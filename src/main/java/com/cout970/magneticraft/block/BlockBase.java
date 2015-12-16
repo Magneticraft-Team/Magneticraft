@@ -6,16 +6,22 @@ import net.darkaqua.blacksmith.api.block.IBlock;
 import net.darkaqua.blacksmith.api.block.IBlockDefinition;
 import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
+import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.default_models.SimpleBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.default_models.SimpleModelPartCube;
+import net.darkaqua.blacksmith.api.render.model.default_models.SimpleRenderModel;
 import net.darkaqua.blacksmith.api.util.Cube;
+import net.darkaqua.blacksmith.api.util.ResourceReference;
 
 /**
  * Created by cout970 on 16/12/2015.
  */
-public class BlockBase implements IBlockDefinition {
+public abstract class BlockBase implements IBlockDefinition {
 
     public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.NAME+" Main", Blocks.IRON_BLOCK.newItemStack(1));
     protected IBlock parent;
-    protected String blockName;
+
+    public abstract String getBlockName();
 
     @Override
     public void onCreate(IBlock block) {
@@ -24,7 +30,7 @@ public class BlockBase implements IBlockDefinition {
 
     @Override
     public String getUnlocalizedName() {
-        return blockName;
+        return getBlockName();
     }
 
     @Override
@@ -56,4 +62,21 @@ public class BlockBase implements IBlockDefinition {
     public ICreativeTab getCreativeTab() {
         return MAIN_CREATIVE_TAB;
     }
+
+    @Override
+    public boolean shouldRender() {
+        return true;
+    }
+
+    @Override
+    public boolean isFullCube() {
+        return true;
+    }
+
+    public IBlockModelProvider getModelProvider(){
+        SimpleRenderModel model = new SimpleRenderModel();
+        model.addModelPart(new SimpleModelPartCube(new ResourceReference(Magneticraft.ID, "blocks/"+getBlockName())));
+        return new SimpleBlockModelProvider(model);
+    }
+
 }

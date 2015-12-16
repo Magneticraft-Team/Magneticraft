@@ -1,8 +1,11 @@
 package com.cout970.magneticraft;
 
+import com.cout970.magneticraft.block.BlockBase;
 import com.cout970.magneticraft.block.BlockCrushingTable;
+import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockDefinition;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
+import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.mod.registry.BlockRegistry;
 
 import java.util.LinkedList;
@@ -13,20 +16,36 @@ import java.util.List;
  */
 public enum ManagerBlocks {
 
-    CrushingTable(new BlockCrushingTable());
+    CrushingTable(new BlockCrushingTable(), "Crushing Table", TileCrushingTable.class);
 
     private static List<BlockRegistry.RegisteredBlock> registeredBlocks = new LinkedList<>();
-    private IBlockDefinition definition;
+    private BlockBase definition;
     private String identifier;
+    private Class<? extends ITileEntityDefinition> tileEntityClass;
 
-    ManagerBlocks(IBlockDefinition def){
+    ManagerBlocks(BlockBase def, String englishName){
         definition = def;
         identifier = def.getUnlocalizedName();
+        LangHelper.addName("tile."+def.getUnlocalizedName(), englishName);
+    }
+
+    ManagerBlocks(BlockBase def, String englishName, Class<? extends ITileEntityDefinition> tile){
+        this(def, englishName);
+        tileEntityClass = tile;
     }
 
     public static void initBlocks(){
         for(ManagerBlocks b : ManagerBlocks.values()){
             StaticAccess.GAME.getBlockRegistry().registerBlockDefinition(b.definition, b.identifier);
+            if (b.tileEntityClass != null) {
+                StaticAccess.GAME.getTileEntityRegistry().registerTileEntityDefinition(b.tileEntityClass, b.identifier);
+            }
+        }
+    }
+
+    public static void initBlockRenders(){
+        for(ManagerBlocks b : ManagerBlocks.values()){
+            StaticAccess.GAME.getRenderRegistry().registerBlockModelProvider(b.definition, b.definition.getModelProvider());
         }
     }
 

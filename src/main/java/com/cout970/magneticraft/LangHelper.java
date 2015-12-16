@@ -52,8 +52,4 @@ public class LangHelper {
             e.printStackTrace();
         }
     }
-
-    public static void registerNames() {
-
-    }
 }

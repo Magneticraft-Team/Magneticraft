@@ -1,16 +1,19 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "Magneticraft",
+  "name": "Magneticraft",
+  "description": "Magneticraft Energy, Industries and Multiblocks!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
+  "url": "http://minecraft.curseforge.com/mc-mods/224808-magneticraft",
+  "updateUrl": "http://minecraft.curseforge.com/mc-mods/224808-magneticraft",
+  "authorList": [
+  "Cout970", "Minecreatr", "MattDahEpic","MechWarrior99","Cypher121"
+  ],
+  "credits": "By Magneticraft Team: Cout970, Cypher121, Minecreatr, MattDahEpic (Developers) and MechWarrior99 (Artist)",
+  "logoFile": "assets/magneticraft/textures/logo/logo.png",
   "screenshots": [],
+  "requiredMods": [ "Forge", "Blacksmith" ],
   "dependencies": []
 }
 ]

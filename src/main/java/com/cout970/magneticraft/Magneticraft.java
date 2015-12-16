@@ -68,7 +68,6 @@ public class Magneticraft {
                 throw new RuntimeException("Could not find source code directory!");
             }
             //END FINDING OF SOURCE DIR
-            LangHelper.registerNames();
             LangHelper.setupLangFile();
         }
 

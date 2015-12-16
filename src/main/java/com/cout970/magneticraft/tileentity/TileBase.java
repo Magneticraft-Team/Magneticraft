@@ -60,6 +60,6 @@ public class TileBase implements ITileEntityDefinition {
 
     @Override
     public Cube getRenderBox() {
-        return Cube.fullBlock();
+        return Cube.fullBlock().translate(parent.getWorldRef().getPosition().toVector3d());
     }
 }
