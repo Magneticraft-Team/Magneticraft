@@ -16,8 +16,9 @@ import java.io.File;
 /**
  * Created by cout970 on 06/12/2015.
  */
-@BlacksmithMod(id = Magneticraft.ID, name = Magneticraft.NAME, version = Magneticraft.VERSION, dependencies = "required-after:ForgeMultipart;" +
-        "after:BuildCraft|Core;after:CoFHCore;after:IC2;after:Railcraft;after:ImmersiveEngineering")
+@BlacksmithMod(id = Magneticraft.ID, name = Magneticraft.NAME, version = Magneticraft.VERSION
+//        , dependencies = "required-after:ForgeMultipart;after:BuildCraft|Core;after:CoFHCore;after:IC2;after:Railcraft;after:ImmersiveEngineering"
+)
 public class Magneticraft {
 
     public final static String ID = "magneticraft";
@@ -39,7 +40,7 @@ public class Magneticraft {
         Log.info("Starting preInit");
         ManagerConfig.init(event.getSuggestedConfigurationFile());
 
-//        ManagerBlocks.initBlocks();
+        ManagerBlocks.initBlocks();
 //        ManagerBlocks.registerBlocks();
 //        ManagerBlocks.registerTileEntities();
 //
