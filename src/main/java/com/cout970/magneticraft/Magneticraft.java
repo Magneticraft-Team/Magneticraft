@@ -2,6 +2,7 @@ package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.proxy.CommonProxy;
 import com.cout970.magneticraft.util.Log;
+import com.cout970.magneticraft.world.ManagerWorldGen;
 import net.darkaqua.blacksmith.api.event.EventSubscribe;
 import net.darkaqua.blacksmith.api.event.modloader.IInitEvent;
 import net.darkaqua.blacksmith.api.event.modloader.IPostInitEvent;
@@ -77,7 +78,9 @@ public class Magneticraft {
 
     @EventSubscribe
     public void init(IInitEvent e){
-
+        Log.info("Starting Init");
+        StaticAccess.GAME.getWorldGenerationRegistry().registerWorldGenerator(new ManagerWorldGen(), 10);
+        Log.info("Init Done");
     }
 
     @EventSubscribe

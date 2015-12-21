@@ -1,18 +1,25 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.api.access.RecipeCrushingTable;
+import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.block.VoidBlockModelProvider;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.IBlockVariant;
+import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
+import net.darkaqua.blacksmith.api.entity.IPlayer;
+import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
+import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
-import net.darkaqua.blacksmith.api.util.Cube;
+import net.darkaqua.blacksmith.api.util.*;
 import net.darkaqua.blacksmith.api.world.IWorld;
 
 /**
  * Created by cout970 on 16/12/2015.
  */
-public class BlockCrushingTable extends BlockBase implements IBlockContainerDefinition{
+public class BlockCrushingTable extends BlockBase implements IBlockContainerDefinition, BlockMethod.OnActivated {
 
     @Override
     public boolean shouldRender() {
@@ -44,7 +51,84 @@ public class BlockCrushingTable extends BlockBase implements IBlockContainerDefi
         return new TileCrushingTable();
     }
 
-    public IBlockModelProvider getModelProvider(){
+    public IBlockModelProvider getModelProvider() {
         return new VoidBlockModelProvider();
+    }
+
+    @Override
+    public boolean onActivated(WorldRef ref, IBlockVariant state, IPlayer p, Direction side, Vect3d vector3d) {
+        if (p != null) {
+            ITileEntity t = ref.getTileEntity();
+            if (!(t.getTileEntityDefinition() instanceof TileCrushingTable)) {
+                return true;
+            }
+            TileCrushingTable tile = (TileCrushingTable) t.getTileEntityDefinition();
+
+            IItemStack i = p.getSelectedItemStack();
+            IInventoryHandler playerInv = p.getInventory();
+            if (i != null) {
+                IHammer hammer = ObjectScanner.findInItemStack(i, IHammer.class);
+                if (hammer != null) {
+                    if (tile.canWork()) {
+                        if (hammer.canHammer(i, ref)) {
+                            tile.tick(hammer.getMaxHits(i, ref));
+                            IItemStack stack = hammer.tick(i, ref);
+                            p.setSelectedItemStack(0, stack);
+                            return true;
+                        }
+                    } else {
+                        if (tile.getContent() == null) {
+                            for (int j = 0; j < playerInv.getSlots(null); j++) {
+                                IItemStack stack = playerInv.getStackInSlot(null, j);
+                                if (stack != null && stack.getAmount() > 0 && RecipeCrushingTable.getRecipe(stack) != null) {
+                                    tile.setContent(playerInv.extractItemStack(null, j, stack.getAmount(), false));
+                                    t.setModified();
+                                    return true;
+                                }
+                            }
+                        } else {
+                            boolean inserted = false;
+                            for (int j = 0; j < playerInv.getSlots(null); j++) {
+                                if (playerInv.insertItemStack(null, j, tile.getContent(), true) == null) {
+                                    playerInv.insertItemStack(null, j, tile.getContent(), false);
+                                    inserted = true;
+                                    break;
+                                }
+                            }
+                            if (inserted) {
+                                tile.setContent(null);
+                            }
+                        }
+                        t.setModified();
+
+                        return true;
+                    }
+
+                } else if ((tile.getContent() == null) && (i.getAmount() > 0)) {
+                    IItemStack split = i.split(1);
+                    p.setSelectedItemStack(0, (i.getAmount() > 0) ? i : null);
+                    tile.setContent(split);
+
+                    t.setModified();
+
+                    return true;
+                }
+            }
+            if (tile.getContent() != null) {
+                boolean inserted = false;
+                for (int j = 0; j < playerInv.getSlots(null); j++) {
+                    if (playerInv.insertItemStack(null, j, tile.getContent(), true) == null) {
+                        playerInv.insertItemStack(null, j, tile.getContent(), false);
+                        inserted = true;
+                        break;
+                    }
+                }
+                if (inserted) {
+                    tile.setContent(null);
+                }
+            }
+            t.setModified();
+        }
+        return true;
     }
 }

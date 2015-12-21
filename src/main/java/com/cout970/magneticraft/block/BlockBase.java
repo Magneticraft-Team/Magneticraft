@@ -7,9 +7,9 @@ import net.darkaqua.blacksmith.api.block.IBlockDefinition;
 import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
 import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.default_models.SimpleBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.default_models.SimpleModelPartCube;
-import net.darkaqua.blacksmith.api.render.model.default_models.SimpleRenderModel;
+import net.darkaqua.blacksmith.api.render.model.defaults.SimpleBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.defaults.SimpleModelPartCube;
+import net.darkaqua.blacksmith.api.render.model.defaults.SimpleRenderModel;
 import net.darkaqua.blacksmith.api.util.Cube;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 
@@ -18,7 +18,7 @@ import net.darkaqua.blacksmith.api.util.ResourceReference;
  */
 public abstract class BlockBase implements IBlockDefinition {
 
-    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.NAME+" Main", Blocks.IRON_BLOCK.newItemStack(1));
+    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreatibeTab(Magneticraft.NAME+" Main", Blocks.IRON_BLOCK.newItemStack(1));
     protected IBlock parent;
 
     public abstract String getBlockName();
@@ -75,8 +75,7 @@ public abstract class BlockBase implements IBlockDefinition {
 
     public IBlockModelProvider getModelProvider(){
         SimpleRenderModel model = new SimpleRenderModel();
-        model.addModelPart(new SimpleModelPartCube(new ResourceReference(Magneticraft.ID, "blocks/"+getBlockName())));
+        model.addModelPart(new SimpleModelPartCube(new ResourceReference(Magneticraft.ID, "blocks/"+getBlockName().toLowerCase())));
         return new SimpleBlockModelProvider(model);
     }
-
 }
