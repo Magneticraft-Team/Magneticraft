@@ -42,12 +42,8 @@ public class Magneticraft {
         ManagerConfig.init(event.getSuggestedConfigurationFile());
 
         ManagerBlocks.initBlocks();
-//        ManagerBlocks.registerBlocks();
-//        ManagerBlocks.registerTileEntities();
-//
-//        ManagerItems.initItems();
-//        ManagerItems.registerItems();
-//
+        ManagerItems.initItems();
+
 //        ManagerFluids.initFluids();
 
         proxy.init();

@@ -1,3 +1,10 @@
-tile.oreCopper.name=Copper Ore
+tile.hand_crank.name=Hand Crank
+tile.table_sieve.name=Table Sieve
+item.hand_sieve.name=Hand Sieve
+item.iron_hammer.name=Iron Hammer
 tile.oreTungsten.name=Tungsten Ore
 tile.crushing_table.name=Crushing Table
+tile.oreCopper.name=Copper Ore
+tile.wooden_shaft.name=Wooden Shaft
+tile.wind_turbine.name=Wind Turbine
+item.stone_hammer.name=Stone Hammer

@@ -2,7 +2,7 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.api.access.RecipeCrushingTable;
 import com.cout970.magneticraft.api.tool.IHammer;
-import com.cout970.magneticraft.client.block.VoidBlockModelProvider;
+import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.IBlockVariant;
@@ -11,6 +11,7 @@ import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.defaults.SimpleBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.util.*;
@@ -19,26 +20,11 @@ import net.darkaqua.blacksmith.api.world.IWorld;
 /**
  * Created by cout970 on 16/12/2015.
  */
-public class BlockCrushingTable extends BlockBase implements IBlockContainerDefinition, BlockMethod.OnActivated {
-
-    @Override
-    public boolean shouldRender() {
-        return false;
-    }
+public class BlockCrushingTable extends BlockModeled implements IBlockContainerDefinition, BlockMethod.OnActivated {
 
     @Override
     public String getBlockName() {
         return "crushing_table";
-    }
-
-    @Override
-    public float getLightOpacity() {
-        return 0f;
-    }
-
-    @Override
-    public boolean isFullCube() {
-        return false;
     }
 
     @Override
@@ -49,10 +35,6 @@ public class BlockCrushingTable extends BlockBase implements IBlockContainerDefi
     @Override
     public ITileEntityDefinition createTileEntity(IWorld world, IBlockVariant state) {
         return new TileCrushingTable();
-    }
-
-    public IBlockModelProvider getModelProvider() {
-        return new VoidBlockModelProvider();
     }
 
     @Override
@@ -73,7 +55,7 @@ public class BlockCrushingTable extends BlockBase implements IBlockContainerDefi
                         if (hammer.canHammer(i, ref)) {
                             tile.tick(hammer.getMaxHits(i, ref));
                             IItemStack stack = hammer.tick(i, ref);
-                            p.setSelectedItemStack(0, stack);
+                            p.setSelectedItemStack(stack);
                             return true;
                         }
                     } else {
@@ -106,7 +88,7 @@ public class BlockCrushingTable extends BlockBase implements IBlockContainerDefi
 
                 } else if ((tile.getContent() == null) && (i.getAmount() > 0)) {
                     IItemStack split = i.split(1);
-                    p.setSelectedItemStack(0, (i.getAmount() > 0) ? i : null);
+                    p.setSelectedItemStack((i.getAmount() > 0) ? i : null);
                     tile.setContent(split);
 
                     t.setModified();
@@ -130,5 +112,8 @@ public class BlockCrushingTable extends BlockBase implements IBlockContainerDefi
             t.setModified();
         }
         return true;
+    }
+    public IBlockModelProvider getModelProvider() {
+        return new SimpleBlockModelProvider(ModelConstants.ofTechne(ModelConstants.MODEL_CRUSHING_TABLE, ModelConstants.TEXTURE_CRUSHING_TABLE));
     }
 }

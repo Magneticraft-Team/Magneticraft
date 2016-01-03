@@ -1,18 +1,17 @@
 package com.cout970.magneticraft;
 
 import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.fluid.IFluid;
+import net.darkaqua.blacksmith.api.fluid.IFluidStack;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.item.IItem;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LangHelper {
 
-    public static List<String> unloc = new ArrayList<>();
-    public static List<String> name = new ArrayList<>();
+    public static Map<String, String> names = new HashMap<>();
 
     public static void addName(Object obj, String name) {
         if (obj == null) return;
@@ -23,16 +22,19 @@ public class LangHelper {
             LangHelper.put(((IBlock) obj).getUnlocalizedName(), name);
         } else if (obj instanceof IItem) {
             LangHelper.put(((IItem) obj).getUnlocalizedName(), name);
-        } else if (obj instanceof IFluid) {
-            LangHelper.put(((IFluid) obj).getUnlocalizedName(), name);
+        } else if (obj instanceof IFluidStack) {
+            LangHelper.putWithoutSuffix(((IFluidStack) obj).getUnlocalizedName(), name);
         } else if (obj instanceof String) {
             LangHelper.put((String) obj, name);
         }
     }
 
-    public static void put(String a, String b) {
-        unloc.add(a);
-        name.add(b);
+    public static void put(String key, String name) {
+        names.put(key+".name", name);
+    }
+
+    public static void putWithoutSuffix(String key, String name) {
+        names.put(key, name);
     }
 
     public static void setupLangFile() {
@@ -40,12 +42,8 @@ public class LangHelper {
         Writer w;
         try {
             w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
-            for (String s : unloc) {
-                if (s.contains("fluid.")) {
-                    w.write(s + "=" + name.get(unloc.indexOf(s)) + "\n");
-                } else {
-                    w.write(s + ".name=" + name.get(unloc.indexOf(s)) + "\n");
-                }
+            for (Map.Entry<String, String> s : names.entrySet()) {
+                w.write(s.getKey() + "=" + s.getValue() + "\n");
             }
             w.close();
         } catch (IOException e) {
