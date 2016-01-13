@@ -21,6 +21,9 @@ version = "0.7.0-alpha1"
 group= "com.cout970.magneticraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "magneticraft"
 
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 minecraft {
     version = "1.8.9-11.15.0.1693"
     runDir = "run"
