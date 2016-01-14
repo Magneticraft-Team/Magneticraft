@@ -27,7 +27,7 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
 
     @Override
     public void iterate() {
-        if(lastTick != getFirstNode().getWorldReference().getWorld().getWorldTime()) {
+        if (lastTick != getFirstNode().getWorldReference().getWorld().getWorldTime()) {
             lastTick = getFirstNode().getWorldReference().getWorld().getWorldTime();
             //apply lose
             maxSpeed = addedSpeed - addedSpeed * getLose();
@@ -37,7 +37,7 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
             //clear input buffer
             addedSpeed = 0;
             //updated rotation
-            angle += maxSpeed/20;
+            angle += maxSpeed / 20;
             angle %= 360;
         }
     }
@@ -45,8 +45,8 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
     @Override
     public double getMass() {
         double mass = 0;
-        for(INetworkNode n : nodes){
-            if(n instanceof IKineticConductor) {
+        for (INetworkNode n : nodes) {
+            if (n instanceof IKineticConductor) {
                 mass += ((IKineticConductor) n).getMass();
             }
         }
@@ -56,8 +56,8 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
     @Override
     public double getLose() {
         double lose = 0;
-        for(INetworkNode n : nodes){
-            if(n instanceof IKineticConductor) {
+        for (INetworkNode n : nodes) {
+            if (n instanceof IKineticConductor) {
                 lose += ((IKineticConductor) n).getLose();
             }
         }
@@ -71,23 +71,23 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
 
     @Override
     public void applyForce(double force) {
-        addedSpeed += force/getMass();
+        addedSpeed += force / getMass();
     }
 
     @Override
     public double applyForce(double force, double maxSpeed) {
         double mass = getMass();
-        double speedAdded = Math.max(0, Math.min(maxSpeed- removedSpeed, force/mass));
+        double speedAdded = Math.max(0, Math.min(maxSpeed - removedSpeed, force / mass));
         addedSpeed += speedAdded;
-        return speedAdded*mass;
+        return speedAdded * mass;
     }
 
     @Override
     public double drainForce(double force) {
         double mass = getMass();
-        double speedLose = Math.min(removedSpeed, force/mass);
+        double speedLose = Math.min(removedSpeed, force / mass);
         removedSpeed -= speedLose;
-        return speedLose*mass;
+        return speedLose * mass;
     }
 
     @Override

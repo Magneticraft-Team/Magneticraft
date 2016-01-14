@@ -36,7 +36,7 @@ public class Magneticraft {
     public static CommonProxy proxy;
 
     @EventSubscribe
-    public void preInit(IPreInitEvent event){
+    public void preInit(IPreInitEvent event) {
         Log.LOGGER = event.getModLog();
         Log.info("Starting preInit");
         ManagerConfig.init(event.getSuggestedConfigurationFile());
@@ -73,14 +73,14 @@ public class Magneticraft {
     }
 
     @EventSubscribe
-    public void init(IInitEvent e){
+    public void init(IInitEvent e) {
         Log.info("Starting Init");
         StaticAccess.GAME.getWorldGenerationRegistry().registerWorldGenerator(new ManagerWorldGen(), 10);
         Log.info("Init Done");
     }
 
     @EventSubscribe
-    public void postInit(IPostInitEvent e){
+    public void postInit(IPostInitEvent e) {
 
     }
 }

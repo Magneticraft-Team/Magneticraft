@@ -20,12 +20,12 @@ public class TileRenderWindTurbine implements ITileEntityRenderer<TileWindTurbin
     public void renderTileEntity(ITileEntity tile, TileWindTurbine def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 1.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F);
-        GL11.glRotatef(90, 0,0,1);
+        GL11.glRotatef(90, 0, 0, 1);
         helper.bindTexture(ModelConstants.ofTexture(ModelConstants.TEXTURE_WIND_TURBINE));
-        GL11.glRotatef(-def.getRotationAngle(partialTick), 0,1,0);
+        GL11.glRotatef(-def.getRotationAngle(partialTick), 0, 1, 0);
         model.renderStatic(0.0625f);
-        for(int i = 0; i < 4; i++) {
-            GL11.glRotatef(90, 0,1,0);
+        for (int i = 0; i < 4; i++) {
+            GL11.glRotatef(90, 0, 1, 0);
             model.renderDynamic(0.0625f);
         }
         GL11.glPopMatrix();

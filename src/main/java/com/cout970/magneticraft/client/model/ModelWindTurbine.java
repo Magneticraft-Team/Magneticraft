@@ -50,7 +50,7 @@ public class ModelWindTurbine extends ModelBase {
         wool.render(f5);
     }
 
-    public void renderStatic(float f5){
+    public void renderStatic(float f5) {
         axix.render(f5);
     }
 

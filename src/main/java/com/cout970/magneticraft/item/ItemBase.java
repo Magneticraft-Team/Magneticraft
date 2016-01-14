@@ -25,7 +25,7 @@ public abstract class ItemBase extends DefaultItemDefinition {
 
     public abstract String getItemName();
 
-    public IItemModelProvider getModelProvider(){
-        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/"+getItemName().toLowerCase()));
+    public IItemModelProvider getModelProvider() {
+        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase()));
     }
 }

@@ -30,24 +30,24 @@ public enum ManagerBlocks {
     private Class<? extends ITileEntityDefinition> tileEntityClass;
     private ITileEntityRenderer<? extends ITileEntityDefinition> tileRenderer;
 
-    ManagerBlocks(BlockBase def, String englishName){
+    ManagerBlocks(BlockBase def, String englishName) {
         definition = def;
         identifier = def.getUnlocalizedName();
-        LangHelper.addName("tile."+def.getUnlocalizedName(), englishName);
+        LangHelper.addName("tile." + def.getUnlocalizedName(), englishName);
     }
 
-    <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile){
+    <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile) {
         this(def, englishName);
         tileEntityClass = tile;
     }
 
-    <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile, ITileEntityRenderer<T> renderer){
+    <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile, ITileEntityRenderer<T> renderer) {
         this(def, englishName, tile);
         tileRenderer = renderer;
     }
 
-    public static void initBlocks(){
-        for(ManagerBlocks b : ManagerBlocks.values()){
+    public static void initBlocks() {
+        for (ManagerBlocks b : ManagerBlocks.values()) {
             b.block = StaticAccess.GAME.getBlockRegistry().registerBlockDefinition(b.definition, b.identifier);
             if (b.tileEntityClass != null) {
                 StaticAccess.GAME.getTileEntityRegistry().registerTileEntityDefinition(b.tileEntityClass, b.identifier);
@@ -55,10 +55,10 @@ public enum ManagerBlocks {
         }
     }
 
-    public static void initBlockRenders(){
-        for(ManagerBlocks b : ManagerBlocks.values()){
+    public static void initBlockRenders() {
+        for (ManagerBlocks b : ManagerBlocks.values()) {
             StaticAccess.GAME.getRenderRegistry().registerBlockModelProvider(b.definition, b.definition.getModelProvider());
-            if (b.tileRenderer != null){
+            if (b.tileRenderer != null) {
                 StaticAccess.GAME.getRenderRegistry().registerTileEntityRenderer(b.tileEntityClass, b.tileRenderer);
             }
         }

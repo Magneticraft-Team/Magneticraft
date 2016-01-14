@@ -7,7 +7,7 @@ import com.cout970.magneticraft.api.network.INetworkNode;
 /**
  * Created by cout970 on 29/12/2015.
  */
-public interface IKineticConductor extends IDataStorage, IConnectable, INetworkNode{
+public interface IKineticConductor extends IDataStorage, IConnectable, INetworkNode {
 
     IKineticNetwork getNetwork();
 

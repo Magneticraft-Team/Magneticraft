@@ -82,31 +82,31 @@ public class ModelWoodenShaft extends ModelBase {
 //  }
 
     public void render(float f5, int sides, float rot) {
-        if((sides & 0x1) > 0){
+        if ((sides & 0x1) > 0) {
             Shape1.rotateAngleY = rot;
             Shape1.render(f5); // down
         }
-        if((sides & 0x2) > 0){
+        if ((sides & 0x2) > 0) {
             Shape3.rotateAngleY = rot;
             Shape3.render(f5); // up
         }
-        if((sides & 0x4) > 0){
+        if ((sides & 0x4) > 0) {
             Shape2.rotateAngleZ = rot;
             Shape2.render(f5); // north
         }
-        if((sides & 0x8) > 0){
+        if ((sides & 0x8) > 0) {
             Shape4.rotateAngleZ = rot;
             Shape4.render(f5); // south
         }
-        if((sides & 0x10) > 0){
+        if ((sides & 0x10) > 0) {
             Shape6.rotateAngleX = rot;
             Shape6.render(f5); // west
         }
-        if((sides & 0x20) > 0){
+        if ((sides & 0x20) > 0) {
             Shape5.rotateAngleX = rot;
             Shape5.render(f5); // east
         }
-        if((sides & 0x40) > 0)Shape7.render(f5); // center
+        if ((sides & 0x40) > 0) Shape7.render(f5); // center
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {

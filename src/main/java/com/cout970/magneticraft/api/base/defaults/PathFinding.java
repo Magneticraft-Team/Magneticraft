@@ -31,7 +31,7 @@ public abstract class PathFinding {
     }
 
     public void addAdjacentNodes(PathNode node) {
-        for(Direction d : Direction.values())
+        for (Direction d : Direction.values())
             addNode(node, d.toVect3i());
     }
 
@@ -49,7 +49,7 @@ public abstract class PathFinding {
 
     public abstract boolean isEnd(PathNode node);
 
-    public LinkedList<Vect3i> getPath(){
+    public LinkedList<Vect3i> getPath() {
         PathNode node = getPathEnd();
 
         if (node != null) {
@@ -63,7 +63,7 @@ public abstract class PathFinding {
         return null;
     }
 
-    public PathNode getPathEnd(){
+    public PathNode getPathEnd() {
         toScan.clear();
         scanned.clear();
         addNode(new PathNode(start, null), Vect3i.nullVector());

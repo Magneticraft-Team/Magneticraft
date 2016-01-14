@@ -27,12 +27,14 @@ targetCompatibility = "1.8"
 minecraft {
     version = "1.8.9-11.15.0.1693"
     runDir = "run"
+    useDepAts = true
    
     mappings = "snapshot_20151122"
 }
 
 dependencies {
     deobfCompile "MCMultiPart:MCMultiPart:1.0.4:universal"
+    deobfCompile "mezz.jei:jei_1.8.9:2.16.2.78"
 }
 
 curseforge {
@@ -58,12 +60,12 @@ curseforge {
 
 repositories {
     maven {
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
+        name = "Mobius Repo"
+        url = "http://mobiusstrip.eu/maven"
     }
     maven {
-        name 'CB Repo'
-        url "http://chickenbones.net/maven/"
+        name = 'CB Repo'
+        url = "http://chickenbones.net/maven/"
     }
     maven {
         name = "tehnut"
@@ -72,6 +74,10 @@ repositories {
     maven {
         name = "amadornes"
         url = "http://maven.amadornes.com/"
+    }
+    maven {
+        name = "mezz"
+        url = "http://dvs1.progwml6.com/files/maven"
     }
 }
 

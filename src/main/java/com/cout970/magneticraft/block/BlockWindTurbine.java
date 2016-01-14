@@ -35,7 +35,7 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
         ref.setBlockVariant(state.withProperty(DIRECTION, Direction.SOUTH));
     }
 
-    public IBlockModelProvider getModelProvider(){
+    public IBlockModelProvider getModelProvider() {
         return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.MODEL_WOODEN_SHAFT, ModelConstants.TEXTURE_WOODEN_SHAFT));
     }
 

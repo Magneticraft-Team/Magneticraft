@@ -15,7 +15,7 @@ public class PathNode {
         before = node;
     }
 
-    public boolean isStart(){
+    public boolean isStart() {
         return before == null;
     }
 

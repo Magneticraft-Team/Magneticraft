@@ -23,15 +23,15 @@ public class ModelConstants {
     public static final String MODEL_WOODEN_SHAFT = "models/wooden_shaft.tcn";
 
 
-    public static ResourceReference of(String s){
+    public static ResourceReference of(String s) {
         return new ResourceReference(DOMAIN, s);
     }
 
-    public static ResourceReference ofTexture(String s){
-        return new ResourceReference(DOMAIN, "textures/"+s+".png");
+    public static ResourceReference ofTexture(String s) {
+        return new ResourceReference(DOMAIN, "textures/" + s + ".png");
     }
 
-    public static IModelPart ofTechne(String file, String texture){
+    public static IModelPart ofTechne(String file, String texture) {
         return TechneModelLoader.loadModel(of(file), of(texture));
     }
 }

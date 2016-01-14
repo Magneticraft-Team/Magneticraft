@@ -30,7 +30,7 @@ public class TileWindTurbine extends TileKineticBase {
             speed = (float) (Math.sqrt(power) * 0.1d);
             traceAir1();
         }
-        cond.getNetwork().applyForce(speed, 20*speed);
+        cond.getNetwork().applyForce(speed, 20 * speed);
     }
 
     private void traceAir1() {

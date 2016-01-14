@@ -64,7 +64,7 @@ public abstract class NetworkBase implements INetwork {
                 NetworkPathFinder pathFinder = new NetworkPathFinder(this, node.getWorldReference());
                 pathFinder.getPathEnd();
                 node.createNetwork();
-                for(INetworkNode n : pathFinder.getConductors()){
+                for (INetworkNode n : pathFinder.getConductors()) {
                     node.getNetwork().addNetworkNode(n);
                 }
             }
@@ -83,7 +83,7 @@ public abstract class NetworkBase implements INetwork {
         List<INetworkNode> list = net.getNetworkNodes();
         net.destroyNetwork();
         nodes.addAll(list);
-        for(INetworkNode n : list){
+        for (INetworkNode n : list) {
             n.setNetwork(this);
         }
     }

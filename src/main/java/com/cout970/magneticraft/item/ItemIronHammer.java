@@ -13,9 +13,9 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
 /**
  * Created by cout970 on 21/12/2015.
  */
-public class ItemIronHammer extends ItemBase implements IHammer{
+public class ItemIronHammer extends ItemBase implements IHammer {
 
-    public ItemIronHammer(){
+    public ItemIronHammer() {
         maxDamage = 250;
         maxStackSize = 1;
     }
@@ -25,11 +25,11 @@ public class ItemIronHammer extends ItemBase implements IHammer{
         return "iron_hammer";
     }
 
-    public IItemModelProvider getModelProvider(){
-        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase())){
+    public IItemModelProvider getModelProvider() {
+        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase())) {
             @Override
             public IRenderModel getModelForVariant(IItemStack stack) {
-                if(model == null){
+                if (model == null) {
                     model = new SwordRenderModel(identifier);
                 }
                 return model;

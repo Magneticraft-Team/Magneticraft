@@ -113,6 +113,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
         }
         return true;
     }
+
     public IBlockModelProvider getModelProvider() {
         return new SimpleBlockModelProvider(ModelConstants.ofTechne(ModelConstants.MODEL_CRUSHING_TABLE, ModelConstants.TEXTURE_CRUSHING_TABLE));
     }

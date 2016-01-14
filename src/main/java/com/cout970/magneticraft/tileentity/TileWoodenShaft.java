@@ -22,29 +22,29 @@ public class TileWoodenShaft extends TileKineticBase {
     @Override
     public void update() {
         super.update();
-        if(getWorld().getWorldTime() % 20 == 0){
+        if (getWorld().getWorldTime() % 20 == 0) {
             connections = 0;
             int count = 0;
             Direction first = null;
             Direction second = null;
-            for(Direction d : Direction.values()){
+            for (Direction d : Direction.values()) {
                 ITileEntity t = parent.getWorldRef().move(d).getTileEntity();
                 IKineticConductor k = ObjectScanner.findInTileEntity(t, IKineticConductor.class);
-                if(k != null){
+                if (k != null) {
                     connections |= 1 << d.ordinal();
                     count++;
-                    if (first == null){
+                    if (first == null) {
                         first = d;
-                    }else if(second == null){
+                    } else if (second == null) {
                         second = d;
                     }
                 }
             }
-            if (count > 2){
+            if (count > 2) {
                 connections |= 0x40;
-            }else if(count == 2 && first != second && first.isPerpendicular(second)){
+            } else if (count == 2 && first != second && first.isPerpendicular(second)) {
                 connections |= 0x40;
-            }else if(count == 0){
+            } else if (count == 0) {
                 connections |= 0x40;
             }
         }

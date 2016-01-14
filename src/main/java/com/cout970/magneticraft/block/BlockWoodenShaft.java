@@ -19,14 +19,14 @@ public class BlockWoodenShaft extends BlockModeled implements IBlockContainerDef
         return "wooden_shaft";
     }
 
-    public IBlockModelProvider getModelProvider(){
+    public IBlockModelProvider getModelProvider() {
         return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.MODEL_WOODEN_SHAFT, ModelConstants.TEXTURE_WOODEN_SHAFT));
     }
 
     @Override
     public Cube getBounds() {
-        double w = 4/16d;
-        return new Cube(0.5-w, 0.5-w, 0.5-w, 0.5+w, 0.5+w, 0.5+w);
+        double w = 4 / 16d;
+        return new Cube(0.5 - w, 0.5 - w, 0.5 - w, 0.5 + w, 0.5 + w, 0.5 + w);
     }
 
     @Override
