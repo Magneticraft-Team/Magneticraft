@@ -2,7 +2,7 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.tileentity.TileHandCrank;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.variants.IBlockData;
+import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.world.IWorld;
 

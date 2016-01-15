@@ -15,7 +15,7 @@ import net.darkaqua.blacksmith.api.util.ResourceReference;
  */
 public abstract class BlockBase extends DefaultBlockDefinition {
 
-    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreatibeTab(Magneticraft.NAME + " Main", Blocks.IRON_BLOCK.newItemStack(1));
+    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.NAME + " Main", Blocks.IRON_BLOCK.newItemStack(1));
 
     public abstract String getBlockName();
 

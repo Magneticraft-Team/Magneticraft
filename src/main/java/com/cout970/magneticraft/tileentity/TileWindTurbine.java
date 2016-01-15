@@ -6,7 +6,7 @@ import com.cout970.magneticraft.api.kinetic.defaults.KineticConductor;
 import com.cout970.magneticraft.block.BlockWindTurbine;
 import com.cout970.magneticraft.tileentity.base.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
-import net.darkaqua.blacksmith.api.block.variants.IBlockData;
+import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.world.IWorld;

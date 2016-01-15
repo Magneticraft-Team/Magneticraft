@@ -4,9 +4,9 @@ import com.cout970.magneticraft.block.BlockBase;
 import com.cout970.magneticraft.util.multiblock.IMultiBlockData;
 import com.cout970.magneticraft.util.multiblock.MB_Block;
 import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.block.variants.BlockDataFactory;
-import net.darkaqua.blacksmith.api.block.variants.IBlockAttribute;
-import net.darkaqua.blacksmith.api.block.variants.defaults.BlockAttributeValueBoolean;
+import net.darkaqua.blacksmith.api.block.blockdata.BlockDataFactory;
+import net.darkaqua.blacksmith.api.block.blockdata.IBlockAttribute;
+import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueBoolean;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
-import net.darkaqua.blacksmith.api.block.variants.IBlockData;
+import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
