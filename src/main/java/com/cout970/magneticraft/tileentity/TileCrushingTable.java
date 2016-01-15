@@ -12,13 +12,13 @@ import net.darkaqua.blacksmith.api.storage.IDataCompound;
 /**
  * Created by cout970 on 16/12/2015.
  */
-public class TileCrushingTable extends TileBase implements IInventoryProvider{
+public class TileCrushingTable extends TileBase implements IInventoryProvider {
 
     private SimpleInventoryHandler inventory;
     private int maxProgress;
     private int progress;
 
-    public TileCrushingTable(){
+    public TileCrushingTable() {
         inventory = new SimpleInventoryHandler(1);
     }
 

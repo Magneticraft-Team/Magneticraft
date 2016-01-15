@@ -27,7 +27,7 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
     public void onDelete() {
         super.onDelete();
         INetwork net = cond.getNetwork();
-        if (net != null){
+        if (net != null) {
             net.removeNetworkNode(cond);
         }
     }
@@ -36,7 +36,7 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
 
     @Override
     public Object providerInterface(String className, Class<?> interfaceClass) {
-        if (interfaceClass.isAssignableFrom(IKineticConductor.class)){
+        if (interfaceClass.isAssignableFrom(IKineticConductor.class)) {
             return cond;
         }
         return null;
@@ -61,10 +61,10 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
 
     public float getRotationAngle(float partialTick) {
         float rot = 0;
-        if(getCond().getNetwork() != null){
-            double speed = getCond().getNetwork().getSpeed()/20d;
+        if (getCond().getNetwork() != null) {
+            double speed = getCond().getNetwork().getSpeed() / 20d;
             rot = (float) getCond().getNetwork().getRotationAngle();
-            rot += partialTick*speed;
+            rot += partialTick * speed;
         }
         return rot;
     }

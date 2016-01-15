@@ -12,12 +12,12 @@ import java.util.Random;
 /**
  * Created by cout970 on 18/12/2015.
  */
-public class ManagerWorldGen implements IWorldGeneratorDefinition{
+public class ManagerWorldGen implements IWorldGeneratorDefinition {
 
     private OreGenerator copper;
     private OreGenerator tungsten;
 
-    public ManagerWorldGen(){
+    public ManagerWorldGen() {
         copper = new OreGenerator(ManagerBlocks.CopperOre.getBlock(), 8);
         tungsten = new OreGenerator(ManagerBlocks.TungstenOre.getBlock(), 5);
     }
@@ -28,7 +28,7 @@ public class ManagerWorldGen implements IWorldGeneratorDefinition{
         generateChunkOres(tungsten, world, chunkPos, chunkRandom, 20, 100, 0);
     }
 
-    public void generateChunkOres(OreGenerator gen, IWorld world, Vect2i pos, Random random, int veins, int maxHeight, int minHeight){
+    public void generateChunkOres(OreGenerator gen, IWorld world, Vect2i pos, Random random, int veins, int maxHeight, int minHeight) {
         for (int k = 0; k < veins; k++) {
             int x = pos.getX() * 16 + random.nextInt(16);
             int y = minHeight + random.nextInt(maxHeight - minHeight);

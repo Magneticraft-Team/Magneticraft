@@ -3,7 +3,7 @@ package com.cout970.magneticraft.block;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileTableSieve;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.variants.IBlockVariant;
+import net.darkaqua.blacksmith.api.block.variants.IBlockData;
 import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.defaults.SimpleBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
@@ -24,7 +24,7 @@ public class BlockTableSieve extends BlockModeled implements IBlockContainerDefi
     }
 
     @Override
-    public ITileEntityDefinition createTileEntity(IWorld world, IBlockVariant state) {
+    public ITileEntityDefinition createTileEntity(IWorld world, IBlockData state) {
         return new TileTableSieve();
     }
 }

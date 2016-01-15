@@ -3,9 +3,10 @@ package com.cout970.magneticraft.block.multiblock;
 import com.cout970.magneticraft.block.BlockBase;
 import com.cout970.magneticraft.util.multiblock.IMultiBlockData;
 import com.cout970.magneticraft.util.multiblock.MB_Block;
-import net.darkaqua.blacksmith.api.block.variants.BlockVariantCreatorFactory;
 import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.block.variants.IIProperty;
+import net.darkaqua.blacksmith.api.block.variants.BlockDataFactory;
+import net.darkaqua.blacksmith.api.block.variants.IBlockAttribute;
+import net.darkaqua.blacksmith.api.block.variants.defaults.BlockAttributeValueBoolean;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
 import java.util.List;
@@ -15,16 +16,16 @@ import java.util.List;
  */
 public abstract class BlockMultiBlockBase extends BlockBase implements MB_Block {
 
-    public static IIProperty<Boolean> ACTIVATION = BlockVariantCreatorFactory.createPropertyBoolean("activation");
+    public static IBlockAttribute ACTIVATION = BlockDataFactory.createBlockAttribute("activation", BlockAttributeValueBoolean.VALUES);
 
     @Override
     public void mutates(WorldRef ref, IMultiBlockData data) {
-        ref.setBlockVariant(getBlock().getDefaultVariant().withProperty(ACTIVATION, true));
+        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, new BlockAttributeValueBoolean(true)));
     }
 
     @Override
     public void destroy(WorldRef ref, IMultiBlockData data) {
-        ref.setBlockVariant(getBlock().getDefaultVariant().withProperty(ACTIVATION, false));
+        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, new BlockAttributeValueBoolean(true)));
     }
 
     public boolean matchesAny(WorldRef worldRef, List<IBlock> blocks){

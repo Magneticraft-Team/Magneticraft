@@ -2,12 +2,13 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileWindTurbine;
-import net.darkaqua.blacksmith.api.block.*;
+import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
-import net.darkaqua.blacksmith.api.block.variants.BlockVariantCreatorFactory;
-import net.darkaqua.blacksmith.api.block.variants.IBlockVariant;
-import net.darkaqua.blacksmith.api.block.variants.IBlockVariantCreator;
-import net.darkaqua.blacksmith.api.block.variants.IIProperty;
+import net.darkaqua.blacksmith.api.block.variants.BlockDataFactory;
+import net.darkaqua.blacksmith.api.block.variants.IBlockAttribute;
+import net.darkaqua.blacksmith.api.block.variants.IBlockData;
+import net.darkaqua.blacksmith.api.block.variants.IBlockDataGenerator;
+import net.darkaqua.blacksmith.api.block.variants.defaults.BlockAttributeValueDirection;
 import net.darkaqua.blacksmith.api.entity.ILivingEntity;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.*;
@@ -24,11 +25,11 @@ import net.darkaqua.blacksmith.api.world.IWorld;
  */
 public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlacedBy, IBlockContainerDefinition {
 
-    public static IIProperty<Direction> DIRECTION = BlockVariantCreatorFactory.createPropertyEnum("direction", Direction.class);
+    public static IBlockAttribute DIRECTION = BlockDataFactory.createBlockAttribute("direction", BlockAttributeValueDirection.HORIZONTAL_VALUES);
 
     @Override
-    public IBlockVariantCreator getBlockVariantCreator() {
-        return BlockVariantCreatorFactory.createBlockVariantCreator(parent, DIRECTION);
+    public IBlockDataGenerator getBlockDataGenerator() {
+        return BlockDataFactory.createBlockDataGenerator(parent, DIRECTION);
     }
 
     @Override
@@ -37,8 +38,9 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
     }
 
     @Override
-    public void onPlacedBy(WorldRef ref, IBlockVariant state, ILivingEntity placer, IItemStack stack) {
-        ref.setBlockVariant(state.withProperty(DIRECTION, Direction.SOUTH));
+    public void onPlacedBy(WorldRef ref, IBlockData state, ILivingEntity placer, IItemStack stack) {
+        state = state.setValue(DIRECTION, new BlockAttributeValueDirection(placer.getEntityRotation().toHorizontalAxis()));
+        ref.setBlockData(state);
     }
 
     public IBlockModelProvider getModelProvider(){
@@ -67,7 +69,17 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
     }
 
     @Override
-    public ITileEntityDefinition createTileEntity(IWorld world, IBlockVariant state) {
+    public ITileEntityDefinition createTileEntity(IWorld world, IBlockData state) {
         return new TileWindTurbine();
+    }
+
+    @Override
+    public IBlockData translateMetadataToVariant(int meta) {
+        return parent.getDefaultBlockData().setValue(DIRECTION, BlockAttributeValueDirection.HORIZONTAL_VALUES[meta%4]);
+    }
+
+    @Override
+    public int translateVariantToMetadata(IBlockData variant) {
+        return ((Direction)variant.getValue(DIRECTION).getValue()).ordinal();
     }
 }

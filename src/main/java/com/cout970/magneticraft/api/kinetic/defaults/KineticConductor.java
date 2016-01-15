@@ -19,7 +19,7 @@ public class KineticConductor implements IKineticConductor {
     protected double mass;
     protected double lose;
 
-    public KineticConductor(ITileEntity parent){
+    public KineticConductor(ITileEntity parent) {
         this.parent = parent;
         mass = 0.01;
         lose = 0.01;
@@ -27,7 +27,7 @@ public class KineticConductor implements IKineticConductor {
 
     @Override
     public void iterate() {
-        if (network == null){
+        if (network == null) {
             createNetwork();
             network.refreshNetwork();
         }
@@ -87,7 +87,8 @@ public class KineticConductor implements IKineticConductor {
     }
 
     @Override
-    public void onNetworkChange() {}
+    public void onNetworkChange() {
+    }
 
     @Override
     public void createNetwork() {

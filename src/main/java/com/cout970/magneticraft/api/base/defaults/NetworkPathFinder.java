@@ -39,14 +39,14 @@ public class NetworkPathFinder extends PathFinding {
         Vect3i vec = node.getPosition().copy().add(dir);
 
         if (scanned.contains(vec)) return;
-        for(PathNode n : toScan){
+        for (PathNode n : toScan) {
             if (n.getPosition().equals(vec))
                 return;
         }
 
         ITileEntity b = ref.getWorld().getTileEntity(vec);
         INetworkNode cond = ObjectScanner.findInTileEntity(b, INetworkNode.class);
-        if(cond != null && network.canAddToNetwork(cond)){
+        if (cond != null && network.canAddToNetwork(cond)) {
             toScan.add(new PathNode(vec, node));
             conductors.add(cond);
         }

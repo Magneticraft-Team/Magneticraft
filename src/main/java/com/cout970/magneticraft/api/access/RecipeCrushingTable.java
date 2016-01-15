@@ -5,7 +5,7 @@ import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.InventoryUtils;
 
 public class RecipeCrushingTable {
-    
+
     protected final IItemStack input;
     protected final IItemStack output;
 

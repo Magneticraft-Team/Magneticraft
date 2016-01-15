@@ -36,7 +36,7 @@ public class SimpleComponent implements MB_Component {
         if (mb == null)return false;
         if (!mb.matchesAny(new WorldRef(ref.getWorld(), pos), blocks)) {
             if (Magneticraft.DEBUG) {
-                ref.getWorld().setBlockVariant(blocks.get(0).getDefaultVariant(), pos);
+                ref.getWorld().setBlockVariant(blocks.get(0).getDefaultBlockData(), pos);
             }
             return false;
         }

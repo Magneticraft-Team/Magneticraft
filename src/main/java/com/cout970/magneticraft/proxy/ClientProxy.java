@@ -8,7 +8,7 @@ import com.cout970.magneticraft.ManagerItems;
  */
 public class ClientProxy extends CommonProxy {
 
-    public void init(){
+    public void init() {
         super.init();
         ManagerBlocks.initBlockRenders();
         ManagerItems.initBlockRenders();

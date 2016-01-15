@@ -30,7 +30,7 @@ public class LangHelper {
     }
 
     public static void put(String key, String name) {
-        names.put(key+".name", name);
+        names.put(key + ".name", name);
     }
 
     public static void putWithoutSuffix(String key, String name) {

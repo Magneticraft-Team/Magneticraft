@@ -23,17 +23,17 @@ public enum ManagerItems {
     ManagerItems(ItemBase definition, String englishName) {
         this.definition = definition;
         identifier = definition.getUnlocalizedName();
-        LangHelper.addName("item."+definition.getUnlocalizedName(), englishName);
+        LangHelper.addName("item." + definition.getUnlocalizedName(), englishName);
     }
 
-    public static void initItems(){
-        for(ManagerItems b : ManagerItems.values()){
+    public static void initItems() {
+        for (ManagerItems b : ManagerItems.values()) {
             b.item = StaticAccess.GAME.getItemRegistry().registerItemDefinition(b.definition, b.identifier);
         }
     }
 
-    public static void initBlockRenders(){
-        for(ManagerItems b : ManagerItems.values()){
+    public static void initBlockRenders() {
+        for (ManagerItems b : ManagerItems.values()) {
             StaticAccess.GAME.getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
         }
     }

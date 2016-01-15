@@ -5,8 +5,8 @@ import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.variants.IBlockVariant;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
+import net.darkaqua.blacksmith.api.block.variants.IBlockData;
 import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
@@ -33,12 +33,12 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
     }
 
     @Override
-    public ITileEntityDefinition createTileEntity(IWorld world, IBlockVariant state) {
+    public ITileEntityDefinition createTileEntity(IWorld world, IBlockData state) {
         return new TileCrushingTable();
     }
 
     @Override
-    public boolean onActivated(WorldRef ref, IBlockVariant state, IPlayer p, Direction side, Vect3d vector3d) {
+    public boolean onActivated(WorldRef ref, IBlockData state, IPlayer p, Direction side, Vect3d vector3d) {
         if (p != null) {
             ITileEntity t = ref.getTileEntity();
             if (!(t.getTileEntityDefinition() instanceof TileCrushingTable)) {
@@ -113,6 +113,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
         }
         return true;
     }
+
     public IBlockModelProvider getModelProvider() {
         return new SimpleBlockModelProvider(ModelConstants.ofTechne(ModelConstants.CRUSHING_TABLE));
     }

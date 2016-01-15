@@ -6,7 +6,7 @@ import com.cout970.magneticraft.api.kinetic.defaults.KineticConductor;
 import com.cout970.magneticraft.block.BlockWindTurbine;
 import com.cout970.magneticraft.tileentity.base.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
-import net.darkaqua.blacksmith.api.block.variants.IBlockVariant;
+import net.darkaqua.blacksmith.api.block.variants.IBlockData;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.world.IWorld;
@@ -30,7 +30,7 @@ public class TileWindTurbine extends TileKineticBase {
             speed = (float) (Math.sqrt(power) * 0.1d);
             traceAir1();
         }
-        cond.getNetwork().applyForce(speed, 20*speed);
+        cond.getNetwork().applyForce(speed, 20 * speed);
     }
 
     private void traceAir1() {
@@ -72,8 +72,8 @@ public class TileWindTurbine extends TileKineticBase {
     }
 
     public Direction getDirection() {
-        IBlockVariant variant = parent.getWorldRef().getBlockVariant();
-        return variant.getValue(BlockWindTurbine.DIRECTION);
+        IBlockData variant = parent.getWorldRef().getBlockData();
+        return (Direction) variant.getValue(BlockWindTurbine.DIRECTION).getValue();
     }
 
     public double getWindSpeed() {

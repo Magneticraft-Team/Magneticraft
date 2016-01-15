@@ -3,7 +3,7 @@ package com.cout970.magneticraft.block;
 /**
  * Created by cout970 on 18/12/2015.
  */
-public class BlockOreBase extends BlockBase{
+public class BlockOreBase extends BlockBase {
 
     private String oreDictName;
 
