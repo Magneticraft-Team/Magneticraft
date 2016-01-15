@@ -5,7 +5,7 @@ import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.IBlockVariant;
+import net.darkaqua.blacksmith.api.block.variants.IBlockVariant;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
@@ -114,6 +114,6 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
         return true;
     }
     public IBlockModelProvider getModelProvider() {
-        return new SimpleBlockModelProvider(ModelConstants.ofTechne(ModelConstants.MODEL_CRUSHING_TABLE, ModelConstants.TEXTURE_CRUSHING_TABLE));
+        return new SimpleBlockModelProvider(ModelConstants.ofTechne(ModelConstants.CRUSHING_TABLE));
     }
 }

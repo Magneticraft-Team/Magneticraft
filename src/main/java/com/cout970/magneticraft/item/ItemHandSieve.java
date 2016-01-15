@@ -1,13 +1,11 @@
 package com.cout970.magneticraft.item;
 
-import com.cout970.magneticraft.Magneticraft;
+import com.cout970.magneticraft.client.model.ModelConstants;
 import net.darkaqua.blacksmith.api.render.model.IItemModelProvider;
 import net.darkaqua.blacksmith.api.render.model.IRenderModel;
 import net.darkaqua.blacksmith.api.render.model.RenderPlace;
 import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
 import net.darkaqua.blacksmith.api.render.model.defaults.SimpleItemModelProvider;
-import net.darkaqua.blacksmith.api.render.techne.TechneModelLoader;
-import net.darkaqua.blacksmith.api.util.ResourceReference;
 import net.darkaqua.blacksmith.api.util.Vect3d;
 
 /**
@@ -16,9 +14,7 @@ import net.darkaqua.blacksmith.api.util.Vect3d;
 public class ItemHandSieve extends ItemBase {
 
     public IItemModelProvider getModelProvider() {
-        return new SimpleItemModelProvider(TechneModelLoader.loadModel(
-                new ResourceReference(Magneticraft.ID, "models/" + getItemName().toLowerCase() + ".tcn"),
-                new ResourceReference(Magneticraft.ID, "misc/" + getItemName().toLowerCase()))) {
+        return new SimpleItemModelProvider(ModelConstants.ofTechne(getItemName().toLowerCase())) {
 
             public IRenderModel createRenderModel() {
                 return new ItemModel(identifier) {

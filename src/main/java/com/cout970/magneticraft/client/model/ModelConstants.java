@@ -12,26 +12,22 @@ public class ModelConstants {
 
     private static final String DOMAIN = Magneticraft.ID;
 
-    public static final String TEXTURE_WOODEN_SHAFT = "misc/wooden_shaft";
-    public static final String TEXTURE_CRUSHING_TABLE = "misc/crushing_table";
-    public static final String TEXTURE_SIEVE_TABLE = "misc/table_sieve";
-    public static final String TEXTURE_WIND_TURBINE = "misc/wind_turbine";
+    public static final String WOODEN_SHAFT = "wooden_shaft";
+    public static final String CRUSHING_TABLE = "crushing_table";
+    public static final String SIEVE_TABLE = "table_sieve";
+    public static final String WIND_TURBINE = "wind_turbine";
 
-
-    public static final String MODEL_CRUSHING_TABLE = "models/crushing_table.tcn";
-    public static final String MODEL_SIEVE_TABLE = "models/table_sieve.tcn";
-    public static final String MODEL_WOODEN_SHAFT = "models/wooden_shaft.tcn";
-
-
-    public static ResourceReference of(String s){
-        return new ResourceReference(DOMAIN, s);
+    public static ResourceReference ofTexture(String s) {
+        return new ResourceReference(DOMAIN, "textures/models/" + s + ".png");
     }
 
-    public static ResourceReference ofTexture(String s){
-        return new ResourceReference(DOMAIN, "textures/"+s+".png");
+    public static IModelPart ofTechne(String file) {
+        return ofTechne(file, file);
     }
 
-    public static IModelPart ofTechne(String file, String texture){
-        return TechneModelLoader.loadModel(of(file), of(texture));
+    public static IModelPart ofTechne(String file, String texture) {
+        return TechneModelLoader.loadModel(new ResourceReference(DOMAIN, "models/" + file + ".tcn"), new ResourceReference(DOMAIN, "models/" + texture));
     }
+
+
 }

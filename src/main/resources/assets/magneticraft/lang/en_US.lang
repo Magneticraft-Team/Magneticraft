@@ -4,6 +4,7 @@ item.hand_sieve.name=Hand Sieve
 item.iron_hammer.name=Iron Hammer
 tile.oreTungsten.name=Tungsten Ore
 tile.crushing_table.name=Crushing Table
+tile.chassis.name=MultiBlock Chassis
 tile.oreCopper.name=Copper Ore
 tile.wooden_shaft.name=Wooden Shaft
 tile.wind_turbine.name=Wind Turbine

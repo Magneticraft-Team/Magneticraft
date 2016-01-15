@@ -1,10 +1,12 @@
 package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.block.*;
+import com.cout970.magneticraft.block.multiblock.BlockChassis;
 import com.cout970.magneticraft.client.tilerender.TileRenderCrushingTable;
 import com.cout970.magneticraft.client.tilerender.TileRenderWindTurbine;
 import com.cout970.magneticraft.client.tilerender.TileRenderWoodenShaft;
 import com.cout970.magneticraft.tileentity.*;
+import com.cout970.magneticraft.util.multiblock.structures.TileMultiBlockChassis;
 import net.darkaqua.blacksmith.api.block.IBlock;
 import net.darkaqua.blacksmith.api.block.IBlockDefinition;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
@@ -22,7 +24,8 @@ public enum ManagerBlocks {
     TableSieve(new BlockTableSieve(), "Table Sieve", TileTableSieve.class),
     WoodenShaft(new BlockWoodenShaft(), "Wooden Shaft", TileWoodenShaft.class, new TileRenderWoodenShaft()),
     HandCrank(new BlockHandCrank(), "Hand Crank", TileHandCrank.class),
-    WindTurbine(new BlockWindTurbine(), "Wind Turbine", TileWindTurbine.class, new TileRenderWindTurbine());
+    WindTurbine(new BlockWindTurbine(), "Wind Turbine", TileWindTurbine.class, new TileRenderWindTurbine()),
+    Chassis(new BlockChassis(), "MultiBlock Chassis", TileMultiBlockChassis.class );
 
     private BlockBase definition;
     private IBlock block;
