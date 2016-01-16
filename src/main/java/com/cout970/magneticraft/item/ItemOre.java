@@ -23,7 +23,6 @@ public class ItemOre extends ItemBase {
 
     public ItemOre(String base) {
         this.base = base;
-        hasSubtypes = true;
     }
 
     public int maxMeta() {
