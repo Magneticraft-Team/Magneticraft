@@ -1,9 +1,9 @@
 package com.cout970.magneticraft;
 
-import com.cout970.magneticraft.item.ItemBase;
-import com.cout970.magneticraft.item.ItemHandSieve;
-import com.cout970.magneticraft.item.ItemIronHammer;
-import com.cout970.magneticraft.item.ItemStoneHammer;
+import com.cout970.magneticraft.item.*;
+import com.cout970.magneticraft.util.MiscUtils;
+import net.darkaqua.blacksmith.api.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
 import net.darkaqua.blacksmith.api.item.IItem;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
 
@@ -30,12 +30,14 @@ public enum ManagerItems {
         for (ManagerItems b : ManagerItems.values()) {
             b.item = StaticAccess.GAME.getItemRegistry().registerItemDefinition(b.definition, b.identifier);
         }
+        ItemOres.initItems();
     }
 
-    public static void initBlockRenders() {
+    public static void initItemRenders() {
         for (ManagerItems b : ManagerItems.values()) {
             StaticAccess.GAME.getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
         }
+        ItemOres.initItemRenders();
     }
 
     public ItemBase getDefinition() {
@@ -48,5 +50,61 @@ public enum ManagerItems {
 
     public String getIdentifier() {
         return identifier;
+    }
+
+
+    public enum ItemOres {
+        Copper("Copper", "Gold", "Iron");
+
+        private ItemOre definition;
+        private IItem item;
+        private String identifier;
+        private String[] extras;
+
+        ItemOres(String base, String... extras) {
+            this.definition = new ItemOre(base);
+            this.extras = extras;
+            identifier = "itemOre" + base;
+            for (int i = 0; i < definition.maxMeta(); i++) {
+                LangHelper.addName("item." + definition.getUnlocalizedNameForMeta(i), base + " " + MiscUtils.capitalice(ItemOre.prefixes[i]));
+            }
+        }
+
+        public static void initItems() {
+            for (ItemOres b : ItemOres.values()) {
+                b.item = StaticAccess.GAME.getItemRegistry().registerItemDefinition(b.definition, b.identifier);
+            }
+        }
+
+        public static void initItemRenders() {
+            for (ItemOres b : ItemOres.values()) {
+                StaticAccess.GAME.getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
+            }
+        }
+
+        public ItemOre getDefinition() {
+            return definition;
+        }
+
+        public IItem getItem() {
+            return item;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public String getExtra(int n) {
+            if (n >= extras.length) return null;
+            return extras[n];
+        }
+
+        public IItemStack getIngot() {
+            return ItemStackFactory.createItemStack(item, 1, 0);
+        }
+
+        public IItemStack getDust() {
+            return ItemStackFactory.createItemStack(item, 1, 1);
+        }
     }
 }

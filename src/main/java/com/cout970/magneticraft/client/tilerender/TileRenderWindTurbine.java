@@ -3,7 +3,7 @@ package com.cout970.magneticraft.client.tilerender;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.client.model.ModelWindTurbine;
 import com.cout970.magneticraft.tileentity.TileWindTurbine;
-import com.cout970.magneticraft.util.ModelRotator;
+import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRenderer;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
@@ -22,7 +22,7 @@ public class TileRenderWindTurbine implements ITileEntityRenderer<TileWindTurbin
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 1.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F);
         GL11.glRotatef(90, 0,0,1);
-        ModelRotator.rotate(def.getDirection());
+        MiscUtils.rotate(def.getDirection());
         helper.bindTexture(ModelConstants.ofTexture(ModelConstants.WIND_TURBINE));
         GL11.glRotatef(-def.getRotationAngle(partialTick), 0,1,0);
         model.renderStatic(0.0625f);

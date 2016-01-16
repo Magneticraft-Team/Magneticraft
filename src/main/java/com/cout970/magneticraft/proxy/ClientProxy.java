@@ -11,6 +11,6 @@ public class ClientProxy extends CommonProxy {
     public void init() {
         super.init();
         ManagerBlocks.initBlockRenders();
-        ManagerItems.initBlockRenders();
+        ManagerItems.initItemRenders();
     }
 }
