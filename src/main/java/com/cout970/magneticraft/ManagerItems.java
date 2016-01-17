@@ -66,7 +66,7 @@ public enum ManagerItems {
             this.extras = extras;
             identifier = "itemOre" + base;
             for (int i = 0; i < definition.maxMeta(); i++) {
-                LangHelper.addName("item." + definition.getUnlocalizedNameForMeta(i), base + " " + MiscUtils.capitalice(ItemOre.prefixes[i]));
+                LangHelper.addName("item." + definition.getUnlocalizedNameForMeta(i), base + " " + MiscUtils.capitalize(ItemOre.prefixes[i]));
             }
         }
 

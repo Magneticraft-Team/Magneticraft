@@ -1,21 +1,19 @@
-package com.cout970.magneticraft.api.base.defaults;
+package com.cout970.magneticraft.api.pathfinding;
 
+import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 
-/**
- * Created by cout970 on 30/12/2015.
- */
 public class PathNode {
 
     private Vect3i position;
     private PathNode before;
 
     public PathNode(Vect3i position, PathNode node) {
-        this.position = position.copy();
+        this.position = position;
         before = node;
     }
 
-    public boolean isStart() {
+    public boolean isStart(){
         return before == null;
     }
 
@@ -33,5 +31,9 @@ public class PathNode {
 
     public void setPosition(Vect3i position) {
         this.position = position;
+    }
+
+    public PathNode step(Direction dir) {
+        return new PathNode(position.add(dir), this);
     }
 }

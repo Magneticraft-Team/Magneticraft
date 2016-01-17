@@ -1,15 +1,15 @@
-package com.cout970.magneticraft.api.kinetic.defaults;
+package com.cout970.magneticraft.api.kinetic;
 
-import com.cout970.magneticraft.api.base.defaults.NetworkBase;
-import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.api.kinetic.IKineticNetwork;
 import com.cout970.magneticraft.api.network.INetworkNode;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
+import com.cout970.magneticraft.api.network.Network;
+import com.sun.istack.internal.NotNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by cout970 on 30/12/2015.
  */
-public class KineticNetwork extends NetworkBase implements IKineticNetwork {
+public class KineticNetwork extends Network<IKineticConductor> {
 
     protected double addedSpeed;
     protected double maxSpeed;
@@ -17,25 +17,19 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
     protected double angle;
     protected long lastTick;
 
-    public KineticNetwork(INetworkNode start) {
+    public KineticNetwork(IKineticConductor start) {
         super(start);
     }
 
     @Override
-    protected IInterfaceIdentifier getInterfaceIdentifier() {
-        return IKineticConductor.IDENTIFIER;
+    public boolean canAddToNetwork(IKineticConductor node) {
+        return true;
     }
 
-    @Override
-    public boolean canAddToNetwork(INetworkNode node) {
-        return node instanceof IKineticConductor;
-    }
-
-    @Override
     public void iterate() {
-        if (lastTick != getFirstNode().getWorldReference().getWorld().getWorldTime()) {
-            lastTick = getFirstNode().getWorldReference().getWorld().getWorldTime();
-            //apply lose
+        if (lastTick != getMasterNode().getWorldReference().getWorld().getWorldTime()) {
+            lastTick = getMasterNode().getWorldReference().getWorld().getWorldTime();
+            //apply loss
             maxSpeed = addedSpeed - addedSpeed * getLose();
             if (maxSpeed < 0) maxSpeed = 0;
             //reset output buffer
@@ -48,39 +42,22 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
         }
     }
 
-    @Override
     public double getMass() {
-        double mass = 0;
-        for (INetworkNode n : nodes) {
-            if (n instanceof IKineticConductor) {
-                mass += ((IKineticConductor) n).getMass();
-            }
-        }
-        return mass;
+        return nodes.stream().mapToDouble(IKineticConductor::getMass).sum();
     }
 
-    @Override
     public double getLose() {
-        double lose = 0;
-        for (INetworkNode n : nodes) {
-            if (n instanceof IKineticConductor) {
-                lose += ((IKineticConductor) n).getLose();
-            }
-        }
-        return lose;
+        return nodes.stream().mapToDouble(IKineticConductor::getLoss).sum();
     }
 
-    @Override
     public double getSpeed() {
         return maxSpeed;
     }
 
-    @Override
     public void applyForce(double force) {
         addedSpeed += force / getMass();
     }
 
-    @Override
     public double applyForce(double force, double maxSpeed) {
         double mass = getMass();
         double speedAdded = Math.max(0, Math.min(maxSpeed - removedSpeed, force / mass));
@@ -88,7 +65,6 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
         return speedAdded * mass;
     }
 
-    @Override
     public double drainForce(double force) {
         double mass = getMass();
         double speedLose = Math.min(removedSpeed, force / mass);
@@ -96,8 +72,17 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
         return speedLose * mass;
     }
 
-    @Override
     public double getRotationAngle() {
         return angle;
+    }
+
+    @Override
+    public void addNetworkNode(@Nonnull IKineticConductor node) {
+
+    }
+
+    @Override
+    public void removeNetworkNode(@Nonnull IKineticConductor node) {
+
     }
 }

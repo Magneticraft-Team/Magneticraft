@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.base;
+package com.cout970.magneticraft.api.network;
 
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.util.WorldRef;
@@ -6,9 +6,11 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
 /**
  * Created by cout970 on 29/12/2015.
  */
-public interface IConnectable {
+public interface IConnectable<T extends IConnectable> {
 
     WorldRef getWorldReference();
 
-    boolean isAbleToConnect(IConnectable cond, Vect3i offset);
+    boolean isAbleToConnect(T node, Vect3i offset);
+
+
 }

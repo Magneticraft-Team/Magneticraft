@@ -1,8 +1,6 @@
 package com.cout970.magneticraft.tileentity;
 
-import com.cout970.magneticraft.api.base.IConnectable;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.api.kinetic.defaults.KineticConductor;
 import com.cout970.magneticraft.block.BlockWindTurbine;
 import com.cout970.magneticraft.tileentity.base.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
@@ -30,7 +28,7 @@ public class TileWindTurbine extends TileKineticBase {
             speed = (float) (Math.sqrt(power) * 0.1d);
             traceAir1();
         }
-        cond.getNetwork().applyForce(speed, 20 * speed);
+        network.applyForce(speed, 20 * speed);
     }
 
     private void traceAir1() {
@@ -61,16 +59,6 @@ public class TileWindTurbine extends TileKineticBase {
         }
     }
 
-    @Override
-    protected IKineticConductor createKineticConductor() {
-        return new KineticConductor(getParent()) {
-            @Override
-            public boolean isAbleToConnect(IConnectable cond, Vect3i offset) {
-                return cond instanceof IKineticConductor && getDirection().matches(offset);
-            }
-        };
-    }
-
     public Direction getDirection() {
         IBlockData variant = parent.getWorldRef().getBlockData();
         return (Direction) variant.getValue(BlockWindTurbine.DIRECTION).getValue();
@@ -88,5 +76,10 @@ public class TileWindTurbine extends TileKineticBase {
             return 0.5D + 0.5D * tot;
         }
         return tot;
+    }
+
+    @Override
+    public boolean isAbleToConnect(IKineticConductor cond, Vect3i offset) {
+        return getDirection().matches(offset);
     }
 }

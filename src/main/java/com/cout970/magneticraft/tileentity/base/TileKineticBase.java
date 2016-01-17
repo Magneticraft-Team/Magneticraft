@@ -1,77 +1,124 @@
 package com.cout970.magneticraft.tileentity.base;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.api.network.INetwork;
+import com.cout970.magneticraft.api.kinetic.KineticNetwork;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
+import net.darkaqua.blacksmith.api.util.Vect3i;
+import net.darkaqua.blacksmith.api.util.WorldRef;
 
 /**
  * Created by cout970 on 30/12/2015.
  */
-public abstract class TileKineticBase extends TileBase implements IInterfaceProvider {
-
-    protected IKineticConductor cond;
-
-    @Override
-    public void bindParent(ITileEntity parent) {
-        super.bindParent(parent);
-        cond = createKineticConductor();
-    }
-
-    public IKineticConductor getCond() {
-        return cond;
-    }
+public abstract class TileKineticBase extends TileBase implements IInterfaceProvider, IKineticConductor {
+    protected KineticNetwork network;
+    protected double mass;
+    protected double loss;
 
     @Override
     public void onDelete() {
         super.onDelete();
-        INetwork net = cond.getNetwork();
-        if (net != null) {
-            net.removeNetworkNode(cond);
+        if (network != null) {
+            network.removeNetworkNode(this);
         }
-    }
-
-    protected abstract IKineticConductor createKineticConductor();
-
-    public boolean hasInterface(IInterfaceIdentifier identifier, Direction side){
-        return identifier == IKineticConductor.IDENTIFIER;
-    }
-
-    public Object getInterface(IInterfaceIdentifier identifier, Direction side){
-        if (identifier == IKineticConductor.IDENTIFIER) {
-            return cond;
-        }
-        return null;
     }
 
     @Override
     public void update() {
-        cond.iterate();
+        iterate();
     }
 
     @Override
     public void loadData(IDataCompound tag) {
         super.loadData(tag);
-        cond.load(tag);
+        mass = tag.getDouble("Mass");
+        loss = tag.getDouble("Loss");
     }
 
     @Override
     public void saveData(IDataCompound tag) {
         super.saveData(tag);
-        cond.save(tag);
+        tag.setDouble("Mass", mass);
+        tag.setDouble("Loss", loss);
     }
 
     public float getRotationAngle(float partialTick) {
         float rot = 0;
-        if (getCond().getNetwork() != null) {
-            partialTick = Math.min(1, partialTick);
-            double speed = getCond().getNetwork().getSpeed() / 20d;
-            rot = (float) getCond().getNetwork().getRotationAngle();
+        if (network != null) {
+            double speed = network.getSpeed() / 20d;
+            rot = (float) network.getRotationAngle();
             rot += partialTick * speed;
         }
         return rot;
+    }
+
+    @Override
+    public void iterate() {
+        if (network == null) {
+            createNetwork();
+            network.refreshNetwork();
+        }
+        getNetwork().iterate();
+    }
+
+    @Override
+    public double getMass() {
+        return mass;
+    }
+
+    @Override
+    public double getLoss() {
+        return loss;
+    }
+
+    @Override
+    public double getSpeed() {
+        return network.getSpeed();
+    }
+
+    @Override
+    public WorldRef getWorldReference() {
+        return parent.getWorldRef();
+    }
+
+    @Override
+    public boolean isAbleToConnect(IKineticConductor cond, Vect3i offset) {
+        return offset.isDirectionalOffset();
+    }
+
+    @Override
+    public KineticNetwork getNetwork() {
+        return network;
+    }
+
+    @Override
+    public void setNetwork(KineticNetwork net) {
+        network = net;
+    }
+
+    @Override
+    public boolean isValid() {
+        return parent.isValid();
+    }
+
+    @Override
+    public void onNetworkChange() {
+    }
+
+    @Override
+    public void createNetwork() {
+        network = new KineticNetwork(this);
+    }
+
+    @Override
+    public boolean hasInterface(IInterfaceIdentifier iInterfaceIdentifier, Direction direction) {
+        return iInterfaceIdentifier.getInterfaceClass().isAssignableFrom(this.getClass());
+    }
+
+    @Override
+    public Object getInterface(IInterfaceIdentifier iInterfaceIdentifier, Direction direction) {
+        return this;
     }
 }
