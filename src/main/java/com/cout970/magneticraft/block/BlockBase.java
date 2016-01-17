@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.LangHelper;
 import com.cout970.magneticraft.Magneticraft;
 import net.darkaqua.blacksmith.api.block.Blocks;
 import net.darkaqua.blacksmith.api.block.defaults.DefaultBlockDefinition;
@@ -32,5 +33,9 @@ public abstract class BlockBase extends DefaultBlockDefinition {
     public IBlockModelProvider getModelProvider() {
         SimpleModelPartBlock model = new SimpleModelPartBlock(new ResourceReference(Magneticraft.ID, "blocks/" + getBlockName().toLowerCase()));
         return new SimpleBlockModelProvider(model);
+    }
+
+    public void registerName(String name) {
+        LangHelper.addName("tile." + getUnlocalizedName(), name);
     }
 }

@@ -20,7 +20,7 @@ public class TileRenderCrushingTable implements ITileEntityRenderer<TileCrushing
     public void renderTileEntity(ITileEntity tile, TileCrushingTable def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 0.5F, (float) pos.getY() + 1.5F, (float) pos.getZ() + 0.5F);
-        IItemStack stack = def.getInventory().getStackInSlot(null, 0);
+        IItemStack stack = def.getContent();
         if (stack != null) {
             if (stack.getItem() instanceof IItemBlock) {
                 GL11.glTranslatef(0, -0.5f, 0);

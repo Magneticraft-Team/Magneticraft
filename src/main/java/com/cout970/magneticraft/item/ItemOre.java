@@ -42,6 +42,11 @@ public class ItemOre extends ItemBase {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return "itemOre_"+base;
+    }
+
+    @Override
     public String getUnlocalizedName(IItemStack stack) {
         return getUnlocalizedNameForMeta(stack.getDamage());
     }

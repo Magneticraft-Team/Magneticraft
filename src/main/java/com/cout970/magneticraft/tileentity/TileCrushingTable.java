@@ -6,6 +6,7 @@ import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.inventory.InventoryUtils;
 import net.darkaqua.blacksmith.api.inventory.defaults.SimpleInventoryHandler;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
@@ -17,11 +18,24 @@ import net.darkaqua.blacksmith.api.util.Direction;
 public class TileCrushingTable extends TileBase implements IInterfaceProvider{
 
     private SimpleInventoryHandler inventory;
-    private int maxProgress;
     private int progress;
 
     public TileCrushingTable() {
-        inventory = new SimpleInventoryHandler(1);
+        inventory = new SimpleInventoryHandler(1){
+            @Override
+            public void setStackInSlot(Direction side, int slot, IItemStack stack) {
+                inventory[slot] = stack;
+                sendUpdateToClient();
+            }
+            @Override
+            public IItemStack insertItemStack(Direction side, int slot, IItemStack stack, boolean simulated) {
+                IItemStack ret = super.insertItemStack(side, slot, stack, simulated);
+                if (!simulated && InventoryUtils.areExactlyEqual(ret, stack)){
+                    sendUpdateToClient();
+                }
+                return ret;
+            }
+        };
     }
 
     public IInventoryHandler getInventory() {
@@ -61,15 +75,13 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider{
     }
 
     public void tick(int maxHits) {
-        maxProgress = maxHits;
         progress++;
         if (StaticAccess.GAME.isClient()) {
             addParticles();
         }
-        if (progress >= maxProgress) {
-            maxProgress = 0;
+        if (progress >= maxHits) {
             progress = 0;
-            inventory.setStackInSlot(null, 0, getOutput().copy());
+            setContent(getOutput().copy());
         }
     }
 

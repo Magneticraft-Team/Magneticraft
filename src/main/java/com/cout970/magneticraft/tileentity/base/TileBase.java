@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.tileentity.base;
 
-import net.darkaqua.blacksmith.api.network.packet.ITileEntityUpdatePacket;
-import net.darkaqua.blacksmith.api.network.packet.PacketFactory;
+import com.cout970.magneticraft.ManagerNetwork;
+import com.cout970.magneticraft.network.MessageServerUpdate;
+import net.darkaqua.blacksmith.api.registry.StaticAccess;
 import net.darkaqua.blacksmith.api.storage.DataElementFactory;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
 import net.darkaqua.blacksmith.api.tileentity.defaults.DefaultTileEntityDefinition;
@@ -11,23 +12,31 @@ import net.darkaqua.blacksmith.api.tileentity.defaults.DefaultTileEntityDefiniti
  */
 public class TileBase extends DefaultTileEntityDefinition {
 
+    public void sendUpdateToClient(){
+        if (StaticAccess.GAME.isClient()) return;
+        IDataCompound nbt = DataElementFactory.createDataCompound();
+        writeUpdatePacket(nbt);
+        MessageServerUpdate message = new MessageServerUpdate(getParent().getWorldRef(), nbt);
+        ManagerNetwork.CHANNEL.sendToAllAround(message, getWorld().getWorldDimension(), 64, getPosition().toVect3d());
+    }
+
     @Override
-    public ITileEntityUpdatePacket getUpdatePacket() {
+    public IDataCompound getUpdateData() {
         IDataCompound data = DataElementFactory.createDataCompound();
         writeUpdatePacket(data);
-        return PacketFactory.createTileEntityUpdatePacket(parent, data);
+        return data;
     }
 
     @Override
-    public void onUpdatePacketArrives(ITileEntityUpdatePacket packet) {
-        readUpdatePacket(packet.getDataCompound());
+    public void onUpdateDataArrives(IDataCompound data) {
+        readUpdatePacket(data);
     }
 
-    protected void writeUpdatePacket(IDataCompound data) {
+    public void writeUpdatePacket(IDataCompound data) {
         saveData(data);
     }
 
-    protected void readUpdatePacket(IDataCompound dataCompound) {
+    public synchronized void readUpdatePacket(IDataCompound dataCompound) {
         loadData(dataCompound);
     }
 

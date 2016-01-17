@@ -25,7 +25,8 @@ public enum ManagerBlocks {
     WoodenShaft(new BlockWoodenShaft(), "Wooden Shaft", TileWoodenShaft.class, new TileRenderWoodenShaft()),
     HandCrank(new BlockHandCrank(), "Hand Crank", TileHandCrank.class),
     WindTurbine(new BlockWindTurbine(), "Wind Turbine", TileWindTurbine.class, new TileRenderWindTurbine()),
-    Chassis(new BlockChassis(), "MultiBlock Chassis", TileMultiBlockChassis.class );
+    Chassis(new BlockChassis(), "MultiBlock Chassis", TileMultiBlockChassis.class ),
+    Limestone(new BlockLimestone(), "Limestone");
 
     private BlockBase definition;
     private IBlock block;
@@ -36,7 +37,7 @@ public enum ManagerBlocks {
     ManagerBlocks(BlockBase def, String englishName) {
         definition = def;
         identifier = def.getUnlocalizedName();
-        LangHelper.addName("tile." + def.getUnlocalizedName(), englishName);
+        def.registerName(englishName);
     }
 
     <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile) {

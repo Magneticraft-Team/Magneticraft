@@ -52,6 +52,9 @@ public class Magneticraft {
         proxy.init();
         StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), () -> new KineticConductor(null));
 
+        ManagerNetwork.init();
+        ManagerRecipe.init();
+
         if (DEBUG) {
             //BEGIN FINDING OF SOURCE DIR
             File temp = event.getModConfigurationDirectory();
