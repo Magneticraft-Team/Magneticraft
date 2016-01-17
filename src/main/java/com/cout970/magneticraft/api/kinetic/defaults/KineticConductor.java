@@ -51,7 +51,7 @@ public class KineticConductor implements IKineticConductor {
 
     @Override
     public WorldRef getWorldReference() {
-        return parent.getWorldRef();
+        return parent != null ? parent.getWorldRef() : null;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class KineticConductor implements IKineticConductor {
 
     @Override
     public boolean isValid() {
-        return parent.isValid();
+        return parent != null && parent.isValid();
     }
 
     @Override

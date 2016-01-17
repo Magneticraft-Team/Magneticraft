@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.base.defaults.NetworkBase;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.api.kinetic.IKineticNetwork;
 import com.cout970.magneticraft.api.network.INetworkNode;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 
 /**
  * Created by cout970 on 30/12/2015.
@@ -18,6 +19,11 @@ public class KineticNetwork extends NetworkBase implements IKineticNetwork {
 
     public KineticNetwork(INetworkNode start) {
         super(start);
+    }
+
+    @Override
+    protected IInterfaceIdentifier getInterfaceIdentifier() {
+        return IKineticConductor.IDENTIFIER;
     }
 
     @Override

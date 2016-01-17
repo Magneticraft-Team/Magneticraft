@@ -1,5 +1,8 @@
 package com.cout970.magneticraft;
 
+import com.cout970.magneticraft.api.kinetic.IKineticConductor;
+import com.cout970.magneticraft.api.kinetic.defaults.KineticConductor;
+import com.cout970.magneticraft.api.kinetic.defaults.KineticStorageHandler;
 import com.cout970.magneticraft.proxy.CommonProxy;
 import com.cout970.magneticraft.util.Log;
 import com.cout970.magneticraft.world.ManagerWorldGen;
@@ -47,8 +50,7 @@ public class Magneticraft {
 //        ManagerFluids.initFluids();
 
         proxy.init();
-
-//        ManagerIntegration.searchCompatibilities();
+        StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), () -> new KineticConductor(null));
 
         if (DEBUG) {
             //BEGIN FINDING OF SOURCE DIR

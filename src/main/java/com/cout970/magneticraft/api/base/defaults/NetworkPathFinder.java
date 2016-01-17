@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.base.defaults;
 
 import com.cout970.magneticraft.api.network.INetwork;
 import com.cout970.magneticraft.api.network.INetworkNode;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.ObjectScanner;
 import net.darkaqua.blacksmith.api.util.Vect3i;
@@ -18,12 +19,14 @@ public class NetworkPathFinder extends PathFinding {
     protected WorldRef ref;
     protected List<INetworkNode> conductors;
     protected INetwork network;
+    protected IInterfaceIdentifier identifier;
 
-    public NetworkPathFinder(INetwork net, WorldRef ref) {
+    public NetworkPathFinder(INetwork net, WorldRef ref, IInterfaceIdentifier identifier) {
         network = net;
         this.ref = ref;
         conductors = new LinkedList<>();
         setStart(ref.getPosition());
+        this.identifier = identifier;
     }
 
     public List<INetworkNode> getConductors() {
@@ -45,7 +48,7 @@ public class NetworkPathFinder extends PathFinding {
         }
 
         ITileEntity b = ref.getWorld().getTileEntity(vec);
-        INetworkNode cond = ObjectScanner.findInTileEntity(b, INetworkNode.class);
+        INetworkNode cond = (INetworkNode) ObjectScanner.findInTileEntity(b, identifier, null);
         if (cond != null && network.canAddToNetwork(cond)) {
             toScan.add(new PathNode(vec, node));
             conductors.add(cond);

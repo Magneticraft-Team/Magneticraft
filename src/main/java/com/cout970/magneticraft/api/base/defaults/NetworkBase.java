@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.base.defaults;
 
 import com.cout970.magneticraft.api.network.INetwork;
 import com.cout970.magneticraft.api.network.INetworkNode;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -61,7 +62,7 @@ public abstract class NetworkBase implements INetwork {
         nodes.clear();
         for (INetworkNode node : list) {
             if (node.getNetwork() == null && node.isValid()) {
-                NetworkPathFinder pathFinder = new NetworkPathFinder(this, node.getWorldReference());
+                NetworkPathFinder pathFinder = new NetworkPathFinder(this, node.getWorldReference(), getInterfaceIdentifier());
                 pathFinder.getPathEnd();
                 node.createNetwork();
                 for (INetworkNode n : pathFinder.getConductors()) {
@@ -71,6 +72,8 @@ public abstract class NetworkBase implements INetwork {
         }
         onNetworkChange();
     }
+
+    protected abstract IInterfaceIdentifier getInterfaceIdentifier();
 
     public void onNetworkChange() {
         for (INetworkNode node : getNetworkNodes()) {

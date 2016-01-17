@@ -2,17 +2,19 @@ package com.cout970.magneticraft.tileentity;
 
 import com.cout970.magneticraft.api.access.RecipeCrushingTable;
 import com.cout970.magneticraft.tileentity.base.TileBase;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
-import net.darkaqua.blacksmith.api.inventory.IInventoryProvider;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.defaults.SimpleInventoryHandler;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.util.Direction;
 
 /**
  * Created by cout970 on 16/12/2015.
  */
-public class TileCrushingTable extends TileBase implements IInventoryProvider {
+public class TileCrushingTable extends TileBase implements IInterfaceProvider{
 
     private SimpleInventoryHandler inventory;
     private int maxProgress;
@@ -22,7 +24,6 @@ public class TileCrushingTable extends TileBase implements IInventoryProvider {
         inventory = new SimpleInventoryHandler(1);
     }
 
-    @Override
     public IInventoryHandler getInventory() {
         return inventory;
     }
@@ -74,5 +75,15 @@ public class TileCrushingTable extends TileBase implements IInventoryProvider {
 
     private void addParticles() {
 
+    }
+
+    @Override
+    public boolean hasInterface(IInterfaceIdentifier identifier, Direction side) {
+        return identifier == IInventoryHandler.IDENTIFIER;
+    }
+
+    @Override
+    public Object getInterface(IInterfaceIdentifier identifier, Direction side) {
+        return identifier == IInventoryHandler.IDENTIFIER ? inventory : null;
     }
 }

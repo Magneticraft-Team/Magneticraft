@@ -2,9 +2,11 @@ package com.cout970.magneticraft.tileentity.base;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.api.network.INetwork;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.util.Direction;
 
 /**
  * Created by cout970 on 30/12/2015.
@@ -34,9 +36,12 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
 
     protected abstract IKineticConductor createKineticConductor();
 
-    @Override
-    public Object providerInterface(String className, Class<?> interfaceClass) {
-        if (interfaceClass.isAssignableFrom(IKineticConductor.class)) {
+    public boolean hasInterface(IInterfaceIdentifier identifier, Direction side){
+        return identifier == IKineticConductor.IDENTIFIER;
+    }
+
+    public Object getInterface(IInterfaceIdentifier identifier, Direction side){
+        if (identifier == IKineticConductor.IDENTIFIER) {
             return cond;
         }
         return null;
@@ -62,6 +67,7 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
     public float getRotationAngle(float partialTick) {
         float rot = 0;
         if (getCond().getNetwork() != null) {
+            partialTick = Math.min(1, partialTick);
             double speed = getCond().getNetwork().getSpeed() / 20d;
             rot = (float) getCond().getNetwork().getRotationAngle();
             rot += partialTick * speed;
