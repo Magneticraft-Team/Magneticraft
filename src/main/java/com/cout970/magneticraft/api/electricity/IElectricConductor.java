@@ -7,6 +7,7 @@ import net.darkaqua.blacksmith.api.intermod.InterfaceIdentifierHolder;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 
 public interface IElectricConductor extends IConnectable<IElectricConductor>, INetworkNode<ElectricNetwork> {
+
     @InterfaceIdentifierHolder(IElectricConductor.class)
     IInterfaceIdentifier IDENTIFIER = null;
 

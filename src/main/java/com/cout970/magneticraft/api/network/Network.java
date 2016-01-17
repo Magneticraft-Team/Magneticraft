@@ -16,6 +16,7 @@ public abstract class Network<T extends INetworkNode> {
         nodes = new ArrayList<>();
         nodes.add(node);
         node.setNetwork(this);
+        this.masterNode = node;
     }
 
     public INetworkNode getMasterNode() {

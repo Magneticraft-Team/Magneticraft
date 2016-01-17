@@ -51,8 +51,8 @@ public class TileCombustionEngine extends TileBase implements IInterfaceProvider
     }
 
     @Override
-    public boolean hasInterface(IInterfaceIdentifier iInterfaceIdentifier, Direction direction) {
-        return iInterfaceIdentifier.getInterfaceClass().isAssignableFrom(this.getClass());
+    public boolean hasInterface(IInterfaceIdentifier id, Direction direction) {
+        return id == IElectricConductor.IDENTIFIER;
     }
 
     @Override

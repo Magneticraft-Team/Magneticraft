@@ -53,14 +53,15 @@ public class MessageServerUpdate implements INetworkMessage, INetworkMessageHand
     public MessageServerUpdate onMessage(MessageServerUpdate message, INetworkContext context) {
 
         context.addScheduledTask(() -> {
-            IWorld w =  context.getClientContext().getWorld(message.dimension);
-            ITileEntity tile = w.getTileEntity(message.pos);
-            ITileEntityDefinition def = tile.getTileEntityDefinition();
-            if (def instanceof TileBase){
-                ((TileBase) def).readUpdatePacket(message.data);
+            IWorld w = context.getClientContext().getWorld();
+            if (w.getWorldDimension() == message.dimension) {
+                ITileEntity tile = w.getTileEntity(message.pos);
+                ITileEntityDefinition def = tile.getTileEntityDefinition();
+                if (def instanceof TileBase) {
+                    ((TileBase) def).readUpdatePacket(message.data);
+                }
             }
         });
-
         return null;
     }
 }

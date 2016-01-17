@@ -25,6 +25,7 @@ public class KineticNetwork extends Network<IKineticConductor> {
     }
 
     public void iterate() {
+        if (getMasterNode() == null) return;
         if (lastTick != getMasterNode().getWorldReference().getWorld().getWorldTime()) {
             lastTick = getMasterNode().getWorldReference().getWorld().getWorldTime();
             //apply loss

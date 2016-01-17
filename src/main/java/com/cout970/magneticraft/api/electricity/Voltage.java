@@ -13,4 +13,8 @@ public enum Voltage {
     Voltage(int maxVoltage) {
         this.maxVoltage = maxVoltage;
     }
+
+    public int getMaxVoltage() {
+        return maxVoltage;
+    }
 }
