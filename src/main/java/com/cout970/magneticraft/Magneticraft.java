@@ -1,7 +1,7 @@
 package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.api.kinetic.defaults.KineticConductor;
+import com.cout970.magneticraft.api.kinetic.defaults.DefaultKineticConductor;
 import com.cout970.magneticraft.api.kinetic.defaults.KineticStorageHandler;
 import com.cout970.magneticraft.proxy.CommonProxy;
 import com.cout970.magneticraft.util.Log;
@@ -47,10 +47,8 @@ public class Magneticraft {
         ManagerBlocks.initBlocks();
         ManagerItems.initItems();
 
-//        ManagerFluids.initFluids();
-
         proxy.init();
-        StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), () -> new KineticConductor(null));
+        StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), DefaultKineticConductor::new);
 
         ManagerNetwork.init();
         ManagerRecipe.init();
@@ -73,7 +71,6 @@ public class Magneticraft {
             LangHelper.setupLangFile();
         }
 
-//        ManagerOreDict.registerOreDict();
         Log.info("preInit Done");
     }
 

@@ -26,8 +26,8 @@ public class MiscUtils {
         }
     }
 
-    public static String capitalice(String name) {
+    public static String capitalize(String name) {
         char a = name.charAt(0);
-        return Character.toUpperCase(a) + name.substring(1);
+        return Character.toUpperCase(a)+name.substring(1);
     }
 }

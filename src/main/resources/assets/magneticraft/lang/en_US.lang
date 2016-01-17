@@ -1,7 +1,9 @@
 item.iron_hammer.name=Iron Hammer
 tile.crushing_table.name=Crushing Table
+item.Tungsten.ingot.name=Tungsten Ingot
 tile.wind_turbine.name=Wind Turbine
 item.Copper.ingot.name=Copper Ingot
+item.Tungsten.dust.name=Tungsten Dust
 item.stone_hammer.name=Stone Hammer
 tile.hand_crank.name=Hand Crank
 tile.table_sieve.name=Table Sieve

@@ -7,7 +7,7 @@ import net.darkaqua.blacksmith.api.storage.IDataCompound;
  */
 public interface IDataStorage {
 
-    void load(IDataCompound data);
+    void loadData(IDataCompound data);
 
-    void save(IDataCompound data);
+    void saveData(IDataCompound data);
 }

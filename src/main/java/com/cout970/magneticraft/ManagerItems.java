@@ -54,7 +54,8 @@ public enum ManagerItems {
 
 
     public enum ItemOres {
-        Copper("Copper", "Gold", "Iron");
+        Copper("Copper", "Gold", "Iron"),
+        Tungsten("Tungsten", "Gold", "Iron");
 
         private ItemOre definition;
         private IItem item;
@@ -66,13 +67,16 @@ public enum ManagerItems {
             this.extras = extras;
             identifier = "itemOre" + base;
             for (int i = 0; i < definition.maxMeta(); i++) {
-                LangHelper.addName("item." + definition.getUnlocalizedNameForMeta(i), base + " " + MiscUtils.capitalice(ItemOre.prefixes[i]));
+                LangHelper.addName("item." + definition.getUnlocalizedNameForMeta(i), base + " " + MiscUtils.capitalize(ItemOre.prefixes[i]));
             }
         }
 
         public static void initItems() {
             for (ItemOres b : ItemOres.values()) {
                 b.item = StaticAccess.GAME.getItemRegistry().registerItemDefinition(b.definition, b.identifier);
+                for (int i = 0; i < b.definition.maxMeta(); i++) {
+                    StaticAccess.GAME.getOreDictionary().registerOre(b.definition.getOreDictName(i), ItemStackFactory.createItemStack(b.item, 1, i));
+                }
             }
         }
 

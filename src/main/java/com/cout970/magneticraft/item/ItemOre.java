@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.item;
 
 import com.cout970.magneticraft.Magneticraft;
+import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
@@ -34,6 +35,10 @@ public class ItemOre extends ItemBase {
         for (int i = 0; i < maxMeta(); i++) {
             subItems.add(ItemStackFactory.createItemStack(parent, 1, i));
         }
+    }
+
+    public String getOreDictName(int i){
+        return prefixes[i % prefixes.length] + MiscUtils.capitalize(base);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.api.kinetic.defaults.KineticConductor;
 import com.cout970.magneticraft.tileentity.base.TileKineticBase;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
@@ -11,13 +10,7 @@ import net.darkaqua.blacksmith.api.util.ObjectScanner;
  * Created by cout970 on 28/12/2015.
  */
 public class TileWoodenShaft extends TileKineticBase {
-
     private int connections;
-
-    @Override
-    protected IKineticConductor createKineticConductor() {
-        return new KineticConductor(getParent());
-    }
 
     @Override
     public void update() {
