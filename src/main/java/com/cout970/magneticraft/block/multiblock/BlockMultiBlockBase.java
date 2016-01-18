@@ -20,12 +20,12 @@ public abstract class BlockMultiBlockBase extends BlockBase implements MB_Block 
 
     @Override
     public void mutates(WorldRef ref, IMultiBlockData data) {
-        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, new BlockAttributeValueBoolean(true)));
+        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, BlockAttributeValueBoolean.TRUE));
     }
 
     @Override
     public void destroy(WorldRef ref, IMultiBlockData data) {
-        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, new BlockAttributeValueBoolean(true)));
+        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, BlockAttributeValueBoolean.FALSE));
     }
 
     public boolean matchesAny(WorldRef worldRef, List<IBlock> blocks){

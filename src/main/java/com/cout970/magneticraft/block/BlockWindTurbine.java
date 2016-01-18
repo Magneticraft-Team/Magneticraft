@@ -39,7 +39,7 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
 
     @Override
     public void onPlacedBy(WorldRef ref, IBlockData state, ILivingEntity placer, IItemStack stack) {
-        state = state.setValue(DIRECTION, new BlockAttributeValueDirection(placer.getEntityRotation().toHorizontalAxis()));
+        state = state.setValue(DIRECTION, BlockAttributeValueDirection.fromDirection(placer.getEntityRotation().toHorizontalAxis().opposite()));
         ref.setBlockData(state);
     }
 
