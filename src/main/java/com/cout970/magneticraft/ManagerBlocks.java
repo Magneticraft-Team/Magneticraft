@@ -9,6 +9,8 @@ import com.cout970.magneticraft.tileentity.*;
 import com.cout970.magneticraft.util.multiblock.structures.TileMultiBlockChassis;
 import net.darkaqua.blacksmith.api.block.IBlock;
 import net.darkaqua.blacksmith.api.block.IBlockDefinition;
+import net.darkaqua.blacksmith.api.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRenderer;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
@@ -78,5 +80,9 @@ public enum ManagerBlocks {
 
     public IBlock getBlock() {
         return block;
+    }
+
+    public IItemStack toItemStack() {
+        return ItemStackFactory.createItemStack(getBlock());
     }
 }

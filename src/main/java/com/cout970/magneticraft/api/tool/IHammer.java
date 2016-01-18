@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.api.tool;
 
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.intermod.InterfaceIdentifierHolder;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
@@ -9,6 +11,9 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
  * @author cout970
  */
 public interface IHammer {
+
+    @InterfaceIdentifierHolder(IHammer.class)
+    IInterfaceIdentifier IDENTIFIER = null;
 
     /**
      * called to damage the tool, return the item to leave in the player's hands

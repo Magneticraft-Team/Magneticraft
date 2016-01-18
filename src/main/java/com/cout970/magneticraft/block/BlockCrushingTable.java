@@ -5,8 +5,8 @@ import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
+import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
@@ -49,7 +49,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
             IItemStack i = p.getSelectedItemStack();
             IInventoryHandler playerInv = p.getInventory();
             if (i != null) {
-                IHammer hammer = ObjectScanner.findInItemStack(i, IHammer.class);
+                IHammer hammer = (IHammer) ObjectScanner.findInItem(i.getItem(), IHammer.IDENTIFIER, null);
                 if (hammer != null) {
                     if (tile.canWork()) {
                         if (hammer.canHammer(i, ref)) {
@@ -63,7 +63,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
                             for (int j = 0; j < playerInv.getSlots(null); j++) {
                                 IItemStack stack = playerInv.getStackInSlot(null, j);
                                 if (stack != null && stack.getAmount() > 0 && RecipeCrushingTable.getRecipe(stack) != null) {
-                                    tile.setContent(playerInv.extractItemStack(null, j, stack.getAmount(), false));
+                                    tile.setContent(playerInv.extractItemStack(null, j, 1, false));
                                     t.setModified();
                                     return true;
                                 }

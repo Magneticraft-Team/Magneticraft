@@ -52,6 +52,9 @@ public enum ManagerItems {
         return identifier;
     }
 
+    public IItemStack toItemStack() {
+        return ItemStackFactory.createItemStack(getItem());
+    }
 
     public enum ItemOres {
         Copper("Copper", "Gold", "Iron"),

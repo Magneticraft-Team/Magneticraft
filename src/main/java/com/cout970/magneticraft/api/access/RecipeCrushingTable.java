@@ -23,7 +23,7 @@ public class RecipeCrushingTable {
     }
 
     public boolean matches(IItemStack i) {
-        return InventoryUtils.areExactlyEqual(input, i) || InventoryUtils.areOreDictEquivalent(input, i);
+        return InventoryUtils.areEqual(input, i) || InventoryUtils.areOreDictEquivalent(input, i);
     }
 
     public static RecipeCrushingTable getRecipe(IItemStack i) {
