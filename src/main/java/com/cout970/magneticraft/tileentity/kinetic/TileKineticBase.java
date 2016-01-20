@@ -6,7 +6,9 @@ import com.cout970.magneticraft.tileentity.TileBase;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
+import net.darkaqua.blacksmith.api.util.ObjectScanner;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
@@ -29,6 +31,20 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
     @Override
     public void update() {
         iterate();
+        if (getWorld().getWorldTime() % 20 == 0) {
+            for (Direction d : Direction.values()) {
+                ITileEntity tile = getWorldReference().move(d).getTileEntity();
+                IKineticConductor k = ObjectScanner.findInTileEntity(tile, IKineticConductor.IDENTIFIER, d);
+
+                if (isAbleToConnect(k, d.toVect3i()) && network.canAddToNetwork(k)) {
+                    if (k.getNetwork() != null) {
+                        network.expandNetwork(k.getNetwork());
+                    } else {
+                        network.addNetworkNode(k);
+                    }
+                }
+            }
+        }
     }
 
     @Override

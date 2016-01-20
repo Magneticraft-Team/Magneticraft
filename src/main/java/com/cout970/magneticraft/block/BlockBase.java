@@ -2,7 +2,6 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.LangHelper;
 import com.cout970.magneticraft.Magneticraft;
-import com.google.common.collect.Lists;
 import net.darkaqua.blacksmith.api.block.Blocks;
 import net.darkaqua.blacksmith.api.block.defaults.DefaultBlockDefinition;
 import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
@@ -15,6 +14,7 @@ import net.darkaqua.blacksmith.api.util.Cube;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ public abstract class BlockBase extends DefaultBlockDefinition {
     }
 
     public List<Cube> getCollisionCubes(WorldRef ref, IEntity entity) {
-        return Lists.newArrayList(getBounds(ref));
+        return Collections.singletonList(getBounds(ref));
     }
 
     public Cube getBounds(WorldRef ref){

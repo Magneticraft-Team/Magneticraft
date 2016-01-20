@@ -3,7 +3,7 @@ package com.cout970.magneticraft;
 import com.cout970.magneticraft.api.electricity.IElectricConductor;
 import com.cout970.magneticraft.api.electricity.defaults.ElectricStorageHandler;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.api.kinetic.defaults.KineticStorageHandler;
+import com.cout970.magneticraft.api.kinetic.KineticStorageHandler;
 import com.cout970.magneticraft.proxy.CommonProxy;
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;

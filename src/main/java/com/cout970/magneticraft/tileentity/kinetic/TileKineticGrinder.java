@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity;
+package com.cout970.magneticraft.tileentity.kinetic;
 
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 

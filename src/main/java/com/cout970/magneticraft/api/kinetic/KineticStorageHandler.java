@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.kinetic.defaults;
+package com.cout970.magneticraft.api.kinetic;
 
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;

@@ -7,6 +7,7 @@ import com.cout970.magneticraft.client.tilerender.TileRenderHandCrank;
 import com.cout970.magneticraft.client.tilerender.TileRenderWindTurbine;
 import com.cout970.magneticraft.client.tilerender.TileRenderWoodenShaft;
 import com.cout970.magneticraft.tileentity.*;
+import com.cout970.magneticraft.tileentity.kinetic.TileKineticGrinder;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
 import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;

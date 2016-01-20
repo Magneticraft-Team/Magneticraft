@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;
+import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 
@@ -19,8 +20,7 @@ public class TileHandCrank extends TileKineticBase {
         super.update();
         if (counter > 0){
             counter--;
-            if (getNetwork() != null)
-                getNetwork().applyForce(5, 10);
+            getNetwork().applyForce(5, 10);
         }
     }
 

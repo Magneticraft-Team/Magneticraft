@@ -20,7 +20,9 @@ public class KineticNetwork extends Network<IKineticConductor> {
         super(start);
     }
 
+    @Override
     public void iterate() {
+        super.iterate();
         if (getMasterNode() == null) return;
         if (lastTick != getMasterNode().getWorldReference().getWorld().getWorldTime()) {
             lastTick = getMasterNode().getWorldReference().getWorld().getWorldTime();

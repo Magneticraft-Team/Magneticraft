@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.api.network;
 
 import com.cout970.magneticraft.api.pathfinding.NetworkPathFinding;
-import com.cout970.magneticraft.api.pathfinding.PathFinding;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 
 import javax.annotation.Nonnull;
@@ -19,6 +18,10 @@ public abstract class Network<T extends INetworkNode> {
         nodes.add(node);
         node.setNetwork(this);
         this.masterNode = node;
+    }
+
+    public void iterate() {
+        List<T> tmp = new ArrayList<>(nodes);
     }
 
     public INetworkNode getMasterNode() {
@@ -40,6 +43,8 @@ public abstract class Network<T extends INetworkNode> {
 
         nodes.add(node);
         node.setNetwork(this);
+
+        onNetworkChange();
     }
 
     public void removeNetworkNode(@Nonnull T node) {
@@ -54,6 +59,8 @@ public abstract class Network<T extends INetworkNode> {
         if (masterNode.equals(node)) {
             masterNode = nodes.get(0);
         }
+
+        onNetworkChange();
     }
 
     public void refreshNetwork() {
@@ -91,6 +98,8 @@ public abstract class Network<T extends INetworkNode> {
     public void destroyNetwork() {
         nodes.forEach(n -> n.setNetwork(null));
         nodes.clear();
+
+        masterNode = null;
     }
 
     public boolean canAddToNetwork(T node) {

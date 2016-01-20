@@ -11,6 +11,8 @@ import net.darkaqua.blacksmith.api.util.Vect3d;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.world.IWorld;
 
+import static net.darkaqua.blacksmith.api.block.Blocks.*;
+
 /**
  * Created by cout970 on 03/01/2016.
  */
@@ -44,7 +46,7 @@ public class TileWindTurbine extends TileKineticBase {
         int air;
 
         IWorld w = parent.getWorldRef().getWorld();
-        for (air = 0; air < 20 && net.darkaqua.blacksmith.api.block.Blocks.AIR.getBlock().equals(w.getBlockVariant(pos).getBlock()); ++air) {
+        for (air = 0; air < 20 && AIR.getBlock().equals(w.getBlockVariant(pos).getBlock()); ++air) {
             pos.add(getDirection());
         }
 

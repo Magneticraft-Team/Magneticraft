@@ -18,6 +18,7 @@ public class TileWoodenShaft extends TileKineticBase {
         if (getWorld().getWorldTime() % 20 == 0) {
             connections = 0;
             int count = 0;
+            //TODO pull this up to base
             Direction first = null;
             Direction second = null;
             for (Direction d : Direction.values()) {
