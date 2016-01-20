@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.client.model.ModelConstants;
-import com.cout970.magneticraft.tileentity.TileWoodenShaft;
+import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;

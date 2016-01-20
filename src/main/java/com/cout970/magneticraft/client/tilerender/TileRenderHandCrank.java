@@ -2,7 +2,7 @@ package com.cout970.magneticraft.client.tilerender;
 
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.client.model.ModelHandCrank;
-import com.cout970.magneticraft.tileentity.TileHandCrank;
+import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRenderer;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;

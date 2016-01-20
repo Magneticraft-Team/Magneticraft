@@ -2,7 +2,7 @@ package com.cout970.magneticraft.client.tilerender;
 
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.client.model.ModelWoodenShaft;
-import com.cout970.magneticraft.tileentity.TileWoodenShaft;
+import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRenderer;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;

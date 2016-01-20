@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.base;
+package com.cout970.magneticraft.tileentity;
 
 import com.cout970.magneticraft.ManagerNetwork;
 import com.cout970.magneticraft.api.base.IDataStorage;

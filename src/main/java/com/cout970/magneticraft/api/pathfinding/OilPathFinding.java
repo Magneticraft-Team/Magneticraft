@@ -14,7 +14,7 @@ public class OilPathFinding extends PathFinding {
 
     @Override
     protected boolean hasFailed() {
-        return (scanned.size() > 4000) || (toScan.size() > 10000);
+        return super.hasFailed() || (scanned.size() > 4000) || (toScan.size() > 10000);
     }
 
     @Override

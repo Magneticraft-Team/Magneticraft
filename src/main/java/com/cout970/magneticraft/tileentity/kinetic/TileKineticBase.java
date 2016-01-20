@@ -1,7 +1,8 @@
-package com.cout970.magneticraft.tileentity.base;
+package com.cout970.magneticraft.tileentity.kinetic;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.api.kinetic.KineticNetwork;
+import com.cout970.magneticraft.tileentity.TileBase;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
@@ -12,10 +13,10 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
 /**
  * Created by cout970 on 30/12/2015.
  */
-public abstract class TileKineticBase extends TileBase implements IInterfaceProvider, IKineticConductor {
+public class TileKineticBase extends TileBase implements IInterfaceProvider, IKineticConductor {
     protected KineticNetwork network;
-    protected double mass;
-    protected double loss;
+    protected double mass = 0.01;
+    protected double loss = 0.01;
 
     @Override
     public void onDelete() {
@@ -80,6 +81,10 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
 
     @Override
     public WorldRef getWorldReference() {
+        if (parent == null) {
+            return null;
+        }
+
         return parent.getWorldRef();
     }
 
@@ -100,7 +105,8 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
 
     @Override
     public boolean isValid() {
-        return parent.isValid();
+        return parent != null && parent.isValid();
+
     }
 
     @Override
@@ -117,8 +123,9 @@ public abstract class TileKineticBase extends TileBase implements IInterfaceProv
         return id == IKineticConductor.IDENTIFIER;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object getInterface(IInterfaceIdentifier id, Direction direction) {
-        return this;
+    public <T> T getInterface(IInterfaceIdentifier<T> id, Direction direction) {
+        return id == IKineticConductor.IDENTIFIER ? (T) this : null;
     }
 }

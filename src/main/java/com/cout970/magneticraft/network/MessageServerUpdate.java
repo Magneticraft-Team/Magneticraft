@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.network;
 
-import com.cout970.magneticraft.tileentity.base.TileBase;
+import com.cout970.magneticraft.tileentity.TileBase;
 import io.netty.buffer.ByteBuf;
 import net.darkaqua.blacksmith.api.network.ExtendedByteBuf;
 import net.darkaqua.blacksmith.api.network.INetworkContext;

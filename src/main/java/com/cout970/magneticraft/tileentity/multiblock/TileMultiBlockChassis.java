@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.multiblock.structures;
+package com.cout970.magneticraft.tileentity.multiblock;
 
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblockBase;
 

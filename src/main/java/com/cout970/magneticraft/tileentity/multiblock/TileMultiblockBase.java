@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tileentity.multiblock;
 
-import com.cout970.magneticraft.tileentity.base.TileBase;
+import com.cout970.magneticraft.tileentity.TileBase;
 import com.cout970.magneticraft.util.multiblock.IMultiBlockData;
 import com.cout970.magneticraft.util.multiblock.MB_Tile;
 import com.cout970.magneticraft.util.multiblock.MultiblockData;

@@ -2,7 +2,7 @@ package com.cout970.magneticraft.block.generators;
 
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.block.BlockModeled;
-import com.cout970.magneticraft.tileentity.generators.TileCombustionEngine;
+import com.cout970.magneticraft.tileentity.electric.generators.TileCombustionEngine;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;

@@ -1,13 +1,15 @@
 package com.cout970.magneticraft.api.network;
 
+import com.cout970.magneticraft.api.pathfinding.NetworkPathFinding;
+import com.cout970.magneticraft.api.pathfinding.PathFinding;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
+
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by cout970 on 29/12/2015.
- */
+@SuppressWarnings("unchecked")
 public abstract class Network<T extends INetworkNode> {
     protected List<T> nodes;
     protected T masterNode;
@@ -55,7 +57,20 @@ public abstract class Network<T extends INetworkNode> {
     }
 
     public void refreshNetwork() {
+        List<T> nList = new ArrayList<>(nodes);
+        nodes.forEach(n -> n.setNetwork(null));
 
+        nodes.clear();
+        nList.stream().filter(n -> n != null && n.isValid()).forEach(n -> {
+            NetworkPathFinding<T> path = new NetworkPathFinding<>(this, n.getWorldReference());
+            while (!path.isDone()) {
+                path.iterate(10000);
+            }
+
+            n.createNetwork();
+            path.getResult().getNodes()
+                    .forEach(n.getNetwork()::addNetworkNode);
+        });
     }
 
     public void onNetworkChange() {
@@ -74,10 +89,13 @@ public abstract class Network<T extends INetworkNode> {
     }
 
     public void destroyNetwork() {
-
+        nodes.forEach(n -> n.setNetwork(null));
+        nodes.clear();
     }
 
     public boolean canAddToNetwork(T node) {
-        return node != null;
+        return node != null && !nodes.contains(node);
     }
+
+    public abstract IInterfaceIdentifier<T> getInterfaceIdentifier();
 }

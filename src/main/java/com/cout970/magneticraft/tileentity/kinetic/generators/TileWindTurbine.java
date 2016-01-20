@@ -1,7 +1,7 @@
-package com.cout970.magneticraft.tileentity;
+package com.cout970.magneticraft.tileentity.kinetic.generators;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.tileentity.base.TileKineticBase;
+import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;

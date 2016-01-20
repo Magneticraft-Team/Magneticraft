@@ -19,4 +19,6 @@ public interface IElectricConductor extends IConnectable<IElectricConductor>, IN
     default boolean isAbleToConnect(IElectricConductor cond, Vect3i offset) {
         return cond.getVoltage() == getVoltage();
     }
+
+    double getResistance();
 }

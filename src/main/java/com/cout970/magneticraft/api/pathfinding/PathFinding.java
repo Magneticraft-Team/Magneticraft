@@ -87,11 +87,6 @@ public abstract class PathFinding {
                 break;
             }
         }
-
-        //if no blocks are left, search failed
-        if (toScan.isEmpty()) {
-            currentState = State.FAIL;
-        }
     }
 
     /**
@@ -99,7 +94,9 @@ public abstract class PathFinding {
      *
      * @return <code>true</code> if algorithm has failed and <code>false</code> otherwise
      */
-    protected abstract boolean hasFailed();
+    protected boolean hasFailed() {
+        return toScan.isEmpty();
+    }
 
     /**
      * Determines if this algorithm has a goal, such as oil block, TileEntity with specific properties, etc.
@@ -170,7 +167,7 @@ public abstract class PathFinding {
         SUCCESS
     }
 
-    public static class Result {
+    public class Result {
         private final Vect3i goal;
         private final List<Vect3i> pathToGoal;
         private final List<Vect3i> scanned;

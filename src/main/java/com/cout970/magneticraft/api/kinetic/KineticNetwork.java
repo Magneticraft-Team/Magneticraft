@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.kinetic;
 
 import com.cout970.magneticraft.api.network.Network;
+import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 
 import javax.annotation.Nonnull;
 
@@ -17,11 +18,6 @@ public class KineticNetwork extends Network<IKineticConductor> {
 
     public KineticNetwork(IKineticConductor start) {
         super(start);
-    }
-
-    @Override
-    public boolean canAddToNetwork(IKineticConductor node) {
-        return true;
     }
 
     public void iterate() {
@@ -76,12 +72,7 @@ public class KineticNetwork extends Network<IKineticConductor> {
     }
 
     @Override
-    public void addNetworkNode(@Nonnull IKineticConductor node) {
-
-    }
-
-    @Override
-    public void removeNetworkNode(@Nonnull IKineticConductor node) {
-
+    public IInterfaceIdentifier<IKineticConductor> getInterfaceIdentifier() {
+        return IKineticConductor.IDENTIFIER;
     }
 }

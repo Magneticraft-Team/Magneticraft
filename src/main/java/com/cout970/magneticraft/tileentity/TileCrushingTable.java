@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity;
 
 import com.cout970.magneticraft.api.access.RecipeCrushingTable;
-import com.cout970.magneticraft.tileentity.base.TileBase;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
@@ -108,6 +107,7 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider{
         return identifier == IInventoryHandler.IDENTIFIER;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object getInterface(IInterfaceIdentifier identifier, Direction side) {
         return identifier == IInventoryHandler.IDENTIFIER ? inventory : null;

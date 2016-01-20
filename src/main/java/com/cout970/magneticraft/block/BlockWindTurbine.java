@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.client.model.ModelConstants;
-import com.cout970.magneticraft.tileentity.TileWindTurbine;
+import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.block.blockdata.BlockDataFactory;

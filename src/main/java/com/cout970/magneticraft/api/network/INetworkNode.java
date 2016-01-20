@@ -9,9 +9,9 @@ public interface INetworkNode<T extends Network> {
 
     WorldRef getWorldReference();
 
-    Network getNetwork();
+    T getNetwork();
 
-    <R extends T> void setNetwork(R net);
+    void setNetwork(T net);
 
     boolean isValid();
 
