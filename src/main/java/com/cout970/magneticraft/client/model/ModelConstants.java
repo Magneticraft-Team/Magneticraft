@@ -16,6 +16,7 @@ public class ModelConstants {
     public static final String CRUSHING_TABLE = "crushing_table";
     public static final String SIEVE_TABLE = "table_sieve";
     public static final String WIND_TURBINE = "wind_turbine";
+    public static final String HAND_CRANK = "hand_crank";
 
     public static ResourceReference ofTexture(String s) {
         return new ResourceReference(DOMAIN, "textures/models/" + s + ".png");

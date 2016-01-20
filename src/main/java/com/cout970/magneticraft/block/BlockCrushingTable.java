@@ -28,7 +28,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
     }
 
     @Override
-    public Cube getBounds() {
+    public Cube getBounds(WorldRef ref) {
         return new Cube(0, 0, 0, 1, 0.875f, 1);
     }
 

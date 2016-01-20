@@ -5,7 +5,6 @@ import com.cout970.magneticraft.tileentity.TileWindTurbine;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.block.blockdata.BlockDataFactory;
-import net.darkaqua.blacksmith.api.block.blockdata.IBlockAttribute;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockDataGenerator;
 import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;
@@ -25,11 +24,9 @@ import net.darkaqua.blacksmith.api.world.IWorld;
  */
 public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlacedBy, IBlockContainerDefinition {
 
-    public static IBlockAttribute DIRECTION = BlockDataFactory.createBlockAttribute("direction", BlockAttributeValueDirection.HORIZONTAL_VALUES);
-
     @Override
     public IBlockDataGenerator getBlockDataGenerator() {
-        return BlockDataFactory.createBlockDataGenerator(parent, DIRECTION);
+        return BlockDataFactory.createBlockDataGenerator(parent, BlockAttributeValueDirection.HORIZONTAL_DIRECTION);
     }
 
     @Override
@@ -39,12 +36,12 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
 
     @Override
     public void onPlacedBy(WorldRef ref, IBlockData state, ILivingEntity placer, IItemStack stack) {
-        state = state.setValue(DIRECTION, BlockAttributeValueDirection.fromDirection(placer.getEntityRotation().toHorizontalAxis().opposite()));
+        state = state.setValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION, BlockAttributeValueDirection.fromDirection(placer.getEntityRotation().toHorizontalAxis().opposite()));
         ref.setBlockData(state);
     }
 
     public IBlockModelProvider getModelProvider(){
-        return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.WIND_TURBINE)){
+        return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.WIND_TURBINE, ModelConstants.WIND_TURBINE+"_item")){
             public IRenderModel fromModelPart(IModelPartIdentifier id){
                 return new SimpleItemModelProvider.ItemModel(id){
                     @Override
@@ -75,11 +72,11 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
 
     @Override
     public IBlockData translateMetadataToVariant(int meta) {
-        return parent.getDefaultBlockData().setValue(DIRECTION, BlockAttributeValueDirection.HORIZONTAL_VALUES[meta%4]);
+        return parent.getDefaultBlockData().setValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION, BlockAttributeValueDirection.HORIZONTAL_VALUES[meta%4]);
     }
 
     @Override
     public int translateVariantToMetadata(IBlockData variant) {
-        return ((Direction)variant.getValue(DIRECTION).getValue()).ordinal();
+        return ((Direction)variant.getValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION).getValue()).ordinal();
     }
 }

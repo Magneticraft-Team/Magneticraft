@@ -13,7 +13,7 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
 public interface IHammer {
 
     @InterfaceIdentifierHolder(IHammer.class)
-    IInterfaceIdentifier IDENTIFIER = null;
+    IInterfaceIdentifier<IHammer> IDENTIFIER = null;
 
     /**
      * called to damage the tool, return the item to leave in the player's hands

@@ -24,7 +24,8 @@ public class TileRenderCrushingTable implements ITileEntityRenderer<TileCrushing
         if (stack != null) {
             if (stack.getItem() instanceof IItemBlock) {
                 GL11.glTranslatef(0, -0.5f, 0);
-                float size = 0.5f;
+                float size = 0.35f;
+                size = 0.8f;
                 GL11.glScalef(size, size, size);
             } else {
                 GL11.glTranslatef(0, -39 / 64f, 0);

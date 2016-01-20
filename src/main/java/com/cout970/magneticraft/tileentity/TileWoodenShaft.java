@@ -23,7 +23,7 @@ public class TileWoodenShaft extends TileKineticBase {
             for (Direction d : Direction.values()) {
                 ITileEntity t = parent.getWorldRef().move(d).getTileEntity();
                 IKineticConductor k = (IKineticConductor) ObjectScanner.findInTileEntity(t, IKineticConductor.IDENTIFIER, d);
-                if (k != null) {
+                if (k != null && k.isAbleToConnect(this, d.opposite().toVect3i())) {
                     connections |= 1 << d.ordinal();
                     count++;
                     if (first == null) {

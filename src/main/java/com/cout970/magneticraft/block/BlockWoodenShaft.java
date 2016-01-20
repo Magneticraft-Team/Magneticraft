@@ -8,6 +8,7 @@ import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.defaults.SimpleItemBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.util.Cube;
+import net.darkaqua.blacksmith.api.util.WorldRef;
 import net.darkaqua.blacksmith.api.world.IWorld;
 
 /**
@@ -26,7 +27,7 @@ public class BlockWoodenShaft extends BlockModeled implements IBlockContainerDef
     }
 
     @Override
-    public Cube getBounds() {
+    public Cube getBounds(WorldRef ref) {
         double w = 4 / 16d;
         return new Cube(0.5 - w, 0.5 - w, 0.5 - w, 0.5 + w, 0.5 + w, 0.5 + w);
     }

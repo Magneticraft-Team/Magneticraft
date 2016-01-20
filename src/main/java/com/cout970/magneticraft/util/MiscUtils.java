@@ -11,7 +11,11 @@ public class MiscUtils {
     public static void rotate(Direction dir) {
         switch (dir) {
             case DOWN:
+                GL11.glRotatef(-90, 1, 0, 0);
+                break;
             case UP:
+                GL11.glRotatef(90, 1, 0, 0);
+                break;
             case NORTH:
                 break;
             case SOUTH:
@@ -28,6 +32,6 @@ public class MiscUtils {
 
     public static String capitalize(String name) {
         char a = name.charAt(0);
-        return Character.toUpperCase(a)+name.substring(1);
+        return Character.toUpperCase(a) + name.substring(1);
     }
 }

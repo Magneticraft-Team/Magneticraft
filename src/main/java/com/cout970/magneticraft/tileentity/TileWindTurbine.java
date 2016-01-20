@@ -1,11 +1,13 @@
 package com.cout970.magneticraft.tileentity;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import com.cout970.magneticraft.block.BlockWindTurbine;
 import com.cout970.magneticraft.tileentity.base.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
+import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;
+import net.darkaqua.blacksmith.api.util.Cube;
 import net.darkaqua.blacksmith.api.util.Direction;
+import net.darkaqua.blacksmith.api.util.Vect3d;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.world.IWorld;
 
@@ -61,7 +63,7 @@ public class TileWindTurbine extends TileKineticBase {
 
     public Direction getDirection() {
         IBlockData variant = parent.getWorldRef().getBlockData();
-        return (Direction) variant.getValue(BlockWindTurbine.DIRECTION).getValue();
+        return (Direction) variant.getValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION).getValue();
     }
 
     public double getWindSpeed() {
@@ -80,6 +82,11 @@ public class TileWindTurbine extends TileKineticBase {
 
     @Override
     public boolean isAbleToConnect(IKineticConductor cond, Vect3i offset) {
-        return getDirection().matches(offset);
+        return getDirection().opposite().matches(offset);
+    }
+
+    @Override
+    public Cube getRenderBox() {
+        return Cube.fullBlock().translate(parent.getWorldRef().getPosition().toVect3d()).expand(new Vect3d(5,5,5));
     }
 }

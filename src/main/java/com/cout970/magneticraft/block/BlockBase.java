@@ -2,23 +2,41 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.LangHelper;
 import com.cout970.magneticraft.Magneticraft;
+import com.google.common.collect.Lists;
 import net.darkaqua.blacksmith.api.block.Blocks;
 import net.darkaqua.blacksmith.api.block.defaults.DefaultBlockDefinition;
 import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
+import net.darkaqua.blacksmith.api.entity.IEntity;
 import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.defaults.SimpleBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.defaults.SimpleModelPartBlock;
+import net.darkaqua.blacksmith.api.util.Cube;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
+import net.darkaqua.blacksmith.api.util.WorldRef;
+
+import java.util.List;
 
 /**
  * Created by cout970 on 16/12/2015.
  */
 public abstract class BlockBase extends DefaultBlockDefinition {
 
-    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.NAME + " Main", Blocks.IRON_BLOCK.newItemStack(1));
+    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.ID+"_main", Blocks.IRON_BLOCK.newItemStack(1));
 
     public abstract String getBlockName();
+
+    public Cube getSelectionCube(WorldRef ref){
+        return getBounds(ref);
+    }
+
+    public List<Cube> getCollisionCubes(WorldRef ref, IEntity entity) {
+        return Lists.newArrayList(getBounds(ref));
+    }
+
+    public Cube getBounds(WorldRef ref){
+        return Cube.fullBlock();
+    }
 
     @Override
     public String getUnlocalizedName() {

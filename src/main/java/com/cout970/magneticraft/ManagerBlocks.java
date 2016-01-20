@@ -3,6 +3,7 @@ package com.cout970.magneticraft;
 import com.cout970.magneticraft.block.*;
 import com.cout970.magneticraft.block.multiblock.BlockChassis;
 import com.cout970.magneticraft.client.tilerender.TileRenderCrushingTable;
+import com.cout970.magneticraft.client.tilerender.TileRenderHandCrank;
 import com.cout970.magneticraft.client.tilerender.TileRenderWindTurbine;
 import com.cout970.magneticraft.client.tilerender.TileRenderWoodenShaft;
 import com.cout970.magneticraft.tileentity.*;
@@ -25,10 +26,11 @@ public enum ManagerBlocks {
     CrushingTable(new BlockCrushingTable(), "Crushing Table", TileCrushingTable.class, new TileRenderCrushingTable()),
     TableSieve(new BlockTableSieve(), "Table Sieve", TileTableSieve.class),
     WoodenShaft(new BlockWoodenShaft(), "Wooden Shaft", TileWoodenShaft.class, new TileRenderWoodenShaft()),
-    HandCrank(new BlockHandCrank(), "Hand Crank", TileHandCrank.class),
+    HandCrank(new BlockHandCrank(), "Hand Crank", TileHandCrank.class, new TileRenderHandCrank()),
     WindTurbine(new BlockWindTurbine(), "Wind Turbine", TileWindTurbine.class, new TileRenderWindTurbine()),
     Chassis(new BlockChassis(), "MultiBlock Chassis", TileMultiBlockChassis.class ),
-    Limestone(new BlockLimestone(), "Limestone");
+    Limestone(new BlockLimestone(), "Limestone"),
+    KineticGrinder(new BlockKineticGrinder(), "Kinetic Grinder", TileKineticGrinder.class);
 
     private BlockBase definition;
     private IBlock block;

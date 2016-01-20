@@ -12,7 +12,7 @@ import net.darkaqua.blacksmith.api.intermod.InterfaceIdentifierHolder;
 public interface IKineticConductor extends IDataStorage, IConnectable<IKineticConductor>, INetworkNode<KineticNetwork> {
 
     @InterfaceIdentifierHolder(IKineticConductor.class)
-    IInterfaceIdentifier IDENTIFIER = null;
+    IInterfaceIdentifier<IKineticConductor> IDENTIFIER = null;
 
     KineticNetwork getNetwork();
 

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft;
 
+import com.cout970.magneticraft.block.BlockBase;
 import net.darkaqua.blacksmith.api.block.IBlock;
 import net.darkaqua.blacksmith.api.fluid.IFluidStack;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
@@ -12,6 +13,10 @@ import java.util.Map;
 public class LangHelper {
 
     public static Map<String, String> names = new HashMap<>();
+
+    public static void addTexts(){
+        putWithoutSuffix("itemGroup."+BlockBase.MAIN_CREATIVE_TAB.getLabel(), "Magneticraft Main");
+    }
 
     public static void addName(Object obj, String name) {
         if (obj == null) return;
