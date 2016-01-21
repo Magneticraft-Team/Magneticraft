@@ -60,19 +60,19 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
                         }
                     } else {
                         if (tile.getContent() == null) {
-                            for (int j = 0; j < playerInv.getSlots(null); j++) {
-                                IItemStack stack = playerInv.getStackInSlot(null, j);
+                            for (int j = 0; j < playerInv.getSlots(); j++) {
+                                IItemStack stack = playerInv.getStackInSlot(j);
                                 if (stack != null && stack.getAmount() > 0 && RecipeCrushingTable.getRecipe(stack) != null) {
-                                    tile.setContent(playerInv.extractItemStack(null, j, 1, false));
+                                    tile.setContent(playerInv.extractItemStack(j, 1, false));
                                     t.setModified();
                                     return true;
                                 }
                             }
                         } else {
                             boolean inserted = false;
-                            for (int j = 0; j < playerInv.getSlots(null); j++) {
-                                if (playerInv.insertItemStack(null, j, tile.getContent(), true) == null) {
-                                    playerInv.insertItemStack(null, j, tile.getContent(), false);
+                            for (int j = 0; j < playerInv.getSlots(); j++) {
+                                if (playerInv.insertItemStack(j, tile.getContent(), true) == null) {
+                                    playerInv.insertItemStack(j, tile.getContent(), false);
                                     inserted = true;
                                     break;
                                 }
@@ -98,9 +98,9 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
             }
             if (tile.getContent() != null) {
                 boolean inserted = false;
-                for (int j = 0; j < playerInv.getSlots(null); j++) {
-                    if (playerInv.insertItemStack(null, j, tile.getContent(), true) == null) {
-                        playerInv.insertItemStack(null, j, tile.getContent(), false);
+                for (int j = 0; j < playerInv.getSlots(); j++) {
+                    if (playerInv.insertItemStack(j, tile.getContent(), true) == null) {
+                        playerInv.insertItemStack(j, tile.getContent(), false);
                         inserted = true;
                         break;
                     }

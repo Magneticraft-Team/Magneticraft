@@ -5,7 +5,6 @@ import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.inventory.InventoryUtils;
 import net.darkaqua.blacksmith.api.inventory.defaults.SimpleInventoryHandler;
 import net.darkaqua.blacksmith.api.item.IItemBlock;
 import net.darkaqua.blacksmith.api.registry.IParticleManager;
@@ -25,18 +24,11 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider{
 
     public TileCrushingTable() {
         inventory = new SimpleInventoryHandler(1){
+
             @Override
-            public void setStackInSlot(Direction side, int slot, IItemStack stack) {
-                inventory[slot] = stack;
+            public void setStackInSlot(int slot, IItemStack stack) {
+                super.setStackInSlot(slot, stack);
                 sendUpdateToClient();
-            }
-            @Override
-            public IItemStack insertItemStack(Direction side, int slot, IItemStack stack, boolean simulated) {
-                IItemStack ret = super.insertItemStack(side, slot, stack, simulated);
-                if (!simulated && InventoryUtils.areExactlyEqual(ret, stack)){
-                    sendUpdateToClient();
-                }
-                return ret;
             }
         };
     }
@@ -58,20 +50,20 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider{
     }
 
     public IItemStack getContent() {
-        return inventory.getStackInSlot(null, 0);
+        return inventory.getStackInSlot(0);
     }
 
     public void setContent(IItemStack input) {
-        inventory.setStackInSlot(null, 0, input);
+        inventory.setStackInSlot(0, input);
     }
 
     public boolean canWork() {
-        return (inventory.getStackInSlot(null, 0) != null) &&
-                (RecipeCrushingTable.getRecipe(inventory.getStackInSlot(null, 0)) != null);
+        return (inventory.getStackInSlot(0) != null) &&
+                (RecipeCrushingTable.getRecipe(inventory.getStackInSlot(0)) != null);
     }
 
     public IItemStack getOutput() {
-        RecipeCrushingTable rec = RecipeCrushingTable.getRecipe(inventory.getStackInSlot(null, 0));
+        RecipeCrushingTable rec = RecipeCrushingTable.getRecipe(inventory.getStackInSlot(0));
         if (rec == null)
             return null;
         return rec.getOutput().copy();
