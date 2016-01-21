@@ -16,6 +16,7 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
  * Created by cout970 on 30/12/2015.
  */
 public class TileKineticBase extends TileBase implements IInterfaceProvider, IKineticConductor {
+
     protected KineticNetwork network;
     protected double mass = 0.01;
     protected double loss = 0.01;

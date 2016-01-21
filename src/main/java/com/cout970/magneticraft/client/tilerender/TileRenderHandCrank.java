@@ -21,14 +21,14 @@ public class TileRenderHandCrank implements ITileEntityRenderer<TileHandCrank> {
     public void renderTileEntity(ITileEntity tile, TileHandCrank def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F);
+
         MiscUtils.rotate(def.getDirection().opposite());
         GL11.glRotatef(90, 0, 0, 1);
         GL11.glRotatef(90, 1, 0, 0);
 
-
         GL11.glTranslatef(0, -1, 0);
+        GL11.glRotatef(def.getRotationAngle(partialTick), 0, 1, 0);
 
-        GL11.glRotatef((float) Math.toRadians(def.getRotationAngle(partialTick)), 0, 1, 0);
         helper.bindTexture(ModelConstants.ofTexture(ModelConstants.HAND_CRANK));
         model.renderStatic(0.0625f);
         GL11.glPopMatrix();

@@ -3,8 +3,6 @@ package com.cout970.magneticraft.api.kinetic;
 import com.cout970.magneticraft.api.network.Network;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 
-import javax.annotation.Nonnull;
-
 /**
  * Created by cout970 on 30/12/2015.
  */
@@ -34,7 +32,8 @@ public class KineticNetwork extends Network<IKineticConductor> {
             //clear input buffer
             addedSpeed = 0;
             //updated rotation
-            angle += maxSpeed / 20;
+            if (Double.isNaN(angle))angle = 0;
+            angle += maxSpeed / 20d;
             angle %= 360;
         }
     }
@@ -57,7 +56,7 @@ public class KineticNetwork extends Network<IKineticConductor> {
 
     public double applyForce(double force, double maxSpeed) {
         double mass = getMass();
-        double speedAdded = Math.max(0, Math.min(maxSpeed - removedSpeed, force / mass));
+        double speedAdded = Math.max(0, Math.min(maxSpeed - addedSpeed, force / mass));
         addedSpeed += speedAdded;
         return speedAdded * mass;
     }
