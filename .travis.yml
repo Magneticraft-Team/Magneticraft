@@ -8,3 +8,5 @@ cache:
     - '$HOME/.gradle'
 before_cache:
     - rm -f $HOME/.gradle/caches/*/*.lock
+install: ./gradlew setupCIWorkspace
+script: ./gradlew build
