@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.item.SwordRenderModel;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
+import net.darkaqua.blacksmith.api.intermod.InterModUtils;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.IItemModelProvider;
 import net.darkaqua.blacksmith.api.render.model.IRenderModel;
@@ -61,12 +62,12 @@ public class ItemStoneHammer extends ItemBase implements IHammer, IInterfaceProv
     }
 
     @Override
-    public boolean hasInterface(IInterfaceIdentifier identifier, Direction side) {
-        return IHammer.IDENTIFIER == identifier;
+    public boolean hasInterface(IInterfaceIdentifier id, Direction side) {
+        return InterModUtils.matches(IHammer.IDENTIFIER, id);
     }
 
     @Override
-    public Object getInterface(IInterfaceIdentifier identifier, Direction side) {
-        return this;
+    public <T> T getInterface(IInterfaceIdentifier<T> identifier, Direction side) {
+        return (T) this;
     }
 }

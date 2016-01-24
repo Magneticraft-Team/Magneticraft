@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.kinetic.KineticNetwork;
 import com.cout970.magneticraft.tileentity.TileBase;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
+import net.darkaqua.blacksmith.api.intermod.InterModUtils;
 import net.darkaqua.blacksmith.api.storage.IDataCompound;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
@@ -137,12 +138,12 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
 
     @Override
     public boolean hasInterface(IInterfaceIdentifier id, Direction direction) {
-        return id == IKineticConductor.IDENTIFIER;
+        return InterModUtils.matches(IKineticConductor.IDENTIFIER, id);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getInterface(IInterfaceIdentifier<T> id, Direction direction) {
-        return id == IKineticConductor.IDENTIFIER ? (T) this : null;
+        return (T) this;
     }
 }

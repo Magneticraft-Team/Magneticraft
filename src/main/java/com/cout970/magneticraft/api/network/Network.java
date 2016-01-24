@@ -60,7 +60,7 @@ public abstract class Network<T extends INetworkNode> {
             masterNode = nodes.get(0);
         }
 
-        onNetworkChange();
+        refreshNetwork();
     }
 
     public void refreshNetwork() {

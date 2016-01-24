@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.electricity.IElectricConductor;
 import com.cout970.magneticraft.tileentity.TileBase;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
+import net.darkaqua.blacksmith.api.intermod.InterModUtils;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
@@ -55,12 +56,12 @@ public class TileElectricBase extends TileBase implements IElectricConductor, II
 
     @Override
     public boolean hasInterface(IInterfaceIdentifier<?> id, Direction direction) {
-        return id == IElectricConductor.IDENTIFIER;
+        return InterModUtils.matches(IElectricConductor.IDENTIFIER, id);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getInterface(IInterfaceIdentifier<T> id, Direction direction) {
-        return id == IElectricConductor.IDENTIFIER ? (T) this : null;
+        return (T) this;
     }
 }

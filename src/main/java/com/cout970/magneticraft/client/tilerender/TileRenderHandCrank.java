@@ -27,7 +27,7 @@ public class TileRenderHandCrank implements ITileEntityRenderer<TileHandCrank> {
         GL11.glRotatef(90, 1, 0, 0);
 
         GL11.glTranslatef(0, -1, 0);
-        GL11.glRotatef(def.getRotationAngle(partialTick), 0, 1, 0);
+        MiscUtils.rotateAround(def.getRotationAngle(partialTick), def.getDirection(), new Vect3d(0,1,0));
 
         helper.bindTexture(ModelConstants.ofTexture(ModelConstants.HAND_CRANK));
         model.renderStatic(0.0625f);
