@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ItemOre extends ItemBase {
 
-    public static final String[] prefixes = {"ingot", "dust"};
+    public static final String[] prefixes = {"ingot", "dust", "chunk"};
     private String base;
 
     public ItemOre(String base) {

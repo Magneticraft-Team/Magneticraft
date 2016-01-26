@@ -1,25 +1,27 @@
 package com.cout970.magneticraft.api.access;
 
-
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.InventoryUtils;
 
-public class RecipeCrushingTable {
+/**
+ * Created by cout970 on 25/01/2016.
+ */
+public class RecipeTableSieve {
 
     protected final IItemStack input;
     protected final IItemStack output;
 
-    public RecipeCrushingTable(IItemStack input, IItemStack output) {
+    public RecipeTableSieve(IItemStack input, IItemStack output) {
         this.input = input;
         this.output = output;
     }
 
     public IItemStack getInput() {
-        return input;
+        return input.copy();
     }
 
     public IItemStack getOutput() {
-        return output;
+        return output.copy();
     }
 
     public boolean matches(IItemStack i) {
@@ -28,7 +30,7 @@ public class RecipeCrushingTable {
 
     @Override
     public String toString() {
-        return "Crushing Table Recipe, Input: " + input.getDisplayName() + ", Output: " + output.getDisplayName();
+        return "Sieve Table Recipe, Input: " + input.getDisplayName() + ", Output: " + output.getDisplayName();
     }
 
     @Override
@@ -40,7 +42,6 @@ public class RecipeCrushingTable {
 
         if (input != null ? !input.equals(that.input) : that.input != null) return false;
         return !(output != null ? !output.equals(that.output) : that.output != null);
-
     }
 
     @Override

@@ -113,5 +113,9 @@ public enum ManagerItems {
         public IItemStack getDust() {
             return ItemStackFactory.createItemStack(item, 1, 1);
         }
+
+        public IItemStack getChunk() {
+            return ItemStackFactory.createItemStack(item, 1, 2);
+        }
     }
 }

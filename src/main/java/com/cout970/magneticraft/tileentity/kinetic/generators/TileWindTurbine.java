@@ -46,7 +46,7 @@ public class TileWindTurbine extends TileKineticBase {
         int air;
 
         IWorld w = parent.getWorldRef().getWorld();
-        for (air = 0; air < 20 && AIR.getBlock().equals(w.getBlockVariant(pos).getBlock()); ++air) {
+        for (air = 0; air < 20 && AIR.getBlock().equals(w.getBlockData(pos).getBlock()); ++air) {
             pos.add(getDirection());
         }
 

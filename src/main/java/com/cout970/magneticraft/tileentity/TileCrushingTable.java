@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.tileentity;
 
 import com.cout970.magneticraft.api.access.RecipeCrushingTable;
+import com.cout970.magneticraft.api.access.RecipeRegister;
+import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.intermod.InterModUtils;
@@ -39,6 +41,15 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider{
     }
 
     @Override
+    public void onDelete(){
+        super.onDelete();
+        if (StaticAccess.GAME.isServer()){
+            MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, 0.5, 0.5), inventory.getStackInSlot(0));
+            inventory.setStackInSlot(0, null);
+        }
+    }
+
+    @Override
     public void loadData(IDataCompound tag) {
         super.loadData(tag);
         inventory.load(tag, "inv");
@@ -60,11 +71,11 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider{
 
     public boolean canWork() {
         return (inventory.getStackInSlot(0) != null) &&
-                (RecipeCrushingTable.getRecipe(inventory.getStackInSlot(0)) != null);
+                (RecipeRegister.getCrushingTableRecipe(inventory.getStackInSlot(0)) != null);
     }
 
     public IItemStack getOutput() {
-        RecipeCrushingTable rec = RecipeCrushingTable.getRecipe(inventory.getStackInSlot(0));
+        RecipeCrushingTable rec = RecipeRegister.getCrushingTableRecipe(inventory.getStackInSlot(0));
         if (rec == null)
             return null;
         return rec.getOutput().copy();

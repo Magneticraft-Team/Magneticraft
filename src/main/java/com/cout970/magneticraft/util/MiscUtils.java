@@ -1,7 +1,11 @@
 package com.cout970.magneticraft.util;
 
+import net.darkaqua.blacksmith.api.entity.EntityFactory;
+import net.darkaqua.blacksmith.api.entity.types.IEntityItem;
+import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3d;
+import net.darkaqua.blacksmith.api.util.WorldRef;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -57,5 +61,10 @@ public class MiscUtils {
     public static String capitalize(String name) {
         char a = name.charAt(0);
         return Character.toUpperCase(a) + name.substring(1);
+    }
+
+    public static void dropItem(WorldRef ref, Vect3d offset, IItemStack stack) {
+        IEntityItem entity = EntityFactory.createEntityItem(ref.getWorld(), ref.getPosition().toVect3d().add(offset), stack);
+        ref.getWorld().spawnEntity(entity);
     }
 }

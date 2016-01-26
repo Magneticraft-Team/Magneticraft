@@ -9,13 +9,21 @@ import net.darkaqua.blacksmith.api.inventory.IItemStack;
 public class ManagerRecipe {
 
     public static void init() {
-        initCrusherRecipes();
+        initCrushingTableRecipes();
+        initTableSieveRecipes();
     }
 
-    private static void initCrusherRecipes() {
-        IItemStack result = ManagerItems.ItemOres.Copper.getDust();
-        result.setAmount(2);
-        RecipeRegister.registerCrushingTableRecipe(ManagerBlocks.CopperOre.toItemStack(), result);
+    private static void initCrushingTableRecipes() {
+        addCrushingTableRecipe(ManagerBlocks.CopperOre, ManagerItems.ItemOres.Copper);
+        addCrushingTableRecipe(ManagerBlocks.TungstenOre, ManagerItems.ItemOres.Tungsten);
     }
 
+    private static void initTableSieveRecipes() {
+        RecipeRegister.registerSieveTableRecipe(ManagerItems.ItemOres.Copper.getChunk(), ManagerItems.ItemOres.Copper.getDust());
+    }
+
+    private static void addCrushingTableRecipe(ManagerBlocks input, ManagerItems.ItemOres output){
+        IItemStack result = output.getChunk();
+        RecipeRegister.registerCrushingTableRecipe(input.toItemStack(), result);
+    }
 }

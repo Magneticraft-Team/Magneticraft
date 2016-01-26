@@ -1,6 +1,7 @@
 item.iron_hammer.name=Iron Hammer
 tile.crushing_table.name=Crushing Table
 item.Tungsten.ingot.name=Tungsten Ingot
+item.Copper.chunk.name=Copper Chunk
 tile.wind_turbine.name=Wind Turbine
 item.Copper.ingot.name=Copper Ingot
 item.Tungsten.dust.name=Tungsten Dust
@@ -16,3 +17,4 @@ itemGroup.magneticraft_main=Magneticraft Main
 tile.chassis.name=MultiBlock Chassis
 tile.oreCopper.name=Copper Ore
 tile.wooden_shaft.name=Wooden Shaft
+item.Tungsten.chunk.name=Tungsten Chunk

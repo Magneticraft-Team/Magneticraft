@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.block;
 
-import com.cout970.magneticraft.api.access.RecipeCrushingTable;
+import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
@@ -62,7 +62,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
                         if (tile.getContent() == null) {
                             for (int j = 0; j < playerInv.getSlots(); j++) {
                                 IItemStack stack = playerInv.getStackInSlot(j);
-                                if (stack != null && stack.getAmount() > 0 && RecipeCrushingTable.getRecipe(stack) != null) {
+                                if (stack != null && stack.getAmount() > 0 && RecipeRegister.getCrushingTableRecipe(stack) != null) {
                                     tile.setContent(playerInv.extractItemStack(j, 1, false));
                                     t.setModified();
                                     return true;

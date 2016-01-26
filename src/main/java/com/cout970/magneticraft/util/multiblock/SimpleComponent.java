@@ -31,12 +31,12 @@ public class SimpleComponent implements MB_Component {
     @Override
     public boolean matches(WorldRef ref, Vect3i rot, IMultiBlockData data) {
         Vect3i pos = data.getMultiBlock().translate(rot, data).add(ref.getPosition());
-        IBlock block = ref.getWorld().getBlockVariant(pos).getBlock();
+        IBlock block = ref.getWorld().getBlockData(pos).getBlock();
         MB_Block mb = ObjectScanner.findInBlock(block, MB_Block.class);
         if (mb == null)return false;
         if (!mb.matchesAny(new WorldRef(ref.getWorld(), pos), blocks)) {
             if (Magneticraft.DEBUG) {
-                ref.getWorld().setBlockVariant(blocks.get(0).getDefaultBlockData(), pos);
+                ref.getWorld().setBlockData(blocks.get(0).getDefaultBlockData(), pos);
             }
             return false;
         }
@@ -47,7 +47,7 @@ public class SimpleComponent implements MB_Component {
     public void setup(WorldRef ref, Vect3i rot, IMultiBlockData data) {
         Vect3i pos = data.getMultiBlock().translate(rot, data).add(ref.getPosition());
 
-        IBlock block = ref.getWorld().getBlockVariant(pos).getBlock();
+        IBlock block = ref.getWorld().getBlockData(pos).getBlock();
         MB_Block mb_block = ObjectScanner.findInBlock(block, MB_Block.class);
         if (mb_block == null)return;
         mb_block.mutates(new WorldRef(ref.getWorld(), pos), data);
@@ -62,7 +62,7 @@ public class SimpleComponent implements MB_Component {
     public void destroy(WorldRef ref, Vect3i rot, IMultiBlockData data) {
         Vect3i pos = data.getMultiBlock().translate(rot, data).add(ref.getPosition());
 
-        IBlock block = ref.getWorld().getBlockVariant(pos).getBlock();
+        IBlock block = ref.getWorld().getBlockData(pos).getBlock();
         MB_Block mb_block = ObjectScanner.findInBlock(block, MB_Block.class);
         if (mb_block == null)return;
         mb_block.destroy(new WorldRef(ref.getWorld(), pos), data);

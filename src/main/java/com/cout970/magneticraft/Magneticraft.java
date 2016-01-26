@@ -4,9 +4,12 @@ import com.cout970.magneticraft.api.electricity.IElectricConductor;
 import com.cout970.magneticraft.api.electricity.defaults.ElectricStorageHandler;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.api.kinetic.KineticStorageHandler;
+import com.cout970.magneticraft.api.tool.IHammer;
+import com.cout970.magneticraft.item.ItemStoneHammer;
 import com.cout970.magneticraft.proxy.CommonProxy;
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
+import com.cout970.magneticraft.util.EmptyStorageHandler;
 import com.cout970.magneticraft.util.Log;
 import com.cout970.magneticraft.world.ManagerWorldGen;
 import net.darkaqua.blacksmith.api.event.EventSubscribe;
@@ -49,6 +52,7 @@ public class Magneticraft {
         ManagerItems.initItems();
 
         proxy.init();
+        StaticAccess.GAME.getInterModRegistry().registerInterface(IHammer.class, new EmptyStorageHandler(), ItemStoneHammer::new);
         StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), TileKineticBase::new);
         StaticAccess.GAME.getInterModRegistry().registerInterface(IElectricConductor.class, new ElectricStorageHandler(), TileElectricBase::new);
         ManagerNetwork.init();
