@@ -89,7 +89,7 @@ public class ItemOre extends ItemBase {
                 models[i] = new ItemFlatModelProvider.ItemFlatModel(
                         registry.registerFlatItemModel(
                                 new ResourceReference(Magneticraft.ID,
-                                        "items/" + item.getBase() + "/" + prefixes[i])));
+                                        "items/" + item.getBase().toLowerCase() + "/" + prefixes[i])));
             }
         }
     }

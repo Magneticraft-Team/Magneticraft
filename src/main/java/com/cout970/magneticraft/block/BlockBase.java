@@ -2,14 +2,12 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.LangHelper;
 import com.cout970.magneticraft.Magneticraft;
-import net.darkaqua.blacksmith.api.block.Blocks;
 import net.darkaqua.blacksmith.api.block.defaults.DefaultBlockDefinition;
-import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
 import net.darkaqua.blacksmith.api.entity.IEntity;
+import net.darkaqua.blacksmith.api.render.model.defaults.SimpleModelPartBlock;
 import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.defaults.SimpleModelPartBlock;
 import net.darkaqua.blacksmith.api.util.Cube;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 import net.darkaqua.blacksmith.api.util.WorldRef;
@@ -22,7 +20,7 @@ import java.util.List;
  */
 public abstract class BlockBase extends DefaultBlockDefinition {
 
-    public static ICreativeTab MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.ID+"_main", Blocks.IRON_BLOCK.newItemStack(1));
+    public static ICreativeTab MAIN_CREATIVE_TAB;
 
     public abstract String getBlockName();
 

@@ -14,6 +14,7 @@ import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiBlockChassis;
 import net.darkaqua.blacksmith.api.block.IBlock;
+import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
@@ -65,6 +66,7 @@ public enum ManagerBlocks {
                 StaticAccess.GAME.getTileEntityRegistry().registerTileEntityDefinition(b.tileEntityClass, b.identifier);
             }
         }
+        BlockBase.MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.ID+"_main", ManagerBlocks.CrushingTable.toItemStack());
     }
 
     public static void initBlockRenders() {

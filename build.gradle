@@ -17,7 +17,7 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.7.0-alpha1"
+version = "1.0.0-alpha4"
 group= "com.cout970.magneticraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "magneticraft"
 
@@ -35,7 +35,7 @@ minecraft {
 dependencies {
     deobfCompile "MCMultiPart:MCMultiPart:1.0.4:universal"
     deobfCompile "mezz.jei:jei_1.8.9:2.16.2.78"
-	compile files("./blacksmith/blacksmith-api-0.0.1alpha2-dev.jar")
+	compile files("./blacksmith/blacksmith-api-0.0.2alpha1.jar")
 }
 
 //curseforge {

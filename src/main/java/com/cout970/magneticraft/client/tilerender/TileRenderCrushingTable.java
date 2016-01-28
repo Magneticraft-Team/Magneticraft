@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.client.tilerender;
 
-import com.cout970.testmod.model.TestModel;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.item.IItemBlock;
@@ -16,8 +15,6 @@ import org.lwjgl.opengl.GL11;
  * Created by cout970 on 16/12/2015.
  */
 public class TileRenderCrushingTable implements ITileEntityRenderer<TileCrushingTable> {
-
-    private TestModel model = new TestModel();
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileCrushingTable def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
