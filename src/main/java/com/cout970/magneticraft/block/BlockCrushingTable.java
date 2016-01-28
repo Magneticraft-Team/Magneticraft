@@ -10,8 +10,8 @@ import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.render.model.IBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.defaults.SimpleBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.util.*;
@@ -49,7 +49,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
             IItemStack i = p.getSelectedItemStack();
             IInventoryHandler playerInv = p.getInventory();
             if (i != null) {
-                IHammer hammer = (IHammer) ObjectScanner.findInItem(i.getItem(), IHammer.IDENTIFIER, null);
+                IHammer hammer = ObjectScanner.findInItem(i.getItem(), IHammer.IDENTIFIER, null);
                 if (hammer != null) {
                     if (tile.canWork()) {
                         if (hammer.canHammer(i, ref)) {
@@ -113,6 +113,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
         }
         return true;
     }
+
 
     public IBlockModelProvider getModelProvider() {
         return new SimpleBlockModelProvider(ModelConstants.ofTechne(ModelConstants.CRUSHING_TABLE));

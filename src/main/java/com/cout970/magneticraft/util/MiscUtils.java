@@ -64,6 +64,7 @@ public class MiscUtils {
     }
 
     public static void dropItem(WorldRef ref, Vect3d offset, IItemStack stack) {
+        if (stack == null) return;
         IEntityItem entity = EntityFactory.createEntityItem(ref.getWorld(), ref.getPosition().toVect3d().add(offset), stack);
         ref.getWorld().spawnEntity(entity);
     }

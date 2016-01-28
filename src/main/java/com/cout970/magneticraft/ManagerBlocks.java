@@ -6,14 +6,14 @@ import com.cout970.magneticraft.client.tilerender.TileRenderCrushingTable;
 import com.cout970.magneticraft.client.tilerender.TileRenderHandCrank;
 import com.cout970.magneticraft.client.tilerender.TileRenderWindTurbine;
 import com.cout970.magneticraft.client.tilerender.TileRenderWoodenShaft;
-import com.cout970.magneticraft.tileentity.*;
+import com.cout970.magneticraft.tileentity.TileCrushingTable;
+import com.cout970.magneticraft.tileentity.TileTableSieve;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticGrinder;
+import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
-import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiBlockChassis;
 import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.block.IBlockDefinition;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
@@ -76,7 +76,7 @@ public enum ManagerBlocks {
         }
     }
 
-    public IBlockDefinition getDefinition() {
+    public BlockBase getDefinition() {
         return definition;
     }
 

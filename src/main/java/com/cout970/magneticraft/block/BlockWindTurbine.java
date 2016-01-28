@@ -11,8 +11,9 @@ import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueD
 import net.darkaqua.blacksmith.api.entity.ILivingEntity;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.*;
-import net.darkaqua.blacksmith.api.render.model.defaults.SimpleItemBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.defaults.SimpleItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3d;
@@ -42,7 +43,7 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
 
     public IBlockModelProvider getModelProvider(){
         return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.WIND_TURBINE, ModelConstants.WIND_TURBINE+"_item")){
-            public IRenderModel fromModelPart(IModelPartIdentifier id){
+            public IStaticModel fromModelPart(IModelPartIdentifier id){
                 return new SimpleItemModelProvider.ItemModel(id){
                     @Override
                     public RenderTransformation getTransformation(RenderPlace place) {

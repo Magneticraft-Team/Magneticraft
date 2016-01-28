@@ -4,8 +4,8 @@ import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.block.BlockBase;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
 import net.darkaqua.blacksmith.api.item.defaults.DefaultItemDefinition;
-import net.darkaqua.blacksmith.api.render.model.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 
 /**

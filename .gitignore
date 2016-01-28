@@ -49,6 +49,7 @@ options.txt
 usernamecache.json
 logs/**
 saves/**
+blacksmith/**
 
 /server.properties
 *.psd

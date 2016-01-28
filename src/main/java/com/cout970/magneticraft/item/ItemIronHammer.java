@@ -7,9 +7,9 @@ import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.intermod.InterModUtils;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.render.model.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.IRenderModel;
-import net.darkaqua.blacksmith.api.render.model.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.IStaticModel;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 import net.darkaqua.blacksmith.api.util.WorldRef;
@@ -32,7 +32,7 @@ public class ItemIronHammer extends ItemBase implements IHammer, IInterfaceProvi
     public IItemModelProvider getModelProvider() {
         return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase())) {
             @Override
-            public IRenderModel getModelForVariant(IItemStack stack) {
+            public IStaticModel getModelForVariant(IItemStack stack) {
                 if (model == null) {
                     model = new SwordRenderModel(identifier);
                 }

@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.client.model;
 
 import com.cout970.magneticraft.Magneticraft;
-import net.darkaqua.blacksmith.api.render.model.IModelPart;
 import net.darkaqua.blacksmith.api.render.techne.TechneModelLoader;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 
@@ -18,17 +17,20 @@ public class ModelConstants {
     public static final String WIND_TURBINE = "wind_turbine";
     public static final String HAND_CRANK = "hand_crank";
 
+    public static TechneModelLoader.TechneModel test;
+
     public static ResourceReference ofTexture(String s) {
         return new ResourceReference(DOMAIN, "textures/models/" + s + ".png");
     }
 
-    public static IModelPart ofTechne(String file) {
+    public static TechneModelLoader.TechneModelPart ofTechne(String file) {
         return ofTechne(file, file);
     }
 
-    public static IModelPart ofTechne(String file, String texture) {
+    public static TechneModelLoader.TechneModelPart ofTechne(String file, String texture) {
         return TechneModelLoader.loadModel(new ResourceReference(DOMAIN, "models/" + file + ".tcn"), new ResourceReference(DOMAIN, "models/" + texture));
     }
 
-
+    public static void init(){
+    }
 }

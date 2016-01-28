@@ -7,9 +7,9 @@ import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
 import net.darkaqua.blacksmith.api.item.IItem;
 import net.darkaqua.blacksmith.api.registry.IModelRegistry;
-import net.darkaqua.blacksmith.api.render.model.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.IRenderModel;
-import net.darkaqua.blacksmith.api.render.model.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.IStaticModel;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 
 import java.util.List;
@@ -70,16 +70,16 @@ public class ItemOre extends ItemBase {
 
     private class ModelProvider implements IItemModelProvider {
 
-        private IRenderModel[] models;
+        private IStaticModel[] models;
         private ItemOre item;
 
         public ModelProvider(ItemOre item) {
-            this.models = new IRenderModel[item.maxMeta()];
+            this.models = new IStaticModel[item.maxMeta()];
             this.item = item;
         }
 
         @Override
-        public IRenderModel getModelForVariant(IItemStack stack) {
+        public IStaticModel getModelForVariant(IItemStack stack) {
             return models[stack.getDamage() % models.length];
         }
 

@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.item;
 
 import com.cout970.magneticraft.client.model.ModelConstants;
-import net.darkaqua.blacksmith.api.render.model.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.IRenderModel;
+import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.IStaticModel;
 import net.darkaqua.blacksmith.api.render.model.RenderPlace;
 import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
-import net.darkaqua.blacksmith.api.render.model.defaults.SimpleItemModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemModelProvider;
 import net.darkaqua.blacksmith.api.util.Vect3d;
 
 /**
@@ -13,10 +13,14 @@ import net.darkaqua.blacksmith.api.util.Vect3d;
  */
 public class ItemHandSieve extends ItemBase {
 
+    public ItemHandSieve(){
+        maxStackSize = 1;
+    }
+
     public IItemModelProvider getModelProvider() {
         return new SimpleItemModelProvider(ModelConstants.ofTechne(getItemName().toLowerCase())) {
 
-            public IRenderModel createRenderModel() {
+            public IStaticModel createRenderModel() {
                 return new ItemModel(identifier) {
                     @Override
                     public RenderTransformation getTransformation(RenderPlace place) {

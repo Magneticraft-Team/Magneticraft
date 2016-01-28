@@ -35,28 +35,29 @@ minecraft {
 dependencies {
     deobfCompile "MCMultiPart:MCMultiPart:1.0.4:universal"
     deobfCompile "mezz.jei:jei_1.8.9:2.16.2.78"
+	compile files("./blacksmith/blacksmith-api-0.0.1alpha2-dev.jar")
 }
 
-curseforge {
-    apiKey = project.curseForgeApiKey
-    project {
-        id = '224808'
-        mainArtifact(jar) {
-            displayName = 'Magneticraft ' + version
-        }
-        releaseType = 'release'
-        changelog = file('./changelogs/' + version + '.txt')
-        if (version.contains('beta')) {
-            releaseType = 'beta'
-        }
-        if (version.contains('alpha')) {
-            releaseType = 'alpha'
-        }
-        relations {
-            requiredLibrary 'mcmultipart'
-        }
-    }
-}
+//curseforge {
+//    apiKey = project.curseForgeApiKey
+//   project {
+//        id = '224808'
+//        mainArtifact(jar) {
+//            displayName = 'Magneticraft ' + version
+//        }
+//        releaseType = 'release'
+//        changelog = file('./changelogs/' + version + '.txt')
+//        if (version.contains('beta')) {
+//            releaseType = 'beta'
+//        }
+//        if (version.contains('alpha')) {
+//            releaseType = 'alpha'
+//        }
+//        relations {
+//            requiredLibrary 'mcmultipart'
+//        }
+//    }
+//}
 
 repositories {
     maven {

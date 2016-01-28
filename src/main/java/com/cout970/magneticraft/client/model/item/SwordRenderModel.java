@@ -3,7 +3,7 @@ package com.cout970.magneticraft.client.model.item;
 import net.darkaqua.blacksmith.api.render.model.IModelPartIdentifier;
 import net.darkaqua.blacksmith.api.render.model.RenderPlace;
 import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
-import net.darkaqua.blacksmith.api.render.model.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
 import net.darkaqua.blacksmith.api.util.Vect3d;
 
 /**
