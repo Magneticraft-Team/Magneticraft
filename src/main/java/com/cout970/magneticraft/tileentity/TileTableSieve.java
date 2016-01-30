@@ -23,7 +23,6 @@ import java.util.List;
 public class TileTableSieve extends TileBase {
 
     private SimpleInventoryHandler inv = new SimpleInventoryHandler(1, 1);
-    private int timer;
     private int progress;
     private static final int MAX_PROGRESS = 50;
     private boolean blocked;
@@ -42,16 +41,13 @@ public class TileTableSieve extends TileBase {
                 if (getWorld().getWorldTime() % 20 == 0) {
                     suckUpItems();
                 }
-            } else if (timer > 0 && hasValidRecipe(inv.getStackInSlot(0))) {
+            } else if (hasValidRecipe(inv.getStackInSlot(0))) {
                 progress++;
                 if (progress >= MAX_PROGRESS) {
                     progress = 0;
                     blocked = true;
                 }
             }
-        }
-        if (timer > 0) {
-            timer--;
         }
     }
 
@@ -79,10 +75,6 @@ public class TileTableSieve extends TileBase {
     private IItemStack getRecipeOutput(IItemStack stack) {
         RecipeTableSieve r = RecipeRegister.getTableSieveRecipe(stack);
         return r == null ? null : r.getOutput();
-    }
-
-    public void resetTimer() {
-        timer = 10;
     }
 
     private void suckUpItems() {

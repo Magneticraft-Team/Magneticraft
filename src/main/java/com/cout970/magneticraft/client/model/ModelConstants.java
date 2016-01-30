@@ -9,18 +9,24 @@ import net.darkaqua.blacksmith.api.util.ResourceReference;
  */
 public class ModelConstants {
 
-    private static final String DOMAIN = Magneticraft.ID;
+    public static TechneModelLoader.TechneModelPart WOODEN_SHAFT;
+    public static TechneModelLoader.TechneModelPart CRUSHING_TABLE;
+    public static TechneModelLoader.TechneModelPart SIEVE_TABLE;
+    public static TechneModelLoader.TechneModelPart WIND_TURBINE;
+    public static TechneModelLoader.TechneModelPart WIND_TURBINE_ITEM;
+    public static TechneModelLoader.TechneModelPart HAND_CRANK;
+    public static TechneModelLoader.TechneModelPart HAND_SIEVE;
+    public static TechneModelLoader.TechneModelPart KINETIC_GRINDER;
 
-    public static final String WOODEN_SHAFT = "wooden_shaft";
-    public static final String CRUSHING_TABLE = "crushing_table";
-    public static final String SIEVE_TABLE = "table_sieve";
-    public static final String WIND_TURBINE = "wind_turbine";
-    public static final String HAND_CRANK = "hand_crank";
-
-    public static TechneModelLoader.TechneModel test;
-
-    public static ResourceReference ofTexture(String s) {
-        return new ResourceReference(DOMAIN, "textures/models/" + s + ".png");
+    public static void loadModels() {
+        WOODEN_SHAFT = ofTechne("wooden_shaft");
+        CRUSHING_TABLE = ofTechne("crushing_table");
+        SIEVE_TABLE = ofTechne("table_sieve");
+        WIND_TURBINE = ofTechne("wind_turbine");
+        WIND_TURBINE_ITEM = ofTechne("wind_turbine_item");
+        HAND_CRANK = ofTechne("hand_crank");
+        HAND_SIEVE = ofTechne("hand_sieve");
+        KINETIC_GRINDER = ofTechne("kinetic_grinder");
     }
 
     public static TechneModelLoader.TechneModelPart ofTechne(String file) {
@@ -28,9 +34,6 @@ public class ModelConstants {
     }
 
     public static TechneModelLoader.TechneModelPart ofTechne(String file, String texture) {
-        return TechneModelLoader.loadModel(new ResourceReference(DOMAIN, "models/" + file + ".tcn"), new ResourceReference(DOMAIN, "models/" + texture));
-    }
-
-    public static void init(){
+        return TechneModelLoader.loadModel(new ResourceReference(Magneticraft.ID, "models/" + file + ".tcn"), new ResourceReference(Magneticraft.ID, "models/" + texture));
     }
 }

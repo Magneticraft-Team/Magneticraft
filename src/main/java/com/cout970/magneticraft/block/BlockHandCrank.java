@@ -40,7 +40,7 @@ public class BlockHandCrank extends BlockModeled implements IBlockContainerDefin
     }
 
     public IBlockModelProvider getModelProvider() {
-        return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.HAND_CRANK));
+        return new SimpleItemBlockModelProvider(ModelConstants.HAND_CRANK);
     }
 
     @Override

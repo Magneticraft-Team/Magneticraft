@@ -2,16 +2,17 @@ package com.cout970.magneticraft.item;
 
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.api.tool.IHammer;
-import com.cout970.magneticraft.client.model.item.SwordRenderModel;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
 import net.darkaqua.blacksmith.api.intermod.InterModUtils;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.render.model.RenderPlace;
+import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
 import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.IStaticModel;
 import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
+import net.darkaqua.blacksmith.api.util.Vect3d;
 import net.darkaqua.blacksmith.api.util.WorldRef;
 
 /**
@@ -30,15 +31,18 @@ public class ItemIronHammer extends ItemBase implements IHammer, IInterfaceProvi
     }
 
     public IItemModelProvider getModelProvider() {
-        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase())) {
-            @Override
-            public IStaticModel getModelForVariant(IItemStack stack) {
-                if (model == null) {
-                    model = new SwordRenderModel(identifier);
-                }
-                return model;
-            }
-        };
+        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase()),
+                (id) -> new ItemFlatModelProvider.ItemFlatModel(id,
+                        (place) -> {
+                            if (place == RenderPlace.THIRD_PERSON) {
+                                return new RenderTransformation(new Vect3d(0, 1.25, -3.5).multiply(1 / 16d),
+                                        new Vect3d(0, 90, -35), new Vect3d(0.85, 0.85, 0.85));
+                            } else if (place == RenderPlace.FIRST_PERSON) {
+                                return new RenderTransformation(new Vect3d(0, 4, 2).multiply(1 / 16d),
+                                        new Vect3d(0, -135, 25), new Vect3d(1.7, 1.7, 1.7));
+                            }
+                            return null;
+                        }));
     }
 
     @Override

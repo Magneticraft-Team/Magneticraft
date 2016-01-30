@@ -42,7 +42,7 @@ public class BlockWindTurbine extends BlockModeled implements BlockMethod.OnPlac
     }
 
     public IBlockModelProvider getModelProvider(){
-        return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.WIND_TURBINE, ModelConstants.WIND_TURBINE+"_item")){
+        return new SimpleItemBlockModelProvider(ModelConstants.WIND_TURBINE_ITEM){
             public IStaticModel fromModelPart(IModelPartIdentifier id){
                 return new SimpleItemModelProvider.ItemModel(id){
                     @Override

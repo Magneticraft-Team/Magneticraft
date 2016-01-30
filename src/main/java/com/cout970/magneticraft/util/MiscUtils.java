@@ -13,47 +13,43 @@ import org.lwjgl.opengl.GL11;
  */
 public class MiscUtils {
 
-    public static void rotate(Direction dir) {
+    public static float getRotation(Direction dir) {
         switch (dir) {
             case DOWN:
-                GL11.glRotatef(-90, 1, 0, 0);
-                break;
+                return 90;
             case UP:
-                GL11.glRotatef(90, 1, 0, 0);
-                break;
+                return -90;
             case NORTH:
-                break;
+                return 180;
             case SOUTH:
-                GL11.glRotatef(180, 0, 1, 0);
-                break;
+                return 0;
             case EAST:
-                GL11.glRotatef(-90, 0, 1, 0);
-                break;
+                return 90;
             case WEST:
-                GL11.glRotatef(90, 0, 1, 0);
-                break;
+                return -90;
         }
+        return 0;
     }
 
     public static void rotateAround(float angle, Direction dir, Vect3d axis) {
         switch (dir) {
             case DOWN:
-                GL11.glRotatef(angle, (float)axis.getX(), (float)axis.getY(), (float)axis.getZ());
+                GL11.glRotatef(angle, (float) axis.getX(), (float) axis.getY(), (float) axis.getZ());
                 break;
             case UP:
-                GL11.glRotatef(-angle, (float)axis.getX(), (float)axis.getY(), (float)axis.getZ());
+                GL11.glRotatef(-angle, (float) axis.getX(), (float) axis.getY(), (float) axis.getZ());
                 break;
             case NORTH:
-                GL11.glRotatef(angle, (float)axis.getX(), (float)axis.getY(), (float)axis.getZ());
+                GL11.glRotatef(angle, (float) axis.getX(), (float) axis.getY(), (float) axis.getZ());
                 break;
             case SOUTH:
-                GL11.glRotatef(-angle, (float)axis.getX(), (float)axis.getY(), (float)axis.getZ());
+                GL11.glRotatef(-angle, (float) axis.getX(), (float) axis.getY(), (float) axis.getZ());
                 break;
             case EAST:
-                GL11.glRotatef(angle, (float)axis.getX(), (float)axis.getY(), (float)axis.getZ());
+                GL11.glRotatef(angle, (float) axis.getX(), (float) axis.getY(), (float) axis.getZ());
                 break;
             case WEST:
-                GL11.glRotatef(-angle, (float)axis.getX(), (float)axis.getY(), (float)axis.getZ());
+                GL11.glRotatef(-angle, (float) axis.getX(), (float) axis.getY(), (float) axis.getZ());
                 break;
         }
     }

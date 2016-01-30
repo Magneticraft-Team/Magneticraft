@@ -2,10 +2,7 @@ package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.block.*;
 import com.cout970.magneticraft.block.multiblock.BlockChassis;
-import com.cout970.magneticraft.client.tilerender.TileRenderCrushingTable;
-import com.cout970.magneticraft.client.tilerender.TileRenderHandCrank;
-import com.cout970.magneticraft.client.tilerender.TileRenderWindTurbine;
-import com.cout970.magneticraft.client.tilerender.TileRenderWoodenShaft;
+import com.cout970.magneticraft.client.tilerender.*;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
 import com.cout970.magneticraft.tileentity.TileTableSieve;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticGrinder;
@@ -18,7 +15,6 @@ import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
-import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRenderer;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 
 /**
@@ -35,13 +31,13 @@ public enum ManagerBlocks {
     WindTurbine(new BlockWindTurbine(), "Wind Turbine", TileWindTurbine.class, new TileRenderWindTurbine()),
     Chassis(new BlockChassis(), "MultiBlock Chassis", TileMultiBlockChassis.class ),
     Limestone(new BlockLimestone(), "Limestone"),
-    KineticGrinder(new BlockKineticGrinder(), "Kinetic Grinder", TileKineticGrinder.class);
+    KineticGrinder(new BlockKineticGrinder(), "Kinetic Grinder", TileKineticGrinder.class, new TileRenderKineticGrinder());
 
     private BlockBase definition;
     private IBlock block;
     private String identifier;
     private Class<? extends ITileEntityDefinition> tileEntityClass;
-    private ITileEntityRenderer<? extends ITileEntityDefinition> tileRenderer;
+    private TileEntityRenderer<? extends ITileEntityDefinition> tileRenderer;
 
     ManagerBlocks(BlockBase def, String englishName) {
         definition = def;
@@ -54,7 +50,7 @@ public enum ManagerBlocks {
         tileEntityClass = tile;
     }
 
-    <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile, ITileEntityRenderer<T> renderer) {
+    <T extends ITileEntityDefinition> ManagerBlocks(BlockBase def, String englishName, Class<T> tile, TileEntityRenderer<T> renderer) {
         this(def, englishName, tile);
         tileRenderer = renderer;
     }
@@ -74,6 +70,7 @@ public enum ManagerBlocks {
             StaticAccess.GAME.getRenderRegistry().registerBlockModelProvider(b.definition, b.definition.getModelProvider());
             if (b.tileRenderer != null) {
                 StaticAccess.GAME.getRenderRegistry().registerTileEntityRenderer(b.tileEntityClass, b.tileRenderer);
+                b.tileRenderer.initModels();
             }
         }
     }

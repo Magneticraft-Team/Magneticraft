@@ -18,7 +18,7 @@ public class ItemHandSieve extends ItemBase {
     }
 
     public IItemModelProvider getModelProvider() {
-        return new SimpleItemModelProvider(ModelConstants.ofTechne(getItemName().toLowerCase())) {
+        return new SimpleItemModelProvider(ModelConstants.HAND_SIEVE) {
 
             public IStaticModel createRenderModel() {
                 return new ItemModel(identifier) {

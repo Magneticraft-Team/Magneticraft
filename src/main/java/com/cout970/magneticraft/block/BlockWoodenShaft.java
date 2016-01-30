@@ -22,7 +22,7 @@ public class BlockWoodenShaft extends BlockModeled implements IBlockContainerDef
     }
 
     public IBlockModelProvider getModelProvider(){
-        return new SimpleItemBlockModelProvider(ModelConstants.ofTechne(ModelConstants.WOODEN_SHAFT));
+        return new SimpleItemBlockModelProvider(ModelConstants.WOODEN_SHAFT);
 
     }
 
