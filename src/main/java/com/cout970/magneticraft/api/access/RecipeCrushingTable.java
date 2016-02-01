@@ -10,16 +10,16 @@ public class RecipeCrushingTable {
     protected final IItemStack output;
 
     public RecipeCrushingTable(IItemStack input, IItemStack output) {
-        this.input = input;
-        this.output = output;
+        this.input = input.copy();
+        this.output = output.copy();
     }
 
     public IItemStack getInput() {
-        return input;
+        return input.copy();
     }
 
     public IItemStack getOutput() {
-        return output;
+        return output.copy();
     }
 
     public boolean matches(IItemStack i) {

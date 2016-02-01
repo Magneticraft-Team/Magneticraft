@@ -56,6 +56,7 @@ public class Magneticraft {
         StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), TileKineticBase::new);
         StaticAccess.GAME.getInterModRegistry().registerInterface(IElectricConductor.class, new ElectricStorageHandler(), TileElectricBase::new);
         ManagerNetwork.init();
+        ManagerOreDict.registerOredictNames();
         ManagerRecipe.init();
 
         if (DEBUG) {

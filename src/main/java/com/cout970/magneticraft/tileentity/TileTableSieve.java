@@ -3,7 +3,6 @@ package com.cout970.magneticraft.tileentity;
 import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.access.RecipeTableSieve;
 import com.cout970.magneticraft.util.MiscUtils;
-import net.darkaqua.blacksmith.api.block.Blocks;
 import net.darkaqua.blacksmith.api.entity.IEntity;
 import net.darkaqua.blacksmith.api.entity.types.IEntityItem;
 import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
@@ -52,18 +51,17 @@ public class TileTableSieve extends TileBase {
     }
 
     private boolean ejectItem(IItemStack stack) {
-        Vect3i down = getParent().getWorldRef().getPosition().down();
-        if (getWorld().getBlockData(down).getBlock().equals(Blocks.AIR.getBlock())) {
+        WorldRef ref = new WorldRef(getWorld(), getParent().getWorldRef().getPosition().down());
+        ITileEntity tile = ref.getTileEntity();
+        IInventoryHandler inventory = ObjectScanner.findInTileEntity(tile, IInventoryHandler.IDENTIFIER, Direction.UP);
+        if (inventory != null && InventoryUtils.insertAllInInventory(inventory, stack)) {
+            return true;
+        }
+        if (ref.getBlockData().getBlock().isPassable(ref)) {
             if (StaticAccess.GAME.isServer()) {
-                MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, -0.5, 0.5), stack);
+                MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, -0.0625f * 6, 0.5), stack, false);
             }
             return true;
-        } else {
-            ITileEntity tile = getWorld().getTileEntity(down);
-            IInventoryHandler inventory = ObjectScanner.findInTileEntity(tile, IInventoryHandler.IDENTIFIER, Direction.UP);
-            if (inventory != null && InventoryUtils.insertAllInInventory(inventory, stack)) {
-                return true;
-            }
         }
         return false;
     }
@@ -96,20 +94,20 @@ public class TileTableSieve extends TileBase {
     }
 
     @Override
-    public void loadData(IDataCompound data){
+    public void loadData(IDataCompound data) {
         inv.load(data, "inv");
     }
 
     @Override
-    public void saveData(IDataCompound data){
+    public void saveData(IDataCompound data) {
         inv.save(data, "inv");
     }
 
     @Override
-    public void onDelete(){
+    public void onDelete() {
         super.onDelete();
-        if (StaticAccess.GAME.isServer()){
-            MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, 0.5, 0.5), inv.getStackInSlot(0));
+        if (StaticAccess.GAME.isServer()) {
+            MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, 0.5, 0.5), inv.getStackInSlot(0), true);
             inv.setStackInSlot(0, null);
         }
     }

@@ -59,9 +59,20 @@ public class MiscUtils {
         return Character.toUpperCase(a) + name.substring(1);
     }
 
-    public static void dropItem(WorldRef ref, Vect3d offset, IItemStack stack) {
+    public static void dropItem(WorldRef ref, Vect3d offset, IItemStack stack, boolean random) {
         if (stack == null) return;
         IEntityItem entity = EntityFactory.createEntityItem(ref.getWorld(), ref.getPosition().toVect3d().add(offset), stack);
+        if (!random) {
+            entity.setMotion(Vect3d.nullVector());
+        }
         ref.getWorld().spawnEntity(entity);
+    }
+
+    public static double fastSqrt(double d) {
+        //http://stackoverflow.com/questions/13263948/fast-sqrt-in-java-at-the-expense-of-accuracy
+        double sqrt = Double.longBitsToDouble(((Double.doubleToLongBits(d) - (1l << 52)) >> 1) + (1l << 61));
+        double better = (sqrt + d / sqrt) / 2.0;
+        double evenbetter = (better + d / better) / 2.0;
+        return evenbetter;
     }
 }

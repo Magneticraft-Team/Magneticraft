@@ -11,7 +11,7 @@ import net.darkaqua.blacksmith.api.util.Vect3d;
 import net.darkaqua.blacksmith.api.util.Vect3i;
 import net.darkaqua.blacksmith.api.world.IWorld;
 
-import static net.darkaqua.blacksmith.api.block.Blocks.*;
+import static net.darkaqua.blacksmith.api.block.Blocks.AIR;
 
 /**
  * Created by cout970 on 03/01/2016.
@@ -32,7 +32,7 @@ public class TileWindTurbine extends TileKineticBase {
             speed = (float) (Math.sqrt(power) * 0.1d);
             traceAir1();
         }
-        network.applyForce(speed, 20 * speed);
+        network.applyForce(Math.max(0, speed*15-network.getSpeed()));
     }
 
     private void traceAir1() {
@@ -88,7 +88,16 @@ public class TileWindTurbine extends TileKineticBase {
     }
 
     @Override
+    public double getLoss() {
+        if (getNetwork().getSpeed() > 250){
+            double extra = (getNetwork().getSpeed()-250);
+            return super.getLoss()+extra*extra*0.015;
+        }
+        return super.getLoss();
+    }
+
+    @Override
     public Cube getRenderBox() {
-        return Cube.fullBlock().translate(parent.getWorldRef().getPosition().toVect3d()).expand(new Vect3d(5,5,5));
+        return Cube.fullBlock().expand(new Vect3d(5,5,5)).translate(parent.getWorldRef().getPosition().toVect3d());
     }
 }

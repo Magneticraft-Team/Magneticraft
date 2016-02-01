@@ -19,7 +19,7 @@ public class NetworkPathFinding<T extends INetworkNode> extends PathFinding {
     /**
      * Initializes a new PathFinding instance that will work on given field, starting with a block at given position.
      *
-     * @param net {@link Network} to check nodes against
+     * @param net   {@link Network} to check nodes against
      * @param ba    {@link IWorld} that will provide information about blocks for the algorithm
      * @param start {@link Vect3i} containing coordinates of a start block.
      */
@@ -60,8 +60,16 @@ public class NetworkPathFinding<T extends INetworkNode> extends PathFinding {
     @Override
     public boolean isPath(PathNode node) {
         ITileEntity tile = field.getTileEntity(node.getPosition());
-        T n = ObjectScanner.findInTileEntity(tile, network.getInterfaceIdentifier(), null);
-        return network.canAddToNetwork(n);
+        if (node.getBefore() == null) {
+            T n = ObjectScanner.findInTileEntity(tile, network.getInterfaceIdentifier(), null);
+            return network.canAddToNetwork(n);
+        } else {
+            Vect3i dir = node.getPosition().copy().sub(node.getBefore().getPosition());
+            T n = ObjectScanner.findInTileEntity(tile, network.getInterfaceIdentifier(), dir.toDirection());
+            ITileEntity oldTile = field.getTileEntity(node.getBefore().getPosition());
+            T old = ObjectScanner.findInTileEntity(oldTile, network.getInterfaceIdentifier(), null);
+            return old != null && n != null && network.canAddToNetwork(n) && n.isAbleToConnect(old, dir) && old.isAbleToConnect(n, dir.getOpposite());
+        }
     }
 
     public class Result extends PathFinding.Result {

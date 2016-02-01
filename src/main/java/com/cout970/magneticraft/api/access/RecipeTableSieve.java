@@ -12,8 +12,8 @@ public class RecipeTableSieve {
     protected final IItemStack output;
 
     public RecipeTableSieve(IItemStack input, IItemStack output) {
-        this.input = input;
-        this.output = output;
+        this.input = input.copy();
+        this.output = output.copy();
     }
 
     public IItemStack getInput() {

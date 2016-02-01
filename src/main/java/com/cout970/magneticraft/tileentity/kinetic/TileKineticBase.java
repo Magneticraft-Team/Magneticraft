@@ -19,8 +19,7 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
 public class TileKineticBase extends TileBase implements IInterfaceProvider, IKineticConductor {
 
     protected KineticNetwork network;
-    protected double mass = 0.01;
-    protected double loss = 0.01;
+    protected double mass = 1.5d;
 
     @Override
     public void onDelete() {
@@ -36,9 +35,9 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
         if (getWorld().getWorldTime() % 20 == 0) {
             for (Direction d : Direction.values()) {
                 ITileEntity tile = getWorldReference().move(d).getTileEntity();
-                IKineticConductor k = ObjectScanner.findInTileEntity(tile, IKineticConductor.IDENTIFIER, d);
+                IKineticConductor k = ObjectScanner.findInTileEntity(tile, IKineticConductor.IDENTIFIER, d.opposite());
 
-                if (isAbleToConnect(k, d.toVect3i()) && network.canAddToNetwork(k)) {
+                if (network.canAddToNetwork(k) && isAbleToConnect(k, d.toVect3i()) && k.isAbleToConnect(this, d.opposite().toVect3i())) {
                     if (k.getNetwork() != null) {
                         network.expandNetwork(k.getNetwork());
                     } else {
@@ -53,14 +52,12 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
     public void loadData(IDataCompound tag) {
         super.loadData(tag);
         mass = tag.getDouble("Mass");
-        loss = tag.getDouble("Loss");
     }
 
     @Override
     public void saveData(IDataCompound tag) {
         super.saveData(tag);
         tag.setDouble("Mass", mass);
-        tag.setDouble("Loss", loss);
     }
 
     public float getRotationAngle(float partialTick) {
@@ -89,12 +86,7 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
 
     @Override
     public double getLoss() {
-        return loss;
-    }
-
-    @Override
-    public double getSpeed() {
-        return network.getSpeed();
+        return getNetwork().getSpeed()*0.005;
     }
 
     @Override
@@ -124,7 +116,6 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
     @Override
     public boolean isValid() {
         return parent != null && parent.isValid();
-
     }
 
     @Override

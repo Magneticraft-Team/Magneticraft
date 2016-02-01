@@ -1,7 +1,6 @@
 package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.api.access.RecipeRegister;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
 
 /**
  * Created by cout970 on 17/01/2016.
@@ -14,16 +13,14 @@ public class ManagerRecipe {
     }
 
     private static void initCrushingTableRecipes() {
-        addCrushingTableRecipe(ManagerBlocks.CopperOre, ManagerItems.ItemOres.Copper);
-        addCrushingTableRecipe(ManagerBlocks.TungstenOre, ManagerItems.ItemOres.Tungsten);
+        for(ManagerItems.ItemOres ore : ManagerItems.ItemOres.values()){
+            RecipeRegister.registerCrushingTableRecipe(ore.getOreBlock(), ore.getChunk());
+        }
     }
 
     private static void initTableSieveRecipes() {
-        RecipeRegister.registerSieveTableRecipe(ManagerItems.ItemOres.Copper.getChunk(), ManagerItems.ItemOres.Copper.getDust());
-    }
-
-    private static void addCrushingTableRecipe(ManagerBlocks input, ManagerItems.ItemOres output){
-        IItemStack result = output.getChunk();
-        RecipeRegister.registerCrushingTableRecipe(input.toItemStack(), result);
+        for(ManagerItems.ItemOres ore : ManagerItems.ItemOres.values()){
+            RecipeRegister.registerSieveTableRecipe(ore.getChunk(), ore.getDust().setAmount(2));
+        }
     }
 }

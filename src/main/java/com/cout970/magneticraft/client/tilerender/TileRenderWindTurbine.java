@@ -4,10 +4,12 @@ import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
 import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.render.model.IDynamicModel;
-import net.darkaqua.blacksmith.api.render.techne.TechneModelLoader;
+import net.darkaqua.blacksmith.api.render.techne.TechneDynamicModel;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3d;
+import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -19,22 +21,25 @@ public class TileRenderWindTurbine extends TileEntityRenderer<TileWindTurbine> {
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileWindTurbine def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
+        RenderHelper.disableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 0.5f, (float) pos.getY() - 5, (float) pos.getZ() + 0.5f);
-
-        GL11.glRotatef(MiscUtils.getRotation(def.getDirection()), 0, 1, 0);
+        Direction dir = def.getDirection();
+        GL11.glRotatef(MiscUtils.getRotation(dir), 0, 1, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
 
+
         GL11.glTranslatef(0.5f, 5 + 0.5f, 0);
-        GL11.glRotatef(def.getRotationAngle(partialTick), 0, 0, 1);//
+        GL11.glRotatef(dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? -def.getRotationAngle(partialTick) : def.getRotationAngle(partialTick), 0, 0, 1);
         GL11.glTranslatef(-0.5f, -5-0.5f, 0);
 
         model.renderAll();
         GL11.glPopMatrix();
+        RenderHelper.enableStandardItemLighting();
     }
 
     @Override
     public void initModels() {
-        model = new TechneModelLoader.TechneModel(ModelConstants.WIND_TURBINE);
+        model = new TechneDynamicModel(ModelConstants.WIND_TURBINE);
     }
 }

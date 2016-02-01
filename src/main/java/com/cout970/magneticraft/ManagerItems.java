@@ -60,12 +60,14 @@ public enum ManagerItems {
         Copper("Copper", "Gold", "Iron"),
         Tungsten("Tungsten", "Gold", "Iron");
 
+        private String base;
         private ItemOre definition;
         private IItem item;
         private String identifier;
         private String[] extras;
 
         ItemOres(String base, String... extras) {
+            this.base = base;
             this.definition = new ItemOre(base);
             this.extras = extras;
             identifier = "itemOre" + base;
@@ -116,6 +118,10 @@ public enum ManagerItems {
 
         public IItemStack getChunk() {
             return ItemStackFactory.createItemStack(item, 1, 2);
+        }
+
+        public IItemStack getOreBlock() {
+            return ManagerOreDict.getOreWithPriority("ore"+base);
         }
     }
 }

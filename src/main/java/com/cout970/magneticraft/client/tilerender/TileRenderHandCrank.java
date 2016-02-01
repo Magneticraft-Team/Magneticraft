@@ -3,10 +3,11 @@ package com.cout970.magneticraft.client.tilerender;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import net.darkaqua.blacksmith.api.render.model.IDynamicModel;
-import net.darkaqua.blacksmith.api.render.techne.TechneModelLoader;
+import net.darkaqua.blacksmith.api.render.techne.TechneDynamicModel;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Vect3d;
+import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -21,6 +22,7 @@ public class TileRenderHandCrank extends TileEntityRenderer<TileHandCrank> {
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileHandCrank def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
+        RenderHelper.disableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F);
         float rotation = -def.getRotationAngle(partialTick);
@@ -96,11 +98,12 @@ public class TileRenderHandCrank extends TileEntityRenderer<TileHandCrank> {
         }
         model.renderPartSet(handle);
         GL11.glPopMatrix();
+        RenderHelper.enableStandardItemLighting();
     }
 
     @Override
     public void initModels() {
-        model = new TechneModelLoader.TechneModel(ModelConstants.HAND_CRANK);
+        model = new TechneDynamicModel(ModelConstants.HAND_CRANK);
         base = model.createAllContains("base");
         handle = model.createAllContains("handle");
     }

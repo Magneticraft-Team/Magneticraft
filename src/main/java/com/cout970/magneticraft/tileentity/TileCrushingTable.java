@@ -48,7 +48,7 @@ public class TileCrushingTable extends TileBase implements IInterfaceProvider {
     public void onDelete() {
         super.onDelete();
         if (StaticAccess.GAME.isServer()) {
-            MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, 0.5, 0.5), inventory.getStackInSlot(0));
+            MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, 0.5, 0.5), inventory.getStackInSlot(0), true);
             inventory.setStackInSlot(0, null);
         }
     }

@@ -5,7 +5,7 @@ import net.darkaqua.blacksmith.api.util.WorldRef;
 /**
  * Created by cout970 on 29/12/2015.
  */
-public interface INetworkNode<T extends Network> {
+public interface INetworkNode<T extends Network, D extends INetworkNode> extends IConnectable<D>{
 
     WorldRef getWorldReference();
 

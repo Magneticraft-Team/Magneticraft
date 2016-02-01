@@ -8,9 +8,9 @@ import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
  */
 public class KineticNetwork extends Network<IKineticConductor> {
 
-    protected double addedSpeed;
-    protected double maxSpeed;
-    protected double removedSpeed;
+    public static final double R = 1;
+    protected double totalForce;
+    protected double speed;
     protected double angle;
     protected long lastTick;
 
@@ -24,16 +24,18 @@ public class KineticNetwork extends Network<IKineticConductor> {
         if (getMasterNode() == null) return;
         if (lastTick != getMasterNode().getWorldReference().getWorld().getWorldTime()) {
             lastTick = getMasterNode().getWorldReference().getWorld().getWorldTime();
-            //apply loss
-            maxSpeed = addedSpeed - addedSpeed * getLose();
-            if (maxSpeed < 0) maxSpeed = 0;
-            //reset output buffer
-            removedSpeed = maxSpeed;
-            //clear input buffer
-            addedSpeed = 0;
-            //updated rotation
-            if (Double.isNaN(angle))angle = 0;
-            angle += maxSpeed / 20d;
+
+            //angular momentum (M = r x F)
+            double M = R * (totalForce - getLoss());
+            //momentum of inertia (I = m*r^2)
+            double I = getMass() * R * R;
+            //acceleration (M = I*a) -> (a = M/I)
+            double a = M / I;
+            speed += a;
+            totalForce = 0;
+
+            angle += speed / 20d;
+            if (Double.isNaN(angle)) angle = 0;
             angle %= 360;
         }
     }
@@ -42,30 +44,17 @@ public class KineticNetwork extends Network<IKineticConductor> {
         return nodes.stream().mapToDouble(IKineticConductor::getMass).sum();
     }
 
-    public double getLose() {
+    public double getLoss() {
         return nodes.stream().mapToDouble(IKineticConductor::getLoss).sum();
     }
 
     public double getSpeed() {
-        return maxSpeed;
+        return speed;
     }
 
-    public void applyForce(double force) {
-        addedSpeed += force / getMass();
-    }
-
-    public double applyForce(double force, double maxSpeed) {
-        double mass = getMass();
-        double speedAdded = Math.max(0, Math.min(maxSpeed - addedSpeed, force / mass));
-        addedSpeed += speedAdded;
-        return speedAdded * mass;
-    }
-
-    public double drainForce(double force) {
-        double mass = getMass();
-        double speedLose = Math.min(removedSpeed, force / mass);
-        removedSpeed -= speedLose;
-        return speedLose * mass;
+    public double applyForce(double force) {
+        totalForce += force;
+        return force;
     }
 
     public double getRotationAngle() {
