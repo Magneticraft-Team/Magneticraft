@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.ModelConstants;
@@ -116,6 +117,7 @@ public class BlockCrushingTable extends BlockModeled implements IBlockContainerD
 
 
     public IBlockModelProvider getModelProvider() {
-        return new SimpleBlockModelProvider(ModelConstants.CRUSHING_TABLE);
+        return new SimpleBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER, ModelConstants.CRUSHING_TABLE)));
     }
 }

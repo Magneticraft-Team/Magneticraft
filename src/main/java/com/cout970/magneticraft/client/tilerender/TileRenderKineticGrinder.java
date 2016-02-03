@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.client.tilerender;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticGrinder;
 import com.cout970.magneticraft.util.MiscUtils;
@@ -49,7 +50,7 @@ public class TileRenderKineticGrinder extends TileEntityRenderer<TileKineticGrin
 
     @Override
     public void initModels() {
-        model = new TechneDynamicModel(ModelConstants.KINETIC_GRINDER);
+        model = new TechneDynamicModel(Magneticraft.IDENTIFIER, ModelConstants.KINETIC_GRINDER);
         base = model.createAllContains("base");
         lshaft = model.createAllContains("Wheell");
         rshaft = model.createAllContains("Wheelr");

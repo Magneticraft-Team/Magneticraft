@@ -29,10 +29,8 @@ public class TileHandCrank extends TileKineticBase {
 
     @Override
     public double getLoss() {
-        if (getNetwork().getSpeed() > 400){
-            return super.getLoss()+(getNetwork().getSpeed()-400)*0.05;
-        }
-        return super.getLoss();
+        double speed = getNetwork().getSpeed();
+        return super.getLoss() + speed * speed * 0.5D * 0.001;
     }
 
     @Override

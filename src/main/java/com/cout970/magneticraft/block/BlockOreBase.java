@@ -23,6 +23,9 @@ public class BlockOreBase extends BlockBase {
     }
 
     public IBlockModelProvider getModelProvider() {
-        return new SimpleBlockModelProvider(new SimpleModelPartBlock(new ResourceReference(Magneticraft.ID, "blocks/" + getBlockName().toLowerCase())));
+        return new SimpleBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER,
+                        new SimpleModelPartBlock(
+                                new ResourceReference(Magneticraft.ID, "blocks/" + getBlockName().toLowerCase())))));
     }
 }

@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity.kinetic;
 import com.cout970.magneticraft.api.access.RecipeCrushingTable;
 import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
+import com.cout970.magneticraft.util.Log;
 import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;
@@ -44,16 +45,18 @@ public class TileKineticGrinder extends TileKineticBase {
                     suckUpItems();
                 }
             } else if (hasValidRecipe(inv.getStackInSlot(0))) {
-                double speed = getNetwork().getSpeed();
-                progress += speed * 0.005d;
+                double torque = MiscUtils.fastSqrt(getNetwork().getTorque()) - 0.5;
+                if (torque > 0) {
+                    progress += torque;
 
-                if (progress >= MAX_PROGRESS) {
-                    if (progress >= MAX_PROGRESS * 2) {
-                        progress = 0;
-                    } else {
-                        progress -= MAX_PROGRESS;
+                    if (progress >= MAX_PROGRESS) {
+                        if (progress >= MAX_PROGRESS * 2) {
+                            progress = 0;
+                        } else {
+                            progress -= MAX_PROGRESS;
+                        }
+                        blocked = true;
                     }
-                    blocked = true;
                 }
             }
         }
@@ -61,17 +64,16 @@ public class TileKineticGrinder extends TileKineticBase {
 
     @Override
     public double getLoss() {
-        double loss = 0;
-        if (getNetwork().getSpeed() > 400) {
-            double extra = (getNetwork().getSpeed() - 400);
-            loss = super.getLoss() + extra * extra * 0.015;
-        } else {
-            loss = super.getLoss();
-        }
+        double speed = getNetwork().getSpeed();
+        return super.getLoss() + speed * speed * 0.5D * 0.001;
+    }
+
+    @Override
+    public double getForceConsumed() {
         if (hasValidRecipe(inv.getStackInSlot(0))) {
-            loss += getNetwork().getSpeed() * 0.1;
+            return 5D;
         }
-        return loss;
+        return 0;
     }
 
 
@@ -145,7 +147,7 @@ public class TileKineticGrinder extends TileKineticBase {
 
     @Override
     public boolean isAbleToConnect(IKineticConductor cond, Vect3i offset) {
-        return offset.isDirectionalOffset() && getDirection().isParallel(offset.toDirection());
+        return isValid() && offset.isDirectionalOffset() && getDirection().isParallel(offset.toDirection());
     }
 
     public Direction getDirection() {

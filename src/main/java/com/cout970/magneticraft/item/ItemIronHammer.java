@@ -9,7 +9,7 @@ import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.RenderPlace;
 import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
 import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.PlaneItemModelProvider;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 import net.darkaqua.blacksmith.api.util.Vect3d;
@@ -31,9 +31,8 @@ public class ItemIronHammer extends ItemBase implements IHammer, IInterfaceProvi
     }
 
     public IItemModelProvider getModelProvider() {
-        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase()),
-                (id) -> new ItemFlatModelProvider.ItemFlatModel(id,
-                        (place) -> {
+        return new PlaneItemModelProvider(Magneticraft.IDENTIFIER, new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase()),
+                (place) -> {
                             if (place == RenderPlace.THIRD_PERSON) {
                                 return new RenderTransformation(new Vect3d(0, 1.25, -3.5).multiply(1 / 16d),
                                         new Vect3d(0, 90, -35), new Vect3d(0.85, 0.85, 0.85));
@@ -42,7 +41,7 @@ public class ItemIronHammer extends ItemBase implements IHammer, IInterfaceProvi
                                         new Vect3d(0, -135, 25), new Vect3d(1.7, 1.7, 1.7));
                             }
                             return null;
-                        }));
+                        });
     }
 
     @Override

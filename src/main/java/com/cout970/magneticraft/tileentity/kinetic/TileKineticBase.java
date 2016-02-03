@@ -63,7 +63,7 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
     public float getRotationAngle(float partialTick) {
         float rot = 0;
         if (network != null) {
-            double speed = network.getSpeed() / 20d;
+            double speed = (network.getSpeed() * 360 / 60) / 20d;
             rot = (float) network.getRotationAngle();
             rot += partialTick * speed;
         }
@@ -86,7 +86,13 @@ public class TileKineticBase extends TileBase implements IInterfaceProvider, IKi
 
     @Override
     public double getLoss() {
-        return getNetwork().getSpeed()*0.005;
+        //this is the energy loss caused by the drag
+        return getNetwork().getSpeed() * 0.01;
+    }
+
+    @Override
+    public double getForceConsumed() {
+        return 0;
     }
 
     @Override

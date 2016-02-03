@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.client.tilerender;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import net.darkaqua.blacksmith.api.render.model.IDynamicModel;
@@ -70,7 +71,7 @@ public class TileRenderWoodenShaft extends TileEntityRenderer<TileWoodenShaft> {
 
     @Override
     public void initModels() {
-        model = new TechneDynamicModel(ModelConstants.WOODEN_SHAFT);
+        model = new TechneDynamicModel(Magneticraft.IDENTIFIER, ModelConstants.WOODEN_SHAFT);
         center = model.createAllContains("center");
         connections = new IDynamicModel.IPartSet[6];
         for (Direction dir : Direction.values()) {

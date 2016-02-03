@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileTableSieve;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
@@ -20,7 +21,8 @@ public class BlockTableSieve extends BlockModeled implements IBlockContainerDefi
     }
 
     public IBlockModelProvider getModelProvider() {
-        return new SimpleBlockModelProvider(ModelConstants.SIEVE_TABLE);
+        return new SimpleBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER, ModelConstants.SIEVE_TABLE)));
     }
 
     @Override

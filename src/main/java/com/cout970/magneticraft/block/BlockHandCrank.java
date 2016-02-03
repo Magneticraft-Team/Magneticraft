@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import com.google.common.collect.Lists;
@@ -13,6 +14,7 @@ import net.darkaqua.blacksmith.api.entity.IEntity;
 import net.darkaqua.blacksmith.api.entity.ILivingEntity;
 import net.darkaqua.blacksmith.api.entity.IPlayer;
 import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
@@ -40,7 +42,8 @@ public class BlockHandCrank extends BlockModeled implements IBlockContainerDefin
     }
 
     public IBlockModelProvider getModelProvider() {
-        return new SimpleItemBlockModelProvider(ModelConstants.HAND_CRANK);
+        return new SimpleItemBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER, ModelConstants.HAND_CRANK)));
     }
 
     @Override

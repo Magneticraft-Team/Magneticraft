@@ -47,8 +47,10 @@ public abstract class BlockBase extends DefaultBlockDefinition {
     }
 
     public IBlockModelProvider getModelProvider() {
-        SimpleModelPartBlock model = new SimpleModelPartBlock(new ResourceReference(Magneticraft.ID, "blocks/" + getBlockName().toLowerCase()));
-        return new SimpleBlockModelProvider(model);
+        SimpleModelPartBlock model = new SimpleModelPartBlock(
+                new ResourceReference(Magneticraft.ID, "blocks/" + getBlockName().toLowerCase()));
+        return new SimpleBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER, model)));
     }
 
     public void registerName(String name) {

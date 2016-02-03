@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.client.tilerender;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import net.darkaqua.blacksmith.api.render.model.IDynamicModel;
@@ -103,7 +104,7 @@ public class TileRenderHandCrank extends TileEntityRenderer<TileHandCrank> {
 
     @Override
     public void initModels() {
-        model = new TechneDynamicModel(ModelConstants.HAND_CRANK);
+        model = new TechneDynamicModel(Magneticraft.IDENTIFIER, ModelConstants.HAND_CRANK);
         base = model.createAllContains("base");
         handle = model.createAllContains("handle");
     }

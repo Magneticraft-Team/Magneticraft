@@ -12,11 +12,13 @@ import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 import com.cout970.magneticraft.util.EmptyStorageHandler;
 import com.cout970.magneticraft.util.Log;
 import com.cout970.magneticraft.world.ManagerWorldGen;
+import net.darkaqua.blacksmith.api.event.EventBus;
 import net.darkaqua.blacksmith.api.event.EventSubscribe;
 import net.darkaqua.blacksmith.api.event.modloader.IInitEvent;
 import net.darkaqua.blacksmith.api.event.modloader.IPostInitEvent;
 import net.darkaqua.blacksmith.api.event.modloader.IPreInitEvent;
 import net.darkaqua.blacksmith.api.modloader.BlacksmithMod;
+import net.darkaqua.blacksmith.api.modloader.IModIdentifier;
 import net.darkaqua.blacksmith.api.modloader.ModInstance;
 import net.darkaqua.blacksmith.api.modloader.ModSidedProxy;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
@@ -33,6 +35,7 @@ public class Magneticraft {
     public final static String NAME = "Magneticraft";
     public final static String VERSION = "@VERSION@";
     public static final boolean DEBUG = StaticAccess.GAME.isDeobfuscatedEnvironment();
+    public static IModIdentifier IDENTIFIER;
     public static String DEV_HOME;
 
     @ModInstance(NAME)
@@ -46,12 +49,16 @@ public class Magneticraft {
     public void preInit(IPreInitEvent event) {
         Log.LOGGER = event.getModLog();
         Log.info("Starting preInit");
+        IDENTIFIER = StaticAccess.GAME.getModManager().getIdentifier(INSTANCE);
         ManagerConfig.init(event.getSuggestedConfigurationFile());
 
         ManagerBlocks.initBlocks();
         ManagerItems.initItems();
 
         proxy.init();
+        if (StaticAccess.GAME.isClient()){
+            EventBus.registerEventListener(proxy);
+        }
         StaticAccess.GAME.getInterModRegistry().registerInterface(IHammer.class, new EmptyStorageHandler(), ItemStoneHammer::new);
         StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), TileKineticBase::new);
         StaticAccess.GAME.getInterModRegistry().registerInterface(IElectricConductor.class, new ElectricStorageHandler(), TileElectricBase::new);

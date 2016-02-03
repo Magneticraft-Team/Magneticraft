@@ -20,4 +20,6 @@ public interface IKineticConductor extends IDataStorage, INetworkNode<KineticNet
     double getMass();
 
     double getLoss();
+
+    double getForceConsumed();
 }

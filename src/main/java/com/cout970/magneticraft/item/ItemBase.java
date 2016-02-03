@@ -5,7 +5,7 @@ import com.cout970.magneticraft.block.BlockBase;
 import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
 import net.darkaqua.blacksmith.api.item.defaults.DefaultItemDefinition;
 import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.PlaneItemModelProvider;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 
 /**
@@ -26,6 +26,6 @@ public abstract class ItemBase extends DefaultItemDefinition {
     public abstract String getItemName();
 
     public IItemModelProvider getModelProvider() {
-        return new ItemFlatModelProvider(new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase()));
+        return new PlaneItemModelProvider(Magneticraft.IDENTIFIER, new ResourceReference(Magneticraft.ID, "items/" + getItemName().toLowerCase()));
     }
 }

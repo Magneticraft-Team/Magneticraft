@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.client.tilerender;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
 import com.cout970.magneticraft.util.MiscUtils;
@@ -28,7 +29,6 @@ public class TileRenderWindTurbine extends TileEntityRenderer<TileWindTurbine> {
         GL11.glRotatef(MiscUtils.getRotation(dir), 0, 1, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
 
-
         GL11.glTranslatef(0.5f, 5 + 0.5f, 0);
         GL11.glRotatef(dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? -def.getRotationAngle(partialTick) : def.getRotationAngle(partialTick), 0, 0, 1);
         GL11.glTranslatef(-0.5f, -5-0.5f, 0);
@@ -40,6 +40,6 @@ public class TileRenderWindTurbine extends TileEntityRenderer<TileWindTurbine> {
 
     @Override
     public void initModels() {
-        model = new TechneDynamicModel(ModelConstants.WIND_TURBINE);
+        model = new TechneDynamicModel(Magneticraft.IDENTIFIER, ModelConstants.WIND_TURBINE);
     }
 }

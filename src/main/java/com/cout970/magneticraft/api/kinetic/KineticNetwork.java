@@ -9,7 +9,8 @@ import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
 public class KineticNetwork extends Network<IKineticConductor> {
 
     public static final double R = 1;
-    protected double totalForce;
+    protected double inputForce;
+    protected double torque;
     protected double speed;
     protected double angle;
     protected long lastTick;
@@ -25,16 +26,19 @@ public class KineticNetwork extends Network<IKineticConductor> {
         if (lastTick != getMasterNode().getWorldReference().getWorld().getWorldTime()) {
             lastTick = getMasterNode().getWorldReference().getWorld().getWorldTime();
 
-            //angular momentum (M = r x F)
-            double M = R * (totalForce - getLoss());
+            torque = Math.max(0, inputForce - getForceConsumed());
+//            Log.debug(String.format("input force: %.3f, force consumed: %.3f , lose: %.3f, torque: %.3f, speed: %.3f rpm",
+//                    inputForce, getForceConsumed(), getLoss(), torque, speed));
+            //torque (M = r x F)
+            double efectiveTorque = R * (torque - getLoss());
             //momentum of inertia (I = m*r^2)
             double I = getMass() * R * R;
             //acceleration (M = I*a) -> (a = M/I)
-            double a = M / I;
-            speed += a;
-            totalForce = 0;
+            double a = efectiveTorque / I;
+            speed += (a * 360 / 60) / 20d;
+            inputForce = 0;
 
-            angle += speed / 20d;
+            angle += (speed * 360 / 60) / 20d;
             if (Double.isNaN(angle)) angle = 0;
             angle %= 360;
         }
@@ -48,12 +52,21 @@ public class KineticNetwork extends Network<IKineticConductor> {
         return nodes.stream().mapToDouble(IKineticConductor::getLoss).sum();
     }
 
+    public double getForceConsumed() {
+        return nodes.stream().mapToDouble(IKineticConductor::getForceConsumed).sum();
+    }
+
+    public double getTorque(){
+        return torque;
+    }
+
+    // The unit of the speed is RPM, Revolutions per minute
     public double getSpeed() {
         return speed;
     }
 
     public double applyForce(double force) {
-        totalForce += force;
+        inputForce += force;
         return force;
     }
 

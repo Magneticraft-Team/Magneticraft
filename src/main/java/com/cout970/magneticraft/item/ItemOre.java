@@ -9,7 +9,7 @@ import net.darkaqua.blacksmith.api.item.IItem;
 import net.darkaqua.blacksmith.api.registry.IModelRegistry;
 import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
 import net.darkaqua.blacksmith.api.render.model.IStaticModel;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.ItemFlatModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.PlaneItemModelProvider;
 import net.darkaqua.blacksmith.api.util.ResourceReference;
 
 import java.util.List;
@@ -85,10 +85,10 @@ public class ItemOre extends ItemBase {
         }
 
         @Override
-        public void registerModels(IModelRegistry registry) {
+        public void reloadModels(IModelRegistry registry) {
             for (int i = 0; i < item.maxMeta(); i++) {
-                models[i] = new ItemFlatModelProvider.ItemFlatModel(
-                        registry.registerFlatItemModel(
+                models[i] = new PlaneItemModelProvider.ItemFlatModel(
+                        registry.registerFlatItemModel(Magneticraft.IDENTIFIER,
                                 new ResourceReference(Magneticraft.ID,
                                         "items/" + item.getBase().toLowerCase() + "/" + prefixes[i])));
             }

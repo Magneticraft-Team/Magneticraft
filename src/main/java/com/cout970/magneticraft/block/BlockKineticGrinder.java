@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticGrinder;
-import com.cout970.magneticraft.util.ItemOnlyModelProvider;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
@@ -12,6 +12,8 @@ import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.entity.ILivingEntity;
 import net.darkaqua.blacksmith.api.inventory.IItemStack;
 import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.WorldRef;
@@ -23,7 +25,8 @@ import net.darkaqua.blacksmith.api.world.IWorld;
 public class BlockKineticGrinder extends BlockModeled implements IBlockContainerDefinition, BlockMethod.OnPlacedBy{
 
     public IBlockModelProvider getModelProvider() {
-        return new ItemOnlyModelProvider(ModelConstants.KINETIC_GRINDER);
+        return new SimpleItemBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER, ModelConstants.KINETIC_GRINDER)));
     }
 
     @Override

@@ -75,6 +75,14 @@ public enum ManagerBlocks {
         }
     }
 
+    public static void reloadModels(){
+        for (ManagerBlocks b : ManagerBlocks.values()) {
+            if (b.tileRenderer != null) {
+                b.tileRenderer.initModels();
+            }
+        }
+    }
+
     public BlockBase getDefinition() {
         return definition;
     }

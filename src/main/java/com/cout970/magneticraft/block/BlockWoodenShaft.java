@@ -1,10 +1,12 @@
 package com.cout970.magneticraft.block;
 
+import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
 import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
 import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemBlockModelProvider;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
 import net.darkaqua.blacksmith.api.util.Cube;
@@ -22,7 +24,8 @@ public class BlockWoodenShaft extends BlockModeled implements IBlockContainerDef
     }
 
     public IBlockModelProvider getModelProvider(){
-        return new SimpleItemBlockModelProvider(ModelConstants.WOODEN_SHAFT);
+        return new SimpleItemBlockModelProvider(iModelRegistry -> new SimpleBlockModelProvider.BlockModel(
+                iModelRegistry.registerModelPart(Magneticraft.IDENTIFIER, ModelConstants.WOODEN_SHAFT)));
 
     }
 

@@ -32,7 +32,7 @@ public class TileWindTurbine extends TileKineticBase {
             speed = (float) (Math.sqrt(power) * 0.1d);
             traceAir1();
         }
-        network.applyForce(Math.max(0, speed*15-network.getSpeed()));
+        network.applyForce(Math.max(0, speed));
     }
 
     private void traceAir1() {
@@ -89,11 +89,8 @@ public class TileWindTurbine extends TileKineticBase {
 
     @Override
     public double getLoss() {
-        if (getNetwork().getSpeed() > 250){
-            double extra = (getNetwork().getSpeed()-250);
-            return super.getLoss()+extra*extra*0.015;
-        }
-        return super.getLoss();
+        double speed = getNetwork().getSpeed();
+        return super.getLoss() + speed * speed * 0.5D * 0.05;
     }
 
     @Override
