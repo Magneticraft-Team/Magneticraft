@@ -9,7 +9,6 @@ import net.darkaqua.blacksmith.api.render.techne.TechneDynamicModel;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -24,7 +23,7 @@ public class TileRenderKineticGrinder extends TileEntityRenderer<TileKineticGrin
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileKineticGrinder def, ITileEntityRendererHelper helper, Vect3d offset, float partialTick, int breakingProgress) {
-        RenderHelper.disableStandardItemLighting();
+        helper.disableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef((float) offset.getX(), (float) offset.getY(), (float) offset.getZ());
         float rotation = def.getRotationAngle(partialTick)*4;
@@ -45,7 +44,7 @@ public class TileRenderKineticGrinder extends TileEntityRenderer<TileKineticGrin
         model.renderPartSet(rshaft);
 
         GL11.glPopMatrix();
-        RenderHelper.enableStandardItemLighting();
+        helper.enableStandardItemLighting();
     }
 
     @Override

@@ -17,10 +17,7 @@ import net.darkaqua.blacksmith.api.event.EventSubscribe;
 import net.darkaqua.blacksmith.api.event.modloader.IInitEvent;
 import net.darkaqua.blacksmith.api.event.modloader.IPostInitEvent;
 import net.darkaqua.blacksmith.api.event.modloader.IPreInitEvent;
-import net.darkaqua.blacksmith.api.modloader.BlacksmithMod;
-import net.darkaqua.blacksmith.api.modloader.IModIdentifier;
-import net.darkaqua.blacksmith.api.modloader.ModInstance;
-import net.darkaqua.blacksmith.api.modloader.ModSidedProxy;
+import net.darkaqua.blacksmith.api.modloader.*;
 import net.darkaqua.blacksmith.api.registry.StaticAccess;
 
 import java.io.File;
@@ -35,11 +32,12 @@ public class Magneticraft {
     public final static String NAME = "Magneticraft";
     public final static String VERSION = "@VERSION@";
     public static final boolean DEBUG = StaticAccess.GAME.isDeobfuscatedEnvironment();
-    public static IModIdentifier IDENTIFIER;
     public static String DEV_HOME;
 
-    @ModInstance(NAME)
+    @ModInstance
     public static Magneticraft INSTANCE;
+    @ModIdentifier
+    public static IModIdentifier IDENTIFIER;
 
     @ModSidedProxy(clientSide = "com.cout970.magneticraft.proxy.ClientProxy",
             serverSide = "com.cout970.magneticraft.proxy.CommonProxy")

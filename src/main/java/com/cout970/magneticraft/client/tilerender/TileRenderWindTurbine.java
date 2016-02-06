@@ -10,7 +10,6 @@ import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -22,7 +21,7 @@ public class TileRenderWindTurbine extends TileEntityRenderer<TileWindTurbine> {
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileWindTurbine def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
-        RenderHelper.disableStandardItemLighting();
+        helper.disableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 0.5f, (float) pos.getY() - 5, (float) pos.getZ() + 0.5f);
         Direction dir = def.getDirection();
@@ -35,7 +34,7 @@ public class TileRenderWindTurbine extends TileEntityRenderer<TileWindTurbine> {
 
         model.renderAll();
         GL11.glPopMatrix();
-        RenderHelper.enableStandardItemLighting();
+        helper.enableStandardItemLighting();
     }
 
     @Override

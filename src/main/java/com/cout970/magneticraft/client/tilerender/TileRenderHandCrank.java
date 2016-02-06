@@ -8,7 +8,6 @@ import net.darkaqua.blacksmith.api.render.techne.TechneDynamicModel;
 import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -23,7 +22,7 @@ public class TileRenderHandCrank extends TileEntityRenderer<TileHandCrank> {
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileHandCrank def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
-        RenderHelper.disableStandardItemLighting();
+        helper.disableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F);
         float rotation = -def.getRotationAngle(partialTick);
@@ -99,7 +98,7 @@ public class TileRenderHandCrank extends TileEntityRenderer<TileHandCrank> {
         }
         model.renderPartSet(handle);
         GL11.glPopMatrix();
-        RenderHelper.enableStandardItemLighting();
+        helper.enableStandardItemLighting();
     }
 
     @Override

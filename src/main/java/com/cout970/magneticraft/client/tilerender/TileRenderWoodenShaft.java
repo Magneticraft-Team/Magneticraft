@@ -9,7 +9,6 @@ import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
 import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
 import net.darkaqua.blacksmith.api.util.Direction;
 import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -23,7 +22,7 @@ public class TileRenderWoodenShaft extends TileEntityRenderer<TileWoodenShaft> {
 
     @Override
     public void renderTileEntity(ITileEntity tile, TileWoodenShaft def, ITileEntityRendererHelper helper, Vect3d pos, float partialTick, int breakingProgress) {
-        RenderHelper.disableStandardItemLighting();
+        helper.disableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
         int sides = def.getConnections();
@@ -66,7 +65,7 @@ public class TileRenderWoodenShaft extends TileEntityRenderer<TileWoodenShaft> {
         }
         GL11.glPopMatrix();
         GL11.glPopMatrix();
-        RenderHelper.enableStandardItemLighting();
+        helper.enableStandardItemLighting();
     }
 
     @Override

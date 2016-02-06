@@ -25,7 +25,7 @@ public class BlockCombustionEngine extends BlockModeled implements BlockMethod.O
         if (iPlayer.isSneaking()) {
             return false;
         }
-        iPlayer.openGui(Magneticraft.INSTANCE, 0, worldRef);
+        iPlayer.openGui(Magneticraft.IDENTIFIER, 0, worldRef);
         return true;
     }
 
