@@ -2,16 +2,16 @@ package com.cout970.magneticraft.network;
 
 import com.cout970.magneticraft.tileentity.TileBase;
 import io.netty.buffer.ByteBuf;
-import net.darkaqua.blacksmith.api.network.ExtendedByteBuf;
-import net.darkaqua.blacksmith.api.network.INetworkContext;
-import net.darkaqua.blacksmith.api.network.INetworkMessage;
-import net.darkaqua.blacksmith.api.network.INetworkMessageHandler;
-import net.darkaqua.blacksmith.api.storage.IDataCompound;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.util.WorldRef;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.network.ExtendedByteBuf;
+import net.darkaqua.blacksmith.api.common.network.INetworkContext;
+import net.darkaqua.blacksmith.api.common.network.INetworkMessage;
+import net.darkaqua.blacksmith.api.common.network.INetworkMessageHandler;
+import net.darkaqua.blacksmith.api.common.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntityDefinition;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
 /**
  * Created by cout970 on 17/01/2016.
@@ -52,7 +52,7 @@ public class MessageServerUpdate implements INetworkMessage, INetworkMessageHand
     @Override
     public MessageServerUpdate onMessage(MessageServerUpdate message, INetworkContext context) {
 
-        context.addScheduledTask(() -> {
+        context.getServerContext().addScheduledTask(() -> {
             IWorld w = context.getClientContext().getWorld();
             if (w.getWorldDimension() == message.dimension) {
                 ITileEntity tile = w.getTileEntity(message.pos);

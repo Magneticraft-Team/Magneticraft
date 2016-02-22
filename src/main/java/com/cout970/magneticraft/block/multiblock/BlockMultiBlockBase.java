@@ -3,11 +3,11 @@ package com.cout970.magneticraft.block.multiblock;
 import com.cout970.magneticraft.block.BlockBase;
 import com.cout970.magneticraft.util.multiblock.IMultiBlockData;
 import com.cout970.magneticraft.util.multiblock.MB_Block;
-import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.block.blockdata.BlockDataFactory;
-import net.darkaqua.blacksmith.api.block.blockdata.IBlockAttribute;
-import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueBoolean;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.block.IBlock;
+import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockAttribute;
+import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueBoolean;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 import java.util.List;
 

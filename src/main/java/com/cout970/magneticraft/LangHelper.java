@@ -1,10 +1,10 @@
 package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.block.BlockBase;
-import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.fluid.IFluidStack;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.item.IItem;
+import net.darkaqua.blacksmith.api.common.block.IBlock;
+import net.darkaqua.blacksmith.api.common.fluid.IFluidStack;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.item.IItem;
 
 import java.io.*;
 import java.util.HashMap;

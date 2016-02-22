@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.api.network;
 
 import com.cout970.magneticraft.api.pathfinding.NetworkPathFinding;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

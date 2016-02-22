@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.util.multiblock;
 
-import net.darkaqua.blacksmith.api.command.ChatMessageFactory;
-import net.darkaqua.blacksmith.api.entity.IPlayer;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.command.ChatMessageFactory;
+import net.darkaqua.blacksmith.api.common.entity.IPlayer;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 public class MB_Watcher {
 

@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.access;
 
 
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.inventory.InventoryUtils;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.inventory.InventoryUtils;
 
 public class RecipeCrushingTable {
 

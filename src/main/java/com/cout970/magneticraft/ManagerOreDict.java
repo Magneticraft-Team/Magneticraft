@@ -1,7 +1,7 @@
 package com.cout970.magneticraft;
 
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
 
 import java.util.List;
 
@@ -16,16 +16,16 @@ public class ManagerOreDict {
     }
 
     private static void register(String name, ManagerBlocks block) {
-        StaticAccess.GAME.getOreDictionary().registerOre(name, block.toItemStack());
+        Game.getCommonHandler().getOreDictionary().registerOre(name, block.toItemStack());
     }
 
     public static IItemStack getOreWithPriority(String name){
-        List<IItemStack> stacks = StaticAccess.GAME.getOreDictionary().getOres(name);
+        List<IItemStack> stacks = Game.getCommonHandler().getOreDictionary().getOres(name);
         if (stacks.isEmpty()){
             return null;
         }
         for(IItemStack stack : stacks){
-            if (Magneticraft.ID.equals(StaticAccess.GAME.getItemRegistry().getItemDomain(stack.getItem()))){
+            if (Magneticraft.ID.equals(Game.getCommonHandler().getItemRegistry().getItemDomain(stack.getItem()))){
                 return stack.copy();
             }
         }
@@ -33,7 +33,7 @@ public class ManagerOreDict {
     }
 
     public static IItemStack getOre(String name){
-        List<IItemStack> stacks = StaticAccess.GAME.getOreDictionary().getOres(name);
+        List<IItemStack> stacks = Game.getCommonHandler().getOreDictionary().getOres(name);
         if (stacks.isEmpty()){
             return null;
         }

@@ -3,11 +3,11 @@ package com.cout970.magneticraft.tileentity.electric;
 import com.cout970.magneticraft.api.electricity.ElectricNetwork;
 import com.cout970.magneticraft.api.electricity.IElectricConductor;
 import com.cout970.magneticraft.tileentity.TileBase;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
-import net.darkaqua.blacksmith.api.intermod.InterModUtils;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceProvider;
+import net.darkaqua.blacksmith.api.common.intermod.InterModUtils;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 /**
  * Created by cypheraj on 1/17/16.

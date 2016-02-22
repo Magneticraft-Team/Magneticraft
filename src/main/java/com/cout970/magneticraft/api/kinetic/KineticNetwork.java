@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.api.kinetic;
 
 import com.cout970.magneticraft.api.network.Network;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
 
 /**
  * Created by cout970 on 30/12/2015.

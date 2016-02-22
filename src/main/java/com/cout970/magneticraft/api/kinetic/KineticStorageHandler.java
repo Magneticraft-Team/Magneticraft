@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.kinetic;
 
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.storage.IDataCompound;
-import net.darkaqua.blacksmith.api.util.Direction;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.common.util.Direction;
 
 /**
  * Created by cout970 on 16/01/2016.

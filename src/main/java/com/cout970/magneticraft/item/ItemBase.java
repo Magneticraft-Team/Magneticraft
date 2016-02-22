@@ -2,11 +2,11 @@ package com.cout970.magneticraft.item;
 
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.block.BlockBase;
-import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
-import net.darkaqua.blacksmith.api.item.defaults.DefaultItemDefinition;
-import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.PlaneItemModelProvider;
-import net.darkaqua.blacksmith.api.util.ResourceReference;
+import net.darkaqua.blacksmith.api.client.creativetab.ICreativeTab;
+import net.darkaqua.blacksmith.api.common.item.defaults.DefaultItemDefinition;
+import net.darkaqua.blacksmith.api.client.render.item.IItemModelProvider;
+import net.darkaqua.blacksmith.api.client.render.item.defaults.PlaneItemModelProvider;
+import net.darkaqua.blacksmith.api.common.util.ResourceReference;
 
 /**
  * Created by cout970 on 21/12/2015.

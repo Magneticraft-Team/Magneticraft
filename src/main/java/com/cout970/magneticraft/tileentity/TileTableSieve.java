@@ -3,16 +3,20 @@ package com.cout970.magneticraft.tileentity;
 import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.access.RecipeTableSieve;
 import com.cout970.magneticraft.util.MiscUtils;
-import net.darkaqua.blacksmith.api.entity.IEntity;
-import net.darkaqua.blacksmith.api.entity.types.IEntityItem;
-import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.inventory.InventoryUtils;
-import net.darkaqua.blacksmith.api.inventory.defaults.SimpleInventoryHandler;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
-import net.darkaqua.blacksmith.api.storage.IDataCompound;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.util.*;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.common.entity.IEntity;
+import net.darkaqua.blacksmith.api.common.entity.types.IEntityItem;
+import net.darkaqua.blacksmith.api.common.inventory.IInventoryHandler;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.inventory.InventoryUtils;
+import net.darkaqua.blacksmith.api.common.inventory.defaults.SimpleInventoryHandler;
+import net.darkaqua.blacksmith.api.common.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.ObjectScanner;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.util.raytrace.Cube;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
 
 import java.util.List;
 
@@ -58,7 +62,7 @@ public class TileTableSieve extends TileBase {
             return true;
         }
         if (ref.getBlockData().getBlock().isPassable(ref)) {
-            if (StaticAccess.GAME.isServer()) {
+            if (Game.isServer()) {
                 MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, -0.0625f * 6, 0.5), stack, false);
             }
             return true;
@@ -106,7 +110,7 @@ public class TileTableSieve extends TileBase {
     @Override
     public void onDelete() {
         super.onDelete();
-        if (StaticAccess.GAME.isServer()) {
+        if (Game.isServer()) {
             MiscUtils.dropItem(getParent().getWorldRef(), new Vect3d(0.5, 0.5, 0.5), inv.getStackInSlot(0), true);
             inv.setStackInSlot(0, null);
         }

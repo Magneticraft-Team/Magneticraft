@@ -2,11 +2,11 @@ package com.cout970.magneticraft.item;
 
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
-import net.darkaqua.blacksmith.api.render.model.RenderPlace;
-import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
-import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleItemModelProvider;
-import net.darkaqua.blacksmith.api.util.Vect3d;
+import net.darkaqua.blacksmith.api.client.render.model.RenderPlace;
+import net.darkaqua.blacksmith.api.client.render.model.RenderTransformation;
+import net.darkaqua.blacksmith.api.client.render.item.IItemModelProvider;
+import net.darkaqua.blacksmith.api.client.render.item.defaults.SimpleItemModelProvider;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
 
 /**
  * Created by cout970 on 28/12/2015.

@@ -2,10 +2,10 @@ package com.cout970.magneticraft;
 
 import com.cout970.magneticraft.item.*;
 import com.cout970.magneticraft.util.MiscUtils;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
-import net.darkaqua.blacksmith.api.item.IItem;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.inventory.ItemStackFactory;
+import net.darkaqua.blacksmith.api.common.item.IItem;
 
 /**
  * Created by cout970 on 21/12/2015.
@@ -28,14 +28,14 @@ public enum ManagerItems {
 
     public static void initItems() {
         for (ManagerItems b : ManagerItems.values()) {
-            b.item = StaticAccess.GAME.getItemRegistry().registerItemDefinition(b.definition, b.identifier);
+            b.item = Game.getCommonHandler().getItemRegistry().registerItemDefinition(b.definition, b.identifier);
         }
         ItemOres.initItems();
     }
 
     public static void initItemRenders() {
         for (ManagerItems b : ManagerItems.values()) {
-            StaticAccess.GAME.getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
+            Game.getClientHandler().getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
         }
         ItemOres.initItemRenders();
     }
@@ -78,16 +78,16 @@ public enum ManagerItems {
 
         public static void initItems() {
             for (ItemOres b : ItemOres.values()) {
-                b.item = StaticAccess.GAME.getItemRegistry().registerItemDefinition(b.definition, b.identifier);
+                b.item = Game.getCommonHandler().getItemRegistry().registerItemDefinition(b.definition, b.identifier);
                 for (int i = 0; i < b.definition.maxMeta(); i++) {
-                    StaticAccess.GAME.getOreDictionary().registerOre(b.definition.getOreDictName(i), ItemStackFactory.createItemStack(b.item, 1, i));
+                    Game.getCommonHandler().getOreDictionary().registerOre(b.definition.getOreDictName(i), ItemStackFactory.createItemStack(b.item, 1, i));
                 }
             }
         }
 
         public static void initItemRenders() {
             for (ItemOres b : ItemOres.values()) {
-                StaticAccess.GAME.getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
+                Game.getClientHandler().getRenderRegistry().registerItemModelProvider(b.definition, b.definition.getModelProvider());
             }
         }
 

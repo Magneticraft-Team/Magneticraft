@@ -3,15 +3,15 @@ package com.cout970.magneticraft.block.generators;
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.block.BlockModeled;
 import com.cout970.magneticraft.tileentity.electric.generators.TileCombustionEngine;
-import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
-import net.darkaqua.blacksmith.api.entity.IPlayer;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.darkaqua.blacksmith.api.util.WorldRef;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.block.IBlockContainerDefinition;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
+import net.darkaqua.blacksmith.api.common.block.methods.BlockMethod;
+import net.darkaqua.blacksmith.api.common.entity.IPlayer;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntityDefinition;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
 public class BlockCombustionEngine extends BlockModeled implements BlockMethod.OnActivated, IBlockContainerDefinition {
     @Override

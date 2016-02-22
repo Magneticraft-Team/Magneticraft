@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.world;
 
 import com.cout970.magneticraft.ManagerBlocks;
-import net.darkaqua.blacksmith.api.util.Vect2i;
-import net.darkaqua.blacksmith.api.world.IIChunkProvider;
-import net.darkaqua.blacksmith.api.world.IWorld;
-import net.darkaqua.blacksmith.api.world.generation.IWorldGeneratorDefinition;
-import net.darkaqua.blacksmith.api.world.generation.OreGenerator;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect2i;
+import net.darkaqua.blacksmith.api.common.world.IIChunkProvider;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
+import net.darkaqua.blacksmith.api.common.world.generation.IWorldGeneratorDefinition;
+import net.darkaqua.blacksmith.api.common.world.generation.OreGenerator;
 
 import java.util.Random;
 

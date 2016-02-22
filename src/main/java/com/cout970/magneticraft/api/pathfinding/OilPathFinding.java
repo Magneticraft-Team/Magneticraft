@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.pathfinding;
 
-import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.block.IBlock;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
 public class OilPathFinding extends PathFinding {
 

@@ -10,12 +10,12 @@ import com.cout970.magneticraft.tileentity.kinetic.TileWoodenShaft;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileWindTurbine;
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiBlockChassis;
-import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.creativetab.CreativeTabFactory;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.inventory.ItemStackFactory;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.client.creativetab.CreativeTabFactory;
+import net.darkaqua.blacksmith.api.common.block.IBlock;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.inventory.ItemStackFactory;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntityDefinition;
 
 /**
  * Created by cout970 on 16/12/2015.
@@ -57,9 +57,9 @@ public enum ManagerBlocks {
 
     public static void initBlocks() {
         for (ManagerBlocks b : ManagerBlocks.values()) {
-            b.block = StaticAccess.GAME.getBlockRegistry().registerBlockDefinition(b.definition, b.identifier);
+            b.block = Game.getCommonHandler().getBlockRegistry().registerBlockDefinition(b.definition, b.identifier);
             if (b.tileEntityClass != null) {
-                StaticAccess.GAME.getTileEntityRegistry().registerTileEntityDefinition(b.tileEntityClass, b.identifier);
+                Game.getCommonHandler().getTileEntityRegistry().registerTileEntityDefinition(b.tileEntityClass, b.identifier);
             }
         }
         BlockBase.MAIN_CREATIVE_TAB = CreativeTabFactory.createCreativeTab(Magneticraft.ID+"_main", ManagerBlocks.CrushingTable.toItemStack());
@@ -67,9 +67,9 @@ public enum ManagerBlocks {
 
     public static void initBlockRenders() {
         for (ManagerBlocks b : ManagerBlocks.values()) {
-            StaticAccess.GAME.getRenderRegistry().registerBlockModelProvider(b.definition, b.definition.getModelProvider());
+            Game.getClientHandler().getRenderRegistry().registerBlockModelProvider(b.definition, b.definition.getModelProvider());
             if (b.tileRenderer != null) {
-                StaticAccess.GAME.getRenderRegistry().registerTileEntityRenderer(b.tileEntityClass, b.tileRenderer);
+                Game.getClientHandler().getRenderRegistry().registerTileEntityRenderer(b.tileEntityClass, b.tileRenderer);
                 b.tileRenderer.initModels();
             }
         }

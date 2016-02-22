@@ -1,9 +1,9 @@
 package com.cout970.magneticraft;
 
-import net.darkaqua.blacksmith.api.config.ConfigurationFactory;
-import net.darkaqua.blacksmith.api.config.util.ConfigHandler;
-import net.darkaqua.blacksmith.api.event.EventSubscribe;
-import net.darkaqua.blacksmith.api.event.config.IConfigChangedEvent;
+import net.darkaqua.blacksmith.api.common.config.ConfigurationFactory;
+import net.darkaqua.blacksmith.api.common.config.util.ConfigHandler;
+import net.darkaqua.blacksmith.api.common.event.EventSubscribe;
+import net.darkaqua.blacksmith.api.common.event.config.IConfigChangedEvent;
 
 import java.io.File;
 

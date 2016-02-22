@@ -3,10 +3,10 @@ package com.cout970.magneticraft.tileentity;
 import com.cout970.magneticraft.ManagerNetwork;
 import com.cout970.magneticraft.api.base.IDataStorage;
 import com.cout970.magneticraft.network.MessageServerUpdate;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
-import net.darkaqua.blacksmith.api.storage.DataElementFactory;
-import net.darkaqua.blacksmith.api.storage.IDataCompound;
-import net.darkaqua.blacksmith.api.tileentity.defaults.DefaultTileEntityDefinition;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.common.storage.DataElementFactory;
+import net.darkaqua.blacksmith.api.common.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.common.tileentity.defaults.DefaultTileEntityDefinition;
 
 /**
  * Created by cout970 on 16/12/2015.
@@ -14,7 +14,7 @@ import net.darkaqua.blacksmith.api.tileentity.defaults.DefaultTileEntityDefiniti
 public class TileBase extends DefaultTileEntityDefinition implements IDataStorage {
 
     public void sendUpdateToClient(){
-        if (StaticAccess.GAME.isClient()) return;
+        if (Game.isClient()) return;
         IDataCompound nbt = DataElementFactory.createDataCompound();
         writeUpdatePacket(nbt);
         MessageServerUpdate message = new MessageServerUpdate(getParent().getWorldRef(), nbt);

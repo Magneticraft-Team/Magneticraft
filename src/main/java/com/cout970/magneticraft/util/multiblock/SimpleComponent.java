@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.util.multiblock;
 
 import com.cout970.magneticraft.Magneticraft;
-import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.util.ObjectScanner;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.block.IBlock;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.util.ObjectScanner;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 import java.util.ArrayList;
 import java.util.Collections;

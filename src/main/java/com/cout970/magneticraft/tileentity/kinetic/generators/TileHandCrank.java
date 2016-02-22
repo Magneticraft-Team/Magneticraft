@@ -2,10 +2,10 @@ package com.cout970.magneticraft.tileentity.kinetic.generators;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
-import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.Vect3i;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
+import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
 
 /**
  * Created by cout970 on 03/01/2016.

@@ -2,18 +2,18 @@ package com.cout970.magneticraft.item;
 
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.api.tool.IHammer;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceProvider;
-import net.darkaqua.blacksmith.api.intermod.InterModUtils;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.render.model.RenderPlace;
-import net.darkaqua.blacksmith.api.render.model.RenderTransformation;
-import net.darkaqua.blacksmith.api.render.model.providers.IItemModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.PlaneItemModelProvider;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.ResourceReference;
-import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceProvider;
+import net.darkaqua.blacksmith.api.common.intermod.InterModUtils;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.client.render.model.RenderPlace;
+import net.darkaqua.blacksmith.api.client.render.model.RenderTransformation;
+import net.darkaqua.blacksmith.api.client.render.item.IItemModelProvider;
+import net.darkaqua.blacksmith.api.client.render.item.defaults.PlaneItemModelProvider;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.ResourceReference;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 /**
  * Created by cout970 on 21/12/2015.

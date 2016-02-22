@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.api.electricity;
 
 import com.cout970.magneticraft.api.network.INetworkNode;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.intermod.InterfaceIdentifierHolder;
-import net.darkaqua.blacksmith.api.util.Vect3i;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.intermod.InterfaceIdentifierHolder;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
 
 public interface IElectricConductor extends INetworkNode<ElectricNetwork, IElectricConductor> {
 

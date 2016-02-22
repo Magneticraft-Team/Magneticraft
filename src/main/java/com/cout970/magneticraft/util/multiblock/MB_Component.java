@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.util.multiblock;
 
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 public interface MB_Component {
 

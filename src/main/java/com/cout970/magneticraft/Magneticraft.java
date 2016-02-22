@@ -12,13 +12,13 @@ import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 import com.cout970.magneticraft.util.EmptyStorageHandler;
 import com.cout970.magneticraft.util.Log;
 import com.cout970.magneticraft.world.ManagerWorldGen;
-import net.darkaqua.blacksmith.api.event.EventBus;
-import net.darkaqua.blacksmith.api.event.EventSubscribe;
-import net.darkaqua.blacksmith.api.event.modloader.IInitEvent;
-import net.darkaqua.blacksmith.api.event.modloader.IPostInitEvent;
-import net.darkaqua.blacksmith.api.event.modloader.IPreInitEvent;
-import net.darkaqua.blacksmith.api.modloader.*;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.common.event.EventBus;
+import net.darkaqua.blacksmith.api.common.event.EventSubscribe;
+import net.darkaqua.blacksmith.api.common.event.modloader.IInitEvent;
+import net.darkaqua.blacksmith.api.common.event.modloader.IPostInitEvent;
+import net.darkaqua.blacksmith.api.common.event.modloader.IPreInitEvent;
+import net.darkaqua.blacksmith.api.common.modloader.*;
 
 import java.io.File;
 
@@ -31,7 +31,7 @@ public class Magneticraft {
     public final static String ID = "magneticraft";
     public final static String NAME = "Magneticraft";
     public final static String VERSION = "@VERSION@";
-    public static final boolean DEBUG = StaticAccess.GAME.isDeobfuscatedEnvironment();
+    public static final boolean DEBUG = Game.isDeobfuscatedEnvironment();
     public static String DEV_HOME;
 
     @ModInstance
@@ -47,19 +47,19 @@ public class Magneticraft {
     public void preInit(IPreInitEvent event) {
         Log.LOGGER = event.getModLog();
         Log.info("Starting preInit");
-        IDENTIFIER = StaticAccess.GAME.getModManager().getIdentifier(INSTANCE);
+        IDENTIFIER = Game.getCommonHandler().getModManager().getIdentifier(INSTANCE);
         ManagerConfig.init(event.getSuggestedConfigurationFile());
 
         ManagerBlocks.initBlocks();
         ManagerItems.initItems();
 
         proxy.init();
-        if (StaticAccess.GAME.isClient()){
+        if (Game.isClient()){
             EventBus.registerEventListener(proxy);
         }
-        StaticAccess.GAME.getInterModRegistry().registerInterface(IHammer.class, new EmptyStorageHandler(), ItemStoneHammer::new);
-        StaticAccess.GAME.getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), TileKineticBase::new);
-        StaticAccess.GAME.getInterModRegistry().registerInterface(IElectricConductor.class, new ElectricStorageHandler(), TileElectricBase::new);
+        Game.getCommonHandler().getInterModRegistry().registerInterface(IHammer.class, new EmptyStorageHandler(), ItemStoneHammer::new);
+        Game.getCommonHandler().getInterModRegistry().registerInterface(IKineticConductor.class, new KineticStorageHandler(), TileKineticBase::new);
+        Game.getCommonHandler().getInterModRegistry().registerInterface(IElectricConductor.class, new ElectricStorageHandler(), TileElectricBase::new);
         ManagerNetwork.init();
         ManagerOreDict.registerOredictNames();
         ManagerRecipe.init();
@@ -89,7 +89,7 @@ public class Magneticraft {
     @EventSubscribe
     public void init(IInitEvent e) {
         Log.info("Starting Init");
-        StaticAccess.GAME.getWorldGenerationRegistry().registerWorldGenerator(new ManagerWorldGen(), 10);
+        Game.getCommonHandler().getWorldGenerationRegistry().registerWorldGenerator(new ManagerWorldGen(), 10);
         Log.info("Init Done");
     }
 

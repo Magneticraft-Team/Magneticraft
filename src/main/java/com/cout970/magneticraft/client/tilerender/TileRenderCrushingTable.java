@@ -1,13 +1,13 @@
 package com.cout970.magneticraft.client.tilerender;
 
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.item.IItemBlock;
-import net.darkaqua.blacksmith.api.registry.StaticAccess;
-import net.darkaqua.blacksmith.api.render.model.RenderPlace;
-import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.util.Vect3d;
+import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.client.render.model.RenderPlace;
+import net.darkaqua.blacksmith.api.client.render.tileentity.ITileEntityRendererHelper;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.item.IItemBlock;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -30,7 +30,7 @@ public class TileRenderCrushingTable extends TileEntityRenderer<TileCrushingTabl
                 GL11.glTranslatef(0, -39 / 64f, 0);
                 GL11.glRotatef(90, 1, 0, 0);
             }
-            StaticAccess.GAME.getRenderManager().renderItemStack(stack, new Vect3d(0, 0, 0), RenderPlace.NONE);
+            Game.getClientHandler().getRenderManager().renderItemStack(stack, new Vect3d(0, 0, 0), RenderPlace.NONE);
             GL11.glPopMatrix();
         }
     }

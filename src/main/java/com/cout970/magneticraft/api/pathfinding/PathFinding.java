@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.pathfinding;
 
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
 import java.util.*;
 import java.util.stream.Collectors;

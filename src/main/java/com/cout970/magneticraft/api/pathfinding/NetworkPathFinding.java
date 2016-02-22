@@ -2,12 +2,12 @@ package com.cout970.magneticraft.api.pathfinding;
 
 import com.cout970.magneticraft.api.network.INetworkNode;
 import com.cout970.magneticraft.api.network.Network;
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.util.ObjectScanner;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.util.WorldRef;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.util.ObjectScanner;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
 import java.util.ArrayList;
 import java.util.List;

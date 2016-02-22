@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.tileentity.kinetic;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.ObjectScanner;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.ObjectScanner;
 
 /**
  * Created by cout970 on 28/12/2015.

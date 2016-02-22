@@ -3,15 +3,15 @@ package com.cout970.magneticraft.tileentity.kinetic.generators;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
-import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.block.blockdata.defaults.BlockAttributeValueDirection;
-import net.darkaqua.blacksmith.api.util.Cube;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.darkaqua.blacksmith.api.util.Vect3i;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
+import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
+import net.darkaqua.blacksmith.api.common.util.raytrace.Cube;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
-import static net.darkaqua.blacksmith.api.block.Blocks.AIR;
+import static net.darkaqua.blacksmith.api.common.block.Blocks.AIR;
 
 /**
  * Created by cout970 on 03/01/2016.

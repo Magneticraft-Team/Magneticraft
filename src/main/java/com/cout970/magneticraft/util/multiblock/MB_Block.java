@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.util.multiblock;
 
-import net.darkaqua.blacksmith.api.block.IBlock;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.block.IBlock;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 import java.util.List;
 

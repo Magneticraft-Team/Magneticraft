@@ -3,11 +3,11 @@ package com.cout970.magneticraft.client.tilerender;
 import com.cout970.magneticraft.Magneticraft;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.kinetic.generators.TileHandCrank;
-import net.darkaqua.blacksmith.api.render.model.IDynamicModel;
-import net.darkaqua.blacksmith.api.render.techne.TechneDynamicModel;
-import net.darkaqua.blacksmith.api.render.tileentity.ITileEntityRendererHelper;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.util.Vect3d;
+import net.darkaqua.blacksmith.api.client.render.model.IDynamicModel;
+import net.darkaqua.blacksmith.api.client.render.modelloader.techne.TechneDynamicModel;
+import net.darkaqua.blacksmith.api.client.render.tileentity.ITileEntityRendererHelper;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
 import org.lwjgl.opengl.GL11;
 
 /**

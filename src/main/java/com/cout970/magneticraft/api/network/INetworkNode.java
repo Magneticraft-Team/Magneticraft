@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.api.network;
 
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 /**
  * Created by cout970 on 29/12/2015.

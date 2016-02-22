@@ -5,18 +5,20 @@ import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.tool.IHammer;
 import com.cout970.magneticraft.client.model.ModelConstants;
 import com.cout970.magneticraft.tileentity.TileCrushingTable;
-import net.darkaqua.blacksmith.api.block.IBlockContainerDefinition;
-import net.darkaqua.blacksmith.api.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.block.methods.BlockMethod;
-import net.darkaqua.blacksmith.api.entity.IPlayer;
-import net.darkaqua.blacksmith.api.inventory.IInventoryHandler;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntity;
-import net.darkaqua.blacksmith.api.tileentity.ITileEntityDefinition;
-import net.darkaqua.blacksmith.api.util.*;
-import net.darkaqua.blacksmith.api.world.IWorld;
+import net.darkaqua.blacksmith.api.common.block.IBlockContainerDefinition;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
+import net.darkaqua.blacksmith.api.common.block.methods.BlockMethod;
+import net.darkaqua.blacksmith.api.common.entity.IPlayer;
+import net.darkaqua.blacksmith.api.common.inventory.IInventoryHandler;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.client.render.block.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.client.render.block.defaults.SimpleBlockModelProvider;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntity;
+import net.darkaqua.blacksmith.api.common.tileentity.ITileEntityDefinition;
+import net.darkaqua.blacksmith.api.common.util.*;
+import net.darkaqua.blacksmith.api.common.util.raytrace.Cube;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
+import net.darkaqua.blacksmith.api.common.world.IWorld;
 
 /**
  * Created by cout970 on 16/12/2015.

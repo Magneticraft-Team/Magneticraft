@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.client.model;
 
 import com.cout970.magneticraft.Magneticraft;
-import net.darkaqua.blacksmith.api.render.techne.TechneModelLoader;
-import net.darkaqua.blacksmith.api.util.ResourceReference;
+import net.darkaqua.blacksmith.api.client.render.modelloader.techne.TechneModelLoader;
+import net.darkaqua.blacksmith.api.common.util.ResourceReference;
 
 /**
  * Created by cout970 on 16/12/2015.

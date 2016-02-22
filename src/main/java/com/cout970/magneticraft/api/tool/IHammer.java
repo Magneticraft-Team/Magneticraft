@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.api.tool;
 
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.intermod.InterfaceIdentifierHolder;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.intermod.InterfaceIdentifierHolder;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 /**
  * Used on the hammer table to smash ores

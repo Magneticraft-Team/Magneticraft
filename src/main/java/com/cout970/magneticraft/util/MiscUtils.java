@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.util;
 
-import net.darkaqua.blacksmith.api.entity.EntityFactory;
-import net.darkaqua.blacksmith.api.entity.types.IEntityItem;
-import net.darkaqua.blacksmith.api.inventory.IItemStack;
-import net.darkaqua.blacksmith.api.util.Direction;
-import net.darkaqua.blacksmith.api.util.Vect3d;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.entity.EntityFactory;
+import net.darkaqua.blacksmith.api.common.entity.types.IEntityItem;
+import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
+import net.darkaqua.blacksmith.api.common.util.Direction;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 import org.lwjgl.opengl.GL11;
 
 /**

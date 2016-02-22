@@ -2,15 +2,15 @@ package com.cout970.magneticraft.block;
 
 import com.cout970.magneticraft.LangHelper;
 import com.cout970.magneticraft.Magneticraft;
-import net.darkaqua.blacksmith.api.block.defaults.DefaultBlockDefinition;
-import net.darkaqua.blacksmith.api.creativetab.ICreativeTab;
-import net.darkaqua.blacksmith.api.entity.IEntity;
-import net.darkaqua.blacksmith.api.render.model.defaults.SimpleModelPartBlock;
-import net.darkaqua.blacksmith.api.render.model.providers.IBlockModelProvider;
-import net.darkaqua.blacksmith.api.render.model.providers.defaults.SimpleBlockModelProvider;
-import net.darkaqua.blacksmith.api.util.Cube;
-import net.darkaqua.blacksmith.api.util.ResourceReference;
-import net.darkaqua.blacksmith.api.util.WorldRef;
+import net.darkaqua.blacksmith.api.common.block.defaults.DefaultBlockDefinition;
+import net.darkaqua.blacksmith.api.client.creativetab.ICreativeTab;
+import net.darkaqua.blacksmith.api.common.entity.IEntity;
+import net.darkaqua.blacksmith.api.client.render.model.defaults.SimpleModelPartBlock;
+import net.darkaqua.blacksmith.api.client.render.block.IBlockModelProvider;
+import net.darkaqua.blacksmith.api.client.render.block.defaults.SimpleBlockModelProvider;
+import net.darkaqua.blacksmith.api.common.util.raytrace.Cube;
+import net.darkaqua.blacksmith.api.common.util.ResourceReference;
+import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 import java.util.Collections;
 import java.util.List;

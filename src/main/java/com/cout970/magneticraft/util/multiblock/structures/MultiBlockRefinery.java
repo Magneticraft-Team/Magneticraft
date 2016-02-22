@@ -4,7 +4,7 @@ import com.cout970.magneticraft.ManagerBlocks;
 import com.cout970.magneticraft.util.multiblock.MB_Component;
 import com.cout970.magneticraft.util.multiblock.MultiBlock;
 import com.cout970.magneticraft.util.multiblock.SimpleComponent;
-import net.darkaqua.blacksmith.api.util.Vect3i;
+import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
 
 /**
  * Created by cout970 on 15/01/2016.

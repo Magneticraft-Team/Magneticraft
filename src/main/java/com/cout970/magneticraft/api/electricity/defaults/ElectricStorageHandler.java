@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.electricity.defaults;
 
-import net.darkaqua.blacksmith.api.intermod.IInterfaceIdentifier;
-import net.darkaqua.blacksmith.api.storage.IDataCompound;
-import net.darkaqua.blacksmith.api.util.Direction;
+import net.darkaqua.blacksmith.api.common.intermod.IInterfaceIdentifier;
+import net.darkaqua.blacksmith.api.common.storage.IDataCompound;
+import net.darkaqua.blacksmith.api.common.util.Direction;
 
 /**
  * Created by cypheraj on 1/18/16.
