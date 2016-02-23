@@ -3,8 +3,8 @@ package com.cout970.magneticraft.tileentity.kinetic.generators;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
 import com.cout970.magneticraft.util.FractalLib;
+import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
 import net.darkaqua.blacksmith.api.common.util.raytrace.Cube;
 import net.darkaqua.blacksmith.api.common.util.Direction;
 import net.darkaqua.blacksmith.api.common.util.vectors.Vect3d;
@@ -65,7 +65,7 @@ public class TileWindTurbine extends TileKineticBase {
 
     public Direction getDirection() {
         IBlockData variant = parent.getWorldRef().getBlockData();
-        return (Direction) variant.getValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION).getValue();
+        return variant.getValue(BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS);
     }
 
     public double getWindSpeed() {

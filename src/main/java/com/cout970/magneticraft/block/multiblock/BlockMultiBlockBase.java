@@ -6,7 +6,6 @@ import com.cout970.magneticraft.util.multiblock.MB_Block;
 import net.darkaqua.blacksmith.api.common.block.IBlock;
 import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockAttribute;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueBoolean;
 import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 import java.util.List;
@@ -16,16 +15,16 @@ import java.util.List;
  */
 public abstract class BlockMultiBlockBase extends BlockBase implements MB_Block {
 
-    public static IBlockAttribute ACTIVATION = BlockDataFactory.createBlockAttribute("activation", BlockAttributeValueBoolean.VALUES);
+    public static IBlockAttribute<Boolean> ACTIVATION = BlockDataFactory.createBlockAttribute("activation", Boolean.class, new Boolean[]{true, false});
 
     @Override
     public void mutates(WorldRef ref, IMultiBlockData data) {
-        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, BlockAttributeValueBoolean.TRUE));
+        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, true));
     }
 
     @Override
     public void destroy(WorldRef ref, IMultiBlockData data) {
-        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, BlockAttributeValueBoolean.FALSE));
+        ref.setBlockData(getBlock().getDefaultBlockData().setValue(ACTIVATION, false));
     }
 
     public boolean matchesAny(WorldRef worldRef, List<IBlock> blocks){

@@ -5,8 +5,8 @@ import com.cout970.magneticraft.api.access.RecipeRegister;
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.util.MiscUtils;
 import net.darkaqua.blacksmith.api.Game;
+import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
 import net.darkaqua.blacksmith.api.common.entity.IEntity;
 import net.darkaqua.blacksmith.api.common.entity.types.IEntityItem;
 import net.darkaqua.blacksmith.api.common.inventory.IInventoryHandler;
@@ -156,6 +156,6 @@ public class TileKineticGrinder extends TileKineticBase {
 
     public Direction getDirection() {
         IBlockData variant = parent.getWorldRef().getBlockData();
-        return (Direction) variant.getValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION).getValue();
+        return variant.getValue(BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS);
     }
 }

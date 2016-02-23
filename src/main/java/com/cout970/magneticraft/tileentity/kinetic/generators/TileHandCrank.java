@@ -2,8 +2,8 @@ package com.cout970.magneticraft.tileentity.kinetic.generators;
 
 import com.cout970.magneticraft.api.kinetic.IKineticConductor;
 import com.cout970.magneticraft.tileentity.kinetic.TileKineticBase;
+import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
 import net.darkaqua.blacksmith.api.common.util.Direction;
 import net.darkaqua.blacksmith.api.common.util.vectors.Vect3i;
 
@@ -45,6 +45,6 @@ public class TileHandCrank extends TileKineticBase {
 
     public Direction getDirection() {
         IBlockData variant = parent.getWorldRef().getBlockData();
-        return (Direction) variant.getValue(BlockAttributeValueDirection.DIRECTION).getValue();
+        return variant.getValue(BlockDataFactory.ATTRIBUTE_ALL_DIRECTIONS);
     }
 }

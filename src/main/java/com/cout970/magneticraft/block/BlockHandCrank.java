@@ -7,8 +7,7 @@ import com.google.common.collect.Lists;
 import net.darkaqua.blacksmith.api.common.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockDataGenerator;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockDataHandler;
 import net.darkaqua.blacksmith.api.common.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.common.entity.IEntity;
 import net.darkaqua.blacksmith.api.common.entity.ILivingEntity;
@@ -47,24 +46,24 @@ public class BlockHandCrank extends BlockModeled implements IBlockContainerDefin
     }
 
     @Override
-    public IBlockDataGenerator getBlockDataGenerator() {
-        return BlockDataFactory.createBlockDataGenerator(parent, BlockAttributeValueDirection.DIRECTION);
+    public IBlockDataHandler getBlockDataGenerator() {
+        return BlockDataFactory.createBlockDataHandler(parent, BlockDataFactory.ATTRIBUTE_ALL_DIRECTIONS);
     }
 
     @Override
     public IBlockData translateMetadataToVariant(int meta) {
-        return parent.getDefaultBlockData().setValue(BlockAttributeValueDirection.DIRECTION, BlockAttributeValueDirection.VALUES[meta%6]);
+        return parent.getDefaultBlockData().getBlockDataHandler().setValue(parent.getDefaultBlockData(), BlockDataFactory.ATTRIBUTE_ALL_DIRECTIONS, Direction.getDirection(meta));
     }
 
     @Override
     public int translateVariantToMetadata(IBlockData variant) {
-        return ((Direction)variant.getValue(BlockAttributeValueDirection.DIRECTION).getValue()).ordinal();
+        return variant.getValue(BlockDataFactory.ATTRIBUTE_ALL_DIRECTIONS).ordinal();
     }
 
     @Override
     public IBlockData onPlaced(WorldRef ref, Direction side, ILivingEntity entity, Vect3d hit, int metadata) {
         IBlockData state = parent.getDefaultBlockData();
-        state = state.setValue(BlockAttributeValueDirection.DIRECTION, BlockAttributeValueDirection.fromDirection(side.opposite()));
+        state = state.getBlockDataHandler().setValue(state, BlockDataFactory.ATTRIBUTE_ALL_DIRECTIONS, side.opposite());
         return state;
     }
 

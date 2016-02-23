@@ -5,9 +5,6 @@ import com.cout970.magneticraft.util.multiblock.MB_ControlBlock;
 import com.cout970.magneticraft.util.multiblock.MultiBlock;
 import com.cout970.magneticraft.util.multiblock.MultiblockData;
 import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
-import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockAttribute;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
-import net.darkaqua.blacksmith.api.common.util.Direction;
 import net.darkaqua.blacksmith.api.common.util.WorldRef;
 
 /**
@@ -15,11 +12,9 @@ import net.darkaqua.blacksmith.api.common.util.WorldRef;
  */
 public abstract class BlockMultiblockControl extends BlockMultiBlockBase implements MB_ControlBlock {
 
-    public static IBlockAttribute DIRECTION = BlockDataFactory.createBlockAttribute("direction", BlockAttributeValueDirection.HORIZONTAL_VALUES);
-
     @Override
     public IMultiBlockData getMultiBlockData(WorldRef ref) {
-        return new MultiblockData(ref.getPosition(), (Direction) ref.getBlockData().getValue(DIRECTION).getValue(), getMultiBlock());
+        return new MultiblockData(ref.getPosition(), ref.getBlockData().getValue(BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS), getMultiBlock());
     }
 
     public abstract MultiBlock getMultiBlock();

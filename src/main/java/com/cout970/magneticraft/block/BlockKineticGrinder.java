@@ -6,8 +6,7 @@ import com.cout970.magneticraft.tileentity.kinetic.TileKineticGrinder;
 import net.darkaqua.blacksmith.api.common.block.IBlockContainerDefinition;
 import net.darkaqua.blacksmith.api.common.block.blockdata.BlockDataFactory;
 import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockData;
-import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockDataGenerator;
-import net.darkaqua.blacksmith.api.common.block.blockdata.defaults.BlockAttributeValueDirection;
+import net.darkaqua.blacksmith.api.common.block.blockdata.IBlockDataHandler;
 import net.darkaqua.blacksmith.api.common.block.methods.BlockMethod;
 import net.darkaqua.blacksmith.api.common.entity.ILivingEntity;
 import net.darkaqua.blacksmith.api.common.inventory.IItemStack;
@@ -35,13 +34,13 @@ public class BlockKineticGrinder extends BlockModeled implements IBlockContainer
     }
 
     @Override
-    public IBlockDataGenerator getBlockDataGenerator() {
-        return BlockDataFactory.createBlockDataGenerator(parent, BlockAttributeValueDirection.HORIZONTAL_DIRECTION);
+    public IBlockDataHandler getBlockDataGenerator() {
+        return BlockDataFactory.createBlockDataHandler(parent, BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS);
     }
 
     @Override
     public void onPlacedBy(WorldRef ref, IBlockData state, ILivingEntity placer, IItemStack stack) {
-        state = state.setValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION, BlockAttributeValueDirection.fromDirection(placer.getEntityRotation().toHorizontalAxis()));
+        state = state.getBlockDataHandler().setValue(state, BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS, placer.getEntityRotation().toHorizontalAxis());
         ref.setBlockData(state);
     }
 
@@ -52,11 +51,11 @@ public class BlockKineticGrinder extends BlockModeled implements IBlockContainer
 
     @Override
     public IBlockData translateMetadataToVariant(int meta) {
-        return parent.getDefaultBlockData().setValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION, BlockAttributeValueDirection.HORIZONTAL_VALUES[meta%4]);
+        return parent.getDefaultBlockData().getBlockDataHandler().setValue(parent.getDefaultBlockData(), BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS, Direction.HORIZONTAL_DIRECTIONS[meta%4]);
     }
 
     @Override
     public int translateVariantToMetadata(IBlockData variant) {
-        return ((Direction)variant.getValue(BlockAttributeValueDirection.HORIZONTAL_DIRECTION).getValue()).ordinal();
+        return variant.getValue(BlockDataFactory.ATTRIBUTE_HORIZONTAL_DIRECTIONS).ordinal();
     }
 }
