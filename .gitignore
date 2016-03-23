@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # default forge gitignore
 eclipse
 bin*
@@ -17,6 +18,19 @@ build
 .gradle
 #
 
+=======
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs
+>>>>>>> f047ff5f4081e0a39fd0e644f8a349247b11279c
 hs_err_pid*
 
 #eclipse

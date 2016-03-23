@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 // For those who want the bleeding edge
+=======
+>>>>>>> f047ff5f4081e0a39fd0e644f8a349247b11279c
 buildscript {
     repositories {
         jcenter()
@@ -12,6 +15,7 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+<<<<<<< HEAD
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 /*
@@ -76,6 +80,102 @@ processResources
     }
         
     // copy everything else, thats not the mcmod.info
+=======
+
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.6'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "1.0.0-alpha5"
+group= "com.cout970.magneticraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "magneticraft"
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+minecraft {
+    version = "1.8.9-11.15.0.1699"
+    runDir = "run"
+    useDepAts = true
+   
+    mappings = "snapshot_20151122"
+	makeObfSourceJar = false
+}
+
+dependencies {
+    deobfCompile "MCMultiPart:MCMultiPart:1.0.4:universal"
+    deobfCompile "mezz.jei:jei_1.8.9:2.16.2.78"
+	compile files("./blacksmith/blacksmith-api-0.0.2alpha2-dev.jar")
+}
+
+//curseforge {
+//    apiKey = project.curseForgeApiKey
+//   project {
+//        id = '224808'
+//        mainArtifact(jar) {
+//            displayName = 'Magneticraft ' + version
+//        }
+//        releaseType = 'release'
+//        changelog = file('./changelogs/' + version + '.txt')
+//        if (version.contains('beta')) {
+//            releaseType = 'beta'
+//        }
+//        if (version.contains('alpha')) {
+//            releaseType = 'alpha'
+//        }
+//        relations {
+//            requiredLibrary 'mcmultipart'
+//        }
+//    }
+//}
+
+repositories {
+    maven {
+        name = "Mobius Repo"
+        url = "http://mobiusstrip.eu/maven"
+    }
+    maven {
+        name = 'CB Repo'
+        url = "http://chickenbones.net/maven/"
+    }
+    maven {
+        name = "tehnut"
+        url = "http://tehnut.info/maven/"
+    }
+    maven {
+        name = "amadornes"
+        url = "http://maven.amadornes.com/"
+    }
+    maven {
+        name = "mezz"
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+}
+
+artifacts {
+    archives devJar
+}
+
+apply plugin: 'idea'
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+               
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+      
+>>>>>>> f047ff5f4081e0a39fd0e644f8a349247b11279c
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
