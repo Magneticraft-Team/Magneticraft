@@ -1,21 +1,7 @@
-item.item.iron_hammer.name=Iron Hammer
-tile.crushing_table.name=Crushing Table
-tile.ore_washer.name=Ore Washer
-item.Tungsten.ingot.name=Tungsten Ingot
-itemGroup.magneticraft.name=Magneticraft Main
-item.Copper.chunk.name=Copper Chunk
-tile.wind_turbine.name=Wind Turbine
-item.Copper.ingot.name=Copper Ingot
-item.Tungsten.dust.name=Tungsten Dust
-item.item.hand_sieve.name=Hand Sieve
-tile.hand_crank.name=Hand Crank
-tile.kinetic_grinder.name=Kinetic Grinder
-tile.table_sieve.name=Table Sieve
-tile.oreTungsten.name=Tungsten Ore
-item.Copper.dust.name=Copper Dust
-tile.limestone.name=Limestone
-tile.chassis.name=MultiBlock Chassis
-item.item.stone_hammer.name=Stone Hammer
-tile.oreCopper.name=Copper Ore
-tile.wooden_shaft.name=Wooden Shaft
-item.Tungsten.chunk.name=Tungsten Chunk
+item.magneticraft.guide_book.name=Magneticraft Instruction Manual
+
+magneticraft.guide.contents=Content Table
+magneticraft.guide.basics=Basics
+magneticraft.guide.getting.started=Getting Started
+magneticraft.guide.link.text=%s, page %s
+

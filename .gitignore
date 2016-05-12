@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # default forge gitignore
 eclipse
 bin*
@@ -18,9 +18,6 @@ build
 .gradle
 #
 
-=======
-*.class
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -29,32 +26,18 @@ build
 *.war
 *.ear
 
-# virtual machine crash logs
->>>>>>> f047ff5f4081e0a39fd0e644f8a349247b11279c
-hs_err_pid*
 
-#eclipse
-.project
-.classpath
-.metadata
 org.*
 bin
 
 #idea
-.idea
 *.iml
 *.ipr
 *.iws
 *.eml
 out
 
-#gradle
-build
-.gradle
-gradle.properties
-
 #runtime
-eclipse
 run
 
 #mac
@@ -62,16 +45,12 @@ run
 *.command
 
 #workspace
-screenshots
 asm/**
 config/**
 crash-reports/**
 minetweaker.log
-options.txt
-usernamecache.json
 logs/**
 saves/**
-blacksmith/**
 
 /server.properties
 *.psd

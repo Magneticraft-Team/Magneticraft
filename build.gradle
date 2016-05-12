@@ -1,59 +1,76 @@
 buildscript {
+    ext.kotlin_version = '1.0.1-2'
+
     repositories {
         jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
     }
 }
 
 plugins {
     id 'com.matthewprenger.cursegradle' version '1.0.6'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'idea'
+apply plugin: 'kotlin'
+apply plugin: 'maven-publish'
 
-version = "1.0.0-alpha5"
-group= "com.cout970.magneticraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "magneticraft"
+archivesBaseName = name
+version project.version
+group project.groupId
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 minecraft {
-    version = "1.8.9-11.15.1.1855"
+    version = "1.9-12.16.0.1868-1.9"
     runDir = "run"
     useDepAts = true
-   
-    mappings = "stable_22"
-	makeObfSourceJar = false
+
+    replace "@VERSION@", project.version
+
+    mappings = "snapshot_20160502"
+    makeObfSourceJar = false
 }
 
-//curseforge {
-//    apiKey = project.curseForgeApiKey
-//   project {
-//        id = '224808'
-//        mainArtifact(jar) {
-//            displayName = 'Magneticraft ' + version
-//        }
-//        releaseType = 'release'
-//        changelog = file('./changelogs/' + version + '.txt')
-//        if (version.contains('beta')) {
-//            releaseType = 'beta'
-//        }
-//        if (version.contains('alpha')) {
-//            releaseType = 'alpha'
-//        }
-//        relations {
-//            requiredLibrary 'mcmultipart'
-//        }
-//    }
-//}
+curseforge {
+    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : ''
+
+    project {
+        id = '224808'
+        mainArtifact(jar) {
+            displayName = 'Magneticraft ' + version
+        }
+        releaseType = 'release'
+        changelog = file('./changelogs/' + version + '.txt')
+        if (!changelog.exists()) {
+            changelog = 'No changelog provided'
+        }
+
+        if (version.contains('beta')) {
+            releaseType = 'beta'
+        }
+
+        if (version.contains('alpha')) {
+            releaseType = 'alpha'
+        }
+    }
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
 
 repositories {
     maven {
@@ -76,20 +93,53 @@ repositories {
         name = "mezz"
         url = "http://dvs1.progwml6.com/files/maven"
     }
+
+    maven {
+        name = "Cypher Repo"
+        url = "http://maven.cypher.coffee/repository/mc-repo"
+    }
+    mavenCentral()
 }
 
 dependencies {
-    //deobfCompile "MCMultiPart:MCMultiPart:1.0.4:universal"
-    //deobfCompile "mezz.jei:jei_1.8.9:2.16.2.78"
+    shade 'coffee.cypher.mcextlib:MC-ExtLib:1.0.2'
+    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 task devJar(type: Jar) {
     from sourceSets.main.output
+
     classifier = 'dev'
 }
 
+sourceJar {
+    classifier = 'src'
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+
+shadowJar {
+    relocate 'kotlin', 'com.cout970.magneticraft.internal.shade.kotlin'
+    relocate 'org.jetbrains.annotations', 'com.cout970.magneticraft.internal.shade.annotations'
+    relocate 'coffee.cypher.mcextlib', 'com.cout970.magneticraft.internal.shade.mcextlib'
+}
+
+reobf {
+    shadowJar { mappingType }
+}
+
+tasks.build.dependsOn reobfShadowJar
+
 artifacts {
+    archives shadowJar
     archives devJar
+    archives sourceJar
 }
 
 processResources {
@@ -98,10 +148,40 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-               
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+publishing {
+    tasks.publish.dependsOn 'build'
+
+    repositories {
+        maven {
+            credentials {
+                def (user, pass) = project.hasProperty('cypherMaven') ? cypherMaven.split('::') : ['', '']
+
+                username user
+                password pass
+            }
+
+            url project.repoURL
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            artifact sourceJar
+            artifact devJar
+            artifact shadowJar
+        }
+    }
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }
