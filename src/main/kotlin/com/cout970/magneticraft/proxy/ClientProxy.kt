@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.proxy
 
-import coffee.cypher.mcextlib.blocks.item
+import coffee.cypher.mcextlib.extensions.blocks.item
 import com.cout970.magneticraft.blocks
 import com.cout970.magneticraft.client.render.registerInvRender
 import com.cout970.magneticraft.items

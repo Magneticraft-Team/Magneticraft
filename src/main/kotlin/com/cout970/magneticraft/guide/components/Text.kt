@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.guide.components
 
-import coffee.cypher.mcextlib.strings.i18n
+import coffee.cypher.mcextlib.extensions.strings.i18n
 import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.guide.FONT_HEIGHT
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook

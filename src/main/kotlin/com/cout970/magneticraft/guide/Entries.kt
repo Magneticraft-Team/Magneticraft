@@ -1,23 +1,21 @@
 package com.cout970.magneticraft.guide
 
-import coffee.cypher.mcextlib.strings.i18n
+import coffee.cypher.mcextlib.delegates.loaderState
+import coffee.cypher.mcextlib.extensions.strings.i18n
 import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.guide.PAGE_CENTER
 import com.cout970.magneticraft.guide.builders.entry
 import com.cout970.magneticraft.guide.builders.page
 import com.cout970.magneticraft.guide.builders.text
-import com.cout970.magneticraft.guide.entries.gettingStarted
 import com.cout970.magneticraft.util.MODID
+import net.minecraftforge.fml.common.LoaderState
 
 const val GUIDE = "$MODID.guide"
 
-val mainEntries = listOf(
-    gettingStarted
-).map(Entry::name)
+val mainEntries = emptyList<String>()
 
-val contentTable: Entry
-    //TODO Change to backing field when done with designing the page
-    get() = entry("$GUIDE.contents") {
+val contentTable: Entry by loaderState(LoaderState.POSTINITIALIZATION) {
+    entry("$GUIDE.contents") {
         +page {
             //logo here
         }
@@ -34,3 +32,4 @@ val contentTable: Entry
             }
         }
     }
+}
