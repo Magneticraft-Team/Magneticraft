@@ -35,11 +35,12 @@ class Recipe(
         val slots = recipe.map { it.map { it.shuffled() } }
 
         override fun draw(mouse: Coords, time: Double) {
+            parent.gui.drawTexture(drawPos, GRID_SIZE, GRID_TEXTURE)
+
             GlStateManager.pushMatrix()
             GlStateManager.color(1f, 1f, 1f, 1f)
             GlStateManager.enableBlend()
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-            parent.gui.drawTexture(drawPos, GRID_SIZE, GRID_TEXTURE)
 
             slots.forEachIndexed { rowN, row ->
                 row.forEachIndexed { columnN, stacks ->

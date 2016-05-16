@@ -1,23 +1,24 @@
 package com.cout970.magneticraft.guide
 
-import coffee.cypher.mcextlib.delegates.loaderState
+import coffee.cypher.mcextlib.delegates.postInit
 import coffee.cypher.mcextlib.extensions.strings.i18n
+import com.cout970.magneticraft.api.registries.entries.mainEntries
 import com.cout970.magneticraft.gui.Coords
+import com.cout970.magneticraft.gui.centeredAt
 import com.cout970.magneticraft.gui.client.guide.PAGE_CENTER
-import com.cout970.magneticraft.guide.builders.entry
-import com.cout970.magneticraft.guide.builders.page
-import com.cout970.magneticraft.guide.builders.text
+import com.cout970.magneticraft.guide.builders.*
 import com.cout970.magneticraft.util.MODID
-import net.minecraftforge.fml.common.LoaderState
 
-const val GUIDE = "$MODID.guide"
+const val GUIDE_LANG = "$MODID.guide"
 
-val mainEntries = emptyList<String>()
-
-val contentTable: Entry by loaderState(LoaderState.POSTINITIALIZATION) {
-    entry("$GUIDE.contents") {
+val contentTable: Entry by postInit {
+    entry("$GUIDE_LANG.contents") {
         +page {
-            //logo here
+            +image {
+                location = "$GUIDE_FOLDER/logo.png"
+                size = Coords(150, 100)
+                position = size centeredAt PAGE_CENTER - Coords(0, 10)
+            }
         }
 
         +page {

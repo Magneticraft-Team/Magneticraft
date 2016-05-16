@@ -5,7 +5,7 @@ import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.guide.FONT_HEIGHT
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
-import com.cout970.magneticraft.guide.GUIDE
+import com.cout970.magneticraft.guide.GUIDE_LANG
 import com.cout970.magneticraft.guide.LinkInfo
 import com.cout970.magneticraft.guide.Page
 import net.minecraft.client.resources.I18n
@@ -129,7 +129,7 @@ class Text(
 
         fun postDraw(mouse: Coords) {
             if (link != null && isInside(mouse)) {
-                page.gui.drawHoveringText(listOf(I18n.format("$GUIDE.link.text", link.entry.i18n(), link.page + 1)), mouse)
+                page.gui.drawHoveringText(listOf(I18n.format("$GUIDE_LANG.link.text", link.entry.i18n(), link.page + 1)), mouse)
             }
         }
     }
