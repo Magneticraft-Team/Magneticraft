@@ -5,3 +5,10 @@ magneticraft.guide.basics=Basics
 magneticraft.guide.getting.started=Getting Started
 magneticraft.guide.link.text=%s, page %s
 
+tile.magneticraft.ore_block.copper.name=Malachite Ore
+tile.magneticraft.ore_block.lead.name=Galena Ore
+tile.magneticraft.ore_block.cobalt.name=Cobaltite Ore
+tile.magneticraft.ore_block.tungsten.name=Wolframite Ore
+
+itemGroup.magneticraft=Magneticraft
+

@@ -1,0 +1,56 @@
+{
+	"blocks":[
+		{
+			"id": "magneticraft:ore_block",
+			"variants": [
+				{
+					"variant": "type=copper",
+					"type": "block",
+					"textures": [ "magneticraft:blocks/ore_block/copper" ]
+				},
+				{
+					"variant": "type=lead",
+					"type": "block",
+					"textures": [ "magneticraft:blocks/ore_block/lead" ]
+				},
+				{
+					"variant": "type=cobalt",
+					"type": "block",
+					"textures": [ "magneticraft:blocks/ore_block/cobalt" ]
+				},
+				{
+					"variant": "type=tungsten",
+					"type": "block",
+					"textures": [ "magneticraft:blocks/ore_block/tungsten" ]
+				}
+			]
+		}
+	],
+	"items":[
+		{
+			"id": "magneticraft:test_item",
+			"variants": [
+				{
+					"variant": "inventory0",
+					"type": "block",
+					"textures": [ "magneticraft:items/test_item/inventory0" ]
+				},
+				{
+					"variant": "inventory1",
+					"type": "block",
+					"textures": [ "magneticraft:items/test_item/inventory1" ]
+				},
+				{
+					"variant": "inventory2",
+					"type": "block",
+					"textures": [ "magneticraft:items/test_item/inventory2" ]
+				},
+				{
+					"variant": "inventory3",
+					"type": "block",
+					"textures": [ "magneticraft:items/test_item/inventory3" ]
+				}
+			]
+		}
+	]
+}
