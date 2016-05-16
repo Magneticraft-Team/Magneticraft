@@ -40,8 +40,15 @@ open class GuiCommon : GuiScreen() {
     override fun doesGuiPauseGame() = false
 
     fun drawTexture(position: Coords, size: Coords, texture: ResourceLocation) {
+        GlStateManager.pushMatrix()
+        GlStateManager.color(1f, 1f, 1f, 1f)
+        GlStateManager.enableBlend()
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
+
         mc.renderEngine.bindTexture(texture)
         drawScaledCustomSizeModalRect(position.x, position.y, 0f, 0f, 256, 256, size.x, size.y, 256f, 256f)
+
+        GlStateManager.popMatrix()
     }
 
     fun drawHoveringText(text: List<String>, pos: Coords) {

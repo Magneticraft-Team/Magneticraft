@@ -16,9 +16,13 @@ data class Coords(val x: Int, val y: Int) {
     fun yCenter() = Coords(x, y / 2)
 }
 
-fun String.centeredAt(pos: Coords) = pos - box.center()
+infix fun String.centeredAt(pos: Coords) = box.centeredAt(pos)
 
 fun String.centeredAt(x: Int, y: Int) = centeredAt(Coords(x, y))
+
+infix fun Coords.centeredAt(pos: Coords) = pos - center()
+
+fun Coords.centeredAt(x: Int, y: Int) = centeredAt(Coords(x, y))
 
 val String.box: Coords
     get() = Minecraft.getMinecraft().fontRendererObj.run {
