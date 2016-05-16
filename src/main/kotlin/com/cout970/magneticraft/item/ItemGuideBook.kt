@@ -1,8 +1,6 @@
 package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
-import com.cout970.magneticraft.util.MODID
-import com.cout970.magneticraft.util.resource
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -11,10 +9,8 @@ import net.minecraft.util.EnumActionResult
 import net.minecraft.util.EnumHand
 import net.minecraft.world.World
 
-object ItemGuideBook : ItemBase() {
+object ItemGuideBook : ItemBase("guide_book") {
     init {
-        unlocalizedName = "$MODID.guide_book"
-        registryName = resource("guide_book")
         maxStackSize = 1
     }
 
