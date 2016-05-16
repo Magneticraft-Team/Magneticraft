@@ -1,6 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.0.1-2'
-
     repositories {
         jcenter()
         maven {
@@ -102,7 +100,7 @@ repositories {
 }
 
 dependencies {
-    shade 'coffee.cypher.mcextlib:MC-ExtLib:1.1.1'
+    shade "coffee.cypher.mcextlib:MC-ExtLib:$extlib_version"
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
