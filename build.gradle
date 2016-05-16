@@ -100,7 +100,7 @@ repositories {
 }
 
 dependencies {
-    shade "coffee.cypher.mcextlib:MC-ExtLib:$extlib_version"
+    shade "coffee.cypher.mcextlib:MC-ExtLib:$extlib_version:dev"
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
