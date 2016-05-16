@@ -1,10 +1,12 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.block.BlockBase
+import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import net.minecraftforge.fml.common.registry.GameRegistry
 
-val blocks = emptyList<BlockBase>()
+val blocks = listOf(
+    BlockCrushingTable
+)
 
 fun registerBlocks() {
     blocks.forEach {

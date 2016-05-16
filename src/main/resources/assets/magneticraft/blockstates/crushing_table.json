@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "custom": {
+            "flip-v": true
+        },
+        "textures": {
+            "texture": "magneticraft:blocks/crushing_table"
+        },
+        "model": "magneticraft:crushing_table.obj"
+    },
+    "variants": {
+        "normal": [
+            {}
+        ],
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}
