@@ -9,7 +9,7 @@ private fun getByKey(key: ItemStack) =
     recipes.entries.firstOrNull { ItemStack.areItemStacksEqual(key, it.key) }?.value
 
 fun registerRecipe(input: ItemStack, output: ItemStack) {
-    //recipes += input to output
+    recipes += input to output
 }
 
 fun ItemStack.findCrushable() = recipes.keys.firstOrNull { equalsIgnoreSize(it) }?.copy()
