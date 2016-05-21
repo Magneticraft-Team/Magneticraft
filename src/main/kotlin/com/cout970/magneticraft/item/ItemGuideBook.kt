@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
+import com.cout970.magneticraft.misc.CreativeTabMg
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -10,7 +11,9 @@ import net.minecraft.util.EnumHand
 import net.minecraft.world.World
 
 object ItemGuideBook : ItemBase("guide_book") {
+
     init {
+        creativeTab = CreativeTabMg
         maxStackSize = 1
     }
 
