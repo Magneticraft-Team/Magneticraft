@@ -39,9 +39,9 @@ object BlockOre : BlockBase(Material.ROCK, "ore_block") {
     private fun getVariant(metadata: Int): String = listOf("copper", "lead", "cobalt", "tungsten")[metadata]
 
     @SideOnly(Side.CLIENT)
-    override fun getSubBlocks(itemIn: Item, tab: CreativeTabs, list: MutableList<ItemStack>) {
+    override fun getSubBlocks(itemIn: Item?, tab: CreativeTabs?, list: MutableList<ItemStack>?) {
         for (i in 0..3)
-            list.add(ItemStack(itemIn, 1, i))
+            list?.add(ItemStack(itemIn, 1, i))
     }
 
     override fun createBlockState(): BlockStateContainer? {

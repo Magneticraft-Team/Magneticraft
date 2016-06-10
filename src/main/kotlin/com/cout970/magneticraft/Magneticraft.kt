@@ -8,6 +8,8 @@ import com.cout970.magneticraft.util.MODID
 import com.cout970.magneticraft.util.NAME
 import com.cout970.magneticraft.util.VERSION
 import com.cout970.magneticraft.world.WorldGenerator
+import net.minecraft.client.Minecraft
+import net.minecraft.util.Timer
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -48,6 +50,7 @@ object Magneticraft {
 
         registerBlocks()
         registerItems()
+        registerTileEntities()
         proxy.preInit()
 
         log.info("Pre-init done")
@@ -72,5 +75,18 @@ object Magneticraft {
         proxy.postInit()
 
         log.info("Post-init done")
+    }
+
+    //useful function to change the amount of tick per second used in minecraft
+    //feel free to remove it if you want
+    fun setTicksPerSecond(tps:Int){
+        //DEBUG
+        val timerField = Minecraft::class.java.getDeclaredField("timer")
+        timerField.isAccessible = true
+        val timer = timerField.get(Minecraft.getMinecraft()) as Timer
+        val tickfield = Timer::class.java.getDeclaredField("ticksPerSecond")
+        tickfield.isAccessible = true
+        tickfield.set(timer, tps.toFloat())
+        //DEBUG
     }
 }
