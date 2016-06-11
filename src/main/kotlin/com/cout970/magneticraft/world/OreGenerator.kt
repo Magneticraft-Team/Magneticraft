@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.world
 
-import com.cout970.magneticraft.util.WorldRef
 import com.google.common.base.Predicate
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -24,8 +23,8 @@ class OreGenerator(
 
     constructor(ore: Block, meta: Int, number: Int, target: Predicate<IBlockState>) : this(ore.getStateFromMeta(meta), number, target)
 
-    fun generate(ref: WorldRef, random: Random) {
-        generate(ref.world, random, ref.pos.x, ref.pos.y, ref.pos.z)
+    fun generate(world: World, pos: BlockPos, random: Random) {
+        generate(world, random, pos.x, pos.y, pos.z)
     }
 
     fun generate(world: World, random: Random, x: Int, y: Int, z: Int) {
@@ -66,10 +65,9 @@ class OreGenerator(
                                 val blockPos = BlockPos(i, j, k)
 
                                 if (xDistance * xDistance + yDistance * yDistance + zDistance * zDistance < 1.0) {
-                                    val ref = WorldRef(world, blockPos)
-                                    val state = ref.getBlockState()
+                                    val state = world.getBlockState(blockPos)
                                     if (state.block.isReplaceableOreGen(state, world, blockPos, predicate)) {
-                                        ref.setBlockState(ore, 2)
+                                        world.setBlockState(blockPos, ore, 2)
                                     }
                                 }
                             }
