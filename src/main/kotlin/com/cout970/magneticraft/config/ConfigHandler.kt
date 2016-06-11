@@ -131,7 +131,6 @@ object ConfigHandler {
 
         @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
-            println(getKey())
             val category = annotation.category+"."+getKey().replace("Ore", "")
             //chunk
             val chunk = handler.config.getInteger(category, "chunkAmount", (field.get(handler.instance) as OreConfig).chunkAmount, "Amount of "+annotation.comment+" per chunk")
