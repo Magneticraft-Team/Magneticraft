@@ -3,9 +3,7 @@ package com.cout970.magneticraft
 import com.cout970.magneticraft.util.Log
 import com.cout970.magneticraft.util.MODID
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.item.Item
 import net.minecraft.launchwrapper.Launch
@@ -29,10 +27,9 @@ object Debug {
             return
         }
         Log.debug("Source folder found at ${srcDir?.absolutePath}")
-        createBlockModelJson("ore_block_copper", "cube_all", mapOf("all" to "ore_block/copper"))
-        createBlockModelJson("ore_block_lead", "cube_all", mapOf("all" to "ore_block/lead"))
-        createBlockModelJson("ore_block_cobalt", "cube_all", mapOf("all" to "ore_block/cobalt"))
-        createBlockModelJson("ore_block_tungsten", "cube_all", mapOf("all" to "ore_block/tungsten"))
+        createBlockModelJson("burn_limestone_normal", "cube_all", mapOf("all" to "burn_limestone/normal"))
+        createBlockModelJson("burn_limestone_brick", "cube_all", mapOf("all" to "burn_limestone/brick"))
+        createBlockModelJson("burn_limestone_cobble", "cube_all", mapOf("all" to "burn_limestone/cobble"))
     }
 
     fun searchSourceDir(configDir: File): File {
@@ -91,41 +88,6 @@ object Debug {
             textures.addProperty(i, "magneticraft:blocks/$j")
         }
         json.add("textures", textures)
-
-        val string = gson.toJson(json)
-
-        val writer = FileWriter(file)
-        writer.write(string)
-        writer.close()
-    }
-
-    fun createBlockstateJson(block: Block, model:String){
-
-        val name = block.registryName.resourcePath
-        val path = srcDir!!.absolutePath + "/src/main/resources/assets/$MODID/blockstates/$name.json"
-        val file = File(path)
-        if (file.exists()) return
-
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val json = JsonObject()
-        val defaults = JsonObject()
-        val variants = JsonObject()
-        val normalArray = JsonArray()
-        val inventoryArray = JsonArray()
-        val inventoryObject = JsonObject()
-
-        defaults.addProperty("model", "$MODID:$model")
-
-        normalArray.add(JsonObject())
-        variants.add("normal", normalArray)
-
-        inventoryObject.addProperty("transform", "forge:default-block")
-        inventoryArray.add(inventoryObject)
-        variants.add("inventory", JsonArray())
-
-        json.addProperty("forge_marker", 1)
-        json.add("defaults", defaults)
-        json.add("variants", variants)
 
         val string = gson.toJson(json)
 

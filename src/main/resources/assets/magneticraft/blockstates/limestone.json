@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "type=normal": [{
+			"model" : "magneticraft:limestone_normal"
+		}],
+		"type=brick": [{
+			"model" : "magneticraft:limestone_brick"
+		}],
+        "type=cobble": [{
+            "model" : "magneticraft:limestone_cobble"
+        }],
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}

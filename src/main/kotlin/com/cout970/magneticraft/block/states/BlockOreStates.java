@@ -12,6 +12,7 @@ public enum BlockOreStates implements IStringSerializable {
     COBALT,
     TUNGSTEN;
 
+    @Override
     public String getName(){
         return name().toLowerCase();
     }

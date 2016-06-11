@@ -1,4 +1,5 @@
 item.magneticraft.guide_book.name=Magneticraft Instruction Manual
+item.magneticraft.iron_hammer.name=Iron Hammer
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
@@ -9,6 +10,13 @@ tile.magneticraft.ore_block.copper.name=Malachite Ore
 tile.magneticraft.ore_block.lead.name=Galena Ore
 tile.magneticraft.ore_block.cobalt.name=Cobaltite Ore
 tile.magneticraft.ore_block.tungsten.name=Wolframite Ore
+tile.magneticraft.crushing_table.name=Crushing Table
+tile.magneticraft.limestone.normal.name=Limestone
+tile.magneticraft.limestone.brick.name=Limestone Brick
+tile.magneticraft.limestone.cobble.name=Limestone Cobble
+tile.magneticraft.burn_limestone.normal.name=Burn Limestone
+tile.magneticraft.burn_limestone.brick.name=Burn Limestone Brick
+tile.magneticraft.burn_limestone.cobble.name=Burn Limestone Cobble
 
 itemGroup.magneticraft=Magneticraft
 
