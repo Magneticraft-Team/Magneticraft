@@ -5,7 +5,6 @@ import com.cout970.magneticraft.util.MODID
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
-import net.minecraft.item.Item
 import net.minecraft.launchwrapper.Launch
 import net.minecraft.util.Timer
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -27,6 +26,9 @@ object Debug {
             return
         }
         Log.debug("Source folder found at ${srcDir?.absolutePath}")
+//        for(i in ItemCrushedOre.CRUSHED_ORES.keys){
+//            createItemJson("crushed_ore_${ItemCrushedOre.CRUSHED_ORES[i]}", "crushed_ore/${ItemCrushedOre.CRUSHED_ORES[i]}")
+//        }
 //        createItemJson(ItemStoneHammer, "stone_hammer")
     }
 
@@ -51,8 +53,7 @@ object Debug {
         tickField.set(timer, tps.toFloat())
     }
 
-    fun createItemJson(item: Item, texName: String) {
-        val name = item.registryName.resourcePath
+    fun createItemJson(name: String, texName: String) {
         val path = srcDir!!.absolutePath + "/src/main/resources/assets/$MODID/models/item/$name.json"
         val file = File(path)
         if (file.exists()) return

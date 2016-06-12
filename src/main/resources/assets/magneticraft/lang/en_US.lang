@@ -1,6 +1,12 @@
 item.magneticraft.guide_book.name=Magneticraft Instruction Manual
 item.magneticraft.iron_hammer.name=Iron Hammer
 item.magneticraft.stone_hammer.name=Stone Hammer
+item.magneticraft.crushed_ore.iron.name=Crushed Iron Ore
+item.magneticraft.crushed_ore.gold.name=Crushed Gold Ore
+item.magneticraft.crushed_ore.copper.name=Crushed Copper Ore
+item.magneticraft.crushed_ore.lead.name=Crushed Lead Ore
+item.magneticraft.crushed_ore.cobalt.name=Crushed Cobalt Ore
+item.magneticraft.crushed_ore.tungsten.name=Crushed Tungsten Ore
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics

@@ -3,12 +3,12 @@ package com.cout970.magneticraft
 import com.cout970.magneticraft.block.BlockBurnLimestone
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockLimestone
+import com.cout970.magneticraft.item.ItemGuideBook
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks.*
-import net.minecraft.init.Items.IRON_INGOT
-import net.minecraft.init.Items.STICK
+import net.minecraft.init.Items.*
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -27,6 +27,9 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockCrushingTable),          "SSS", "WWW", "W#W", 'S', of(STONE), 'W', of(LOG))
     addRecipe(ItemStack(ItemIronHammer),        true, "XX#", "XZX", "#Z#", 'X', of(IRON_INGOT), 'Z', of(STICK))
     addRecipe(ItemStack(ItemStoneHammer),       true, "XX#", "XZX", "#Z#", 'X', of(COBBLESTONE), 'Z', of(STICK))
+    addRecipe(ItemStack(BlockLimestone, 4, 1),        "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
+    addRecipe(ItemStack(BlockBurnLimestone, 4, 1),    "XX", "XX", 'X', ItemStack(BlockBurnLimestone, 1, 0))
+    addRecipe(ItemStack(ItemGuideBook),               "CB", 'C', "ingotCopper", 'B', of(BOOK))
 
     //TODO add a guide book recipe
 
