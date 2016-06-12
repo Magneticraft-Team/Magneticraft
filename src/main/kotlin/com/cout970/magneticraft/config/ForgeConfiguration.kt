@@ -12,7 +12,7 @@ class ForgeConfiguration(file: File) : net.minecraftforge.common.config.Configur
     }
 
     override fun getInteger(category: String, key: String, defaultValue: Int, comment: String): Int {
-        return get(category, key, defaultValue, comment).getInt()
+        return get(category, key, defaultValue, comment).int
     }
 
     override fun getBoolean(category: String, key: String, defaultValue: Boolean, comment: String): Boolean {
@@ -20,7 +20,7 @@ class ForgeConfiguration(file: File) : net.minecraftforge.common.config.Configur
     }
 
     override fun getDouble(category: String, key: String, defaultValue: Double, comment: String): Double {
-        return get(category, key, defaultValue, comment).getDouble()
+        return get(category, key, defaultValue, comment).double
     }
 
     override fun getStringArray(category: String, key: String, defaultValue: Array<String>, comment: String): Array<String> {
@@ -28,15 +28,15 @@ class ForgeConfiguration(file: File) : net.minecraftforge.common.config.Configur
     }
 
     override fun getIntegerArray(category: String, key: String, defaultValue: IntArray, comment: String): IntArray {
-        return get(category, key, defaultValue, comment).getIntList()
+        return get(category, key, defaultValue, comment).intList
     }
 
     override fun getBooleanArray(category: String, key: String, defaultValue: BooleanArray, comment: String): BooleanArray {
-        return get(category, key, defaultValue, comment).getBooleanList()
+        return get(category, key, defaultValue, comment).booleanList
     }
 
     override fun getDoubleArray(category: String, key: String, defaultValue: DoubleArray, comment: String): DoubleArray {
-        return get(category, key, defaultValue, comment).getDoubleList()
+        return get(category, key, defaultValue, comment).doubleList
     }
 
     override fun getString(category: String, key: String, defaultValue: String, comment: String, validValues: Array<String>): String {
@@ -48,7 +48,7 @@ class ForgeConfiguration(file: File) : net.minecraftforge.common.config.Configur
     }
 
     override fun getDouble(category: String, key: String, defaultValue: Double, comment: String, min: Double, max: Double): Double {
-        return get(category, key, defaultValue, comment, min, max).getDouble()
+        return get(category, key, defaultValue, comment, min, max).double
     }
 
     override fun getStringArray(category: String, key: String, defaultValue: Array<String>, comment: String, validValues: Array<String>): Array<String> {
@@ -56,10 +56,10 @@ class ForgeConfiguration(file: File) : net.minecraftforge.common.config.Configur
     }
 
     override fun getIntegerArray(category: String, key: String, defaultValue: IntArray, comment: String, min: Int, max: Int): IntArray {
-        return get(category, key, defaultValue, comment, min, max).getIntList()
+        return get(category, key, defaultValue, comment, min, max).intList
     }
 
     override fun getDoubleArray(category: String, key: String, defaultValue: DoubleArray, comment: String, min: Double, max: Double): DoubleArray {
-        return get(category, key, defaultValue, comment, min, max).getDoubleList()
+        return get(category, key, defaultValue, comment, min, max).doubleList
     }
 }

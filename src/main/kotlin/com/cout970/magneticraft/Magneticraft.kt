@@ -45,6 +45,7 @@ object Magneticraft {
         registerBlocks()
         registerItems()
         registerTileEntities()
+        registerRecipes()
 
         if(Debug.DEBUG){
            Debug.preInit(event)

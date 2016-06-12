@@ -27,9 +27,7 @@ object Debug {
             return
         }
         Log.debug("Source folder found at ${srcDir?.absolutePath}")
-        createBlockModelJson("burn_limestone_normal", "cube_all", mapOf("all" to "burn_limestone/normal"))
-        createBlockModelJson("burn_limestone_brick", "cube_all", mapOf("all" to "burn_limestone/brick"))
-        createBlockModelJson("burn_limestone_cobble", "cube_all", mapOf("all" to "burn_limestone/cobble"))
+//        createItemJson(ItemStoneHammer, "stone_hammer")
     }
 
     fun searchSourceDir(configDir: File): File {
