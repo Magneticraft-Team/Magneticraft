@@ -10,9 +10,9 @@
         "model": "magneticraft:crushing_table.obj"
     },
     "variants": {
-        "normal": [
-            {}
-        ],
+        "normal": [{
+		
+		}],
         "inventory": [
             {
                 "transform": "forge:default-block"

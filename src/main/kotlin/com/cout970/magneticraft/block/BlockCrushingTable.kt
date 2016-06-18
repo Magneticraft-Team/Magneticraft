@@ -18,12 +18,14 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
-val CRUSHING_TABLE_BOX = Vec3d.ZERO to Vec3d(1.0, 0.875, 1.0)
 
 object BlockCrushingTable : BlockBase(
-    material = Material.ROCK,
-    registryName = "crushing_table"
+        material = Material.ROCK,
+        registryName = "crushing_table"
 ), ITileEntityProvider {
+
+    val CRUSHING_TABLE_BOX = Vec3d.ZERO to Vec3d(1.0, 0.875, 1.0)
+
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
     override fun isFullCube(state: IBlockState?) = false
@@ -34,9 +36,9 @@ object BlockCrushingTable : BlockBase(
     override fun createNewTileEntity(worldIn: World, meta: Int) = TileCrushingTable()
 
     override fun onBlockActivated(
-        world: World, pos: BlockPos, state: IBlockState,
-        player: EntityPlayer, hand: EnumHand, heldItem: ItemStack?,
-        side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float
+            world: World, pos: BlockPos, state: IBlockState,
+            player: EntityPlayer, hand: EnumHand, heldItem: ItemStack?,
+            side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float
     ): Boolean {
         val tile = world.getTile<TileCrushingTable>(pos) ?: return super.onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
 

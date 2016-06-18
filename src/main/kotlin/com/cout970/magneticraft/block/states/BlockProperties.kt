@@ -8,5 +8,7 @@ import net.minecraft.block.properties.PropertyEnum
  */
 object BlockProperties {
 
-    val blockOreState : IProperty<BlockOreStates> = PropertyEnum.create("type", BlockOreStates.COPPER.javaClass)
+    val blockOreState : IProperty<BlockOreStates> = PropertyEnum.create("type", BlockOreStates::class.java)
+    val blockLimestoneState: IProperty<BlockLimestoneStates> = PropertyEnum.create("type", BlockLimestoneStates::class.java)
+    val blockBurnLimestoneState: IProperty<BlockLimestoneStates> = PropertyEnum.create("type", BlockLimestoneStates::class.java)
 }

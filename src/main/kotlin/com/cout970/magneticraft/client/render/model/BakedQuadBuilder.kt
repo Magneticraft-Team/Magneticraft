@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3d
  * Created by cout970 on 14/05/2016.
  */
 
+//this class can be useful in the future, even if the model loader doesn't exist anymore
 class BakedQuadBuilder(val side: EnumFacing, val texture: TextureAtlasSprite) {
 
     val FACE_BRIGHTNESS = listOf(0.5F, 1.0F, 0.8F, 0.8F, 0.6F, 0.6F)
@@ -64,7 +65,7 @@ class BakedQuadBuilder(val side: EnumFacing, val texture: TextureAtlasSprite) {
 
     fun getFaceShadeColor(): Int {
         val f = FACE_BRIGHTNESS[side.index];
-        var i = MathHelper.clamp_int((f * 255.0F).toInt(), 0, 255);
+        val i = MathHelper.clamp_int((f * 255.0F).toInt(), 0, 255);
         val j = 0xFF000000.toInt()
         return j or (i shl 16) or (i shl 8) or i;
     }

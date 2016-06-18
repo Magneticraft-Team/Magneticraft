@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "type=copper": [{
+			"model" : "magneticraft:ore_block_copper"
+		}],
+		"type=lead": [{
+			"model" : "magneticraft:ore_block_lead"
+		}],
+		"type=cobalt": [{
+			"model" : "magneticraft:ore_block_cobalt"
+		}],
+		"type=tungsten": [{
+			"model" : "magneticraft:ore_block_tungsten"
+		}],
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}
