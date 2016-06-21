@@ -7,6 +7,7 @@ item.magneticraft.crushed_ore.copper.name=Crushed Copper Ore
 item.magneticraft.crushed_ore.lead.name=Crushed Lead Ore
 item.magneticraft.crushed_ore.cobalt.name=Crushed Cobalt Ore
 item.magneticraft.crushed_ore.tungsten.name=Crushed Tungsten Ore
+item.magneticraft.hand_sieve.name=Hand Sieve
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
@@ -24,6 +25,7 @@ tile.magneticraft.limestone.cobble.name=Limestone Cobble
 tile.magneticraft.burn_limestone.normal.name=Burn Limestone
 tile.magneticraft.burn_limestone.brick.name=Burn Limestone Brick
 tile.magneticraft.burn_limestone.cobble.name=Burn Limestone Cobble
+tile.magneticraft.table_sieve.name=Table Sieve
 
 itemGroup.magneticraft=Magneticraft
 

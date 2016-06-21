@@ -41,7 +41,6 @@ object Magneticraft {
         ConfigHandler.read()
         ConfigHandler.save()
 
-
         registerBlocks()
         registerItems()
         registerTileEntities()

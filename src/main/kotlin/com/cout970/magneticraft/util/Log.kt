@@ -27,6 +27,6 @@ object Log {
                 s.append(", ")
             }
         }
-        log.info("[DEBUG]${s.toString()}[/DEBUG]")
+        log.info("[DEBUG]${s.toString()}")
     }
 }

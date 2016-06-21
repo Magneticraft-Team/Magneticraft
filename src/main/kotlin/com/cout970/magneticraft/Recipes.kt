@@ -1,5 +1,7 @@
 package com.cout970.magneticraft
 
+import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
+import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
 import com.cout970.magneticraft.block.BlockBurnLimestone
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockLimestone
@@ -36,6 +38,9 @@ fun registerRecipes() {
     //SMELTING RECIPES
     addSmeltingRecipe(ItemStack(BlockBurnLimestone), ItemStack(BlockLimestone))
 
+    //TABLE SIEVE RECIPES
+    addTableSieveRecipe(ItemStack(SAND), ItemStack(SAND), ItemStack(COBBLESTONE), 0.5f)
+
     //@formatter:on
 }
 
@@ -43,8 +48,12 @@ private fun addRecipe(result: ItemStack, vararg craft: Any) {
     GameRegistry.addRecipe(ShapedOreRecipe(result, *craft))
 }
 
-private fun addSmeltingRecipe(result:ItemStack, input:ItemStack){
+private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
     GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
+}
+
+private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float) {
+    TableSieveRegistry.registerRecipe(TableSieveRecipe(input, output0, output1, prob))
 }
 
 //function to get the fist ore dictionary of the block if exist, or the block

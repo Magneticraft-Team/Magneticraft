@@ -1,6 +1,14 @@
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.common.capabilities.CapabilityInject
-import net.minecraftforge.items.IItemHandler
+package com.cout970.magneticraft.util
 
-@CapabilityInject(IItemHandler::class)
-var ITEM_HANDLER: Capability<IItemHandler>? = null
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.EnumFacing
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.ICapabilityProvider
+
+
+fun <T> Capability<T>.fromTile(tile: TileEntity, side: EnumFacing? = null): T? {
+    if (tile is ICapabilityProvider && tile.hasCapability(this, side)) {
+        return tile.getCapability(this, side)
+    }
+    return null
+}

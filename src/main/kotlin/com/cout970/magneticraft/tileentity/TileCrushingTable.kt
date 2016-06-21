@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.tileentity
 
-import ITEM_HANDLER
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import com.cout970.magneticraft.api.registries.machines.crushingtable.crush
@@ -10,10 +9,12 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
-val CRUSHING_DAMAGE = 40
+const val CRUSHING_DAMAGE = 40
 
+//TODO redo this class
 class TileCrushingTable : TileBase() {
     var damageTaken = 0
     private val _inventory = CrushingTableInventory()
@@ -62,14 +63,23 @@ class TileCrushingTable : TileBase() {
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?) =
-        (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
+        (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) || super.hasCapability(capability, facing)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?) =
-        if (capability == ITEM_HANDLER)
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             inventory as T
         else
             super.getCapability(capability, facing)
+
+    override fun onBreak() {
+        super.onBreak()
+        if(!worldObj.isRemote) {
+            if (inventory[0] != null) {
+                dropItem(inventory[0]!!, pos)
+            }
+        }
+    }
 
     private inner class CrushingTableInventory : ItemStackHandler(1) {
         override fun onContentsChanged(slot: Int) {
