@@ -5,7 +5,9 @@ import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveReg
 import com.cout970.magneticraft.block.BlockBurnLimestone
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockLimestone
+import com.cout970.magneticraft.item.ItemCrushedOre
 import com.cout970.magneticraft.item.ItemGuideBook
+import com.cout970.magneticraft.item.ItemlPebbles
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import net.minecraft.block.Block
@@ -39,7 +41,9 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(BlockBurnLimestone), ItemStack(BlockLimestone))
 
     //TABLE SIEVE RECIPES
-    addTableSieveRecipe(ItemStack(SAND), ItemStack(SAND), ItemStack(COBBLESTONE), 0.5f)
+    for(i in ItemlPebbles.METAL_PEBBLES.keys){
+        addTableSieveRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemlPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f)
+    }
 
     //@formatter:on
 }

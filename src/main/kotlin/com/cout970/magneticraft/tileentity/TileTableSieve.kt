@@ -48,14 +48,25 @@ class TileTableSieve : TileBase(), ITickable {
         //TODO find a better way to know if you can drop the item or not
         if (!state.block.isFullCube(state)) {
             while (!output.isEmpty()) {
-                dropItem(output.first().copy(), pos.down())
+                dropOutput(output.first().copy())
                 output.removeAt(0)
             }
         }
     }
 
+    fun dropOutput(item: ItemStack) {
+        if (!world.isRemote) {
+            val entityItem = EntityItem(world, pos.x.toDouble() + 0.5, pos.y.toDouble() - 0.5, pos.z.toDouble() + 0.5, item)
+            entityItem.motionX = 0.0
+            entityItem.motionY = 0.0
+            entityItem.motionZ = 0.0
+            entityItem.setDefaultPickupDelay()
+            world.spawnEntityInWorld(entityItem)
+        }
+    }
+
     fun suckItems() {
-        val aabb = AxisAlignedBB(pos.up())
+        val aabb = AxisAlignedBB(pos, pos.up().add(1.0, 1.0, 1.0))
         val items = worldObj.getEntitiesInAABBexcluding(null, aabb, { it is EntityItem })
         for (i in items) {
             if (i !is EntityItem) continue

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft
 
+import com.cout970.magneticraft.item.ItemlPebbles
 import com.cout970.magneticraft.util.Log
 import com.cout970.magneticraft.util.MODID
 import com.google.gson.GsonBuilder
@@ -26,8 +27,8 @@ object Debug {
             return
         }
         Log.debug("Source folder found at ${srcDir?.absolutePath}")
-//        for(i in ItemCrushedOre.CRUSHED_ORES.keys){
-//            createItemJson("crushed_ore_${ItemCrushedOre.CRUSHED_ORES[i]}", "crushed_ore/${ItemCrushedOre.CRUSHED_ORES[i]}")
+//        for(i in ItemMetalPebble.METAL_PEBBLES.keys){
+//            createItemJson("metal_pebble_${ItemMetalPebble.METAL_PEBBLES[i]}", "metal_pebble/${ItemMetalPebble.METAL_PEBBLES[i]}")
 //        }
 //        createItemJson(ItemStoneHammer, "stone_hammer")
     }
