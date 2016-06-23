@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 /**
  * Created by cout970 on 23/06/2016.
  */
-object ItemlPebbles : ItemBase("metal_pebble") {
+object ItemPebbles : ItemBase("metal_pebble") {
 
     val METAL_PEBBLES = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten")
 
