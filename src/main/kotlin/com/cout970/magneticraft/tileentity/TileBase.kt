@@ -7,8 +7,7 @@ import net.minecraft.util.math.BlockPos
 
 open class TileBase : TileEntity() {
 
-    open fun onBreak() {
-    }
+    open fun onBreak() {}
 
     fun dropItem(last: ItemStack, pos: BlockPos) {
         if (!world.isRemote) {

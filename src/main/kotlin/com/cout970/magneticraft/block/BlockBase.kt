@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.MODID
@@ -22,17 +23,17 @@ abstract class BlockBase(material: Material, registryName: String, unlocalizedNa
         setCreativeTab(CreativeTabMg)
     }
 
-    open fun getMaxModels():Int = 1
-
-    open fun getModelLoc(i :Int): ModelResourceLocation = ModelResourceLocation(registryName, "inventory")
+    open fun getModels() = mapOf(0 to ModelResourceLocation(registryName, "inventory"))
 
     open fun getUnlocalizedName(stack: ItemStack?): String? = unlocalizedName
 
-    override fun breakBlock(worldIn: World?, pos: BlockPos?, state: IBlockState?) {
-        val tile = worldIn?.getTileEntity(pos)
+    override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
+        val tile = worldIn.getTileEntity(pos)
         if(tile is TileBase){
             tile.onBreak()
         }
         super.breakBlock(worldIn, pos, state)
     }
+
+    open fun createItemBlock() = ItemBlockBase(this)
 }

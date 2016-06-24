@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 
-class ItemBlockBase(block: BlockBase) : ItemBlock(block) {
+open class ItemBlockBase(block: BlockBase) : ItemBlock(block) {
 
     init {
         registryName = block.registryName
@@ -17,9 +17,7 @@ class ItemBlockBase(block: BlockBase) : ItemBlock(block) {
         return (block as BlockBase).getUnlocalizedName(stack) ?: "unamed"
     }
 
-    fun getMaxModels():Int = (block as BlockBase).getMaxModels()
-
-    fun getModelLoc(i :Int): ModelResourceLocation = (block as BlockBase).getModelLoc(i)
+    fun getModels() = (block as BlockBase).getModels()
 
     override fun getMetadata(damage: Int): Int = damage
 }

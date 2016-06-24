@@ -4,5 +4,4 @@
 newmtl texture
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
-Ks 1.000000 1.000000 1.000000
 map_Kd magneticraft:blocks/crushing_table

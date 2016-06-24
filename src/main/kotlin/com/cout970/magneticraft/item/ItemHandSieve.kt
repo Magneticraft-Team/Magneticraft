@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.item
 
+import com.cout970.magneticraft.block.BlockBurnLimestone
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 /**
@@ -7,5 +8,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
  */
 object ItemHandSieve : ItemBase("hand_sieve") {
 
-    override  fun getModelLoc(i :Int): ModelResourceLocation = ModelResourceLocation("$registryName.obj", "inventory")
+
+    override fun getModels(): Map<Int, ModelResourceLocation> {
+        return mapOf(0 to ModelResourceLocation("$registryName.obj", "inventory"))
+    }
 }

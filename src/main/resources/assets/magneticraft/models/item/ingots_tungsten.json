@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "magneticraft:items/metal_pebble/iron"
+    "layer0": "magneticraft:items/ingots/tungsten"
   }
 }

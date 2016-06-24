@@ -1,9 +1,6 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.item.ItemCrushedOre
-import com.cout970.magneticraft.item.ItemGuideBook
-import com.cout970.magneticraft.item.ItemHandSieve
-import com.cout970.magneticraft.item.ItemPebbles
+import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -14,7 +11,8 @@ val items = listOf(
         ItemStoneHammer,
         ItemCrushedOre,
         ItemHandSieve,
-        ItemPebbles
+        ItemPebbles,
+        ItemIngots
 )
 
 fun registerItems() {

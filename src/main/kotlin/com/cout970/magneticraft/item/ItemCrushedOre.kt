@@ -20,10 +20,10 @@ object ItemCrushedOre : ItemBase("crushed_ore") {
         return super.getUnlocalizedName(stack)+"."+CRUSHED_ORES[stack?.metadata]
     }
 
-    override fun getMaxModels(): Int = CRUSHED_ORES.size
-
-    override fun getModelLoc(i: Int): ModelResourceLocation {
-        return ModelResourceLocation("${registryName}_${CRUSHED_ORES[i]}", "inventory")
+    override fun getModels(): Map<Int, ModelResourceLocation> {
+        val map = mutableMapOf<Int, ModelResourceLocation>()
+        CRUSHED_ORES.entries.forEach { map.put(it.key, ModelResourceLocation("${registryName}_${CRUSHED_ORES[it.key]}", "inventory")) }
+        return map
     }
 
     override fun getSubItems(itemIn: Item?, tab: CreativeTabs?, subItems: MutableList<ItemStack>?) {

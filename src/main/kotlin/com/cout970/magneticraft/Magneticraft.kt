@@ -44,6 +44,7 @@ object Magneticraft {
         registerBlocks()
         registerItems()
         registerTileEntities()
+        registerOreDictionaryEntries()
         registerRecipes()
 
         if(Debug.DEBUG){

@@ -6,28 +6,28 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
 /**
- * Created by cout970 on 23/06/2016.
+ * Created by cout970 on 24/06/2016.
  */
-object ItemPebbles : ItemBase("pebbles") {
+object ItemIngots : ItemBase("ingots") {
 
-    val PEBBLES = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten")
+    val INGOTS = mapOf(2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten")
 
-    init{
+    init {
         hasSubtypes = true
     }
 
     override fun getUnlocalizedName(stack: ItemStack?): String? {
-        return super.getUnlocalizedName(stack)+"."+ PEBBLES[stack?.metadata]
+        return super.getUnlocalizedName(stack) + "." + INGOTS[stack?.metadata]
     }
 
     override fun getModels(): Map<Int, ModelResourceLocation> {
         val map = mutableMapOf<Int, ModelResourceLocation>()
-        PEBBLES.entries.forEach { map.put(it.key, ModelResourceLocation("${registryName}_${PEBBLES[it.key]}", "inventory")) }
+        INGOTS.entries.forEach { map.put(it.key, ModelResourceLocation("${registryName}_${INGOTS[it.key]}", "inventory")) }
         return map
     }
 
     override fun getSubItems(itemIn: Item?, tab: CreativeTabs?, subItems: MutableList<ItemStack>?) {
-        for(i in PEBBLES.keys){
+        for (i in INGOTS.keys) {
             subItems?.add(ItemStack(itemIn, 1, i))
         }
     }

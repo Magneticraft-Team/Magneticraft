@@ -2,6 +2,7 @@ package com.cout970.magneticraft
 
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
+import com.cout970.magneticraft.util.Log
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 val blocks = listOf(
@@ -9,12 +10,13 @@ val blocks = listOf(
         BlockOre,
         BlockLimestone,
         BlockBurnLimestone,
-        BlockTableSieve
+        BlockTableSieve,
+        BlockFeedingTrough
 )
 
 fun registerBlocks() {
     blocks.forEach {
         GameRegistry.register(it)
-        GameRegistry.register(ItemBlockBase(it))
+        GameRegistry.register(it.createItemBlock())
     }
 }

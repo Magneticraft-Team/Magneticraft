@@ -9,12 +9,17 @@ item.magneticraft.crushed_ore.lead.name=Crushed Lead Ore
 item.magneticraft.crushed_ore.cobalt.name=Crushed Cobalt Ore
 item.magneticraft.crushed_ore.tungsten.name=Crushed Tungsten Ore
 
-item.magneticraft.metal_pebble.iron.name=Iron Pebbles
-item.magneticraft.metal_pebble.gold.name=Gold Pebbles
-item.magneticraft.metal_pebble.copper.name=Copper Pebbles
-item.magneticraft.metal_pebble.lead.name=Lead Pebbles
-item.magneticraft.metal_pebble.cobalt.name=Cobalt Pebbles
-item.magneticraft.metal_pebble.tungsten.name=Tungsten Pebbles
+item.magneticraft.pebbles.iron.name=Iron Pebbles
+item.magneticraft.pebbles.gold.name=Gold Pebbles
+item.magneticraft.pebbles.copper.name=Copper Pebbles
+item.magneticraft.pebbles.lead.name=Lead Pebbles
+item.magneticraft.pebbles.cobalt.name=Cobalt Pebbles
+item.magneticraft.pebbles.tungsten.name=Tungsten Pebbles
+
+item.magneticraft.ingots.copper.name=Copper Ingot
+item.magneticraft.ingots.lead.name=Lead Ingot
+item.magneticraft.ingots.cobalt.name=Cobalt Ingot
+item.magneticraft.ingots.tungsten.name=Tungsten Ingot
 
 item.magneticraft.hand_sieve.name=Hand Sieve
 
@@ -35,6 +40,7 @@ tile.magneticraft.burn_limestone.normal.name=Burn Limestone
 tile.magneticraft.burn_limestone.brick.name=Burn Limestone Brick
 tile.magneticraft.burn_limestone.cobble.name=Burn Limestone Cobble
 tile.magneticraft.table_sieve.name=Table Sieve
+tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
 
 itemGroup.magneticraft=Magneticraft
 

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft
 
+import com.cout970.magneticraft.item.ItemIngots
 import com.cout970.magneticraft.item.ItemPebbles
 import com.cout970.magneticraft.util.Log
 import com.cout970.magneticraft.util.MODID
@@ -27,10 +28,13 @@ object Debug {
             return
         }
         Log.debug("Source folder found at ${srcDir?.absolutePath}")
-//        for(i in ItemMetalPebble.METAL_PEBBLES.keys){
-//            createItemJson("metal_pebble_${ItemMetalPebble.METAL_PEBBLES[i]}", "metal_pebble/${ItemMetalPebble.METAL_PEBBLES[i]}")
+
+//        for(i in ItemPebbles.PEBBLES.keys){
+//            createItemJson("pebbles_${ItemPebbles.PEBBLES[i]}", "pebbles/${ItemPebbles.PEBBLES[i]}")
 //        }
-//        createItemJson(ItemStoneHammer, "stone_hammer")
+//        for(i in ItemIngots.INGOTS.keys){
+//            createItemJson("ingots_${ItemIngots.INGOTS[i]}", "ingots/${ItemIngots.INGOTS[i]}")
+//        }
     }
 
     fun searchSourceDir(configDir: File): File {

@@ -41,7 +41,7 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(BlockBurnLimestone), ItemStack(BlockLimestone))
 
     //TABLE SIEVE RECIPES
-    for(i in ItemPebbles.METAL_PEBBLES.keys){
+    for(i in ItemPebbles.PEBBLES.keys){
         addTableSieveRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f)
     }
 
