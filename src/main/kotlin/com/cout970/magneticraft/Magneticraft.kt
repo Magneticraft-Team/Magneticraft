@@ -41,10 +41,10 @@ object Magneticraft {
         ConfigHandler.read()
         ConfigHandler.save()
 
-
         registerBlocks()
         registerItems()
         registerTileEntities()
+        registerOreDictionaryEntries()
         registerRecipes()
 
         if(Debug.DEBUG){

@@ -17,7 +17,5 @@ abstract class ItemBase(
         creativeTab = CreativeTabMg
     }
 
-    open fun getMaxModels(): Int = 1
-
-    open fun getModelLoc(i: Int): ModelResourceLocation = ModelResourceLocation(registryName, "inventory")
+    open fun getModels() = mapOf(0 to ModelResourceLocation(registryName, "inventory"))
 }

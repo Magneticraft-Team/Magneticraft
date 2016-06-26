@@ -5,6 +5,7 @@ import com.cout970.magneticraft.block.states.BlockProperties
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -14,23 +15,29 @@ import net.minecraft.item.ItemStack
  */
 object BlockLimestone : BlockMultiState(Material.ROCK, "limestone") {
 
-    override fun getMaxModels():Int = 3
+    val STATE_MAP = mapOf(
+            0 to defaultState.withProperty(BlockProperties.blockLimestoneState, BlockLimestoneStates.values()[0]),
+            1 to defaultState.withProperty(BlockProperties.blockLimestoneState, BlockLimestoneStates.values()[1]),
+            2 to defaultState.withProperty(BlockProperties.blockLimestoneState, BlockLimestoneStates.values()[2])
+    )
 
-    override fun getUnlocalizedName(stack: ItemStack?): String? {
-        return unlocalizedName +"."+ deserializeState(stack?.metadata ?: 0)
-                .getValue(BlockProperties.blockLimestoneState).getName()
+    val MODEL_MAP = mapOf(
+            0 to ModelResourceLocation(registryName, getStateName(STATE_MAP[0]!!)),
+            1 to ModelResourceLocation(registryName, getStateName(STATE_MAP[1]!!)),
+            2 to ModelResourceLocation(registryName, getStateName(STATE_MAP[2]!!))
+    )
+
+    override fun getModels(): Map<Int, ModelResourceLocation> {
+        return MODEL_MAP
     }
 
-    override fun shouldItemBeDisplayed(itemIn: Item, tab: CreativeTabs, i: Int): Boolean = i < 3
+    override fun getUnlocalizedName(stack: ItemStack?): String? {
+        return unlocalizedName +"."+ getStateFromMeta(stack?.metadata ?: 0)?.getValue(BlockProperties.blockLimestoneState)?.getName()
+    }
 
     override fun getProperties(): Array<IProperty<*>> = arrayOf(BlockProperties.blockLimestoneState)
 
-    override fun deserializeState(meta: Int): IBlockState {
-        return blockState.baseState.withProperty(BlockProperties.blockLimestoneState,
-                BlockLimestoneStates.values()[meta])
-    }
+    override fun isHiddenState(state: IBlockState, meta: Int): Boolean = false
 
-    override fun serializeState(state: IBlockState): Int {
-        return state.getValue(BlockProperties.blockLimestoneState).ordinal
-    }
+    override fun getStateMap(): Map<Int, IBlockState> = STATE_MAP
 }

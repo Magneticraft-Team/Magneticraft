@@ -8,12 +8,12 @@ import net.minecraftforge.client.model.ModelLoader
 
 fun Item.registerInvRender() {
     if(this is ItemBase){
-        for(i in 0..this.getMaxModels()-1) {
-            ModelLoader.setCustomModelResourceLocation(this, i, this.getModelLoc(i))
+        for(i in this.getModels()) {
+            ModelLoader.setCustomModelResourceLocation(this, i.key, i.value)
         }
     }else if(this is ItemBlockBase){
-        for(i in 0..this.getMaxModels()-1) {
-            ModelLoader.setCustomModelResourceLocation(this, i, this.getModelLoc(i))
+        for(i in this.getModels()) {
+            ModelLoader.setCustomModelResourceLocation(this, i.key, i.value)
         }
     }else {
         ModelLoader.setCustomModelResourceLocation(this, 0, ModelResourceLocation(registryName, "inventory"))

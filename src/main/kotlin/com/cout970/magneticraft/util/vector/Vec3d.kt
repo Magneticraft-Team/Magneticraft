@@ -11,9 +11,7 @@ import net.minecraft.util.math.Vec3d
 
 fun Vec3d(): Vec3d = net.minecraft.util.math.Vec3d(0.0, 0.0, 0.0)
 
-fun Vec3d(x: Float, y: Float, z: Float): Vec3d = net.minecraft.util.math.Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
-
-fun Vec3d(x: Int, y: Int, z: Int): Vec3d = net.minecraft.util.math.Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
+fun Vec3d(x: Number, y: Number, z: Number): Vec3d = net.minecraft.util.math.Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
 
 // getters
 

@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:table_sieve.obj"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}

@@ -14,7 +14,7 @@ object Log {
     }
 
     fun info(str: String) {
-        log.info(str)
+        log.info("[$MODID]$str")
     }
 
     fun debug(vararg obj: Any?) {
@@ -27,6 +27,6 @@ object Log {
                 s.append(", ")
             }
         }
-        log.info("[DEBUG]${s.toString()}[/DEBUG]")
+        log.info("[$MODID][DEBUG]${s.toString()}")
     }
 }

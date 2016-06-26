@@ -1,12 +1,9 @@
 package com.cout970.magneticraft.block
 
-import com.google.common.base.Joiner
-import com.google.common.collect.Iterables
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -20,50 +17,49 @@ import net.minecraftforge.fml.relauncher.SideOnly
 abstract class BlockMultiState(material: Material, registryName: String, unlocalizedName: String = registryName) :
         BlockBase(material, registryName, unlocalizedName) {
 
-    private val COMMA_JOINER = Joiner.on(',')
+    override fun getStateFromMeta(meta: Int): IBlockState? = getStateMap()[meta]
 
-    override fun getModelLoc(i :Int): ModelResourceLocation {
-        return ModelResourceLocation(registryName, getStateName(deserializeState(i)))
+    override fun getMetaFromState(state: IBlockState?): Int {
+        val meta = getStateMap().entries.indexOfFirst { it.value == state }
+        return if(meta == -1) 0 else meta
     }
-
-    override fun getStateFromMeta(meta: Int): IBlockState? = deserializeState(meta)
-
-    override fun getMetaFromState(state: IBlockState?): Int = serializeState(state!!)
 
     override fun createBlockState(): BlockStateContainer? = BlockStateContainer(this, *getProperties())
 
     override fun damageDropped(state: IBlockState): Int {
-        return serializeState(state)
+        val meta = getMetaFromState(state)
+        if(!isHiddenState(state, meta)){
+            return meta
+        }
+        return 0
     }
 
     @SideOnly(Side.CLIENT)
     override fun getSubBlocks(itemIn: Item?, tab: CreativeTabs?, list: MutableList<ItemStack>?) {
         if (itemIn == null || tab == null || list == null) return
-        for (i in 0..16) {
-            if (shouldItemBeDisplayed(itemIn, tab, i)) {
-                list.add(ItemStack(itemIn, 1, i))
+        for (i in getStateMap().entries) {
+            if (!isHiddenState(i.value, i.key)) {
+                list.add(ItemStack(itemIn, 1, i.key))
             }
         }
     }
 
+    abstract fun isHiddenState(state: IBlockState, meta: Int): Boolean
+
+    abstract fun getProperties(): Array<IProperty<*>>
+
+    abstract fun getStateMap(): Map<Int, IBlockState>
+
     fun getStateName(state: IBlockState): String {
-        return COMMA_JOINER.join(Iterables.transform(state.properties.entries, {
-            if(it == null) {
+        return state.properties.entries.joinToString(separator = ",") {
+            if (it == null) {
                 "NULL"
-            }else{
+            } else {
                 val pName = it.key.getName()
                 @Suppress("UNCHECKED_CAST")
                 val vName = (it.key as IProperty<Comparable<Any>>).getName(it.value as Comparable<Any>)
                 "$pName=$vName"
             }
-        }))
+        }
     }
-
-    abstract fun shouldItemBeDisplayed(itemIn: Item, tab: CreativeTabs, i: Int): Boolean
-
-    abstract fun getProperties(): Array<IProperty<*>>
-
-    abstract fun deserializeState(meta: Int): IBlockState
-
-    abstract fun serializeState(state: IBlockState): Int
 }
