@@ -1,21 +1,19 @@
 package com.cout970.magneticraft.client.render
 
+import coffee.cypher.mcextlib.extensions.resources.toModel
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.item.ItemBase
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.item.Item
 import net.minecraftforge.client.model.ModelLoader
 
-fun Item.registerInvRender() {
-    if(this is ItemBase){
-        for(i in this.getModels()) {
-            ModelLoader.setCustomModelResourceLocation(this, i.key, i.value)
-        }
-    }else if(this is ItemBlockBase){
-        for(i in this.getModels()) {
-            ModelLoader.setCustomModelResourceLocation(this, i.key, i.value)
-        }
-    }else {
-        ModelLoader.setCustomModelResourceLocation(this, 0, ModelResourceLocation(registryName, "inventory"))
+fun ItemBase.registerInvRender() {
+    variants.forEach {
+        ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
+    }
+}
+
+fun ItemBlockBase.registerInvRender() {
+    blockBase.inventoryVariants.forEach {
+        ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
     }
 }

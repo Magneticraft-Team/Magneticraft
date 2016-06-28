@@ -5,12 +5,15 @@ package com.cout970.magneticraft.util.vector
  */
 
 data class Vec2d(val x: Double, val y: Double) {
+    companion object {
+        val ZERO = Vec2d(0.0, 0.0)
+    }
 
-    constructor() : this(0.0, 0.0)
+    val lengthSquared = x * x + y * y
 
-    constructor(x: Int, y: Int) : this(x.toDouble(), y.toDouble())
+    val length = Math.sqrt(lengthSquared)
 
-    constructor(x: Float, y: Float) : this(x.toDouble(), y.toDouble())
+    constructor(x: Number, y: Number) : this(x.toDouble(), y.toDouble())
 
     fun getXf(): Float = x.toFloat()
 
@@ -20,11 +23,7 @@ data class Vec2d(val x: Double, val y: Double) {
 
     fun getYi(): Int = y.toInt()
 
-    fun toPair(): Pair<Double, Double> = x.to(y)
-
-    fun setX(x: Double) = Vec2d(x, y)
-
-    fun setY(y: Double) = Vec2d(x, y)
+    fun toPair(): Pair<Double, Double> = x to y
 
     fun yx() = Vec2d(y, x)
 
@@ -49,8 +48,4 @@ data class Vec2d(val x: Double, val y: Double) {
     fun round() = Vec2d(x.toInt(), y.toInt())
 
     fun transform(op: (Double) -> Double) = Vec2d(op(x), op(y))
-
-    fun lengthSq() = x * x + y * y
-
-    fun lenght() = Math.sqrt(lengthSq())
 }

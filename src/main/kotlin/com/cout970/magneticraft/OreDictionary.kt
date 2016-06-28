@@ -12,15 +12,15 @@ import net.minecraftforge.oredict.OreDictionary
 
 fun registerOreDictionaryEntries() {
 
-    for (i in ItemIngots.INGOTS) {
+    for (i in ItemIngots.variants) {
         OreDictionary.registerOre("ore${format(i.value)}", ItemStack(ItemIngots, 1, i.key))
     }
 
-    for (i in ItemCrushedOre.CRUSHED_ORES) {
+    for (i in ItemCrushedOre.variants) {
         OreDictionary.registerOre("crushedore${format(i.value)}", ItemStack(ItemCrushedOre, 1, i.key))
     }
 
-    for (i in ItemPebbles.PEBBLES) {
+    for (i in ItemPebbles.variants) {
         OreDictionary.registerOre("pebbles${format(i.value)}", ItemStack(ItemPebbles, 1, i.key))
     }
 }

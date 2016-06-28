@@ -2,10 +2,10 @@ package com.cout970.magneticraft.tileentity
 
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.inventories.get
+import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
-import com.cout970.magneticraft.block.states.BlockProperties
+import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
 import com.mojang.authlib.GameProfile
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.passive.EntityAnimal
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -21,10 +21,10 @@ import java.util.*
  * Created by cout970 on 24/06/2016.
  */
 class TileFeedingTrough : TileBase(), ITickable {
-
     val ACCEPTED_ITEMS = listOf(Items.WHEAT, Items.CARROT, Items.WHEAT_SEEDS)
     val MAX_ANIMALS = 30
     val FAKE_PLAYER_UUID = UUID.fromString("d0f15bc8-6eb3-4a1b-8b5d-d3fdf5140321")
+    val FAKE_PROFILE = GameProfile(FAKE_PLAYER_UUID, "FeedingTrough")
     var WAIT_TIME = 600
     val inventory = ItemStackHandler()
 
@@ -34,11 +34,11 @@ class TileFeedingTrough : TileBase(), ITickable {
                 //getting the bounding box to search animals
                 var start = pos.toDoubleVec().addVector(-3.5, -1.0, -3.5)
                 var end = pos.toDoubleVec().addVector(4.5, 2.0, 4.5)
-                val dir = worldObj.getBlockState(pos).getValue(BlockProperties.blockFeedingTroughCompanion)
+                val dir = worldObj.getBlockState(pos).getValue(FEEDING_TROUGH_SIDE_POSITION)
                 if (dir.axisDirection == EnumFacing.AxisDirection.POSITIVE) {
-                    end = end.add(dir.directionVec.toDoubleVec())
+                    end += dir.directionVec.toDoubleVec();
                 } else {
-                    start = start.add(dir.directionVec.toDoubleVec())
+                    start += dir.directionVec.toDoubleVec()
                 }
                 val box = start to end
                 //getting the animals
@@ -54,7 +54,7 @@ class TileFeedingTrough : TileBase(), ITickable {
                         inventory.extractItem(0, 1, false)
 
                         //applying love =)
-                        animal.setInLove(FakePlayerFactory.get(worldObj as WorldServer, GameProfile(FAKE_PLAYER_UUID, "FeedingTrough")))
+                        animal.setInLove(FakePlayerFactory.get(worldObj as WorldServer, FAKE_PROFILE))
                     }
                 }
             }

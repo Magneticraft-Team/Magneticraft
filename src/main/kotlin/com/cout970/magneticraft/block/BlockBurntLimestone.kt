@@ -13,14 +13,14 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
-val LIMESTONE_TYPE = PropertyEnum.create("type", LimestoneTypes::class.java)
+/**
+ * Created by cout970 on 11/06/2016.
+ */
+object BlockBurntLimestone : BlockBase(Material.ROCK, "burnt_limestone") {
 
-object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
-    override val inventoryVariants = mapOf(
-        0 to "normal",
-        1 to "brick",
-        2 to "cobble"
-    )
+    override val inventoryVariants = LimestoneTypes.values().associate {
+        it.ordinal to "type=${it.name}"
+    }
 
     override fun damageDropped(state: IBlockState) = state.getValue(LIMESTONE_TYPE).ordinal
 

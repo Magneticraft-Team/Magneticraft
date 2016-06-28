@@ -1,47 +1,50 @@
 package com.cout970.magneticraft.block
 
-import com.cout970.magneticraft.block.states.BlockLimestoneStates
-import com.cout970.magneticraft.block.states.BlockOreStates
-import com.cout970.magneticraft.block.states.BlockProperties
+import coffee.cypher.mcextlib.extensions.items.stack
+import com.cout970.magneticraft.block.states.OreTypes
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
+import net.minecraft.block.properties.PropertyEnum
+import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
 /**
  * Created by cout970 on 12/05/2016.
  */
-object BlockOre : BlockMultiState(Material.ROCK, "ore_block") {
+val ORE_TYPE = PropertyEnum.create("ore", OreTypes::class.java)
 
-    val STATE_MAP = mapOf(
-            0 to defaultState.withProperty(BlockProperties.blockOreState, BlockOreStates.values()[0]),
-            1 to defaultState.withProperty(BlockProperties.blockOreState, BlockOreStates.values()[1]),
-            2 to defaultState.withProperty(BlockProperties.blockOreState, BlockOreStates.values()[2]),
-            3 to defaultState.withProperty(BlockProperties.blockOreState, BlockOreStates.values()[3])
-    )
-
-    val MODEL_MAP = mapOf(
-            0 to ModelResourceLocation(registryName, getStateName(STATE_MAP[0]!!)),
-            1 to ModelResourceLocation(registryName, getStateName(STATE_MAP[1]!!)),
-            2 to ModelResourceLocation(registryName, getStateName(STATE_MAP[2]!!)),
-            3 to ModelResourceLocation(registryName, getStateName(STATE_MAP[3]!!))
-    )
-
-    override fun getModels(): Map<Int, ModelResourceLocation> {
-        return MODEL_MAP
+object BlockOre : BlockBase(
+    material = Material.ROCK,
+    registryName = "ore_block"
+) {
+    override val inventoryVariants = OreTypes.values().associate {
+        it.ordinal to "ore=${it.name}"
     }
 
-    override fun getUnlocalizedName(stack: ItemStack?): String? {
-        return unlocalizedName +"."+ getStateFromMeta(stack?.metadata ?: 0)?.getValue(BlockProperties.blockOreState)?.getName()
+    init {
+        soundType = SoundType.STONE
     }
 
-    override fun getProperties(): Array<IProperty<*>> = arrayOf(BlockProperties.blockOreState)
+    override fun damageDropped(state: IBlockState) = state.getValue(ORE_TYPE).ordinal
 
-    override fun isHiddenState(state: IBlockState, meta: Int): Boolean = false
+    override fun getItemName(stack: ItemStack?) =
+        "${super.getItemName(stack)}_${OreTypes.values()[stack?.metadata ?: 0].name.toLowerCase()}"
 
-    override fun getStateMap(): Map<Int, IBlockState> = STATE_MAP
+    @SideOnly(Side.CLIENT)
+    override fun getSubBlocks(itemIn: Item, tab: CreativeTabs?, list: MutableList<ItemStack>) {
+        inventoryVariants.forEach { list += itemIn.stack(meta = it.key) }
+    }
+
+    override fun createBlockState() = BlockStateContainer(this, ORE_TYPE)
+
+    override fun getStateFromMeta(meta: Int) =
+        blockState.baseState.withProperty(ORE_TYPE, OreTypes.values()[meta])
+
+    override fun getMetaFromState(state: IBlockState?) =
+        state?.getValue(ORE_TYPE)?.ordinal ?: 0
 }

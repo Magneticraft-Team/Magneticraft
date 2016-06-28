@@ -7,12 +7,15 @@ import net.minecraft.util.math.Vec3d
  */
 
 data class Vec4d(val x: Double, val y: Double, val z: Double, val w: Double) {
+    companion object {
+        val ZERO = Vec4d(0, 0, 0, 0)
+    }
 
-    constructor() : this(0.0, 0.0, 0.0, 0.0)
+    val lengthSquared = x * x + y * y + z * z + w * w
 
-    constructor(x: Int, y: Int, z: Int, w: Int) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
+    val length = Math.sqrt(lengthSquared)
 
-    constructor(x: Float, y: Float, z: Float, w: Float) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
+    constructor(x: Number, y: Number, z: Number, w: Number) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
 
     fun getXf(): Float = x.toFloat()
 
@@ -29,14 +32,6 @@ data class Vec4d(val x: Double, val y: Double, val z: Double, val w: Double) {
     fun getZi(): Int = z.toInt()
 
     fun getWi(): Int = w.toInt()
-
-    fun setX(x: Double) = Vec4d(x, y, z, w)
-
-    fun setY(y: Double) = Vec4d(x, y, z, w)
-
-    fun setZ(z: Double) = Vec4d(x, y, z, w)
-
-    fun setW(w: Double) = Vec4d(x, y, z, w)
 
     fun xy() = Vec2d(x, y)
 
@@ -65,8 +60,4 @@ data class Vec4d(val x: Double, val y: Double, val z: Double, val w: Double) {
     fun round() = Vec4d(x.toInt(), y.toInt(), z.toInt(), w.toInt())
 
     fun transform(op: (Double) -> Double) = Vec4d(op(x), op(y), op(z), op(w))
-
-    fun lengthSq() = x * x + y * y + z * z + w * w
-
-    fun lenght() = Math.sqrt(lengthSq())
 }

@@ -23,17 +23,11 @@ class GaussianOreGenerator(
         if (world.provider.dimension in listOf(1, -1)) return
 
         if (conf.active) {
-            val nextGaussian = random.nextGaussian() * conf.deviation + conf.chunkAmount
-            var veins = Math.floor(nextGaussian).toInt()
-            if (veins < 0) {
-                veins = 0
-            }
-            if (veins < conf.minAmountPerChunk) {
-                veins = conf.minAmountPerChunk
-            }
-            if (veins > conf.maxAmountPerChunk) {
-                veins = conf.maxAmountPerChunk
-            }
+            val randGaussian = random.nextGaussian() * conf.deviation + conf.chunkAmount
+
+            val veins = Math.floor(randGaussian).toInt().coerceAtLeast(0)
+                .coerceIn(conf.minAmountPerChunk, conf.maxAmountPerChunk)
+
             generateChunkOres(world, Vec2d(chunkX, chunkZ), random, veins)
         }
     }

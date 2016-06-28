@@ -3,6 +3,7 @@ package com.cout970.magneticraft.block.itemblock
 import com.cout970.magneticraft.block.BlockFeedingTrough
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
 import net.minecraft.util.EnumFacing
@@ -42,7 +43,7 @@ class ItemBlockFeedingTrough() : ItemBlockBase(BlockFeedingTrough) {
             }
             return EnumActionResult.SUCCESS
         } else {
-            return EnumActionResult.FAIL
+            return EnumActionResult.PASS
         }
     }
 }
