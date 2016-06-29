@@ -40,7 +40,7 @@ public final class TableSieveRecipe {
     }
 
     public ItemStack getSecondaryOutput() {
-        return secondaryOutput == null ? null :secondaryOutput.copy();
+        return secondaryOutput == null ? null : secondaryOutput.copy();
     }
 
     public float getProbability() {
@@ -49,13 +49,21 @@ public final class TableSieveRecipe {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (!(o instanceof TableSieveRecipe)) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TableSieveRecipe)) {
+            return false;
+        }
 
         TableSieveRecipe that = (TableSieveRecipe) o;
 
-        if (Float.compare(that.probability, probability) != 0) { return false; }
-        if (input != null ? !input.equals(that.input) : that.input != null) { return false; }
+        if (Float.compare(that.probability, probability) != 0) {
+            return false;
+        }
+        if (input != null ? !input.equals(that.input) : that.input != null) {
+            return false;
+        }
         if (primaryOutput != null ? !primaryOutput.equals(that.primaryOutput) : that.primaryOutput != null) {
             return false;
         }
@@ -75,10 +83,10 @@ public final class TableSieveRecipe {
     @Override
     public String toString() {
         return "TableSieveRecipe{" +
-                "input=" + input +
-                ", primaryOutput=" + primaryOutput +
-                ", secondaryOutput=" + secondaryOutput +
-                ", probability=" + probability +
-                '}';
+               "input=" + input +
+               ", primaryOutput=" + primaryOutput +
+               ", secondaryOutput=" + secondaryOutput +
+               ", probability=" + probability +
+               '}';
     }
 }

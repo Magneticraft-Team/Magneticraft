@@ -2,19 +2,18 @@ package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.block.states.LimestoneTypes
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 
-val LIMESTONE_TYPE = PropertyEnum.create("type", LimestoneTypes::class.java)
+/**
+ * Created by cout970 on 11/06/2016.
+ */
+object BlockBurntLimestone : BlockBase(Material.ROCK, "burnt_limestone") {
 
-object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
-    override val inventoryVariants = mapOf(
-        0 to "normal",
-        1 to "brick",
-        2 to "cobble"
-    )
+    override val inventoryVariants = LimestoneTypes.values().associate {
+        it.ordinal to "type=${it.name}"
+    }
 
     override fun damageDropped(state: IBlockState) = state.getValue(LIMESTONE_TYPE).ordinal
 

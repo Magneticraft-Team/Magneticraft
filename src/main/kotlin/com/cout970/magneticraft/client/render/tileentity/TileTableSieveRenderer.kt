@@ -1,22 +1,18 @@
-package com.cout970.magneticraft.tilerender
+package com.cout970.magneticraft.client.render.tileentity
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.tileentity.TileTableSieve
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.Vec3d
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.tileentity.TileEntityBannerRenderer
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.util.math.Vec3d
 import org.lwjgl.opengl.GL11
 
 /**
  * Created by cout970 on 19/06/2016.
  */
-object TileRendererTableSieve : TileEntitySpecialRenderer<TileTableSieve>() {
+object TileTableSieveRenderer : TileEntitySpecialRenderer<TileTableSieve>() {
 
     val texture = resource("textures/models/table_sieve_content.png")
 
@@ -44,7 +40,7 @@ object TileRendererTableSieve : TileEntitySpecialRenderer<TileTableSieve>() {
         val tes = Tessellator.getInstance()
         val buffer = tes.buffer
         val a = 0.0625 * 2
-        val b = 1-a
+        val b = 1 - a
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL)
         buffer.pos(a, h, a).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
         buffer.pos(a, h, b).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()

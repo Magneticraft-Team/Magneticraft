@@ -1,8 +1,5 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.item.ItemIngots
-import com.cout970.magneticraft.item.ItemPebbles
-import com.cout970.magneticraft.util.Log
 import com.cout970.magneticraft.util.MODID
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -24,13 +21,12 @@ object Debug {
     fun preInit(event: FMLPreInitializationEvent) {
         srcDir = searchSourceDir(event.modConfigurationDirectory)
         if (srcDir == null) {
-            Log.debug("Error trying to find the source directory")
+            //Log.debug("Error trying to find the source directory")
             return
         }
-        Log.debug("Source folder found at ${srcDir?.absolutePath}")
-
-//        for(i in ItemPebbles.PEBBLES.keys){
-//            createItemJson("pebbles_${ItemPebbles.PEBBLES[i]}", "pebbles/${ItemPebbles.PEBBLES[i]}")
+        //Log.debug("Source folder found at ${srcDir?.absolutePath}")
+//        for(i in ItemCrushedOre.CRUSHED_ORES.keys){
+//            createItemJson("crushed_ore_${ItemCrushedOre.CRUSHED_ORES[i]}", "crushed_ore/${ItemCrushedOre.CRUSHED_ORES[i]}")
 //        }
 //        for(i in ItemIngots.INGOTS.keys){
 //            createItemJson("ingots_${ItemIngots.INGOTS[i]}", "ingots/${ItemIngots.INGOTS[i]}")

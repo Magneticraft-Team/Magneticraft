@@ -12,17 +12,15 @@ import net.minecraftforge.oredict.OreDictionary
 
 fun registerOreDictionaryEntries() {
 
-    for (i in ItemIngots.INGOTS) {
-        OreDictionary.registerOre("ore${format(i.value)}", ItemStack(ItemIngots, 1, i.key))
+    for (i in ItemIngots.variants) {
+        OreDictionary.registerOre("ore${i.value.capitalize()}", ItemStack(ItemIngots, 1, i.key))
     }
 
-    for (i in ItemCrushedOre.CRUSHED_ORES) {
-        OreDictionary.registerOre("crushedore${format(i.value)}", ItemStack(ItemCrushedOre, 1, i.key))
+    for (i in ItemCrushedOre.variants) {
+        OreDictionary.registerOre("crushedore${i.value.capitalize()}", ItemStack(ItemCrushedOre, 1, i.key))
     }
 
-    for (i in ItemPebbles.PEBBLES) {
-        OreDictionary.registerOre("pebbles${format(i.value)}", ItemStack(ItemPebbles, 1, i.key))
+    for (i in ItemPebbles.variants) {
+        OreDictionary.registerOre("pebbles${i.value.capitalize()}", ItemStack(ItemPebbles, 1, i.key))
     }
 }
-
-private fun format(string: String) = string[0].toUpperCase() + string.substring(1).toLowerCase()

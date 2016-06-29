@@ -2,7 +2,6 @@ package com.cout970.magneticraft.config
 
 import com.cout970.magneticraft.Magneticraft
 import java.lang.reflect.Field
-import java.util.*
 
 /**
  * Created by cout970 on 16/05/2016.
@@ -10,7 +9,7 @@ import java.util.*
 object ConfigHandler {
 
     val instance = Config
-    var wrappers: MutableList<FieldWrapper> = mutableListOf()
+    val wrappers = mutableListOf<FieldWrapper>()
     val config: IConfig
 
     init {
@@ -24,7 +23,7 @@ object ConfigHandler {
         }
     }
 
-    fun load(){
+    fun load() {
         config.load()
     }
 
@@ -41,31 +40,24 @@ object ConfigHandler {
     fun loadFields() {
         val clazz = instance.javaClass
         val fields = clazz.declaredFields
-        wrappers = LinkedList<FieldWrapper>()
+        wrappers.clear()
 
         for (f in fields) {
             if (f.isAnnotationPresent(ConfigValue::class.java)) {
                 f.isAccessible = true
-                val type = f.type
                 val annotation = f.getAnnotation(ConfigValue::class.java)
-                var wrapper: FieldWrapper? = null
-                if (type == Integer.TYPE) {
-                    wrapper = IntegerFieldWrapper(f, annotation)
-                } else if (type == java.lang.Double.TYPE) {
-                    wrapper = DoubleFieldWrapper(f, annotation)
-                } else if (type == java.lang.Boolean.TYPE) {
-                    wrapper = BooleanFieldWrapper(f, annotation)
-                } else if (type == String::class.java) {
-                    wrapper = StringFieldWrapper(f, annotation)
-                }else if(type == java.lang.Float.TYPE) {
-                    wrapper = FloatFieldWrapper(f, annotation)
-                }else if(type == OreConfig::class.java){
-                    wrapper = OreConfigFieldWrapper(f, annotation)
-                }else if(type == GaussOreConfig::class.java){
-                    wrapper = GausOreConfigFieldWrapper(f, annotation)
-                }
-                if (wrapper != null) {
-                    wrappers.add(wrapper)
+
+                when (f.type) {
+                    Int::class.java -> IntegerFieldWrapper(f, annotation)
+                    Double::class.java -> DoubleFieldWrapper(f, annotation)
+                    Boolean::class.java -> BooleanFieldWrapper(f, annotation)
+                    String::class.java -> StringFieldWrapper(f, annotation)
+                    Float::class.java -> FloatFieldWrapper(f, annotation)
+                    OreConfig::class.java -> OreConfigFieldWrapper(f, annotation)
+                    GaussOreConfig::class.java -> GaussOreConfigFieldWrapper(f, annotation)
+                    else -> null
+                }?.let {
+                    wrappers += it
                 }
             }
         }
@@ -80,13 +72,11 @@ object ConfigHandler {
             return annotation.key
         }
 
-        @Throws(IllegalAccessException::class)
         abstract fun read(handler: ConfigHandler)
     }
 
     class IntegerFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.INT) {
 
-        @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
             val value = handler.config.getInteger(annotation.category, getKey(), field.getInt(handler.instance), annotation.comment)
             field.set(handler.instance, value)
@@ -95,7 +85,6 @@ object ConfigHandler {
 
     class DoubleFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.DOUBLE) {
 
-        @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
             val value = handler.config.getDouble(annotation.category, getKey(), field.getDouble(handler.instance), annotation.comment)
             field.set(handler.instance, value)
@@ -104,7 +93,6 @@ object ConfigHandler {
 
     class FloatFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.DOUBLE) {
 
-        @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
             val value = handler.config.getDouble(annotation.category, getKey(), field.getFloat(handler.instance).toDouble(), annotation.comment)
             field.set(handler.instance, value.toFloat())
@@ -113,7 +101,6 @@ object ConfigHandler {
 
     class BooleanFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.BOOLEAN) {
 
-        @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
             val value = handler.config.getBoolean(annotation.category, getKey(), field.getBoolean(handler.instance), annotation.comment)
             field.set(handler.instance, value)
@@ -122,55 +109,47 @@ object ConfigHandler {
 
     class StringFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.STRING) {
 
-        @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
             val value = handler.config.getString(annotation.category, getKey(), field.get(handler.instance) as String, annotation.comment)
             field.set(handler.instance, value)
         }
     }
 
-    class OreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE){
+    class OreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE) {
 
-        @Throws(IllegalAccessException::class)
         override fun read(handler: ConfigHandler) {
-            val category = annotation.category+"."+getKey().replace("Ore", "")
-            //active
+            println(getKey())
+            val category = annotation.category + "." + getKey().replace("Ore", "")
+
             val active = handler.config.getBoolean(category, "active", (field.get(handler.instance) as OreConfig).active, "If ${annotation.comment} should be generated or not")
-            //chunk
+
             val chunk = handler.config.getInteger(category, "chunkAmount", (field.get(handler.instance) as OreConfig).chunkAmount, "Amount of ${annotation.comment} per chunk")
-            //vein
             val vein = handler.config.getInteger(category, "veinAmount", (field.get(handler.instance) as OreConfig).veinAmount, "Amount of ${annotation.comment} per vein")
-            //max
             val max = handler.config.getInteger(category, "maxLevel", (field.get(handler.instance) as OreConfig).maxLevel, "Max level to generate the ore")
-            //min
             val min = handler.config.getInteger(category, "minLevel", (field.get(handler.instance) as OreConfig).minLevel, "Min level to generate the ore")
 
             field.set(handler.instance, OreConfig(chunk, vein, max, min, active))
         }
     }
-    class GausOreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE){
 
-        @Throws(IllegalAccessException::class)
+    class GaussOreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE) {
         override fun read(handler: ConfigHandler) {
-            val category = annotation.category+"."+getKey().replace("Ore", "")
-            //active
-            val active = handler.config.getBoolean(category, "active", (field.get(handler.instance) as GaussOreConfig).active, "If ${annotation.comment} should be generated or not")
-            //chunk
-            val chunk = handler.config.getInteger(category, "chunkAmount", (field.get(handler.instance) as GaussOreConfig).chunkAmount, "Amount of ${annotation.comment} per chunk")
-            //vein
-            val vein = handler.config.getInteger(category, "veinAmount", (field.get(handler.instance) as GaussOreConfig).veinAmount, "Amount of ${annotation.comment} per vein")
-            //max height
-            val max = handler.config.getInteger(category, "maxLevel", (field.get(handler.instance) as GaussOreConfig).maxLevel, "Max level to generate the ore")
-            //min height
-            val min = handler.config.getInteger(category, "minLevel", (field.get(handler.instance) as GaussOreConfig).minLevel, "Min level to generate the ore")
-            //min amount per chunk
-            val min2 = handler.config.getInteger(category, "minAmount", (field.get(handler.instance) as GaussOreConfig).minAmountPerChunk, "Min amount of veins of ore")
-            //max amount per chunk
-            val max2 = handler.config.getInteger(category, "maxAmount", (field.get(handler.instance) as GaussOreConfig).maxAmountPerChunk, "Max amount of veins of ore")
-            //deviation from the original veinAmount
-            val deviation = handler.config.getDouble(category, "maxAmount", (field.get(handler.instance) as GaussOreConfig).deviation.toDouble(), "Deviation from the amount of veins per chunk").toFloat()
+            val category = annotation.category + "." + getKey().replace("Ore", "")
 
-            field.set(handler.instance, GaussOreConfig(min2, max2, deviation, chunk, vein, max, min, active))
+            val active = handler.config.getBoolean(category, "active", (field.get(handler.instance) as GaussOreConfig).active, "If ${annotation.comment} should be generated or not")
+
+            val chunk = handler.config.getInteger(category, "chunkAmount", (field.get(handler.instance) as GaussOreConfig).chunkAmount, "Amount of ${annotation.comment} per chunk")
+            val vein = handler.config.getInteger(category, "veinAmount", (field.get(handler.instance) as GaussOreConfig).veinAmount, "Amount of ${annotation.comment} per vein")
+
+            val maxY = handler.config.getInteger(category, "maxLevel", (field.get(handler.instance) as GaussOreConfig).maxLevel, "Max level to generate the ore")
+            val minY = handler.config.getInteger(category, "minLevel", (field.get(handler.instance) as GaussOreConfig).minLevel, "Min level to generate the ore")
+
+            val minVeins = handler.config.getInteger(category, "minAmount", (field.get(handler.instance) as GaussOreConfig).minAmountPerChunk, "Min amount of veins of ore per chunk")
+            val maxVeins = handler.config.getInteger(category, "maxAmount", (field.get(handler.instance) as GaussOreConfig).maxAmountPerChunk, "Max amount of veins of ore per chunk")
+
+            val deviation = handler.config.getDouble(category, "maxAmount", (field.get(handler.instance) as GaussOreConfig).deviation.toDouble(), "Standard deviation of the amount of veins per chunk").toFloat()
+
+            field.set(handler.instance, GaussOreConfig(minVeins, maxVeins, deviation, chunk, vein, maxY, minY, active))
         }
     }
 }

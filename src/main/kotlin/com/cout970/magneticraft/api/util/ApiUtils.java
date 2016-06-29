@@ -7,18 +7,19 @@ import net.minecraft.item.ItemStack;
  */
 public class ApiUtils {
 
-    private ApiUtils(){}
+    private ApiUtils() {
+    }
 
     public static boolean equalsIgnoreSize(ItemStack a, ItemStack b) {
         return a == b || !(a == null || b == null)
-                && (a.getItem().equals(b.getItem()))
-                && (!a.getItem().getHasSubtypes()
-                || (a.getMetadata() == b.getMetadata()))
-                && equals(a.getTagCompound(), b.getTagCompound());
+                         && (a.getItem().equals(b.getItem()))
+                         && (!a.getItem().getHasSubtypes()
+                             || (a.getMetadata() == b.getMetadata()))
+                         && equals(a.getTagCompound(), b.getTagCompound());
     }
 
-    public static boolean equals(Object a, Object b){
-        if(a == null)return b == null;
+    public static boolean equals(Object a, Object b) {
+        if (a == null) return b == null;
         return a.equals(b);
     }
 }

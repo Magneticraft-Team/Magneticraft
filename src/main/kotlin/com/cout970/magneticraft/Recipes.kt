@@ -2,7 +2,7 @@ package com.cout970.magneticraft
 
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
-import com.cout970.magneticraft.block.BlockBurnLimestone
+import com.cout970.magneticraft.block.BlockBurntLimestone
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockLimestone
 import com.cout970.magneticraft.item.ItemCrushedOre
@@ -23,25 +23,25 @@ import net.minecraftforge.oredict.ShapedOreRecipe
  * Created by cout970 on 11/06/2016.
  */
 
-
+//TODO Recipe Builder
 fun registerRecipes() {
     //@formatter:off
 
     //CRAFTING RECIPES
-    addRecipe(ItemStack(BlockCrushingTable),          "SSS", "WWW", "W#W", 'S', of(STONE), 'W', of(LOG))
-    addRecipe(ItemStack(ItemIronHammer),        true, "XX#", "XZX", "#Z#", 'X', of(IRON_INGOT), 'Z', of(STICK))
-    addRecipe(ItemStack(ItemStoneHammer),       true, "XX#", "XZX", "#Z#", 'X', of(COBBLESTONE), 'Z', of(STICK))
-    addRecipe(ItemStack(BlockLimestone, 4, 1),        "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
-    addRecipe(ItemStack(BlockBurnLimestone, 4, 1),    "XX", "XX", 'X', ItemStack(BlockBurnLimestone, 1, 0))
-    addRecipe(ItemStack(ItemGuideBook),               "CB", 'C', "ingotCopper", 'B', of(BOOK))
+    addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE), 'W', of(LOG))
+    addRecipe(ItemStack(ItemIronHammer), true, "XX#", "XZX", "#Z#", 'X', of(IRON_INGOT), 'Z', of(STICK))
+    addRecipe(ItemStack(ItemStoneHammer), true, "XX#", "XZX", "#Z#", 'X', of(COBBLESTONE), 'Z', of(STICK))
+    addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
+    addRecipe(ItemStack(BlockBurntLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockBurntLimestone, 1, 0))
+    addRecipe(ItemStack(ItemGuideBook), "CB", 'C', "ingotCopper", 'B', of(BOOK))
 
     //TODO add a guide book recipe
 
     //SMELTING RECIPES
-    addSmeltingRecipe(ItemStack(BlockBurnLimestone), ItemStack(BlockLimestone))
+    addSmeltingRecipe(ItemStack(BlockBurntLimestone), ItemStack(BlockLimestone))
 
     //TABLE SIEVE RECIPES
-    for(i in ItemPebbles.PEBBLES.keys){
+    for (i in ItemPebbles.variants.keys) {
         addTableSieveRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f)
     }
 
