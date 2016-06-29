@@ -31,7 +31,7 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 minecraft {
-    version = "1.9.4-12.17.0.1968-1.9.4"
+    version = "1.9.4-12.17.0.1968"
     runDir = "run"
     useDepAts = true
 
