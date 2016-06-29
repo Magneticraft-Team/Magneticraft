@@ -12,7 +12,8 @@ public class TableSieveRegistry {
 
     private static final List<TableSieveRecipe> recipes = new LinkedList<>();
 
-    private TableSieveRegistry(){}
+    private TableSieveRegistry() {
+    }
 
     public static TableSieveRecipe findRecipe(ItemStack stack) {
         for (TableSieveRecipe rec : recipes) {
@@ -24,7 +25,9 @@ public class TableSieveRegistry {
     }
 
     public static boolean registerRecipe(TableSieveRecipe recipe) {
-        if (findRecipe(recipe.getInput()) != null) { return false; }
+        if (findRecipe(recipe.getInput()) != null) {
+            return false;
+        }
         recipes.add(recipe);
         return true;
     }

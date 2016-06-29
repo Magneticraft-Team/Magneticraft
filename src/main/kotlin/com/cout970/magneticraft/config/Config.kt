@@ -4,7 +4,7 @@ package com.cout970.magneticraft.config
  * Created by cout970 on 16/05/2016.
  */
 
-const val CATEGORY_ORES = CATEGORY_GENERAL+".ores"
+const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 
 object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Copper ore")

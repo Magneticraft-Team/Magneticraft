@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.energy.impl
 
-import coffee.cypher.mcextlib.extensions.vectors.*
+import coffee.cypher.mcextlib.extensions.vectors.length
+import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
 
@@ -21,8 +22,8 @@ open class ElectricConnection(
         //total resistance of the connection
         val R = (firstNode.resistance + secondNode.resistance) * separationDistance
         //number of iterations needed to avoid instabilities with voltages
-        val times = (2/R).toInt()
-        for(i in 0..times) {
+        val times = (2 / R).toInt()
+        for (i in 0..times - 1) {
             //voltage difference between the conductors
             val V = firstNode.voltage - secondNode.voltage
             //Ohm's law with 'times' to divide the amperage in the different iterations of the for loop

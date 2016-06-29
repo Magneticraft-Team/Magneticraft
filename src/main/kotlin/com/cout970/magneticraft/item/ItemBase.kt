@@ -6,8 +6,8 @@ import com.cout970.magneticraft.util.resource
 import net.minecraft.item.Item
 
 abstract class ItemBase(
-        registryName: String,
-        unlocalizedName: String = registryName
+    registryName: String,
+    unlocalizedName: String = registryName
 ) : Item() {
     open val variants = mapOf(
         0 to "inventory"

@@ -3,7 +3,6 @@ package com.cout970.magneticraft.client.render
 import coffee.cypher.mcextlib.extensions.resources.toModel
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.item.ItemBase
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraftforge.client.model.ModelLoader
 
 fun ItemBase.registerInvRender() {

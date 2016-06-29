@@ -110,7 +110,7 @@ class TileCrushingTable : TileBase() {
 
     override fun onBreak() {
         super.onBreak()
-        if(!worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

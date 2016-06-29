@@ -44,7 +44,7 @@ class TileFeedingTrough : TileBase(), ITickable {
                 //getting the animals
                 val totalAnimals = worldObj.getEntitiesInAABBexcluding(null, box, { it is EntityAnimal })
                 val validAnimals = totalAnimals.map { it as EntityAnimal }
-                        .filter { !it.isInLove && !it.isChild && it.isBreedingItem(inventory[0]) }.toMutableList()
+                    .filter { !it.isInLove && !it.isChild && it.isBreedingItem(inventory[0]) }.toMutableList()
 
                 if (validAnimals.size >= 2 && totalAnimals.size < MAX_ANIMALS) {
                     for (i in 0..1) {

@@ -7,7 +7,10 @@ import com.cout970.magneticraft.client.sounds.registerSounds
 import com.cout970.magneticraft.config.ConfigHandler
 import com.cout970.magneticraft.gui.GuiHandler
 import com.cout970.magneticraft.proxy.CommonProxy
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.LANG_ADAPTER
+import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.NAME
+import com.cout970.magneticraft.util.VERSION
 import com.cout970.magneticraft.world.WorldGenerator
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
@@ -32,7 +35,7 @@ import java.io.File
 object Magneticraft {
     lateinit var log: Logger
     val network = SimpleNetworkWrapper(MODID)
-    lateinit var configFile : File
+    lateinit var configFile: File
 
     @SidedProxy(
         clientSide = "com.cout970.magneticraft.proxy.ClientProxy",
@@ -56,8 +59,8 @@ object Magneticraft {
         registerSounds()
         registerRecipes()
 
-        if(Debug.DEBUG){
-           Debug.preInit(event)
+        if (Debug.DEBUG) {
+            Debug.preInit(event)
         }
 
         proxy.preInit()

@@ -1,17 +1,12 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.block.states.OreTypes
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
 
 /**
  * Created by cout970 on 12/05/2016.
@@ -34,11 +29,6 @@ object BlockOre : BlockBase(
 
     override fun getItemName(stack: ItemStack?) =
         "${super.getItemName(stack)}_${OreTypes.values()[stack?.metadata ?: 0].name.toLowerCase()}"
-
-    @SideOnly(Side.CLIENT)
-    override fun getSubBlocks(itemIn: Item, tab: CreativeTabs?, list: MutableList<ItemStack>) {
-        inventoryVariants.forEach { list += itemIn.stack(meta = it.key) }
-    }
 
     override fun createBlockState() = BlockStateContainer(this, ORE_TYPE)
 

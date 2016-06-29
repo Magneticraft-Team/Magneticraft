@@ -2,7 +2,6 @@ package com.cout970.magneticraft.config
 
 import com.cout970.magneticraft.Magneticraft
 import java.lang.reflect.Field
-import java.util.*
 
 /**
  * Created by cout970 on 16/05/2016.
@@ -24,7 +23,7 @@ object ConfigHandler {
         }
     }
 
-    fun load(){
+    fun load() {
         config.load()
     }
 
@@ -46,7 +45,6 @@ object ConfigHandler {
         for (f in fields) {
             if (f.isAnnotationPresent(ConfigValue::class.java)) {
                 f.isAccessible = true
-                val type = f.type
                 val annotation = f.getAnnotation(ConfigValue::class.java)
 
                 when (f.type) {
@@ -133,9 +131,10 @@ object ConfigHandler {
             field.set(handler.instance, OreConfig(chunk, vein, max, min, active))
         }
     }
-    class GaussOreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE){
+
+    class GaussOreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE) {
         override fun read(handler: ConfigHandler) {
-            val category = annotation.category+"."+getKey().replace("Ore", "")
+            val category = annotation.category + "." + getKey().replace("Ore", "")
 
             val active = handler.config.getBoolean(category, "active", (field.get(handler.instance) as GaussOreConfig).active, "If ${annotation.comment} should be generated or not")
 

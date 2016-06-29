@@ -1,8 +1,5 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.item.ItemIngots
-import com.cout970.magneticraft.item.ItemPebbles
-import com.cout970.magneticraft.util.Log
 import com.cout970.magneticraft.util.MODID
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject

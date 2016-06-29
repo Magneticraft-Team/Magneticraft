@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.item
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -19,16 +18,16 @@ object ItemPebbles : ItemBase("pebbles") {
         5 to "tungsten"
     )
 
-    init{
+    init {
         hasSubtypes = true
     }
 
     override fun getUnlocalizedName(stack: ItemStack?): String? {
-        return super.getUnlocalizedName(stack)+"."+ variants[stack?.metadata]
+        return super.getUnlocalizedName(stack) + "." + variants[stack?.metadata]
     }
 
     override fun getSubItems(itemIn: Item?, tab: CreativeTabs?, subItems: MutableList<ItemStack>?) {
-        for(i in variants.keys){
+        for (i in variants.keys) {
             subItems?.add(ItemStack(itemIn, 1, i))
         }
     }

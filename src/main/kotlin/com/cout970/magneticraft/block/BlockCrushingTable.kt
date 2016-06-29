@@ -18,8 +18,8 @@ import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 object BlockCrushingTable : BlockBase(
-        material = Material.ROCK,
-        registryName = "crushing_table"
+    material = Material.ROCK,
+    registryName = "crushing_table"
 ), ITileEntityProvider {
 
     val boundingBox = Vec3d.ZERO to Vec3d(1.0, 0.875, 1.0)
@@ -34,9 +34,9 @@ object BlockCrushingTable : BlockBase(
     override fun createNewTileEntity(worldIn: World, meta: Int) = TileCrushingTable()
 
     override fun onBlockActivated(
-            world: World, pos: BlockPos, state: IBlockState,
-            player: EntityPlayer, hand: EnumHand, heldItem: ItemStack?,
-            side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float
+        world: World, pos: BlockPos, state: IBlockState,
+        player: EntityPlayer, hand: EnumHand, heldItem: ItemStack?,
+        side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float
     ): Boolean {
         if (side != EnumFacing.UP) {
             return super.onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
@@ -52,7 +52,7 @@ object BlockCrushingTable : BlockBase(
                 item.onHit(heldItem!!, player)
             } else {
                 player.inventory.addItemStackToInventory(tile.getStack())
-                 tile.setStack(null)
+                tile.setStack(null)
             }
 
             return true

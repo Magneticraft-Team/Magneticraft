@@ -14,9 +14,9 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 13/06/2016.
  */
-object BlockTableSieve : BlockBase(Material.WOOD, "table_sieve"), ITileEntityProvider{
+object BlockTableSieve : BlockBase(Material.WOOD, "table_sieve"), ITileEntityProvider {
 
-    val TABLE_SIEVE_BOX = Vec3d.ZERO to Vec3d(1.0, 9.0/16.0, 1.0)
+    val TABLE_SIEVE_BOX = Vec3d.ZERO to Vec3d(1.0, 9.0 / 16.0, 1.0)
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = TABLE_SIEVE_BOX
 

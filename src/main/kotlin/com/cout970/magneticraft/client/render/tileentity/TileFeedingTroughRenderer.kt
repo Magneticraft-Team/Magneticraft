@@ -1,18 +1,16 @@
-package com.cout970.magneticraft.tilerender
+package com.cout970.magneticraft.client.render.tileentity
 
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
-import com.cout970.magneticraft.util.vector.Vec3d
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.entity.RenderEntityItem
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.util.math.Vec3d
 
 /**
  * Created by cout970 on 24/06/2016.
  */
-object TileRendererFeedingTrough : TileEntitySpecialRenderer<TileFeedingTrough>() {
+object TileFeedingTroughRenderer : TileEntitySpecialRenderer<TileFeedingTrough>() {
 
     lateinit var entityItem: EntityItem
     lateinit var entityRenderer: RenderEntityItem
