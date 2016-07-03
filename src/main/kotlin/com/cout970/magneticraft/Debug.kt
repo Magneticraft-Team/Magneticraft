@@ -21,9 +21,10 @@ object Debug {
     fun preInit(event: FMLPreInitializationEvent) {
         srcDir = searchSourceDir(event.modConfigurationDirectory)
         if (srcDir == null) {
-            //Log.debug("Error trying to find the source directory")
+            error("Error trying to find the source directory")
             return
         }
+//        setTicksPerSecond(80)
         //Log.debug("Source folder found at ${srcDir?.absolutePath}")
 //        for(i in ItemCrushedOre.CRUSHED_ORES.keys){
 //            createItemJson("crushed_ore_${ItemCrushedOre.CRUSHED_ORES[i]}", "crushed_ore/${ItemCrushedOre.CRUSHED_ORES[i]}")

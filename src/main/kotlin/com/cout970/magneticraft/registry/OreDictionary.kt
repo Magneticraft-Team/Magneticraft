@@ -1,4 +1,4 @@
-package com.cout970.magneticraft
+package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.item.ItemCrushedOre
 import com.cout970.magneticraft.item.ItemIngots

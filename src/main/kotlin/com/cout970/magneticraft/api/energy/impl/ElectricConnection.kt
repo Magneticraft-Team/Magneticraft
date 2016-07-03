@@ -9,10 +9,9 @@ import com.cout970.magneticraft.api.energy.IElectricNode
  * Created by cout970 on 11/06/2016.
  */
 open class ElectricConnection(
-    private val firstNode: IElectricNode,
-    private val secondNode: IElectricNode
+        private val firstNode: IElectricNode,
+        private val secondNode: IElectricNode
 ) : IElectricConnection {
-    private val separationDistance = (firstNode.pos - secondNode.pos).length
 
     override fun getFirstNode() = firstNode
     override fun getSecondNode() = secondNode
@@ -21,17 +20,16 @@ open class ElectricConnection(
     override fun iterate() {
         //total resistance of the connection
         val R = (firstNode.resistance + secondNode.resistance) * separationDistance
-        //number of iterations needed to avoid instabilities with voltages
-        val times = (2 / R).toInt()
-        for (i in 0..times - 1) {
-            //voltage difference between the conductors
-            val V = firstNode.voltage - secondNode.voltage
-            //Ohm's law with 'times' to divide the amperage in the different iterations of the for loop
-            val I = (V / R) / times
-            //moves the charge between the conductors
-            //this follows the Kirchhoff's first law
-            firstNode.applyCurrent(-I)
-            secondNode.applyCurrent(I)
-        }
+        //capacity of the connection
+        val C = 0.5
+        //voltage difference
+        val V = firstNode.voltage - secondNode.voltage
+        //final voltage
+        val Vf = V / 2 * Math.exp(-1 / (R * C)) + V / 2 + secondNode.voltage
+        //intensity or amperage
+        val I = firstNode.voltage - Vf
+        //the charge is moved, using the kirchhoff law
+        firstNode.applyCurrent(-I)
+        secondNode.applyCurrent(I)
     }
 }

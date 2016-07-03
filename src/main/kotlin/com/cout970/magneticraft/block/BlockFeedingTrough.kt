@@ -4,6 +4,7 @@ import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.isHorizontal
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
+import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
@@ -33,7 +34,7 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox
 
     override fun createNewTileEntity(worldIn: World?, meta: Int) =
-        if (getStateFromMeta(meta)?.getValue(FEEDING_TROUGH_IS_CENTER) ?: false)
+        if (FEEDING_TROUGH_IS_CENTER[getStateFromMeta(meta)!!])
             TileFeedingTrough()
         else null
 
@@ -56,10 +57,10 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
     }
 
     private fun getTileEntity(worldIn: World, pos: BlockPos, state: IBlockState) =
-        if (state.getValue(FEEDING_TROUGH_IS_CENTER)) {
+        if (FEEDING_TROUGH_IS_CENTER[state]) {
             worldIn.getTile<TileFeedingTrough>(pos)
         } else {
-            val dir = state.getValue(FEEDING_TROUGH_SIDE_POSITION)
+            val dir = FEEDING_TROUGH_SIDE_POSITION[state]
             worldIn.getTile<TileFeedingTrough>(pos.add(dir.directionVec))
         }
 
@@ -74,12 +75,12 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         super.breakBlock(worldIn, pos, state)
-        val dir = state.getValue(FEEDING_TROUGH_SIDE_POSITION)
+        val dir = FEEDING_TROUGH_SIDE_POSITION[state]
         worldIn.setBlockToAir(pos.add(dir.directionVec))
     }
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType {
-        if (!state.getValue(FEEDING_TROUGH_IS_CENTER)) {
+        if (!FEEDING_TROUGH_IS_CENTER[state]) {
             return EnumBlockRenderType.INVISIBLE
         }
         return super.getRenderType(state)
@@ -95,15 +96,15 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
             return 0
         }
 
-        val sideMeta = EnumFacing.HORIZONTALS.indexOf(state.getValue(FEEDING_TROUGH_SIDE_POSITION)) * 2
-        val centerMeta = if (state.getValue(FEEDING_TROUGH_IS_CENTER)) 1 else 0
+        val sideMeta = EnumFacing.HORIZONTALS.indexOf(FEEDING_TROUGH_SIDE_POSITION[state]) shl 1
+        val centerMeta = if (FEEDING_TROUGH_IS_CENTER[state]) 1 else 0
 
         return sideMeta + centerMeta
     }
 
     override fun getStateFromMeta(meta: Int) = defaultState.run {
-        val side = EnumFacing.HORIZONTALS[meta / 2]
-        val center = meta % 2 == 1
+        val side = EnumFacing.HORIZONTALS[meta shr 1]
+        val center = (meta and 1) == 1
         withProperty(FEEDING_TROUGH_SIDE_POSITION, side).withProperty(FEEDING_TROUGH_IS_CENTER, center)
     }
 }

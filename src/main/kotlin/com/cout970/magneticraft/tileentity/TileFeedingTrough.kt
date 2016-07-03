@@ -21,6 +21,7 @@ import java.util.*
  * Created by cout970 on 24/06/2016.
  */
 class TileFeedingTrough : TileBase(), ITickable {
+
     val ACCEPTED_ITEMS = listOf(Items.WHEAT, Items.CARROT, Items.WHEAT_SEEDS)
     val MAX_ANIMALS = 30
     val FAKE_PLAYER_UUID = UUID.fromString("d0f15bc8-6eb3-4a1b-8b5d-d3fdf5140321")
@@ -72,15 +73,11 @@ class TileFeedingTrough : TileBase(), ITickable {
         return inventory.extractItem(0, 64, false)
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) {
-        inventory.deserializeNBT(nbt?.getCompoundTag("inventory"))
-        super.deserializeNBT(nbt)
-    }
+    override fun save(): NBTTagCompound =
+            NBTTagCompound().apply { setTag("inventory", inventory.serializeNBT()) }
 
-    override fun serializeNBT(): NBTTagCompound? {
-        val nbt = super.serializeNBT()
-        nbt.setTag("inventory", inventory.serializeNBT())
-        return nbt
+    override fun load(nbt: NBTTagCompound) {
+        inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
     }
 
     override fun onBreak() {

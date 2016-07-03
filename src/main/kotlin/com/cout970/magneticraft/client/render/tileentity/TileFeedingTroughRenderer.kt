@@ -1,11 +1,13 @@
 package com.cout970.magneticraft.client.render.tileentity
 
+import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.entity.RenderEntityItem
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 24/06/2016.
@@ -23,6 +25,11 @@ object TileFeedingTroughRenderer : TileEntitySpecialRenderer<TileFeedingTrough>(
         val itemToRender = item.copy().apply { stackSize = 1 }
         pushMatrix()
         translate(x, y, z)
+        val i = 0.5f
+        translate(i, 0f, i)
+        val dir = te.world.getBlockState(te.pos).getValue(FEEDING_TROUGH_SIDE_POSITION)
+        rotate(if (dir.axis == EnumFacing.Axis.Z) dir.horizontalAngle else dir.opposite.horizontalAngle, 0f, 1f, 0f)
+        translate(-i, 0f, -i)
         entityItem.setEntityItemStack(itemToRender)
         //fix rotation
         entityItem.hoverStart = 0f

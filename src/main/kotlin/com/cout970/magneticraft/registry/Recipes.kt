@@ -1,4 +1,4 @@
-package com.cout970.magneticraft
+package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry

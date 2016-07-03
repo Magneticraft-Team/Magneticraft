@@ -41,6 +41,8 @@ tile.magneticraft.burn_limestone_brick.name=Burnt Limestone Brick
 tile.magneticraft.burn_limestone_cobble.name=Burnt Limestone Cobble
 tile.magneticraft.table_sieve.name=Table Sieve
 tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
+tile.magneticraft.electric_pole.name=Electric Pole
+tile.magneticraft.electric_connector.name=Electric Connector
 
 itemGroup.magneticraft=Magneticraft
 

@@ -7,6 +7,7 @@ import com.cout970.magneticraft.client.sounds.registerSounds
 import com.cout970.magneticraft.config.ConfigHandler
 import com.cout970.magneticraft.gui.GuiHandler
 import com.cout970.magneticraft.proxy.CommonProxy
+import com.cout970.magneticraft.registry.*
 import com.cout970.magneticraft.util.LANG_ADAPTER
 import com.cout970.magneticraft.util.MODID
 import com.cout970.magneticraft.util.NAME
@@ -58,6 +59,7 @@ object Magneticraft {
         registerOreDictionaryEntries()
         registerSounds()
         registerRecipes()
+        registerCapabilities()
 
         if (Debug.DEBUG) {
             Debug.preInit(event)

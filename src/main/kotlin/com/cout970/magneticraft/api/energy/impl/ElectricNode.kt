@@ -9,23 +9,29 @@ import net.minecraft.world.World
  * Created by cout970 on 11/06/2016.
  */
 open class ElectricNode(
-    private val resistance: Double,
-    private val world: World,
-    private val pos: BlockPos
+        private val resistance: Double = 0.01,
+        private val worldGetter: () -> World,
+        private val posGetter: () -> BlockPos
 ) : IElectricNode {
 
     private var voltage = 0.0
     private var amperage = 0.0
+    private var amperageCount = 0.0
 
     override fun getAmperage() = amperage
     override fun getVoltage() = voltage
     override fun getResistance() = resistance
 
-    override fun getWorld() = world
-    override fun getPos() = pos
+    override fun getWorld() = worldGetter.invoke()
+    override fun getPos() = posGetter.invoke()
+
+    override fun iterate() {
+        amperage = amperageCount * 0.5
+        amperageCount = 0.0
+    }
 
     override fun applyCurrent(current: Double) {
-        amperage += Math.abs(current)
+        amperageCount += Math.abs(current)
         voltage += current
     }
 
@@ -33,7 +39,7 @@ open class ElectricNode(
         if (voltage > 1) {
             applyCurrent(power / voltage)
         } else {
-            applyPower(power)
+            applyCurrent(power)
         }
     }
 

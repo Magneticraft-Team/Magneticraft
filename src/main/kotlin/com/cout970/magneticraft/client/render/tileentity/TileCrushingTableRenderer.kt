@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.item.ItemSkull
 
 object TileCrushingTableRenderer : TileEntitySpecialRenderer<TileCrushingTable>() {
+
     override fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         val stack = te.getStack()
 

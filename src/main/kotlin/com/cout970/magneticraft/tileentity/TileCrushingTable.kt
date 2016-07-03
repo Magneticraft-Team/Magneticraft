@@ -5,7 +5,7 @@ import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
 import com.cout970.magneticraft.client.sounds.sounds
-import com.cout970.magneticraft.util.ITEM_HANDLER
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.vector.Vec3d
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -24,13 +24,13 @@ import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraftforge.items.ItemStackHandler
 
 class TileCrushingTable : TileBase() {
+
     companion object {
         val CRUSHING_DAMAGE = 40
     }
 
+    val inventory: CrushingTableInventory = CrushingTableInventory()
     var damageTaken = 0
-    private val _inventory = CrushingTableInventory()
-    val inventory: ItemStackHandler = _inventory
 
     fun getStack() = inventory[0]?.copy()
 
@@ -53,7 +53,7 @@ class TileCrushingTable : TileBase() {
                 spawnParticles()
             }
 
-            _inventory.setResult(CrushingTableRegistry.getRecipe(getStack()!!)!!)
+            inventory.setResult(CrushingTableRegistry.getRecipe(getStack()!!)!!)
         } else if (world.isRemote) {
             world.playSound(Minecraft.getMinecraft().thePlayer, pos, sounds["crushing_hit"], SoundCategory.BLOCKS, 1F, 1F)
             spawnParticles()
@@ -80,33 +80,33 @@ class TileCrushingTable : TileBase() {
         }
     }
 
-    override fun writeToNBT(compound: NBTTagCompound) = super.writeToNBT(compound).apply {
-        if (getStack() != null) {
-            setTag("stack", NBTTagCompound().apply { getStack()?.writeToNBT(this) })
-        }
-        setInteger("damage", damageTaken)
-    }
+    override fun save(): NBTTagCompound =
+            NBTTagCompound().apply {
+                if (getStack() != null) {
+                    setTag("stack", NBTTagCompound().apply { getStack()?.writeToNBT(this) })
+                }
+                setInteger("damage", damageTaken)
+            }
 
-    override fun readFromNBT(compound: NBTTagCompound) {
-        super.readFromNBT(compound)
-
-        inventory[0] = if (compound.hasKey("stack"))
-            ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"))
-        else
+    override fun load(nbt: NBTTagCompound) {
+        inventory[0] = if (nbt.hasKey("stack")) {
+            ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack"))
+        }else {
             null
-
-        damageTaken = compound.getInteger("damage")
+        }
+        damageTaken = nbt.getInteger("damage")
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?) =
-        (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
+            (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?) =
-        if (capability == ITEM_HANDLER)
-            inventory as T
-        else
-            super.getCapability(capability, facing)
+            if (capability == ITEM_HANDLER) {
+                inventory as T
+            }else {
+                super.getCapability(capability, facing)
+            }
 
     override fun onBreak() {
         super.onBreak()
@@ -117,7 +117,7 @@ class TileCrushingTable : TileBase() {
         }
     }
 
-    private inner class CrushingTableInventory : ItemStackHandler(1) {
+    inner class CrushingTableInventory : ItemStackHandler(1) {
         override fun onContentsChanged(slot: Int) {
             damageTaken = 0
         }

@@ -118,7 +118,6 @@ object ConfigHandler {
     class OreConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.ORE) {
 
         override fun read(handler: ConfigHandler) {
-            println(getKey())
             val category = annotation.category + "." + getKey().replace("Ore", "")
 
             val active = handler.config.getBoolean(category, "active", (field.get(handler.instance) as OreConfig).active, "If ${annotation.comment} should be generated or not")
