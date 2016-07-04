@@ -1,22 +1,31 @@
 {
     "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:ore_block",
+        "transform": "forge:default-block"
+    },
     "variants": {
-        "type=copper": [{
-			"model" : "magneticraft:ore_block_copper"
-		}],
-		"type=lead": [{
-			"model" : "magneticraft:ore_block_lead"
-		}],
-		"type=cobalt": [{
-			"model" : "magneticraft:ore_block_cobalt"
-		}],
-		"type=tungsten": [{
-			"model" : "magneticraft:ore_block_tungsten"
-		}],
-        "inventory": [
-            {
-                "transform": "forge:default-block"
+        "ore": {
+            "copper": {
+                "textures": {
+                    "all": "magneticraft:blocks/ore_block/copper"
+                }
+            },
+            "lead": {
+                "textures": {
+                    "all": "magneticraft:blocks/ore_block/lead"
+                }
+            },
+            "cobalt": {
+                "textures": {
+                    "all": "magneticraft:blocks/ore_block/cobalt"
+                }
+            },
+            "tungsten": {
+                "textures": {
+                    "all": "magneticraft:blocks/ore_block/tungsten"
+                }
             }
-        ]
+        }
     }
 }

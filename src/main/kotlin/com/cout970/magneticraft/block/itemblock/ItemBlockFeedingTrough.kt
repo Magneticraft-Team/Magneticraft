@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block.itemblock
 
 import com.cout970.magneticraft.block.BlockFeedingTrough
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -30,8 +29,8 @@ class ItemBlockFeedingTrough() : ItemBlockBase(BlockFeedingTrough) {
         }
 
         if (stack.stackSize != 0 && playerIn.canPlayerEdit(pos, facing, stack)
-                && worldIn.canBlockBePlaced(this.block, pos, false, facing, null, stack)
-                && worldIn.canBlockBePlaced(this.block, pos.add(playerIn.adjustedHorizontalFacing.directionVec), false, facing, null, stack)) {
+            && worldIn.canBlockBePlaced(this.block, pos, false, facing, null, stack)
+            && worldIn.canBlockBePlaced(this.block, pos.add(playerIn.adjustedHorizontalFacing.directionVec), false, facing, null, stack)) {
             val i = this.getMetadata(stack.metadata)
             val iblockstate1 = this.block.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, i, playerIn)
 
@@ -42,7 +41,7 @@ class ItemBlockFeedingTrough() : ItemBlockBase(BlockFeedingTrough) {
             }
             return EnumActionResult.SUCCESS
         } else {
-            return EnumActionResult.FAIL
+            return EnumActionResult.PASS
         }
     }
 }

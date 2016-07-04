@@ -18,9 +18,9 @@ import java.util.*
  */
 
 open class OreGenerator(
-        val ore: IBlockState,
-        val predicate: Predicate<IBlockState>,
-        val config: OreConfig
+    val ore: IBlockState,
+    val predicate: Predicate<IBlockState>,
+    val config: OreConfig
 ) : IWorldGenerator {
 
     constructor(ore: Block, config: OreConfig) : this(ore.defaultState, Predicate { input -> input?.block == Blocks.STONE }, config)

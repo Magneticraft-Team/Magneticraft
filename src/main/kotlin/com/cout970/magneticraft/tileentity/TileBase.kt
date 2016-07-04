@@ -2,12 +2,14 @@ package com.cout970.magneticraft.tileentity
 
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 
-open class TileBase : TileEntity() {
+abstract class TileBase : TileEntity() {
 
-    open fun onBreak() {}
+    open fun onBreak() {
+    }
 
     fun dropItem(last: ItemStack, pos: BlockPos) {
         if (!world.isRemote) {
@@ -20,4 +22,19 @@ open class TileBase : TileEntity() {
             world.spawnEntityInWorld(entityItem)
         }
     }
+
+    override fun readFromNBT(compound: NBTTagCompound?) {
+        compound?.let { load(compound.getCompoundTag("TileData")) }
+        super.readFromNBT(compound)
+    }
+
+    override fun writeToNBT(compound: NBTTagCompound?): NBTTagCompound? {
+        compound?.apply { setTag("TileData", save()) }
+        return super.writeToNBT(compound)
+    }
+
+    override fun getMaxRenderDistanceSquared(): Double = 128.0 * 128.0
+
+    abstract fun save(): NBTTagCompound
+    abstract fun load(nbt: NBTTagCompound)
 }

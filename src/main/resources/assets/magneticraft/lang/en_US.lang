@@ -28,19 +28,21 @@ magneticraft.guide.basics=Basics
 magneticraft.guide.getting.started=Getting Started
 magneticraft.guide.link.text=%s, page %s
 
-tile.magneticraft.ore_block.copper.name=Malachite Ore
-tile.magneticraft.ore_block.lead.name=Galena Ore
-tile.magneticraft.ore_block.cobalt.name=Cobaltite Ore
-tile.magneticraft.ore_block.tungsten.name=Wolframite Ore
+tile.magneticraft.ore_block_copper.name=Malachite Ore
+tile.magneticraft.ore_block_lead.name=Galena Ore
+tile.magneticraft.ore_block_cobalt.name=Cobaltite Ore
+tile.magneticraft.ore_block_tungsten.name=Wolframite Ore
 tile.magneticraft.crushing_table.name=Crushing Table
-tile.magneticraft.limestone.normal.name=Limestone
-tile.magneticraft.limestone.brick.name=Limestone Brick
-tile.magneticraft.limestone.cobble.name=Limestone Cobble
-tile.magneticraft.burn_limestone.normal.name=Burn Limestone
-tile.magneticraft.burn_limestone.brick.name=Burn Limestone Brick
-tile.magneticraft.burn_limestone.cobble.name=Burn Limestone Cobble
+tile.magneticraft.limestone_normal.name=Limestone
+tile.magneticraft.limestone_brick.name=Limestone Brick
+tile.magneticraft.limestone_cobble.name=Limestone Cobble
+tile.magneticraft.burn_limestone_normal.name=Burnt Limestone
+tile.magneticraft.burn_limestone_brick.name=Burnt Limestone Brick
+tile.magneticraft.burn_limestone_cobble.name=Burnt Limestone Cobble
 tile.magneticraft.table_sieve.name=Table Sieve
 tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
+tile.magneticraft.electric_pole.name=Electric Pole
+tile.magneticraft.electric_connector.name=Electric Connector
 
 itemGroup.magneticraft=Magneticraft
 

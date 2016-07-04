@@ -97,16 +97,11 @@ class TileTableSieve : TileBase(), ITickable {
         }
     }
 
+    override fun save(): NBTTagCompound =
+            NBTTagCompound().apply { setTag("inventory", inventory.serializeNBT()) }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) {
-        inventory.deserializeNBT(nbt?.getCompoundTag("inventory"))
-        super.deserializeNBT(nbt)
-    }
-
-    override fun serializeNBT(): NBTTagCompound? {
-        val nbt = super.serializeNBT()
-        nbt.setTag("inventory", inventory.serializeNBT())
-        return nbt
+    override fun load(nbt: NBTTagCompound) {
+        inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
     }
 
     override fun onBreak() {

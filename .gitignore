@@ -13,7 +13,6 @@ out*
 .iws*
 .iml
 .idea
-gradle
 build
 .gradle
 #
@@ -22,7 +21,6 @@ build
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -43,6 +41,9 @@ run
 #mac
 .DS_Store
 *.command
+
+#linux
+*~
 
 #workspace
 asm/**

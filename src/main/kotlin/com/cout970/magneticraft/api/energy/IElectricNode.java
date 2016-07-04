@@ -5,6 +5,8 @@ package com.cout970.magneticraft.api.energy;
  */
 public interface IElectricNode extends INode {
 
+    void iterate();
+
     double getVoltage();
 
     double getAmperage();

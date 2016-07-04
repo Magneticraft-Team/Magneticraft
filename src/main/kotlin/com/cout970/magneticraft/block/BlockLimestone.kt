@@ -1,43 +1,31 @@
 package com.cout970.magneticraft.block
 
-import com.cout970.magneticraft.block.states.BlockLimestoneStates
-import com.cout970.magneticraft.block.states.BlockProperties
+import com.cout970.magneticraft.block.states.LimestoneTypes
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
+import net.minecraft.block.properties.PropertyEnum
+import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
-/**
- * Created by cout970 on 11/06/2016.
- */
-object BlockLimestone : BlockMultiState(Material.ROCK, "limestone") {
+val LIMESTONE_TYPE = PropertyEnum.create("type", LimestoneTypes::class.java)
 
-    val STATE_MAP = mapOf(
-            0 to defaultState.withProperty(BlockProperties.blockLimestoneState, BlockLimestoneStates.values()[0]),
-            1 to defaultState.withProperty(BlockProperties.blockLimestoneState, BlockLimestoneStates.values()[1]),
-            2 to defaultState.withProperty(BlockProperties.blockLimestoneState, BlockLimestoneStates.values()[2])
+object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
+    override val inventoryVariants = mapOf(
+        0 to "normal",
+        1 to "brick",
+        2 to "cobble"
     )
 
-    val MODEL_MAP = mapOf(
-            0 to ModelResourceLocation(registryName, getStateName(STATE_MAP[0]!!)),
-            1 to ModelResourceLocation(registryName, getStateName(STATE_MAP[1]!!)),
-            2 to ModelResourceLocation(registryName, getStateName(STATE_MAP[2]!!))
-    )
+    override fun damageDropped(state: IBlockState) = state.getValue(LIMESTONE_TYPE).ordinal
 
-    override fun getModels(): Map<Int, ModelResourceLocation> {
-        return MODEL_MAP
-    }
+    override fun getItemName(stack: ItemStack?) =
+        "${super.getItemName(stack)}_${LimestoneTypes.values()[stack?.metadata ?: 0].name.toLowerCase()}"
 
-    override fun getUnlocalizedName(stack: ItemStack?): String? {
-        return unlocalizedName +"."+ getStateFromMeta(stack?.metadata ?: 0)?.getValue(BlockProperties.blockLimestoneState)?.getName()
-    }
+    override fun createBlockState() = BlockStateContainer(this, LIMESTONE_TYPE)
 
-    override fun getProperties(): Array<IProperty<*>> = arrayOf(BlockProperties.blockLimestoneState)
+    override fun getStateFromMeta(meta: Int) =
+        blockState.baseState.withProperty(LIMESTONE_TYPE, LimestoneTypes.values()[meta])
 
-    override fun isHiddenState(state: IBlockState, meta: Int): Boolean = false
-
-    override fun getStateMap(): Map<Int, IBlockState> = STATE_MAP
+    override fun getMetaFromState(state: IBlockState?) =
+        state?.getValue(LIMESTONE_TYPE)?.ordinal ?: 0
 }

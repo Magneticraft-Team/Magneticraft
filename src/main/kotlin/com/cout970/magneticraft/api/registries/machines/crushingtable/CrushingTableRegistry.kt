@@ -1,36 +1,26 @@
 package com.cout970.magneticraft.api.registries.machines.crushingtable
 
+import coffee.cypher.mcextlib.util.collections.troveMap
 import net.minecraft.item.ItemStack
 
-private var recipes = emptyMap<ItemStack, ItemStack>()
+object CrushingTableRegistry {
+    private val recipes = troveMap<ItemStack, ItemStack>(
+        hash = { it.item.hashCode() xor it.stackSize xor it.metadata xor (it.tagCompound?.hashCode() ?: 0) },
+        equals = ItemStack::areItemStacksEqual
+    )
 
-//Necessary because itemstacks don't have fucking .equals()
-private fun getByKey(key: ItemStack) =
-    recipes.entries.firstOrNull { ItemStack.areItemStacksEqual(key, it.key) }?.value
-
-fun registerRecipe(input: ItemStack, output: ItemStack) {
-    recipes += input to output
-}
-
-fun ItemStack.findCrushable() = recipes.keys.firstOrNull { equalsIgnoreSize(it) }?.copy()
-
-fun ItemStack?.isCrushable() = this?.findCrushable()?.let { it.stackSize <= this.stackSize } ?: false
-
-fun ItemStack.crush(): ItemStack {
-    val recipe = getByKey(this)
-
-    return recipe?.copy() ?: this
-}
-
-@Deprecated("Use ExtLib version once it comes out.")
-fun ItemStack?.equalsIgnoreSize(that: ItemStack?): Boolean {
-    if (this === that) {
-        return true
+    fun registerRecipe(input: ItemStack, output: ItemStack) {
+        if (input.stackSize != 1) {
+            throw IllegalArgumentException("Attempted to register recipe {$input -> $output}, only single item inputs are allowed for Crushing Table")
+        }
+        if (recipes[input] == null) {
+            recipes += input.copy() to output.copy()
+        } else {
+            throw IllegalStateException(
+                "Attempted to register recipe {$input -> $output}, but {$input -> ${recipes[input]}} is already present."
+            )
+        }
     }
 
-    if (this == null || that == null) {
-        return false
-    }
-
-    return (item == that.item) && (!item.hasSubtypes || (metadata == that.metadata)) && (tagCompound == that.tagCompound)
+    fun getRecipe(input: ItemStack) = recipes[input.copy().apply { stackSize = 1 }]?.copy()
 }

@@ -8,34 +8,30 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 11/06/2016.
  */
-open class ElectricNode(resistance: Double, world: World, pos: BlockPos) : IElectricNode {
+open class ElectricNode(
+        private val resistance: Double = 0.01,
+        private val worldGetter: () -> World,
+        private val posGetter: () -> BlockPos
+) : IElectricNode {
 
-    private val world = world
-    private val pos = pos
     private var voltage = 0.0
     private var amperage = 0.0
-    private val resistance = resistance
+    private var amperageCount = 0.0
 
-    override fun getVoltage(): Double = voltage
+    override fun getAmperage() = amperage
+    override fun getVoltage() = voltage
+    override fun getResistance() = resistance
 
-    override fun getAmperage(): Double = amperage
+    override fun getWorld() = worldGetter.invoke()
+    override fun getPos() = posGetter.invoke()
 
-    fun setVoltage(v: Double) {
-        voltage = v
+    override fun iterate() {
+        amperage = amperageCount * 0.5
+        amperageCount = 0.0
     }
-
-    fun setAmperage(a: Double) {
-        amperage = a
-    }
-
-    override fun getResistance(): Double = resistance
-
-    override fun getWorld(): World = world
-
-    override fun getPos(): BlockPos = pos
 
     override fun applyCurrent(current: Double) {
-        amperage += Math.abs(current)
+        amperageCount += Math.abs(current)
         voltage += current
     }
 
@@ -43,21 +39,18 @@ open class ElectricNode(resistance: Double, world: World, pos: BlockPos) : IElec
         if (voltage > 1) {
             applyCurrent(power / voltage)
         } else {
-            applyPower(power)
+            applyCurrent(power)
         }
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound?) {
-        //null check for nbt
         if (nbt == null) return
         voltage = nbt.getDouble("V")
         amperage = nbt.getDouble("A")
     }
 
-    override fun serializeNBT(): NBTTagCompound? {
-        val nbt = NBTTagCompound()
-        nbt.setDouble("V", voltage)
-        nbt.setDouble("A", amperage)
-        return nbt
+    override fun serializeNBT() = NBTTagCompound().apply {
+        setDouble("V", voltage)
+        setDouble("A", amperage)
     }
 }
