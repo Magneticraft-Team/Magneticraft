@@ -13,6 +13,8 @@ public interface IElectricNode extends INode {
 
     double getResistance();
 
+    double getCapacity();
+
     void applyCurrent(double current);
 
     void applyPower(double power);

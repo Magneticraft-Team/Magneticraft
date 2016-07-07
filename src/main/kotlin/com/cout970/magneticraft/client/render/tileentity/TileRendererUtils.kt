@@ -3,6 +3,10 @@ package com.cout970.magneticraft.client.render.tileentity
 import coffee.cypher.mcextlib.extensions.vectors.component1
 import coffee.cypher.mcextlib.extensions.vectors.component2
 import coffee.cypher.mcextlib.extensions.vectors.component3
+import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
+import com.cout970.magneticraft.api.energy.IElectricConnection
+import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.util.resource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
@@ -14,6 +18,8 @@ import org.lwjgl.opengl.GL11
 /**
  * Created by cout970 on 29/06/2016.
  */
+//TEXTURES
+val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
 fun renderFloatingLabel(str: String, pos: Vec3d) {
 
@@ -87,6 +93,29 @@ fun drawLine(t: VertexBuffer, a: Vec3d, b: Vec3d) {
     t.pos(a.xCoord - w, a.yCoord, a.zCoord).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
     t.pos(b.xCoord - w, b.yCoord, b.zCoord).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
     t.pos(b.xCoord + w, b.yCoord, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+}
+
+fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnector){
+    val origins = a.connectors
+    val destinations = b.connectors
+    val direction = b.pos.subtract(a.pos)
+    for (c in origins.indices) {
+        val order = b.getConnectorIndex(c, a, con)
+        val start = origins[c]
+        val end = direction.toDoubleVec().add(destinations[order])
+
+        val tes = Tessellator.getInstance()
+        val buffer = tes.buffer
+
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
+
+        val points = interpolateWire(start, end)
+
+        for (p in 0..points.size - 2) {
+            drawLine(buffer, points[p], points[p + 1])
+        }
+        tes.draw()
+    }
 }
 
 fun interpolateWire(start: Vec3d, end: Vec3d): List<Vec3d> {

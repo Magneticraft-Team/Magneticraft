@@ -28,7 +28,8 @@ class ItemBlockElectricPole : ItemBlockBase(BlockElectricPole) {
                 && worldIn.canBlockBePlaced(this.block, pos, false, facing, null, stack)
                 && worldIn.canBlockBePlaced(this.block, pos.offset(EnumFacing.UP, 1), false, facing, null, stack)
                 && worldIn.canBlockBePlaced(this.block, pos.offset(EnumFacing.UP, 2), false, facing, null, stack)
-                && worldIn.canBlockBePlaced(this.block, pos.offset(EnumFacing.UP, 3), false, facing, null, stack)) {
+                && worldIn.canBlockBePlaced(this.block, pos.offset(EnumFacing.UP, 3), false, facing, null, stack)
+                && worldIn.canBlockBePlaced(this.block, pos.offset(EnumFacing.UP, 4), false, facing, null, stack)) {
             val i = this.getMetadata(stack.metadata)
             val iblockstate1 = this.block.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, i, playerIn)
 

@@ -6,15 +6,20 @@ import com.cout970.magneticraft.block.itemblock.ItemBlockElectricPole
 import com.cout970.magneticraft.block.itemblock.ItemBlockFeedingTrough
 import net.minecraftforge.fml.common.registry.GameRegistry
 
+//@formatter:off
 val blocks = mapOf(
-        BlockCrushingTable to ItemBlockBase(BlockCrushingTable),
-        BlockOre to ItemBlockBase(BlockOre),
-        BlockLimestone to ItemBlockBase(BlockLimestone),
-        BlockBurntLimestone to ItemBlockBase(BlockBurntLimestone),
-        BlockFeedingTrough to ItemBlockFeedingTrough(),
-        BlockElectricConnector to ItemBlockBase(BlockElectricConnector),
-        BlockElectricPole to ItemBlockElectricPole()
+        BlockCrushingTable          to ItemBlockBase(BlockCrushingTable),
+        BlockOre                    to ItemBlockBase(BlockOre),
+        BlockLimestone              to ItemBlockBase(BlockLimestone),
+        BlockBurntLimestone         to ItemBlockBase(BlockBurntLimestone),
+        BlockFeedingTrough          to ItemBlockFeedingTrough(),
+        BlockElectricConnector      to ItemBlockBase(BlockElectricConnector),
+        BlockElectricPole           to ItemBlockElectricPole(),
+        BlockIncendiaryGenerator    to ItemBlockBase(BlockIncendiaryGenerator),
+        BlockElectricFurnace        to ItemBlockBase(BlockElectricFurnace),
+        BlockElectricPoleAdapter    to ItemBlockBase(BlockElectricPoleAdapter)
 )
+//@formatter:on
 
 fun registerBlocks() {
     blocks.forEach {

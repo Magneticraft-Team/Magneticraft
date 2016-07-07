@@ -40,7 +40,7 @@ object Debug {
             if (File(temp, "build.gradle").exists()) {
                 return temp;
             }
-            temp = temp.parentFile;
+            temp = temp.parentFile
         }
         return temp
     }
