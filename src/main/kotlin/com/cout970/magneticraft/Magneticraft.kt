@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTa
 import com.cout970.magneticraft.client.sounds.registerSounds
 import com.cout970.magneticraft.config.ConfigHandler
 import com.cout970.magneticraft.gui.GuiHandler
+import com.cout970.magneticraft.network.MessageIBD
 import com.cout970.magneticraft.proxy.CommonProxy
 import com.cout970.magneticraft.registry.*
 import com.cout970.magneticraft.util.LANG_ADAPTER
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.relauncher.Side
 import org.apache.logging.log4j.Logger
 import java.io.File
 
@@ -42,7 +44,7 @@ object Magneticraft {
         clientSide = "com.cout970.magneticraft.proxy.ClientProxy",
         serverSide = "com.cout970.magneticraft.proxy.CommonProxy"
     )
-    lateinit var proxy: CommonProxy;
+    lateinit var proxy: CommonProxy
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
@@ -78,6 +80,8 @@ object Magneticraft {
         WorldGenerator.init()
         GameRegistry.registerWorldGenerator(WorldGenerator, 10)
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler)
+
+        network.registerMessage(MessageIBD.Companion, MessageIBD::class.java, 0, Side.CLIENT)
 
         CrushingTableRegistry.registerRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
         CrushingTableRegistry.registerRecipe(Blocks.DIRT.stack(), Blocks.DIAMOND_BLOCK.stack(size = 64))

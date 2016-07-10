@@ -1,14 +1,10 @@
 package com.cout970.magneticraft.client.render.tileentity
 
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
-import com.cout970.magneticraft.util.resource
 import net.minecraft.client.renderer.GlStateManager.*
-import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.opengl.GL11
 
@@ -16,8 +12,6 @@ import org.lwjgl.opengl.GL11
  * Created by cout970 on 29/06/2016.
  */
 object TileElectricPoleRenderer : TileEntitySpecialRenderer<TileElectricPole>() {
-
-    val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
     override fun renderTileEntityAt(te: TileElectricPole, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
 
@@ -35,25 +29,7 @@ object TileElectricPoleRenderer : TileEntitySpecialRenderer<TileElectricPole>() 
             glNewList(te.renderCache, GL11.GL_COMPILE)
             for (i in te.connections) {
                 if (i.firstNode != te.node) continue
-                val origins = (i.firstNode as IWireConnector).connections
-                val destinations = (i.secondNode as IWireConnector).connections
-                val direction = i.secondNode.pos.subtract(i.firstNode.pos)
-                for ((c, start) in origins.withIndex()) {
-                    val order = (i.secondNode as IWireConnector).getConnectionIndex(c, i.firstNode as IWireConnector, i)
-                    val end = direction.toDoubleVec().add(destinations[order])
-
-                    val tes = Tessellator.getInstance()
-                    val buffer = tes.buffer
-
-                    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
-
-                    val points = interpolateWire(start, end)
-
-                    for (p in 0..points.size - 2) {
-                        drawLine(buffer, points[p], points[p + 1])
-                    }
-                    tes.draw()
-                }
+                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
             }
             glEndList()
         }

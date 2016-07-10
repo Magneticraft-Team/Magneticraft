@@ -10,9 +10,13 @@ import org.jetbrains.annotations.NotNull;
 public interface IWireConnector extends IElectricNode {
 
     //List of points in the node where a wire can be attached
-    ImmutableList<Vec3d> getConnections();
+    ImmutableList<Vec3d> getConnectors();
 
-    default int getConnectionIndex(int index, @NotNull IWireConnector connector, @NotNull IElectricConnection connection){
+    //Size of the list of connector to avoid creating a list only for checking connectivity
+    int getConnectorsSize();
+
+    //this method return the order of the connectors in an specific connection, this is used to avoid crossed wires
+    default int getConnectorIndex(int index, @NotNull IWireConnector connector, @NotNull IElectricConnection connection){
         return index;
     }
 }

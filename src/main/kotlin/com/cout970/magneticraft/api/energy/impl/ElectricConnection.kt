@@ -20,15 +20,14 @@ open class ElectricConnection(
     override fun iterate() {
         //total resistance of the connection
         val R = (firstNode.resistance + secondNode.resistance) * separationDistance
-        //capacity of the connection
-        val C = 0.5
+        //capacity in the connection
+        val C = 1.0 / (1.0 / firstNode.capacity + 1.0 / secondNode.capacity)
         //voltage difference
-        val V = firstNode.voltage - secondNode.voltage
-        //final voltage
-        val Vf = V / 2 * Math.exp(-1 / (R * C)) + V / 2 + secondNode.voltage
+        val V = (firstNode.voltage * firstNode.capacity + secondNode.voltage * secondNode.capacity) / (firstNode.capacity + secondNode.capacity) - secondNode.voltage
         //intensity or amperage
-        val I = firstNode.voltage - Vf
-        //the charge is moved, using the kirchhoff law
+        var I = (1 - Math.exp(-1 / (R * C))) * V * secondNode.capacity / firstNode.capacity
+        I *= C * 2
+        //the charge is moved
         firstNode.applyCurrent(-I)
         secondNode.applyCurrent(I)
     }

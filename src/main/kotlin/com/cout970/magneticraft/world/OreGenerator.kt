@@ -37,9 +37,9 @@ open class OreGenerator(
 
     fun generateChunkOres(world: World, pos: Vec2d, random: Random, chunkAmount: Int) {
         for (k in 0..chunkAmount - 1) {
-            val x = pos.getXi() * 16 + random.nextInt(16)
+            val x = pos.xi * 16 + random.nextInt(16)
             val y = config.minLevel + random.nextInt(config.maxLevel - config.minLevel)
-            val z = pos.getYi() * 16 + random.nextInt(16)
+            val z = pos.yi * 16 + random.nextInt(16)
             generate(world, random, x, y, z)
         }
     }

@@ -1,18 +1,18 @@
 package com.cout970.magneticraft.gui.client.guide
 
-import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.GuiCommon
 import com.cout970.magneticraft.guide.Entry
 import com.cout970.magneticraft.guide.Page.Gui
 import com.cout970.magneticraft.guide.contentTable
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
 val BOOK = resource("textures/gui/guide/book.png")
-val PAGE_SIZE = Coords(108, 141)
+val PAGE_SIZE = Vec2d(108, 141)
 val PAGE_CENTER = PAGE_SIZE.center()
-val ARROW_SIZE = Coords(18, 26)
+val ARROW_SIZE = Vec2d(18, 26)
 val FONT_HEIGHT = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT
 
 class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
@@ -22,7 +22,7 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
     val hasPrevPair = pageNum >= 2
 
     val pages: Pair<Gui, Gui?>
-    override val size = Coords(286, 186)
+    override val size = Vec2d(286, 186)
 
     init {
         pages = entry.getPagePair(pageNum).run {
@@ -43,7 +43,7 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
         val worldTime = mc.theWorld?.totalWorldTime?.toDouble() ?: 0.0
         val totalTime = worldTime + partialTicks
 
-        val mouse = Coords(mouseX, mouseY)
+        val mouse = Vec2d(mouseX, mouseY)
 
         pages.first.draw(mouse, totalTime)
         pages.second?.draw(mouse, totalTime)
@@ -61,7 +61,7 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
     }
 
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        val mouse = Coords(mouseX, mouseY)
+        val mouse = Vec2d(mouseX, mouseY)
         val mouseRelative = mouse - start
         if (mouseButton != 0) {
             return;
@@ -77,11 +77,11 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
             return
         }
 
-        if (mouseRelative.inside(Page.LEFT.start, Page.LEFT.end)) {
+        if (mouseRelative in Page.LEFT.start to Page.LEFT.end) {
             pages.first.onLeftClick(mouse)
             return
         }
-        if (mouseRelative.inside(Page.RIGHT.start, Page.RIGHT.end)) {
+        if (mouseRelative in Page.RIGHT.start to Page.RIGHT.end) {
             pages.second?.onLeftClick(mouse)
             return
         }
@@ -92,12 +92,12 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
         GlStateManager.pushMatrix()
         mc.textureManager.bindTexture(BOOK)
         GlStateManager.color(1f, 1f, 1f, 1f)
-        drawModalRectWithCustomSizedTexture(start.x, start.y, 0f, 0f, size.x, size.y, 512f, 512f)
+        drawModalRectWithCustomSizedTexture(start.xi, start.yi, 0f, 0f, size.xi, size.yi, 512f, 512f)
         GlStateManager.popMatrix()
     }
 
-    fun drawString(pos: Coords, text: String) {
-        fontRenderer.drawString(text, pos.x, pos.y, -16777216)
+    fun drawString(pos: Vec2d, text: String) {
+        fontRenderer.drawString(text, pos.xi, pos.yi, -16777216)
     }
 
     fun getStringWidth(text: String) = fontRenderer.getStringWidth(text)
@@ -105,31 +105,31 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
     fun getCharWidth(char: Char) = fontRenderer.getCharWidth(char)
 
     enum class Page(
-        val start: Coords,
-        val end: Coords,
-        val arrowUV: Coords,
-        val arrowUVHover: Coords,
-        val isInsideArrow: Coords.() -> Boolean,
-        val arrowPos: Coords
+        val start: Vec2d,
+        val end: Vec2d,
+        val arrowUV: Vec2d,
+        val arrowUVHover: Vec2d,
+        val isInsideArrow: Vec2d.() -> Boolean,
+        val arrowPos: Vec2d
     ) {
         LEFT(
-            start = Coords(19, 19),
-            end = Coords(127, 160),
-            arrowUV = Coords(4, 188),
-            arrowUVHover = Coords(4, 218),
-            isInsideArrow = { inside(LEFT.arrowPos, LEFT.arrowPos + ARROW_SIZE) },
-            arrowPos = Coords(30, 164)
+            start = Vec2d(19, 19),
+            end = Vec2d(127, 160),
+            arrowUV = Vec2d(4, 188),
+            arrowUVHover = Vec2d(4, 218),
+            isInsideArrow = { this in (LEFT.arrowPos to (LEFT.arrowPos + ARROW_SIZE))},
+            arrowPos = Vec2d(30, 164)
         ),
         RIGHT(
-            start = Coords(153, 19),
-            end = Coords(251, 160),
-            arrowUV = Coords(26, 188),
-            arrowUVHover = Coords(26, 218),
-            isInsideArrow = { inside(RIGHT.arrowPos, RIGHT.arrowPos + ARROW_SIZE) },
-            arrowPos = Coords(232, 164)
+            start = Vec2d(153, 19),
+            end = Vec2d(251, 160),
+            arrowUV = Vec2d(26, 188),
+            arrowUVHover = Vec2d(26, 218),
+            isInsideArrow = { this in (RIGHT.arrowPos to ( RIGHT.arrowPos + ARROW_SIZE))},
+            arrowPos = Vec2d(232, 164)
         );
 
-        fun drawArrow(mouse: Coords, parent: GuiGuideBook) {
+        fun drawArrow(mouse: Vec2d, parent: GuiGuideBook) {
             val arrowStart = parent.start + arrowPos
 
             GlStateManager.pushMatrix()
@@ -138,16 +138,16 @@ class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
 
             if (mouse.isInsideArrow()) {
                 drawModalRectWithCustomSizedTexture(
-                    arrowStart.x, arrowStart.y,
+                    arrowStart.xi, arrowStart.yi,
                     arrowUVHover.x.toFloat(), arrowUVHover.y.toFloat(),
-                    ARROW_SIZE.x, ARROW_SIZE.y,
+                    ARROW_SIZE.xi, ARROW_SIZE.yi,
                     512f, 512f
                 )
             } else {
                 drawModalRectWithCustomSizedTexture(
-                    arrowStart.x, arrowStart.y,
+                    arrowStart.xi, arrowStart.yi,
                     arrowUV.x.toFloat(), arrowUV.y.toFloat(),
-                    ARROW_SIZE.x, ARROW_SIZE.y,
+                    ARROW_SIZE.xi, ARROW_SIZE.yi,
                     512f, 512f
                 )
             }

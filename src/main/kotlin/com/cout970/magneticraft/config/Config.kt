@@ -5,6 +5,7 @@ package com.cout970.magneticraft.config
  */
 
 const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
+const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
 
 object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Copper ore")
@@ -21,4 +22,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator")
+    var incendiaryGeneratorMaxProduction = 80
 }
