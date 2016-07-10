@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.item.ItemCrushedOre
-import com.cout970.magneticraft.item.ItemIngots
+import com.cout970.magneticraft.item.ItemIngot
 import com.cout970.magneticraft.item.ItemPebbles
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
@@ -12,15 +12,15 @@ import net.minecraftforge.oredict.OreDictionary
 
 fun registerOreDictionaryEntries() {
 
-    for (i in ItemIngots.variants) {
-        OreDictionary.registerOre("ore${i.value.capitalize()}", ItemStack(ItemIngots, 1, i.key))
+    for ((key, value) in ItemIngot.variants) {
+        OreDictionary.registerOre("ore${value.capitalize()}", ItemStack(ItemIngot, 1, key))
     }
 
-    for (i in ItemCrushedOre.variants) {
-        OreDictionary.registerOre("crushedore${i.value.capitalize()}", ItemStack(ItemCrushedOre, 1, i.key))
+    for ((key, value) in ItemCrushedOre.variants) {
+        OreDictionary.registerOre("crushedore${value.capitalize()}", ItemStack(ItemCrushedOre, 1, key))
     }
 
-    for (i in ItemPebbles.variants) {
-        OreDictionary.registerOre("pebbles${i.value.capitalize()}", ItemStack(ItemPebbles, 1, i.key))
+    for ((key, value) in ItemPebbles.variants) {
+        OreDictionary.registerOre("pebbles${value.capitalize()}", ItemStack(ItemPebbles, 1, key))
     }
 }

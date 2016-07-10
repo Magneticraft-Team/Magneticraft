@@ -7,14 +7,12 @@ import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 
-val LIMESTONE_TYPE = PropertyEnum.create("type", LimestoneTypes::class.java)
+val LIMESTONE_TYPE: PropertyEnum<LimestoneTypes> = PropertyEnum.create("type", LimestoneTypes::class.java)!!
 
 object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
-    override val inventoryVariants = mapOf(
-        0 to "normal",
-        1 to "brick",
-        2 to "cobble"
-    )
+    override val inventoryVariants = LimestoneTypes.values().associate {
+        it.ordinal to "type=${it.name}"
+    }
 
     override fun damageDropped(state: IBlockState) = state.getValue(LIMESTONE_TYPE).ordinal
 

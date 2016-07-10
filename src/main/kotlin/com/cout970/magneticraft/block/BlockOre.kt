@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack
 /**
  * Created by cout970 on 12/05/2016.
  */
-val ORE_TYPE = PropertyEnum.create("ore", OreTypes::class.java)
+val ORE_TYPE: PropertyEnum<OreTypes> = PropertyEnum.create("ore", OreTypes::class.java)!!
 
 object BlockOre : BlockBase(
     material = Material.ROCK,

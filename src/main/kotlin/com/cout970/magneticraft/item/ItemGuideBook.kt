@@ -18,7 +18,7 @@ object ItemGuideBook : ItemBase("guide_book") {
     }
 
     override fun onItemRightClick(stack: ItemStack?, world: World?, player: EntityPlayer?, hand: EnumHand?): ActionResult<ItemStack?>? {
-        if ((player?.isSneaking ?: true) || !(world?.isRemote ?: true)) {
+        if ((player == null) || player.isSneaking || world == null || !world.isRemote) {
             return super.onItemRightClick(stack, world, player, hand)
         }
 
