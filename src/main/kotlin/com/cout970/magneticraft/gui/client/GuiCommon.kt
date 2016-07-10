@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.gui.client
 
-import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
@@ -19,48 +19,48 @@ open class GuiCommon : GuiScreen() {
     val fontRenderer: FontRenderer
         get() = super.fontRendererObj
 
-    open val size = Coords(176, 166)
-    var start = Coords(0, 0)
+    open val size = Vec2d(176, 166)
+    var start = Vec2d(0, 0)
 
     override fun initGui() {
-        start = Coords((width - size.x) / 2, (height - size.y) / 2)
+        start = Vec2d((width - size.x) / 2, (height - size.y) / 2)
     }
 
-    fun renderToolTip(stack: ItemStack, pos: Coords) {
-        super.renderToolTip(stack, pos.x, pos.y)
+    fun renderToolTip(stack: ItemStack, pos: Vec2d) {
+        super.renderToolTip(stack, pos.xi, pos.yi)
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         mc.textureManager.bindTexture(BACKGROUND)
-        drawTexturedModalRect(start.x, start.y, 0, 0, size.x, size.y)
+        drawTexturedModalRect(start.xi, start.yi, 0, 0, size.xi, size.yi)
         GlStateManager.color(1f, 1f, 1f, 1f)
         super.drawScreen(mouseX, mouseY, partialTicks)
     }
 
     override fun doesGuiPauseGame() = false
 
-    fun drawTexture(position: Coords, size: Coords, texture: ResourceLocation) {
+    fun drawTexture(position: Vec2d, size: Vec2d, texture: ResourceLocation) {
         GlStateManager.pushMatrix()
         GlStateManager.color(1f, 1f, 1f, 1f)
         GlStateManager.enableBlend()
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
 
         mc.renderEngine.bindTexture(texture)
-        drawScaledCustomSizeModalRect(position.x, position.y, 0f, 0f, 256, 256, size.x, size.y, 256f, 256f)
+        drawScaledCustomSizeModalRect(position.xi, position.yi, 0f, 0f, 256, 256, size.xi, size.yi, 256f, 256f)
 
         GlStateManager.popMatrix()
     }
 
-    fun drawHoveringText(text: List<String>, pos: Coords) {
-        drawHoveringText(text, pos.x, pos.y, fontRenderer)
+    fun drawHoveringText(text: List<String>, pos: Vec2d) {
+        drawHoveringText(text, pos.xi, pos.yi, fontRenderer)
     }
 
-    fun drawStack(stack: ItemStack, pos: Coords, text: String? = null) {
+    fun drawStack(stack: ItemStack, pos: Vec2d, text: String? = null) {
         GlStateManager.pushMatrix()
         RenderHelper.enableGUIStandardItemLighting()
 
-        itemRenderer?.renderItemAndEffectIntoGUI(stack, pos.x, pos.y)
-        itemRenderer?.renderItemOverlayIntoGUI(fontRenderer, stack, pos.x, pos.y, text)
+        itemRenderer?.renderItemAndEffectIntoGUI(stack, pos.xi, pos.yi)
+        itemRenderer?.renderItemOverlayIntoGUI(fontRenderer, stack, pos.xi, pos.yi, text)
 
         RenderHelper.disableStandardItemLighting()
         GlStateManager.popMatrix()

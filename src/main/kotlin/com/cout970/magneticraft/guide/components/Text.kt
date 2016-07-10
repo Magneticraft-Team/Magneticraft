@@ -1,18 +1,18 @@
 package com.cout970.magneticraft.guide.components
 
 import coffee.cypher.mcextlib.extensions.strings.i18n
-import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.guide.FONT_HEIGHT
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
 import com.cout970.magneticraft.guide.GUIDE_LANG
 import com.cout970.magneticraft.guide.LinkInfo
 import com.cout970.magneticraft.guide.Page
+import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.resources.I18n
 
 class Text(
-    position: Coords,
-    override val size: Coords,
+    position: Vec2d,
+    override val size: Vec2d,
     text: String
 ) : PageComponent(position) {
     val words = parseText(text)
@@ -56,9 +56,9 @@ class Text(
                 }
 
                 if (x + space > size.x) {
-                    boxList += TextBox(this, Coords(x, y), word, false, link)
+                    boxList += TextBox(this, Vec2d(x, y), word, false, link)
                 } else {
-                    boxList += TextBox(this, Coords(x, y), word, true, link)
+                    boxList += TextBox(this, Vec2d(x, y), word, true, link)
                     x += space
                 }
 
@@ -68,15 +68,15 @@ class Text(
             boxes = boxList
         }
 
-        override fun draw(mouse: Coords, time: Double) {
+        override fun draw(mouse: Vec2d, time: Double) {
             boxes.forEach { it.draw(mouse) }
         }
 
-        override fun postDraw(mouse: Coords, time: Double) {
+        override fun postDraw(mouse: Vec2d, time: Double) {
             boxes.forEach { it.postDraw(mouse) }
         }
 
-        override fun onLeftClick(mouse: Coords): Boolean {
+        override fun onLeftClick(mouse: Vec2d): Boolean {
             val box = boxes.firstOrNull { it.isInside(mouse) && it.link != null }
 
             box ?: return false
@@ -90,21 +90,21 @@ class Text(
 
     private class TextBox(
         val parent: Gui,
-        val position: Coords,
+        val position: Vec2d,
         val text: String,
         val space: Boolean,
         val link: LinkInfo? = null
     ) {
         val page = parent.parent
-        val size = Coords(page.gui.getStringWidth(text), FONT_HEIGHT)
+        val size = Vec2d(page.gui.getStringWidth(text), FONT_HEIGHT)
         var nextLink = false
 
-        val drawPos: Coords
+        val drawPos: Vec2d
             get() = parent.drawPos + position
 
-        fun isInside(pos: Coords) = pos.inside(drawPos, drawPos + size)
+        fun isInside(pos: Vec2d) = pos in drawPos to (drawPos + size)
 
-        fun draw(mouse: Coords) {
+        fun draw(mouse: Vec2d) {
             val prefix = if (link == null) {
                 "§r"
             } else {
@@ -127,7 +127,7 @@ class Text(
             )
         }
 
-        fun postDraw(mouse: Coords) {
+        fun postDraw(mouse: Vec2d) {
             if (link != null && isInside(mouse)) {
                 page.gui.drawHoveringText(listOf(I18n.format("$GUIDE_LANG.link.text", link.entry.i18n(), link.page + 1)), mouse)
             }

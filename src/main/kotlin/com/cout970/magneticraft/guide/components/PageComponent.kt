@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.guide.components
 
-import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
 import com.cout970.magneticraft.guide.Page
+import com.cout970.magneticraft.util.vector.Vec2d
 
-abstract class PageComponent(val position: Coords) {
-    abstract val size: Coords
+abstract class PageComponent(val position: Vec2d) {
+    abstract val size: Vec2d
 
     abstract fun toGuiComponent(parent: Page.Gui): GuiPageComponent
 
@@ -13,18 +13,18 @@ abstract class PageComponent(val position: Coords) {
         override val size = this@PageComponent.size
         override val position = this@PageComponent.position
 
-        lateinit var drawPos: Coords
+        lateinit var drawPos: Vec2d
             private set
 
         override fun initGui() {
             drawPos = parent.start + position
         }
 
-        override fun isMouseInside(mouse: Coords) = mouse.inside(drawPos, drawPos + size)
+        override fun isMouseInside(mouse: Vec2d) = mouse in drawPos to (drawPos + size)
 
-        override fun onLeftClick(mouse: Coords) = false
+        override fun onLeftClick(mouse: Vec2d) = false
 
-        override fun postDraw(mouse: Coords, time: Double) {
+        override fun postDraw(mouse: Vec2d, time: Double) {
         }
     }
 }

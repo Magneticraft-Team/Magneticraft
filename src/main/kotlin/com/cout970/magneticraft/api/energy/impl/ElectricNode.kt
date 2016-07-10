@@ -41,15 +41,18 @@ open class ElectricNode(
         voltage += current / getCapacity()
     }
 
-    override fun applyPower(power: Double) {
+    override fun applyPower(power: Double): Double {
         if (power > 0) {
             val squared = voltage * voltage + Math.abs(power) * 2
             val diff = Math.sqrt(squared) - Math.abs(voltage)
             applyCurrent(diff)
+            return power
         } else {
             val squared = voltage * voltage - Math.abs(power) * 2
+            val powerUsed = if (squared > 0) power else (voltage * voltage) / 2
             val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
             applyCurrent(diff)
+            return powerUsed
         }
     }
 

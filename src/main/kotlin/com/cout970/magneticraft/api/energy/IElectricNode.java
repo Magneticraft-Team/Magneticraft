@@ -17,5 +17,5 @@ public interface IElectricNode extends INode {
 
     void applyCurrent(double current);
 
-    void applyPower(double power);
+    double applyPower(double power);
 }

@@ -56,8 +56,8 @@ abstract class TileElectricBase : TileBase(), INodeHandler, ITickable {
     }
 
     fun interpolate(v: Double, min: Double, max: Double): Double {
-        if (v < min) return 0.0;
-        if (v > max) return 1.0;
+        if (v < min) return 0.0
+        if (v > max) return 1.0
         val dif = max - min
         return (v - min) / dif
     }

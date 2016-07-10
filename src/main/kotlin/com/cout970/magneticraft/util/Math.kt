@@ -12,6 +12,8 @@ infix fun Long.roundTo(factor: Long) = (this / factor) * factor
 
 fun Float.toRadians() = Math.toRadians(this.toDouble()).toFloat()
 
+fun clamp(value:Double, max:Double, min:Double) = Math.max(Math.min(max, value), min)
+
 fun hasIntersection(aFirst: Vec3d, aSecond: Vec3d, bFirst: Vec3d, bSecond: Vec3d): Boolean {
     val da = aSecond - aFirst
     val db = bSecond - bFirst

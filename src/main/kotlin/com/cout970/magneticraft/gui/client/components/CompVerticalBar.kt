@@ -1,0 +1,42 @@
+package com.cout970.magneticraft.gui.client.components
+
+import com.cout970.magneticraft.gui.client.IComponent
+import com.cout970.magneticraft.gui.client.IGui
+import com.cout970.magneticraft.util.Box
+import com.cout970.magneticraft.util.clamp
+import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.Vec2d
+
+/**
+ * Created by cout970 on 09/07/2016.
+ */
+
+val BAR_TEXTURES = resource("textures/gui/bar_textures.png")
+
+open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: Vec2d) : IComponent {
+
+    override val box: Box = Box(pos, Vec2d(5, 48))
+    override lateinit var gui: IGui
+
+    override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        gui.run {
+            bindTexture(BAR_TEXTURES)
+            val level = (provider.getLevel() * 48).toInt()
+            drawScaledTexture(Vec2d(pos.x, pos.yi - level), Vec2d(5, level), Vec2d(index * 5, 48 - level), Vec2d(64, 64))
+        }
+    }
+}
+
+interface IBarProvider {
+    fun getLevel(): Float
+}
+
+open class CallbackBarProvider(val callback: () -> Double, val max: () -> Double, val min: () -> Double) : IBarProvider {
+
+    override fun getLevel(): Float = clamp((callback.invoke() - min.invoke()) / (max.invoke() - min.invoke()), 1.0, 0.0).toFloat()
+}
+
+open class InvertedCallbackBarProvider(val callback: () -> Double, val max: () -> Double, val min: () -> Double) : IBarProvider {
+
+    override fun getLevel(): Float = clamp(1 - ((callback.invoke() - min.invoke()) / (max.invoke() - min.invoke())), 1.0, 0.0).toFloat()
+}

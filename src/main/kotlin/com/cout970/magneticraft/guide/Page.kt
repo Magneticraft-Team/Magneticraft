@@ -1,15 +1,15 @@
 package com.cout970.magneticraft.guide
 
-import com.cout970.magneticraft.gui.Coords
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
 import com.cout970.magneticraft.gui.client.guide.PAGE_SIZE
 import com.cout970.magneticraft.guide.components.PageComponent
+import com.cout970.magneticraft.util.vector.Vec2d
 
 class Page(private val components: List<PageComponent>) {
     fun toGuiComponent(parent: GuiGuideBook, page: GuiGuideBook.Page) = Gui(parent, page)
 
     inner class Gui(val gui: GuiGuideBook, val page: GuiGuideBook.Page) {
-        lateinit var start: Coords
+        lateinit var start: Vec2d
         val size = PAGE_SIZE
         val components = this@Page.components.map { it.toGuiComponent(this) }
 
@@ -18,15 +18,15 @@ class Page(private val components: List<PageComponent>) {
             components.forEach { it.initGui() }
         }
 
-        fun draw(mouse: Coords, time: Double) {
+        fun draw(mouse: Vec2d, time: Double) {
             components.forEach { it.draw(mouse, time) }
         }
 
-        fun postDraw(mouse: Coords, time: Double) {
+        fun postDraw(mouse: Vec2d, time: Double) {
             components.forEach { it.postDraw(mouse, time) }
         }
 
-        fun onLeftClick(mouse: Coords) =
+        fun onLeftClick(mouse: Vec2d) =
             components.filter { it.isMouseInside(mouse) }.any { it.onLeftClick(mouse) }
     }
 }
