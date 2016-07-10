@@ -2,7 +2,7 @@ package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.network.MessageIBD
-import com.cout970.magneticraft.util.IBD
+import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.InventoryPlayer

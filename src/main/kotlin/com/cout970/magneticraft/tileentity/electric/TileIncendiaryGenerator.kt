@@ -5,7 +5,10 @@ import coffee.cypher.mcextlib.extensions.inventories.set
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.util.consumeItem
+import com.cout970.magneticraft.util.misc.ValueAverage
+import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraftforge.items.ItemStackHandler
@@ -54,7 +57,6 @@ class TileIncendiaryGenerator : TileElectricBase() {
                         prod) / prod
                 production += applied * prod
                 heat -= applied.toFloat()
-                debug("$speed, $prod, $applied, $heat")
             }
             production.tick()
         }
@@ -65,12 +67,14 @@ class TileIncendiaryGenerator : TileElectricBase() {
         setTag("inventory", inventory.serializeNBT())
         setFloat("maxBurningTime", maxBurningTime)
         setFloat("burningTime", burningTime)
+        setFloat("heat", heat)
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
         maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("burningTime")
+        heat = nbt.getFloat("heat")
     }
 
     override fun onBreak() {
