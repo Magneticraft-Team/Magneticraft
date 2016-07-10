@@ -35,8 +35,8 @@ class TileElectricPole : TileElectricBase() {
                 if (x == 0 && z == 0) continue
                 val tile = worldObj.getTileEntity(pos.add(x, 0, z)) ?: continue
                 val provider = NODE_PROVIDER!!.fromTile(tile, null) ?: continue
-                for (n in provider.nodes.filter { it is IWireConnector }) {
-                    if (n is IWireConnector && n.connections.size == (node as ElectricPoleNode).connections.size) {
+                for (n in provider.nodes.filterIsInstance<IWireConnector>()) {
+                    if (n.connections.size == (node as ElectricPoleNode).connections.size) {
                         if (tile is TileElectricBase) {
                             if (!tile.connections.any { it.secondNode == node || it.firstNode == node }) {
                                 connections.add(ElectricConnection(node, n as IElectricNode))

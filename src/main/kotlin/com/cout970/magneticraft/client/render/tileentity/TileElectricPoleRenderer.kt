@@ -38,9 +38,8 @@ object TileElectricPoleRenderer : TileEntitySpecialRenderer<TileElectricPole>() 
                 val origins = (i.firstNode as IWireConnector).connections
                 val destinations = (i.secondNode as IWireConnector).connections
                 val direction = i.secondNode.pos.subtract(i.firstNode.pos)
-                for (c in origins.indices) {
+                for ((c, start) in origins.withIndex()) {
                     val order = (i.secondNode as IWireConnector).getConnectionIndex(c, i.firstNode as IWireConnector, i)
-                    val start = origins[c]
                     val end = direction.toDoubleVec().add(destinations[order])
 
                     val tes = Tessellator.getInstance()
