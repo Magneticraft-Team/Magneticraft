@@ -28,7 +28,7 @@ abstract class BlockBase(
         creativeTab = CreativeTabMg
     }
 
-    open fun getItemName(stack: ItemStack?) = unlocalizedName
+    open fun getItemName(stack: ItemStack?): String? = unlocalizedName
 
     override fun getSubBlocks(itemIn: Item?, tab: CreativeTabs?, list: MutableList<ItemStack>?) {
         if (list == null || itemIn == null) {

@@ -3,13 +3,11 @@ package com.cout970.magneticraft.item
 import net.minecraft.item.ItemStack
 
 /**
- * Created by cout970 on 23/06/2016.
+ * Created by cout970 on 24/06/2016.
  */
-object ItemPebbles : ItemBase("pebbles") {
+object ItemIngot : ItemBase("ingot") {
 
     override val variants = mapOf(
-        0 to "ore=iron",
-        1 to "ore=gold",
         2 to "ore=copper",
         3 to "ore=lead",
         4 to "ore=cobalt",

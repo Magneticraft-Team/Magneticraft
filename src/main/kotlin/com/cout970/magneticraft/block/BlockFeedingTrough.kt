@@ -25,8 +25,8 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 24/06/2016.
  */
-val FEEDING_TROUGH_IS_CENTER = PropertyBool.create("center")
-val FEEDING_TROUGH_SIDE_POSITION = PropertyDirection.create("side", { it?.isHorizontal() ?: false })
+val FEEDING_TROUGH_IS_CENTER = PropertyBool.create("center")!!
+val FEEDING_TROUGH_SIDE_POSITION = PropertyDirection.create("side", { it?.isHorizontal() ?: false })!!
 
 object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEntityProvider {
     val boundingBox = Vec3d.ZERO to Vec3d(1.0, 0.75, 1.0)
@@ -44,7 +44,7 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
         val tile = getTileEntity(worldIn, pos, state)
         if (tile != null) {
             if (heldItem != null) {
-                val result = tile.insetItem(heldItem)
+                val result = tile.insertItem(heldItem)
                 playerIn!!.setHeldItem(hand, result)
                 return true
             } else {

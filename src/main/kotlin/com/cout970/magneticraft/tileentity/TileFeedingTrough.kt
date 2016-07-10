@@ -21,7 +21,6 @@ import java.util.*
  * Created by cout970 on 24/06/2016.
  */
 class TileFeedingTrough : TileBase(), ITickable {
-
     val ACCEPTED_ITEMS = listOf(Items.WHEAT, Items.CARROT, Items.WHEAT_SEEDS)
     val MAX_ANIMALS = 30
     val FAKE_PLAYER_UUID = UUID.fromString("d0f15bc8-6eb3-4a1b-8b5d-d3fdf5140321")
@@ -37,7 +36,7 @@ class TileFeedingTrough : TileBase(), ITickable {
                 var end = pos.toDoubleVec().addVector(4.5, 2.0, 4.5)
                 val dir = worldObj.getBlockState(pos).getValue(FEEDING_TROUGH_SIDE_POSITION)
                 if (dir.axisDirection == EnumFacing.AxisDirection.POSITIVE) {
-                    end += dir.directionVec.toDoubleVec();
+                    end += dir.directionVec.toDoubleVec()
                 } else {
                     start += dir.directionVec.toDoubleVec()
                 }
@@ -62,7 +61,7 @@ class TileFeedingTrough : TileBase(), ITickable {
         }
     }
 
-    fun insetItem(item: ItemStack?): ItemStack? {
+    fun insertItem(item: ItemStack?): ItemStack? {
         if (item != null && ACCEPTED_ITEMS.contains(item.item)) {
             return inventory.insertItem(0, item, false)
         }

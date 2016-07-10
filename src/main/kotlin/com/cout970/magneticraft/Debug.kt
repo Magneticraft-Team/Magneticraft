@@ -22,7 +22,6 @@ object Debug {
         srcDir = searchSourceDir(event.modConfigurationDirectory)
         if (srcDir == null) {
             error("Error trying to find the source directory")
-            return
         }
 //        setTicksPerSecond(80)
         //Log.debug("Source folder found at ${srcDir?.absolutePath}")
@@ -38,7 +37,7 @@ object Debug {
         var temp = configDir
         while (temp != null && temp.isDirectory) {
             if (File(temp, "build.gradle").exists()) {
-                return temp;
+                return temp
             }
             temp = temp.parentFile
         }
