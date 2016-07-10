@@ -28,6 +28,6 @@ object BlockIncendiaryGenerator : BlockBase(Material.IRON, "incendiary_generator
     override fun onBlockActivated(worldIn: World?, pos: BlockPos?, state: IBlockState?, playerIn: EntityPlayer?, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         pos!!
         playerIn?.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
+        return true
     }
 }

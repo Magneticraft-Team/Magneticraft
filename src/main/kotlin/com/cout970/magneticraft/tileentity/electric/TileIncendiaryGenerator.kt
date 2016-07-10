@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.consumeItem
+import com.cout970.magneticraft.util.debug
 import com.cout970.magneticraft.util.misc.ValueAverage
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
@@ -48,13 +49,14 @@ class TileIncendiaryGenerator : TileElectricBase() {
                 val burningSpeed = 1
                 burningTime -= burningSpeed
                 heat += burningSpeed
+                debug(burningTime)
             }
             //makes electricity from heat
             if (heat > STANDARD_AMBIENT_TEMPERATURE) {
                 val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 10)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
                 val applied = node.applyPower((1 - interpolate(node.voltage, 120.0, 125.0)) *
-                        prod) / prod
+                        prod) / Config.incendiaryGeneratorMaxProduction
                 production += applied * prod
                 heat -= applied.toFloat()
             }

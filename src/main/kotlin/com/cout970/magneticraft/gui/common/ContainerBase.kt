@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.Slot
+import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -21,9 +22,9 @@ val DATA_ID_MAX_BURNING_TIME = 3
 val DATA_ID_MACHINE_HEAT = 4
 val DATA_ID_MACHINE_PRODUCTION = 5
 
-abstract class ContainerBase(val player: EntityPlayer, val world: World, val blockPos: BlockPos) : Container() {
+abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos: BlockPos) : Container() {
 
-    val tileEntity = world.getTileEntity(blockPos)
+    val tileEntity = world.getTileEntity(pos)
 
     override fun canInteractWith(playerIn: EntityPlayer?): Boolean = true
 
@@ -53,6 +54,9 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val blo
             }
         }
     }
+
+    //to avoid crashed with shift click
+    abstract override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack?
 
     abstract fun sendDataToClient(): IBD?
 

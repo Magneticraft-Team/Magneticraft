@@ -5,6 +5,7 @@ import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.SlotItemHandler
@@ -21,6 +22,8 @@ class ContainerIncendiaryGenerator(player: EntityPlayer, world: World, blockPos:
         inv?.let { addSlotToContainer(SlotItemHandler(inv, 0, 129, 30)) }
         bindPlayerInventory(player.inventory)
     }
+
+    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
 
     override fun sendDataToClient(): IBD? {
         val data = IBD()
