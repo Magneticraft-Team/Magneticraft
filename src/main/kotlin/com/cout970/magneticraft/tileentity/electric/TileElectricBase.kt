@@ -63,7 +63,9 @@ abstract class TileElectricBase : TileBase(), INodeHandler, ITickable {
     }
 
     override fun readFromNBT(compound: NBTTagCompound?) {
-        node.deserializeNBT(compound!!.getCompoundTag("ElectricNode"))
+        if(compound!!.hasKey("ElectricNode")) {
+            node.deserializeNBT(compound.getCompoundTag("ElectricNode"))
+        }
         super.readFromNBT(compound)
     }
 

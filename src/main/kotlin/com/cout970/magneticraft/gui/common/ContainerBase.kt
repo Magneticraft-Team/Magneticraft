@@ -21,6 +21,10 @@ val DATA_ID_BURNING_TIME = 2
 val DATA_ID_MAX_BURNING_TIME = 3
 val DATA_ID_MACHINE_HEAT = 4
 val DATA_ID_MACHINE_PRODUCTION = 5
+val DATA_ID_FLUID_AMOUNT = 6
+val DATA_ID_FLUID_NAME = 7
+val DATA_ID_STORAGE = 8
+val DATA_ID_CHAGE_RATE = 9
 
 abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos: BlockPos) : Container() {
 

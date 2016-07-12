@@ -33,6 +33,7 @@ class ContainerIncendiaryGenerator(player: EntityPlayer, world: World, blockPos:
         data.setFloat(DATA_ID_MAX_BURNING_TIME, tile.maxBurningTime)
         data.setFloat(DATA_ID_MACHINE_HEAT, tile.heat)
         data.setFloat(DATA_ID_MACHINE_PRODUCTION, tile.production.average)
+        data.merge(tile.tank.getData())
         return data
     }
 
@@ -43,5 +44,6 @@ class ContainerIncendiaryGenerator(player: EntityPlayer, world: World, blockPos:
         ibd.getFloat(DATA_ID_MAX_BURNING_TIME, { tile.maxBurningTime = it })
         ibd.getFloat(DATA_ID_MACHINE_HEAT, { tile.heat = it })
         ibd.getFloat(DATA_ID_MACHINE_PRODUCTION, { tile.production.storage = it })
+        tile.tank.setData(ibd)
     }
 }

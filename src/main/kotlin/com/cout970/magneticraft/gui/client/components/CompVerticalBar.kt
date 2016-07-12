@@ -2,8 +2,8 @@ package com.cout970.magneticraft.gui.client.components
 
 import com.cout970.magneticraft.gui.client.IComponent
 import com.cout970.magneticraft.gui.client.IGui
-import com.cout970.magneticraft.util.misc.Box
 import com.cout970.magneticraft.util.clamp
+import com.cout970.magneticraft.util.misc.Box
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
 
@@ -13,9 +13,10 @@ import com.cout970.magneticraft.util.vector.Vec2d
 
 val BAR_TEXTURES = resource("textures/gui/bar_textures.png")
 
-open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: Vec2d) : IComponent {
+open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: Vec2d, val tooltip: () -> List<String> = { listOf<String>() }) : IComponent {
 
-    override val box: Box = Box(pos, Vec2d(5, 48))
+    val size = Vec2d(5, 48)
+    override val box: Box = Box(pos.copy(y = pos.y - size.y), size)
     override lateinit var gui: IGui
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
@@ -23,6 +24,15 @@ open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: 
             bindTexture(BAR_TEXTURES)
             val level = (provider.getLevel() * 48).toInt()
             drawScaledTexture(Vec2d(pos.x, pos.yi - level), Vec2d(5, level), Vec2d(index * 5, 48 - level), Vec2d(64, 64))
+        }
+    }
+
+    override fun drawSecondLayer(mouse: Vec2d) {
+        if (mouse in box) {
+            val text = tooltip.invoke()
+            if (!text.isEmpty()) {
+                gui.drawHoveringText(text, mouse)
+            }
         }
     }
 }

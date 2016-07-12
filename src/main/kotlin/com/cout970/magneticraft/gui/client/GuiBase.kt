@@ -97,7 +97,7 @@ abstract class GuiBase(val container: ContainerBase) : GuiContainer(container), 
     }
 
     override fun drawHoveringText(textLines: List<String>, pos: Vec2d) {
-        super.drawHoveringText(textLines, pos.xi, pos.yi)
+        super.drawHoveringText(textLines, pos.xi - box.pos.xi, pos.yi - box.pos.yi)
     }
 
     override fun drawCenteredString(text: String, pos: Vec2d, color: Int) {

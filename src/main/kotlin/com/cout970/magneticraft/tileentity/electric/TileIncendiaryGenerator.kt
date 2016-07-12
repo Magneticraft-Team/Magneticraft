@@ -7,18 +7,24 @@ import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.consumeItem
-import com.cout970.magneticraft.util.debug
+import com.cout970.magneticraft.util.fluid.Tank
 import com.cout970.magneticraft.util.misc.ValueAverage
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
+import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.items.ItemStackHandler
 
 /**
  * Created by cout970 on 04/07/2016.
  */
 
-class TileIncendiaryGenerator : TileElectricBase() {
+class TileIncendiaryGenerator(
+        val tank: Tank = object : Tank(4000) {
+            override fun canFillFluidType(fluid: FluidStack): Boolean = fluid.fluid.name == "water"
+        }
+) : TileElectricBase(), IFluidHandler by tank {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     val inventory = ItemStackHandler(1)
@@ -26,6 +32,7 @@ class TileIncendiaryGenerator : TileElectricBase() {
     var burningTime = 0f
     var heat = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     val production = ValueAverage()
+    var nanoBuckets = 0
 
     override fun getMainNode(): IElectricNode = mainNode
 
@@ -49,16 +56,23 @@ class TileIncendiaryGenerator : TileElectricBase() {
                 val burningSpeed = 1
                 burningTime -= burningSpeed
                 heat += burningSpeed
-                debug(burningTime)
             }
             //makes electricity from heat
-            if (heat > STANDARD_AMBIENT_TEMPERATURE) {
+            if (heat > STANDARD_AMBIENT_TEMPERATURE && tank.fluidAmount > 0) {
                 val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 10)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
                 val applied = node.applyPower((1 - interpolate(node.voltage, 120.0, 125.0)) *
                         prod) / Config.incendiaryGeneratorMaxProduction
                 production += applied * prod
                 heat -= applied.toFloat()
+                // 1 coal -> 1600 ticks, 1 bucket 1000*1000 nanoBuckets,
+                // we want to use 1 bucket ever 8 coal,
+                // so every tick uses (1000*1000)/(1600*8) = 78.125 nanoBuckets
+                nanoBuckets += (applied * 78.125).toInt()
+                if (nanoBuckets > 1000) {
+                    nanoBuckets -= 1000
+                    tank.drainInternal(1, true)
+                }
             }
             production.tick()
         }
@@ -70,6 +84,7 @@ class TileIncendiaryGenerator : TileElectricBase() {
         setFloat("maxBurningTime", maxBurningTime)
         setFloat("burningTime", burningTime)
         setFloat("heat", heat)
+        setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
     }
 
     override fun load(nbt: NBTTagCompound) {
@@ -77,6 +92,7 @@ class TileIncendiaryGenerator : TileElectricBase() {
         maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("burningTime")
         heat = nbt.getFloat("heat")
+        tank.readFromNBT(nbt.getCompoundTag("tank"))
     }
 
     override fun onBreak() {

@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "magneticraft:connector.mcm"
+        "model": "magneticraft:connector_with_base.mcm"
     },
     "variants": {
         "normal": [{}],

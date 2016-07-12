@@ -25,4 +25,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator")
     var incendiaryGeneratorMaxProduction = 80
+
+    @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
+    var heatUnitCelsius = true
 }

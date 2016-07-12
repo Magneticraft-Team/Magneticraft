@@ -17,7 +17,8 @@ val blocks = mapOf(
         BlockElectricPole           to ItemBlockElectricPole(),
         BlockIncendiaryGenerator    to ItemBlockBase(BlockIncendiaryGenerator),
         BlockElectricFurnace        to ItemBlockBase(BlockElectricFurnace),
-        BlockElectricPoleAdapter    to ItemBlockBase(BlockElectricPoleAdapter)
+        BlockElectricPoleAdapter    to ItemBlockBase(BlockElectricPoleAdapter),
+        BlockBattery                to ItemBlockBase(BlockBattery)
 )
 //@formatter:on
 

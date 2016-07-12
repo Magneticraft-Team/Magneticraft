@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.proxy
 
-//import com.cout970.loader.api.ModelRegistry
+import com.cout970.loader.api.ModelRegistry
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.client.render.registerInvRender
 import com.cout970.magneticraft.client.render.tileentity.*
@@ -24,7 +24,7 @@ class ClientProxy : CommonProxy() {
 
         OBJLoader.INSTANCE.addDomain(MODID)
 
-        //ModelRegistry.registerDomain("magneticraft")
+        ModelRegistry.registerDomain("magneticraft")
 
         items.forEach(ItemBase::registerInvRender)
         blocks.values.forEach(ItemBlockBase::registerInvRender)

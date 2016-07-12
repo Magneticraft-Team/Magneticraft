@@ -12,6 +12,7 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.CapabilityInject
 import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.common.capabilities.ICapabilityProvider
+import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.items.IItemHandler
 
 @CapabilityInject(IItemHandler::class)
@@ -19,6 +20,9 @@ var ITEM_HANDLER: Capability<IItemHandler>? = null
 
 @CapabilityInject(INodeHandler::class)
 var NODE_PROVIDER: Capability<INodeHandler>? = null
+
+@CapabilityInject(IFluidHandler::class)
+var FLUID_HANDLER: Capability<IFluidHandler>? = null
 
 fun registerCapabilities(){
     CapabilityManager.INSTANCE.register(INodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })

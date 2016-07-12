@@ -15,7 +15,8 @@ val tiles = mapOf(
         TileElectricPole::class.java            to "electric_pole",
         TileIncendiaryGenerator::class.java     to "incendiary_generator",
         TileElectricFurnace::class.java         to "electric_furnace",
-        TileElectricPoleAdapter::class.java     to "electric_pole_adapter"
+        TileElectricPoleAdapter::class.java     to "electric_pole_adapter",
+        TileBattery::class.java                 to "battery"
 )
 //@formatter:on
 

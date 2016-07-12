@@ -24,7 +24,9 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun readFromNBT(compound: NBTTagCompound?) {
-        compound?.let { load(compound.getCompoundTag("TileData")) }
+        if (compound!!.hasKey("TileData")) {
+            load(compound.getCompoundTag("TileData"))
+        }
         super.readFromNBT(compound)
     }
 

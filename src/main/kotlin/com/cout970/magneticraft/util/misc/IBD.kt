@@ -30,6 +30,10 @@ class IBD {
         map.put(id, value)
     }
 
+    fun setString(id: Int, value: String) {
+        map.put(id, value)
+    }
+
     fun getInteger(id: Int) = map[id] as Int
 
     fun getLong(id: Int) = map[id] as Long
@@ -39,6 +43,8 @@ class IBD {
     fun getDouble(id: Int) = map[id] as Double
 
     fun getBoolean(id: Int) = map[id] as Boolean
+
+    fun getString(id: Int) = map[id] as String
 
     fun getInteger(id: Int, action: (Int) -> Unit) {
         if (hasKey(id)) {
@@ -85,6 +91,15 @@ class IBD {
         }
     }
 
+    fun getString(id: Int, action: (String) -> Unit) {
+        if (hasKey(id)) {
+            val value = map[id]
+            if (value is String) {
+                action.invoke(value)
+            }
+        }
+    }
+
     fun hasKey(id: Int) = map.containsKey(id)
 
     fun remove(id: Int) {
@@ -93,6 +108,12 @@ class IBD {
 
     fun clear() {
         map.clear()
+    }
+
+    fun merge(other: IBD) {
+        for ((key, value) in other.map) {
+            map.put(key, value)
+        }
     }
 
     fun fromBuffer(buf: ByteBuf) {
@@ -117,6 +138,9 @@ class IBD {
                 5 -> {
                     setBoolean(id, buf.readBoolean())
                 }
+                6 -> {
+                    setString(id, buf.readString())
+                }
             }
         }
     }
@@ -130,6 +154,7 @@ class IBD {
                 is Float -> 3
                 is Double -> 4
                 is Boolean -> 5
+                is String -> 6
                 else -> throw IllegalStateException("Invalid value type: ${value.javaClass}, value:$value")
             }
             buf.writeByte(type)
@@ -150,8 +175,28 @@ class IBD {
                 5 -> {
                     buf.writeBoolean(value as Boolean)
                 }
+                6 -> {
+                    buf.writeString(value as String)
+                }
                 else -> throw IllegalStateException("Invalid value type: ${value.javaClass}, value:$value")
             }
         }
+    }
+}
+
+fun ByteBuf.readString(): String {
+    val size = Math.abs(this.readShort().toInt())
+    val buffer = ByteArray(size)
+    for (i in 0 until size) {
+        buffer[i] = this.readByte()
+    }
+    return kotlin.text.String(buffer, charset = Charsets.UTF_8)
+}
+
+fun ByteBuf.writeString(str: String) {
+    val array = str.toByteArray(Charsets.UTF_8)
+    this.writeShort(array.size)
+    for (i in 0 until array.size) {
+        this.writeByte(array[i].toInt())
     }
 }

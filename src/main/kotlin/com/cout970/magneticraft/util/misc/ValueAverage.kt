@@ -27,4 +27,8 @@ class ValueAverage(val maxCounter: Int = 20) {
     operator fun plusAssign(value: Number) {
         accumulated += value.toFloat()
     }
+
+    operator fun minusAssign(value: Number) {
+        accumulated -= value.toFloat()
+    }
 }

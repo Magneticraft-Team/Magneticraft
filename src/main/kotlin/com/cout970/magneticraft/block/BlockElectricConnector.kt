@@ -29,4 +29,8 @@ object BlockElectricConnector : BlockBase(Material.IRON, "electric_connector"), 
     override fun isVisuallyOpaque() = false
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileElectricConnector()
+
+    override fun getActualState(state: IBlockState?, worldIn: IBlockAccess?, pos: BlockPos?): IBlockState {
+        return super.getActualState(state, worldIn, pos)
+    }
 }
