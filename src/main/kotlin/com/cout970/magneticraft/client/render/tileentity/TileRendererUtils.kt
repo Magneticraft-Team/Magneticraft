@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.VertexBuffer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.opengl.GL11
 
@@ -21,9 +22,22 @@ import org.lwjgl.opengl.GL11
 //TEXTURES
 val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
+fun rotateFromCenter(facing: EnumFacing, optional: Float = 0f) {
+    val angle = when (facing) {
+        EnumFacing.NORTH -> 0f
+        EnumFacing.SOUTH -> 180f
+        EnumFacing.WEST -> 90f
+        EnumFacing.EAST -> -90f
+        else -> 0f
+    } + optional
+    GlStateManager.translate(0.5, 0.5, 0.5)
+    GlStateManager.rotate(angle, 0f, 1f, 0f)
+    GlStateManager.translate(-0.5, -0.5, -0.5)
+}
+
 fun renderFloatingLabel(str: String, pos: Vec3d) {
 
-    val (x,y,z) = pos
+    val (x, y, z) = pos
     val renderManager = Minecraft.getMinecraft().renderManager
     val fontrenderer = renderManager.fontRenderer
     val f = 1.6f
@@ -95,7 +109,7 @@ fun drawLine(t: VertexBuffer, a: Vec3d, b: Vec3d) {
     t.pos(b.xCoord + w, b.yCoord, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
 }
 
-fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnector){
+fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnector) {
     val origins = a.connectors
     val destinations = b.connectors
     val direction = b.pos.subtract(a.pos)
@@ -109,7 +123,7 @@ fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnec
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
 
-        val points = interpolateWire(start, end)
+        val points = interpolateWire(start, end, 0.035)
 
         for (p in 0..points.size - 2) {
             drawLine(buffer, points[p], points[p + 1])
@@ -118,12 +132,12 @@ fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnec
     }
 }
 
-fun interpolateWire(start: Vec3d, end: Vec3d): List<Vec3d> {
+fun interpolateWire(start: Vec3d, end: Vec3d, mass: Double): List<Vec3d> {
     val list = mutableListOf<Vec3d>()
     val distance = start.distanceTo(end)
     val middle = Vec3d(
             (start.xCoord + end.xCoord) / 2,
-            (start.yCoord + end.yCoord) / 2 - distance * 0.05,
+            (start.yCoord + end.yCoord) / 2 - distance * mass,
             (start.zCoord + end.zCoord) / 2)
 
     for (i in 0..10) {

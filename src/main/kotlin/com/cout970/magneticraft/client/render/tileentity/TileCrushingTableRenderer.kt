@@ -5,10 +5,9 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.item.ItemSkull
 
-object TileCrushingTableRenderer : TileEntitySpecialRenderer<TileCrushingTable>() {
+object TileCrushingTableRenderer : TileEntityRenderer<TileCrushingTable>() {
 
     override fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         val stack = te.getStack()

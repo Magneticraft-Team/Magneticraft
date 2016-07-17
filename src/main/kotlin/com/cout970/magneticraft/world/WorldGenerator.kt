@@ -21,6 +21,7 @@ object WorldGenerator : IWorldGenerator {
     val generators = mutableListOf<IWorldGenerator>()
 
     fun init() {
+        generators.clear()
         generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.COPPER), Config.copperOre))
         generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.LEAD), Config.leadOre))
         generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.COBALT), Config.cobaltOre))

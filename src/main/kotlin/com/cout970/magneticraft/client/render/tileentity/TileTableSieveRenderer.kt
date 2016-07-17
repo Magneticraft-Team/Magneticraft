@@ -5,19 +5,18 @@ import com.cout970.magneticraft.tileentity.TileTableSieve
 import com.cout970.magneticraft.util.resource
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
 /**
  * Created by cout970 on 19/06/2016.
  */
-object TileTableSieveRenderer : TileEntitySpecialRenderer<TileTableSieve>() {
+object TileTableSieveRenderer : TileEntityRenderer<TileTableSieve>() {
 
     val texture = resource("textures/models/table_sieve_content.png")
 
-    override fun renderTileEntityAt(te: TileTableSieve?, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
-        val item = te!!.inventory[0]
+    override fun renderTileEntityAt(te: TileTableSieve, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
+        val item = te.inventory[0]
         if (item != null) {
             pushMatrix()
             translate(x, y, z)

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.network.MessageIBD
+import com.cout970.magneticraft.network.MessageContainerUpdate
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
@@ -24,7 +24,8 @@ val DATA_ID_MACHINE_PRODUCTION = 5
 val DATA_ID_FLUID_AMOUNT = 6
 val DATA_ID_FLUID_NAME = 7
 val DATA_ID_STORAGE = 8
-val DATA_ID_CHAGE_RATE = 9
+val DATA_ID_CHARGE_RATE = 9
+val DATA_ID_MACHINE_WORKING = 10
 
 abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos: BlockPos) : Container() {
 
@@ -54,7 +55,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
         if (player is EntityPlayerMP) {
             val ibd = sendDataToClient()
             if (ibd != null) {
-                Magneticraft.network.sendTo(MessageIBD(ibd), player)
+                Magneticraft.network.sendTo(MessageContainerUpdate(ibd), player)
             }
         }
     }

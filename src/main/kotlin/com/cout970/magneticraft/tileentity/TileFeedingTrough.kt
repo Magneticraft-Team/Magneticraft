@@ -8,6 +8,7 @@ import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.passive.EntityAnimal
 import net.minecraft.init.Items
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -21,9 +22,9 @@ import java.util.*
  * Created by cout970 on 24/06/2016.
  */
 class TileFeedingTrough : TileBase(), ITickable {
-    val ACCEPTED_ITEMS = listOf(Items.WHEAT, Items.CARROT, Items.WHEAT_SEEDS)
+    val ACCEPTED_ITEMS: List<Item> = listOf(Items.WHEAT, Items.CARROT, Items.WHEAT_SEEDS)
     val MAX_ANIMALS = 30
-    val FAKE_PLAYER_UUID = UUID.fromString("d0f15bc8-6eb3-4a1b-8b5d-d3fdf5140321")
+    val FAKE_PLAYER_UUID = UUID.fromString("d0f15bc8-6eb3-4a1b-8b5d-d3fdf5140321")!!
     val FAKE_PROFILE = GameProfile(FAKE_PLAYER_UUID, "FeedingTrough")
     var WAIT_TIME = 600
     val inventory = ItemStackHandler()

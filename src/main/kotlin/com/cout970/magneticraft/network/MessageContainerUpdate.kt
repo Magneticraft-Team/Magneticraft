@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side
  */
 
 //Server -> Client
-class MessageIBD() : IMessage {
+class MessageContainerUpdate() : IMessage {
 
     var ibd: IBD? = null
 
@@ -32,9 +32,9 @@ class MessageIBD() : IMessage {
         ibd!!.toBuffer(buf!!)
     }
 
-    companion object : IMessageHandler<MessageIBD, IMessage>{
+    companion object : IMessageHandler<MessageContainerUpdate, IMessage>{
 
-        override fun onMessage(message: MessageIBD?, ctx: MessageContext?): IMessage? {
+        override fun onMessage(message: MessageContainerUpdate?, ctx: MessageContext?): IMessage? {
             if(ctx!!.side == Side.CLIENT) {
                 val container = Minecraft.getMinecraft().thePlayer.openContainer
                 if (container is ContainerBase) {

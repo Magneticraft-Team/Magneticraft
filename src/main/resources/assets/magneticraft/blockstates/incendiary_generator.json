@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:incendiary_generator.mcm"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{
+                "transform": "forge:default-block"
+            }]
+    }
+}

@@ -5,21 +5,19 @@ import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.entity.RenderEntityItem
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 24/06/2016.
  */
-object TileFeedingTroughRenderer : TileEntitySpecialRenderer<TileFeedingTrough>() {
+object TileFeedingTroughRenderer : TileEntityRenderer<TileFeedingTrough>() {
 
     lateinit var entityItem: EntityItem
     lateinit var entityRenderer: RenderEntityItem
     private var initialized = false
 
-    override fun renderTileEntityAt(te: TileFeedingTrough?, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
-        if (te == null) return
+    override fun renderTileEntityAt(te: TileFeedingTrough, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         if (!initialized) init()
         val item = te.inventory.getStackInSlot(0) ?: return
         val itemToRender = item.copy().apply { stackSize = 1 }

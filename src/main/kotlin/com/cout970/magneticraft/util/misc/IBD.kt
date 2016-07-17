@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.util.misc
 
+import com.cout970.magneticraft.util.readString
+import com.cout970.magneticraft.util.writeString
 import io.netty.buffer.ByteBuf
 
 /**
@@ -184,19 +186,4 @@ class IBD {
     }
 }
 
-fun ByteBuf.readString(): String {
-    val size = Math.abs(this.readShort().toInt())
-    val buffer = ByteArray(size)
-    for (i in 0 until size) {
-        buffer[i] = this.readByte()
-    }
-    return kotlin.text.String(buffer, charset = Charsets.UTF_8)
-}
 
-fun ByteBuf.writeString(str: String) {
-    val array = str.toByteArray(Charsets.UTF_8)
-    this.writeShort(array.size)
-    for (i in 0 until array.size) {
-        this.writeByte(array[i].toInt())
-    }
-}

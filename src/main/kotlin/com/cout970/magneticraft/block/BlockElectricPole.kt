@@ -6,6 +6,7 @@ import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
+import net.minecraft.block.state.IBlockState
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 
@@ -22,5 +23,9 @@ object BlockElectricPole : BlockElectricPoleBase(Material.WOOD, "electric_pole")
             return TileElectricPole()
         }
         return null
+    }
+
+    override fun hasTileEntity(state: IBlockState): Boolean {
+        return ELECTRIC_POLE_PLACE[state].isMainBlock()
     }
 }
