@@ -9,22 +9,22 @@ fun Vec3d(x: Number, y: Number, z: Number) = net.minecraft.util.math.Vec3d(x.toD
 
 // getters
 
-fun Vec3d.getXf(): Float = xCoord.toFloat()
+val Vec3d.xf: Float get() = xCoord.toFloat()
 
-fun Vec3d.getYf(): Float = yCoord.toFloat()
+val Vec3d.yf: Float get() = yCoord.toFloat()
 
-fun Vec3d.getZf(): Float = zCoord.toFloat()
+val Vec3d.zf: Float get() = zCoord.toFloat()
 
-fun Vec3d.getXi(): Int = xCoord.toInt()
+val Vec3d.xi: Int get() = xCoord.toInt()
 
-fun Vec3d.getYi(): Int = yCoord.toInt()
+val Vec3d.yi: Int get() = yCoord.toInt()
 
-fun Vec3d.getZi(): Int = zCoord.toInt()
+val Vec3d.zi: Int get() = zCoord.toInt()
 
 // utilities
 
-fun Vec3d.xy() = Vec2d(xCoord, yCoord)
+val Vec3d.xy: Vec2d get() = Vec2d(xCoord, yCoord)
 
-fun Vec3d.yz() = Vec2d(yCoord, zCoord)
+val Vec3d.yz: Vec2d get() = Vec2d(yCoord, zCoord)
 
-fun Vec3d.xz() = Vec2d(xCoord, zCoord)
+val Vec3d.xz: Vec2d get() = Vec2d(xCoord, zCoord)

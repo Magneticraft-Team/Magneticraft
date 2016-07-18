@@ -4,7 +4,7 @@
         "custom": {
             "flip-v": true
         },
-        "model": "magneticraft:crushing_table.obj"
+        "model": "magneticraft:obj/crushing_table.obj"
     },
     "variants": {
         "normal": [{}],

@@ -1,32 +1,46 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "magneticraft:feeding_trough.obj",
+        "model": "magneticraft:obj/feeding_trough.obj",
         "transform": "forge:default-block"
     },
     "variants": {
-        "center=false,side=north": [{
-            "y": 270
-        }],
-        "center=false,side=west": [{
-            "y": 180
-        }],
-        "center=false,side=south": [{
-            "y": 90
-        }],
-        "center=false,side=east": [{}],
-        "center=true,side=north": [{
-            "y": 270
-        }],
-        "center=true,side=west": [{
-            "y": 180
-        }],
-        "center=true,side=south": [{
-            "y": 90
-        }],
-        "center=true,side=east": [{}],
-        "inventory": [{
-            "model": "magneticraft:feeding_trough_tiny.obj"
-        }]
+        "center=false,side=north": [
+            {
+                "y": 270
+            }
+        ],
+        "center=false,side=west": [
+            {
+                "y": 180
+            }
+        ],
+        "center=false,side=south": [
+            {
+                "y": 90
+            }
+        ],
+        "center=false,side=east": [{ }],
+        "center=true,side=north": [
+            {
+                "y": 270
+            }
+        ],
+        "center=true,side=west": [
+            {
+                "y": 180
+            }
+        ],
+        "center=true,side=south": [
+            {
+                "y": 90
+            }
+        ],
+        "center=true,side=east": [{ }],
+        "inventory": [
+            {
+                "model": "magneticraft:obj/feeding_trough_tiny.obj"
+            }
+        ]
     }
 }

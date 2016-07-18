@@ -4,6 +4,7 @@ import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.block.itemblock.ItemBlockElectricPole
 import com.cout970.magneticraft.block.itemblock.ItemBlockFeedingTrough
+import com.cout970.magneticraft.block.itemblock.ItemBlockIncendiaryGenerator
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 //@formatter:off
@@ -15,7 +16,7 @@ val blocks = mapOf(
         BlockFeedingTrough          to ItemBlockFeedingTrough(),
         BlockElectricConnector      to ItemBlockBase(BlockElectricConnector),
         BlockElectricPole           to ItemBlockElectricPole(),
-        BlockIncendiaryGenerator    to ItemBlockBase(BlockIncendiaryGenerator),
+        BlockIncendiaryGenerator    to ItemBlockIncendiaryGenerator(),
         BlockElectricFurnace        to ItemBlockBase(BlockElectricFurnace),
         BlockElectricPoleAdapter    to ItemBlockBase(BlockElectricPoleAdapter),
         BlockBattery                to ItemBlockBase(BlockBattery)

@@ -1,9 +1,6 @@
 package com.cout970.magneticraft.client.render.tileentity
 
-import coffee.cypher.mcextlib.extensions.vectors.component1
-import coffee.cypher.mcextlib.extensions.vectors.component2
-import coffee.cypher.mcextlib.extensions.vectors.component3
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
+import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.util.resource
@@ -21,6 +18,14 @@ import org.lwjgl.opengl.GL11
  */
 //TEXTURES
 val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
+
+fun customRotate(rot: Vec3d, pos: Vec3d) {
+    GlStateManager.translate(pos.x, pos.y, pos.z)
+    GlStateManager.rotate(rot.xCoord.toFloat(), 1f, 0f, 0f)
+    GlStateManager.rotate(rot.yCoord.toFloat(), 0f, 1f, 0f)
+    GlStateManager.rotate(rot.zCoord.toFloat(), 0f, 0f, 1f)
+    GlStateManager.translate(-pos.x, -pos.y, -pos.z)
+}
 
 fun rotateFromCenter(facing: EnumFacing, optional: Float = 0f) {
     val angle = when (facing) {

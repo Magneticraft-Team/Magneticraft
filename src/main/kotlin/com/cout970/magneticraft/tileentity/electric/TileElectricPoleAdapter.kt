@@ -5,13 +5,13 @@ import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.api.energy.impl.ElectricConnection
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
-import com.cout970.magneticraft.registry.NODE_PROVIDER
-import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleAdapterConnector
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleConnector
 import com.cout970.magneticraft.util.contains
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.Vec3i
 
 /**
  * Created by cout970 on 05/07/2016.
@@ -30,25 +30,19 @@ class TileElectricPoleAdapter : TileElectricBase() {
     override fun load(nbt: NBTTagCompound) = Unit
 
     override fun updateConnections() {
-        internalConnections.clear()
         resetRenderCache()
-        for (x in -16..16) {
-            for (z in -16..16) {
-                for (y in -5..5) {
-                    if (x == 0 && y == 0 && z == 0) continue
-                    val tile = worldObj.getTileEntity(pos.add(x, y, z)) ?: continue
-                    val provider = NODE_PROVIDER!!.fromTile(tile, null) ?: continue
-                    for (n in provider.nodes) {
-                        if (n is IWireConnector) {
-                            if (provider.canBeConnected(n, secondNode) && canBeConnected(n, secondNode)) {
-                                if (!provider.connections.filter { n in it }.any { secondNode in it }) {
-                                    internalConnections.add(ElectricConnection(secondNode, n as IElectricNode))
-                                }
-                            } else if (provider.canBeConnected(n, firstNode) && canBeConnected(n, firstNode) && (tile !is TileElectricPoleAdapter)) {
-                                if (!provider.connections.filter { n in it }.any { firstNode in it }) {
-                                    internalConnections.add(ElectricConnection(firstNode, n as IElectricNode))
-                                }
-                            }
+        wiredConnections.clear()
+        for (provider in getHandlersIn(world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), this)) {
+            for (n in provider.nodes) {
+                if (n is IWireConnector) {
+                    if (provider.canBeConnected(n, secondNode) && canBeConnected(n, secondNode)) {
+                        if (!provider.connections.filter { n in it }.any { secondNode in it }) {
+                            wiredConnections.add(ElectricConnection(secondNode, n as IElectricNode))
+                        }
+
+                    } else if (provider.canBeConnected(n, firstNode) && canBeConnected(n, firstNode) && (provider !is TileElectricPoleAdapter)) {
+                        if (!provider.connections.filter { n in it }.any { firstNode in it }) {
+                            wiredConnections.add(ElectricConnection(firstNode, n as IElectricNode))
                         }
                     }
                 }
@@ -64,6 +58,8 @@ class TileElectricPoleAdapter : TileElectricBase() {
             renderCache = -1
         }
     }
+
+    override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing == null
 
     override fun getNodes(): List<INode> = listOf(firstNode, secondNode)
 

@@ -17,6 +17,7 @@ import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.fml.relauncher.Side
@@ -65,7 +66,7 @@ class TileIncendiaryGenerator(
                 heat += burningSpeed * FUEL_TO_HEAT
             }
             //makes electricity from heat
-            if (heat > STANDARD_AMBIENT_TEMPERATURE + 100 && tank.fluidAmount > 0) {
+            if (heat > STANDARD_AMBIENT_TEMPERATURE + 75 && tank.fluidAmount > 0) {
 
                 val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
@@ -75,12 +76,14 @@ class TileIncendiaryGenerator(
                 heat -= applied.toFloat() / HEAT_TO_WATTS
                 // 1 coal -> 1600 ticks, 1 bucket 1000*1000 nanoBuckets,
                 // we want to use 1 bucket ever 8 coal,
-                // so every tick uses (1000*1000)/(1600*8) = 78.125 nanoBuckets
-                nanoBuckets += ((applied / Config.incendiaryGeneratorMaxProduction) * 78.125).toInt()
+                // so every tick uses (1000*1000)/(1600*8) = 78.125 nanoBuckets per fuel
+                nanoBuckets += ((applied / FUEL_TO_WATTS) * 78.125).toInt()
                 if (nanoBuckets > 1000) {
                     nanoBuckets -= 1000
                     tank.drainInternal(1, true)
                 }
+            } else if (heat > STANDARD_AMBIENT_TEMPERATURE && tank.fluidAmount > 0) {
+                heat -= 0.109f
             }
             //updates the production counter
             production.tick()
@@ -127,6 +130,10 @@ class TileIncendiaryGenerator(
                 dropItem(inventory[0]!!, pos)
             }
         }
+    }
+
+    override fun canConnectAtSide(facing: EnumFacing?): Boolean {
+        return facing == EnumFacing.UP
     }
 
     companion object {

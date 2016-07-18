@@ -4,12 +4,13 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.api.energy.impl.ElectricConnection
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
-import com.cout970.magneticraft.registry.NODE_PROVIDER
-import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleConnector
+import com.cout970.magneticraft.util.contains
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.Vec3i
 
 /**
  * Created by cout970 on 03/07/2016.
@@ -22,24 +23,13 @@ class TileElectricPole : TileElectricBase() {
     override fun getMainNode(): IElectricNode = mainNode
 
     override fun updateConnections() {
-        internalConnections.clear()
         resetRenderCache()
-        for (x in -16..16) {
-            for (z in -16..16) {
-                for (y in -5..5) {
-                    if (x == 0 && y == 0 && z == 0) continue
-                    val tile = worldObj.getTileEntity(pos.add(x, y, z)) ?: continue
-                    val provider = NODE_PROVIDER!!.fromTile(tile, null) ?: continue
-                    for (n in provider.nodes) {
-                        if (n is IWireConnector && n.connectorsSize == (node as IWireConnector).connectorsSize) {
-                            if (tile is TileElectricBase) {
-                                if (!tile.connections.any { it.secondNode == node || it.firstNode == node }) {
-                                    internalConnections.add(ElectricConnection(node, n as IElectricNode))
-                                }
-                            } else {
-                                internalConnections.add(ElectricConnection(node, n as IElectricNode))
-                            }
-                        }
+        wiredConnections.clear()
+        for (provider in getHandlersIn(world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), this)) {
+            for (n in provider.nodes) {
+                if (n is IWireConnector && n.connectorsSize == (node as IWireConnector).connectorsSize) {
+                    if (!provider.connections.filter { n in it }.any { mainNode in it }) {
+                        wiredConnections.add(ElectricConnection(node, n as IElectricNode))
                     }
                 }
             }
@@ -54,6 +44,8 @@ class TileElectricPole : TileElectricBase() {
             renderCache = -1
         }
     }
+
+    override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing == null
 
     override fun canBeConnected(nodeA: IElectricNode, nodeB: IElectricNode): Boolean = true
 

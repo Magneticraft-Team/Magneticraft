@@ -22,6 +22,7 @@ item.magneticraft.ingot_cobalt.name=Cobalt Ingot
 item.magneticraft.ingot_tungsten.name=Tungsten Ingot
 
 item.magneticraft.hand_sieve.name=Hand Sieve
+item.magneticraft.coi_of_wire.name=Coil of Wire
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
@@ -43,6 +44,15 @@ tile.magneticraft.table_sieve.name=Table Sieve
 tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
 tile.magneticraft.electric_pole.name=Electric Pole
 tile.magneticraft.electric_connector.name=Electric Connector
+tile.magneticraft.incendiary_generator.name=Incendiary Generator
+tile.magneticraft.block_battery.name=Battery Block
+tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
+
 
 itemGroup.magneticraft=Magneticraft
+
+text.magneticraft.wire_connect.success=Wire attached
+text.magneticraft.wire_connect.fail=Unable to connect wire
+text.magneticraft.wire_connect.same_block=Unable to connect wire to the same block
+text.magneticraft.wire_connect.no_other_connector=No position set
 

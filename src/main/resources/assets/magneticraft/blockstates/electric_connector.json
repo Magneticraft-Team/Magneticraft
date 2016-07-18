@@ -1,12 +1,11 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "magneticraft:connector_with_base.mcm"
+        "model": "magneticraft:mcm/electric_connector.mcm",
+        "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{
-                "transform": "forge:default-block"
-            }]
+        "normal": [{ }],
+        "inventory": [{ }]
     }
 }

@@ -1,11 +1,10 @@
 package com.cout970.magneticraft.client.render.tileentity
 
 import com.cout970.loader.api.ModelCacheFactory
-import com.cout970.loader.api.ModelRegistry
 import com.cout970.loader.api.model.ICachedModel
 import com.cout970.loader.api.model.IModelCube
 import com.cout970.loader.api.model.IModelFilter
-import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
@@ -41,13 +40,11 @@ object TileIncendiaryGeneratorRenderer : TileEntityRenderer<TileIncendiaryGenera
 
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
-        val model = ModelRegistry.getDynamicModel(resource("models/block/incendiary_generator.mcm"))
+        val model = getModel(resource("models/block/mcm/incendiary_generator.mcm"))
         val hasFan = IModelFilter {
             if (it is IModelCube) it.name.contains("Fan") else false
         }
-        val blockModel = model.filter(Predicates.not(hasFan))
-        val fanModel = model.filter(hasFan)
-        block = ModelCacheFactory.createCachedModel(blockModel, 128)
-        fan = ModelCacheFactory.createCachedModel(fanModel, 128)
+        block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(hasFan)), 128)
+        fan = ModelCacheFactory.createCachedModel(model.filter(hasFan), 128)
     }
 }

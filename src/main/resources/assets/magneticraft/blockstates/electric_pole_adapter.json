@@ -1,37 +1,54 @@
-
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "magneticraft:pole_adapter.mcm",
+        "model": "magneticraft:mcm/pole_adapter.mcm",
         "transform": "forge:default-block"
     },
     "variants": {
-        "place=north": [{
-          "transform": { "rotation": { "y": 90 } }
-        }],
-		"place=north_east": [{
-          "transform": { "rotation": { "y": 45 } }
-        }],
-		"place=east": [{
-          "transform": { "rotation": { "y": 180 } }
-		}],
-		"place=south_east": [{
-          "transform": { "rotation": { "y": 135 } }
-		}],
-		"place=south": [{
-          "transform": { "rotation": { "y": 270 } }
-        }],
-		"place=south_west": [{
-          "transform": { "rotation": { "y": 225 } }
-        }],
-        "place=west": [{
-          "transform": { "rotation": { "y": 0 } }
-        }],
-        "place=north_west": [{
-          "transform": { "rotation": { "y": -45 } }
-        }],
-        "inventory": [{
-          "model": "magneticraft:pole_adapter_tiny.mcm"
-        }]
+        "place=north": [
+            {
+                "transform": { "rotation": { "y": 90 } }
+            }
+        ],
+        "place=north_east": [
+            {
+                "transform": { "rotation": { "y": 45 } }
+            }
+        ],
+        "place=east": [
+            {
+                "transform": { "rotation": { "y": 180 } }
+            }
+        ],
+        "place=south_east": [
+            {
+                "transform": { "rotation": { "y": 135 } }
+            }
+        ],
+        "place=south": [
+            {
+                "transform": { "rotation": { "y": 270 } }
+            }
+        ],
+        "place=south_west": [
+            {
+                "transform": { "rotation": { "y": 225 } }
+            }
+        ],
+        "place=west": [
+            {
+                "transform": { "rotation": { "y": 0 } }
+            }
+        ],
+        "place=north_west": [
+            {
+                "transform": { "rotation": { "y": -45 } }
+            }
+        ],
+        "inventory": [
+            {
+                "model": "magneticraft:mcm/pole_adapter_tiny.mcm"
+            }
+        ]
     }
 }

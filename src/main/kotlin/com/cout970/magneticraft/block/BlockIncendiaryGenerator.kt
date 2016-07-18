@@ -2,12 +2,12 @@ package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -29,7 +29,6 @@ import net.minecraftforge.fluids.FluidStack
  */
 
 val PROPERTY_LOCATION: PropertyEnum<BlockIncendiaryGenerator.Location> = PropertyEnum.create("location", BlockIncendiaryGenerator.Location::class.java)!!
-val PROPERTY_DIRECTION: PropertyDirection = PropertyDirection.create("direction", listOf(*EnumFacing.HORIZONTALS))!!
 
 object BlockIncendiaryGenerator : BlockState(Material.IRON, "incendiary_generator"), ITileEntityProvider {
 

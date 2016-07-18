@@ -2,8 +2,11 @@ package com.cout970.magneticraft.tileentity.electric
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.misc.ValueAverage
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.items.ItemStackHandler
 
 /**
@@ -51,6 +54,15 @@ class TileBattery : TileElectricBase() {
     override fun load(nbt: NBTTagCompound) {
         storage = nbt.getInteger("storage")
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
+    }
+
+    fun getFacing(): EnumFacing {
+        val state = world.getBlockState(pos)
+        return PROPERTY_DIRECTION[state]
+    }
+
+    override fun canConnectAtSide(facing: EnumFacing?): Boolean {
+        return facing == null || facing == getFacing()
     }
 
     companion object {

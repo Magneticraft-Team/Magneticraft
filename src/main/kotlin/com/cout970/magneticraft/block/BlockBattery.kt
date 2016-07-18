@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.tileentity.electric.TileBattery
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
