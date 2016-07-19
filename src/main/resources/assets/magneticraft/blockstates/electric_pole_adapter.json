@@ -7,12 +7,12 @@
     "variants": {
         "place=north": [
             {
-                "transform": { "rotation": { "y": 90 } }
+                "transform": { "rotation": { "y": 270 } }
             }
         ],
         "place=north_east": [
             {
-                "transform": { "rotation": { "y": 45 } }
+                "transform": { "rotation": { "y": 225 } }
             }
         ],
         "place=east": [
@@ -27,12 +27,12 @@
         ],
         "place=south": [
             {
-                "transform": { "rotation": { "y": 270 } }
+                "transform": { "rotation": { "y": 90 } }
             }
         ],
         "place=south_west": [
             {
-                "transform": { "rotation": { "y": 225 } }
+                "transform": { "rotation": { "y": 45 } }
             }
         ],
         "place=west": [

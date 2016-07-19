@@ -5,7 +5,10 @@ import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -23,4 +26,6 @@ object BlockElectricPoleAdapter : BlockElectricPoleBase(Material.IRON, "electric
     override fun hasTileEntity(state: IBlockState): Boolean {
         return ELECTRIC_POLE_PLACE[state].isMainBlock()
     }
+
+    override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack?) {}
 }

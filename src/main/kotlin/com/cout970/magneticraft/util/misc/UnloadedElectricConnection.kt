@@ -13,7 +13,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 18/07/2016.
  */
-class UnloadedElectricConnection(
+data class UnloadedElectricConnection(
         val first: BlockPos,
         val firstIndex: Int,
         val second: BlockPos,
@@ -53,10 +53,10 @@ class UnloadedElectricConnection(
             isValid = false
             return null
         }
-        var con:IElectricConnection? = null
-        if(handler == handler0){
+        val con: IElectricConnection?
+        if (handler == handler0) {
             con = handler1.createConnection(handler0, nodes0[firstIndex] as IElectricNode, nodes1[secondIndex] as IElectricNode, null)
-        }else{
+        } else {
             con = handler0.createConnection(handler1, nodes1[secondIndex] as IElectricNode, nodes0[firstIndex] as IElectricNode, null)
         }
 

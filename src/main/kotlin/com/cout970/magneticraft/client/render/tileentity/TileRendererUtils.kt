@@ -119,6 +119,7 @@ fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnec
     val origins = a.connectors
     val destinations = b.connectors
     val direction = b.pos.subtract(a.pos)
+    if (origins.size != destinations.size) return
     for (c in origins.indices) {
         val order = b.getConnectorIndex(c, a, con)
         val start = origins[c]

@@ -24,6 +24,11 @@ class TileElectricPoleAdapter : TileElectricBase() {
 
     override fun load(nbt: NBTTagCompound) = Unit
 
+    override fun iterate() {
+        mainNode.iterate()
+        wiredConnections.forEach { if (it.firstNode == firstNode || it.firstNode == secondNode) it.iterate() }
+    }
+
     override fun updateWiredConnections() {
 
         if (autoConnectWires) {
@@ -37,7 +42,7 @@ class TileElectricPoleAdapter : TileElectricBase() {
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing == null
 
-    override fun getNodes(): List<INode> = listOf(firstNode, secondNode)
+    override fun getNodes(): List<INode> = listOf(secondNode, firstNode)
 
     override fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean {
         var result = false
@@ -68,7 +73,17 @@ class TileElectricPoleAdapter : TileElectricBase() {
         return result
     }
 
-    private fun  distance(a: IWireConnector, b: IWireConnector): Double {
+    private fun distance(a: IWireConnector, b: IWireConnector): Double {
         return a.pos.distanceSq(b.pos)
+    }
+
+    fun loadConnections(connections: List<IElectricConnection>) {
+        for (i in connections) {
+            val node = if (firstNode == i.firstNode) i.secondNode else i.firstNode
+            val handler = getHandler(node)
+            if (handler is IElectricNodeHandler) {
+                connect(this, handler)
+            }
+        }
     }
 }

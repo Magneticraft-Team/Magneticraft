@@ -13,7 +13,8 @@ val items = listOf(
         ItemHandSieve,
         ItemPebbles,
         ItemIngot,
-        ItemCoilOfWire
+        ItemCoilOfWire,
+        ItemPlate
 )
 
 fun registerItems() {

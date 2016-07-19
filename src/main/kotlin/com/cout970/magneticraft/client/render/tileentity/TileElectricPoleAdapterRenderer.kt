@@ -16,7 +16,7 @@ object TileElectricPoleAdapterRenderer : TileEntityRenderer<TileElectricPoleAdap
             for (i in te.wiredConnections) {
                 if (te.firstNode == i.firstNode || te.secondNode == i.firstNode) {
                     renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
-                } else {//wires are renderer twice to fix a render bug in vanilla
+                } else if (i.firstNode == te.secondNode) {//wires are renderer twice to fix a render bug in vanilla
                     val trans = i.firstNode.pos - i.secondNode.pos
                     pushMatrix()
                     translate(trans.x.toDouble(), trans.y.toDouble(), trans.z.toDouble())

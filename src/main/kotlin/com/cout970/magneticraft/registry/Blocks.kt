@@ -1,15 +1,13 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.*
-import com.cout970.magneticraft.block.itemblock.ItemBlockBase
-import com.cout970.magneticraft.block.itemblock.ItemBlockElectricPole
-import com.cout970.magneticraft.block.itemblock.ItemBlockFeedingTrough
-import com.cout970.magneticraft.block.itemblock.ItemBlockIncendiaryGenerator
+import com.cout970.magneticraft.block.itemblock.*
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 //@formatter:off
 val blocks = mapOf(
         BlockCrushingTable          to ItemBlockBase(BlockCrushingTable),
+        BlockTableSieve             to ItemBlockBase(BlockTableSieve),
         BlockOre                    to ItemBlockBase(BlockOre),
         BlockLimestone              to ItemBlockBase(BlockLimestone),
         BlockBurntLimestone         to ItemBlockBase(BlockBurntLimestone),
@@ -18,7 +16,7 @@ val blocks = mapOf(
         BlockElectricPole           to ItemBlockElectricPole(),
         BlockIncendiaryGenerator    to ItemBlockIncendiaryGenerator(),
         BlockElectricFurnace        to ItemBlockBase(BlockElectricFurnace),
-        BlockElectricPoleAdapter    to ItemBlockBase(BlockElectricPoleAdapter),
+        BlockElectricPoleAdapter    to ItemBlockElectricPoleAdapter(),
         BlockBattery                to ItemBlockBase(BlockBattery)
 )
 //@formatter:on

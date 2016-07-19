@@ -11,6 +11,7 @@ import com.cout970.magneticraft.util.misc.UnloadedElectricConnection
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.with
 import com.google.common.base.Predicate
+import com.google.common.base.Predicates
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.tileentity.TileEntity
@@ -76,6 +77,10 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
                 }
             }
         }
+        iterate()
+    }
+
+    open fun iterate(){
         node.iterate()
         normalConnections.forEach { if (it.firstNode == node) it.iterate() }
         wiredConnections.forEach { if (it.firstNode == node) it.iterate() }
@@ -234,14 +239,21 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
             for (t in getTileEntitiesIn(world, start, end, predicate)) {
                 val handler = NODE_HANDLER!!.fromTile(t)
                 if (handler is IElectricNodeHandler) {
-                    for (n in handler.nodes.filter { it is IWireConnector }.map { it as IWireConnector }.filter { filter.apply(it) }) {
-                        val connection = handler.createConnection(tile, node, n, null)
-                        if (connection != null) {
-                            tile.wiredConnections.add(connection)
-                        }
-                    }
+                    connect(tile, handler, filter)
                 }
             }
+        }
+
+        fun connect(tile: TileElectricBase, handler: IElectricNodeHandler, filter: Predicate<IWireConnector> = Predicates.alwaysTrue()) : Boolean{
+            var result = false
+            for (n in handler.nodes.filter { it is IWireConnector }.map { it as IWireConnector }.filter { filter.apply(it) }) {
+                val connection = handler.createConnection(tile, tile.node, n, null)
+                if (connection != null) {
+                    tile.wiredConnections.add(connection)
+                    result = true
+                }
+            }
+            return result
         }
 
         fun getTileEntitiesIn(world: World, start: BlockPos, end: BlockPos, filter: Predicate<TileEntity>): List<TileEntity> {

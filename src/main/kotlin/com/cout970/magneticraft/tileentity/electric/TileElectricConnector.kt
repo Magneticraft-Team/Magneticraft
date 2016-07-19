@@ -3,7 +3,6 @@ package com.cout970.magneticraft.tileentity.electric
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.INodeHandler
-import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.block.states.PROPERTY_FACING
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricConnector
@@ -50,18 +49,8 @@ class TileElectricConnector : TileElectricBase() {
     override fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean {
         var result = false
         if (handler == this || handler !is IElectricNodeHandler) return result
-        for (n in handler.nodes) {
-            if (n is IWireConnector) {
-                if (n.connectorsSize == mainNode.connectorsSize) {
-                    val con = handler.createConnection(this, mainNode, n, null)
-                    if (con != null) {
-                        wiredConnections.add(con)
-                        result = true
-                        wireRender.reset()
-                    }
-                }
-            }
-        }
+        result = connect(this, handler)
+        wireRender.reset()
         return result
     }
 
