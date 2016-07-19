@@ -4,8 +4,11 @@ import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.NetworkManager
+import net.minecraft.network.play.server.SPacketUpdateTileEntity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.network.NetworkRegistry
@@ -45,11 +48,29 @@ abstract class TileBase : TileEntity() {
     abstract fun save(): NBTTagCompound
     abstract fun load(nbt: NBTTagCompound)
 
+    fun sendUpdateToNearPlayers() {
+        if (world.isRemote) return
+        val packet = updatePacket
+        worldObj.playerEntities
+                .map { it as EntityPlayerMP }
+                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (32 * 32) }
+                .forEach { it.connection.sendPacket(packet) }
+    }
+
+    override fun getUpdatePacket(): SPacketUpdateTileEntity {
+        return SPacketUpdateTileEntity(pos, 0, writeToNBT(NBTTagCompound()))
+    }
+
+    override fun onDataPacket(net: NetworkManager?, pkt: SPacketUpdateTileEntity?) {
+        readFromNBT(pkt!!.nbtCompound)
+    }
+
     /**
      * Receives data sent using [sendSyncData]
      * @param side the side that sent the message
      */
-    open fun receiveSyncData(data: IBD, side: Side) {}
+    open fun receiveSyncData(data: IBD, side: Side) {
+    }
 
     /**
      * Sends data to 'side' to be handled in [receiveSyncData]
@@ -57,9 +78,9 @@ abstract class TileBase : TileEntity() {
      */
     fun sendSyncData(data: IBD, side: Side) {
         val msg = MessageTileUpdate(data, pos, world.provider.dimension)
-        if(side == Side.CLIENT){
+        if (side == Side.CLIENT) {
             Magneticraft.network.sendToAllAround(msg, NetworkRegistry.TargetPoint(world.provider.dimension, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), 32.0))
-        }else{
+        } else {
             Magneticraft.network.sendToServer(msg)
         }
     }

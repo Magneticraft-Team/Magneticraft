@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.api.energy.*
+import com.cout970.magneticraft.api.energy.IManualConnectionHandler
+import com.cout970.magneticraft.api.energy.INode
+import com.cout970.magneticraft.api.energy.INodeHandler
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -58,10 +60,6 @@ class EmptyStorage<T> : Capability.IStorage<T> {
 class DefaultNodeProvider : INodeHandler {
 
     override fun getNodes(): List<INode> = listOf()
-
-    override fun getConnections(): List<IElectricConnection> = listOf()
-
-    override fun canBeConnected(nodeA: IElectricNode?, nodeB: IElectricNode?): Boolean = false
 }
 
 class DefaultManualConnectionHandler : IManualConnectionHandler {

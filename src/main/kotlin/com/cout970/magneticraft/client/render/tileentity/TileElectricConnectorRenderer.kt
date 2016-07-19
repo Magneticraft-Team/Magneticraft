@@ -11,7 +11,6 @@ import com.cout970.magneticraft.util.vector.Vec3d
 import com.google.common.base.Predicates
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.util.EnumFacing
-import org.lwjgl.opengl.GL11
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -25,15 +24,11 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
     override fun renderTileEntityAt(te: TileElectricConnector, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
 
         //create cache for wire connections
-        if (te.renderCache == -1) {
-            te.renderCache = glGenLists(1)
-            glNewList(te.renderCache, GL11.GL_COMPILE)
-            for (i in te.connections) {
+        te.wireRender.update {
+            for (i in te.wiredConnections) {
                 if (i.firstNode != te.node) continue
-                if (i.secondNode !is IWireConnector) continue
-                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
+                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.01)
             }
-            glEndList()
         }
 
         pushMatrix()
@@ -41,7 +36,7 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
 
         //render wires
         bindTexture(WIRE_TEXTURE)
-        callList(te.renderCache)
+        te.wireRender.render()
 
         //render block
         bindTexture(texture)

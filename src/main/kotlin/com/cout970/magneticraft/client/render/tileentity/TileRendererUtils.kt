@@ -114,7 +114,7 @@ fun drawLine(t: VertexBuffer, a: Vec3d, b: Vec3d) {
     t.pos(b.xCoord + w, b.yCoord, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
 }
 
-fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnector) {
+fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnector, weight: Double = 0.05) {
     val origins = a.connectors
     val destinations = b.connectors
     val direction = b.pos.subtract(a.pos)
@@ -128,7 +128,7 @@ fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnec
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
 
-        val points = interpolateWire(start, end, 0.035)
+        val points = interpolateWire(start, end, weight)
 
         for (p in 0..points.size - 2) {
             drawLine(buffer, points[p], points[p + 1])

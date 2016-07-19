@@ -49,7 +49,7 @@ open class ElectricNode(
             return power
         } else {
             val squared = voltage * voltage - Math.abs(power) * 2
-            val powerUsed = if (squared > 0) power else (voltage * voltage) / 2
+            val powerUsed = if (squared > 0) -power else (voltage * voltage) / 2
             val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
             applyCurrent(diff)
             return powerUsed
@@ -66,4 +66,30 @@ open class ElectricNode(
         setDouble("V", voltage)
         setDouble("A", amperage)
     }
+
+    override fun toString(): String {
+        return "ElectricNode(world=${worldGetter.invoke()}, pos=${posGetter.invoke()}, resistance=$resistance, capacity=$capacity, voltage=$voltage, amperage=$amperage"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ElectricNode) return false
+
+        if (worldGetter.invoke() != other.worldGetter.invoke()) return false
+        if (posGetter.invoke() != other.posGetter.invoke()) return false
+        if (resistance != other.resistance) return false
+        if (capacity != other.capacity) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = worldGetter.invoke().hashCode()
+        result = 31 * result + posGetter.invoke().hashCode()
+        result = 31 * result + resistance.hashCode()
+        result = 31 * result + capacity.hashCode()
+        return result
+    }
+
+
 }

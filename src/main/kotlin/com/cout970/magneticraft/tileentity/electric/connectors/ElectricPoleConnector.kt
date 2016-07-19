@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d
  * Created by cout970 on 06/07/2016.
  */
 
-class ElectricPoleConnector(node: ElectricNode) : IElectricNode by node, IWireConnector {
+class ElectricPoleConnector(val node: ElectricNode) : IElectricNode by node, IWireConnector {
 
     override fun getConnectors(): ImmutableList<Vec3d> {
         val state = world.getBlockState(pos)
@@ -39,4 +39,14 @@ class ElectricPoleConnector(node: ElectricNode) : IElectricNode by node, IWireCo
         }
         return index
     }
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other) || if (other is ElectricNode) node.equals(other) else false
+    }
+
+    override fun hashCode(): Int {
+        return node.hashCode()
+    }
+
+    override fun toString() = node.toString()
 }

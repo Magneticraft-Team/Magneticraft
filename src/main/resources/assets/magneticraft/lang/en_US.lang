@@ -22,7 +22,7 @@ item.magneticraft.ingot_cobalt.name=Cobalt Ingot
 item.magneticraft.ingot_tungsten.name=Tungsten Ingot
 
 item.magneticraft.hand_sieve.name=Hand Sieve
-item.magneticraft.coi_of_wire.name=Coil of Wire
+item.magneticraft.coil_of_wire.name=Coil of Wire
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics

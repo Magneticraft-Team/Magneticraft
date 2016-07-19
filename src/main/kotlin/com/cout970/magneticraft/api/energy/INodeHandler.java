@@ -8,8 +8,4 @@ import java.util.List;
 public interface INodeHandler {
 
     List<INode> getNodes();
-
-    List<IElectricConnection> getConnections();
-
-    boolean canBeConnected(IElectricNode nodeA, IElectricNode nodeB);
 }

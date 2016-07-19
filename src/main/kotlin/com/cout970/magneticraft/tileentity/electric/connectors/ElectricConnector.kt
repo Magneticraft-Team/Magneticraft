@@ -14,12 +14,15 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 06/07/2016.
  */
-class ElectricConnector(node: ElectricNode, val tile: TileElectricConnector) : IElectricNode by node, IWireConnector {
+class ElectricConnector(val node: ElectricNode, val tile: TileElectricConnector) : IElectricNode by node, IWireConnector {
 
     override fun getConnectors(): ImmutableList<Vec3d> {
-        val vec = Vec3d(0.5, 0.5, 0.5) + (tile.getFacing().directionVec.toDoubleVec() * PIXEL * 3.0)
+        val offset = if (!tile.isInvalid) (tile.getFacing().directionVec.toDoubleVec() * PIXEL * 3.0) else Vec3d.ZERO
+        val vec = Vec3d(0.5, 0.5, 0.5) + offset
         return ImmutableList.of(vec)
     }
 
     override fun getConnectorsSize(): Int = 1
+
+    override fun toString() = node.toString()
 }

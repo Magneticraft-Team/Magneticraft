@@ -1,12 +1,18 @@
 package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.aabb.to
+import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.block.states.ElectricPoleTypes
+import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
+import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
@@ -14,11 +20,13 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.ICapabilityProvider
 
 /**
  * Created by cout970 on 05/07/2016.
  */
-abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBase(material, name) {
+abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBase(material, name), IManualConnectionHandler, ICapabilityProvider {
 
     val boundingBox by lazy {
         val size = 0.0625 * 3
@@ -113,4 +121,26 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
             else -> super.getRenderType(state)
         }
     }
+
+    override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer, side: EnumFacing, stack: ItemStack): Boolean {
+        val state = world.getBlockState(thisBlock)
+        val mainPos = getMainPos(state, thisBlock)
+        val tile = world.getTileEntity(mainPos)
+        val other = world.getTileEntity(otherBlock)
+        if (tile !is TileElectricPole || other == null) {
+            return false
+        }
+        val handler = NODE_HANDLER!!.fromTile(other) ?: return false
+        return tile.connectWire(handler, side)
+    }
+
+    override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): BlockPos {
+        val state = world!!.getBlockState(thisBlock)
+        return getMainPos(state, thisBlock!!)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T = this as T
+
+    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean = capability == MANUAL_CONNECTION_HANDLER
 }

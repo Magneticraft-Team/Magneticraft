@@ -32,4 +32,19 @@ open class ElectricConnection(
         firstNode.applyCurrent(-I)
         secondNode.applyCurrent(I)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is IElectricConnection){
+            return firstNode.equals(other.firstNode) && secondNode.equals(other.secondNode)
+        }
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return (super.hashCode() * 31 + firstNode.hashCode()) * 31 + secondNode.hashCode()
+    }
+
+    override fun toString(): String{
+        return "ElectricConnection(firstNode=$firstNode, secondNode=$secondNode)"
+    }
 }
