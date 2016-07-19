@@ -5,6 +5,7 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
+import com.cout970.magneticraft.util.shouldTick
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.passive.EntityAnimal
 import net.minecraft.init.Items
@@ -26,12 +27,15 @@ class TileFeedingTrough : TileBase(), ITickable {
     val MAX_ANIMALS = 30
     val FAKE_PLAYER_UUID = UUID.fromString("d0f15bc8-6eb3-4a1b-8b5d-d3fdf5140321")!!
     val FAKE_PROFILE = GameProfile(FAKE_PLAYER_UUID, "FeedingTrough")
-    var WAIT_TIME = 600
+    var WAIT_TIME = 400
     val inventory = ItemStackHandler()
 
     override fun update() {
         if (!worldObj.isRemote) {
-            if ((worldObj.totalWorldTime + pos.hashCode()) % WAIT_TIME == 0L && inventory[0] != null) {
+            if (shouldTick(200)) {
+                sendUpdateToNearPlayers()
+            }
+            if (shouldTick(WAIT_TIME) && inventory[0] != null) {
                 //getting the bounding box to search animals
                 var start = pos.toDoubleVec().addVector(-3.5, -1.0, -3.5)
                 var end = pos.toDoubleVec().addVector(4.5, 2.0, 4.5)
@@ -45,7 +49,7 @@ class TileFeedingTrough : TileBase(), ITickable {
                 //getting the animals
                 val totalAnimals = worldObj.getEntitiesInAABBexcluding(null, box, { it is EntityAnimal })
                 val validAnimals = totalAnimals.map { it as EntityAnimal }
-                    .filter { !it.isInLove && !it.isChild && it.isBreedingItem(inventory[0]) }.toMutableList()
+                        .filter { !it.isInLove && !it.isChild && it.isBreedingItem(inventory[0]) }.toMutableList()
 
                 if (validAnimals.size >= 2 && totalAnimals.size < MAX_ANIMALS) {
                     for (i in 0..1) {
@@ -53,6 +57,7 @@ class TileFeedingTrough : TileBase(), ITickable {
                         val animal = validAnimals[index]
                         validAnimals.removeAt(index)
                         inventory.extractItem(0, 1, false)
+                        sendUpdateToNearPlayers()
 
                         //applying love =)
                         animal.setInLove(FakePlayerFactory.get(worldObj as WorldServer, FAKE_PROFILE))

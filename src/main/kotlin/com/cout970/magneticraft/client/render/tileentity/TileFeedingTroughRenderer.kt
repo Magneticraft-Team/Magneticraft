@@ -1,12 +1,17 @@
 package com.cout970.magneticraft.client.render.tileentity
 
+import coffee.cypher.mcextlib.extensions.vectors.x
+import coffee.cypher.mcextlib.extensions.vectors.y
+import coffee.cypher.mcextlib.extensions.vectors.z
 import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.entity.RenderEntityItem
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.Vec3d
 
 /**
  * Created by cout970 on 24/06/2016.
@@ -31,95 +36,109 @@ object TileFeedingTroughRenderer : TileEntityRenderer<TileFeedingTrough>() {
         entityItem.setEntityItemStack(itemToRender)
         //fix rotation
         entityItem.hoverStart = 0f
-        val pixel = 0.0625
-        //right
-        pushMatrix()
-        translate(pixel * 5, -pixel * 2, pixel * 11)
-        rotate(10f, 0f, 0f, 1f)
-        rotate(-10f, 1f, 0f, 0f)
-        rotate(90f, 0f, 1f, 0f)
-        scale(1.5, 1.5, 1.5)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        pushMatrix()
-        translate(pixel * 5, -pixel * 2, pixel * 25)
-        rotate(10f, 0f, 0f, 1f)
-        rotate(-10f, 1f, 0f, 0f)
-        rotate(90f, 0f, 1f, 0f)
-        scale(1.5, 1.5, 1.5)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        //TODO
-//        if (item.stackSize < 8) {
-//            popMatrix()
-//            return
-//        }
-        //left
-        pushMatrix()
-        translate(pixel * 11, -pixel * 2, pixel * 8)
-        rotate(-10f, 0f, 0f, 1f)
-        rotate(10f, 1f, 0f, 0f)
-        rotate(-90f, 0f, 1f, 0f)
-        scale(1.5, 1.5, 1.5)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        pushMatrix()
-        translate(pixel * 11, -pixel * 2, pixel * 21)
-        rotate(-10f, 0f, 0f, 1f)
-        rotate(10f, 1f, 0f, 0f)
-        rotate(-90f, 0f, 1f, 0f)
-        scale(1.5, 1.5, 1.5)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        //bottom
-        pushMatrix()
-        translate(pixel * 3, pixel * 2, pixel * 14)
-        rotate(90f, 0f, 0f, 1f)
-        rotate(-90f - 45f, 1f, 0f, 0f)
-        rotate(-90f, 0f, 1f, 0f)
-        scale(1.25, 1.25, 1.25)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        pushMatrix()
-        translate(pixel * 13, pixel * 2, pixel * 18)
-        rotate(90f, 0f, 0f, 1f)
-        rotate(50f, 1f, 0f, 0f)
-        rotate(-90f, 0f, 1f, 0f)
-        scale(1.25, 1.25, 1.25)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        pushMatrix()
-        translate(pixel * 15, pixel * 3, pixel * 17)
-        rotate(90f, 0f, 0f, 1f)
-        rotate(-90f, 0f, 1f, 0f)
-        scale(1.25, 1.25, 1.25)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        //front
-        pushMatrix()
-        translate(pixel * 8, pixel * 0, pixel * 2.5)
-        scale(1.25, 1.25, 1.25)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
-        //back
-        pushMatrix()
-        translate(pixel * 8, pixel * 0, 2 - pixel * 2.5)
-        scale(1.25, 1.25, 1.25)
-        entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
-        popMatrix()
+        var level = 0
+        if (item.stackSize > 32) {
+            level = 4
+        } else if (item.stackSize > 16) {
+            level = 3
+        } else if (item.stackSize > 8) {
+            level = 2
+        } else if (item.stackSize > 0) {
+            level = 1
+        }
+        side(level)
+        rotate(180f, 0.0f, 1.0f, 0.0f)
+        translate(-1.0, 0.0, -2.0)
+        side(level)
+
         popMatrix()
     }
 
-//    private fun transform(pos: Vec3d, rot: Vec3d, rotPoint: Vec3d, scale: Vec3d) {
-//        val pixel = 0.0625
-//        translate(pos.xCoord * pixel, pos.yCoord * pixel, pos.zCoord * pixel)
-//        translate(rotPoint.xCoord * pixel, rotPoint.yCoord * pixel, rotPoint.zCoord * pixel)
-//        rotate(rot.zCoord.toFloat(), 0f, 0f, 1f)
-//        rotate(rot.yCoord.toFloat(), 0f, 1f, 0f)
-//        rotate(rot.xCoord.toFloat(), 1f, 0f, 0f)
-//        translate(-rotPoint.xCoord * pixel, -rotPoint.yCoord * pixel, -rotPoint.zCoord * pixel)
-//        scale(scale.xCoord, scale.yCoord, scale.zCoord)
-//    }
+    fun side(level: Int) {
+
+        //level 1
+        if (level >= 1) {
+            pushMatrix()
+            tranform(Vec3d(2.0, 2.0, 3.0), Vec3d(90.0, 0.0, 0.0), Vec3d(0.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+
+
+            pushMatrix()
+            tranform(Vec3d(4.0, 2.0, 3.0), Vec3d(90.0, 30.0, 0.0), Vec3d(0.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+        }
+
+        //level2
+        if (level >= 2) {
+            pushMatrix()
+            tranform(Vec3d(8.0, 3.0, 10.0), Vec3d(90.0, -30.0, 0.0), Vec3d(16.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+
+            pushMatrix()
+            tranform(Vec3d(12.0, 2.5, 10.0), Vec3d(90.0, -30.0, -5.0), Vec3d(16.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+        }
+
+        //level3
+        if (level >= 3) {
+            pushMatrix()
+            tranform(Vec3d(2.0, 1.0, 7.0), Vec3d(-10.0, 22.0, 4.0), Vec3d(0.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+
+            pushMatrix()
+            tranform(Vec3d(1.0, 1.0, 15.0), Vec3d(10.0, -22.0, -4.0), Vec3d(16.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+
+            pushMatrix()
+            tranform(Vec3d(-1.0, -2.0, -4.0), Vec3d(20.0, -90.0, 5.0), Vec3d(0.0, 0.0, 8.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+        }
+
+        //level4
+        if (level >= 4) {
+            pushMatrix()
+            tranform(Vec3d(5.0, 0.0, 4.5), Vec3d(-10.0, 0.0, 0.0), Vec3d(0.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+
+            pushMatrix()
+            tranform(Vec3d(7.0, 0.0, 11.0), Vec3d(14.0, 0.0, 0.0), Vec3d(0.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+
+            pushMatrix()
+            tranform(Vec3d(12.0, 0.0, 10.0), Vec3d(14.0, 0.0, 0.0), Vec3d(0.0, 0.0, 0.0), Vec3d(1.0, 1.0, 1.0))
+            entityRenderer.doRender(entityItem, 0.0, 0.0, 0.0, 0f, 0f)
+            popMatrix()
+        }
+    }
+
+    fun tranform(pos: Vec3d, rot: Vec3d, rotPos: Vec3d, scale: Vec3d) {
+        translate(PIXEL * 16, 0.0, 0.0)
+        rotate(0, -90, 0)
+
+        translate(pos.x * PIXEL, pos.y * PIXEL, pos.z * PIXEL)
+
+        translate(rotPos.x * PIXEL, rotPos.y * PIXEL, rotPos.z * PIXEL)
+        rotate(rot.x, rot.y, rot.z)
+        translate(-rotPos.x * PIXEL, -rotPos.y * PIXEL, -rotPos.z * PIXEL)
+
+        translate(PIXEL * 4, 0.0, 0.0)
+        GlStateManager.scale(scale.x, scale.y, scale.z)
+    }
+
+    private fun rotate(x: Number, y: Number, z: Number) {
+        GlStateManager.rotate(z.toFloat(), 0f, 0f, 1f)
+        GlStateManager.rotate(y.toFloat(), 0f, 1f, 0f)
+        GlStateManager.rotate(x.toFloat(), 1f, 0f, 0f)
+    }
 
     private fun init() {
         initialized = true
