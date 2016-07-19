@@ -7,6 +7,7 @@ import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
+import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -126,12 +127,15 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
         val state = world.getBlockState(thisBlock)
         val mainPos = getMainPos(state, thisBlock)
         val tile = world.getTileEntity(mainPos)
-        val other = world.getTileEntity(otherBlock)
-        if (tile !is TileElectricPole || other == null) {
-            return false
-        }
+        val other = world.getTileEntity(otherBlock) ?: return false
         val handler = NODE_HANDLER!!.fromTile(other) ?: return false
-        return tile.connectWire(handler, side)
+        if(tile is TileElectricPole) {
+            return tile.connectWire(handler, side)
+        }
+        if(tile is TileElectricPoleAdapter) {
+            return tile.connectWire(handler, side)
+        }
+        return false
     }
 
     override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): BlockPos {

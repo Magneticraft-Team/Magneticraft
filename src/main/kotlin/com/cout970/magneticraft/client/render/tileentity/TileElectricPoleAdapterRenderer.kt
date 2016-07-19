@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.client.render.tileentity
 
+import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import net.minecraft.client.renderer.GlStateManager.*
@@ -13,8 +14,15 @@ object TileElectricPoleAdapterRenderer : TileEntityRenderer<TileElectricPoleAdap
 
         te.wireRender.update {
             for (i in te.wiredConnections) {
-                if (te.firstNode == i.firstNode && te.secondNode == i.firstNode) continue
-                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
+                if (te.firstNode == i.firstNode || te.secondNode == i.firstNode) {
+                    renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
+                } else {//wires are renderer twice to fix a render bug in vanilla
+                    val trans = i.firstNode.pos - i.secondNode.pos
+                    pushMatrix()
+                    translate(trans.x.toDouble(), trans.y.toDouble(), trans.z.toDouble())
+                    renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
+                    popMatrix()
+                }
             }
         }
 

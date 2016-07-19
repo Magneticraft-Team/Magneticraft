@@ -53,7 +53,7 @@ abstract class TileBase : TileEntity() {
         val packet = updatePacket
         worldObj.playerEntities
                 .map { it as EntityPlayerMP }
-                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (32 * 32) }
+                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
                 .forEach { it.connection.sendPacket(packet) }
     }
 

@@ -45,7 +45,7 @@ class TileElectricConnector : TileElectricBase() {
         return facing == null || facing == getFacing()
     }
 
-    override fun getMaxWireDistance(): Double = 8.0
+    override fun getMaxWireDistance(): Double = MAX_WIRE_DISTANCE
 
     override fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean {
         var result = false
@@ -63,5 +63,9 @@ class TileElectricConnector : TileElectricBase() {
             }
         }
         return result
+    }
+
+    companion object{
+        val MAX_WIRE_DISTANCE = 8.0
     }
 }

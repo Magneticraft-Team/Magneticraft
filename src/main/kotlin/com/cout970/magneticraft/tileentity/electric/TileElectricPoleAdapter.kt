@@ -44,14 +44,16 @@ class TileElectricPoleAdapter : TileElectricBase() {
         if (handler == this || handler !is IElectricNodeHandler) return result
         for (n in handler.nodes) {
             if (n is IWireConnector) {
-                if (n.connectorsSize == firstNode.connectorsSize) {
+                if (n.connectorsSize == firstNode.connectorsSize && handler !is TileElectricPoleAdapter &&
+                        distance(n, firstNode) <= TileElectricConnector.MAX_WIRE_DISTANCE * TileElectricConnector.MAX_WIRE_DISTANCE) {
+
                     val con = handler.createConnection(this, firstNode, n, null)
                     if (con != null) {
                         wiredConnections.add(con)
                         result = true
                         wireRender.reset()
                     }
-                }else{
+                } else {
                     if (n.connectorsSize == secondNode.connectorsSize) {
                         val con = handler.createConnection(this, secondNode, n, null)
                         if (con != null) {
@@ -64,5 +66,9 @@ class TileElectricPoleAdapter : TileElectricBase() {
             }
         }
         return result
+    }
+
+    private fun  distance(a: IWireConnector, b: IWireConnector): Double {
+        return a.pos.distanceSq(b.pos)
     }
 }

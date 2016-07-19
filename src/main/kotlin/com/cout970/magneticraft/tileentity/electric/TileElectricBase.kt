@@ -61,9 +61,14 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
                 wireRender.reset()
             }
         }
-        // when the world is loaded the player take some ticks to
-        // load so this wait for the player to send an update
+
         if (!world.isRemote) {
+            //update to sync connections every 20 seconds
+            if (shouldTick(400)) {
+                sendUpdateToNearPlayers()
+            }
+            // when the world is loaded the player take some ticks to
+            // load so this wait for the player to send an update
             if (firstTicks > 0) {
                 firstTicks--
                 if (firstTicks % 20 == 0) {
