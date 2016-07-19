@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL11
  */
 //TEXTURES
 val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
+const val PIXEL = 0.0625
 
 fun customRotate(rot: Vec3d, pos: Vec3d) {
     GlStateManager.translate(pos.x, pos.y, pos.z)

@@ -1,10 +1,13 @@
 package com.cout970.magneticraft.registry
 
+import coffee.cypher.mcextlib.extensions.items.stack
+import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
 import com.cout970.magneticraft.block.BlockBurntLimestone
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockLimestone
+import com.cout970.magneticraft.block.BlockOre
 import com.cout970.magneticraft.item.ItemCrushedOre
 import com.cout970.magneticraft.item.ItemGuideBook
 import com.cout970.magneticraft.item.ItemPebbles
@@ -12,6 +15,7 @@ import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks.*
+import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -26,6 +30,13 @@ import net.minecraftforge.oredict.ShapedOreRecipe
 //TODO Recipe Builder
 fun registerRecipes() {
     //@formatter:off
+
+    //CRUSHING TABLE RECIPES
+    CrushingTableRegistry.registerRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
+    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2))
+    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3))
+    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4))
+    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5))
 
     //CRAFTING RECIPES
     addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE), 'W', of(LOG))

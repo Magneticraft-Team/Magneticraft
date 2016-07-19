@@ -18,11 +18,14 @@ abstract class CommonProxy {
         registerItems()
         registerTileEntities()
         registerOreDictionaryEntries()
-        registerRecipes()
         registerCapabilities()
     }
 
     open fun init() {
+
+        //init recipes
+        registerRecipes()
+
         //world generator
         WorldGenerator.init()
         GameRegistry.registerWorldGenerator(WorldGenerator, 10)

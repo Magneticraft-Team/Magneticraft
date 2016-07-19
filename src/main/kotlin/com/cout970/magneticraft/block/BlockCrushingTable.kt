@@ -18,8 +18,8 @@ import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 object BlockCrushingTable : BlockBase(
-    material = Material.ROCK,
-    registryName = "crushing_table"
+        material = Material.ROCK,
+        registryName = "crushing_table"
 ), ITileEntityProvider {
 
     val boundingBox = Vec3d.ZERO to Vec3d(1.0, 0.875, 1.0)
@@ -34,9 +34,9 @@ object BlockCrushingTable : BlockBase(
     override fun createNewTileEntity(worldIn: World, meta: Int) = TileCrushingTable()
 
     override fun onBlockActivated(
-        world: World, pos: BlockPos, state: IBlockState,
-        player: EntityPlayer, hand: EnumHand, heldItem: ItemStack?,
-        side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float
+            world: World, pos: BlockPos, state: IBlockState,
+            player: EntityPlayer, hand: EnumHand, heldItem: ItemStack?,
+            side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float
     ): Boolean {
         if (side != EnumFacing.UP) {
             return super.onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
@@ -58,22 +58,36 @@ object BlockCrushingTable : BlockBase(
             return true
         } else {
             if (heldItem != null) {
-                if (CrushingTableRegistry.getRecipe(heldItem) != null) {
+                if (heldItem.item is ItemHammer) {
+                    for (slot in 0 until player.inventory.sizeInventory) {
+                        val stack = player.inventory.getStackInSlot(slot)
+                        if (stack != null && CrushingTableRegistry.getRecipe(stack) != null) {
+                            if (!player.capabilities.isCreativeMode) {
+                                stack.stackSize--
+
+                                if (stack.stackSize <= 0) {
+                                    player.inventory.setInventorySlotContents(slot, null)
+                                }
+                            }
+
+                            tile.setStack(stack.copy().apply { stackSize = 1 })
+                            return true
+                        }
+                    }
+                } else {
                     if (!player.capabilities.isCreativeMode) {
                         heldItem.stackSize--
 
-                        if (heldItem.stackSize == 0) {
+                        if (heldItem.stackSize <= 0) {
                             player.setHeldItem(hand, null)
                         }
                     }
 
                     tile.setStack(heldItem.copy().apply { stackSize = 1 })
-
                     return true
                 }
             }
-
-            return super.onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
+            return false
         }
     }
 }

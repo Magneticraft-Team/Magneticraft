@@ -24,3 +24,8 @@ fun registerOreDictionaryEntries() {
         OreDictionary.registerOre("pebbles${value.capitalize()}", ItemStack(ItemPebbles, 1, key))
     }
 }
+
+fun getItemFromDict(name:String): ItemStack? {
+    return OreDictionary.getOres(name).firstOrNull()?.copy()
+}
+

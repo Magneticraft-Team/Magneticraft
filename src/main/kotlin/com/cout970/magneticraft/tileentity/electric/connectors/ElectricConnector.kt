@@ -3,10 +3,10 @@ package com.cout970.magneticraft.tileentity.electric.connectors
 import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.times
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
-import com.cout970.loader.impl.util.PIXEL
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.client.render.tileentity.PIXEL
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.google.common.collect.ImmutableList
 import net.minecraft.util.math.Vec3d

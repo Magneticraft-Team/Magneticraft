@@ -1,16 +1,11 @@
 package com.cout970.magneticraft
 
-import coffee.cypher.mcextlib.extensions.blocks.stack
-import coffee.cypher.mcextlib.extensions.items.stack
-import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
 import com.cout970.magneticraft.config.ConfigHandler
 import com.cout970.magneticraft.proxy.CommonProxy
 import com.cout970.magneticraft.util.LANG_ADAPTER
 import com.cout970.magneticraft.util.MODID
 import com.cout970.magneticraft.util.NAME
 import com.cout970.magneticraft.util.VERSION
-import net.minecraft.init.Blocks
-import net.minecraft.init.Items
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -62,9 +57,6 @@ object Magneticraft {
         log.info("Starting init")
 
         proxy.init()
-
-        CrushingTableRegistry.registerRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
-        CrushingTableRegistry.registerRecipe(Blocks.DIRT.stack(), Blocks.DIAMOND_BLOCK.stack(size = 64))
 
         log.info("Init done")
     }

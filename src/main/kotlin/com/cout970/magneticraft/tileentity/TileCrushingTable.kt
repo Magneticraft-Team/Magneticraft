@@ -22,12 +22,9 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraftforge.items.ItemStackHandler
+import java.util.*
 
 class TileCrushingTable : TileBase() {
-
-    companion object {
-        val CRUSHING_DAMAGE = 40
-    }
 
     val inventory: CrushingTableInventory = CrushingTableInventory()
     var damageTaken = 0
@@ -69,29 +66,36 @@ class TileCrushingTable : TileBase() {
         if (item is ItemBlock) {
             val state = item.block.getStateFromMeta(stack.metadata)
             val factory = ParticleDigging.Factory()
+            val rand = Random()
 
-            val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.x, center.y, center.z, 0.0, 1.0, 0.0, Block.getStateId(state))
-            Minecraft.getMinecraft().effectRenderer.addEffect(particle)
+            for (i in 0..5) {
+                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.x, center.y, center.z,
+                        (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15, Block.getStateId(state))
+                Minecraft.getMinecraft().effectRenderer.addEffect(particle)
+            }
         } else {
             val factory = ParticleBreaking.Factory()
+            val rand = Random()
 
-            val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.x, center.y, center.z, 0.0, 1.0, 0.0, Item.getIdFromItem(item), stack.itemDamage)
-            Minecraft.getMinecraft().effectRenderer.addEffect(particle)
+            for (i in 0..5) {
+                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.x, center.y, center.z,
+                        (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15, Item.getIdFromItem(item), stack.itemDamage)
+                Minecraft.getMinecraft().effectRenderer.addEffect(particle)
+            }
         }
     }
 
-    override fun save(): NBTTagCompound =
-            NBTTagCompound().apply {
-                if (getStack() != null) {
-                    setTag("stack", NBTTagCompound().apply { getStack()?.writeToNBT(this) })
-                }
-                setInteger("damage", damageTaken)
-            }
+    override fun save(): NBTTagCompound = NBTTagCompound().apply {
+        if (getStack() != null) {
+            setTag("stack", NBTTagCompound().apply { getStack()?.writeToNBT(this) })
+        }
+        setInteger("damage", damageTaken)
+    }
 
     override fun load(nbt: NBTTagCompound) {
         inventory[0] = if (nbt.hasKey("stack")) {
             ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack"))
-        }else {
+        } else {
             null
         }
         damageTaken = nbt.getInteger("damage")
@@ -101,12 +105,13 @@ class TileCrushingTable : TileBase() {
             (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?) =
-            if (capability == ITEM_HANDLER) {
-                inventory as T
-            }else {
-                super.getCapability(capability, facing)
-            }
+    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+        return if (capability == ITEM_HANDLER) {
+            inventory as T
+        } else {
+            super.getCapability(capability, facing)
+        }
+    }
 
     override fun onBreak() {
         super.onBreak()
@@ -122,34 +127,14 @@ class TileCrushingTable : TileBase() {
             damageTaken = 0
         }
 
-        override fun setStackInSlot(slot: Int, stack: ItemStack?) {
-            if (stack == null || (stack.stackSize == 1 && CrushingTableRegistry.getRecipe(stack) != null)) {
-                super.setStackInSlot(slot, stack)
-            }
-        }
-
-        override fun insertItem(slot: Int, stack: ItemStack?, simulate: Boolean): ItemStack? {
-            if (stack == null) {
-                return null
-            }
-
-            if (this[0] != null) {
-                return stack
-            }
-
-            if (stack.stackSize == 1 && CrushingTableRegistry.getRecipe(stack) != null) {
-                if (!simulate) {
-                    setStackInSlot(slot, stack)
-                }
-
-                return null
-            }
-
-            return stack
-        }
+        override fun getStackLimit(slot: Int, stack: ItemStack): Int = 1
 
         fun setResult(stack: ItemStack) {
             super.setStackInSlot(0, stack)
         }
+    }
+
+    companion object {
+        val CRUSHING_DAMAGE = 40
     }
 }
