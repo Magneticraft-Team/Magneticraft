@@ -25,6 +25,6 @@ class GuiElectricFurnace(container: ContainerBase) : GuiBase(container) {
                 3, Vec2d(69, 64) + box.start, { listOf(String.format("%.2fW", tile.production.storage)) }))
 
         val callback = CallbackBarProvider({ tile.burningTime.toDouble() }, { TileElectricFurnace.MAX_BURNING_TIME.toDouble() }, { 0.0 })
-        components.add(CompVerticalBar(callback, 3, Vec2d(80, 64) + box.start, { listOf("Burning: " + "%.1f".format(callback.getLevel() * 100) + "%") }))
+        components.add(CompVerticalBar(callback, 2, Vec2d(80, 64) + box.start, { listOf("Burning: " + "%.1f".format(callback.getLevel() * 100) + "%") }))
     }
 }

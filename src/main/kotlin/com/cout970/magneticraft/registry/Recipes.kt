@@ -59,10 +59,10 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 0), ItemStack(BlockLimestone, 1, 0))
     addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 2), ItemStack(BlockLimestone, 1, 2))
     //ores
-    addSmeltingRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(BlockOre, 1, 0))
-    addSmeltingRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(BlockOre, 1, 1))
-    addSmeltingRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(BlockOre, 1, 2))
-    addSmeltingRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(BlockOre, 1, 3))
+    addSmeltingRecipe(ItemStack(ItemIngot, 1, 2), ItemStack(BlockOre, 1, 0))
+    addSmeltingRecipe(ItemStack(ItemIngot, 1, 3), ItemStack(BlockOre, 1, 1))
+    addSmeltingRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(BlockOre, 1, 2))
+    addSmeltingRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(BlockOre, 1, 3))
     //pebles
     addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 0))
     addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 1))
