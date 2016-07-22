@@ -3,10 +3,10 @@ package com.cout970.magneticraft.gui.client.blocks
 import com.cout970.magneticraft.gui.client.GuiBase
 import com.cout970.magneticraft.gui.client.IComponent
 import com.cout970.magneticraft.gui.client.IGui
-import com.cout970.magneticraft.gui.client.compoenets.TransferBar
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.CompElectricBar
 import com.cout970.magneticraft.gui.client.components.MISC_TEXTURES
+import com.cout970.magneticraft.gui.client.components.TransferBar
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.tileentity.electric.TileBattery
 import com.cout970.magneticraft.util.misc.Box

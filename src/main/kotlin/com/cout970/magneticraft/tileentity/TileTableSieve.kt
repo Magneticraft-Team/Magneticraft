@@ -2,6 +2,8 @@ package com.cout970.magneticraft.tileentity
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
+import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.registry.fromTile
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -45,8 +47,26 @@ class TileTableSieve : TileBase(), ITickable {
 
     fun ejectItems() {
         val state = worldObj.getBlockState(pos.down())
+        val tile = worldObj.getTileEntity(pos.down())
+        if (tile != null) {
+            val inventory = ITEM_HANDLER!!.fromTile(tile)
+            if (inventory != null) {
+                val iterator = output.iterator()
+                while (iterator.hasNext()) {
+                    val output = iterator.next()
+                    for (slot in 0 until inventory.slots) {
+                        val result = inventory.insertItem(slot, output.copy(), true)
+                        if (result == null) {
+                            inventory.insertItem(slot, output.copy(), false)
+                            iterator.remove()
+                            break
+                        }
+                    }
+                }
+            }
+        }
         //TODO find a better way to know if you can drop the item or not
-        if (!state.block.isFullCube(state)) {
+        if (!state.isFullCube) {
             while (!output.isEmpty()) {
                 dropOutput(output.first().copy())
                 output.removeAt(0)

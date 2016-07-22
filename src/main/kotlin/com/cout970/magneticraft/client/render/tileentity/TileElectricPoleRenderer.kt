@@ -13,16 +13,16 @@ object TileElectricPoleRenderer : TileEntityRenderer<TileElectricPole>() {
     override fun renderTileEntityAt(te: TileElectricPole, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
 
         te.wireRender.update {
-            for (i in te.wiredConnections) {
-                if (i.firstNode != te.node) {//wires are renderer twice to fix a render bug in vanilla
-                    val trans = i.firstNode.pos - i.secondNode.pos
-                    pushMatrix()
-                    translate(trans.x.toDouble(), trans.y.toDouble(), trans.z.toDouble())
-                    renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
-                    popMatrix()
-                } else {
-                    renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
-                }
+            for (i in te.outputWiredConnections) {
+                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
+            }
+            for (i in te.inputWiredConnections) {
+                //wires are renderer twice to fix a render bug in vanilla
+                val trans = i.firstNode.pos - i.secondNode.pos
+                pushMatrix()
+                translate(trans.x.toDouble(), trans.y.toDouble(), trans.z.toDouble())
+                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
+                popMatrix()
             }
         }
 

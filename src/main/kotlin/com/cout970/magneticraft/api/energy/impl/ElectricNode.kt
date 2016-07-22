@@ -11,7 +11,7 @@ import net.minecraft.world.World
 open class ElectricNode(
         private val worldGetter: () -> World,
         private val posGetter: () -> BlockPos,
-        private val resistance: Double = 0.01,
+        private val resistance: Double = 0.001,
         private val capacity: Double = 1.0
 ) : IElectricNode {
 

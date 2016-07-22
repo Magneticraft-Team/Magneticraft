@@ -39,7 +39,8 @@ abstract class CommonProxy {
         Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 2, Side.SERVER)
     }
 
-    open fun postInit() {}
+    open fun postInit() {
+    }
 
     abstract fun getSide(): Side
 }

@@ -4,7 +4,6 @@ import com.cout970.magneticraft.api.energy.*
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleAdapterConnector
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleConnector
-import com.google.common.base.Predicate
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.Vec3i
@@ -17,27 +16,27 @@ class TileElectricPoleAdapter : TileElectricBase() {
     var mainNode = ElectricNode({ world }, { pos })
     var firstNode = ElectricPoleAdapterConnector(mainNode)
     var secondNode = ElectricPoleConnector(mainNode)
-
-    override fun getMainNode(): IElectricNode = mainNode
+    override val electricNodes: List<IElectricNode>
+        get() = listOf(mainNode)
 
     override fun save(): NBTTagCompound = NBTTagCompound()
 
     override fun load(nbt: NBTTagCompound) = Unit
 
-    override fun iterate() {
-        mainNode.iterate()
-        wiredConnections.forEach { if (it.firstNode == firstNode || it.firstNode == secondNode) it.iterate() }
-    }
-
     override fun updateWiredConnections() {
 
         if (autoConnectWires) {
-            autoConnectWires(this, world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), firstNode,
-                    Predicate { it !is ElectricPoleAdapterConnector && it!!.connectorsSize == firstNode.connectorsSize })
-            autoConnectWires(this, world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), secondNode,
-                    Predicate { it!!.connectorsSize == secondNode.connectorsSize })
+            autoConnectWires(this, world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), firstNode)
+            autoConnectWires(this, world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), secondNode)
         }
         super.updateWiredConnections()
+    }
+
+    override fun canConnect(thisNode: IElectricNode, other: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?): Boolean {
+        if(otherNode is ElectricPoleAdapterConnector){
+            return false
+        }
+        return super.canConnect(thisNode, other, otherNode, side)
     }
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing == null
@@ -45,32 +44,11 @@ class TileElectricPoleAdapter : TileElectricBase() {
     override fun getNodes(): List<INode> = listOf(secondNode, firstNode)
 
     override fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean {
-        var result = false
-        if (handler == this || handler !is IElectricNodeHandler) return result
-        for (n in handler.nodes) {
-            if (n is IWireConnector) {
-                if (n.connectorsSize == firstNode.connectorsSize && handler !is TileElectricPoleAdapter &&
-                        distance(n, firstNode) <= TileElectricConnector.MAX_WIRE_DISTANCE * TileElectricConnector.MAX_WIRE_DISTANCE) {
+        if (handler == this || handler !is IElectricNodeHandler) return false
 
-                    val con = handler.createConnection(this, firstNode, n, null)
-                    if (con != null) {
-                        wiredConnections.add(con)
-                        result = true
-                        wireRender.reset()
-                    }
-                } else {
-                    if (n.connectorsSize == secondNode.connectorsSize) {
-                        val con = handler.createConnection(this, secondNode, n, null)
-                        if (con != null) {
-                            wiredConnections.add(con)
-                            result = true
-                            wireRender.reset()
-                        }
-                    }
-                }
-            }
-        }
-        return result
+        return connectHandlers(this, handler, fun(wire1: IWireConnector, wire2: IWireConnector): Boolean {
+            return if (wire1 == firstNode) distance(wire1, wire2) <= TileElectricConnector.MAX_WIRE_DISTANCE * TileElectricConnector.MAX_WIRE_DISTANCE else true
+        })
     }
 
     private fun distance(a: IWireConnector, b: IWireConnector): Double {
@@ -82,7 +60,7 @@ class TileElectricPoleAdapter : TileElectricBase() {
             val node = if (firstNode == i.firstNode) i.secondNode else i.firstNode
             val handler = getHandler(node)
             if (handler is IElectricNodeHandler) {
-                connect(this, handler)
+                connectHandlers(this, handler)
             }
         }
     }

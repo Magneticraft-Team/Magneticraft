@@ -8,6 +8,7 @@ import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
 import com.cout970.magneticraft.block.states.ElectricPoleTypes
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
+import com.cout970.magneticraft.util.with
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -30,7 +31,7 @@ class ItemBlockElectricPoleAdapter : ItemBlockBase(BlockElectricPoleAdapter) {
             val tile = worldIn.getTile<TileElectricPole>(main)
             val connections = mutableListOf<IElectricConnection>()
             if(tile != null){
-                connections.addAll(tile.wiredConnections)
+                connections.addAll(tile.outputWiredConnections with tile.inputWiredConnections)
             }
             val yaw = if (placer.rotationYaw >= 180) {
                 placer.rotationYaw - 360

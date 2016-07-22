@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
+import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.consumeItem
 import com.cout970.magneticraft.util.fluid.Tank
@@ -18,6 +19,7 @@ import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.fml.relauncher.Side
@@ -34,6 +36,8 @@ class TileIncendiaryGenerator(
 ) : TileElectricBase(), IFluidHandler by tank {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
+    override val electricNodes: List<IElectricNode>
+        get() = listOf(mainNode)
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
     var burningTime = 0f
@@ -42,13 +46,12 @@ class TileIncendiaryGenerator(
     var nanoBuckets = 0
     var fanAnimation = AnimationTimer().apply { active = false }
 
-    override fun getMainNode(): IElectricNode = mainNode
 
     override fun update() {
 
         if (!worldObj.isRemote) {
             //consumes fuel
-            if (burningTime <= 0 && node.voltage < 120) {
+            if (burningTime <= 0 && mainNode.voltage < 120) {
                 if (inventory[0] != null) {
                     val time = TileEntityFurnace.getItemBurnTime(inventory[0])
                     if (time > 0) {
@@ -70,7 +73,7 @@ class TileIncendiaryGenerator(
 
                 val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
-                val applied = node.applyPower((1 - interpolate(node.voltage, 120.0, 125.0)) * prod)
+                val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, 120.0, 125.0)) * prod)
                 production += applied
 
                 heat -= applied.toFloat() / HEAT_TO_WATTS
@@ -83,7 +86,7 @@ class TileIncendiaryGenerator(
                     tank.drainInternal(1, true)
                 }
             } else if (heat > STANDARD_AMBIENT_TEMPERATURE && tank.fluidAmount > 0) {
-                heat -= 0.109f
+//                heat -= 0.109f
             }
             //updates the production counter
             production.tick()
@@ -134,6 +137,17 @@ class TileIncendiaryGenerator(
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean {
         return facing == EnumFacing.UP
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+        if (capability == FLUID_HANDLER) return this as T
+        return super.getCapability(capability, facing)
+    }
+
+    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+        if (capability == FLUID_HANDLER) return true
+        return super.hasCapability(capability, facing)
     }
 
     companion object {

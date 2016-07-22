@@ -1,11 +1,13 @@
 package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.aabb.to
+import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.block.states.ElectricPoleTypes
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.get
@@ -17,8 +19,10 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
@@ -129,10 +133,10 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
         val tile = world.getTileEntity(mainPos)
         val other = world.getTileEntity(otherBlock) ?: return false
         val handler = NODE_HANDLER!!.fromTile(other) ?: return false
-        if(tile is TileElectricPole) {
+        if (tile is TileElectricPole) {
             return tile.connectWire(handler, side)
         }
-        if(tile is TileElectricPoleAdapter) {
+        if (tile is TileElectricPoleAdapter) {
             return tile.connectWire(handler, side)
         }
         return false
@@ -141,6 +145,27 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
     override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): BlockPos {
         val state = world!!.getBlockState(thisBlock)
         return getMainPos(state, thisBlock!!)
+    }
+
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+        if (playerIn.isSneaking && playerIn.heldItemMainhand == null) {
+            val te = worldIn.getTile<TileElectricBase>(pos)
+            if (te != null) {
+                te.autoConnectWires = !te.autoConnectWires
+                if (!te.autoConnectWires) {
+                    te.clearWireConnections()
+                }
+                if (!worldIn.isRemote) {
+                    if (te.autoConnectWires) {
+                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.activate"))
+                    } else {
+                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.deactivate"))
+                    }
+                }
+                return true
+            }
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
     }
 
     @Suppress("UNCHECKED_CAST")

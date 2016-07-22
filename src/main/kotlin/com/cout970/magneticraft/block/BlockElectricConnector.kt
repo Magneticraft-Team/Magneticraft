@@ -8,8 +8,10 @@ import com.cout970.magneticraft.client.render.tileentity.PIXEL
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.util.get
+import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -20,9 +22,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumHand
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
@@ -33,6 +37,26 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
  */
 object BlockElectricConnector : BlockState(Material.IRON, "electric_connector"), ITileEntityProvider, IManualConnectionHandler, ICapabilityProvider {
 
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+        if (playerIn.isSneaking && playerIn.heldItemMainhand == null) {
+            val te = worldIn.getTile<TileElectricBase>(pos)
+            if (te != null) {
+                te.autoConnectWires = !te.autoConnectWires
+                if (!te.autoConnectWires) {
+                    te.clearWireConnections()
+                }
+                if (!worldIn.isRemote) {
+                    if (te.autoConnectWires) {
+                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.activate"))
+                    } else {
+                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.deactivate"))
+                    }
+                }
+                return true
+            }
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
+    }
 
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess?, pos: BlockPos?): AxisAlignedBB {
         val facing = PROPERTY_FACING[state]!!
@@ -82,11 +106,23 @@ object BlockElectricConnector : BlockState(Material.IRON, "electric_connector"),
     override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer, side: EnumFacing, stack: ItemStack): Boolean {
         val tile = world.getTile<TileElectricConnector>(thisBlock)
         val other = world.getTileEntity(otherBlock)
-        if(tile == null || other == null){
+        if (tile == null || other == null) {
             return false
         }
         val handler = NODE_HANDLER!!.fromTile(other) ?: return false
         return tile.connectWire(handler, side)
+    }
+
+    override fun canPlaceBlockOnSide(worldIn: World?, pos: BlockPos?, side: EnumFacing?): Boolean {
+        return super.canPlaceBlockOnSide(worldIn, pos, side) && worldIn!!.isSideSolid(pos!!.offset(side!!.opposite), side)
+    }
+
+    override fun neighborChanged(state: IBlockState, world: World, pos: BlockPos?, blockIn: Block?) {
+        val dir = PROPERTY_FACING[state]
+        if (!world.isSideSolid(pos!!.offset(dir), dir.opposite, false)) {
+            world.destroyBlock(pos, true)
+        }
+        super.neighborChanged(state, world, pos, blockIn)
     }
 
     @Suppress("UNCHECKED_CAST")

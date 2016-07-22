@@ -8,6 +8,7 @@ import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleConne
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.Vec3i
 
 /**
  * Created by cout970 on 03/07/2016.
@@ -15,11 +16,13 @@ import net.minecraft.util.math.AxisAlignedBB
 class TileElectricPole : TileElectricBase() {
 
     var mainNode = ElectricPoleConnector(ElectricNode(worldGetter = { world }, posGetter = { pos }))
-
-    override fun getMainNode(): IElectricNode = mainNode
+    override val electricNodes: List<IElectricNode>
+        get() = listOf(mainNode)
 
     override fun updateWiredConnections() {
-//        autoConnectWires(this, world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), mainNode, Predicate { it!!.connectorsSize == mainNode.connectorsSize })
+        if(autoConnectWires) {
+            autoConnectWires(this, world, pos.subtract(Vec3i(16, 5, 16)), pos.add(Vec3i(16, 5, 16)), mainNode)
+        }
         super.updateWiredConnections()
     }
 
@@ -34,7 +37,7 @@ class TileElectricPole : TileElectricBase() {
     override fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean {
         var result = false
         if (handler == this || handler !is IElectricNodeHandler) return result
-        result = connect(this, handler)
+        result = connectHandlers(this, handler)
         wireRender.reset()
         return result
     }

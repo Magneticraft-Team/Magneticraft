@@ -60,6 +60,8 @@ class EmptyStorage<T> : Capability.IStorage<T> {
 class DefaultNodeProvider : INodeHandler {
 
     override fun getNodes(): List<INode> = listOf()
+
+    override fun getPos(): BlockPos = BlockPos.ORIGIN
 }
 
 class DefaultManualConnectionHandler : IManualConnectionHandler {

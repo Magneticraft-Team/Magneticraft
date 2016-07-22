@@ -19,6 +19,7 @@ open class ElectricConnection(
 
     override fun iterate() {
         if (firstNode.world.isRemote) return
+
         //total resistance of the connection
         val R = (firstNode.resistance + secondNode.resistance) * separationDistance
         //capacity in the connection
@@ -27,6 +28,7 @@ open class ElectricConnection(
         val V = (firstNode.voltage * firstNode.capacity + secondNode.voltage * secondNode.capacity) / (firstNode.capacity + secondNode.capacity) - secondNode.voltage
         //intensity or amperage
         var I = (1 - Math.exp(-1 / (R * C))) * V * secondNode.capacity / firstNode.capacity
+
         I *= C * 2
         //the charge is moved
         firstNode.applyCurrent(-I)
@@ -34,7 +36,7 @@ open class ElectricConnection(
     }
 
     override fun equals(other: Any?): Boolean {
-        if(other is IElectricConnection){
+        if (other is IElectricConnection) {
             return firstNode.equals(other.firstNode) && secondNode.equals(other.secondNode)
         }
         return super.equals(other)
@@ -44,7 +46,7 @@ open class ElectricConnection(
         return (super.hashCode() * 31 + firstNode.hashCode()) * 31 + secondNode.hashCode()
     }
 
-    override fun toString(): String{
+    override fun toString(): String {
         return "ElectricConnection(firstNode=$firstNode, secondNode=$secondNode)"
     }
 }

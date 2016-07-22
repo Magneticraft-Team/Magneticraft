@@ -14,7 +14,8 @@ val items = listOf(
         ItemPebbles,
         ItemIngot,
         ItemCoilOfWire,
-        ItemPlate
+        ItemPlate,
+        ItemVoltmeter
 )
 
 fun registerItems() {

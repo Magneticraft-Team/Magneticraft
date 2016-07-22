@@ -15,12 +15,12 @@ import net.minecraftforge.items.ItemStackHandler
 class TileBattery : TileElectricBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
+    override val electricNodes: List<IElectricNode>
+        get() = listOf(mainNode)
     var storage: Int = 0
     val inventory = ItemStackHandler(2)
     val chargeRate = ValueAverage(20)
     val itemChargeRate = ValueAverage(20)
-
-    override fun getMainNode(): IElectricNode = mainNode
 
     override fun update() {
         if (!worldObj.isRemote) {

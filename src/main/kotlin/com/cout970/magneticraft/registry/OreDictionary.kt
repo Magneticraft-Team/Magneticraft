@@ -13,15 +13,15 @@ import net.minecraftforge.oredict.OreDictionary
 fun registerOreDictionaryEntries() {
 
     for ((key, value) in ItemIngot.variants) {
-        OreDictionary.registerOre("ore${value.capitalize()}", ItemStack(ItemIngot, 1, key))
+        OreDictionary.registerOre("ingot${value.replace("ore=", "").capitalize()}", ItemStack(ItemIngot, 1, key))
     }
 
     for ((key, value) in ItemCrushedOre.variants) {
-        OreDictionary.registerOre("crushedore${value.capitalize()}", ItemStack(ItemCrushedOre, 1, key))
+        OreDictionary.registerOre("crushedore${value.replace("ore=", "").capitalize()}", ItemStack(ItemCrushedOre, 1, key))
     }
 
     for ((key, value) in ItemPebbles.variants) {
-        OreDictionary.registerOre("pebbles${value.capitalize()}", ItemStack(ItemPebbles, 1, key))
+        OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}", ItemStack(ItemPebbles, 1, key))
     }
 }
 

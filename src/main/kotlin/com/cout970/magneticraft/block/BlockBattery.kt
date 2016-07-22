@@ -25,7 +25,7 @@ object BlockBattery : BlockState(Material.IRON, "block_battery"), ITileEntityPro
 
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
-    override fun isFullCube(state: IBlockState?) = false
+    override fun isFullCube(state: IBlockState?) = true
     override fun isVisuallyOpaque() = false
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileBattery()

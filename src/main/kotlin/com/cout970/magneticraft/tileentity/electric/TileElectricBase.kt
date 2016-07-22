@@ -1,17 +1,17 @@
 package com.cout970.magneticraft.tileentity.electric
 
+import coffee.cypher.mcextlib.extensions.vectors.length
+import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.energy.*
 import com.cout970.magneticraft.api.energy.impl.ElectricConnection
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.contains
 import com.cout970.magneticraft.util.misc.RenderCache
 import com.cout970.magneticraft.util.misc.UnloadedElectricConnection
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.with
 import com.google.common.base.Predicate
-import com.google.common.base.Predicates
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.tileentity.TileEntity
@@ -27,20 +27,21 @@ import net.minecraftforge.common.util.Constants
  */
 abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
 
-    val wiredConnections = mutableListOf<IElectricConnection>()
-    val normalConnections = mutableListOf<IElectricConnection>()
-    val node: IElectricNode get() = getMainNode()
-    val wireRender = RenderCache()
+    val inputNormalConnections = mutableListOf<IElectricConnection>()
+    val outputNormalConnections = mutableListOf<IElectricConnection>()
+
+    val inputWiredConnections = mutableListOf<IElectricConnection>()
+    val outputWiredConnections = mutableListOf<IElectricConnection>()
+
+    abstract val electricNodes: List<IElectricNode>
+
     val unloadedConnections = mutableListOf<UnloadedElectricConnection>()
-    var needUpdate = true
+    val wireRender = RenderCache()
     var firstTicks = -1
     var autoConnectWires = false
 
-    abstract fun getMainNode(): IElectricNode
-
     override fun update() {
-        if (needUpdate || shouldTick(40)) {
-            needUpdate = false
+        if (shouldTick(40)) {
             updateConnections()
         }
 
@@ -48,11 +49,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
             val iterator = unloadedConnections.iterator()
             while (iterator.hasNext()) {
                 val con = iterator.next()
-                val result = con.create(world, this)
-                if (result != null) {
-                    wiredConnections.add(result)
-                    iterator.remove()
-                } else if (!con.isValid) {
+                if (con.create(world, this)) {
                     iterator.remove()
                 }
             }
@@ -76,28 +73,28 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
                     sendUpdateToNearPlayers()
                 }
             }
+            iterate()
         }
-        iterate()
     }
 
-    open fun iterate(){
-        node.iterate()
-        normalConnections.forEach { if (it.firstNode == node) it.iterate() }
-        wiredConnections.forEach { if (it.firstNode == node) it.iterate() }
+    open fun iterate() {
+        electricNodes.forEach { it.iterate() }
+        outputNormalConnections.forEach { it.iterate() }
+        outputWiredConnections.forEach { it.iterate() }
     }
 
     open fun updateConnections() {
         clearNormalConnections()
         for (dir in EnumFacing.values().filter { it.axisDirection == EnumFacing.AxisDirection.NEGATIVE }) {
             val tile = worldObj.getTileEntity(pos.offset(dir)) ?: continue
-            if (canConnectAtSide(dir)) {
-                val provider = NODE_HANDLER!!.fromTile(tile, dir.opposite) ?: continue
-                if (provider is IElectricNodeHandler) {
-                    for (n in provider.nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
-                        val connection = provider.createConnection(this, node, n, dir.opposite)
-                        if (connection != null) {
-                            normalConnections.add(connection)
-                        }
+            val handler = NODE_HANDLER!!.fromTile(tile, dir.opposite)
+            if (handler !is IElectricNodeHandler) continue
+            for (thisNode in nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
+                for (otherNode in handler.nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
+                    if (this.canConnect(thisNode, handler, otherNode, dir) && handler.canConnect(otherNode, this, thisNode, dir.opposite)) {
+                        val connection = ElectricConnection(thisNode, otherNode)
+                        this.addConnection(connection, dir, true)
+                        handler.addConnection(connection, dir.opposite, false)
                     }
                 }
             }
@@ -108,13 +105,11 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     open fun updateWiredConnections() {
         if (world.isRemote) wireRender.reset()
         //remove invalid nodes in wiredConnections
-        val iterator = wiredConnections.iterator()
+        val iterator = outputWiredConnections.iterator()
         while (iterator.hasNext()) {
             val i = iterator.next()
-            val otherNode = if (i.firstNode == node) i.secondNode else i.firstNode
-            val handler = getHandler(otherNode)
-
-            if (handler == null || !handler.nodes.contains(otherNode)) {
+            val handler = getHandler(i.secondNode)
+            if (handler == null || !handler.nodes.contains(i.secondNode)) {
                 iterator.remove()
                 continue
             }
@@ -122,57 +117,80 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     }
 
     fun clearNormalConnections() {
-        val iterator = normalConnections.iterator()
+        val iterator = outputNormalConnections.iterator()
         while (iterator.hasNext()) {
             val con = iterator.next()
-            val node = if (con.firstNode == node) con.secondNode else con.firstNode
-            val handler = getHandler(node)
+            val handler = getHandler(con.secondNode)
             handler?.removeConnection(con)
             iterator.remove()
         }
     }
 
     fun clearWireConnections() {
-        val iterator = wiredConnections.iterator()
+        val iterator = outputWiredConnections.iterator()
         while (iterator.hasNext()) {
             val con = iterator.next()
-            val node = if (con.firstNode == node) con.secondNode else con.firstNode
-            val handler = getHandler(node)
+            val handler = getHandler(con.secondNode)
             handler?.removeConnection(con)
             iterator.remove()
         }
     }
 
-    override fun createConnection(other: IElectricNodeHandler, otherNode: IElectricNode, thisNode: IElectricNode, side: EnumFacing?): IElectricConnection? {
-        if (other == this || otherNode == thisNode) return null
-
-        if (wiredConnections.any { otherNode in it }) return null
-
-        val connection = ElectricConnection(otherNode, thisNode)
+    override fun canConnect(thisNode: IElectricNode, other: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?): Boolean {
+        if (other == this || otherNode == thisNode) return false
+        if (!canConnectAtSide(side)) return false
         if (side == null) {
-            if (connection.separationDistance > getMaxWireDistance()) {
-                return null
+            if (thisNode !is IWireConnector || otherNode !is IWireConnector) return false
+            if (thisNode.connectorsSize != otherNode.connectorsSize) return false
+
+            if (inputWiredConnections.any { it.firstNode == otherNode }) {
+                return false
             }
-            wiredConnections.add(connection)
-        } else {
-            normalConnections.add(connection)
+            if (outputWiredConnections.any { it.secondNode == otherNode }) {
+                return false
+            }
+            val distance = (thisNode.pos - otherNode.pos).length
+            if (distance > getMaxWireDistance()) {
+                return false
+            }
         }
-        if (world.isRemote) wireRender.reset()
-        return connection
+        return true
+    }
+
+    override fun addConnection(connection: IElectricConnection, side: EnumFacing?, output: Boolean) {
+        if (side == null) {
+            if (output) {
+                outputWiredConnections.add(connection)
+            } else {
+                inputWiredConnections.add(connection)
+            }
+            if (world.isRemote) wireRender.reset()
+        } else {
+            if (output) {
+                outputNormalConnections.add(connection)
+            } else {
+                inputNormalConnections.add(connection)
+            }
+        }
     }
 
     override fun removeConnection(connection: IElectricConnection) {
-        normalConnections.remove(connection)
-        wiredConnections.remove(connection)
+        inputNormalConnections.remove(connection)
+        outputNormalConnections.remove(connection)
+        inputWiredConnections.remove(connection)
+        outputWiredConnections.remove(connection)
         if (world.isRemote) wireRender.reset()
     }
 
     open fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean = false
 
-    override fun getNodes(): List<INode> = listOf(node)
+    override fun getNodes(): List<INode> = electricNodes
 
-    override fun getConnections(): List<IElectricConnection> = normalConnections with wiredConnections
+    override fun getInputConnections(): MutableList<IElectricConnection> = inputNormalConnections with inputWiredConnections
 
+    override fun getOutputConnections(): MutableList<IElectricConnection> = outputNormalConnections with outputWiredConnections
+
+    //check for normal connections
     open fun canConnectAtSide(facing: EnumFacing?): Boolean = true
 
     open fun getNodeHandler(facing: EnumFacing?): INodeHandler? = if (canConnectAtSide(facing)) this else null
@@ -191,8 +209,11 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     }
 
     override fun readFromNBT(compound: NBTTagCompound?) {
-        if (compound!!.hasKey("ElectricNode")) {
-            node.deserializeNBT(compound.getCompoundTag("ElectricNode"))
+        if (compound!!.hasKey("ElectricNodes")) {
+            val tag = compound.getCompoundTag("ElectricNodes")
+            for (i in 0 until electricNodes.size) {
+                electricNodes[i].deserializeNBT(tag.getCompoundTag("Node" + i))
+            }
         }
         if (compound.hasKey("ElectricConnections")) {
             val list = compound.getTagList("ElectricConnections", Constants.NBT.TAG_COMPOUND)
@@ -204,12 +225,15 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     }
 
     override fun writeToNBT(compound: NBTTagCompound?): NBTTagCompound? {
-        compound!!.setTag("ElectricNode", node.serializeNBT())
+        val tag = NBTTagCompound()
+        for (i in 0 until electricNodes.size) {
+            tag.setTag("Node" + i, electricNodes[i].serializeNBT())
+        }
+        compound!!.setTag("ElectricNodes", tag)
+
         val list = NBTTagList()
-        for (i in wiredConnections) {
-            if (i.firstNode == node) {
-                list.appendTag(UnloadedElectricConnection.save(i))
-            }
+        for (i in outputWiredConnections) {
+            list.appendTag(UnloadedElectricConnection.save(i))
         }
         for (i in unloadedConnections) {
             if (i.isValid) {
@@ -224,6 +248,24 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
         super.onBreak()
         clearNormalConnections()
         clearWireConnections()
+        this.let {
+            val iterator = inputNormalConnections.iterator()
+            while (iterator.hasNext()) {
+                val con = iterator.next()
+                val handler = getHandler(con.firstNode)
+                handler?.removeConnection(con)
+                iterator.remove()
+            }
+        }
+        this.let {
+            val iterator = inputWiredConnections.iterator()
+            while (iterator.hasNext()) {
+                val con = iterator.next()
+                val handler = getHandler(con.firstNode)
+                handler?.removeConnection(con)
+                iterator.remove()
+            }
+        }
     }
 
     companion object {
@@ -234,26 +276,38 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
             return (v - min) / (max - min)
         }
 
-        fun autoConnectWires(tile: TileElectricBase, world: World, start: BlockPos, end: BlockPos, node: IWireConnector, filter: Predicate<IWireConnector>) {
+        fun autoConnectWires(tile: TileElectricBase, world: World, start: BlockPos, end: BlockPos, node: IWireConnector, filter: (IWireConnector, IWireConnector) -> Boolean = fun(i1, i2) = true) {
             val predicate: Predicate<TileEntity> = Predicate { it != tile }
             for (t in getTileEntitiesIn(world, start, end, predicate)) {
                 val handler = NODE_HANDLER!!.fromTile(t)
                 if (handler is IElectricNodeHandler) {
-                    connect(tile, handler, filter)
+                    connectHandlers(tile, handler, filter)
                 }
             }
         }
 
-        fun connect(tile: TileElectricBase, handler: IElectricNodeHandler, filter: Predicate<IWireConnector> = Predicates.alwaysTrue()) : Boolean{
+        fun connectHandlers(first: IElectricNodeHandler, second: IElectricNodeHandler, filter: (IWireConnector, IWireConnector) -> Boolean = fun(i1, i2) = true): Boolean {
             var result = false
-            for (n in handler.nodes.filter { it is IWireConnector }.map { it as IWireConnector }.filter { filter.apply(it) }) {
-                val connection = handler.createConnection(tile, tile.node, n, null)
-                if (connection != null) {
-                    tile.wiredConnections.add(connection)
-                    result = true
+            for (firstNode in first.nodes.filter { it is IWireConnector }.map { it as IWireConnector }) {
+                for (secondNode in second.nodes.filter { it is IWireConnector }.map { it as IWireConnector }) {
+                    if (filter.invoke(firstNode, secondNode)) {
+                        if (connectNodes(first, firstNode, second, secondNode)) {
+                            result = true
+                        }
+                    }
                 }
             }
             return result
+        }
+
+        fun connectNodes(first: IElectricNodeHandler, firstNode: IWireConnector, second: IElectricNodeHandler, secondNode: IWireConnector): Boolean {
+            if (first.canConnect(firstNode, second, secondNode, null) && second.canConnect(secondNode, first, firstNode, null)) {
+                val connection = ElectricConnection(firstNode, secondNode)
+                first.addConnection(connection, null, true)
+                second.addConnection(connection, null, false)
+                return true
+            }
+            return false
         }
 
         fun getTileEntitiesIn(world: World, start: BlockPos, end: BlockPos, filter: Predicate<TileEntity>): List<TileEntity> {

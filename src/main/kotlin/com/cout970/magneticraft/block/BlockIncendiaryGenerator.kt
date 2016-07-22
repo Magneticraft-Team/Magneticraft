@@ -34,7 +34,7 @@ object BlockIncendiaryGenerator : BlockState(Material.IRON, "incendiary_generato
 
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
-    override fun isFullCube(state: IBlockState?) = false
+    override fun isFullCube(state: IBlockState?) = true
     override fun isVisuallyOpaque() = false
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType = EnumBlockRenderType.INVISIBLE
@@ -61,6 +61,7 @@ object BlockIncendiaryGenerator : BlockState(Material.IRON, "incendiary_generato
 
     override fun onBlockActivated(worldIn: World, position: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (worldIn.isRemote) return true
+        if (playerIn.isSneaking) return false
         val location = PROPERTY_LOCATION[state]
         var pos = position
         if (location == Location.BASE) {

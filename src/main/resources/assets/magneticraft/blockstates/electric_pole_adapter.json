@@ -45,6 +45,18 @@
                 "transform": { "rotation": { "y": -45 } }
             }
         ],
+		"place=down_1": [{
+			"model": "magneticraft:empty_model"
+		}],
+		"place=down_2": [{
+			"model": "magneticraft:empty_model"
+		}],
+		"place=down_3": [{
+			"model": "magneticraft:empty_model"
+		}],
+		"place=down_4": [{
+			"model": "magneticraft:empty_model"
+		}],
         "inventory": [
             {
                 "model": "magneticraft:mcm/pole_adapter_tiny.mcm"

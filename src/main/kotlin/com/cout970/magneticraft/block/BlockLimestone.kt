@@ -14,16 +14,23 @@ object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
         it.ordinal to "type=${it.name}"
     }
 
-    override fun damageDropped(state: IBlockState) = state.getValue(LIMESTONE_TYPE).ordinal
+    //disabled for now
+//    override fun damageDropped(state: IBlockState): Int {
+//        val type = state.getValue(LIMESTONE_TYPE)
+//        return when (type) {
+//            LimestoneTypes.NORMAL -> LimestoneTypes.COBBLE.ordinal
+//            else -> type.ordinal
+//        }
+//    }
 
     override fun getItemName(stack: ItemStack?) =
-        "${super.getItemName(stack)}_${LimestoneTypes.values()[stack?.metadata ?: 0].name.toLowerCase()}"
+            "${super.getItemName(stack)}_${LimestoneTypes.values()[stack?.metadata ?: 0].name.toLowerCase()}"
 
     override fun createBlockState() = BlockStateContainer(this, LIMESTONE_TYPE)
 
     override fun getStateFromMeta(meta: Int) =
-        blockState.baseState.withProperty(LIMESTONE_TYPE, LimestoneTypes.values()[meta])
+            blockState.baseState.withProperty(LIMESTONE_TYPE, LimestoneTypes.values()[meta])
 
     override fun getMetaFromState(state: IBlockState?) =
-        state?.getValue(LIMESTONE_TYPE)?.ordinal ?: 0
+            state?.getValue(LIMESTONE_TYPE)?.ordinal ?: 0
 }

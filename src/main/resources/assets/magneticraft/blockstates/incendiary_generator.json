@@ -6,6 +6,16 @@
     },
     "variants": {
         "normal": [{ }],
+		"location=base": [{ }],
+		"location=top": [{ }],
+		"direction=north,location=base": [{ }],
+		"direction=south,location=base": [{ }],
+		"direction=west,location=base": [{ }],
+		"direction=east,location=base": [{ }],
+		"direction=north,location=top": [{ }],
+		"direction=south,location=top": [{ }],
+		"direction=west,location=top": [{ }],
+		"direction=east,location=top": [{ }],
         "inventory": [{ }]
     }
 }

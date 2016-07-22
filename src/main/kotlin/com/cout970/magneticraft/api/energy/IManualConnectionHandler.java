@@ -17,14 +17,14 @@ public interface IManualConnectionHandler {
 
     /**
      * This method retrieves the position that will be stored in the ItemStack to call
-     * <code>IManualConnectionHandler.connect()</code> in the future
+     * <code>IManualConnectionHandler.connectWire()</code> in the future
      *
      * @param thisBlock The position of this block
      * @param world     The world where this block is
      * @param player    The player that is connecting the wire
      * @param side      The side of the block where the player is clicking
      * @param stack     The item used to store the position,
-     *                  can be used to send data to <code>IManualConnectionHandler.connect()</code>
+     *                  can be used to send data to <code>IManualConnectionHandler.connectWire()</code>
      * @return the position to store in the item
      */
     BlockPos getBasePos(BlockPos thisBlock, World world, EntityPlayer player, EnumFacing side, ItemStack stack);

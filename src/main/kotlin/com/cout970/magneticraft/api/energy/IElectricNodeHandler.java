@@ -10,26 +10,52 @@ import java.util.List;
 public interface IElectricNodeHandler extends INodeHandler {
 
     /**
-     * The list with all the connections between electric nodes in this handler
+     * This method retrieves all the connections from other nodes to nodes in this handler
+     * All the connections must have the first node in other handler and the second node in this handler
      *
-     * @return a list with all the connections in this handler
+     * @return list of input connections in this handler
      */
-    List<IElectricConnection> getConnections();
+    List<IElectricConnection> getInputConnections();
 
     /**
-     * Tries to create a connection between otherNode and thisNode, if this has success then the
-     * connection will be stored in this handler and a reference will be returned to be stored
-     * in the other handler
-     * If the connection is with an adjacent block the this will be the side of this block where the connection will be created,
-     * If the connection is using wires then side will be null
+     * This method retrieves all the connections from nodes in this handler to nodes in other handlers
+     * All the connections must have the first node in this handler and the second node in other handler
      *
-     * @param other     The handler that contains the otherNode
-     * @param otherNode The external node that want to be connected with this
-     * @param thisNode  The internal node in this handler that will be connected
-     * @param side      The side of the block or null
-     * @return The connections between nodes, this will be null if the connection can't be established
+     * @return list of input connections in this handler
      */
-    IElectricConnection createConnection(IElectricNodeHandler other, IElectricNode otherNode, IElectricNode thisNode, EnumFacing side);
+    List<IElectricConnection> getOutputConnections();
+
+    /**
+     * Check whether or not this handler allow to make connections between
+     * a node from this handler and a node from other handler
+     * Side is used to separate connections with wires and connections with adjacent blocks
+     *
+     * @param thisNode  The node in this handler
+     * @param other     The other handler
+     * @param otherNode The node in the other handler
+     * @param side      The side where the other handler is or null if the connections will be using a wire
+     * @return true if the connections is allowed or false if is not allowed
+     */
+    boolean canConnect(IElectricNode thisNode, IElectricNodeHandler other, IElectricNode otherNode, EnumFacing side);
+
+    /**
+     * Adds a connections to the handler
+     * All the connections must be in two handlers, in one handler the connection must be as output connection
+     * and in the other handler must be as input connection
+     * <p>
+     * if output is true then the connection will be updated every tick and the connection first node
+     * must be one of the nodes in this handler
+     * if output is false then the the connection will be used to notify then this block is mined to
+     * remove it in the other handler
+     * <p>
+     * Side is used to separate connections with wires and connections with adjacent blocks
+     *
+     * @param connection The connection to add to this handler
+     * @param side       The side where the other handler is or null if the connections will be using a wire
+     * @param output     true if this connection starts in this handler and go to other handler,
+     *                   false if this connection starts in other handler and go to this handler
+     */
+    void addConnection(IElectricConnection connection, EnumFacing side, boolean output);
 
     /**
      * Notifies this handler that a connection needs to be removed, usually because the other block has been mined

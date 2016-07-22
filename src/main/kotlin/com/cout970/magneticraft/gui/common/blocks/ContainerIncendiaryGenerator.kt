@@ -26,9 +26,9 @@ class ContainerIncendiaryGenerator(player: EntityPlayer, world: World, blockPos:
     override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
 
     override fun sendDataToClient(): IBD? {
-        val data = IBD()
         tile!!
-        data.setDouble(DATA_ID_VOLTAGE, tile.node.voltage)
+        val data = IBD()
+        data.setDouble(DATA_ID_VOLTAGE, tile.mainNode.voltage)
         data.setFloat(DATA_ID_BURNING_TIME, tile.burningTime)
         data.setFloat(DATA_ID_MAX_BURNING_TIME, tile.maxBurningTime)
         data.setFloat(DATA_ID_MACHINE_HEAT, tile.heat)

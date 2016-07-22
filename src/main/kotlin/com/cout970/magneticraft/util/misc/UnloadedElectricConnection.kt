@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.util.misc
 
 import com.cout970.magneticraft.api.energy.IElectricConnection
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
+import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
@@ -23,48 +23,38 @@ data class UnloadedElectricConnection(
     var isValid: Boolean = true
         private set
 
-    fun create(world: World, handler: IElectricNodeHandler): IElectricConnection? {
+    fun create(world: World, handler: IElectricNodeHandler): Boolean {
         if (!world.isAreaLoaded(first, second)) {
-            return null
+            return false
         }
         val tile0 = world.getTileEntity(first)
         val tile1 = world.getTileEntity(second)
         if (tile0 == null || tile1 == null) {
-            isValid = false
-            return null
+            return true
         }
         val handler0 = NODE_HANDLER!!.fromTile(tile0)
         val handler1 = NODE_HANDLER!!.fromTile(tile1)
         if (handler0 !is IElectricNodeHandler || handler1 !is IElectricNodeHandler) {
-            isValid = false
-            return null
+            return true
         }
         val nodes0 = handler0.nodes
         val nodes1 = handler1.nodes
         if (firstIndex < 0 || secondIndex < 0) {
-            isValid = false
-            return null
+            return true
         }
         if (nodes0.size <= firstIndex || nodes1.size <= secondIndex) {
-            isValid = false
-            return null
+            return true
         }
-        if (nodes0[firstIndex] !is IElectricNode || nodes1[secondIndex] !is IElectricNode) {
-            isValid = false
-            return null
+        val node0 = nodes0[firstIndex]
+        val node1 = nodes1[secondIndex]
+        if (node0 !is IWireConnector){
+            return true
         }
-        val con: IElectricConnection?
-        if (handler == handler0) {
-            con = handler1.createConnection(handler0, nodes0[firstIndex] as IElectricNode, nodes1[secondIndex] as IElectricNode, null)
-        } else {
-            con = handler0.createConnection(handler1, nodes1[secondIndex] as IElectricNode, nodes0[firstIndex] as IElectricNode, null)
+        if (node1 !is IWireConnector) {
+            return true
         }
-
-        if (con == null) {
-            isValid = false
-            return null
-        }
-        return con
+        TileElectricBase.connectNodes(handler0, node0, handler1, node1)
+        return true
     }
 
     companion object {

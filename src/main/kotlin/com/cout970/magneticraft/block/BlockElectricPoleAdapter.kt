@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 /**
@@ -17,15 +18,20 @@ import net.minecraft.world.World
 object BlockElectricPoleAdapter : BlockElectricPoleBase(Material.IRON, "electric_pole_adapter"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity? {
-        if(ELECTRIC_POLE_PLACE[BlockElectricPole.getStateFromMeta(meta)!!].isMainBlock()){
+        if (ELECTRIC_POLE_PLACE[BlockElectricPole.getStateFromMeta(meta)!!].isMainBlock()) {
             return TileElectricPoleAdapter()
         }
         return null
+    }
+
+    override fun getDrops(world: IBlockAccess?, pos: BlockPos?, state: IBlockState?, fortune: Int): MutableList<ItemStack>? {
+        return super.getDrops(world, pos, state, fortune).apply { add(ItemStack(BlockElectricPole)) }
     }
 
     override fun hasTileEntity(state: IBlockState): Boolean {
         return ELECTRIC_POLE_PLACE[state].isMainBlock()
     }
 
-    override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack?) {}
+    override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack?) {
+    }
 }

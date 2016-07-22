@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.api.energy;
 
+import net.minecraft.util.math.BlockPos;
+
 import java.util.List;
 
 /**
@@ -8,4 +10,6 @@ import java.util.List;
 public interface INodeHandler {
 
     List<INode> getNodes();
+
+    BlockPos getPos();
 }

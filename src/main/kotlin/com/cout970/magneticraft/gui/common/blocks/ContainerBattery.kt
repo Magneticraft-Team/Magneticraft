@@ -34,7 +34,7 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos) :
     override fun sendDataToClient(): IBD? {
         val data = IBD()
         tile!!
-        data.setDouble(DATA_ID_VOLTAGE, tile.node.voltage)
+        data.setDouble(DATA_ID_VOLTAGE, tile.mainNode.voltage)
         data.setInteger(DATA_ID_STORAGE, tile.storage)
         data.setFloat(DATA_ID_CHARGE_RATE, tile.chargeRate.average)
         return data

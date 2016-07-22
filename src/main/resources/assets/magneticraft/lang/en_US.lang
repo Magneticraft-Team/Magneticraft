@@ -16,6 +16,13 @@ item.magneticraft.pebbles_lead.name=Lead Pebbles
 item.magneticraft.pebbles_cobalt.name=Cobalt Pebbles
 item.magneticraft.pebbles_tungsten.name=Tungsten Pebbles
 
+item.magneticraft.plate_iron.name=Iron Plate
+item.magneticraft.plate_gold.name=Gold Plate
+item.magneticraft.plate_copper.name=Copper Plate
+item.magneticraft.plate_lead.name=Lead Plate
+item.magneticraft.plate_cobalt.name=Cobalt Plate
+item.magneticraft.plate_tungsten.name=Tungsten Plate
+
 item.magneticraft.ingot_copper.name=Copper Ingot
 item.magneticraft.ingot_lead.name=Lead Ingot
 item.magneticraft.ingot_cobalt.name=Cobalt Ingot
@@ -23,6 +30,7 @@ item.magneticraft.ingot_tungsten.name=Tungsten Ingot
 
 item.magneticraft.hand_sieve.name=Hand Sieve
 item.magneticraft.coil_of_wire.name=Coil of Wire
+item.magneticraft.voltmeter.name=Voltmeter
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
@@ -47,6 +55,7 @@ tile.magneticraft.electric_connector.name=Electric Connector
 tile.magneticraft.incendiary_generator.name=Incendiary Generator
 tile.magneticraft.block_battery.name=Battery Block
 tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
+tile.magneticraft.electric_furnace.name=Electric furnace
 
 
 itemGroup.magneticraft=Magneticraft
@@ -55,4 +64,5 @@ text.magneticraft.wire_connect.success=Wire attached
 text.magneticraft.wire_connect.fail=Unable to connect wire
 text.magneticraft.wire_connect.same_block=Unable to connect wire to the same block
 text.magneticraft.wire_connect.no_other_connector=No position set
-
+text.magneticraft.auto_connect.activate=Auto connect wires activated
+text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated

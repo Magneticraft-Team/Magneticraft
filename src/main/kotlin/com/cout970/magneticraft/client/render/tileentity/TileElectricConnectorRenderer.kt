@@ -4,13 +4,18 @@ import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
 import com.cout970.loader.api.model.IModelCube
 import com.cout970.loader.api.model.IModelFilter
+import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec3d
 import com.google.common.base.Predicates
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.Vec3d
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -25,12 +30,10 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
 
         //create cache for wire connections
         te.wireRender.update {
-            for (i in te.wiredConnections) {
-                if (i.firstNode != te.node) continue
+            for (i in te.outputWiredConnections) {
                 renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.01)
             }
         }
-
         pushMatrix()
         translate(x, y, z)
 
@@ -59,12 +62,25 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
             }
             else -> Unit
         }
-
+        //update base every 40 ticks
+        if (te.tickToNextUpdate == 0) {
+            te.tickToNextUpdate = 40
+            te.hasBase = true
+            val tile = te.world.getTileEntity(te.pos.offset(te.getFacing()))
+            if (tile != null) {
+                val handler = NODE_HANDLER!!.fromTile(tile, te.getFacing().opposite)
+                if (handler is IElectricNodeHandler) {
+                    val node = handler.nodes.firstOrNull { it is IElectricNode }
+                    if (node != null && handler.canConnect(node as IElectricNode, te, te.mainNode, te.getFacing().opposite)) {
+                        te.hasBase = false
+                    }
+                }
+            }
+        }
         block?.render()
-        if (te.world.isSideSolid(te.pos.offset(te.getFacing()), EnumFacing.UP)) {
+        if (te.hasBase) {
             base?.render()
         }
-
         popMatrix()
     }
 

@@ -4,13 +4,8 @@ import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
-import com.cout970.magneticraft.block.BlockBurntLimestone
-import com.cout970.magneticraft.block.BlockCrushingTable
-import com.cout970.magneticraft.block.BlockLimestone
-import com.cout970.magneticraft.block.BlockOre
-import com.cout970.magneticraft.item.ItemCrushedOre
-import com.cout970.magneticraft.item.ItemGuideBook
-import com.cout970.magneticraft.item.ItemPebbles
+import com.cout970.magneticraft.block.*
+import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import net.minecraft.block.Block
@@ -45,11 +40,39 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
     addRecipe(ItemStack(BlockBurntLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockBurntLimestone, 1, 0))
     addRecipe(ItemStack(ItemGuideBook), "CB", 'C', "ingotCopper", 'B', of(BOOK))
-
-    //TODO add a guide book recipe
+    addRecipe(ItemStack(BlockFeedingTrough), "S#S", "W#W", "SWS", 'S', of(STICK), 'W', of(PLANKS))
+    addRecipe(ItemStack(BlockElectricConnector, 8), "#C#", "LCL", "SSS", 'S', of(STONE), 'C', "ingotCopper", 'L', of(WOOL))
+    addRecipe(ItemStack(BlockIncendiaryGenerator), "ICI", "IFI", "IBI", 'I', "ingotIron", 'C', "ingotCopper", 'F', of(FURNACE), 'B', of(BRICK_BLOCK))
+    addRecipe(ItemStack(BlockElectricPole), "CPC", "#W#", "#W#", 'P', of(PLANKS), 'C', "ingotCopper", 'W', of(LOG))
+    addRecipe(ItemStack(BlockElectricPoleAdapter), "#C#", "IWI", "ICI", 'I', "ingotIron", 'C', "ingotCopper", 'W', ItemCoilOfWire)
+    addRecipe(ItemStack(ItemCoilOfWire), "#C#", "C#C", "#C#", 'C', "ingotCopper")
+    addRecipe(ItemStack(BlockTableSieve), "PIP", "W#W", "PPP", 'I', "ingotIron", 'P', of(PLANKS), 'W', of(LOG))
+    addRecipe(ItemStack(ItemVoltmeter), "WIW", "PRP", "CPC", 'C', "ingotCopper", 'I', "ingotIron", 'P', of(PLANKS), 'R', ItemCoilOfWire, 'W', of(WOOL))
+    addRecipe(ItemStack(BlockElectricFurnace), "CCC", "CFC", "CBC", 'C', "ingotCopper", 'F', of(FURNACE), 'B', of(BRICK_BLOCK))
+    addRecipe(ItemStack(BlockBattery), "IIC", "KLK", "LKL", 'C', "ingotCopper", 'I', "ingotIron", 'K', "ingotCobalt", 'L', "ingotLead")
 
     //SMELTING RECIPES
-    addSmeltingRecipe(ItemStack(BlockBurntLimestone), ItemStack(BlockLimestone))
+    addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 0), ItemStack(BlockLimestone, 1, 0))
+    addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 2), ItemStack(BlockLimestone, 1, 2))
+    //ores
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(BlockOre, 1, 0))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(BlockOre, 1, 1))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(BlockOre, 1, 2))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(BlockOre, 1, 3))
+    //pebles
+    addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 0))
+    addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 1))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(ItemPebbles, 1, 2))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(ItemPebbles, 1, 3))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(ItemPebbles, 1, 4))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(ItemPebbles, 1, 5))
+    //crushed ores
+    addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 2, 0), ItemStack(ItemCrushedOre, 1, 0))
+    addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 2, 0), ItemStack(ItemCrushedOre, 1, 1))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(ItemCrushedOre, 1, 2))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(ItemCrushedOre, 1, 3))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(ItemCrushedOre, 1, 4))
+    addSmeltingRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(ItemCrushedOre, 1, 5))
 
     //TABLE SIEVE RECIPES
     for (i in ItemPebbles.variants.keys) {
@@ -71,14 +94,14 @@ private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: I
     TableSieveRegistry.registerRecipe(TableSieveRecipe(input, output0, output1, prob))
 }
 
-//function to get the fist ore dictionary of the block if exist, or the block
+//function to get the first ore dictionary entry for the block if exist, or the block if not exist
 private fun of(i: Block): Any {
     val ids = OreDictionary.getOreIDs(ItemStack(i))
     if (ids.isEmpty()) return i
     return OreDictionary.getOreName(ids.first())
 }
 
-//function to get the fist ore dictionary of the item if exist, or the item
+//function to get the first ore dictionary entry for the item if exist, or the item if not exist
 private fun of(i: Item): Any {
     val ids = OreDictionary.getOreIDs(ItemStack(i))
     if (ids.isEmpty()) return i

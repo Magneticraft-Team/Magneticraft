@@ -26,7 +26,7 @@ object ItemCoilOfWire : ItemBase("coil_of_wire") {
         val name = super.getItemStackDisplayName(stack)
         if (stack!!.hasKey(POSITION_KEY)) {
             val basePos = stack.getBlockPos(POSITION_KEY)
-            return name + " ${TextFormatting.AQUA}Position: ${basePos.x}, ${basePos.y}, ${basePos.z}"
+            return name + " [${TextFormatting.AQUA}Position: ${basePos.x}, ${basePos.y}, ${basePos.z}]"
         }
         return name
     }
