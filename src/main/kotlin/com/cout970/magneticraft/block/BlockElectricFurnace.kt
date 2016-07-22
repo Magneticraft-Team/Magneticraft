@@ -30,8 +30,10 @@ object BlockElectricFurnace : BlockState(Material.IRON, "electric_furnace"), ITi
     override fun isVisuallyOpaque() = false
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (!worldIn.isRemote && !playerIn.isSneaking) {
-            playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
+        if (!playerIn.isSneaking) {
+            if(!worldIn.isRemote) {
+                playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
+            }
             return true
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
