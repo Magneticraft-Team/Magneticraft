@@ -17,11 +17,10 @@ object TileCrushingTableRenderer : TileEntityRenderer<TileCrushingTable>() {
             translate(x + 0.5, y + 0.9375, z + 0.3125)
             if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
                 translate(0.0, -0.045, 0.125)
+                rotate(90f, 1f, 0f, 0f)
             } else {
-                translate(0.0, 0.045, 0.0)
+                translate(0.0, -0.125, 0.0625 * 3)
             }
-
-            rotate(90f, 1f, 0f, 0f)
 
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 

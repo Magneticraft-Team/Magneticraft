@@ -4,6 +4,7 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.util.shouldTick
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -19,15 +20,18 @@ class TileTableSieve : TileBase(), ITickable {
 
     val inventory = ItemStackHandler(1)
     val output = mutableListOf<ItemStack>()
-    val updateTime = 20
-    val craftingTime = 20
+    val craftingTime = 40
     var tickCounter = 0
     var size = 0
+
+    companion object{
+        val UPDATE_TIME = 20
+    }
 
     override fun update() {
 
         //gets the item on top of the block
-        if ((worldObj.totalWorldTime + pos.hashCode()) % updateTime == 0L) {
+        if (shouldTick(UPDATE_TIME)) {
             suckItems()
         }
 

@@ -24,7 +24,7 @@ object TileTableSieveRenderer : TileEntityRenderer<TileTableSieve>() {
             val size = item.stackSize
             var process = 0.0
             if (size != 0) {
-                process = (size + (1 - (te.tickCounter / te.updateTime.toDouble()))) / 64
+                process = (size + (1 - (te.tickCounter / TileTableSieve.UPDATE_TIME.toDouble()))) / 64
             }
 
             val h = 0.0625 * 7.50 + 0.0625 * 1.5 * process

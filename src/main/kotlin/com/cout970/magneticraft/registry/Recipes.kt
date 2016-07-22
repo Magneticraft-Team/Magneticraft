@@ -9,6 +9,7 @@ import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import net.minecraft.block.Block
+import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.*
 import net.minecraft.init.Items
 import net.minecraft.init.Items.*
@@ -28,10 +29,13 @@ fun registerRecipes() {
 
     //CRUSHING TABLE RECIPES
     CrushingTableRegistry.registerRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
+    CrushingTableRegistry.registerRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0))
+    CrushingTableRegistry.registerRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1))
     CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2))
     CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3))
     CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4))
     CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5))
+
 
     //CRAFTING RECIPES
     addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE), 'W', of(LOG))
