@@ -54,6 +54,7 @@ fun registerRecipes() {
     addRecipe(ItemStack(ItemVoltmeter), "WIW", "PRP", "CPC", 'C', "ingotCopper", 'I', "ingotIron", 'P', of(PLANKS), 'R', ItemCoilOfWire, 'W', of(WOOL))
     addRecipe(ItemStack(BlockElectricFurnace), "CCC", "CFC", "CBC", 'C', "ingotCopper", 'F', of(FURNACE), 'B', of(BRICK_BLOCK))
     addRecipe(ItemStack(BlockBattery), "IIC", "KLK", "LKL", 'C', "ingotCopper", 'I', "ingotIron", 'K', "ingotCobalt", 'L', "ingotLead")
+    addRecipe(ItemStack(BlockInfiniteWater), "IBI", "TCT", "IBI", 'C', "ingotCobalt", 'I', "ingotIron", 'T', "ingotTungsten", 'B', Items.WATER_BUCKET)
 
     //SMELTING RECIPES
     addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 0), ItemStack(BlockLimestone, 1, 0))

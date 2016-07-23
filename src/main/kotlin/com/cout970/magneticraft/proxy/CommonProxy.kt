@@ -22,7 +22,6 @@ abstract class CommonProxy {
     }
 
     open fun init() {
-
         //init recipes
         registerRecipes()
 

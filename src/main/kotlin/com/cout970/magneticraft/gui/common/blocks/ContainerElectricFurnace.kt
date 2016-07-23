@@ -25,11 +25,18 @@ class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: Blo
         inv?.let {
             addSlotToContainer(object : SlotItemHandler(inv, 0, 91, 16) {
                 override fun isItemValid(stack: ItemStack?): Boolean {
-                    return false
+                    return true
                 }
 
                 override fun canTakeStack(playerIn: EntityPlayer?): Boolean {
-                    return false
+                    return true
+                }
+
+                override fun decrStackSize(amount: Int): ItemStack {
+                    tile!!.inventory.ignoreFilter = true
+                    val ret = this.itemHandler.extractItem(this.slotIndex, amount, false)
+                    tile.inventory.ignoreFilter = false
+                    return ret
                 }
             })
             addSlotToContainer(object : SlotItemHandler(inv, 1, 91, 48) {
@@ -38,7 +45,7 @@ class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: Blo
                 }
 
                 override fun canTakeStack(playerIn: EntityPlayer?): Boolean {
-                    return false
+                    return true
                 }
             })
         }

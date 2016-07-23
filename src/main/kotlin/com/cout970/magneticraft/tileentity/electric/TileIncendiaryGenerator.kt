@@ -8,14 +8,11 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.registry.FLUID_HANDLER
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.consumeItem
+import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.fluid.Tank
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.IBD
 import com.cout970.magneticraft.util.misc.ValueAverage
-import com.cout970.magneticraft.util.shouldTick
-import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -31,7 +28,7 @@ import net.minecraftforge.items.ItemStackHandler
 
 class TileIncendiaryGenerator(
         val tank: Tank = object : Tank(4000) {
-            override fun canFillFluidType(fluid: FluidStack): Boolean = fluid.fluid.name == "water"
+            override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
         }
 ) : TileElectricBase(), IFluidHandler by tank {
 
@@ -64,7 +61,7 @@ class TileIncendiaryGenerator(
             }
             //burns fuel
             if (burningTime > 0 && heat < MAX_HEAT) {
-                val burningSpeed = 8
+                val burningSpeed = Math.ceil(Config.incendiaryGeneratorMaxProduction / 10.0).toInt()
                 burningTime -= burningSpeed
                 heat += burningSpeed * FUEL_TO_HEAT
             }
@@ -73,7 +70,7 @@ class TileIncendiaryGenerator(
 
                 val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
-                val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, 120.0, 125.0)) * prod)
+                val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * prod)
                 production += applied
 
                 heat -= applied.toFloat() / HEAT_TO_WATTS

@@ -74,11 +74,13 @@ object BlockIncendiaryGenerator : BlockState(Material.IRON, "incendiary_generato
                 val tile = worldIn.getTile<TileIncendiaryGenerator>(pos)
                 if (tile != null) {
                     val drained = cap.drain(FluidStack(FluidRegistry.WATER, 1000), false)
-                    val accepted = tile.tank.fill(drained, true)
-                    if (accepted > 0 && !playerIn.capabilities.isCreativeMode) {
-                        cap.drain(FluidStack(FluidRegistry.WATER, accepted), true)
+                    if(drained == null) {
+                        val accepted = tile.tank.fill(drained, true)
+                        if (accepted > 0 && !playerIn.capabilities.isCreativeMode) {
+                            cap.drain(FluidStack(FluidRegistry.WATER, accepted), true)
+                        }
+                        return true
                     }
-                    return true
                 }
             }
         }

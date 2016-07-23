@@ -53,6 +53,7 @@ object BlockCrushingTable : BlockBase(
             } else {
                 player.inventory.addItemStackToInventory(tile.getStack())
                 tile.setStack(null)
+                tile.sendUpdateToNearPlayers()
             }
 
             return true
@@ -71,6 +72,7 @@ object BlockCrushingTable : BlockBase(
                             }
 
                             tile.setStack(stack.copy().apply { stackSize = 1 })
+                            tile.sendUpdateToNearPlayers()
                             return true
                         }
                     }
@@ -84,6 +86,7 @@ object BlockCrushingTable : BlockBase(
                     }
 
                     tile.setStack(heldItem.copy().apply { stackSize = 1 })
+                    tile.sendUpdateToNearPlayers()
                     return true
                 }
             }

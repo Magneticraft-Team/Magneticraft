@@ -10,6 +10,6 @@ object IntegrationHandler {
     var JEI = false
 
     fun preInit(){
-        JEI = Loader.isModLoaded("jei")
+        JEI = Loader.isModLoaded("JEI")
     }
 }

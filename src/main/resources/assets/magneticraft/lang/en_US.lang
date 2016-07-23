@@ -37,7 +37,7 @@ magneticraft.guide.basics=Basics
 magneticraft.guide.getting.started=Getting Started
 magneticraft.guide.link.text=%s, page %s
 
-tile.magneticraft.ore_block_copper.name=Malachite Ore
+tile.magneticraft.ore_block_copper.name=Chalcopyrite Ore
 tile.magneticraft.ore_block_lead.name=Galena Ore
 tile.magneticraft.ore_block_cobalt.name=Cobaltite Ore
 tile.magneticraft.ore_block_tungsten.name=Wolframite Ore
@@ -56,7 +56,7 @@ tile.magneticraft.incendiary_generator.name=Incendiary Generator
 tile.magneticraft.block_battery.name=Battery Block
 tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
 tile.magneticraft.electric_furnace.name=Electric furnace
-
+tile.magneticraft.infinite_water.name=Infinite Water
 
 itemGroup.magneticraft=Magneticraft
 
@@ -66,3 +66,5 @@ text.magneticraft.wire_connect.same_block=Unable to connect wire to the same blo
 text.magneticraft.wire_connect.no_other_connector=No position set
 text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
+text.magneticraft.jei.crushing_table=Crushing Table
+text.magneticraft.jei.table_sieve=Table Sieve

@@ -6,6 +6,7 @@ import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
 import com.cout970.magneticraft.client.sounds.sounds
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.vector.Vec3d
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumParticleTypes
+import net.minecraft.util.ITickable
 import net.minecraft.util.SoundCategory
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.Side
@@ -24,10 +26,16 @@ import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraftforge.items.ItemStackHandler
 import java.util.*
 
-class TileCrushingTable : TileBase() {
+class TileCrushingTable : TileBase(), ITickable {
 
     val inventory: CrushingTableInventory = CrushingTableInventory()
     var damageTaken = 0
+
+    override fun update() {
+        if(!worldObj.isRemote && shouldTick(100)){
+            sendUpdateToNearPlayers()
+        }
+    }
 
     fun getStack() = inventory[0]?.copy()
 
@@ -55,6 +63,7 @@ class TileCrushingTable : TileBase() {
             world.playSound(Minecraft.getMinecraft().thePlayer, pos, sounds["crushing_hit"], SoundCategory.BLOCKS, 1F, 1F)
             spawnParticles()
         }
+        sendUpdateToNearPlayers()
     }
 
     @SideOnly(Side.CLIENT)

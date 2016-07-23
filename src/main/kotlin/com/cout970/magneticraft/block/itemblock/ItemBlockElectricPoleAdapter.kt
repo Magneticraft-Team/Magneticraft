@@ -70,6 +70,8 @@ class ItemBlockElectricPoleAdapter : ItemBlockBase(BlockElectricPoleAdapter) {
             worldIn.setBlockState(pos.offset(EnumFacing.UP, 3), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_1))
             worldIn.setBlockState(pos.offset(EnumFacing.UP, 4), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, dir))
             worldIn.getTile<TileElectricPoleAdapter>(main)?.loadConnections(connections)
+
+            stack.stackSize--
             return EnumActionResult.SUCCESS
         }
         return EnumActionResult.PASS

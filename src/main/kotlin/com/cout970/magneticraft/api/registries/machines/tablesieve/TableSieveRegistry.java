@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.registries.machines.tablesieve;
 
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,5 +31,9 @@ public class TableSieveRegistry {
         }
         recipes.add(recipe);
         return true;
+    }
+
+    public static List<TableSieveRecipe> getRecipes(){
+        return new ArrayList<>(recipes);
     }
 }

@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.registries.machines.crushingtable
 
 import coffee.cypher.mcextlib.util.collections.troveMap
 import net.minecraft.item.ItemStack
+import java.util.*
 
 object CrushingTableRegistry {
     private val recipes = troveMap<ItemStack, ItemStack>(
@@ -23,4 +24,6 @@ object CrushingTableRegistry {
     }
 
     fun getRecipe(input: ItemStack) = recipes[input.copy().apply { stackSize = 1 }]?.copy()
+
+    fun getRecipes() = HashMap(recipes)
 }

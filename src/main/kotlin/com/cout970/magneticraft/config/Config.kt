@@ -24,7 +24,8 @@ object Config {
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator")
-    var incendiaryGeneratorMaxProduction = 80
+    var incendiaryGeneratorMaxProduction = 40
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace")
     var electricFurnaceMaxConsumption = 20
 

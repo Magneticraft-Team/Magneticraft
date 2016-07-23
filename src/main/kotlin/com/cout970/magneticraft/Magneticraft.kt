@@ -1,6 +1,7 @@
 package com.cout970.magneticraft
 
 import com.cout970.magneticraft.config.ConfigHandler
+import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.proxy.CommonProxy
 import com.cout970.magneticraft.util.LANG_ADAPTER
 import com.cout970.magneticraft.util.MODID
@@ -44,6 +45,7 @@ object Magneticraft {
         ConfigHandler.save()
 
         proxy.preInit()
+        IntegrationHandler.preInit()
 
         if (Debug.DEBUG) {
             Debug.preInit(event)
