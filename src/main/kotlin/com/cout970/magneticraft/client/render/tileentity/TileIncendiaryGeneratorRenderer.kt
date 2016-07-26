@@ -4,9 +4,7 @@ import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
 import com.cout970.loader.api.model.IModelCube
 import com.cout970.loader.api.model.IModelFilter
-import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
-import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.google.common.base.Predicates
 import net.minecraft.client.renderer.GlStateManager.*
@@ -24,7 +22,7 @@ object TileIncendiaryGeneratorRenderer : TileEntityRenderer<TileIncendiaryGenera
 
         pushMatrix()
         translate(x, y - 1, z)
-        val dir = PROPERTY_DIRECTION[te.blockType.getStateFromMeta(te.blockMetadata)]
+        val dir = te.getDirection()
         rotateFromCenter(dir, -90f)
         bindTexture(texture)
         block?.render()

@@ -42,7 +42,7 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos) :
 
     override fun receiveDataFromServer(ibd: IBD) {
         tile!!
-        ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage = it })
+        ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage_ = it })
         ibd.getInteger(DATA_ID_STORAGE, { tile.storage = it })
         ibd.getFloat(DATA_ID_CHARGE_RATE, { tile.chargeRate.storage = it })
     }

@@ -15,30 +15,26 @@ open class ElectricNode(
         private val capacity: Double = 1.0
 ) : IElectricNode {
 
-    private var voltage = 0.0
-    private var amperage = 0.0
-    private var amperageCount = 0.0
+    var voltage_ = 0.0
+    var amperage_ = 0.0
+    var amperageCount = 0.0
 
-    override fun getAmperage() = amperage
-    override fun getVoltage() = voltage
+    override fun getAmperage() = amperage_
+    override fun getVoltage() = voltage_
     override fun getResistance() = resistance
     override fun getCapacity() = capacity
-
-    fun setVoltage(v: Double) {
-        voltage = v
-    }
 
     override fun getWorld() = worldGetter.invoke()
     override fun getPos() = posGetter.invoke()
 
     override fun iterate() {
-        amperage = amperageCount * 0.5
+        amperage_ = amperageCount * 0.5
         amperageCount = 0.0
     }
 
     override fun applyCurrent(current: Double) {
         amperageCount += Math.abs(current)
-        voltage += current / getCapacity()
+        voltage_ += current / getCapacity()
     }
 
     override fun applyPower(power: Double): Double {
@@ -58,8 +54,8 @@ open class ElectricNode(
 
     override fun deserializeNBT(nbt: NBTTagCompound?) {
         if (nbt == null) return
-        voltage = nbt.getDouble("V")
-        amperage = nbt.getDouble("A")
+        voltage_ = nbt.getDouble("V")
+        amperage_ = nbt.getDouble("A")
     }
 
     override fun serializeNBT() = NBTTagCompound().apply {

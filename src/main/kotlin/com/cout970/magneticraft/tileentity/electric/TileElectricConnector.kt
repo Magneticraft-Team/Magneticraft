@@ -8,6 +8,7 @@ import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.block.states.PROPERTY_FACING
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricConnector
 import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.isIn
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -57,7 +58,10 @@ class TileElectricConnector : TileElectricBase() {
 
     fun getFacing(): EnumFacing {
         val state = world.getBlockState(pos)
-        return PROPERTY_FACING[state]
+        if(PROPERTY_FACING.isIn(state)){
+            return PROPERTY_FACING[state]
+        }
+        return EnumFacing.DOWN
     }
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean {

@@ -4,6 +4,7 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
@@ -153,5 +154,13 @@ class TileIncendiaryGenerator(
         val FUEL_TO_WATTS = 10// 1 coal = 1600 burning time = 16000RF
         val FUEL_TO_HEAT = 0.5f
         val HEAT_TO_WATTS = FUEL_TO_WATTS / FUEL_TO_HEAT
+    }
+
+    fun getDirection(): EnumFacing {
+        val state = world.getBlockState(pos)
+        if (PROPERTY_DIRECTION.isIn(state)) {
+            return PROPERTY_DIRECTION[state]
+        }
+        return EnumFacing.NORTH
     }
 }

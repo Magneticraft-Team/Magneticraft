@@ -57,6 +57,8 @@ tile.magneticraft.block_battery.name=Battery Block
 tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
 tile.magneticraft.electric_furnace.name=Electric furnace
 tile.magneticraft.infinite_water.name=Infinite Water
+tile.magneticraft.tile_limestone.name=Limestone Tiles
+tile.magneticraft.infinite_energy.name=Infinite Energy
 
 itemGroup.magneticraft=Magneticraft
 

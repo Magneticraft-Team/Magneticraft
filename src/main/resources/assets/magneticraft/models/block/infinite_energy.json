@@ -1,0 +1,11 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "up": "magneticraft:blocks/infinite_energy_top",
+        "down": "magneticraft:blocks/infinite_energy_top",
+        "north": "magneticraft:blocks/infinite_energy",
+        "south": "magneticraft:blocks/infinite_energy",
+        "west": "magneticraft:blocks/infinite_energy",
+        "east": "magneticraft:blocks/infinite_energy"
+    }
+}
