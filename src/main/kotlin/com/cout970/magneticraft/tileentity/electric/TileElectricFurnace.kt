@@ -29,7 +29,7 @@ class TileElectricFurnace : TileElectricBase() {
     override fun update() {
         if (!worldObj.isRemote) {
             if (mainNode.voltage >= TIER_1_MACHINES_MIN_VOLTAGE && canSmelt()) {
-                val applied = mainNode.applyPower(-Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0))
+                val applied = mainNode.applyPower(-Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
                 burningTime += SPEED * applied.toFloat() / Config.electricFurnaceMaxConsumption
                 production += applied
                 if (burningTime > MAX_BURNING_TIME) {

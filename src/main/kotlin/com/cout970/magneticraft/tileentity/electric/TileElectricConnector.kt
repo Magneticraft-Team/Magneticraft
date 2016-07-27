@@ -6,6 +6,11 @@ import com.cout970.magneticraft.api.energy.INodeHandler
 import com.cout970.magneticraft.api.energy.impl.ElectricConnection
 import com.cout970.magneticraft.api.energy.impl.ElectricNode
 import com.cout970.magneticraft.block.states.PROPERTY_FACING
+import com.cout970.magneticraft.integration.IntegrationHandler
+import com.cout970.magneticraft.integration.tesla.TeslaNodeWrapper
+import com.cout970.magneticraft.registry.TESLA_CONSUMER
+import com.cout970.magneticraft.registry.TESLA_PRODUCER
+import com.cout970.magneticraft.registry.TESLA_STORAGE
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricConnector
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.isIn
@@ -13,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.Vec3i
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -24,6 +30,7 @@ class TileElectricConnector : TileElectricBase() {
         get() = listOf(mainNode)
     var hasBase = true
     var tickToNextUpdate = 0
+    val teslaWrapper: Any? by lazy { if (IntegrationHandler.TESLA) TeslaNodeWrapper(mainNode) else null }
 
     override fun update() {
         super.update()
@@ -58,7 +65,7 @@ class TileElectricConnector : TileElectricBase() {
 
     fun getFacing(): EnumFacing {
         val state = world.getBlockState(pos)
-        if(PROPERTY_FACING.isIn(state)){
+        if (PROPERTY_FACING.isIn(state)) {
             return PROPERTY_FACING[state]
         }
         return EnumFacing.DOWN
@@ -76,6 +83,19 @@ class TileElectricConnector : TileElectricBase() {
         result = connectHandlers(this, handler)
         wireRender.reset()
         return result
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+        if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)){
+            return teslaWrapper as T
+        }
+        return super.getCapability(capability, facing)
+    }
+
+    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+        if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)) return true
+        return super.hasCapability(capability, facing)
     }
 
     companion object {

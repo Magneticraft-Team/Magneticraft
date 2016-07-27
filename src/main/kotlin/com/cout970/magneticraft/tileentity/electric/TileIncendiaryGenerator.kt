@@ -71,7 +71,7 @@ class TileIncendiaryGenerator(
 
                 val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
-                val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * prod)
+                val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * prod, false)
                 production += applied
 
                 heat -= applied.toFloat() / HEAT_TO_WATTS

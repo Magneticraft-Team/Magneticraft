@@ -3,6 +3,9 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.energy.INodeHandler
+import net.darkhax.tesla.api.ITeslaConsumer
+import net.darkhax.tesla.api.ITeslaHolder
+import net.darkhax.tesla.api.ITeslaProducer
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -30,6 +33,15 @@ var MANUAL_CONNECTION_HANDLER: Capability<IManualConnectionHandler>? = null
 
 @CapabilityInject(IFluidHandler::class)
 var FLUID_HANDLER: Capability<IFluidHandler>? = null
+
+@CapabilityInject(ITeslaConsumer::class)
+var TESLA_CONSUMER: Capability<ITeslaConsumer>? = null
+
+@CapabilityInject(ITeslaProducer::class)
+var TESLA_PRODUCER: Capability<ITeslaProducer>? = null
+
+@CapabilityInject(ITeslaHolder::class)
+var TESLA_STORAGE: Capability<ITeslaHolder>? = null
 
 fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(INodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })

@@ -50,7 +50,8 @@ public interface IElectricNode extends INode {
      * The return value is always positive
      *
      * @param power The energy to add or remove from the node in Watts
+     * @param simulated true if this is just a test that shouldn't modify the node, or false if the power should be applied
      * @return The energy inserted or extracted from the node
      */
-    double applyPower(double power);
+    double applyPower(double power, boolean simulated);
 }

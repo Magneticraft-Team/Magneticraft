@@ -27,13 +27,13 @@ class TileBattery : TileElectricBase() {
             if (mainNode.voltage > UPPER_LIMIT) {
                 val speed = interpolate(mainNode.voltage, UPPER_LIMIT, 120.0) * MAX_CHARGE_SPEED
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), MAX_STORAGE - storage)
-                mainNode.applyPower(-finalSpeed.toDouble())
+                mainNode.applyPower(-finalSpeed.toDouble(), false)
                 storage += finalSpeed
                 chargeRate += finalSpeed
             } else if (mainNode.voltage < LOWER_LIMIT) {
                 val speed = (1 - interpolate(mainNode.voltage, 60.0, LOWER_LIMIT)) * MAX_CHARGE_SPEED
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), storage)
-                mainNode.applyPower(finalSpeed.toDouble())
+                mainNode.applyPower(finalSpeed.toDouble(), false)
                 storage -= finalSpeed
                 chargeRate -= finalSpeed
             }

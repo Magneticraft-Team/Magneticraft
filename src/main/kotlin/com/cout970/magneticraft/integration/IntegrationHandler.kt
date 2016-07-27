@@ -8,8 +8,10 @@ import net.minecraftforge.fml.common.Loader
 object IntegrationHandler {
 
     var JEI = false
+    var TESLA = false
 
     fun preInit(){
         JEI = Loader.isModLoaded("JEI")
+        TESLA = Loader.isModLoaded("Tesla")
     }
 }

@@ -19,7 +19,7 @@ class TileInfiniteEnergy : TileElectricBase() {
             amperageCount += Math.abs(current) * 2
         }
 
-        override fun applyPower(power: Double): Double = power
+        override fun applyPower(power: Double, simulated: Boolean): Double = power
     }
 
     override val electricNodes: List<IElectricNode>

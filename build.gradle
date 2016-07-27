@@ -98,6 +98,11 @@ repositories {
         name = "Cypher Repo"
         url = "http://maven.cypher.coffee/repository/mc-repo"
     }
+	
+	maven {
+		name = "Tesla Api"
+        url 'http://maven.epoxide.xyz'
+    }
     mavenCentral()
 }
 
@@ -106,6 +111,7 @@ dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
 	compile files("./lib/ModelLibrary-0.1.1.jar")
+	compile "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
 }
 
 task devJar(type: Jar) {

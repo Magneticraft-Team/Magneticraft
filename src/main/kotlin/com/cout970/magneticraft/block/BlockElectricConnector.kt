@@ -114,7 +114,8 @@ object BlockElectricConnector : BlockState(Material.IRON, "electric_connector"),
     }
 
     override fun canPlaceBlockOnSide(worldIn: World?, pos: BlockPos?, side: EnumFacing?): Boolean {
-        return super.canPlaceBlockOnSide(worldIn, pos, side) && worldIn!!.isSideSolid(pos!!.offset(side!!.opposite), side)
+        return super.canPlaceBlockOnSide(worldIn, pos, side)
+                && worldIn!!.isSideSolid(pos!!.offset(side!!.opposite), side)
     }
 
     override fun neighborChanged(state: IBlockState, world: World, pos: BlockPos?, blockIn: Block?) {
