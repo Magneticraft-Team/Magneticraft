@@ -16,7 +16,8 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileElectricPoleAdapter::class.java     to "electric_pole_adapter",
         TileBattery::class.java                 to "battery",
         TileInfiniteWater::class.java           to "infinite_water",
-        TileInfiniteEnergy::class.java          to "infinite_energy"
+        TileInfiniteEnergy::class.java          to "infinite_energy",
+        TileAirLock::class.java                 to "airlock"
 )
 //@formatter:on
 

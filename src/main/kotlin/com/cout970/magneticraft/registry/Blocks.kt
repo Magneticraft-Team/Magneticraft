@@ -20,7 +20,9 @@ val blocks = mapOf(
         BlockBattery                to ItemBlockBase(BlockBattery),
         BlockInfiniteWater          to ItemBlockBase(BlockInfiniteWater),
         BlockTileLimestone          to ItemBlockBase(BlockTileLimestone),
-        BlockInfiniteEnergy          to ItemBlockBase(BlockInfiniteEnergy)
+        BlockInfiniteEnergy         to ItemBlockBase(BlockInfiniteEnergy),
+        BlockAirLock                to ItemBlockBase(BlockAirLock),
+        BlockAirBubble              to ItemBlockBase(BlockAirBubble)
 )
 //@formatter:on
 

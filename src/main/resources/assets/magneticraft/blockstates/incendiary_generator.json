@@ -1,21 +1,61 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "magneticraft:mcm/incendiary_generator.mcm",
+        "model": "magneticraft:obj/incendiary_generator.obj",
         "transform": "forge:default-block"
     },
     "variants": {
         "normal": [{ }],
-		"location=base": [{ }],
-		"location=top": [{ }],
-		"direction=north,location=base": [{ }],
-		"direction=south,location=base": [{ }],
-		"direction=west,location=base": [{ }],
-		"direction=east,location=base": [{ }],
-		"direction=north,location=top": [{ }],
-		"direction=south,location=top": [{ }],
-		"direction=west,location=top": [{ }],
-		"direction=east,location=top": [{ }],
-        "inventory": [{ }]
+        "location=base": [{ }],
+        "location=top": [{ }],
+        "direction=north,location=base": [{ }],
+        "direction=south,location=base": [{ }],
+        "direction=west,location=base": [{ }],
+        "direction=east,location=base": [{ }],
+        "direction=north,location=top": [{ }],
+        "direction=south,location=top": [{ }],
+        "direction=west,location=top": [{ }],
+        "direction=east,location=top": [{ }],
+        "inventory": [
+            {
+                "transform": {
+                    "ground": {
+                        "translation": [0, 0, 0],
+                        "rotation": [{ "x": 0 }, { "y": 0 }, { "z": 0 }],
+                        "scale": [0.25, 0.25, 0.25]
+                    },
+                    "gui": {
+                        "translation": [0, -0.1875, 0],
+                        "rotation": [{ "x": 30 }, { "y": 315 }, { "z": 0 }],
+                        "scale": [0.4, 0.4, 0.4]
+                    },
+                    "fixed": {
+                        "translation": [0, 0, 0],
+                        "rotation": [{ "x": 0 }, { "y": 0 }, { "z": 0 }],
+                        "scale": [0.25, 0.25, 0.25]
+                    },
+                    "thirdperson_righthand": {
+                        "translation": [0, 0.15625, 0],
+                        "rotation": [{ "x": 75 }, { "y": 45 }, { "z": 0 }],
+                        "scale": [0.1875, 0.1875, 0.1875]
+                    },
+                    "thirdperson_lefthand": {
+                        "translation": [0, 0.15625, 0],
+                        "rotation": [{ "x": 75 }, { "y": 225 }, { "z": 0 }],
+                        "scale": [0.1875, 0.1875, 0.1875]
+                    },
+                    "firstperson_righthand": {
+                        "translation": [0, 0, 0],
+                        "rotation": [{ "x": 0 }, { "y": 45 }, { "z": 0 }],
+                        "scale": [0.2, 0.2, 0.2]
+                    },
+                    "firstperson_lefthand": {
+                        "translation": [0, 0, 0],
+                        "rotation": [{ "x": 0 }, { "y": 225 }, { "z": 0 }],
+                        "scale": [0.2, 0.2, 0.2]
+                    }
+                }
+            }
+        ]
     }
 }

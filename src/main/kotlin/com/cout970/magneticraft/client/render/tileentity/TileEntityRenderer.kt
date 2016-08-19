@@ -19,5 +19,10 @@ abstract class TileEntityRenderer<T: TileBase> : TileEntitySpecialRenderer<T>() 
                 throw MissingResourceException("Model not found", res.toString(), "")
     }
 
+    fun getModelObj(res: ResourceLocation): IDynamicModel{
+        return ModelRegistry.getDynamicObjModel(res) ?:
+                throw MissingResourceException("Model not found", res.toString(), "")
+    }
+
     open fun onModelRegistryReload(){}
 }

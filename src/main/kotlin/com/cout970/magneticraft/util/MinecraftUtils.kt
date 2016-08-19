@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -37,3 +38,6 @@ fun ByteBuf.writeString(str: String) {
         this.writeByte(array[i].toInt())
     }
 }
+
+val World.isServer: Boolean get() = !isRemote
+val World.isClient: Boolean get() = isRemote

@@ -2,8 +2,9 @@ package com.cout970.magneticraft.client.render.tileentity
 
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
-import com.cout970.loader.api.model.IModelCube
 import com.cout970.loader.api.model.IModelFilter
+import com.cout970.loader.api.model.IModelPart
+import com.cout970.loader.api.model.IObjGroup
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
@@ -88,11 +89,15 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
 
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
-        val model = getModel(resource("models/block/mcm/electric_connector.mcm"))
-        val isBase = IModelFilter {
-            if (it is IModelCube) it.name.contains("Base") else false
+        try {
+            val model = getModelObj(resource("models/block/obj/electric_connector.obj"))
+            val isBase = object : IModelFilter {
+                override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("base") else false
+            }
+            block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(isBase)), 1)
+            base = ModelCacheFactory.createCachedModel(model.filter(isBase), 1)
+        }catch (e: Exception){
+            e.printStackTrace()
         }
-        block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(isBase)), 32)
-        base = ModelCacheFactory.createCachedModel(model.filter(isBase), 32)
     }
 }

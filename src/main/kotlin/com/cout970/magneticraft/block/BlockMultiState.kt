@@ -8,7 +8,7 @@ import net.minecraft.block.state.IBlockState
 /**
  * Created by cout970 on 30/06/2016.
  */
-abstract class BlockState(material: Material, name: String) : BlockBase(material, name) {
+abstract class BlockMultiState(material: Material, name: String) : BlockBase(material, name) {
 
     abstract override fun getMetaFromState(state: IBlockState): Int
 

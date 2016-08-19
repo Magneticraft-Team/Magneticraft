@@ -5,11 +5,13 @@ import com.cout970.magneticraft.guide.Page
 import com.cout970.magneticraft.util.vector.Vec2d
 
 abstract class PageComponent(val position: Vec2d) {
+
     abstract val size: Vec2d
 
     abstract fun toGuiComponent(parent: Page.Gui): GuiPageComponent
 
     protected abstract inner class Gui(val parent: Page.Gui) : GuiPageComponent {
+
         override val size = this@PageComponent.size
         override val position = this@PageComponent.position
 
@@ -24,7 +26,6 @@ abstract class PageComponent(val position: Vec2d) {
 
         override fun onLeftClick(mouse: Vec2d) = false
 
-        override fun postDraw(mouse: Vec2d, time: Double) {
-        }
+        override fun postDraw(mouse: Vec2d, time: Double) = Unit
     }
 }

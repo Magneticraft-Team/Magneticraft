@@ -30,7 +30,7 @@ import net.minecraftforge.fluids.FluidStack
 
 val PROPERTY_LOCATION: PropertyEnum<BlockIncendiaryGenerator.Location> = PropertyEnum.create("location", BlockIncendiaryGenerator.Location::class.java)!!
 
-object BlockIncendiaryGenerator : BlockState(Material.IRON, "incendiary_generator"), ITileEntityProvider {
+object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_generator"), ITileEntityProvider {
 
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false

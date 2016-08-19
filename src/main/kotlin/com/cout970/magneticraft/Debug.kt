@@ -21,7 +21,7 @@ object Debug {
     fun preInit(event: FMLPreInitializationEvent) {
         srcDir = searchSourceDir(event.modConfigurationDirectory)
         if (srcDir == null) {
-            error("Error trying to find the source directory")
+            com.cout970.magneticraft.util.error("Error trying to find the source directory")
         }
 //        setTicksPerSecond(80)
         //Log.debug("Source folder found at ${srcDir?.absolutePath}")
@@ -33,8 +33,8 @@ object Debug {
 //        }
     }
 
-    fun searchSourceDir(configDir: File): File {
-        var temp = configDir
+    fun searchSourceDir(configDir: File): File? {
+        var temp: File? = configDir
         while (temp != null && temp.isDirectory) {
             if (File(temp, "build.gradle").exists()) {
                 return temp

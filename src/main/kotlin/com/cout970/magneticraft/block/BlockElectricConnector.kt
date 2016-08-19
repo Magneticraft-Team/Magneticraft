@@ -35,7 +35,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
 /**
  * Created by cout970 on 29/06/2016.
  */
-object BlockElectricConnector : BlockState(Material.IRON, "electric_connector"), ITileEntityProvider, IManualConnectionHandler, ICapabilityProvider {
+object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connector"), ITileEntityProvider, IManualConnectionHandler, ICapabilityProvider {
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (playerIn.isSneaking && playerIn.heldItemMainhand == null) {

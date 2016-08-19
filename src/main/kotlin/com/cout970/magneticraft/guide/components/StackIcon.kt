@@ -5,10 +5,11 @@ import com.cout970.magneticraft.guide.Page
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.item.ItemStack
 
-class Icon(
-    position: Vec2d,
-    val stack: ItemStack
+class StackIcon(
+        position: Vec2d,
+        val stack: ItemStack
 ) : PageComponent(position) {
+
     override val size = Vec2d(16, 16)
 
     override fun toGuiComponent(parent: Page.Gui): GuiPageComponent = Gui(parent)

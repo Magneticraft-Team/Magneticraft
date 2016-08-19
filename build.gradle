@@ -110,8 +110,8 @@ dependencies {
     shade "coffee.cypher.mcextlib:MC-ExtLib:$extlib_version:dev"
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
-	compile files("./lib/ModelLibrary-0.1.1.jar")
-	compile "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
+	compile files("./lib/ModelLibrary-${model_lib_version}.jar")
+	compile "net.darkhax.tesla:Tesla:${tesla_version}"
 }
 
 task devJar(type: Jar) {

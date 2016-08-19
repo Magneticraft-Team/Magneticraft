@@ -29,6 +29,13 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace")
     var electricFurnaceMaxConsumption = 20
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock Air bubble cost")
+    var airlockBubbleCost = 2.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock Water clear cost")
+    var airlockAirCost = 1.0
+
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
     var heatUnitCelsius = true
+
 }

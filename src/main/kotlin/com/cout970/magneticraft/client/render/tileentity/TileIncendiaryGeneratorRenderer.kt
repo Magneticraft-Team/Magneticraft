@@ -2,8 +2,9 @@ package com.cout970.magneticraft.client.render.tileentity
 
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
-import com.cout970.loader.api.model.IModelCube
 import com.cout970.loader.api.model.IModelFilter
+import com.cout970.loader.api.model.IModelPart
+import com.cout970.loader.api.model.IObjGroup
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.util.resource
 import com.google.common.base.Predicates
@@ -38,11 +39,13 @@ object TileIncendiaryGeneratorRenderer : TileEntityRenderer<TileIncendiaryGenera
 
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
-        val model = getModel(resource("models/block/mcm/incendiary_generator.mcm"))
-        val hasFan = IModelFilter {
-            if (it is IModelCube) it.name.contains("Fan") else false
-        }
-        block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(hasFan)), 128)
-        fan = ModelCacheFactory.createCachedModel(model.filter(hasFan), 128)
+        try {
+            val model = getModelObj(resource("models/block/obj/incendiary_generator.obj"))
+            val hasFan = object : IModelFilter {
+                override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("fan") else false
+            }
+            block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(hasFan)), 1)
+            fan = ModelCacheFactory.createCachedModel(model.filter(hasFan), 1)
+        }catch (e: Exception){}
     }
 }

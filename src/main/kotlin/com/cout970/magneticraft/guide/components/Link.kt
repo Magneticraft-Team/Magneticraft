@@ -7,6 +7,7 @@ import com.cout970.magneticraft.guide.Page
 import com.cout970.magneticraft.util.vector.Vec2d
 
 class Link(val target: LinkInfo, val base: PageComponent) : PageComponent(base.position) {
+
     override val size = base.size
 
     override fun toGuiComponent(parent: Page.Gui): GuiPageComponent = Gui(parent)
@@ -32,7 +33,6 @@ class Link(val target: LinkInfo, val base: PageComponent) : PageComponent(base.p
 
         override fun onLeftClick(mouse: Vec2d): Boolean {
             parent.gui.mc.displayGuiScreen(GuiGuideBook(entryTarget))
-
             return true
         }
     }

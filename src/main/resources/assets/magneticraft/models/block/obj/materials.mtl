@@ -1,0 +1,9 @@
+
+newmtl electric_connector
+map_Kd magneticraft:blocks/electric_connector
+
+newmtl block_battery
+map_Kd magneticraft:blocks/block_battery
+
+newmtl incendiary_generator
+map_Kd magneticraft:blocks/incendiary_generator

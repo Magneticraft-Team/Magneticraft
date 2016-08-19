@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "magneticraft:mcm/block_battery.mcm"
+        "model": "magneticraft:obj/block_battery.obj"
     },
     "variants": {
         "direction=north": [

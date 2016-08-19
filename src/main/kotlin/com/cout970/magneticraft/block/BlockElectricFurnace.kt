@@ -20,7 +20,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockElectricFurnace : BlockState(Material.IRON, "electric_furnace"), ITileEntityProvider {
+object BlockElectricFurnace : BlockMultiState(Material.IRON, "electric_furnace"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileElectricFurnace()
 

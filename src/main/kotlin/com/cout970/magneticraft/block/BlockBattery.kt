@@ -21,7 +21,7 @@ import net.minecraft.world.World
  * Created by cout970 on 11/07/2016.
  */
 
-object BlockBattery : BlockState(Material.IRON, "block_battery"), ITileEntityProvider {
+object BlockBattery : BlockMultiState(Material.IRON, "block_battery"), ITileEntityProvider {
 
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false

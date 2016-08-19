@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.electric
 
+import coffee.cypher.mcextlib.extensions.vectors.toBlockPos
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.INodeHandler
@@ -11,9 +12,11 @@ import com.cout970.magneticraft.integration.tesla.TeslaNodeWrapper
 import com.cout970.magneticraft.registry.TESLA_CONSUMER
 import com.cout970.magneticraft.registry.TESLA_PRODUCER
 import com.cout970.magneticraft.registry.TESLA_STORAGE
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricConnector
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.isIn
+import com.cout970.magneticraft.util.plus
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -34,9 +37,20 @@ class TileElectricConnector : TileElectricBase() {
 
     override fun update() {
         super.update()
-        if (worldObj.isRemote)
+        if (worldObj.isRemote) {
             if (tickToNextUpdate > 0)
                 tickToNextUpdate--
+
+            if (IntegrationHandler.TESLA) {
+                val tile = worldObj.getTileEntity((pos + getFacing()).toBlockPos()) ?: return
+                val consumer = TESLA_CONSUMER!!.fromTile(tile, getFacing()) ?: return
+                val node: TeslaNodeWrapper = teslaWrapper!! as TeslaNodeWrapper
+                val accepted = consumer.givePower(Math.min(node.storedPower, 200L), true)
+                if (accepted > 0) {
+                    node.takePower(consumer.givePower(accepted, false), false)
+                }
+            }
+        }
     }
 
     override fun save(): NBTTagCompound = NBTTagCompound()
@@ -87,7 +101,7 @@ class TileElectricConnector : TileElectricBase() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
-        if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)){
+        if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)) {
             return teslaWrapper as T
         }
         return super.getCapability(capability, facing)
