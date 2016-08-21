@@ -23,4 +23,8 @@ class AnimationTimer {
     fun getRotationState(speed: Float): Float {
         return (animationStage * speed) % 360
     }
+
+    fun getMotionState(speed: Float): Float {
+        return Math.sin(Math.toRadians(getRotationState(speed).toDouble())).toFloat()
+    }
 }

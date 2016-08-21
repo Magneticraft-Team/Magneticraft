@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.itemblock.*
+import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 //@formatter:off
@@ -22,7 +23,8 @@ val blocks = mapOf(
         BlockTileLimestone          to ItemBlockBase(BlockTileLimestone),
         BlockInfiniteEnergy         to ItemBlockBase(BlockInfiniteEnergy),
         BlockAirLock                to ItemBlockBase(BlockAirLock),
-        BlockAirBubble              to ItemBlockBase(BlockAirBubble)
+        BlockAirBubble              to ItemBlockBase(BlockAirBubble),
+        BlockHydraulicPress         to ItemBlockBase(BlockHydraulicPress)
 )
 //@formatter:on
 

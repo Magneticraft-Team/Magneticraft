@@ -2,6 +2,7 @@ package com.cout970.magneticraft.proxy
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.gui.GuiHandler
+import com.cout970.magneticraft.multiblock.MultiblockManager
 import com.cout970.magneticraft.network.MessageContainerUpdate
 import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.registry.*
@@ -19,6 +20,7 @@ abstract class CommonProxy {
         registerTileEntities()
         registerOreDictionaryEntries()
         registerCapabilities()
+        MultiblockManager.registerDefaults()
     }
 
     open fun init() {

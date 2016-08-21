@@ -5,8 +5,16 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import io.netty.buffer.ByteBuf
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.NBTTagInt
+import net.minecraft.nbt.NBTTagList
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.World
+import net.minecraftforge.common.util.Constants
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -39,5 +47,28 @@ fun ByteBuf.writeString(str: String) {
     }
 }
 
+fun EntityPlayer.sendMessage(str: String, vararg args: Any){
+    addChatComponentMessage(TextComponentTranslation(str, *args))
+}
+
+fun translate(str: String, vararg args: Any) = TextComponentTranslation(str, *args)
+
 val World.isServer: Boolean get() = !isRemote
 val World.isClient: Boolean get() = isRemote
+
+fun NBTTagCompound.setBlockPos(key: String, pos: BlockPos) = setTag(key, NBTTagList().apply {
+    appendTag(NBTTagInt(pos.x))
+    appendTag(NBTTagInt(pos.y))
+    appendTag(NBTTagInt(pos.z))
+})
+
+fun NBTTagCompound.getBlockPos(key: String): BlockPos{
+    val list = getTagList(key, Constants.NBT.TAG_INT)
+    return BlockPos(list.getIntAt(0), list.getIntAt(1), list.getIntAt(2))
+}
+
+fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing){
+    setInteger(key, facing.ordinal)
+}
+
+fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))

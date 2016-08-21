@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.util.misc.IBD
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
@@ -15,6 +16,17 @@ import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.relauncher.Side
 
 abstract class TileBase : TileEntity() {
+
+    private var blockState: IBlockState? = null
+    private var lastTime: Long = -1
+
+    fun getBlockState(): IBlockState{
+        if(blockState == null || worldObj.totalWorldTime > lastTime + 40) {
+            lastTime = worldObj.totalWorldTime
+            blockState = worldObj.getBlockState(pos)
+        }
+        return blockState!!
+    }
 
     open fun onBreak() {
     }

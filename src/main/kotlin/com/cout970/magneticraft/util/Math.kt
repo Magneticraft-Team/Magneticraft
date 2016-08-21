@@ -32,4 +32,5 @@ fun hasIntersection(aFirst: Vec3d, aSecond: Vec3d, bFirst: Vec3d, bSecond: Vec3d
 private fun norm2(v: Vec3d): Double = v.x * v.x + v.y * v.y + v.z * v.z
 
 operator fun BlockPos.plus(dir: EnumFacing) = this.offset(dir)!!
+operator fun BlockPos.plus(dir: BlockPos) = this.add(dir)!!
 operator fun Vec3i.plus(dir: EnumFacing) = this.toBlockPos().offset(dir)!!

@@ -29,8 +29,7 @@ import net.minecraftforge.common.capabilities.Capability
 class TileElectricConnector : TileElectricBase() {
 
     var mainNode = ElectricConnector(ElectricNode(worldGetter = { world }, posGetter = { pos }), this)
-    override val electricNodes: List<IElectricNode>
-        get() = listOf(mainNode)
+    override val electricNodes: List<IElectricNode> get() = listOf(mainNode)
     var hasBase = true
     var tickToNextUpdate = 0
     val teslaWrapper: Any? by lazy { if (IntegrationHandler.TESLA) TeslaNodeWrapper(mainNode) else null }
@@ -78,7 +77,7 @@ class TileElectricConnector : TileElectricBase() {
     }
 
     fun getFacing(): EnumFacing {
-        val state = world.getBlockState(pos)
+        val state = getBlockState()
         if (PROPERTY_FACING.isIn(state)) {
             return PROPERTY_FACING[state]
         }

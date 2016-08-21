@@ -16,8 +16,10 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
+import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.util.MODID
 import net.minecraftforge.client.event.ModelBakeEvent
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.obj.OBJLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.ClientRegistry
@@ -42,6 +44,12 @@ class ClientProxy : CommonProxy() {
         //item renders
         items.forEach(ItemBase::registerInvRender)
         blocks.values.forEach(ItemBlockBase::registerInvRender)
+        blocks.values.forEach {
+            val mapper = it.blockBase.getCustomStateMapper()
+            if (mapper != null) {
+                ModelLoader.setCustomStateMapper(it.block, mapper)
+            }
+        }
 
         //tile entity renderer
         register(TileCrushingTable::class.java, TileCrushingTableRenderer)
@@ -51,6 +59,7 @@ class ClientProxy : CommonProxy() {
         register(TileElectricPole::class.java, TileElectricPoleRenderer)
         register(TileElectricPoleAdapter::class.java, TileElectricPoleAdapterRenderer)
         register(TileIncendiaryGenerator::class.java, TileIncendiaryGeneratorRenderer)
+        register(TileHydraulicPress::class.java, TileHydraulicPressRenderer)
 
         //registering model bake event listener
         MinecraftForge.EVENT_BUS.register(this)

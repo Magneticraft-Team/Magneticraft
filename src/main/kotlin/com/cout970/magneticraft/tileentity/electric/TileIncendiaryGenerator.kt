@@ -55,7 +55,7 @@ class TileIncendiaryGenerator(
                     if (time > 0) {
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
-                        inventory[0] = consumeItem(inventory[0]!!)
+                        inventory[0] = inventory[0]!!.consumeItem()
                         markDirty()
                     }
                 }

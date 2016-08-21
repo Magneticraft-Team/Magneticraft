@@ -61,6 +61,7 @@ tile.magneticraft.tile_limestone.name=Limestone Tiles
 tile.magneticraft.infinite_energy.name=Infinite Energy
 tile.magneticraft.airlock.name=Airlock
 tile.magneticraft.air_bubble.name=Air Bubble
+tile.magneticraft.hydraulic_press.name=Hydraulic Press
 
 itemGroup.magneticraft=Magneticraft
 
@@ -72,3 +73,8 @@ text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 text.magneticraft.jei.crushing_table=Crushing Table
 text.magneticraft.jei.table_sieve=Table Sieve
+text.magneticraft.multiblock.error_count=Found %d errors trying to active the multiblock
+text.magneticraft.multiblock.first_errors=Showing the %d first errors:
+text.magneticraft.multiblock.all_errors=Showing all errors:
+text.magneticraft.multiblock.invalid_block=Invalid block at %s, found: %s, expected: %s
+text.magneticraft.multiblock.activate=Successfully activated
