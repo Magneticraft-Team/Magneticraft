@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.registries.entries
+package com.cout970.magneticraft.guide
 
 import com.cout970.magneticraft.guide.Entry
 import java.util.*

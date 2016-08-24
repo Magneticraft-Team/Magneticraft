@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagInt
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.World
@@ -47,7 +48,7 @@ fun ByteBuf.writeString(str: String) {
     }
 }
 
-fun EntityPlayer.sendMessage(str: String, vararg args: Any){
+fun EntityPlayer.sendMessage(str: String, vararg args: Any) {
     addChatComponentMessage(TextComponentTranslation(str, *args))
 }
 
@@ -62,13 +63,22 @@ fun NBTTagCompound.setBlockPos(key: String, pos: BlockPos) = setTag(key, NBTTagL
     appendTag(NBTTagInt(pos.z))
 })
 
-fun NBTTagCompound.getBlockPos(key: String): BlockPos{
+fun NBTTagCompound.getBlockPos(key: String): BlockPos {
     val list = getTagList(key, Constants.NBT.TAG_INT)
     return BlockPos(list.getIntAt(0), list.getIntAt(1), list.getIntAt(2))
 }
 
-fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing){
+fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing) {
     setInteger(key, facing.ordinal)
 }
 
-fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))
+fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))!!
+
+fun AxisAlignedBB.cut(other: AxisAlignedBB): AxisAlignedBB? {
+    if (!this.intersectsWith(other)) return null
+    return AxisAlignedBB(
+            Math.max(minX, other.minX), Math.max(minY, other.minY), Math.max(minZ, other.minZ),
+            Math.min(maxX, other.maxX), Math.min(maxY, other.maxY), Math.min(maxZ, other.maxZ))
+}
+
+val EMPTY_AABB = AxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

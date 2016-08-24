@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.energy.impl
+package com.cout970.magneticraft.api.internal.energy
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import net.minecraft.nbt.NBTTagCompound
@@ -15,26 +15,30 @@ open class ElectricNode(
         private val capacity: Double = 1.0
 ) : IElectricNode {
 
-    var voltage_ = 0.0
-    var amperage_ = 0.0
+    private var voltage = 0.0
+    private var amperage = 0.0
     var amperageCount = 0.0
 
-    override fun getAmperage() = amperage_
-    override fun getVoltage() = voltage_
+    override fun getAmperage() = amperage
+    fun setAmperage(a: Double) { amperage = a }
+
+    override fun getVoltage() = voltage
+    fun setVoltage(v : Double){ voltage = v }
+
     override fun getResistance() = resistance
     override fun getCapacity() = capacity
 
-    override fun getWorld() = worldGetter.invoke()
-    override fun getPos() = posGetter.invoke()
+    override fun getWorld() = worldGetter()
+    override fun getPos() = posGetter()
 
     override fun iterate() {
-        amperage_ = amperageCount * 0.5
+        amperage = amperageCount * 0.5
         amperageCount = 0.0
     }
 
     override fun applyCurrent(current: Double) {
         amperageCount += Math.abs(current)
-        voltage_ += current / getCapacity()
+        voltage += current / getCapacity()
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {
@@ -54,8 +58,8 @@ open class ElectricNode(
 
     override fun deserializeNBT(nbt: NBTTagCompound?) {
         if (nbt == null) return
-        voltage_ = nbt.getDouble("V")
-        amperage_ = nbt.getDouble("A")
+        voltage = nbt.getDouble("V")
+        amperage = nbt.getDouble("A")
     }
 
     override fun serializeNBT() = NBTTagCompound().apply {
@@ -86,6 +90,4 @@ open class ElectricNode(
         result = 31 * result + capacity.hashCode()
         return result
     }
-
-
 }

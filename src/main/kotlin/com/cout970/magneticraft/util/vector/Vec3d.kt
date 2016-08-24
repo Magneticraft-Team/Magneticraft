@@ -5,7 +5,7 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 14/05/2016.
  */
-fun Vec3d(x: Number, y: Number, z: Number) = net.minecraft.util.math.Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
+fun vec3Of(x: Number, y: Number, z: Number) = net.minecraft.util.math.Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
 
 // getters
 

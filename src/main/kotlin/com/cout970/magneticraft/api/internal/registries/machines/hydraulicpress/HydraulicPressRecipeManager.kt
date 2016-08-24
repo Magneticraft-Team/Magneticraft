@@ -1,5 +1,6 @@
-package com.cout970.magneticraft.api.internal.registries.machines
+package com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress
 
+import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipe
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipeManager
 import net.minecraft.item.ItemStack

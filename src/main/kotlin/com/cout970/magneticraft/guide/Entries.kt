@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.guide
 
 import coffee.cypher.mcextlib.extensions.strings.i18n
-import com.cout970.magneticraft.api.registries.entries.EntryRegistry
+import com.cout970.magneticraft.guide.EntryRegistry
 import com.cout970.magneticraft.gui.client.guide.PAGE_CENTER
 import com.cout970.magneticraft.guide.builders.*
 import com.cout970.magneticraft.util.MODID

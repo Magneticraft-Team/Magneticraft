@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.electric
 
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.BlockAirBubble
 import com.cout970.magneticraft.block.BlockAirLock
 import com.cout970.magneticraft.config.Config

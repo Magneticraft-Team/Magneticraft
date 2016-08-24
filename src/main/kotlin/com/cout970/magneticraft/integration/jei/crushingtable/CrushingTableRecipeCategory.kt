@@ -24,8 +24,8 @@ object CrushingTableRecipeCategory : IRecipeCategory<CrushingTableRecipeWrapper>
     override fun setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: CrushingTableRecipeWrapper) {
         recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
         recipeLayout.itemStacks.init(1, false, 48, 51 - 5)
-        recipeLayout.itemStacks.set(0, recipeWrapper.input)
-        recipeLayout.itemStacks.set(1, recipeWrapper.output)
+        recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+        recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
     }
 
     override fun getTitle(): String = title

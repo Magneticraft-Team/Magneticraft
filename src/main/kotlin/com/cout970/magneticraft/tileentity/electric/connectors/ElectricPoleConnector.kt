@@ -4,7 +4,7 @@ import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.hasIntersection

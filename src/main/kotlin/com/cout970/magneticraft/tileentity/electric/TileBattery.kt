@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.electric
 
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.misc.ValueAverage

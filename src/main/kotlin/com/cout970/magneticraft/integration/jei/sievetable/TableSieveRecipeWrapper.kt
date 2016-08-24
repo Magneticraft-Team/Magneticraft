@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.integration.jei.sievetable
 
-import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
+import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipe
+import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
 import mezz.jei.api.recipe.IRecipeWrapper
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fluids.FluidStack
@@ -8,7 +9,7 @@ import net.minecraftforge.fluids.FluidStack
 /**
  * Created by cout970 on 23/07/2016.
  */
-class TableSieveRecipeWrapper(val recipe: TableSieveRecipe) : IRecipeWrapper {
+class TableSieveRecipeWrapper(val recipe: ITableSieveRecipe) : IRecipeWrapper {
 
     override fun drawAnimations(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int) {}
 

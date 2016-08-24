@@ -21,7 +21,7 @@ class GuiElectricFurnace(container: ContainerBase) : GuiBase(container) {
         components.add(CompBackground("electric_furnace"))
         components.add(CompElectricBar(tile.mainNode, Vec2d(58, 64) + box.start))
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.production.storage.toDouble() }, { Config.electricFurnaceMaxConsumption.toDouble() }, { 0.0 }),
+                CallbackBarProvider({ tile.production.storage.toDouble() }, { Config.electricFurnaceMaxConsumption }, { 0.0 }),
                 3, Vec2d(69, 64) + box.start, { listOf(String.format("%.2fW", tile.production.storage)) }))
 
         val callback = CallbackBarProvider({ tile.burningTime.toDouble() }, { TileElectricFurnace.MAX_BURNING_TIME.toDouble() }, { 0.0 })

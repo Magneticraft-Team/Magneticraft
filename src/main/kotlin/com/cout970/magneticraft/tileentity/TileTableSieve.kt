@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.tileentity
 
 import coffee.cypher.mcextlib.extensions.inventories.get
-import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
+import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
+import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.util.shouldTick
@@ -24,12 +25,24 @@ class TileTableSieve : TileBase(), ITickable {
     var tickCounter = 0
     var size = 0
 
-    companion object{
+    companion object {
         val UPDATE_TIME = 20
     }
 
-    override fun update() {
+    private var recipeCache: ITableSieveRecipe? = null
+    private var inputCache: ItemStack? = null
 
+    fun getRecipe(input: ItemStack): ITableSieveRecipe? {
+        if (input === inputCache) return recipeCache
+        val recipe = TableSieveRecipeManager.findRecipe(input)
+        if (recipe != null) {
+            recipeCache = recipe
+            inputCache = input
+        }
+        return recipe
+    }
+
+    override fun update() {
         //gets the item on top of the block
         if (shouldTick(UPDATE_TIME)) {
             suckItems()
@@ -95,7 +108,7 @@ class TileTableSieve : TileBase(), ITickable {
         for (i in items) {
             if (i !is EntityItem) continue
             val item = i.entityItem
-            if (TableSieveRegistry.findRecipe(item) == null) continue
+            if (getRecipe(item) == null) continue
             val inserted = inventory.insertItem(0, item, true)
             if (inserted == null) {
                 inventory.insertItem(0, item.copy(), false)
@@ -109,13 +122,13 @@ class TileTableSieve : TileBase(), ITickable {
 
     fun craftItem() {
         val stack = inventory[0]!!
-        val recipe = TableSieveRegistry.findRecipe(stack)
+        val recipe = getRecipe(stack)!!
         output.add(recipe.primaryOutput)
         val extra = recipe.secondaryOutput
         if (extra != null && Random().nextFloat() < recipe.probability) {
             output.add(extra)
         }
-        stack.stackSize--;
+        stack.stackSize--
         if (stack.stackSize <= 0) {
             inventory.setStackInSlot(0, null)
         }

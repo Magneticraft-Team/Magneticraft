@@ -5,7 +5,7 @@ import coffee.cypher.mcextlib.extensions.vectors.times
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.client.render.tileentity.PIXEL
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.google.common.collect.ImmutableList

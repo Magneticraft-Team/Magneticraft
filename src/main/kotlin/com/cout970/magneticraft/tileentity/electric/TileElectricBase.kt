@@ -3,10 +3,11 @@ package com.cout970.magneticraft.tileentity.electric
 import coffee.cypher.mcextlib.extensions.vectors.length
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.energy.*
-import com.cout970.magneticraft.api.energy.impl.ElectricConnection
+import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.isServer
 import com.cout970.magneticraft.util.misc.RenderCache
 import com.cout970.magneticraft.util.misc.UnloadedElectricConnection
 import com.cout970.magneticraft.util.shouldTick
@@ -45,22 +46,9 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
             updateConnections()
         }
 
-        if (!unloadedConnections.isEmpty()) {
-            val iterator = unloadedConnections.iterator()
-            while (iterator.hasNext()) {
-                val con = iterator.next()
-                if (con.create(world, this)) {
-                    iterator.remove()
-                }
-            }
-            if (!world.isRemote) {
-                firstTicks = 60
-            } else {
-                wireRender.reset()
-            }
-        }
+        resolveUnloadedConnections()
 
-        if (!world.isRemote) {
+        if (world.isServer) {
             //update to sync connections every 20 seconds
             if (shouldTick(400)) {
                 sendUpdateToNearPlayers()
@@ -77,6 +65,23 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
         }
     }
 
+    open fun resolveUnloadedConnections() {
+        if (!unloadedConnections.isEmpty()) {
+            val iterator = unloadedConnections.iterator()
+            while (iterator.hasNext()) {
+                val con = iterator.next()
+                if (con.create(world, this)) {
+                    iterator.remove()
+                }
+            }
+            if (!world.isRemote) {
+                firstTicks = 60
+            } else {
+                wireRender.reset()
+            }
+        }
+    }
+
     open fun iterate() {
         electricNodes.forEach { it.iterate() }
         outputNormalConnections.forEach { it.iterate() }
@@ -85,11 +90,11 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
 
     open fun updateConnections() {
         clearNormalConnections()
-        for (dir in EnumFacing.values().filter { it.axisDirection == EnumFacing.AxisDirection.NEGATIVE }) {
-            val tile = worldObj.getTileEntity(pos.offset(dir)) ?: continue
-            val handler = NODE_HANDLER!!.fromTile(tile, dir.opposite)
-            if (handler !is IElectricNodeHandler) continue
-            for (thisNode in nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
+        for (thisNode in nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
+            loop@for (dir in NEGATIVE_DIRECTIONS) {
+                val tile = worldObj.getTileEntity(thisNode.pos.offset(dir)) ?: continue@loop
+                val handler = NODE_HANDLER!!.fromTile(tile, dir.opposite)
+                if (handler !is IElectricNodeHandler) continue@loop
                 for (otherNode in handler.nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
                     if (this.canConnect(thisNode, handler, otherNode, dir) && handler.canConnect(otherNode, this, thisNode, dir.opposite)) {
                         val connection = ElectricConnection(thisNode, otherNode)
@@ -198,7 +203,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     open fun getMaxWireDistance() = 16.0
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == NODE_HANDLER) return getNodeHandler(facing) as T
         return super.getCapability(capability, facing)
     }
@@ -269,6 +274,8 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     }
 
     companion object {
+
+        val NEGATIVE_DIRECTIONS = EnumFacing.values().filter { it.axisDirection == EnumFacing.AxisDirection.NEGATIVE }
 
         fun interpolate(v: Double, min: Double, max: Double): Double {
             if (v < min) return 0.0

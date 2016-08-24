@@ -1,8 +1,11 @@
 package com.cout970.magneticraft.item
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.util.isServer
+import com.cout970.magneticraft.util.sendMessage
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -11,6 +14,7 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
+import org.lwjgl.input.Keyboard
 
 /**
  * Created by cout970 on 20/07/2016.
@@ -18,7 +22,15 @@ import net.minecraft.world.World
 object ItemVoltmeter : ItemBase("voltmeter") {
 
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
-        if (!worldIn.isRemote) {
+
+        //DEBUG
+        if (Debug.DEBUG && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+            val tile = worldIn.getTileEntity(pos)
+            playerIn.sendMessage("Server: ${worldIn.isServer}, Tile: ${tile?.serializeNBT()}\n")
+        }
+
+        //NO DEBUG
+        if (worldIn.isServer) {
             val tile = worldIn.getTileEntity(pos)
             if (tile != null) {
                 val handler = NODE_HANDLER!!.fromTile(tile)

@@ -14,8 +14,5 @@ object ApiUtils {
                 && equals(a.tagCompound, b.tagCompound)
     }
 
-    fun equals(a: Any?, b: Any?): Boolean {
-        if (a == null) return b == null
-        return a == b
-    }
+    fun equals(a: Any?, b: Any?): Boolean = a == b
 }

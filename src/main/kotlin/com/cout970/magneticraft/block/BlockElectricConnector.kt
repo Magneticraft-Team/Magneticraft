@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.aabb.to
+import coffee.cypher.mcextlib.extensions.vectors.plus
+import coffee.cypher.mcextlib.extensions.vectors.times
+import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.block.states.PROPERTY_FACING
@@ -113,14 +116,30 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
         return tile.connectWire(handler, side)
     }
 
-    override fun canPlaceBlockOnSide(worldIn: World?, pos: BlockPos?, side: EnumFacing?): Boolean {
-        return super.canPlaceBlockOnSide(worldIn, pos, side)
-                && worldIn!!.isSideSolid(pos!!.offset(side!!.opposite), side)
+    override fun canPlaceBlockOnSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
+        return super.canPlaceBlockOnSide(worldIn, pos, side) && canStayInSide(worldIn, pos, side.opposite)
     }
 
-    override fun neighborChanged(state: IBlockState, world: World, pos: BlockPos?, blockIn: Block?) {
+    //pos, block to place the connector
+    //side PROPERTY_FACING in the connector
+    fun canStayInSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
+        if (worldIn.isSideSolid(pos.offset(side), side.opposite, false)) return true
+
+        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) to Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
+        val temp = side.directionVec.toDoubleVec() * 0.625 + Vec3d(0.5, 0.5, 0.5)
+        val blockPos = pos.offset(side)
+
+        box = box.union(temp to temp).offset(pos)
+        val state = worldIn.getBlockState(blockPos)
+        val list = mutableListOf<AxisAlignedBB>()
+
+        state.addCollisionBoxToList(worldIn, blockPos, box, list, null)
+        return list.isNotEmpty()
+    }
+
+    override fun neighborChanged(state: IBlockState, world: World, pos: BlockPos, blockIn: Block?) {
         val dir = PROPERTY_FACING[state]
-        if (!world.isSideSolid(pos!!.offset(dir), dir.opposite, false)) {
+        if (!canStayInSide(world, pos, dir)) {
             world.destroyBlock(pos, true)
         }
         super.neighborChanged(state, world, pos, blockIn)

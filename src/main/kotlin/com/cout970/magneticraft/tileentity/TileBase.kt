@@ -20,8 +20,8 @@ abstract class TileBase : TileEntity() {
     private var blockState: IBlockState? = null
     private var lastTime: Long = -1
 
-    fun getBlockState(): IBlockState{
-        if(blockState == null || worldObj.totalWorldTime > lastTime + 40) {
+    fun getBlockState(): IBlockState {
+        if (blockState == null || blockState!!.block != getBlockType() || worldObj.totalWorldTime > lastTime + 40) {
             lastTime = worldObj.totalWorldTime
             blockState = worldObj.getBlockState(pos)
         }
@@ -70,8 +70,10 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun getUpdatePacket(): SPacketUpdateTileEntity {
-        return SPacketUpdateTileEntity(pos, 0, writeToNBT(NBTTagCompound()))
+        return SPacketUpdateTileEntity(pos, 0, updateTag)
     }
+
+    override fun getUpdateTag(): NBTTagCompound = writeToNBT(NBTTagCompound())!!
 
     override fun onDataPacket(net: NetworkManager?, pkt: SPacketUpdateTileEntity?) {
         readFromNBT(pkt!!.nbtCompound)

@@ -1,18 +1,21 @@
 package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
 
+import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
+import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipeManager
 import net.minecraft.item.ItemStack
-
-import java.util.ArrayList
-import java.util.LinkedList
+import java.util.*
 
 /**
  * Created by cout970 on 16/06/2016.
  */
-object TableSieveRecipeManager {
+/**
+ * Internal class only please use MagneticraftApi.getTableSieveRecipeManager() instead
+ */
+object TableSieveRecipeManager : ITableSieveRecipeManager {
 
-    private val recipes = LinkedList<TableSieveRecipe>()
+    private val recipes = LinkedList<ITableSieveRecipe>()
 
-    fun findRecipe(stack: ItemStack): TableSieveRecipe? {
+    override fun findRecipe(stack: ItemStack): ITableSieveRecipe? {
         for (rec in recipes) {
             if (rec.matches(stack)) {
                 return rec
@@ -21,7 +24,7 @@ object TableSieveRecipeManager {
         return null
     }
 
-    fun registerRecipe(recipe: TableSieveRecipe): Boolean {
+    override fun registerRecipe(recipe: ITableSieveRecipe): Boolean {
         if (findRecipe(recipe.input) != null) {
             return false
         }
@@ -29,7 +32,9 @@ object TableSieveRecipeManager {
         return true
     }
 
-    fun getRecipes(): List<TableSieveRecipe> {
-        return ArrayList(recipes)
+    override fun getRecipes(): List<ITableSieveRecipe> = Collections.synchronizedList(recipes)
+
+    override fun createRecipe(input: ItemStack, primaryOutput: ItemStack, secondaryOutput: ItemStack, prob: Float, oreDict: Boolean): ITableSieveRecipe {
+        return TableSieveRecipe(input, primaryOutput, secondaryOutput, prob, oreDict)
     }
 }

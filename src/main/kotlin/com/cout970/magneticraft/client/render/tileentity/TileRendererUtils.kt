@@ -3,15 +3,25 @@ package com.cout970.magneticraft.client.render.tileentity
 import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.multiblock.Multiblock
+import com.cout970.magneticraft.multiblock.get
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.VertexBuffer
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms
+import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL14
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -20,12 +30,117 @@ import org.lwjgl.opengl.GL11
 val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 const val PIXEL = 0.0625
 
+fun renderMultiblockBlueprint(multiblock: Multiblock) {
+    Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+    for (i in 0 until multiblock.size.x) {
+        for (j in 0 until multiblock.size.y) {
+            for (k in 0 until multiblock.size.z) {
+                val component = multiblock.scheme[i, j, k]
+                val blocks = component.getBlueprintBlocks(multiblock, BlockPos(i, j, k))
+                for (stack in blocks) {
+                    pushMatrix()
+                    translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
+                    val pos = vec3Of(i, j, k) - multiblock.center.toDoubleVec()
+                    translate(pos.x, pos.y, pos.z)
+
+                    if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
+                        translate(0.0, -0.045, 0.125)
+                        rotate(90f, 1f, 0f, 0f)
+                    } else {
+                        translate(0.0, -0.125, 0.0625 * 3)
+                    }
+                    scale(2.0, 2.0, 2.0)
+                    renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.5f)
+                    popMatrix()
+                }
+            }
+        }
+    }
+}
+
+fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms.TransformType, alpha: Float) {
+    var bakedmodel = Minecraft.getMinecraft().renderItem.getItemModelWithOverrides(stack, null, null)
+    if (stack.item != null) {
+        val textureManager = Minecraft.getMinecraft().textureManager
+        textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false)
+        enableRescaleNormal()
+        alphaFunc(516, 0.1f)
+        color(1.0f, 1.0f, 1.0f, 1.0f)
+        enableBlend()
+        GL14.glBlendColor(1f, 1f, 1f, alpha)
+        glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA)
+        pushMatrix()
+
+        bakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedmodel, transform, false)
+
+        Minecraft.getMinecraft().renderItem.renderItem(stack, bakedmodel)
+        cullFace(CullFace.BACK)
+        popMatrix()
+        disableRescaleNormal()
+        disableBlend()
+        textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap()
+    }
+}
+
 fun customRotate(rot: Vec3d, pos: Vec3d) {
-    GlStateManager.translate(pos.x, pos.y, pos.z)
-    GlStateManager.rotate(rot.xCoord.toFloat(), 1f, 0f, 0f)
-    GlStateManager.rotate(rot.yCoord.toFloat(), 0f, 1f, 0f)
-    GlStateManager.rotate(rot.zCoord.toFloat(), 0f, 0f, 1f)
-    GlStateManager.translate(-pos.x, -pos.y, -pos.z)
+    translate(pos.x, pos.y, pos.z)
+    rotate(rot.xCoord.toFloat(), 1f, 0f, 0f)
+    rotate(rot.yCoord.toFloat(), 0f, 1f, 0f)
+    rotate(rot.zCoord.toFloat(), 0f, 0f, 1f)
+    translate(-pos.x, -pos.y, -pos.z)
+}
+
+fun renderBox(box: AxisAlignedBB) {
+    val tes = Tessellator.getInstance()
+    val t = tes.buffer
+    val r = 1f
+    val g = 1f
+    val b = 1f
+    val a = 1f
+
+    glDisable(GL_TEXTURE_2D)
+    GlStateManager.glLineWidth(2f)
+    t.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR)
+    t.pos(box.minX, box.minY, box.minZ).color(r, g, b, a).endVertex()
+    t.pos(box.maxX, box.minY, box.minZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.minX, box.minY, box.minZ).color(r, g, b, a).endVertex()
+    t.pos(box.minX, box.maxY, box.minZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.minX, box.minY, box.minZ).color(r, g, b, a).endVertex()
+    t.pos(box.minX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.maxX, box.maxY, box.maxZ).color(r, g, b, a).endVertex()
+    t.pos(box.minX, box.maxY, box.maxZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.maxX, box.maxY, box.maxZ).color(r, g, b, a).endVertex()
+    t.pos(box.maxX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.maxX, box.maxY, box.maxZ).color(r, g, b, a).endVertex()
+    t.pos(box.maxX, box.maxY, box.minZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.minX, box.maxY, box.minZ).color(r, g, b, a).endVertex()
+    t.pos(box.maxX, box.maxY, box.minZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.maxX, box.minY, box.minZ).color(r, g, b, a).endVertex()
+    t.pos(box.maxX, box.maxY, box.minZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.minX, box.maxY, box.minZ).color(r, g, b, a).endVertex()
+    t.pos(box.minX, box.maxY, box.maxZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.maxX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
+    t.pos(box.minX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.minX, box.maxY, box.maxZ).color(r, g, b, a).endVertex()
+    t.pos(box.minX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
+
+    t.pos(box.maxX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
+    t.pos(box.maxX, box.minY, box.minZ).color(r, g, b, a).endVertex()
+
+    tes.draw()
+    glEnable(GL_TEXTURE_2D)
 }
 
 fun rotateFromCenter(facing: EnumFacing, optional: Float = 0f) {
@@ -36,9 +151,9 @@ fun rotateFromCenter(facing: EnumFacing, optional: Float = 0f) {
         EnumFacing.EAST -> -90f
         else -> 0f
     } + optional
-    GlStateManager.translate(0.5, 0.5, 0.5)
-    GlStateManager.rotate(angle, 0f, 1f, 0f)
-    GlStateManager.translate(-0.5, -0.5, -0.5)
+    translate(0.5, 0.5, 0.5)
+    rotate(angle, 0f, 1f, 0f)
+    translate(-0.5, -0.5, -0.5)
 }
 
 fun renderFloatingLabel(str: String, pos: Vec3d) {
@@ -48,38 +163,38 @@ fun renderFloatingLabel(str: String, pos: Vec3d) {
     val fontrenderer = renderManager.fontRenderer
     val f = 1.6f
     val f1 = 0.016666668f * f
-    GlStateManager.pushMatrix()
-    GlStateManager.translate(x.toFloat() + 0.0f, y.toFloat() + 0.5f, z.toFloat())
-    GL11.glNormal3f(0.0f, 1.0f, 0.0f)
-    GlStateManager.rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
-    GlStateManager.rotate(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
-    GlStateManager.scale(-f1, -f1, f1)
-    GlStateManager.disableLighting()
-    GlStateManager.depthMask(false)
-    GlStateManager.disableDepth()
-    GlStateManager.enableBlend()
-    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+    pushMatrix()
+    translate(x.toFloat() + 0.0f, y.toFloat() + 0.5f, z.toFloat())
+    GlStateManager.glNormal3f(0.0f, 1.0f, 0.0f)
+    rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+    rotate(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+    scale(-f1, -f1, f1)
+    disableLighting()
+    depthMask(false)
+    disableDepth()
+    enableBlend()
+    tryBlendFuncSeparate(770, 771, 1, 0)
     val tessellator = Tessellator.getInstance()
     val worldrenderer = tessellator.buffer
     val i = 0
 
     val j = fontrenderer.getStringWidth(str) / 2
-    GlStateManager.disableTexture2D()
+    disableTexture2D()
     worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
     worldrenderer.pos((-j - 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
     worldrenderer.pos((-j - 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
     worldrenderer.pos((j + 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
     worldrenderer.pos((j + 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
     tessellator.draw()
-    GlStateManager.enableTexture2D()
+    enableTexture2D()
     fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, 553648127)
-    GlStateManager.enableDepth()
-    GlStateManager.depthMask(true)
+    enableDepth()
+    depthMask(true)
     fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, -1)
-    GlStateManager.enableLighting()
-    GlStateManager.disableBlend()
-    GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-    GlStateManager.popMatrix()
+    enableLighting()
+    disableBlend()
+    color(1.0f, 1.0f, 1.0f, 1.0f)
+    popMatrix()
 }
 
 fun drawLine(t: VertexBuffer, a: Vec3d, b: Vec3d) {
@@ -128,7 +243,7 @@ fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnec
         val tes = Tessellator.getInstance()
         val buffer = tes.buffer
 
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
+        buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
 
         val points = interpolateWire(start, end, weight)
 

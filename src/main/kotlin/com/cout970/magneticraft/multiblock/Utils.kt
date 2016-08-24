@@ -1,11 +1,13 @@
 package com.cout970.magneticraft.multiblock
 
+import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.round
 import com.cout970.loader.impl.util.rotateX
 import com.cout970.magneticraft.util.toRadians
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 
@@ -24,8 +26,27 @@ fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
         EnumFacing.UP -> return BlockPos(origin + BlockPos(Vec3d(rel).rotateX(90.0)))
         EnumFacing.NORTH -> return point
         EnumFacing.SOUTH -> 180.0f
-        EnumFacing.WEST -> -90.0f
-        EnumFacing.EAST -> 90.0f
+        EnumFacing.WEST -> 90.0f
+        EnumFacing.EAST -> -90.0f
     }
     return BlockPos(origin + BlockPos(Vec3d(rel).rotateYaw(rot.toRadians()).round()))
+}
+
+fun EnumFacing.rotatePoint(origin: Vec3d, point: Vec3d): Vec3d {
+    val rel = point - origin
+    val rot = when (this) {
+        EnumFacing.DOWN -> return origin + rel.rotateX(-90.0)
+        EnumFacing.UP -> return origin + rel.rotateX(90.0)
+        EnumFacing.NORTH -> return point
+        EnumFacing.SOUTH -> 180.0f
+        EnumFacing.WEST -> 90.0f
+        EnumFacing.EAST -> -90.0f
+    }
+    return origin + rel.rotateYaw(rot.toRadians())
+}
+
+fun EnumFacing.rotateBox(origin: Vec3d, box: AxisAlignedBB): AxisAlignedBB {
+    val min = Vec3d(box.minX, box.minY, box.minZ)
+    val max = Vec3d(box.maxX, box.maxY, box.maxZ)
+    return rotatePoint(origin, min) to rotatePoint(origin, max)
 }

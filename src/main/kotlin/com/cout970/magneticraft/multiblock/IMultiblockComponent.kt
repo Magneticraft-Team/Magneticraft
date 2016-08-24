@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.multiblock
 
+import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
 
@@ -11,4 +12,5 @@ interface IMultiblockComponent {
     fun getBlockData(relativePos: BlockPos, context: MultiblockContext): BlockData
     fun activateBlock(relativePos: BlockPos, context: MultiblockContext)
     fun deactivateBlock(relativePos: BlockPos, context: MultiblockContext)
+    fun getBlueprintBlocks(multiblock: Multiblock, blockPos: BlockPos): List<ItemStack>
 }

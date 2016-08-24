@@ -24,16 +24,19 @@ object Config {
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator")
-    var incendiaryGeneratorMaxProduction = 40
+    var incendiaryGeneratorMaxProduction = 40.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace")
-    var electricFurnaceMaxConsumption = 20
+    var electricFurnaceMaxConsumption = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock Air bubble cost")
     var airlockBubbleCost = 2.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock Water clear cost")
     var airlockAirCost = 1.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press")
+    var hydraulicPressConsumption = 1.0
 
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
     var heatUnitCelsius = true

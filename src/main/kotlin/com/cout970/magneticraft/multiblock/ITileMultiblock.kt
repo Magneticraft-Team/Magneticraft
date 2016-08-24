@@ -14,4 +14,8 @@ interface ITileMultiblock {
     var centerPos: BlockPos?
     //orientation of the multiblock
     var multiblockFacing: EnumFacing?
+
+    fun onActivate()
+
+    fun onDeactivate()
 }

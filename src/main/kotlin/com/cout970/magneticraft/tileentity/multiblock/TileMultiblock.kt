@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
+import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.ITileMultiblock
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.MultiblockManager
@@ -11,6 +12,7 @@ import com.cout970.magneticraft.util.setEnumFacing
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 20/08/2016.
@@ -20,6 +22,9 @@ import net.minecraft.util.math.BlockPos
 open class TileMultiblock : TileBase(), ITileMultiblock {
 
     override var multiblock: Multiblock? = null
+        set(i) {
+            field = i
+        }
     override var centerPos: BlockPos? = null
     override var multiblockFacing: EnumFacing? = null
 
@@ -36,15 +41,49 @@ open class TileMultiblock : TileBase(), ITileMultiblock {
     override fun writeToNBT(compound: NBTTagCompound?): NBTTagCompound? {
         multiblock?.let {
             val tag = NBTTagCompound()
-            tag.setString("Multiblock", it.name)
+            tag.setString("Name", it.name)
             tag.setBlockPos("CenterPos", centerPos!!)
             tag.setEnumFacing("Facing", multiblockFacing!!)
-            compound?.apply { setTag("Multiblock", tag) }
+            compound!!.setTag("Multiblock", tag)
         }
         return super.writeToNBT(compound)
+    }
+
+    override fun onLoad() {
+        super.onLoad()
+        sendUpdateToNearPlayers()
     }
 
     override fun save(): NBTTagCompound = NBTTagCompound()
 
     override fun load(nbt: NBTTagCompound) = Unit
+
+    override fun onActivate() {
+        markDirty()
+        sendUpdateToNearPlayers()
+    }
+
+    override fun onDeactivate() {
+        markDirty()
+    }
+
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
+        if (multiblock != null) {
+            val tile = worldObj.getTileEntity(pos.subtract(centerPos!!))
+            if (tile is IMultiblockCenter) {
+                return tile.hasCapability(capability, facing, centerPos!!)
+            }
+        }
+        return super.hasCapability(capability, facing)
+    }
+
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+        if (multiblock != null) {
+            val tile = worldObj.getTileEntity(pos.subtract(centerPos!!))
+            if (tile is IMultiblockCenter) {
+                return tile.getCapability(capability, facing, centerPos!!)
+            }
+        }
+        return super.getCapability(capability, facing)
+    }
 }

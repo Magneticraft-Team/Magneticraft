@@ -3,7 +3,7 @@ package com.cout970.magneticraft.tileentity.electric.connectors
 import coffee.cypher.mcextlib.extensions.vectors.times
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.BlockElectricPoleAdapter
 import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
 import com.cout970.magneticraft.util.get

@@ -1,14 +1,15 @@
 package com.cout970.magneticraft.block.multiblock
 
+import coffee.cypher.mcextlib.extensions.inventories.get
+import coffee.cypher.mcextlib.extensions.inventories.set
+import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.multiblock.MultiblockContext
-import com.cout970.magneticraft.multiblock.MultiblockManager
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.isServer
-import com.cout970.magneticraft.util.sendMessage
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
@@ -16,6 +17,7 @@ import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMap
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -23,6 +25,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.BlockRenderLayer
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -36,7 +39,20 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
 
     init {
         defaultState = defaultState.withProperty(PROPERTY_CENTER, false).withProperty(PROPERTY_ACTIVE, false)
-        setLightOpacity(0)
+    }
+
+    override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
+        if (PROPERTY_ACTIVE[state] && entityBox != null) {
+            return super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn)
+        }
+        return addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos))
+    }
+
+    override fun getSelectedBoundingBox(state: IBlockState, worldIn: World, pos: BlockPos): AxisAlignedBB {
+        if (PROPERTY_ACTIVE[state]) {
+            return super.getSelectedBoundingBox(state, worldIn, pos)
+        }
+        return FULL_BLOCK_AABB
     }
 
     override fun isOpaqueCube(state: IBlockState): Boolean = false
@@ -87,25 +103,27 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
     }
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state] && !PROPERTY_ACTIVE[state]) {
-            val context = MultiblockContext(MultiblockHydraulicPress, worldIn, pos, PROPERTY_DIRECTION[state], playerIn)
-            val errors = MultiblockManager.checkMultiblockStructure(context)
-            if (errors.isNotEmpty()) {
-                playerIn.sendMessage("text.magneticraft.multiblock.error_count", errors.size)
-                if (errors.size > 2) {
-                    playerIn.sendMessage("text.magneticraft.multiblock.first_errors", 2)
-                    errors.stream().limit(2).forEach {
-                        playerIn.addChatComponentMessage(it)
+        if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state]) {
+            if (!PROPERTY_ACTIVE[state]) {
+                activateMultiblock(MultiblockContext(MultiblockHydraulicPress, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
+            } else {
+                val tile = worldIn.getTile<TileHydraulicPress>(pos) ?: return true
+
+                if (tile.inventory[0] != null) {
+                    if (heldItem == null) {
+
+                        playerIn.inventory.addItemStackToInventory(tile.inventory[0])
+                        tile.inventory[0] = null
+                        tile.sendUpdateToNearPlayers()
                     }
                 } else {
-                    playerIn.sendMessage("text.magneticraft.multiblock.all_errors")
-                    errors.forEach {
-                        playerIn.addChatComponentMessage(it)
+                    if (heldItem != null) {
+                        val inv = TileHydraulicPress.Inventory(tile.inventory)
+                        val rest = inv.insertItem(0, heldItem, false)
+                        playerIn.setHeldItem(EnumHand.MAIN_HAND, rest)
+                        tile.sendUpdateToNearPlayers()
                     }
                 }
-            } else {
-                MultiblockManager.activateMultiblockStructure(context)
-                playerIn.sendMessage("text.magneticraft.multiblock.activate")
             }
         }
         return true
@@ -113,11 +131,7 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         if (PROPERTY_ACTIVE[state]) {
-            if (PROPERTY_CENTER[state]) {
-                MultiblockManager.deactivateMultiblockStructure(MultiblockContext(MultiblockHydraulicPress, worldIn, pos, PROPERTY_DIRECTION[state], null))
-            } else {
-                super.breakBlock(worldIn, pos, state)
-            }
+            super.breakBlock(worldIn, pos, state)
         }
     }
 

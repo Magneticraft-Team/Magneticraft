@@ -4,8 +4,8 @@ import coffee.cypher.mcextlib.extensions.vectors.toBlockPos
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.INodeHandler
-import com.cout970.magneticraft.api.energy.impl.ElectricConnection
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricConnection
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.states.PROPERTY_FACING
 import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.integration.tesla.TeslaNodeWrapper
@@ -42,7 +42,7 @@ class TileElectricConnector : TileElectricBase() {
 
             if (IntegrationHandler.TESLA) {
                 val tile = worldObj.getTileEntity((pos + getFacing()).toBlockPos()) ?: return
-                val consumer = TESLA_CONSUMER!!.fromTile(tile, getFacing()) ?: return
+                val consumer = TESLA_CONSUMER!!.fromTile(tile, getFacing().opposite) ?: return
                 val node: TeslaNodeWrapper = teslaWrapper!! as TeslaNodeWrapper
                 val accepted = consumer.givePower(Math.min(node.storedPower, 200L), true)
                 if (accepted > 0) {
@@ -99,7 +99,7 @@ class TileElectricConnector : TileElectricBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)) {
             return teslaWrapper as T
         }

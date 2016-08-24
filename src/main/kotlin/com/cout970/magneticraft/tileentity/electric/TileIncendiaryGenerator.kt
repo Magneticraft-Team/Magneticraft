@@ -3,7 +3,7 @@ package com.cout970.magneticraft.tileentity.electric
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
@@ -138,7 +138,7 @@ class TileIncendiaryGenerator(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }

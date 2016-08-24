@@ -33,4 +33,5 @@ private fun norm2(v: Vec3d): Double = v.x * v.x + v.y * v.y + v.z * v.z
 
 operator fun BlockPos.plus(dir: EnumFacing) = this.offset(dir)!!
 operator fun BlockPos.plus(dir: BlockPos) = this.add(dir)!!
+operator fun BlockPos.unaryMinus() = BlockPos(-x, -y, -z)
 operator fun Vec3i.plus(dir: EnumFacing) = this.toBlockPos().offset(dir)!!

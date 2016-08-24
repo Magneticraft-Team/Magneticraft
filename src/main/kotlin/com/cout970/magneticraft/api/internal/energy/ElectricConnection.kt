@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.energy.impl
+package com.cout970.magneticraft.api.internal.energy
 
 import coffee.cypher.mcextlib.extensions.vectors.length
 import coffee.cypher.mcextlib.extensions.vectors.minus
@@ -27,9 +27,8 @@ open class ElectricConnection(
         //voltage difference
         val V = (firstNode.voltage * firstNode.capacity + secondNode.voltage * secondNode.capacity) / (firstNode.capacity + secondNode.capacity) - secondNode.voltage
         //intensity or amperage
-        var I = (1 - Math.exp(-1 / (R * C))) * V * secondNode.capacity / firstNode.capacity
+        val I = ((1 - Math.exp(-1 / (R * C))) * V * secondNode.capacity / firstNode.capacity) * C * 2
 
-        I *= C * 2
         //the charge is moved
         firstNode.applyCurrent(-I)
         secondNode.applyCurrent(I)
@@ -37,7 +36,7 @@ open class ElectricConnection(
 
     override fun equals(other: Any?): Boolean {
         if (other is IElectricConnection) {
-            return firstNode.equals(other.firstNode) && secondNode.equals(other.secondNode)
+            return firstNode == other.firstNode && secondNode == other.secondNode
         }
         return super.equals(other)
     }

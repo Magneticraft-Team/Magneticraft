@@ -10,7 +10,13 @@ import net.minecraftforge.common.util.INBTSerializable;
  */
 public interface INode extends INBTSerializable<NBTTagCompound> {
 
+    /**
+     * @return The world where this node is
+     */
     World getWorld();
 
+    /**
+     * @return The position where this node is
+     */
     BlockPos getPos();
 }

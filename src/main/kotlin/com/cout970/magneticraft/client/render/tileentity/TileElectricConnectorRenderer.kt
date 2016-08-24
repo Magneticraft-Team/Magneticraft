@@ -12,7 +12,7 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.Vec3d
+import com.cout970.magneticraft.util.vector.vec3Of
 import com.google.common.base.Predicates
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.util.EnumFacing
@@ -47,19 +47,19 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
 
         when (te.getFacing()) {
             EnumFacing.UP -> {
-                customRotate(Vec3d(180, 0, 0), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(180, 0, 0), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.NORTH -> {
-                customRotate(Vec3d(90, 0, 0), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(90, 0, 0), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.SOUTH -> {
-                customRotate(Vec3d(-90, 0, 0), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(-90, 0, 0), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.WEST -> {
-                customRotate(Vec3d(0, 0, -90), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(0, 0, -90), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.EAST -> {
-                customRotate(Vec3d(0, 0, 90), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(0, 0, 90), Vec3d(0.5, 0.5, 0.5))
             }
             else -> Unit
         }
@@ -96,7 +96,7 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
             }
             block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(isBase)), 1)
             base = ModelCacheFactory.createCachedModel(model.filter(isBase), 1)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

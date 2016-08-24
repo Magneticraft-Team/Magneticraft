@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.registry
 
 import coffee.cypher.mcextlib.extensions.items.stack
-import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
-import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRecipe
-import com.cout970.magneticraft.api.registries.machines.tablesieve.TableSieveRegistry
+import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
@@ -28,14 +28,21 @@ fun registerRecipes() {
     //@formatter:off
 
     //CRUSHING TABLE RECIPES
-    CrushingTableRegistry.registerRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
-    CrushingTableRegistry.registerRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0))
-    CrushingTableRegistry.registerRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1))
-    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2))
-    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3))
-    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4))
-    CrushingTableRegistry.registerRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
+    addCrushingTableRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0))
+    addCrushingTableRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1))
+    addCrushingTableRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2))
+    addCrushingTableRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3))
+    addCrushingTableRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4))
+    addCrushingTableRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5))
 
+    //HYDRAULIC PRESS RECIPES
+    addHydraulicPressRecipe(ItemStack(IRON_INGOT, 2), ItemStack(ItemPlate, 1, 0), 120f)
+    addHydraulicPressRecipe(ItemStack(GOLD_INGOT, 2), ItemStack(ItemPlate, 1, 1), 50f)
+    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(ItemPlate, 1, 2), 100f)
+    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(ItemPlate, 1, 3), 50f)
+    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(ItemPlate, 1, 4), 120f)
+    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(ItemPlate, 1, 5), 150f)
 
     //CRAFTING RECIPES
     addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE), 'W', of(LOG))
@@ -96,8 +103,16 @@ private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
     GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
 }
 
+private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
+    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
+}
+
 private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float) {
-    TableSieveRegistry.registerRecipe(TableSieveRecipe(input, output0, output1, prob))
+    TableSieveRecipeManager.registerRecipe(TableSieveRecipeManager.createRecipe(input, output0, output1, prob, true))
+}
+
+private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
+    HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
 }
 
 //function to get the first ore dictionary entry for the block if exist, or the block if not exist

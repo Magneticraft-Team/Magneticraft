@@ -65,7 +65,7 @@ class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: Blo
 
     override fun receiveDataFromServer(ibd: IBD) {
         tile!!
-        ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage_ = it })
+        ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage = it })
         ibd.getFloat(DATA_ID_BURNING_TIME, { tile.burningTime = it })
         ibd.getFloat(DATA_ID_MACHINE_PRODUCTION, { tile.production.storage = it })
     }

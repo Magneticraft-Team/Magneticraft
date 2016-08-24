@@ -9,7 +9,15 @@ import java.util.List;
  */
 public interface INodeHandler {
 
+    /**
+     * List of nodes in this handler
+     * @return all the nodes in this handler
+     */
     List<INode> getNodes();
 
+    /**
+     * The position in world of this handler
+     * @return The position of this handler
+     */
     BlockPos getPos();
 }

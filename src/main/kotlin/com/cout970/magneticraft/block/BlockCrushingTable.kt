@@ -2,7 +2,7 @@ package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.api.registries.machines.crushingtable.CrushingTableRegistry
+import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.item.hammers.ItemHammer
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import net.minecraft.block.ITileEntityProvider
@@ -49,7 +49,7 @@ object BlockCrushingTable : BlockBase(
 
             if (tile.canDamage() && item is ItemHammer) {
                 tile.doDamage(item.damage)
-                item.onHit(heldItem!!, player)
+                item.onHit(heldItem, player)
             } else {
                 player.inventory.addItemStackToInventory(tile.getStack())
                 tile.setStack(null)
@@ -62,7 +62,7 @@ object BlockCrushingTable : BlockBase(
                 if (heldItem.item is ItemHammer) {
                     for (slot in 0 until player.inventory.sizeInventory) {
                         val stack = player.inventory.getStackInSlot(slot)
-                        if (stack != null && CrushingTableRegistry.getRecipe(stack) != null) {
+                        if (stack != null && CrushingTableRecipeManager.findRecipe(stack) != null) {
                             if (!player.capabilities.isCreativeMode) {
                                 stack.stackSize--
 

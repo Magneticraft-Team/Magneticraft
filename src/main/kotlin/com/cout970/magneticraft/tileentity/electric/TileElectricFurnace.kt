@@ -2,7 +2,7 @@ package com.cout970.magneticraft.tileentity.electric
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.energy.impl.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.TIER_1_MACHINES_MIN_VOLTAGE
@@ -30,7 +30,7 @@ class TileElectricFurnace : TileElectricBase() {
         if (!worldObj.isRemote) {
             if (mainNode.voltage >= TIER_1_MACHINES_MIN_VOLTAGE && canSmelt()) {
                 val applied = mainNode.applyPower(-Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
-                burningTime += SPEED * applied.toFloat() / Config.electricFurnaceMaxConsumption
+                burningTime += SPEED * applied.toFloat() / Config.electricFurnaceMaxConsumption.toFloat()
                 production += applied
                 if (burningTime > MAX_BURNING_TIME) {
                     smelt()
@@ -80,7 +80,7 @@ class TileElectricFurnace : TileElectricBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T {
+    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }

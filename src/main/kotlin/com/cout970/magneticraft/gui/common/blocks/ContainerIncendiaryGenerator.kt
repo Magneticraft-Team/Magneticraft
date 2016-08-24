@@ -39,7 +39,7 @@ class ContainerIncendiaryGenerator(player: EntityPlayer, world: World, blockPos:
 
     override fun receiveDataFromServer(ibd: IBD) {
         tile!!
-        ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage_ = it })
+        ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage = it })
         ibd.getFloat(DATA_ID_BURNING_TIME, { tile.burningTime = it })
         ibd.getFloat(DATA_ID_MAX_BURNING_TIME, { tile.maxBurningTime = it })
         ibd.getFloat(DATA_ID_MACHINE_HEAT, { tile.heat = it })
