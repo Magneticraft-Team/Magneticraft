@@ -2,12 +2,6 @@ package com.cout970.magneticraft.config
 
 import java.io.File
 
-/**
- * Created by cout970 on 16/05/2016.
- */
-
-const val CATEGORY_GENERAL = "general"
-
 interface IConfig {
 
     fun load()

@@ -3,7 +3,7 @@ package com.cout970.magneticraft.block.multiblock
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
+import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress

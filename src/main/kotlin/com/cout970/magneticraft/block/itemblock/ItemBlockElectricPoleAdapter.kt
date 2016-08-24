@@ -4,8 +4,8 @@ import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.block.BlockElectricPole
 import com.cout970.magneticraft.block.BlockElectricPoleAdapter
+import com.cout970.magneticraft.block.BlockElectricPoleBase
 import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
-import com.cout970.magneticraft.block.states.ElectricPoleTypes
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.with
@@ -30,7 +30,7 @@ class ItemBlockElectricPoleAdapter : ItemBlockBase(BlockElectricPoleAdapter) {
             val pos = main.add(0, -4, 0)
             val tile = worldIn.getTile<TileElectricPole>(main)
             val connections = mutableListOf<IElectricConnection>()
-            if(tile != null){
+            if (tile != null) {
                 connections.addAll(tile.outputWiredConnections with tile.inputWiredConnections)
             }
             val yaw = if (placer.rotationYaw >= 180) {
@@ -44,30 +44,30 @@ class ItemBlockElectricPoleAdapter : ItemBlockBase(BlockElectricPoleAdapter) {
             val b = 45 / 2
             val dir =
                     if (yaw < -a * 3 + b && yaw >= -a * 4 + b) {
-                        ElectricPoleTypes.NORTH_EAST
+                        BlockElectricPoleBase.ElectricPoleStates.NORTH_EAST
                     } else if (yaw < -a * 2 + b && yaw >= -a * 3 + b) {
-                        ElectricPoleTypes.EAST
+                        BlockElectricPoleBase.ElectricPoleStates.EAST
                     } else if (yaw < -a + b && yaw >= -a * 2 + b) {
-                        ElectricPoleTypes.SOUTH_EAST
+                        BlockElectricPoleBase.ElectricPoleStates.SOUTH_EAST
                     } else if (yaw < 0 + b && yaw >= -a + b) {
-                        ElectricPoleTypes.SOUTH
+                        BlockElectricPoleBase.ElectricPoleStates.SOUTH
                     } else if (yaw < a + b && yaw >= 0 + b) {
-                        ElectricPoleTypes.SOUTH_WEST
+                        BlockElectricPoleBase.ElectricPoleStates.SOUTH_WEST
                     } else if (yaw < a * 2 + b && yaw >= a + b) {
-                        ElectricPoleTypes.WEST
+                        BlockElectricPoleBase.ElectricPoleStates.WEST
                     } else if (yaw < a * 3 + b && yaw >= a * 2 + b) {
-                        ElectricPoleTypes.NORTH_WEST
+                        BlockElectricPoleBase.ElectricPoleStates.NORTH_WEST
                     } else if (yaw < a * 4 + b && yaw >= a * 3 + b) {
-                        ElectricPoleTypes.NORTH
+                        BlockElectricPoleBase.ElectricPoleStates.NORTH
                     } else {
-                        ElectricPoleTypes.NORTH
+                        BlockElectricPoleBase.ElectricPoleStates.NORTH
                     }
 
             worldIn.setBlockToAir(pos)
-            worldIn.setBlockState(pos, BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_4))
-            worldIn.setBlockState(pos.offset(EnumFacing.UP, 1), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_3))
-            worldIn.setBlockState(pos.offset(EnumFacing.UP, 2), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_2))
-            worldIn.setBlockState(pos.offset(EnumFacing.UP, 3), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_1))
+            worldIn.setBlockState(pos, BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, BlockElectricPoleBase.ElectricPoleStates.DOWN_4))
+            worldIn.setBlockState(pos.offset(EnumFacing.UP, 1), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, BlockElectricPoleBase.ElectricPoleStates.DOWN_3))
+            worldIn.setBlockState(pos.offset(EnumFacing.UP, 2), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, BlockElectricPoleBase.ElectricPoleStates.DOWN_2))
+            worldIn.setBlockState(pos.offset(EnumFacing.UP, 3), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, BlockElectricPoleBase.ElectricPoleStates.DOWN_1))
             worldIn.setBlockState(pos.offset(EnumFacing.UP, 4), BlockElectricPoleAdapter.defaultState.withProperty(ELECTRIC_POLE_PLACE, dir))
             worldIn.getTile<TileElectricPoleAdapter>(main)?.loadConnections(connections)
 

@@ -2,7 +2,7 @@ package com.cout970.magneticraft.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.times
-import com.cout970.magneticraft.client.render.tileentity.PIXEL
+import com.cout970.magneticraft.tilerenderer.PIXEL
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d

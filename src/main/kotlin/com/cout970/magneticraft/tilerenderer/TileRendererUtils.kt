@@ -1,10 +1,10 @@
-package com.cout970.magneticraft.client.render.tileentity
+package com.cout970.magneticraft.tilerenderer
 
 import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.multiblock.Multiblock
-import com.cout970.magneticraft.multiblock.get
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft

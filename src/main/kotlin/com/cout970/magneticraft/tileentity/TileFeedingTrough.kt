@@ -4,7 +4,7 @@ import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
-import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
+import com.cout970.magneticraft.block.BlockFeedingTrough
 import com.cout970.magneticraft.util.shouldTick
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.passive.EntityAnimal
@@ -39,7 +39,7 @@ class TileFeedingTrough : TileBase(), ITickable {
                 //getting the bounding box to search animals
                 var start = pos.toDoubleVec().addVector(-3.5, -1.0, -3.5)
                 var end = pos.toDoubleVec().addVector(4.5, 2.0, 4.5)
-                val dir = worldObj.getBlockState(pos).getValue(FEEDING_TROUGH_SIDE_POSITION)
+                val dir = worldObj.getBlockState(pos).getValue(BlockFeedingTrough.FEEDING_TROUGH_SIDE_POSITION)
                 if (dir.axisDirection == EnumFacing.AxisDirection.POSITIVE) {
                     end += dir.directionVec.toDoubleVec()
                 } else {

@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.gui.client
 
-import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.GuiScreen
@@ -9,8 +8,6 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.RenderItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
-
-val BACKGROUND = resource("textures/gui/background.png")
 
 open class GuiCommon : GuiScreen() {
     val itemRenderer: RenderItem?
@@ -31,8 +28,8 @@ open class GuiCommon : GuiScreen() {
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        mc.textureManager.bindTexture(BACKGROUND)
-        drawTexturedModalRect(start.xi, start.yi, 0, 0, size.xi, size.yi)
+//        mc.textureManager.bindTexture(BACKGROUND)
+//        drawTexturedModalRect(start.xi, start.yi, 0, 0, size.xi, size.yi)
         GlStateManager.color(1f, 1f, 1f, 1f)
         super.drawScreen(mouseX, mouseY, partialTicks)
     }

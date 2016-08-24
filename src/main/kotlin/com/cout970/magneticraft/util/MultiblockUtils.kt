@@ -1,11 +1,12 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.util
 
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.round
 import com.cout970.loader.impl.util.rotateX
-import com.cout970.magneticraft.util.toRadians
+import com.cout970.magneticraft.multiblock.IMultiblockComponent
+import com.cout970.magneticraft.multiblock.Multiblock
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos

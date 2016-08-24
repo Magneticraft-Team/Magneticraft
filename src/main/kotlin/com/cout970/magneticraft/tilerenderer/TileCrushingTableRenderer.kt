@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.client.render.tileentity
+package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import net.minecraft.client.Minecraft

@@ -1,13 +1,12 @@
 package com.cout970.magneticraft.proxy
 
+import coffee.cypher.mcextlib.extensions.resources.toModel
 import com.cout970.loader.api.ModelRegistry
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
-import com.cout970.magneticraft.client.render.registerInvRender
-import com.cout970.magneticraft.client.render.tileentity.*
-import com.cout970.magneticraft.client.sounds.registerSounds
 import com.cout970.magneticraft.item.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
+import com.cout970.magneticraft.registry.registerSounds
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
@@ -17,6 +16,7 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
+import com.cout970.magneticraft.tilerenderer.*
 import com.cout970.magneticraft.util.MODID
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.client.model.ModelLoader
@@ -42,9 +42,9 @@ class ClientProxy : CommonProxy() {
         ModelRegistry.registerDomain(MODID)
 
         //item renders
-        items.forEach(ItemBase::registerInvRender)
-        blocks.values.forEach(ItemBlockBase::registerInvRender)
+        items.forEach { it.registerInvRender() }
         blocks.values.forEach {
+            it.registerInvRender()
             val mapper = it.blockBase.getCustomStateMapper()
             if (mapper != null) {
                 ModelLoader.setCustomStateMapper(it.block, mapper)
@@ -65,6 +65,18 @@ class ClientProxy : CommonProxy() {
         MinecraftForge.EVENT_BUS.register(this)
     }
 
+    fun ItemBase.registerInvRender() {
+        variants.forEach {
+            ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
+        }
+    }
+
+    fun ItemBlockBase.registerInvRender() {
+        blockBase.inventoryVariants.forEach {
+            ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
+        }
+    }
+
     override fun postInit() {
         super.postInit()
     }
@@ -77,6 +89,7 @@ class ClientProxy : CommonProxy() {
     /**
      * Updates all the TileEntityRenderer to reload models
      */
+    @Suppress("unused")
     @SubscribeEvent
     fun onModelRegistryReload(event: ModelBakeEvent) {
         tileRenderers.forEach { it.onModelRegistryReload() }

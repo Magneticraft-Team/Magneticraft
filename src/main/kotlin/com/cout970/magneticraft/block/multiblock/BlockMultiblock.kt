@@ -5,7 +5,7 @@ import com.cout970.magneticraft.block.BlockMultiState
 import com.cout970.magneticraft.multiblock.ITileMultiblock
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.MultiblockManager
-import com.cout970.magneticraft.multiblock.rotateBox
+import com.cout970.magneticraft.util.rotateBox
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.material.Material

@@ -2,10 +2,6 @@ package com.cout970.magneticraft.world
 
 import com.cout970.magneticraft.block.BlockLimestone
 import com.cout970.magneticraft.block.BlockOre
-import com.cout970.magneticraft.block.LIMESTONE_TYPE
-import com.cout970.magneticraft.block.ORE_TYPE
-import com.cout970.magneticraft.block.states.LimestoneTypes
-import com.cout970.magneticraft.block.states.OreTypes
 import com.cout970.magneticraft.config.Config
 import net.minecraft.world.World
 import net.minecraft.world.chunk.IChunkGenerator
@@ -22,11 +18,11 @@ object WorldGenerator : IWorldGenerator {
 
     fun init() {
         generators.clear()
-        generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.COPPER), Config.copperOre))
-        generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.LEAD), Config.leadOre))
-        generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.COBALT), Config.cobaltOre))
-        generators.add(OreGenerator(BlockOre.defaultState.withProperty(ORE_TYPE, OreTypes.TUNGSTEN), Config.tungstenOre))
-        generators.add(GaussianOreGenerator(BlockLimestone.defaultState.withProperty(LIMESTONE_TYPE, LimestoneTypes.NORMAL), Config.limestone))
+        generators.add(OreGenerator(BlockOre.defaultState.withProperty(BlockOre.ORE_STATES, BlockOre.OreStates.COPPER), Config.copperOre))
+        generators.add(OreGenerator(BlockOre.defaultState.withProperty(BlockOre.ORE_STATES, BlockOre.OreStates.LEAD), Config.leadOre))
+        generators.add(OreGenerator(BlockOre.defaultState.withProperty(BlockOre.ORE_STATES, BlockOre.OreStates.COBALT), Config.cobaltOre))
+        generators.add(OreGenerator(BlockOre.defaultState.withProperty(BlockOre.ORE_STATES, BlockOre.OreStates.TUNGSTEN), Config.tungstenOre))
+        generators.add(GaussianOreGenerator(BlockLimestone.defaultState.withProperty(BlockLimestone.LIMESTONE_STATES, BlockLimestone.LimestoneStates.NORMAL), Config.limestone))
     }
 
     override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?, chunkProvider: IChunkProvider?) {

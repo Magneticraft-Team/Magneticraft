@@ -2,7 +2,6 @@ package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.util.get
@@ -27,11 +26,10 @@ import net.minecraftforge.fluids.FluidStack
 /**
  * Created by cout970 on 04/07/2016.
  */
-
-val PROPERTY_LOCATION: PropertyEnum<BlockIncendiaryGenerator.Location> = PropertyEnum.create("location", BlockIncendiaryGenerator.Location::class.java)!!
-
 object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_generator"), ITileEntityProvider {
 
+    lateinit var PROPERTY_LOCATION: PropertyEnum<BlockIncendiaryGenerator.Location>
+        private set
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
     override fun isFullCube(state: IBlockState?) = true
@@ -105,7 +103,10 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
         return defaultState.withProperty(PROPERTY_LOCATION, Location.TOP).withProperty(PROPERTY_DIRECTION, EnumFacing.getHorizontal(meta - 1))
     }
 
-    override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, PROPERTY_LOCATION, PROPERTY_DIRECTION)
+    override fun createBlockState(): BlockStateContainer {
+        PROPERTY_LOCATION = PropertyEnum.create("location", BlockIncendiaryGenerator.Location::class.java)!!
+        return BlockStateContainer(this, PROPERTY_LOCATION, PROPERTY_DIRECTION)
+    }
 
     enum class Location : IStringSerializable {
         BASE, TOP;

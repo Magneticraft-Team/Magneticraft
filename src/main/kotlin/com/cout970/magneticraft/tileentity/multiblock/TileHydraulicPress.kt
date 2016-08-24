@@ -10,12 +10,12 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
-import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
+import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
-import com.cout970.magneticraft.multiblock.rotatePoint
+import com.cout970.magneticraft.util.rotatePoint
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase

@@ -1,9 +1,9 @@
-package com.cout970.magneticraft.client.render.tileentity
+package com.cout970.magneticraft.tilerenderer
 
 import coffee.cypher.mcextlib.extensions.vectors.x
 import coffee.cypher.mcextlib.extensions.vectors.y
 import coffee.cypher.mcextlib.extensions.vectors.z
-import com.cout970.magneticraft.block.FEEDING_TROUGH_SIDE_POSITION
+import com.cout970.magneticraft.block.BlockFeedingTrough
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
@@ -30,7 +30,7 @@ object TileFeedingTroughRenderer : TileEntityRenderer<TileFeedingTrough>() {
         translate(x, y, z)
         val i = 0.5f
         translate(i, 0f, i)
-        val dir = te.world.getBlockState(te.pos).getValue(FEEDING_TROUGH_SIDE_POSITION)
+        val dir = te.world.getBlockState(te.pos).getValue(BlockFeedingTrough.FEEDING_TROUGH_SIDE_POSITION)
         rotate(if (dir.axis == EnumFacing.Axis.Z) dir.horizontalAngle else dir.opposite.horizontalAngle, 0f, 1f, 0f)
         translate(-i, 0f, -i)
         entityItem.setEntityItemStack(itemToRender)

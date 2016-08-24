@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.client.render.tileentity
+package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel

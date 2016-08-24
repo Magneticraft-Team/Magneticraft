@@ -25,10 +25,10 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 24/06/2016.
  */
-val FEEDING_TROUGH_IS_CENTER = PropertyBool.create("center")!!
-val FEEDING_TROUGH_SIDE_POSITION = PropertyDirection.create("side", { it?.isHorizontal() ?: false })!!
-
 object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEntityProvider {
+
+    lateinit var FEEDING_TROUGH_IS_CENTER: PropertyBool
+    lateinit var FEEDING_TROUGH_SIDE_POSITION: PropertyDirection
     val boundingBox = Vec3d.ZERO to Vec3d(1.0, 0.75, 1.0)
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox
@@ -38,7 +38,11 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
             TileFeedingTrough()
         else null
 
-    override fun createBlockState() = BlockStateContainer(this, FEEDING_TROUGH_IS_CENTER, FEEDING_TROUGH_SIDE_POSITION)
+    override fun createBlockState(): BlockStateContainer {
+        FEEDING_TROUGH_IS_CENTER = PropertyBool.create("center")!!
+        FEEDING_TROUGH_SIDE_POSITION = PropertyDirection.create("side", { it?.isHorizontal() ?: false })!!
+        return BlockStateContainer(this, FEEDING_TROUGH_IS_CENTER, FEEDING_TROUGH_SIDE_POSITION)
+    }
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer?, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         val tile = getTileEntity(worldIn, pos, state)

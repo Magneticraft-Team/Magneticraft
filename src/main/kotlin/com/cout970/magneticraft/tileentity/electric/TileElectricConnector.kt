@@ -6,7 +6,7 @@ import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.INodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
-import com.cout970.magneticraft.block.states.PROPERTY_FACING
+import com.cout970.magneticraft.block.PROPERTY_FACING
 import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.integration.tesla.TeslaNodeWrapper
 import com.cout970.magneticraft.registry.TESLA_CONSUMER

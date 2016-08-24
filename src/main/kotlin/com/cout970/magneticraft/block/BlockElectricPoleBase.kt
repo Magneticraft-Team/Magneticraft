@@ -3,7 +3,7 @@ package com.cout970.magneticraft.block
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
-import com.cout970.magneticraft.block.states.ElectricPoleTypes
+import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
+import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.text.TextComponentTranslation
@@ -49,7 +50,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
             ELECTRIC_POLE_PLACE[state].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState? =
-            defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.values()[meta])
+            defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleStates.values()[meta])
 
     override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, ELECTRIC_POLE_PLACE)
 
@@ -68,36 +69,36 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
         val b = 45 / 2
         val dir =
                 if (yaw < -a * 3 + b && yaw >= -a * 4 + b) {
-                    ElectricPoleTypes.NORTH_EAST
+                    ElectricPoleStates.NORTH_EAST
                 } else if (yaw < -a * 2 + b && yaw >= -a * 3 + b) {
-                    ElectricPoleTypes.EAST
+                    ElectricPoleStates.EAST
                 } else if (yaw < -a + b && yaw >= -a * 2 + b) {
-                    ElectricPoleTypes.SOUTH_EAST
+                    ElectricPoleStates.SOUTH_EAST
                 } else if (yaw < 0 + b && yaw >= -a + b) {
-                    ElectricPoleTypes.SOUTH
+                    ElectricPoleStates.SOUTH
                 } else if (yaw < a + b && yaw >= 0 + b) {
-                    ElectricPoleTypes.SOUTH_WEST
+                    ElectricPoleStates.SOUTH_WEST
                 } else if (yaw < a * 2 + b && yaw >= a + b) {
-                    ElectricPoleTypes.WEST
+                    ElectricPoleStates.WEST
                 } else if (yaw < a * 3 + b && yaw >= a * 2 + b) {
-                    ElectricPoleTypes.NORTH_WEST
+                    ElectricPoleStates.NORTH_WEST
                 } else if (yaw < a * 4 + b && yaw >= a * 3 + b) {
-                    ElectricPoleTypes.NORTH
+                    ElectricPoleStates.NORTH
                 } else {
-                    ElectricPoleTypes.NORTH
+                    ElectricPoleStates.NORTH
                 }
 
-        worldIn.setBlockState(pos, defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_4))
-        worldIn.setBlockState(pos.offset(EnumFacing.UP, 1), defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_3))
-        worldIn.setBlockState(pos.offset(EnumFacing.UP, 2), defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_2))
-        worldIn.setBlockState(pos.offset(EnumFacing.UP, 3), defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleTypes.DOWN_1))
+        worldIn.setBlockState(pos, defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleStates.DOWN_4))
+        worldIn.setBlockState(pos.offset(EnumFacing.UP, 1), defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleStates.DOWN_3))
+        worldIn.setBlockState(pos.offset(EnumFacing.UP, 2), defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleStates.DOWN_2))
+        worldIn.setBlockState(pos.offset(EnumFacing.UP, 3), defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleStates.DOWN_1))
         worldIn.setBlockState(pos.offset(EnumFacing.UP, 4), defaultState.withProperty(ELECTRIC_POLE_PLACE, dir))
     }
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         super.breakBlock(worldIn, pos, state)
         val place = ELECTRIC_POLE_PLACE[state]
-        if (place == ElectricPoleTypes.DOWN_1 || place == ElectricPoleTypes.DOWN_2 || place == ElectricPoleTypes.DOWN_3 || place == ElectricPoleTypes.DOWN_4) {
+        if (place == ElectricPoleStates.DOWN_1 || place == ElectricPoleStates.DOWN_2 || place == ElectricPoleStates.DOWN_3 || place == ElectricPoleStates.DOWN_4) {
             val newPos = getMainPos(state, pos)
             worldIn.setBlockToAir(newPos)
         } else {
@@ -109,20 +110,20 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
 
     fun getMainPos(state: IBlockState, pos: BlockPos): BlockPos {
         return when (ELECTRIC_POLE_PLACE[state]) {
-            ElectricPoleTypes.DOWN_1 -> pos.offset(EnumFacing.UP, 1)
-            ElectricPoleTypes.DOWN_2 -> pos.offset(EnumFacing.UP, 2)
-            ElectricPoleTypes.DOWN_3 -> pos.offset(EnumFacing.UP, 3)
-            ElectricPoleTypes.DOWN_4 -> pos.offset(EnumFacing.UP, 4)
+            ElectricPoleStates.DOWN_1 -> pos.offset(EnumFacing.UP, 1)
+            ElectricPoleStates.DOWN_2 -> pos.offset(EnumFacing.UP, 2)
+            ElectricPoleStates.DOWN_3 -> pos.offset(EnumFacing.UP, 3)
+            ElectricPoleStates.DOWN_4 -> pos.offset(EnumFacing.UP, 4)
             else -> pos
         }
     }
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType {
         return when (ELECTRIC_POLE_PLACE[state]) {
-            ElectricPoleTypes.DOWN_1 -> EnumBlockRenderType.INVISIBLE
-            ElectricPoleTypes.DOWN_2 -> EnumBlockRenderType.INVISIBLE
-            ElectricPoleTypes.DOWN_3 -> EnumBlockRenderType.INVISIBLE
-            ElectricPoleTypes.DOWN_4 -> EnumBlockRenderType.INVISIBLE
+            ElectricPoleStates.DOWN_1 -> EnumBlockRenderType.INVISIBLE
+            ElectricPoleStates.DOWN_2 -> EnumBlockRenderType.INVISIBLE
+            ElectricPoleStates.DOWN_3 -> EnumBlockRenderType.INVISIBLE
+            ElectricPoleStates.DOWN_4 -> EnumBlockRenderType.INVISIBLE
             else -> super.getRenderType(state)
         }
     }
@@ -172,4 +173,27 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
     override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T = this as T
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean = capability == MANUAL_CONNECTION_HANDLER
+
+    enum class ElectricPoleStates(
+            val offset: Vec3d,
+            val offsetY: Int = 0
+    ) : IStringSerializable {
+
+        NORTH(Vec3d(1.0, 0.0, 0.0)),
+        NORTH_EAST(Vec3d(0.707106, 0.0, 0.707106)),
+        EAST(Vec3d(0.0, 0.0, 1.0)),
+        SOUTH_EAST(Vec3d(-0.707106, 0.0, 0.707106)),
+        SOUTH(Vec3d(-1.0, 0.0, 0.0)),
+        SOUTH_WEST(Vec3d(-0.707106, 0.0, -0.707106)),
+        WEST(Vec3d(0.0, 0.0, -1.0)),
+        NORTH_WEST(Vec3d(0.707106, 0.0, -0.707106)),
+        DOWN_1(Vec3d.ZERO, 1),
+        DOWN_2(Vec3d.ZERO, 2),
+        DOWN_3(Vec3d.ZERO, 3),
+        DOWN_4(Vec3d.ZERO, 4);
+
+        override fun getName() = name.toLowerCase()
+
+        fun isMainBlock() = offsetY == 0
+    }
 }

@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.client.render.tileentity
+package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.loader.api.ModelRegistry
 import com.cout970.loader.api.model.IDynamicModel
@@ -14,12 +14,12 @@ abstract class TileEntityRenderer<T: TileBase> : TileEntitySpecialRenderer<T>() 
 
     abstract override fun renderTileEntityAt(te: T, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int)
 
-    fun getModel(res: ResourceLocation): IDynamicModel{
+    fun getModel(res: ResourceLocation): IDynamicModel {
         return ModelRegistry.getDynamicModel(res) ?:
                 throw MissingResourceException("Model not found", res.toString(), "")
     }
 
-    fun getModelObj(res: ResourceLocation): IDynamicModel{
+    fun getModelObj(res: ResourceLocation): IDynamicModel {
         return ModelRegistry.getDynamicObjModel(res) ?:
                 throw MissingResourceException("Model not found", res.toString(), "")
     }

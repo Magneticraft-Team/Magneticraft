@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.multiblock.impl
 
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
-import com.cout970.magneticraft.block.states.PROPERTY_DIRECTION
+import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.multiblock.BlockData
 import com.cout970.magneticraft.multiblock.IMultiblockComponent
 import com.cout970.magneticraft.multiblock.Multiblock
