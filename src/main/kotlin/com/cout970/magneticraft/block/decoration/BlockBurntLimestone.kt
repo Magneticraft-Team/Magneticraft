@@ -1,5 +1,6 @@
-package com.cout970.magneticraft.block
+package com.cout970.magneticraft.block.decoration
 
+import com.cout970.magneticraft.block.BlockBase
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
@@ -29,7 +30,7 @@ object BlockBurntLimestone : BlockBase(Material.ROCK, "burnt_limestone") {
     }
 
     override fun getStateFromMeta(meta: Int) =
-        blockState.baseState.withProperty(LIMESTONE_STATES, BlockLimestone.LimestoneStates.values()[meta])
+        defaultState.withProperty(LIMESTONE_STATES, BlockLimestone.LimestoneStates.values()[meta])
 
     override fun getMetaFromState(state: IBlockState?) =
         state?.getValue(LIMESTONE_STATES)?.ordinal ?: 0

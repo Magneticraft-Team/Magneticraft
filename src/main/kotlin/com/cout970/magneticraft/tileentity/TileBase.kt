@@ -28,6 +28,11 @@ abstract class TileBase : TileEntity() {
         return blockState!!
     }
 
+    override fun updateContainingBlockInfo() {
+        super.updateContainingBlockInfo()
+        blockState = null
+    }
+
     open fun onBreak() {
     }
 

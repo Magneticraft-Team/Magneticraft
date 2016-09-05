@@ -1,32 +1,42 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.*
+import com.cout970.magneticraft.block.decoration.*
 import com.cout970.magneticraft.block.itemblock.*
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import net.minecraftforge.fml.common.registry.GameRegistry
 
-//@formatter:off
+
 val blocks = mapOf(
-        BlockCrushingTable          to ItemBlockBase(BlockCrushingTable),
-        BlockTableSieve             to ItemBlockBase(BlockTableSieve),
-        BlockOre                    to ItemBlockBase(BlockOre),
-        BlockLimestone              to ItemBlockBase(BlockLimestone),
-        BlockBurntLimestone         to ItemBlockBase(BlockBurntLimestone),
-        BlockFeedingTrough          to ItemBlockFeedingTrough(),
-        BlockElectricConnector      to ItemBlockBase(BlockElectricConnector),
-        BlockElectricPole           to ItemBlockElectricPole(),
-        BlockIncendiaryGenerator    to ItemBlockIncendiaryGenerator(),
-        BlockElectricFurnace        to ItemBlockBase(BlockElectricFurnace),
-        BlockElectricPoleAdapter    to ItemBlockElectricPoleAdapter(),
-        BlockBattery                to ItemBlockBase(BlockBattery),
-        BlockInfiniteWater          to ItemBlockBase(BlockInfiniteWater),
-        BlockTileLimestone          to ItemBlockBase(BlockTileLimestone),
-        BlockInfiniteEnergy         to ItemBlockBase(BlockInfiniteEnergy),
-        BlockAirLock                to ItemBlockBase(BlockAirLock),
-        BlockAirBubble              to ItemBlockBase(BlockAirBubble),
-        BlockHydraulicPress         to ItemBlockBase(BlockHydraulicPress)
+        pair(BlockCrushingTable),
+        pair(BlockTableSieve),
+        pair(BlockOre),
+        pair(BlockLimestone),
+        pair(BlockBurntLimestone),
+        BlockFeedingTrough to ItemBlockFeedingTrough(),
+        pair(BlockElectricConnector),
+        BlockElectricPole to ItemBlockElectricPole(),
+        BlockIncendiaryGenerator to ItemBlockIncendiaryGenerator(),
+        pair(BlockElectricFurnace),
+        BlockElectricPoleAdapter to ItemBlockElectricPoleAdapter(),
+        pair(BlockBattery),
+        pair(BlockInfiniteWater),
+        pair(BlockTileLimestone),
+        pair(BlockInfiniteEnergy),
+        pair(BlockAirLock),
+        pair(BlockAirBubble),
+        pair(BlockHydraulicPress),
+        pair(BlockStripedMachineBlock),
+        pair(BlockMachineBlockSupportColumn),
+        pair(BlockMachineBlock),
+        pair(BlockCompactedCopper),
+        pair(BlockCompactedCobalt),
+        pair(BlockCompactedLead),
+        pair(BlockCompactedTungsten)
+//        BlockInserter               to ItemBlockBase(BlockInserter)
 )
-//@formatter:on
+
+private fun pair(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
 
 fun registerBlocks() {
     blocks.forEach {

@@ -9,4 +9,4 @@ newmtl incendiary_generator
 map_Kd magneticraft:blocks/incendiary_generator
 
 newmtl hydraulic_press
-map_Kd magneticraft:blocks/hydraulic_press
+map_Kd magneticraft:models/hydraulic_press

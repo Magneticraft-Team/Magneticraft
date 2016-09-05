@@ -1,0 +1,32 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cube",
+        "transform": "forge:default-block",
+        "textures": {
+            "up": "magneticraft:blocks/machine_block_support_column_end",
+            "down": "magneticraft:blocks/machine_block_support_column_end",
+            "particle": "magneticraft:blocks/machine_block_support_column",
+            "north": "magneticraft:blocks/machine_block_support_column",
+            "south": "magneticraft:blocks/machine_block_support_column",
+            "west": "magneticraft:blocks/machine_block_support_column",
+            "east": "magneticraft:blocks/machine_block_support_column"
+        }
+    },
+    "variants": {
+        "normal": [{ }],
+        "axis=lines_x": [
+            {
+                "x": 90,
+                "y": 90
+            }
+        ],
+        "axis=lines_y": [{ }],
+        "axis=lines_z": [
+            {
+                "x": 90
+            }
+        ],
+        "inventory": [{ }]
+    }
+}

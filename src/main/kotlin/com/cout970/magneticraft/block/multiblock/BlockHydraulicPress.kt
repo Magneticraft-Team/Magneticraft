@@ -71,6 +71,15 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
         return TileMultiblock()
     }
 
+    override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?, willHarvest: Boolean): Boolean {
+        if (PROPERTY_ACTIVE[state!!] && world!!.isServer) {
+            breakBlock(world, pos!!, state)
+            return false
+        } else {
+            return super.removedByPlayer(state, world, pos, player, willHarvest)
+        }
+    }
+
     override fun getMetaFromState(state: IBlockState): Int {
         var meta = 0
         if (PROPERTY_CENTER[state]) {

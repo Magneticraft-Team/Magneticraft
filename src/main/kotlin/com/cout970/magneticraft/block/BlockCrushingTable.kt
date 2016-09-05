@@ -49,7 +49,7 @@ object BlockCrushingTable : BlockBase(
 
             if (tile.canDamage() && item is ItemHammer) {
                 tile.doDamage(item.damage)
-                item.onHit(heldItem, player)
+                item.onHit(heldItem!!, player)
             } else {
                 player.inventory.addItemStackToInventory(tile.getStack())
                 tile.setStack(null)

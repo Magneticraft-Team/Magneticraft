@@ -9,24 +9,25 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
-import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
-import com.cout970.magneticraft.util.rotatePoint
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.CraftingProcess
+import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.ItemStackHandler
@@ -74,6 +75,10 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
         })
     }
 
+    override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
+        return oldState?.block !== newSate?.block
+    }
+
     fun getRecipe(input: ItemStack): IHydraulicPressRecipe? {
         if (input === inputCache) return recipeCache
         val recipe = HydraulicPressRecipeManager.findRecipe(input)
@@ -95,6 +100,7 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     }
 
     override fun onActivate() {
+        getBlockState()
         sendUpdateToNearPlayers()
     }
 
@@ -123,6 +129,18 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
 
     companion object {
         val ENERGY_INPUT = BlockPos(1, 1, 0)
+    }
+
+    override fun onBreak() {
+        super.onBreak()
+        if (worldObj.isServer) {
+            for (i in 0 until inventory.slots) {
+                val item = inventory[i]
+                if (item != null) {
+                    dropItem(item, pos)
+                }
+            }
+        }
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {

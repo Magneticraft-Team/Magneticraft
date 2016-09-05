@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cube_all",
+        "transform": "forge:default-block",
+        "textures": {
+            "all": "magneticraft:blocks/copper_block"
+        }
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

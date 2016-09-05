@@ -62,6 +62,13 @@ tile.magneticraft.infinite_energy.name=Infinite Energy
 tile.magneticraft.airlock.name=Airlock
 tile.magneticraft.air_bubble.name=Air Bubble
 tile.magneticraft.hydraulic_press.name=Hydraulic Press
+tile.magneticraft.copper_block.name=Copper Block
+tile.magneticraft.cobalt_block.name=Cobalt Block
+tile.magneticraft.lead_block.name=Lead Block
+tile.magneticraft.tungsten_block.name=Tungsten Block
+tile.magneticraft.machine_block.name=Machine Block
+tile.magneticraft.machine_block_support_column.name=Support Column
+tile.magneticraft.striped_machine_block.name=Striped Machine Block
 
 itemGroup.magneticraft=Magneticraft
 

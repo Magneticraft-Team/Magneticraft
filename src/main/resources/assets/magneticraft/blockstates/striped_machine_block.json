@@ -1,0 +1,11 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:striped_machine_block",
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

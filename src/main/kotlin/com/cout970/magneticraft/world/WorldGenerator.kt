@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.world
 
-import com.cout970.magneticraft.block.BlockLimestone
+import com.cout970.magneticraft.block.decoration.BlockLimestone
 import com.cout970.magneticraft.block.BlockOre
 import com.cout970.magneticraft.config.Config
 import net.minecraft.world.World

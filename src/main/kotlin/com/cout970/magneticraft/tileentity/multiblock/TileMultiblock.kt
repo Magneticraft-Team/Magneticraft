@@ -51,20 +51,19 @@ open class TileMultiblock : TileBase(), ITileMultiblock {
 
     override fun onLoad() {
         super.onLoad()
-        sendUpdateToNearPlayers()
+        if (multiblock != null) {
+            sendUpdateToNearPlayers()
+        }
     }
 
     override fun save(): NBTTagCompound = NBTTagCompound()
 
     override fun load(nbt: NBTTagCompound) = Unit
 
-    override fun onActivate() {
-        markDirty()
-        sendUpdateToNearPlayers()
-    }
+    override fun onActivate() {}
 
     override fun onDeactivate() {
-        markDirty()
+        worldObj.removeTileEntity(pos)
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {

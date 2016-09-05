@@ -23,6 +23,10 @@ fun registerOreDictionaryEntries() {
     for ((key, value) in ItemPebbles.variants) {
         OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}", ItemStack(ItemPebbles, 1, key))
     }
+
+    for ((key, value) in ItemIngot.variants) {
+        OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemIngot, 1, key))
+    }
 }
 
 fun getItemFromDict(name:String): ItemStack? {

@@ -5,7 +5,6 @@ import com.cout970.magneticraft.block.BlockMultiState
 import com.cout970.magneticraft.multiblock.ITileMultiblock
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.MultiblockManager
-import com.cout970.magneticraft.util.rotateBox
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.material.Material
@@ -82,8 +81,11 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
             playerIn.sendMessage("text.magneticraft.multiblock.error_count", errors.size)
             if (errors.size > 2) {
                 playerIn.sendMessage("text.magneticraft.multiblock.first_errors", 2)
-                errors.stream().limit(2).forEach {
+                var count = 0
+                errors.forEach {
+                    if(count >= 2)return@forEach
                     playerIn.addChatComponentMessage(it)
+                    count++
                 }
             } else {
                 playerIn.sendMessage("text.magneticraft.multiblock.all_errors")

@@ -1,3 +1,5 @@
+@file:Suppress("LeakingThis")
+
 package com.cout970.magneticraft.block
 
 import coffee.cypher.mcextlib.extensions.blocks.creativeTab
