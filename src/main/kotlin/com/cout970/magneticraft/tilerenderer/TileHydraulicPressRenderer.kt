@@ -42,7 +42,7 @@ object TileHydraulicPressRenderer : TileEntityRenderer<TileHydraulicPress>() {
             GlStateManager.pushMatrix()
             GlStateManager.translate(0.5, 0.9375, 0.3125)
             if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
-                GlStateManager.translate(0.0, -0.045, 0.125)
+                GlStateManager.translate(0.0, -0.045, 1 / 16.0)
                 GlStateManager.rotate(90f, 1f, 0f, 0f)
             } else {
                 GlStateManager.translate(0.0, -0.125, 0.0625 * 3)
@@ -58,7 +58,7 @@ object TileHydraulicPressRenderer : TileEntityRenderer<TileHydraulicPress>() {
         bindTexture(texture)
         noHammer.render()
 
-        val speed = 480f
+        val speed = 360f
         if (te.craftingProcess.isWorking(te.world)) {
             te.hammerAnimation.updateAnimation()
         } else if ((te.hammerAnimation.getMotionState(speed) + 1f) * 0.5f > 0.5) {

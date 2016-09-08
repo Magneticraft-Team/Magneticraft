@@ -17,6 +17,8 @@ object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
         it.ordinal to "type=${it.name}"
     }
 
+    override fun damageDropped(state: IBlockState) = state.getValue(BlockBurntLimestone.LIMESTONE_STATES).ordinal
+
     override fun getItemName(stack: ItemStack?) =
             "${super.getItemName(stack)}_${LimestoneStates.values()[stack?.metadata ?: 0].name.toLowerCase()}"
 

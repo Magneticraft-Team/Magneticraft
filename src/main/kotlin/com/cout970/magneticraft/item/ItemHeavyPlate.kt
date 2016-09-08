@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack
 /**
  * Created by cout970 on 11/06/2016.
  */
-object ItemPlate : ItemBase("plate") {
+object ItemHeavyPlate : ItemBase("heavy_plate") {
 
     override val variants = mapOf(
         0 to "ore=iron",

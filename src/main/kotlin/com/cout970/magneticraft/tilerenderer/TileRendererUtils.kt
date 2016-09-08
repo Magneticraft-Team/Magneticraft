@@ -32,8 +32,8 @@ const val PIXEL = 0.0625
 
 fun renderMultiblockBlueprint(multiblock: Multiblock) {
     Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-    for (i in 0 until multiblock.size.x) {
-        for (j in 0 until multiblock.size.y) {
+    for (j in 0 until multiblock.size.y) {
+        for (i in 0 until multiblock.size.x) {
             for (k in 0 until multiblock.size.z) {
                 val component = multiblock.scheme[i, j, k]
                 val blocks = component.getBlueprintBlocks(multiblock, BlockPos(i, j, k))

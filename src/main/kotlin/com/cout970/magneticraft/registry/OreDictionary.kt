@@ -1,8 +1,6 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.item.ItemCrushedOre
-import com.cout970.magneticraft.item.ItemIngot
-import com.cout970.magneticraft.item.ItemPebbles
+import com.cout970.magneticraft.item.*
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -17,15 +15,23 @@ fun registerOreDictionaryEntries() {
     }
 
     for ((key, value) in ItemCrushedOre.variants) {
-        OreDictionary.registerOre("crushedore${value.replace("ore=", "").capitalize()}", ItemStack(ItemCrushedOre, 1, key))
+        OreDictionary.registerOre("crushedOre${value.replace("ore=", "").capitalize()}", ItemStack(ItemCrushedOre, 1, key))
     }
 
     for ((key, value) in ItemPebbles.variants) {
         OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}", ItemStack(ItemPebbles, 1, key))
     }
 
-    for ((key, value) in ItemIngot.variants) {
-        OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemIngot, 1, key))
+    for ((key, value) in ItemHeavyPlate.variants) {
+        OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemHeavyPlate, 1, key))
+    }
+
+    for ((key, value) in ItemLightPlate.variants) {
+        OreDictionary.registerOre("lightPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemLightPlate, 1, key))
+    }
+
+    for ((key, value) in ItemNugget.variants) {
+        OreDictionary.registerOre("nugget${value.replace("ore=", "").capitalize()}", ItemStack(ItemNugget, 1, key))
     }
 }
 

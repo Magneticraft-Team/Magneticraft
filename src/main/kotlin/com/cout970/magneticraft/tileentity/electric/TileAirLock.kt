@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class TileAirLock : TileElectricBase() {
 
-    val node = ElectricNode({ worldObj }, { pos })
+    val node = ElectricNode({ worldObj }, { pos }, capacity = 2.0)
     override val electricNodes: List<IElectricNode> = listOf(node)
 
     val range = 10

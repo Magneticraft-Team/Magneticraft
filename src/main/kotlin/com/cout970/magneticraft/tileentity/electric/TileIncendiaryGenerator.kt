@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity.electric
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
+import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
@@ -9,6 +10,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.registry.FLUID_HANDLER
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.fluid.Tank
 import com.cout970.magneticraft.util.misc.AnimationTimer
@@ -32,6 +34,14 @@ class TileIncendiaryGenerator(
             override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
         }
 ) : TileElectricBase(), IFluidHandler by tank {
+
+    companion object {
+        val MAX_HEAT = 500.toKelvinFromCelsius()
+        //fuel -> burning time -> heat -> electricity
+        val FUEL_TO_WATTS = 10// 1 coal = 1600 burning time = 16000RF
+        val FUEL_TO_HEAT = 0.5f
+        val HEAT_TO_WATTS = FUEL_TO_WATTS / FUEL_TO_HEAT
+    }
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>
@@ -84,7 +94,7 @@ class TileIncendiaryGenerator(
                     tank.drainInternal(1, true)
                 }
             } else if (heat > STANDARD_AMBIENT_TEMPERATURE && tank.fluidAmount > 0) {
-//                heat -= 0.109f
+                heat -= 0.109f
             }
             //updates the production counter
             production.tick()
@@ -148,19 +158,30 @@ class TileIncendiaryGenerator(
         return super.hasCapability(capability, facing)
     }
 
-    companion object {
-        val MAX_HEAT = 500.toKelvinFromCelsius()
-        //fuel -> burning time -> heat -> electricity
-        val FUEL_TO_WATTS = 10// 1 coal = 1600 burning time = 16000RF
-        val FUEL_TO_HEAT = 0.5f
-        val HEAT_TO_WATTS = FUEL_TO_WATTS / FUEL_TO_HEAT
-    }
-
     fun getDirection(): EnumFacing {
         val state = world.getBlockState(pos)
         if (PROPERTY_DIRECTION.isIn(state)) {
             return PROPERTY_DIRECTION[state]
         }
         return EnumFacing.NORTH
+    }
+
+    class TileIncendiaryGeneratorBottom() : TileBase() {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+            val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
+            if(tile != null) return tile.getCapability(capability, facing)
+            return super.getCapability(capability, facing)
+        }
+
+        override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+            val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
+            if(tile != null) return tile.hasCapability(capability, facing)
+            return super.hasCapability(capability, facing)
+        }
+
+        override fun save(): NBTTagCompound = NBTTagCompound()
+        override fun load(nbt: NBTTagCompound) = Unit
     }
 }

@@ -5,6 +5,7 @@ package com.cout970.magneticraft
  */
 
 // Ignore this, it requires kotlin 1.1.0
+
 //typealias AABB = AxisAlignedBB
 //typealias Coords = BlockPos
 //typealias Vec3 = Vec3d

@@ -2,12 +2,12 @@ item.magneticraft.guide_book.name=Magneticraft Instruction Manual
 item.magneticraft.iron_hammer.name=Iron Hammer
 item.magneticraft.stone_hammer.name=Stone Hammer
 
-item.magneticraft.crushed_ore_iron.name=Crushed Iron Ore
-item.magneticraft.crushed_ore_gold.name=Crushed Gold Ore
-item.magneticraft.crushed_ore_copper.name=Crushed Copper Ore
-item.magneticraft.crushed_ore_lead.name=Crushed Lead Ore
-item.magneticraft.crushed_ore_cobalt.name=Crushed Cobalt Ore
-item.magneticraft.crushed_ore_tungsten.name=Crushed Tungsten Ore
+item.magneticraft.crushed_ore_iron.name=Iron Chunk
+item.magneticraft.crushed_ore_gold.name=Gold Chunk
+item.magneticraft.crushed_ore_copper.name=Copper Chunk
+item.magneticraft.crushed_ore_lead.name=Lead Chunk
+item.magneticraft.crushed_ore_cobalt.name=Cobalt Chunk
+item.magneticraft.crushed_ore_tungsten.name=Tungsten Chunk
 
 item.magneticraft.pebbles_iron.name=Iron Pebbles
 item.magneticraft.pebbles_gold.name=Gold Pebbles
@@ -16,12 +16,27 @@ item.magneticraft.pebbles_lead.name=Lead Pebbles
 item.magneticraft.pebbles_cobalt.name=Cobalt Pebbles
 item.magneticraft.pebbles_tungsten.name=Tungsten Pebbles
 
-item.magneticraft.plate_iron.name=Iron Plate
-item.magneticraft.plate_gold.name=Gold Plate
-item.magneticraft.plate_copper.name=Copper Plate
-item.magneticraft.plate_lead.name=Lead Plate
-item.magneticraft.plate_cobalt.name=Cobalt Plate
-item.magneticraft.plate_tungsten.name=Tungsten Plate
+item.magneticraft.heavy_plate_iron.name=Heavy Iron Plate
+item.magneticraft.heavy_plate_gold.name=Heavy Gold Plate
+item.magneticraft.heavy_plate_copper.name=Heavy Copper Plate
+item.magneticraft.heavy_plate_lead.name=Heavy Lead Plate
+item.magneticraft.heavy_plate_cobalt.name=Heavy Cobalt Plate
+item.magneticraft.heavy_plate_tungsten.name=Heavy Tungsten Plate
+
+item.magneticraft.light_plate_iron.name=Light Iron Plate
+item.magneticraft.light_plate_gold.name=Light Gold Plate
+item.magneticraft.light_plate_copper.name=Light Copper Plate
+item.magneticraft.light_plate_lead.name=Light Lead Plate
+item.magneticraft.light_plate_cobalt.name=Light Cobalt Plate
+item.magneticraft.light_plate_tungsten.name=Light Tungsten Plate
+
+item.magneticraft.nugget_iron.name=Iron Nugget
+item.magneticraft.nugget_gold.name=Gold Nugget
+item.magneticraft.nugget_copper.name=Copper Nugget
+item.magneticraft.nugget_lead.name=Lead Nugget
+item.magneticraft.nugget_cobalt.name=Cobalt Nugget
+item.magneticraft.nugget_tungsten.name=Tungsten Nugget
+
 
 item.magneticraft.ingot_copper.name=Copper Ingot
 item.magneticraft.ingot_lead.name=Lead Ingot
@@ -69,6 +84,8 @@ tile.magneticraft.tungsten_block.name=Tungsten Block
 tile.magneticraft.machine_block.name=Machine Block
 tile.magneticraft.machine_block_support_column.name=Support Column
 tile.magneticraft.striped_machine_block.name=Striped Machine Block
+tile.magneticraft.solar_panel.name=Solar Panel
+tile.magneticraft.electrical_machine_block.name=Electrical Machine Block
 
 itemGroup.magneticraft=Magneticraft
 

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.util.get
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.BlockStateContainer
@@ -48,7 +49,14 @@ object BlockAirBubble : BlockMultiState(Material.GLASS, "air_bubble") {
         }
     }
 
-    override fun tickRate(worldIn: World): Int = 0
+    override fun neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block?) {
+        super.neighborChanged(state, worldIn, pos, blockIn)
+        if (PROPERTY_DECAY[state] && RANDOM.nextBoolean()) {
+            worldIn.setBlockToAir(pos)
+        }
+    }
+
+    override fun tickRate(worldIn: World): Int = 1
     override fun quantityDropped(random: Random): Int = 0
     override fun isOpaqueCube(state: IBlockState): Boolean = false
     override fun isFullCube(state: IBlockState): Boolean = false

@@ -9,8 +9,8 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
+import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
-import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
@@ -50,7 +50,7 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     override var multiblockFacing: EnumFacing? = null
 
     val hammerAnimation = AnimationTimer()
-    val node = ElectricNode({ worldObj }, { pos + ENERGY_INPUT })
+    val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val inventory = ItemStackHandler(1)
     val craftingProcess: CraftingProcess
@@ -110,8 +110,8 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
         PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
 
-    val active: Boolean get() = if (BlockHydraulicPress.PROPERTY_ACTIVE.isIn(getBlockState()))
-        BlockHydraulicPress.PROPERTY_ACTIVE[getBlockState()] else false
+    val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
+        PROPERTY_ACTIVE[getBlockState()] else false
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
@@ -125,7 +125,7 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
         if (hasKey("crafting")) craftingProcess.deserializeNBT(getCompoundTag("crafting"))
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 0, 1)) to (pos + BlockPos(2, 4, 2))
+    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 0, 1)) to (pos + BlockPos(2, 5, 2))
 
     companion object {
         val ENERGY_INPUT = BlockPos(1, 1, 0)
@@ -144,14 +144,14 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, relPos) == ENERGY_INPUT && (facing == direction.rotateY() || facing == null))
+        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() || facing == null))
             return true
         return false
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, relPos) == ENERGY_INPUT && (facing == direction.rotateY()) || facing == null)
+        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY()) || facing == null)
             return this as T
         return null
     }

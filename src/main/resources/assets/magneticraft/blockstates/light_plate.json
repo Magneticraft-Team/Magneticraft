@@ -8,32 +8,32 @@
         "ore": {
             "iron": {
                 "textures": {
-                    "layer0": "magneticraft:items/plate/iron"
+                    "layer0": "magneticraft:items/light_plate/iron"
                 }
             },
             "gold": {
                 "textures": {
-                    "layer0": "magneticraft:items/plate/gold"
+                    "layer0": "magneticraft:items/light_plate/gold"
                 }
             },
             "copper": {
                 "textures": {
-                    "layer0": "magneticraft:items/plate/copper"
+                    "layer0": "magneticraft:items/light_plate/copper"
                 }
             },
             "lead": {
                 "textures": {
-                    "layer0": "magneticraft:items/plate/lead"
+                    "layer0": "magneticraft:items/light_plate/lead"
                 }
             },
             "cobalt": {
                 "textures": {
-                    "layer0": "magneticraft:items/plate/cobalt"
+                    "layer0": "magneticraft:items/light_plate/cobalt"
                 }
             },
             "tungsten": {
                 "textures": {
-                    "layer0": "magneticraft:items/plate/tungsten"
+                    "layer0": "magneticraft:items/light_plate/tungsten"
                 }
             }
         }

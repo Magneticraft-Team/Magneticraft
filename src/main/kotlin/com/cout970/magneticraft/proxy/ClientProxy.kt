@@ -16,6 +16,7 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
+import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.tilerenderer.*
 import com.cout970.magneticraft.util.MODID
 import net.minecraftforge.client.event.ModelBakeEvent
@@ -60,6 +61,7 @@ class ClientProxy : CommonProxy() {
         register(TileElectricPoleAdapter::class.java, TileElectricPoleAdapterRenderer)
         register(TileIncendiaryGenerator::class.java, TileIncendiaryGeneratorRenderer)
         register(TileHydraulicPress::class.java, TileHydraulicPressRenderer)
+        register(TileSolarPanel::class.java, TileSolarPanelRenderer)
 
         //registering model bake event listener
         MinecraftForge.EVENT_BUS.register(this)

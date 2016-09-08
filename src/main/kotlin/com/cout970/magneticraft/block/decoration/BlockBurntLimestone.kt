@@ -34,4 +34,5 @@ object BlockBurntLimestone : BlockBase(Material.ROCK, "burnt_limestone") {
 
     override fun getMetaFromState(state: IBlockState?) =
         state?.getValue(LIMESTONE_STATES)?.ordinal ?: 0
+
 }

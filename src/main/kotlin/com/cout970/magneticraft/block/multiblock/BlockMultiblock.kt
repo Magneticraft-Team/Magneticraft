@@ -13,6 +13,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.RayTraceResult
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 /**
@@ -74,6 +76,29 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
         return super.getSelectedBoundingBox(state, worldIn, pos)
     }
 
+    override fun collisionRayTrace(blockState: IBlockState, worldIn: World, pos: BlockPos, start: Vec3d, end: Vec3d): RayTraceResult? {
+        val tile = worldIn.getTileEntity(pos)
+        if (tile is ITileMultiblock && tile.multiblock != null && tile.multiblockFacing != null) {
+
+            val relPos = -tile.centerPos!!
+            val global = tile.multiblock!!.getGlobalCollisionBox().map { tile.multiblockFacing!!.rotateBox(vec3Of(0.5, 0.5, 0.5), it) }
+
+            val thisBox = FULL_BLOCK_AABB + tile.centerPos!!
+            val boxes = global.mapNotNull { it.cut(thisBox) }
+            val list = mutableListOf<AxisAlignedBB>()
+
+            boxes.forEach { list.add(it.offset(relPos)) }
+            val res = list
+                    .associate { it to rayTrace(pos, start, end, it) }
+                    .filter { it.value != null }
+                    .map { it.key to it.value }
+                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                    .firstOrNull()?.second
+            return res
+        }
+        return this.rayTrace(pos, start, end, blockState.getBoundingBox(worldIn, pos))
+    }
+
     fun activateMultiblock(context: MultiblockContext) {
         val errors = MultiblockManager.checkMultiblockStructure(context)
         val playerIn = context.player!!
@@ -83,7 +108,7 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
                 playerIn.sendMessage("text.magneticraft.multiblock.first_errors", 2)
                 var count = 0
                 errors.forEach {
-                    if(count >= 2)return@forEach
+                    if (count >= 2) return@forEach
                     playerIn.addChatComponentMessage(it)
                     count++
                 }

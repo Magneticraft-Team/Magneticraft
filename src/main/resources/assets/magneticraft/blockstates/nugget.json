@@ -1,0 +1,36 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "ore": {
+            "iron": {
+                "textures": {
+                    "layer0": "magneticraft:items/nugget/iron"
+                }
+            },
+            "copper": {
+                "textures": {
+                    "layer0": "magneticraft:items/nugget/copper"
+                }
+            },
+            "lead": {
+                "textures": {
+                    "layer0": "magneticraft:items/nugget/lead"
+                }
+            },
+            "cobalt": {
+                "textures": {
+                    "layer0": "magneticraft:items/nugget/cobalt"
+                }
+            },
+            "tungsten": {
+                "textures": {
+                    "layer0": "magneticraft:items/nugget/tungsten"
+                }
+            }
+        }
+    }
+}

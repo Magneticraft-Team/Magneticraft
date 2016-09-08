@@ -4,6 +4,7 @@ import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
 import com.cout970.magneticraft.block.itemblock.*
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
+import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 
@@ -32,7 +33,9 @@ val blocks = mapOf(
         pair(BlockCompactedCopper),
         pair(BlockCompactedCobalt),
         pair(BlockCompactedLead),
-        pair(BlockCompactedTungsten)
+        pair(BlockCompactedTungsten),
+        pair(BlockSolarPanel),
+        pair(BlockElectricalMachineBlock)
 //        BlockInserter               to ItemBlockBase(BlockInserter)
 )
 

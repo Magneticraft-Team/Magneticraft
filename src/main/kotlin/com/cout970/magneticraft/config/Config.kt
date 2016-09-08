@@ -9,6 +9,7 @@ const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
 
 object Config {
+
     @ConfigValue(category = CATEGORY_ORES, comment = "Copper ore")
     var copperOre = OreConfig(10, 8, 80, 30)
 
@@ -24,20 +25,26 @@ object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator")
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Tesla, NOTE: all the values in the config about energy are in Watts")
+    var wattsToTesla = 1.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator Energy Production")
     var incendiaryGeneratorMaxProduction = 40.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace")
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock Air bubble cost")
-    var airlockBubbleCost = 2.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: maintenance cost per Air Bubble every 40 ticks (2 sec)")
+    var airlockBubbleCost = 1.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock Water clear cost")
-    var airlockAirCost = 1.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: cost of removing a water block")
+    var airlockAirCost = 2.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press")
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
     var hydraulicPressConsumption = 1.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
+    var solarPanelMaxProduction = 10.0
 
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
     var heatUnitCelsius = true

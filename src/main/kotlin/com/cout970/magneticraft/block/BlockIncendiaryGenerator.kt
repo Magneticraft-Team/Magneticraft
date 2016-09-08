@@ -41,11 +41,7 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
         if (PROPERTY_LOCATION[getStateFromMeta(meta)] == Location.TOP) {
             return TileIncendiaryGenerator()
         }
-        return null
-    }
-
-    override fun hasTileEntity(state: IBlockState): Boolean {
-        return PROPERTY_LOCATION[state] == Location.TOP
+        return TileIncendiaryGenerator.TileIncendiaryGeneratorBottom()
     }
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {

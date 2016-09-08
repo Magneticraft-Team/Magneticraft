@@ -10,3 +10,6 @@ map_Kd magneticraft:blocks/incendiary_generator
 
 newmtl hydraulic_press
 map_Kd magneticraft:models/hydraulic_press
+
+newmtl solar_panel
+map_Kd magneticraft:models/solar_panel

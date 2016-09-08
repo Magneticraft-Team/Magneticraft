@@ -3,7 +3,7 @@ package com.cout970.magneticraft.util
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.plus
-import coffee.cypher.mcextlib.extensions.vectors.round
+import coffee.cypher.mcextlib.extensions.vectors.transform
 import com.cout970.loader.impl.util.rotateX
 import com.cout970.magneticraft.multiblock.IMultiblockComponent
 import com.cout970.magneticraft.multiblock.Multiblock
@@ -28,9 +28,11 @@ fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
         EnumFacing.NORTH -> return point
         EnumFacing.SOUTH -> 180.0f
         EnumFacing.WEST -> 90.0f
-        EnumFacing.EAST -> -90.0f
+        EnumFacing.EAST -> 360f - 90.0f
     }
-    return BlockPos(origin + BlockPos(Vec3d(rel).rotateYaw(rot.toRadians()).round()))
+    val pos2 = Vec3d(rel).rotateYaw(rot.toRadians())
+    val pos3 = pos2.transform { Math.round(it).toDouble() }
+    return BlockPos(origin + BlockPos(pos3))
 }
 
 fun EnumFacing.rotatePoint(origin: Vec3d, point: Vec3d): Vec3d {

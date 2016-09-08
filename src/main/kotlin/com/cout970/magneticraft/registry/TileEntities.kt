@@ -4,6 +4,7 @@ import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.electric.*
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
+import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 //@formatter:off
@@ -14,6 +15,7 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileElectricConnector::class.java       to "electric_connector",
         TileElectricPole::class.java            to "electric_pole",
         TileIncendiaryGenerator::class.java     to "incendiary_generator",
+        TileIncendiaryGenerator.TileIncendiaryGeneratorBottom::class.java to "incendiary_generator_bottom",
         TileElectricFurnace::class.java         to "electric_furnace",
         TileElectricPoleAdapter::class.java     to "electric_pole_adapter",
         TileBattery::class.java                 to "battery",
@@ -21,7 +23,8 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileInfiniteEnergy::class.java          to "infinite_energy",
         TileAirLock::class.java                 to "airlock",
         TileHydraulicPress::class.java          to "hydraulic_press",
-        TileMultiblock::class.java              to "tile_multiblock"
+        TileMultiblock::class.java              to "tile_multiblock",
+        TileSolarPanel::class.java              to "solar_panel"
 //        TileInserter::class.java                to "inserter"
 )
 //@formatter:on

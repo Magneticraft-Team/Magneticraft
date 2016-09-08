@@ -32,7 +32,7 @@ object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>
         //create cache for wire connections
         te.wireRender.update {
             for (i in te.outputWiredConnections) {
-                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.01)
+                renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.035)
             }
         }
         pushMatrix()

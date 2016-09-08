@@ -1,17 +1,17 @@
 package com.cout970.magneticraft.block.multiblock
 
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+import coffee.cypher.mcextlib.extensions.aabb.to
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.multiblock.MultiblockContext
-import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
-import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
+import com.cout970.magneticraft.multiblock.impl.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
+import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.isServer
+import com.cout970.magneticraft.util.rotateBox
+import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -28,15 +28,24 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 /**
- * Created by cout970 on 17/08/2016.
+ * Created by cout970 on 2016/09/06.
  */
-object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), ITileEntityProvider {
+object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEntityProvider {
 
     init {
         defaultState = defaultState.withProperty(PROPERTY_CENTER, false).withProperty(PROPERTY_ACTIVE, false)
+    }
+
+    override fun getBoundingBox(state: IBlockState, source: IBlockAccess?, pos: BlockPos?): AxisAlignedBB {
+        if (PROPERTY_ACTIVE[state]) {
+            return super.getBoundingBox(state, source, pos)
+        }
+        val dir = PROPERTY_DIRECTION[state]
+        return dir.rotateBox(vec3Of(0.5, 0, 0.5), vec3Of(0.25, 0, 0) to vec3Of(0.75, 0.75, 0.5))
     }
 
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
@@ -50,7 +59,7 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
         if (PROPERTY_ACTIVE[state]) {
             return super.getSelectedBoundingBox(state, worldIn, pos)
         }
-        return FULL_BLOCK_AABB.offset(pos)
+        return getBoundingBox(state, worldIn, pos).offset(pos)
     }
 
     override fun isOpaqueCube(state: IBlockState): Boolean = false
@@ -65,7 +74,7 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = createTileEntity(worldIn, getStateFromMeta(meta))
 
     override fun createTileEntity(world: World, state: IBlockState): TileEntity? {
-        if (PROPERTY_CENTER[state]) return TileHydraulicPress()
+        if (PROPERTY_CENTER[state]) return TileSolarPanel()
         return TileMultiblock()
     }
 
@@ -110,28 +119,10 @@ object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state]) {
             if (!PROPERTY_ACTIVE[state]) {
-                activateMultiblock(MultiblockContext(MultiblockHydraulicPress, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
-            } else {
-                val tile = worldIn.getTile<TileHydraulicPress>(pos) ?: return true
-
-                if (tile.inventory[0] != null) {
-                    if (heldItem == null) {
-
-                        playerIn.inventory.addItemStackToInventory(tile.inventory[0])
-                        tile.inventory[0] = null
-                        tile.sendUpdateToNearPlayers()
-                    }
-                } else {
-                    if (heldItem != null) {
-                        val inv = TileHydraulicPress.Inventory(tile.inventory)
-                        val rest = inv.insertItem(0, heldItem, false)
-                        playerIn.setHeldItem(EnumHand.MAIN_HAND, rest)
-                        tile.sendUpdateToNearPlayers()
-                    }
-                }
+                activateMultiblock(MultiblockContext(MultiblockSolarPanel, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
             }
         }
-        return true
+        return hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state] && !PROPERTY_ACTIVE[state]
     }
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
