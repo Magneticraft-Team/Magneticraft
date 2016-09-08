@@ -10,6 +10,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.registry.FLUID_HANDLER
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.fluid.Tank
@@ -150,11 +151,13 @@ class TileIncendiaryGenerator(
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) return this as T
+        if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == FLUID_HANDLER) return true
+        if (capability == ITEM_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
@@ -171,13 +174,13 @@ class TileIncendiaryGenerator(
         @Suppress("UNCHECKED_CAST")
         override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
             val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
-            if(tile != null) return tile.getCapability(capability, facing)
+            if (tile != null) return tile.getCapability(capability, facing)
             return super.getCapability(capability, facing)
         }
 
         override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
             val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
-            if(tile != null) return tile.hasCapability(capability, facing)
+            if (tile != null) return tile.hasCapability(capability, facing)
             return super.hasCapability(capability, facing)
         }
 

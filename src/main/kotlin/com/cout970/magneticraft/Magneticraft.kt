@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import org.apache.logging.log4j.Logger
 import java.io.File
 
+@Suppress("UNUSED_PARAMETER", "unused")
 @Mod(
     modid = MODID,
     name = NAME,
