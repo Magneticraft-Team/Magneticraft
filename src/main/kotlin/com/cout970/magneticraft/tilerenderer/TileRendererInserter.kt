@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.GlStateManager.*
 /**
  * Created by cout970 on 25/08/2016.
  */
-object TileInserterRenderer : TileEntityRenderer<TileInserter>() {
+object TileRendererInserter : TileEntityRenderer<TileInserter>() {
 
     lateinit var block: ICachedModel
 
@@ -28,7 +28,7 @@ object TileInserterRenderer : TileEntityRenderer<TileInserter>() {
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         try {
-            val model = TileIncendiaryGeneratorRenderer.getModelObj(resource("models/block/obj/inserter.obj"))
+            val model = TileRendererIncendiaryGenerator.getModelObj(resource("models/block/obj/inserter.obj"))
             val hasFan = object : IModelFilter {
                 override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("fan") else false
             }

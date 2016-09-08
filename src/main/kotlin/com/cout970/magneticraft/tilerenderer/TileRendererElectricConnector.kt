@@ -21,7 +21,7 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 29/06/2016.
  */
-object TileElectricConnectorRenderer : TileEntityRenderer<TileElectricConnector>() {
+object TileRendererElectricConnector : TileEntityRenderer<TileElectricConnector>() {
 
     val texture = resource("textures/models/electric_connector.png")
     var block: ICachedModel? = null

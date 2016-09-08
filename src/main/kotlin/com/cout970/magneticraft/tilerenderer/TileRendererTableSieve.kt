@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11
 /**
  * Created by cout970 on 19/06/2016.
  */
-object TileTableSieveRenderer : TileEntityRenderer<TileTableSieve>() {
+object TileRendererTableSieve : TileEntityRenderer<TileTableSieve>() {
 
     val texture = resource("textures/models/table_sieve_content.png")
 

@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 24/06/2016.
  */
-object TileFeedingTroughRenderer : TileEntityRenderer<TileFeedingTrough>() {
+object TileRendererFeedingTrough : TileEntityRenderer<TileFeedingTrough>() {
 
     lateinit var entityItem: EntityItem
     lateinit var entityRenderer: RenderEntityItem

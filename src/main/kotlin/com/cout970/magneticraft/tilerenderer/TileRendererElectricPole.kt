@@ -2,22 +2,21 @@ package com.cout970.magneticraft.tilerenderer
 
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
+import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import net.minecraft.client.renderer.GlStateManager.*
 
 /**
- * Created by cout970 on 06/07/2016.
+ * Created by cout970 on 29/06/2016.
  */
-object TileElectricPoleAdapterRenderer : TileEntityRenderer<TileElectricPoleAdapter>() {
+object TileRendererElectricPole : TileEntityRenderer<TileElectricPole>() {
 
-    override fun renderTileEntityAt(te: TileElectricPoleAdapter, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
+    override fun renderTileEntityAt(te: TileElectricPole, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
 
         te.wireRender.update {
             for (i in te.outputWiredConnections) {
                 renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
             }
             for (i in te.inputWiredConnections) {
-                if (i.secondNode == te.firstNode) continue
                 //wires are renderer twice to fix a render bug in vanilla
                 val trans = i.firstNode.pos - i.secondNode.pos
                 pushMatrix()
@@ -34,5 +33,5 @@ object TileElectricPoleAdapterRenderer : TileEntityRenderer<TileElectricPoleAdap
         popMatrix()
     }
 
-    override fun isGlobalRenderer(te: TileElectricPoleAdapter?): Boolean = true
+    override fun isGlobalRenderer(te: TileElectricPole?): Boolean = true
 }

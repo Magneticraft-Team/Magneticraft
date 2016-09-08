@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.GlStateManager.*
 /**
  * Created by cout970 on 16/07/2016.
  */
-object TileIncendiaryGeneratorRenderer : TileEntityRenderer<TileIncendiaryGenerator>() {
+object TileRendererIncendiaryGenerator : TileEntityRenderer<TileIncendiaryGenerator>() {
 
     val texture = resource("textures/models/incendiary_generator.png")
     var block: ICachedModel? = null

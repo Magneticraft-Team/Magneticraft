@@ -53,15 +53,15 @@ class ClientProxy : CommonProxy() {
         }
 
         //tile entity renderer
-        register(TileCrushingTable::class.java, TileCrushingTableRenderer)
-        register(TileFeedingTrough::class.java, TileFeedingTroughRenderer)
-        register(TileTableSieve::class.java, TileTableSieveRenderer)
-        register(TileElectricConnector::class.java, TileElectricConnectorRenderer)
-        register(TileElectricPole::class.java, TileElectricPoleRenderer)
-        register(TileElectricPoleAdapter::class.java, TileElectricPoleAdapterRenderer)
-        register(TileIncendiaryGenerator::class.java, TileIncendiaryGeneratorRenderer)
-        register(TileHydraulicPress::class.java, TileHydraulicPressRenderer)
-        register(TileSolarPanel::class.java, TileSolarPanelRenderer)
+        register(TileCrushingTable::class.java, TileRendererCrushingTable)
+        register(TileFeedingTrough::class.java, TileRendererFeedingTrough)
+        register(TileTableSieve::class.java, TileRendererTableSieve)
+        register(TileElectricConnector::class.java, TileRendererElectricConnector)
+        register(TileElectricPole::class.java, TileRendererElectricPole)
+        register(TileElectricPoleAdapter::class.java, TileRendererElectricPoleAdapter)
+        register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
+        register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
+        register(TileSolarPanel::class.java, TileRendererSolarPanel)
 
         //registering model bake event listener
         MinecraftForge.EVENT_BUS.register(this)

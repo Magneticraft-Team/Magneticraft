@@ -19,7 +19,7 @@ import net.minecraft.item.ItemSkull
 /**
  * Created by cout970 on 21/08/2016.
  */
-object TileHydraulicPressRenderer : TileEntityRenderer<TileHydraulicPress>() {
+object TileRendererHydraulicPress : TileEntityRenderer<TileHydraulicPress>() {
 
     val texture = resource("textures/models/hydraulic_press.png")
     lateinit var noHammer: ICachedModel

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.GlStateManager
 /**
  * Created by cout970 on 2016/09/06.
  */
-object TileSolarPanelRenderer : TileEntityRenderer<TileSolarPanel>() {
+object TileRendererSolarPanel : TileEntityRenderer<TileSolarPanel>() {
 
     val texture = resource("textures/models/solar_panel.png")
     lateinit var model: ICachedModel
