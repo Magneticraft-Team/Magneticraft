@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.block.BlockOre
 import com.cout970.magneticraft.item.*
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
@@ -9,6 +10,16 @@ import net.minecraftforge.oredict.OreDictionary
  */
 
 fun registerOreDictionaryEntries() {
+
+    for ((key, value) in BlockOre.inventoryVariants) {
+        val parts = value.split("=")
+        val name = parts[0] + parts[1].toLowerCase().capitalize()
+        if (key == 2) {
+            OreDictionary.registerOre("${name}_Mgc", ItemStack(BlockOre, 1, key))
+        } else {
+            OreDictionary.registerOre(name, ItemStack(BlockOre, 1, key))
+        }
+    }
 
     for ((key, value) in ItemIngot.variants) {
         if (key == 4) {
