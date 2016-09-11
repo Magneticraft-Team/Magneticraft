@@ -101,7 +101,7 @@ dependencies {
     shade files("./lib/MC-ExtLib-$extlib_version-dev.jar")
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
-	compile files("./lib/ModelLibrary-${model_lib_version}.jar")
+	shade files("./lib/ModelLibrary-${model_lib_version}.jar")
 	compile "net.darkhax.tesla:Tesla:${tesla_version}"
 }
 
@@ -127,6 +127,7 @@ shadowJar {
     relocate 'kotlin', 'com.cout970.magneticraft.internal.shade.kotlin'
     relocate 'org.jetbrains.annotations', 'com.cout970.magneticraft.internal.shade.annotations'
     relocate 'coffee.cypher.mcextlib', 'com.cout970.magneticraft.internal.shade.mcextlib'
+    relocate 'com.cout970.loader', 'com.cout970.magneticraft.internal.shade.modellib'
 }
 
 reobf {
