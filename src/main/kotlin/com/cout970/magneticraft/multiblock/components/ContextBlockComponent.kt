@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.multiblock.components
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.util.plus
 import com.cout970.magneticraft.util.translate
@@ -21,7 +22,9 @@ class ContextBlockComponent(
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != getter(context)) {
-            context.world.setBlockState(pos, getter(context))
+            if(Debug.DEBUG) {
+                context.world.setBlockState(pos, getter(context))
+            }
             return listOf(translate("text.magneticraft.multiblock.invalid_block", "[%d, %d, %d]".format(pos.x, pos.y, pos.z), state.toString(), getter(context)))
         }
         return emptyList()

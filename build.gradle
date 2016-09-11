@@ -1,76 +1,4 @@
-
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-    }
-}
-
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.6'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-}
-
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
-
-archivesBaseName = name
-version project.version
-group project.groupId
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
-
-minecraft {
-    //version = "1.9.4-12.17.0.1968-1.9.4"
-	version = "1.9.4-12.17.0.1968"
-    runDir = "run"
-    useDepAts = true
-
-    replace "@VERSION@", project.version
-
-    mappings = "snapshot_20160619"
-    makeObfSourceJar = false
-}
-
-curseforge {
-    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : ''
-
-    project {
-        id = '224808'
-        mainArtifact(jar) {
-            displayName = 'Magneticraft ' + version
-        }
-        releaseType = 'release'
-        changelog = file('./changelogs/' + version + '.txt')
-        if (!changelog.exists()) {
-            changelog = 'No changelog provided'
-        }
-
-        if (version.contains('beta')) {
-            releaseType = 'beta'
-        }
-
-        if (version.contains('alpha')) {
-            releaseType = 'alpha'
-        }
-    }
-}
-
-configurations {
-    shade
-    compile.extendsFrom shade
-}
+import scala.tools.nsc.io.Jar
 
 repositories {
     maven {
@@ -93,30 +21,93 @@ repositories {
         name = "mezz"
         url = "http://dvs1.progwml6.com/files/maven"
     }
-
     maven {
-        name = "Cypher Repo"
-        url = "http://maven.cypher.coffee/repository/mc-repo"
-    }
-	
-	maven {
-		name = "Tesla Api"
+        name = "Tesla Api"
         url 'http://maven.epoxide.xyz'
     }
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'kotlin'
+//apply plugin: 'maven-publish'
+
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.6'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+archivesBaseName = name
+version project.version
+group project.groupId
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+minecraft {
+    //version = "1.9.4-12.17.0.1968-1.9.4"
+	version = "1.9.4-12.17.0.1968"
+    runDir = "run"
+    useDepAts = true
+
+    replaceIn "src/main/kotlin/com/cout970/magneticraft/util/Metadata.kt"
+    replace "@VERSION@", project.version
+
+    mappings = "snapshot_20160619"
+    makeObfSourceJar = false
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+
 dependencies {
-    shade "coffee.cypher.mcextlib:MC-ExtLib:$extlib_version:dev"
+    shade files("./lib/MC-ExtLib-$extlib_version-dev.jar")
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
 	compile files("./lib/ModelLibrary-${model_lib_version}.jar")
 	compile "net.darkhax.tesla:Tesla:${tesla_version}"
 }
 
+//shadow
 task devJar(type: Jar) {
     from sourceSets.main.output
-
     classifier = 'dev'
 }
 
@@ -149,20 +140,7 @@ artifacts {
     archives devJar
     archives sourceJar
 }
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
+/*
 publishing {
     tasks.publish.dependsOn 'build'
 
@@ -189,7 +167,30 @@ publishing {
         }
     }
 }
+*/
 
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
+/*
+curseforge {
+    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : ''
+
+    project {
+        id = '224808'
+        mainArtifact(jar) {
+            displayName = 'Magneticraft ' + version
+        }
+        releaseType = 'release'
+        changelog = file('./changelogs/' + version + '.txt')
+        if (!changelog.exists()) {
+            changelog = 'No changelog provided'
+        }
+
+        if (version.contains('beta')) {
+            releaseType = 'beta'
+        }
+
+        if (version.contains('alpha')) {
+            releaseType = 'alpha'
+        }
+    }
 }
+*/

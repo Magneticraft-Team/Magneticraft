@@ -1,0 +1,106 @@
+item.magneticraft.guide_book.name=Manual de Instrucciones de Magneticraft
+item.magneticraft.iron_hammer.name=Martillo de Hierro
+item.magneticraft.stone_hammer.name=Martillo de Piedra
+
+item.magneticraft.crushed_ore_iron.name=Trozo de Hierro
+item.magneticraft.crushed_ore_gold.name=Trozo de Oro
+item.magneticraft.crushed_ore_copper.name=Trozo de Cobre
+item.magneticraft.crushed_ore_lead.name=Trozo de Estaño
+item.magneticraft.crushed_ore_cobalt.name=Trozo de Cobalto
+item.magneticraft.crushed_ore_tungsten.name=Trozo de Tungsteno
+
+item.magneticraft.pebbles_iron.name=Guijarro de Hierro
+item.magneticraft.pebbles_gold.name=Guijaro de Oro
+item.magneticraft.pebbles_copper.name=Guijarro de Cobre
+item.magneticraft.pebbles_lead.name=Guijarro de Estaño
+item.magneticraft.pebbles_cobalt.name=Guijarro de Cobalto
+item.magneticraft.pebbles_tungsten.name=Guijarro de Tungsteno
+
+item.magneticraft.heavy_plate_iron.name=Placa Doble de Hierro
+item.magneticraft.heavy_plate_gold.name=Placa Doble de Oro
+item.magneticraft.heavy_plate_copper.name=Placa Doble de Cobre
+item.magneticraft.heavy_plate_lead.name=Placa Doble de Estaño
+item.magneticraft.heavy_plate_cobalt.name=Placa Doble de Cobalto
+item.magneticraft.heavy_plate_tungsten.name=Placa Doble de Tungsteno
+
+item.magneticraft.light_plate_iron.name=Placa Simple de Hierro
+item.magneticraft.light_plate_gold.name=Placa Simple de Oro
+item.magneticraft.light_plate_copper.name=Placa Simple de Cobre
+item.magneticraft.light_plate_lead.name=Placa Simple de Estaño
+item.magneticraft.light_plate_cobalt.name=Placa Simple de Cobalto
+item.magneticraft.light_plate_tungsten.name=Placa Simple de Tungsteno
+
+item.magneticraft.nugget_iron.name=Pepita de Hierro
+item.magneticraft.nugget_gold.name=Pepita de Oro
+item.magneticraft.nugget_copper.name=Pepita de Cobre
+item.magneticraft.nugget_lead.name=Pepita de Estaño
+item.magneticraft.nugget_cobalt.name=Pepita de Cobalto
+item.magneticraft.nugget_tungsten.name=Pepita de Tungsteno
+
+item.magneticraft.ingot_copper.name=Lingote de Cobre
+item.magneticraft.ingot_lead.name=Lingote de Estaño
+item.magneticraft.ingot_cobalt.name=Lingote de Cobalto
+item.magneticraft.ingot_tungsten.name=Lingote de Tungsteno
+
+item.magneticraft.hand_sieve.name=Tamiz Portatil
+item.magneticraft.coil_of_wire.name=Bobina de cobre
+item.magneticraft.voltmeter.name=Voltimetro
+
+magneticraft.guide.contents=Tabla de Contenidos
+magneticraft.guide.basics=Principiante
+magneticraft.guide.getting.started=Iniciación
+magneticraft.guide.link.text=%s, página %s
+
+tile.magneticraft.ore_block_copper.name=Mineral de Calcopirita
+tile.magneticraft.ore_block_lead.name=Mineral de Galena
+tile.magneticraft.ore_block_cobalt.name=Mineral de Cobaltita
+tile.magneticraft.ore_block_tungsten.name=Mineral de Wolframita
+tile.magneticraft.crushing_table.name=Mesa de Trituración
+tile.magneticraft.limestone_normal.name=Piedra Caliza
+tile.magneticraft.limestone_brick.name=Ladrillo de Caliza
+tile.magneticraft.limestone_cobble.name=Adoquín de Caliza
+tile.magneticraft.burnt_limestone_normal.name=Caliza Quemada
+tile.magneticraft.burnt_limestone_brick.name=Ladrillo de Caliza Quemada
+tile.magneticraft.burnt_limestone_cobble.name=Adoquín de Caliza Quemada
+tile.magneticraft.table_sieve.name=Mesa de Tamizado
+tile.magneticraft.feeding_trough.name=Abrevadero de Madera
+tile.magneticraft.electric_pole.name=Poste Eléctrico
+tile.magneticraft.electric_connector.name=Conector Eléctrico
+tile.magneticraft.incendiary_generator.name=Generador Térmico
+tile.magneticraft.block_battery.name=Batería
+tile.magneticraft.electric_pole_adapter.name=Poste Electrico con Transformador
+tile.magneticraft.electric_furnace.name=Horno Eléctrico
+tile.magneticraft.infinite_water.name=Bloque de Agua Infinita
+tile.magneticraft.tile_limestone.name=Baldosas de Caliza
+tile.magneticraft.infinite_energy.name=Bloque de Energía Infinita
+tile.magneticraft.airlock.name=Compartimento de aire
+tile.magneticraft.air_bubble.name=Burbuja de aire
+tile.magneticraft.hydraulic_press.name=Prensa Hidraulica
+tile.magneticraft.copper_block.name=Bloque de Cobre
+tile.magneticraft.cobalt_block.name=Bloque de Cobalto
+tile.magneticraft.lead_block.name=Bloque de Estaño
+tile.magneticraft.tungsten_block.name=Bloque de Tungsteno
+tile.magneticraft.machine_block.name=Componente de Maquinaria
+tile.magneticraft.machine_block_support_column.name=Columna de Soporte
+tile.magneticraft.striped_machine_block.name=Componente de Maquinaria a Tiras
+tile.magneticraft.solar_panel.name=Panel Solar
+tile.magneticraft.electrical_machine_block.name=Componente de Maquinaria Electrica
+
+itemGroup.magneticraft=Magneticraft
+
+text.magneticraft.wire_connect.success=Cable Conectado
+text.magneticraft.wire_connect.fail=No se puede conectar el cable
+text.magneticraft.wire_connect.same_block=No se pueden conectar cables al mismo bloque
+text.magneticraft.wire_connect.no_other_connector=El cable no esta conectado
+text.magneticraft.auto_connect.activate=Conexion automatica activada
+text.magneticraft.auto_connect.deactivate=Conexion automatica desactivada
+text.magneticraft.jei.crushing_table=Mesa de Trituración
+text.magneticraft.jei.table_sieve=Mesa de Tamizado
+text.magneticraft.jei.hydraulic_press=Prensa Hidraulica
+text.magneticraft.multiblock.error_count=Se encontraron %d errores tratando de activar el multibloque
+text.magneticraft.multiblock.first_errors=Mostrando los %d primeros errores:
+text.magneticraft.multiblock.all_errors=Mostrando todos los errores:
+text.magneticraft.multiblock.invalid_block=El bloque %s es inválido, encontrado: %s, esperado: %s
+text.magneticraft.multiblock.activate=Activado satisfactoriamente
+
+#Translated by Simón133000 2016-09-10
