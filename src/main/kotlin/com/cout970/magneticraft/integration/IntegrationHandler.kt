@@ -12,6 +12,6 @@ object IntegrationHandler {
 
     fun preInit(){
         JEI = Loader.isModLoaded("JEI")
-        TESLA = Loader.isModLoaded("Tesla")
+        TESLA = Loader.isModLoaded("tesla")
     }
 }

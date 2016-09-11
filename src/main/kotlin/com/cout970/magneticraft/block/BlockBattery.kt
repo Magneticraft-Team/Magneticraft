@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.tileentity.electric.TileBattery
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
@@ -23,9 +22,13 @@ import net.minecraft.world.World
 
 object BlockBattery : BlockMultiState(Material.IRON, "block_battery"), ITileEntityProvider {
 
+    init {
+        lightOpacity = 0
+    }
+
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
-    override fun isFullCube(state: IBlockState?) = true
+    override fun isFullCube(state: IBlockState?) = false
     override fun isVisuallyOpaque() = false
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileBattery()

@@ -22,6 +22,12 @@ object BlockOre : BlockBase(Material.ROCK, "ore_block") {
 
     init {
         soundType = SoundType.STONE
+        setHardness(3.0F)
+        setResistance(5.0F)
+        setHarvestLevel("pickaxe", 1, defaultState.withProperty(ORE_STATES, OreStates.COPPER))
+        setHarvestLevel("pickaxe", 1, defaultState.withProperty(ORE_STATES, OreStates.LEAD))
+        setHarvestLevel("pickaxe", 2, defaultState.withProperty(ORE_STATES, OreStates.COBALT))
+        setHarvestLevel("pickaxe", 2, defaultState.withProperty(ORE_STATES, OreStates.TUNGSTEN))
     }
 
     override fun damageDropped(state: IBlockState) = state.getValue(ORE_STATES).ordinal

@@ -25,7 +25,7 @@ object BlockInserter : BlockMultiState(Material.IRON, "inserter"), ITileEntityPr
 
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
-    override fun isFullCube(state: IBlockState?) = true
+    override fun isFullCube(state: IBlockState?) = false
     override fun isVisuallyOpaque() = false
 
     override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].horizontalIndex

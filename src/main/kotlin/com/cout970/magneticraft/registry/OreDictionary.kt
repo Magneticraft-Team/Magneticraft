@@ -11,31 +11,55 @@ import net.minecraftforge.oredict.OreDictionary
 fun registerOreDictionaryEntries() {
 
     for ((key, value) in ItemIngot.variants) {
-        OreDictionary.registerOre("ingot${value.replace("ore=", "").capitalize()}", ItemStack(ItemIngot, 1, key))
+        if (key == 4) {
+            OreDictionary.registerOre("ingot${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemIngot, 1, key))
+        } else {
+            OreDictionary.registerOre("ingot${value.replace("ore=", "").capitalize()}", ItemStack(ItemIngot, 1, key))
+        }
     }
 
     for ((key, value) in ItemCrushedOre.variants) {
-        OreDictionary.registerOre("crushedOre${value.replace("ore=", "").capitalize()}", ItemStack(ItemCrushedOre, 1, key))
+        if (key == 4) {
+            OreDictionary.registerOre("crushedOre${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemCrushedOre, 1, key))
+        } else {
+            OreDictionary.registerOre("crushedOre${value.replace("ore=", "").capitalize()}", ItemStack(ItemCrushedOre, 1, key))
+        }
     }
 
     for ((key, value) in ItemPebbles.variants) {
-        OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}", ItemStack(ItemPebbles, 1, key))
+        if (key == 4) {
+            OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemPebbles, 1, key))
+        } else {
+            OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}", ItemStack(ItemPebbles, 1, key))
+        }
     }
 
     for ((key, value) in ItemHeavyPlate.variants) {
-        OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemHeavyPlate, 1, key))
+        if (key == 4) {
+            OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemHeavyPlate, 1, key))
+        } else {
+            OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemHeavyPlate, 1, key))
+        }
     }
 
     for ((key, value) in ItemLightPlate.variants) {
-        OreDictionary.registerOre("lightPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemLightPlate, 1, key))
+        if (key == 4) {
+            OreDictionary.registerOre("lightPlate${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemLightPlate, 1, key))
+        } else {
+            OreDictionary.registerOre("lightPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemLightPlate, 1, key))
+        }
     }
 
     for ((key, value) in ItemNugget.variants) {
-        OreDictionary.registerOre("nugget${value.replace("ore=", "").capitalize()}", ItemStack(ItemNugget, 1, key))
+        if (key == 4) {
+            OreDictionary.registerOre("nugget${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemNugget, 1, key))
+        } else {
+            OreDictionary.registerOre("nugget${value.replace("ore=", "").capitalize()}", ItemStack(ItemNugget, 1, key))
+        }
     }
 }
 
-fun getItemFromDict(name:String): ItemStack? {
+fun getItemFromDict(name: String): ItemStack? {
     return OreDictionary.getOres(name).firstOrNull()?.copy()
 }
 

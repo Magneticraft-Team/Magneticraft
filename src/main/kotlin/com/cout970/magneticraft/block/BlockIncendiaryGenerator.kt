@@ -32,7 +32,7 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
         private set
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false
-    override fun isFullCube(state: IBlockState?) = true
+    override fun isFullCube(state: IBlockState?) = false
     override fun isVisuallyOpaque() = false
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType = EnumBlockRenderType.INVISIBLE

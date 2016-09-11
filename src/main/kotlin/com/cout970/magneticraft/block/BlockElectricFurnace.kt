@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.tileentity.electric.TileElectricFurnace
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
@@ -23,11 +22,6 @@ import net.minecraft.world.World
 object BlockElectricFurnace : BlockMultiState(Material.IRON, "electric_furnace"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileElectricFurnace()
-
-    override fun isFullBlock(state: IBlockState?) = false
-    override fun isOpaqueCube(state: IBlockState?) = false
-    override fun isFullCube(state: IBlockState?) = true
-    override fun isVisuallyOpaque() = false
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (!playerIn.isSneaking) {

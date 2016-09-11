@@ -78,7 +78,7 @@ object TileRendererHydraulicPress : TileEntityRenderer<TileHydraulicPress>() {
         try {
             val model = getModelObj(resource("models/block/obj/hydraulic_press.obj"))
             val hasFan = object : IModelFilter {
-                override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("head") else false
+                override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("head") || it.getName().contains("rod") else false
             }
             noHammer = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(hasFan)), 1)
             hammer = ModelCacheFactory.createCachedModel(model.filter(hasFan), 1)

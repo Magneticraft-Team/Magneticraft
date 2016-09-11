@@ -41,7 +41,7 @@ object Config {
     var airlockAirCost = 2.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
-    var hydraulicPressConsumption = 1.0
+    var hydraulicPressConsumption = 40.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
     var solarPanelMaxProduction = 10.0
