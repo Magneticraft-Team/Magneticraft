@@ -45,6 +45,7 @@ item.magneticraft.ingot_tungsten.name=Lingote de Tungsteno
 item.magneticraft.hand_sieve.name=Tamiz Portatil
 item.magneticraft.coil_of_wire.name=Bobina de cobre
 item.magneticraft.voltmeter.name=Voltimetro
+item.magneticraft.battery_item.name=Bateria
 
 magneticraft.guide.contents=Tabla de Contenidos
 magneticraft.guide.basics=Principiante
@@ -102,5 +103,6 @@ text.magneticraft.multiblock.first_errors=Mostrando los %d primeros errores:
 text.magneticraft.multiblock.all_errors=Mostrando todos los errores:
 text.magneticraft.multiblock.invalid_block=El bloque %s es inválido, encontrado: %s, esperado: %s
 text.magneticraft.multiblock.activate=Activado satisfactoriamente
+tooltip.magneticraft.item_storage.energy=%.1f/%.1fJ
 
 #Translated by Simón133000 2016-09-10

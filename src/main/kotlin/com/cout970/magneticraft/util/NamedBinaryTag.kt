@@ -29,6 +29,16 @@ fun ItemStack.getString(key: String): String{
     return tagCompound!!.getString(key)
 }
 
+fun ItemStack.setDouble(key: String, value:Double){
+    checkNBT()
+    return tagCompound!!.setDouble(key, value)
+}
+
+fun ItemStack.getDouble(key: String): Double{
+    checkNBT()
+    return tagCompound!!.getDouble(key)
+}
+
 fun ItemStack.setBlockPos(key: String, pos: BlockPos) {
     checkNBT()
     val tag = NBTTagCompound()

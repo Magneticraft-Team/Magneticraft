@@ -1,10 +1,7 @@
 package com.cout970.magneticraft.gui.common.blocks
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.gui.common.ContainerBase
-import com.cout970.magneticraft.gui.common.DATA_ID_CHARGE_RATE
-import com.cout970.magneticraft.gui.common.DATA_ID_STORAGE
-import com.cout970.magneticraft.gui.common.DATA_ID_VOLTAGE
+import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.tileentity.electric.TileBattery
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
@@ -37,6 +34,7 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos) :
         data.setDouble(DATA_ID_VOLTAGE, tile.mainNode.voltage)
         data.setInteger(DATA_ID_STORAGE, tile.storage)
         data.setFloat(DATA_ID_CHARGE_RATE, tile.chargeRate.average)
+        data.setFloat(DATA_ID_ITEM_CHARGE_RATE, tile.itemChargeRate.average)
         return data
     }
 
@@ -45,5 +43,6 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos) :
         ibd.getDouble(DATA_ID_VOLTAGE, { tile.mainNode.voltage = it })
         ibd.getInteger(DATA_ID_STORAGE, { tile.storage = it })
         ibd.getFloat(DATA_ID_CHARGE_RATE, { tile.chargeRate.storage = it })
+        ibd.getFloat(DATA_ID_ITEM_CHARGE_RATE, { tile.itemChargeRate.storage = it })
     }
 }

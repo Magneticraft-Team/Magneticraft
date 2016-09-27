@@ -46,6 +46,7 @@ item.magneticraft.ingot_tungsten.name=Tungsten Ingot
 item.magneticraft.hand_sieve.name=Hand Sieve
 item.magneticraft.coil_of_wire.name=Coil of Wire
 item.magneticraft.voltmeter.name=Voltmeter
+item.magneticraft.battery_item.name=Battery
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
@@ -103,3 +104,4 @@ text.magneticraft.multiblock.first_errors=Showing the %d first errors:
 text.magneticraft.multiblock.all_errors=Showing all errors:
 text.magneticraft.multiblock.invalid_block=Invalid block at %s, found: %s, expected: %s
 text.magneticraft.multiblock.activate=Successfully activated
+tooltip.magneticraft.item_storage.energy=%.1f/%.1fJ

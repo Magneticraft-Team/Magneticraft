@@ -3,6 +3,9 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.energy.INodeHandler
+import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
+import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
+import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
 import net.darkhax.tesla.api.ITeslaConsumer
 import net.darkhax.tesla.api.ITeslaHolder
 import net.darkhax.tesla.api.ITeslaProducer
@@ -43,8 +46,20 @@ var TESLA_PRODUCER: Capability<ITeslaProducer>? = null
 @CapabilityInject(ITeslaHolder::class)
 var TESLA_STORAGE: Capability<ITeslaHolder>? = null
 
+@CapabilityInject(IEnergyConsumerItem::class)
+var ITEM_ENERGY_CONSUMER: Capability<IEnergyConsumerItem>? = null
+
+@CapabilityInject(IEnergyProviderItem::class)
+var ITEM_ENERGY_PROVIDER: Capability<IEnergyProviderItem>? = null
+
+@CapabilityInject(IEnergyStorageItem::class)
+var ITEM_ENERGY_STORAGE: Capability<IEnergyStorageItem>? = null
+
 fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(INodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
+    CapabilityManager.INSTANCE.register(IEnergyConsumerItem::class.java, EmptyStorage(), { DefaultItemEnergyConsumer() })
+    CapabilityManager.INSTANCE.register(IEnergyProviderItem::class.java, EmptyStorage(), { DefaultItemEnergyProvider() })
+    CapabilityManager.INSTANCE.register(IEnergyStorageItem::class.java, EmptyStorage(), { DefaultItemEnergyStorage() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
 }
 
@@ -58,6 +73,13 @@ fun <T> Capability<T>.fromTile(tile: TileEntity, side: EnumFacing? = null): T? {
 fun <T> Capability<T>.fromBlock(block: Block, side: EnumFacing? = null): T? {
     if (block is ICapabilityProvider && block.hasCapability(this, side)) {
         return block.getCapability(this, side)
+    }
+    return null
+}
+
+fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
+    if (tile is ICapabilityProvider && tile.hasCapability(this, null)) {
+        return tile.getCapability(this, null)
     }
     return null
 }
@@ -81,4 +103,21 @@ class DefaultManualConnectionHandler : IManualConnectionHandler {
     override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): BlockPos? = thisBlock
 
     override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): Boolean = false
+}
+
+class DefaultItemEnergyConsumer() : IEnergyConsumerItem {
+
+    override fun giveEnergy(power: Double, simulated: Boolean): Double = 0.0
+}
+
+class DefaultItemEnergyProvider() : IEnergyProviderItem {
+
+    override fun takeEnergy(power: Double, simulated: Boolean): Double = 0.0
+}
+
+class DefaultItemEnergyStorage() : IEnergyStorageItem {
+
+    override fun getStoredEnergy(): Double = 0.0
+
+    override fun getCapacity(): Double = 0.0
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.RayTraceResult
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 
 /**
@@ -103,24 +104,24 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
         val errors = MultiblockManager.checkMultiblockStructure(context)
         val playerIn = context.player!!
         if (errors.isNotEmpty()) {
-            playerIn.sendMessage("text.magneticraft.multiblock.error_count", errors.size)
+            playerIn.sendMessage("text.magneticraft.multiblock.error_count", errors.size, color = TextFormatting.AQUA)
             if (errors.size > 2) {
-                playerIn.sendMessage("text.magneticraft.multiblock.first_errors", 2)
+                playerIn.sendMessage("text.magneticraft.multiblock.first_errors", 2, color = TextFormatting.AQUA)
                 var count = 0
                 errors.forEach {
                     if (count >= 2) return@forEach
-                    playerIn.addChatComponentMessage(it)
+                    playerIn.addChatComponentMessage(it.apply { style.color = TextFormatting.DARK_RED })
                     count++
                 }
             } else {
-                playerIn.sendMessage("text.magneticraft.multiblock.all_errors")
+                playerIn.sendMessage("text.magneticraft.multiblock.all_errors", color = TextFormatting.DARK_AQUA)
                 errors.forEach {
-                    playerIn.addChatComponentMessage(it)
+                    playerIn.addChatComponentMessage(it.apply { style.color = TextFormatting.DARK_RED })
                 }
             }
         } else {
             MultiblockManager.activateMultiblockStructure(context)
-            playerIn.sendMessage("text.magneticraft.multiblock.activate")
+            playerIn.sendMessage("text.magneticraft.multiblock.activate", color = TextFormatting.GREEN)
         }
     }
 

@@ -18,12 +18,21 @@ open class ElectricNode(
     private var voltage = 0.0
     private var amperage = 0.0
     var amperageCount = 0.0
+    var lastTick = 0L
 
-    override fun getAmperage() = amperage
-    fun setAmperage(a: Double) { amperage = a }
+    override fun getAmperage(): Double {
+        updateAmperage()
+        return amperage
+    }
+
+    fun setAmperage(a: Double) {
+        amperage = a
+    }
 
     override fun getVoltage() = voltage
-    fun setVoltage(v : Double){ voltage = v }
+    fun setVoltage(v: Double) {
+        voltage = v
+    }
 
     override fun getResistance() = resistance
     override fun getCapacity() = capacity
@@ -31,12 +40,23 @@ open class ElectricNode(
     override fun getWorld() = worldGetter()
     override fun getPos() = posGetter()
 
-    override fun iterate() {
-        amperage = amperageCount * 0.5
-        amperageCount = 0.0
+    fun updateAmperage() {
+        val tick = world.totalWorldTime
+        if (tick == lastTick) {
+            return
+        } else if (tick == lastTick + 1) {
+            lastTick = tick
+            amperage = amperageCount * 0.5
+            amperageCount = 0.0
+        } else {
+            amperage = 0.0
+            amperageCount = 0.0
+            lastTick = tick
+        }
     }
 
     override fun applyCurrent(current: Double) {
+        updateAmperage()
         amperageCount += Math.abs(current)
         voltage += current / getCapacity()
     }

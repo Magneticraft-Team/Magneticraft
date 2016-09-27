@@ -83,7 +83,6 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     }
 
     open fun iterate() {
-        electricNodes.forEach { it.iterate() }
         outputNormalConnections.forEach { it.iterate() }
         outputWiredConnections.forEach { it.iterate() }
     }

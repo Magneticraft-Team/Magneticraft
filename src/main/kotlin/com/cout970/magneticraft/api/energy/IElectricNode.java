@@ -6,11 +6,6 @@ package com.cout970.magneticraft.api.energy;
 public interface IElectricNode extends INode {
 
     /**
-     * Called every tick to update amperage values
-     */
-    void iterate();
-
-    /**
      * Returns the voltage of the node
      */
     double getVoltage();

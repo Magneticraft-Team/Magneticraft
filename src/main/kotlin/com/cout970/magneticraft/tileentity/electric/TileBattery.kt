@@ -1,8 +1,13 @@
 package com.cout970.magneticraft.tileentity.electric
 
+import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.registry.ITEM_ENERGY_CONSUMER
+import com.cout970.magneticraft.registry.ITEM_ENERGY_PROVIDER
+import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.misc.ValueAverage
 import net.minecraft.nbt.NBTTagCompound
@@ -26,7 +31,7 @@ class TileBattery : TileElectricBase() {
         if (!worldObj.isRemote) {
             if (mainNode.voltage > UPPER_LIMIT) {
                 val speed = interpolate(mainNode.voltage, UPPER_LIMIT, 120.0) * MAX_CHARGE_SPEED
-                val finalSpeed = Math.min(Math.floor(speed).toInt(), MAX_STORAGE - storage)
+                val finalSpeed = Math.min(Math.floor(speed).toInt(), Config.blockBatteryCapacity - storage)
                 mainNode.applyPower(-finalSpeed.toDouble(), false)
                 storage += finalSpeed
                 chargeRate += finalSpeed
@@ -38,7 +43,40 @@ class TileBattery : TileElectricBase() {
                 chargeRate -= finalSpeed
             }
             chargeRate.tick()
-            //TODO
+
+            val toCharge = inventory[0]
+            if(toCharge != null){
+                val cap = ITEM_ENERGY_CONSUMER!!.fromItem(toCharge)
+                if(cap != null){
+                    val amount = Math.min(storage, Config.blockBatteryTransferRate)
+                    //simulated
+                    val given = cap.giveEnergy(amount.toDouble(), true)
+                    //this avoid energy deletion creation when the battery has decimals in the energy value\
+                    val floored = Math.floor(given)
+                    if(floored > 0){
+                        cap.giveEnergy(floored, false)
+                        storage -= floored.toInt()
+                        itemChargeRate -= floored
+                    }
+                }
+            }
+
+            val toDischarge = inventory[1]
+            if(toDischarge != null){
+                val cap = ITEM_ENERGY_PROVIDER!!.fromItem(toDischarge)
+                if(cap != null){
+                    val amount = Math.min(Config.blockBatteryCapacity - storage, Config.blockBatteryTransferRate)
+                    //simulated
+                    val taken = cap.takeEnergy(amount.toDouble(), true)
+                    //this avoid energy deletion creation when the battery has decimals in the energy value
+                    val floored = Math.floor(taken)
+                    if(floored > 0){
+                        cap.takeEnergy(floored, false)
+                        storage += floored.toInt()
+                        itemChargeRate += floored
+                    }
+                }
+            }
             itemChargeRate.tick()
         }
         super.update()
@@ -66,7 +104,7 @@ class TileBattery : TileElectricBase() {
     }
 
     companion object {
-        val MAX_STORAGE = 1000000
+        //this is only used with voltage to charge the block, not for charging items
         val MAX_CHARGE_SPEED = 400
         val UPPER_LIMIT = 100.0
         val LOWER_LIMIT = 90.0

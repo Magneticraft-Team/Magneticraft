@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.gui.client.blocks
 
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.GuiBase
 import com.cout970.magneticraft.gui.client.IComponent
 import com.cout970.magneticraft.gui.client.IGui
@@ -28,6 +29,10 @@ class GuiBattery(container: ContainerBase) : GuiBase(container) {
 
         components.add(TransferBar({ tile.chargeRate.storage.toDouble() },
                 { -TileBattery.MAX_CHARGE_SPEED.toDouble() }, { 0.0 }, { TileBattery.MAX_CHARGE_SPEED.toDouble() }, Vec2d(58, 64) + box.start))
+
+        components.add(TransferBar({ tile.itemChargeRate.storage.toDouble() },
+                { -Config.blockBatteryTransferRate.toDouble() }, { 0.0 }, { Config.blockBatteryTransferRate.toDouble() }, Vec2d(58 + 33, 64) + box.start))
+
     }
 
     inner class BatterBar : IComponent {
@@ -37,7 +42,7 @@ class GuiBattery(container: ContainerBase) : GuiBase(container) {
         override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
             gui.run {
                 bindTexture(MISC_TEXTURES)
-                val level = (this@GuiBattery.tile.storage * 48 / TileBattery.MAX_STORAGE).toInt()
+                val level = (this@GuiBattery.tile.storage * 48 / Config.blockBatteryCapacity).toInt()
                 drawScaledTexture(this@BatterBar.box.pos.copy(y = this@BatterBar.box.pos.y + 48 - level.toDouble()),
                         this@BatterBar.box.size.copy(y = level.toDouble()), Vec2d.ZERO + Vec2d(0, 48 - level), Vec2d(64, 64))
             }

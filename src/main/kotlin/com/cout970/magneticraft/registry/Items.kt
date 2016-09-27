@@ -17,7 +17,8 @@ val items = listOf(
         ItemHeavyPlate,
         ItemLightPlate,
         ItemVoltmeter,
-        ItemNugget
+        ItemNugget,
+        ItemBattery
 )
 
 fun registerItems() {

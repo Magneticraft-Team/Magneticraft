@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
+import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 import net.minecraftforge.common.util.Constants
 
@@ -50,6 +51,10 @@ fun ByteBuf.writeString(str: String) {
 
 fun EntityPlayer.sendMessage(str: String, vararg args: Any) {
     addChatComponentMessage(TextComponentTranslation(str, *args))
+}
+
+fun EntityPlayer.sendMessage(str: String, vararg args: Any, color: TextFormatting) {
+    addChatComponentMessage(TextComponentTranslation(str, *args).apply { style.color = color })
 }
 
 fun translate(str: String, vararg args: Any) = TextComponentTranslation(str, *args)

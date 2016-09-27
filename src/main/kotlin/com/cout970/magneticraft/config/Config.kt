@@ -25,6 +25,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
+    @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
+    var heatUnitCelsius = true
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Tesla, NOTE: all the values in the config about energy are in Watts")
     var wattsToTesla = 1.0
 
@@ -46,7 +49,13 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
     var solarPanelMaxProduction = 10.0
 
-    @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
-    var heatUnitCelsius = true
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Battery Capacity")
+    var itemBatteryCapacity: Double = 250000.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Capacity")
+    var blockBatteryCapacity: Int = 1000000
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Item charge and discharge speed in Joules/tick (Watts)")
+    var blockBatteryTransferRate: Int = 500
 
 }
