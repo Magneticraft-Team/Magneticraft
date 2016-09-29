@@ -2,11 +2,15 @@ package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.fromBlock
+import com.cout970.magneticraft.util.checkNBT
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.hasKey
 import com.cout970.magneticraft.util.setBlockPos
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
+import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumActionResult
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
@@ -29,6 +33,14 @@ object ItemCoilOfWire : ItemBase("coil_of_wire") {
             return name + " [${TextFormatting.AQUA}Position: ${basePos.x}, ${basePos.y}, ${basePos.z}]"
         }
         return name
+    }
+
+    override fun onItemRightClick(itemStackIn: ItemStack?, worldIn: World?, playerIn: EntityPlayer?, hand: EnumHand?): ActionResult<ItemStack>? {
+        if (playerIn!!.isSneaking && itemStackIn != null) {
+            itemStackIn.checkNBT()
+            itemStackIn.tagCompound?.removeTag(POSITION_KEY)
+        }
+        return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand)
     }
 
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer?, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
