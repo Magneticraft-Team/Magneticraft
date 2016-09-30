@@ -15,14 +15,21 @@ import net.minecraftforge.fml.server.FMLServerHandler
 
 /**
  * Created by cout970 on 16/07/2016.
+ *
+ * This class is used to send data from the client to the server, or vice-versa
+ * See TileBase.receiveSyncData(...)
+ * See TileBase.sendSyncData(...)
+ *
+ * Server -> Client
+ * Client -> Server
  */
-//Server -> Client
-//or
-//Client -> Server
 class MessageTileUpdate() : IMessage {
 
+    //Data buffer
     var ibd: IBD? = null
+    //Position of the block
     var pos: BlockPos? = null
+    //Dimension of the block, only for server side
     var dimension = 0
 
     constructor(ibd: IBD, pos: BlockPos, dimension: Int) : this() {

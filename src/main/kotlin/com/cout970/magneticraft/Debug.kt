@@ -1,6 +1,6 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.MOD_ID
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
@@ -12,6 +12,8 @@ import java.io.FileWriter
 
 /**
  * Created by cout970 on 11/06/2016.
+ *
+ * Stuff that only works in the dev-environment
  */
 object Debug {
 
@@ -55,7 +57,7 @@ object Debug {
     }
 
     fun createItemJson(name: String, texName: String) {
-        val path = srcDir!!.absolutePath + "/src/main/resources/assets/$MODID/models/item/$name.json"
+        val path = srcDir!!.absolutePath + "/src/main/resources/assets/$MOD_ID/models/item/$name.json"
         val file = File(path)
         if (file.exists()) return
 
@@ -75,7 +77,7 @@ object Debug {
     }
 
     fun createBlockModelJson(name: String, parent: String, tex: Map<String, String>) {
-        val path = srcDir!!.absolutePath + "/src/main/resources/assets/$MODID/models/block/$name.json"
+        val path = srcDir!!.absolutePath + "/src/main/resources/assets/$MOD_ID/models/block/$name.json"
         val file = File(path)
         if (file.exists()) return
 

@@ -18,7 +18,7 @@ import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.tilerenderer.*
-import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.MOD_ID
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.obj.OBJLoader
@@ -27,6 +27,10 @@ import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.Side
 
+/**
+ * This class extends the functionality of CommonProxy but adds
+ * thing only for the client: sounds, models, textures and renders
+ */
 class ClientProxy : CommonProxy() {
 
     //List of registered TileEntityRenderers
@@ -35,15 +39,17 @@ class ClientProxy : CommonProxy() {
     override fun preInit() {
         super.preInit()
 
-        //sounds
+        //Sounds
         registerSounds()
 
-        //model loaders
-        OBJLoader.INSTANCE.addDomain(MODID)
-        ModelRegistry.registerDomain(MODID)
+        //Model loaders
+        OBJLoader.INSTANCE.addDomain(MOD_ID)
+        //This is from other library
+        ModelRegistry.registerDomain(MOD_ID)
 
-        //item renders
+        //Item renders
         items.forEach { it.registerInvRender() }
+        //ItemBlock renders
         blocks.values.forEach {
             it.registerInvRender()
             val mapper = it.blockBase.getCustomStateMapper()
@@ -52,7 +58,7 @@ class ClientProxy : CommonProxy() {
             }
         }
 
-        //tile entity renderer
+        //TileEntity renderers
         register(TileCrushingTable::class.java, TileRendererCrushingTable)
         register(TileFeedingTrough::class.java, TileRendererFeedingTrough)
         register(TileTableSieve::class.java, TileRendererTableSieve)
@@ -63,7 +69,7 @@ class ClientProxy : CommonProxy() {
         register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
         register(TileSolarPanel::class.java, TileRendererSolarPanel)
 
-        //registering model bake event listener
+        //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
     }
 
@@ -83,13 +89,10 @@ class ClientProxy : CommonProxy() {
         super.postInit()
     }
 
-    /**
-     * The side of the proxy
-     */
     override fun getSide() = Side.CLIENT
 
     /**
-     * Updates all the TileEntityRenderer to reload models
+     * Updates all the TileEntityRenderers to reload models
      */
     @Suppress("unused")
     @SubscribeEvent

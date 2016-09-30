@@ -9,6 +9,9 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 24/06/2016.
  */
 
+/**
+ * This register all the ore dictionary names
+ */
 fun registerOreDictionaryEntries() {
 
     for ((key, value) in BlockOre.inventoryVariants) {
@@ -70,6 +73,9 @@ fun registerOreDictionaryEntries() {
     }
 }
 
+/**
+ * Return one of the items registered with 'name' in the ore dictionary or null if there is none with that name
+ */
 fun getItemFromDict(name: String): ItemStack? {
     return OreDictionary.getOres(name).firstOrNull()?.copy()
 }

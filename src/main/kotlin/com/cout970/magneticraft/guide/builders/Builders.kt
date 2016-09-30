@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.guide.builders
 
 import com.cout970.magneticraft.guide.components.PageComponent
-import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.MOD_ID
 
-const val GUIDE_FOLDER = "$MODID:textures/gui/guide"
+const val GUIDE_FOLDER = "$MOD_ID:textures/gui/guide"
 
 inline fun entry(title: String, init: EntryBuilder.() -> Unit) = EntryBuilder(title).apply(init).build()
 

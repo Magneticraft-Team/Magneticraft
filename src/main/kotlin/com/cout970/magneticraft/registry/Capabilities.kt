@@ -25,6 +25,13 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.items.IItemHandler
 
+/**
+ * Stores instances of Capabilities
+ * to use them you need to add !! at the end
+ * for example:
+ * ITEM_HANDLER!!.fromTile(tile)
+ */
+
 @CapabilityInject(IItemHandler::class)
 var ITEM_HANDLER: Capability<IItemHandler>? = null
 
@@ -55,6 +62,9 @@ var ITEM_ENERGY_PROVIDER: Capability<IEnergyProviderItem>? = null
 @CapabilityInject(IEnergyStorageItem::class)
 var ITEM_ENERGY_STORAGE: Capability<IEnergyStorageItem>? = null
 
+/**
+ * This is called on the server and the client at preInit
+ */
 fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(INodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IEnergyConsumerItem::class.java, EmptyStorage(), { DefaultItemEnergyConsumer() })
@@ -63,6 +73,9 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
 }
 
+/**
+ * Extension functions to get capabilities from TileEntities, Blocks and Items
+ */
 fun <T> Capability<T>.fromTile(tile: TileEntity, side: EnumFacing? = null): T? {
     if (tile is ICapabilityProvider && tile.hasCapability(this, side)) {
         return tile.getCapability(this, side)
@@ -84,6 +97,10 @@ fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
     return null
 }
 
+/**
+ * Empty implementation of IStorage
+ * At some point this should be changed, or just ignored
+ */
 class EmptyStorage<T> : Capability.IStorage<T> {
 
     override fun writeNBT(capability: Capability<T>?, instance: T, side: EnumFacing?): NBTBase? = NBTTagCompound()
@@ -91,6 +108,9 @@ class EmptyStorage<T> : Capability.IStorage<T> {
     override fun readNBT(capability: Capability<T>?, instance: T, side: EnumFacing?, nbt: NBTBase?) = Unit
 }
 
+/**
+ * Default implementation of API interfaces, used to register Capabilities
+ */
 class DefaultNodeProvider : INodeHandler {
 
     override fun getNodes(): List<INode> = listOf()

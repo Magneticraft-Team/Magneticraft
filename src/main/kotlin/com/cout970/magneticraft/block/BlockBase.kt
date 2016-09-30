@@ -7,7 +7,7 @@ import coffee.cypher.mcextlib.extensions.items.stack
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.MOD_ID
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -20,6 +20,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
+/**
+ * This is the base class for all the blocks in the mod
+ */
 abstract class BlockBase(
         material: Material,
         registryName: String,
@@ -31,7 +34,7 @@ abstract class BlockBase(
     )
 
     init {
-        this.unlocalizedName = "$MODID.$unlocalizedName"
+        this.unlocalizedName = "$MOD_ID.$unlocalizedName"
         this.registryName = resource(registryName)
         setHardness(1.5F)
         setResistance(10.0F)

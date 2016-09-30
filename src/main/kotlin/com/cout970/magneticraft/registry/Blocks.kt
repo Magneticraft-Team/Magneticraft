@@ -7,40 +7,42 @@ import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
 
-
+//Map with all the blocks, the keys are Blocks and the values ItemBlocks
 val blocks = mapOf(
-        pair(BlockCrushingTable),
-        pair(BlockTableSieve),
-        pair(BlockOre),
-        pair(BlockLimestone),
-        pair(BlockBurntLimestone),
+        withItemBlock(BlockCrushingTable),
+        withItemBlock(BlockTableSieve),
+        withItemBlock(BlockOre),
+        withItemBlock(BlockLimestone),
+        withItemBlock(BlockBurntLimestone),
         BlockFeedingTrough to ItemBlockFeedingTrough(),
-        pair(BlockElectricConnector),
+        withItemBlock(BlockElectricConnector),
         BlockElectricPole to ItemBlockElectricPole(),
         BlockIncendiaryGenerator to ItemBlockIncendiaryGenerator(),
-        pair(BlockElectricFurnace),
+        withItemBlock(BlockElectricFurnace),
         BlockElectricPoleAdapter to ItemBlockElectricPoleAdapter(),
-        pair(BlockBattery),
-        pair(BlockInfiniteWater),
-        pair(BlockTileLimestone),
-        pair(BlockInfiniteEnergy),
-        pair(BlockAirLock),
-        pair(BlockAirBubble),
-        pair(BlockHydraulicPress),
-        pair(BlockStripedMachineBlock),
-        pair(BlockMachineBlockSupportColumn),
-        pair(BlockMachineBlock),
-        pair(BlockCompactedCopper),
-        pair(BlockCompactedCobalt),
-        pair(BlockCompactedLead),
-        pair(BlockCompactedTungsten),
-        pair(BlockSolarPanel),
-        pair(BlockElectricalMachineBlock)
-//        BlockInserter               to ItemBlockBase(BlockInserter)
+        withItemBlock(BlockBattery),
+        withItemBlock(BlockInfiniteWater),
+        withItemBlock(BlockTileLimestone),
+        withItemBlock(BlockInfiniteEnergy),
+        withItemBlock(BlockAirLock),
+        withItemBlock(BlockAirBubble),
+        withItemBlock(BlockHydraulicPress),
+        withItemBlock(BlockStripedMachineBlock),
+        withItemBlock(BlockMachineBlockSupportColumn),
+        withItemBlock(BlockMachineBlock),
+        withItemBlock(BlockCompactedCopper),
+        withItemBlock(BlockCompactedCobalt),
+        withItemBlock(BlockCompactedLead),
+        withItemBlock(BlockCompactedTungsten),
+        withItemBlock(BlockSolarPanel),
+        withItemBlock(BlockElectricalMachineBlock)
 )
 
-private fun pair(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
+private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
 
+/**
+ * Registers all the blocks in the mod, called by CommonProxy
+ */
 fun registerBlocks() {
     blocks.forEach {
         GameRegistry.register(it.key)

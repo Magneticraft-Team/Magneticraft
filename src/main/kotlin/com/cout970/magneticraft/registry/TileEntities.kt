@@ -7,6 +7,7 @@ import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
 
+//Map with all the TileEntities in the mod
 //@formatter:off
 val tiles = mapOf<Class<out TileBase>, String>(
         TileCrushingTable::class.java           to "crushing_table",
@@ -29,6 +30,9 @@ val tiles = mapOf<Class<out TileBase>, String>(
 )
 //@formatter:on
 
+/**
+ * Called by CommonProxy to register all the TileEntities
+ */
 fun registerTileEntities() {
     tiles.forEach { GameRegistry.registerTileEntity(it.key, "magneticraft:${it.value}") }
 }

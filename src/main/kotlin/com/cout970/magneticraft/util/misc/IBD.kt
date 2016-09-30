@@ -6,8 +6,11 @@ import io.netty.buffer.ByteBuf
 
 /**
  * Created by cout970 on 09/07/2016.
+ *
+ * Indexed Binary Data
+ * Encodes and decodes data from a ByteBuf using a index to identify the data
+ * See gui.common.Constants.kt for ids
  */
-//Indexed Binary Data
 class IBD {
 
     private val map = mutableMapOf<Int, Any>()

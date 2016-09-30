@@ -11,10 +11,15 @@ import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.relauncher.Side
 
+/**
+ * This class has the task to initialize the mod, in both sides, client and server
+ * See ClientProxy for more tasks executed only in the client
+ * See ServerProxy for more tasks executed only in the server, currently nothing
+ */
 abstract class CommonProxy {
 
     open fun preInit() {
-        //common preInit stuff
+        //Common preInit stuff
         registerBlocks()
         registerItems()
         registerTileEntities()
@@ -24,24 +29,28 @@ abstract class CommonProxy {
     }
 
     open fun init() {
-        //init recipes
+        //Init recipes
         registerRecipes()
 
-        //world generator
+        //World generator
         WorldGenerator.init()
         GameRegistry.registerWorldGenerator(WorldGenerator, 10)
 
-        //gui
+        //Gui
         NetworkRegistry.INSTANCE.registerGuiHandler(Magneticraft, GuiHandler)
 
-        //network
+        //Network
+        //Note for implementing Messages:
+        //The class that implements IMessage must have an empty constructor
         Magneticraft.network.registerMessage(MessageContainerUpdate.Companion, MessageContainerUpdate::class.java, 0, Side.CLIENT)
         Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 1, Side.CLIENT)
         Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 2, Side.SERVER)
     }
 
-    open fun postInit() {
-    }
+    open fun postInit() = Unit
 
+    /**
+     * The side of the proxy
+     */
     abstract fun getSide(): Side
 }

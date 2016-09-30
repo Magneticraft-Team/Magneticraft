@@ -4,10 +4,10 @@ import coffee.cypher.mcextlib.extensions.strings.i18n
 import com.cout970.magneticraft.guide.EntryRegistry
 import com.cout970.magneticraft.gui.client.guide.PAGE_CENTER
 import com.cout970.magneticraft.guide.builders.*
-import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.MOD_ID
 import com.cout970.magneticraft.util.vector.Vec2d
 
-const val GUIDE_LANG = "$MODID.guide"
+const val GUIDE_LANG = "$MOD_ID.guide"
 
 var contentTable: Entry =createBook()
 
