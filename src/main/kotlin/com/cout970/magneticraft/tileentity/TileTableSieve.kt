@@ -9,6 +9,7 @@ import com.cout970.magneticraft.util.shouldTick
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.items.ItemStackHandler
@@ -66,7 +67,7 @@ class TileTableSieve : TileBase(), ITickable {
         val state = worldObj.getBlockState(pos.down())
         val tile = worldObj.getTileEntity(pos.down())
         if (tile != null) {
-            val inventory = ITEM_HANDLER!!.fromTile(tile)
+            val inventory = ITEM_HANDLER!!.fromTile(tile, EnumFacing.UP)
             if (inventory != null) {
                 val iterator = output.iterator()
                 while (iterator.hasNext()) {
