@@ -32,7 +32,7 @@ open class OreGenerator(
     override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?, chunkProvider: IChunkProvider?) {
         if (world == null || random == null) return
         if (world.provider.dimension in listOf(1, -1)) return
-        generateChunkOres(world, Vec2d(chunkX, chunkZ), random, config.chunkAmount)
+        if (config.active) generateChunkOres(world, Vec2d(chunkX, chunkZ), random, config.chunkAmount)
     }
 
     fun generateChunkOres(world: World, pos: Vec2d, random: Random, chunkAmount: Int) {
