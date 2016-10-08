@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.guide.components
 
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
-import com.cout970.magneticraft.guide.Page
+import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.guide.builders.GUIDE_FOLDER
 import com.cout970.magneticraft.util.shuffled
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -9,29 +9,35 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 
-const val DISPLAY_TIME = 20
-
-val GRID_TEXTURE = ResourceLocation("$GUIDE_FOLDER/grid.png")
-val GRID_SIZE = Vec2d(88, 56)
-val STACK_OFFSET = Array(3) { row ->
-    Array(3) { column ->
-        Vec2d(2 + 18 * column, 2 + 18 * row)
-    }
-}
-val STACK_SIZE = Vec2d(16, 16)
-val RESULT_OFFSET = Vec2d(68, 20)
-
 class Recipe(
-    position: Vec2d,
-    val recipe: Array<out Array<out List<ItemStack>>>,
-    val result: ItemStack
+        position: Vec2d,
+        val recipe: Array<out Array<out List<ItemStack>>>,
+        val result: ItemStack
+
 ) : PageComponent(position) {
+
+    companion object {
+
+        const val DISPLAY_TIME = 20
+
+        val GRID_TEXTURE = ResourceLocation("$GUIDE_FOLDER/grid.png")
+        val GRID_SIZE = Vec2d(88, 56)
+        val STACK_OFFSET = Array(3) { row ->
+            Array(3) { column ->
+                Vec2d(2 + 18 * column, 2 + 18 * row)
+            }
+        }
+        val STACK_SIZE = Vec2d(16, 16)
+        val RESULT_OFFSET = Vec2d(68, 20)
+    }
+
+    override val id: String = "recipe"
+
     override val size = Vec2d(70, 44)
 
+    override fun toGuiComponent(parent: BookPage.Gui): GuiPageComponent = Gui(parent)
 
-    override fun toGuiComponent(parent: Page.Gui): GuiPageComponent = Gui(parent)
-
-    private inner class Gui(parent: Page.Gui) : PageComponent.Gui(parent) {
+    private inner class Gui(parent: BookPage.Gui) : PageComponent.Gui(parent) {
         val slots = recipe.map { it.map { it.shuffled() } }
 
         override fun draw(mouse: Vec2d, time: Double) {

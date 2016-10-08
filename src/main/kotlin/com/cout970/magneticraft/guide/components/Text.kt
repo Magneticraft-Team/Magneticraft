@@ -4,22 +4,27 @@ import coffee.cypher.mcextlib.extensions.strings.i18n
 import com.cout970.magneticraft.gui.client.guide.FONT_HEIGHT
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
+import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.guide.GUIDE_LANG
+import com.cout970.magneticraft.guide.JsonIgnore
 import com.cout970.magneticraft.guide.LinkInfo
-import com.cout970.magneticraft.guide.Page
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.resources.I18n
 
 class Text(
-    position: Vec2d,
-    override val size: Vec2d,
-    text: String
+        position: Vec2d,
+        override val size: Vec2d,
+        val text: String
 ) : PageComponent(position) {
-    val words = parseText(text)
 
-    override fun toGuiComponent(parent: Page.Gui): GuiPageComponent = TextComponentGui(parent)
+    override val id: String = "text"
 
-    private inner class TextComponentGui(parent: Page.Gui) : Gui(parent) {
+    @JsonIgnore
+    var words: List<Pair<String, LinkInfo?>>? = parseText(text)
+
+    override fun toGuiComponent(parent: BookPage.Gui): GuiPageComponent = TextComponentGui(parent)
+
+    private inner class TextComponentGui(parent: BookPage.Gui) : Gui(parent) {
         lateinit var boxes: List<TextBox>
 
         override fun initGui() {
@@ -30,24 +35,28 @@ class Text(
 
         fun placeBoxes() {
             var x = 0
-            var y = 0;
+            var y = 0
             val boxList = mutableListOf<TextBox>()
 
             val space = parent.gui.getCharWidth(' ')
 
-            for ((word, link) in words) {
+            if(words == null){
+                words = parseText(text)
+            }
+
+            for ((word, link) in words!!) {
                 val width = parent.gui.getStringWidth(word)
                 if (width > size.x) {
-                    throw IllegalStateException(
-                        "Word $word is larger than text box. Increase text box width or change the word."
-                    )
+//                    throw IllegalStateException(
+//                            "Word $word is larger than text box. Increase text box width or change the word."
+//                    )
                 }
 
                 if (x + width > size.x) {
                     x = 0
                     y += FONT_HEIGHT + 1
                     if (y > size.y) {
-                        throw IllegalStateException("Text is larger than the text box.")
+//                        throw IllegalStateException("Text is larger than the text box.")
                     }
                 } else {
                     if (boxList.isNotEmpty() && boxList.last().link == link) {
@@ -89,11 +98,11 @@ class Text(
     }
 
     private class TextBox(
-        val parent: Gui,
-        val position: Vec2d,
-        val text: String,
-        val space: Boolean,
-        val link: LinkInfo? = null
+            val parent: Gui,
+            val position: Vec2d,
+            val text: String,
+            val space: Boolean,
+            val link: LinkInfo? = null
     ) {
         val page = parent.parent
         val size = Vec2d(page.gui.getStringWidth(text), FONT_HEIGHT)
@@ -122,8 +131,8 @@ class Text(
             }
 
             page.gui.drawString(
-                pos = drawPos,
-                text = prefix + text + spaceFormat
+                    pos = drawPos,
+                    text = prefix + text + spaceFormat
             )
         }
 

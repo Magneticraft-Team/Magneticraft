@@ -1,16 +1,23 @@
 package com.cout970.magneticraft.guide.components
 
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
-import com.cout970.magneticraft.guide.Page
+import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.util.vector.Vec2d
 
 abstract class PageComponent(val position: Vec2d) {
 
+    //name of the component
+    abstract val id: String
+    //size of the component
     abstract val size: Vec2d
 
-    abstract fun toGuiComponent(parent: Page.Gui): GuiPageComponent
+    abstract fun toGuiComponent(parent: BookPage.Gui): GuiPageComponent
 
-    protected abstract inner class Gui(val parent: Page.Gui) : GuiPageComponent {
+    override fun toString(): String{
+        return "PageComponent(id='$id', position=$position, size=$size)"
+    }
+
+    protected abstract inner class Gui(val parent: BookPage.Gui) : GuiPageComponent {
 
         override val size = this@PageComponent.size
         override val position = this@PageComponent.position
@@ -28,4 +35,6 @@ abstract class PageComponent(val position: Vec2d) {
 
         override fun postDraw(mouse: Vec2d, time: Double) = Unit
     }
+
+
 }

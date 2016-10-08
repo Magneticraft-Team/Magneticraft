@@ -1,0 +1,37 @@
+{
+  "entries": [
+    {
+      "name": "magneticraft.guide.contents",
+      "pages": [
+        {
+          "components": [
+            {
+              "id": "image",
+              "size": [
+                142.5,
+                95.0
+              ],
+              "location": "magneticraft:textures/gui/guide/logo.png",
+              "position": [
+                -17.25,
+                13.0
+              ]
+            }
+          ]
+        },
+        {
+          "components": []
+        },
+        {
+          "components": []
+        },
+        {
+          "components": []
+        },
+        {
+          "components": []
+        }
+      ]
+    }
+  ]
+}

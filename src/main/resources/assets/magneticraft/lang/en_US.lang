@@ -51,7 +51,7 @@ item.magneticraft.battery_item.name=Battery
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
 magneticraft.guide.getting.started=Getting Started
-magneticraft.guide.link.text=%s, page %s
+magneticraft.guide.link.text=%s, index %s
 
 tile.magneticraft.ore_block_copper.name=Chalcopyrite Ore
 tile.magneticraft.ore_block_lead.name=Galena Ore

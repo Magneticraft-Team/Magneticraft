@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.guide.builders
 
-import com.cout970.magneticraft.guide.Page
+import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.guide.components.PageComponent
 
 /**
@@ -13,5 +13,5 @@ class PageBuilder {
         components += this
     }
 
-    fun build() = Page(components)
+    fun build() = BookPage(components)
 }
