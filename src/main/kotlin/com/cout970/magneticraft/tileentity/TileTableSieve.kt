@@ -9,6 +9,7 @@ import com.cout970.magneticraft.util.shouldTick
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.items.ItemStackHandler
@@ -66,7 +67,7 @@ class TileTableSieve : TileBase(), ITickable {
         val state = worldObj.getBlockState(pos.down())
         val tile = worldObj.getTileEntity(pos.down())
         if (tile != null) {
-            val inventory = ITEM_HANDLER!!.fromTile(tile)
+            val inventory = ITEM_HANDLER!!.fromTile(tile, EnumFacing.UP)
             if (inventory != null) {
                 val iterator = output.iterator()
                 while (iterator.hasNext()) {
@@ -104,18 +105,15 @@ class TileTableSieve : TileBase(), ITickable {
 
     fun suckItems() {
         val aabb = AxisAlignedBB(pos, pos.up().add(1.0, 1.0, 1.0))
-        val items = worldObj.getEntitiesInAABBexcluding(null, aabb, { it is EntityItem })
+        val items = worldObj.getEntitiesWithinAABB(EntityItem::class.java, aabb)
         for (i in items) {
-            if (i !is EntityItem) continue
             val item = i.entityItem
             if (getRecipe(item) == null) continue
-            val inserted = inventory.insertItem(0, item, true)
-            if (inserted == null) {
-                inventory.insertItem(0, item.copy(), false)
+            val inserted = inventory.insertItem(0, item, false)
+            if (inserted != null) {
+                i.setEntityItemStack(inserted)
+            } else {
                 i.setDead()
-            } else if (inserted.stackSize != item.stackSize) {
-                inventory.insertItem(0, item.copy(), false)
-                item.stackSize = inserted.stackSize
             }
         }
     }

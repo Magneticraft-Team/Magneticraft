@@ -14,6 +14,7 @@ import net.minecraft.world.World
 
 abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos: BlockPos) : Container() {
 
+    //the TileEntity that has the gui, can be null
     val tileEntity = world.getTileEntity(pos)
 
     override fun canInteractWith(playerIn: EntityPlayer?): Boolean = true
@@ -45,10 +46,12 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
         }
     }
 
-    //to avoid crashed with shift click
+    //this makes sure that the subclass handles shift click to avoid crashes
     abstract override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack?
 
+    //Called every tick to get the changes in the server that need to be sent to the client
     abstract fun sendDataToClient(): IBD?
 
+    //called when server data is received
     abstract fun receiveDataFromServer(ibd: IBD)
 }

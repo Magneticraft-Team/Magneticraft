@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.network.MessageTileUpdate
+import com.cout970.magneticraft.util.isServer
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.item.EntityItem
@@ -15,6 +16,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.relauncher.Side
 
+/**
+ * Base class for all the TileEntities in the mod
+ */
 abstract class TileBase : TileEntity() {
 
     private var blockState: IBlockState? = null
@@ -33,11 +37,17 @@ abstract class TileBase : TileEntity() {
         blockState = null
     }
 
-    open fun onBreak() {
-    }
+    /**
+     * Called when the block is mined
+     * This is called in the server and the client
+     */
+    open fun onBreak() = Unit
 
+    /**
+     * Drop an item into the world, used to drop the inventory content when a block is mined
+     */
     fun dropItem(last: ItemStack, pos: BlockPos) {
-        if (!world.isRemote) {
+        if (world.isServer) {
             val f = 0.05f
             val d0 = (world.rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
             val d1 = (world.rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
@@ -60,11 +70,14 @@ abstract class TileBase : TileEntity() {
         return super.writeToNBT(compound)
     }
 
+    //The vanilla values is 64 * 64
     override fun getMaxRenderDistanceSquared(): Double = 128.0 * 128.0
 
     abstract fun save(): NBTTagCompound
     abstract fun load(nbt: NBTTagCompound)
 
+    //Sends to the client the nbt of the server TileEntity
+    //NOTE: never send a packet every tick, instead use shouldTick(20) to send a packet only every second
     fun sendUpdateToNearPlayers() {
         if (world.isRemote) return
         val packet = updatePacket
@@ -88,8 +101,7 @@ abstract class TileBase : TileEntity() {
      * Receives data sent using [sendSyncData]
      * @param side the side that sent the message
      */
-    open fun receiveSyncData(data: IBD, side: Side) {
-    }
+    open fun receiveSyncData(data: IBD, side: Side) = Unit
 
     /**
      * Sends data to 'side' to be handled in [receiveSyncData]

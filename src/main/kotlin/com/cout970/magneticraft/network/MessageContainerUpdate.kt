@@ -13,9 +13,13 @@ import net.minecraftforge.fml.relauncher.Side
  * Created by cout970 on 10/07/2016.
  */
 
-//Server -> Client
+/**
+ * Server -> Client
+ * This message is used to send data from a container in the server to the GUI in the client
+ */
 class MessageContainerUpdate() : IMessage {
 
+    //Data buffer
     var ibd: IBD? = null
 
     constructor(ibd: IBD?) : this() {

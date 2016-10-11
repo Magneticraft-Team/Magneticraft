@@ -27,7 +27,9 @@ import net.minecraftforge.oredict.ShapedOreRecipe
  * Created by cout970 on 11/06/2016.
  */
 
-//TODO Recipe Builder
+/**
+ * Called by CommonProxy to register all the recipes in the mod
+ */
 fun registerRecipes() {
     //@formatter:off
 

@@ -1,12 +1,15 @@
 package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.util.MODID
+import com.cout970.magneticraft.util.MOD_ID
 import com.cout970.magneticraft.util.resource
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
+/**
+ * This is the base class for all the items in the mod
+ */
 abstract class ItemBase(
     registryName: String,
     unlocalizedName: String = registryName
@@ -19,7 +22,7 @@ abstract class ItemBase(
 
     init {
         this.registryName = resource(registryName)
-        this.unlocalizedName = "$MODID.$unlocalizedName"
+        this.unlocalizedName = "$MOD_ID.$unlocalizedName"
 
         creativeTab = CreativeTabMg
     }

@@ -1,21 +1,19 @@
 package com.cout970.magneticraft.gui.client.guide
 
 import com.cout970.magneticraft.gui.client.GuiCommon
-import com.cout970.magneticraft.guide.Entry
-import com.cout970.magneticraft.guide.Page.Gui
-import com.cout970.magneticraft.guide.contentTable
+import com.cout970.magneticraft.guide.BookEntry
+import com.cout970.magneticraft.guide.BookPage.Gui
+import com.cout970.magneticraft.guide.book
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
 val BOOK = resource("textures/gui/guide/book.png")
-val PAGE_SIZE = Vec2d(108, 141)
-val PAGE_CENTER = PAGE_SIZE.center()
 val ARROW_SIZE = Vec2d(18, 26)
 val FONT_HEIGHT = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT
 
-class GuiGuideBook(target: Pair<Entry, Int> = contentTable to 0) : GuiCommon() {
+class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : GuiCommon() {
     val entry = target.first
     val pageNum = target.second
     val hasNextPair = entry.hasNextPair(pageNum)

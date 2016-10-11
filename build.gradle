@@ -35,7 +35,7 @@ targetCompatibility = "1.8"
 
 minecraft {
     //version = "1.9.4-12.17.0.1968-1.9.4"
-	version = "1.9.4-12.17.0.1968"
+    version = "1.9.4-12.17.0.1968"
     runDir = "run"
     useDepAts = true
 
@@ -100,9 +100,9 @@ repositories {
 dependencies {
     shade files("./lib/MC-ExtLib-$extlib_version-dev.jar")
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-	deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
-	shade files("./lib/ModelLibrary-${model_lib_version}.jar")
-	compile "net.darkhax.tesla:Tesla:${tesla_version}"
+    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
+    shade files("./lib/ModelLibrary-${model_lib_version}.jar")
+    compile "net.darkhax.tesla:Tesla:${tesla_version}"
 }
 
 //shadow

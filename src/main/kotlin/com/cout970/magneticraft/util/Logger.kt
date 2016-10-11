@@ -7,11 +7,11 @@ import com.cout970.magneticraft.Magneticraft
  */
 
 fun error(str: String, vararg args: Any) {
-    Magneticraft.log.error("[$MODID]$str", *args)
+    Magneticraft.log.error("[$MOD_ID]$str", *args)
 }
 
 fun info(str: String, vararg args: Any) {
-    Magneticraft.log.info("[$MODID]$str", *args)
+    Magneticraft.log.info("[$MOD_ID]$str", *args)
 }
 
 fun debug(vararg obj: Any?) {
@@ -24,5 +24,5 @@ fun debug(vararg obj: Any?) {
             s.append(", ")
         }
     }
-    Magneticraft.log.info("[$MODID][DEBUG]${s.toString()}")
+    Magneticraft.log.info("[$MOD_ID][DEBUG]${s.toString()}")
 }

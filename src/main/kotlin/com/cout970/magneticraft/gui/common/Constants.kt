@@ -1,9 +1,6 @@
 package com.cout970.magneticraft.gui.common
 
 /**
- * Created by cout970 on 24/08/2016.
- */
-/**
  * Created by cout970 on 08/07/2016.
  */
 

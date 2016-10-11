@@ -18,6 +18,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.common.network.IGuiHandler
 
+/**
+ * This class handles which GUI should be opened when a block or item calls player.openGui(...)
+ */
 object GuiHandler : IGuiHandler {
 
     override fun getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
@@ -31,7 +34,6 @@ object GuiHandler : IGuiHandler {
             else -> null
         }
     }
-
 
     override fun getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
         val tile = world.getTileEntity(BlockPos(x, y, z))

@@ -1,21 +1,21 @@
 package com.cout970.magneticraft.guide
 
-import com.cout970.magneticraft.guide.Entry
+import com.cout970.magneticraft.guide.BookEntry
 import java.util.*
 
 object EntryRegistry {
 
-    var entries = mapOf<String, Entry>()
+    var entries = mapOf<String, BookEntry>()
         private set
 
     var mainEntries = emptyList<String>()
         private set
 
-    fun registerEntries(entryList: List<Entry>) {
-        entries += entryList.associateBy(Entry::name)
+    fun registerEntries(entryList: List<BookEntry>) {
+        entries += entryList.associateBy(BookEntry::name)
     }
 
-    fun registerMainEntry(entry: Entry) {
+    fun registerMainEntry(entry: BookEntry) {
         registerEntries(listOf(entry))
         mainEntries += entry.name
     }
