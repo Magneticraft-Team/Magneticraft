@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.block.*
@@ -63,6 +64,14 @@ fun registerRecipes() {
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 3), ItemStack(ItemLightPlate, 1, 3), 50f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 4), ItemStack(ItemLightPlate, 1, 4), 120f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
+
+    //GRINDER RECIPES
+    addGrinderRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0), 5f)
+    addGrinderRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1), 50f)
+    addGrinderRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2), 100f)
+    addGrinderRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3), 50f)
+    addGrinderRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4), 120f)
+    addGrinderRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5), 150f)
 
     //CRAFTING RECIPES
 
@@ -153,6 +162,10 @@ private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: I
 
 private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
     HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
+}
+
+private fun addGrinderRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
+    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output, ticks, true))
 }
 
 //function to get the first ore dictionary entry for the block if exist, or the block if not exist

@@ -46,6 +46,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
     var hydraulicPressConsumption = 40.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
+    var grinderConsumption = 40.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
     var solarPanelMaxProduction = 10.0
 

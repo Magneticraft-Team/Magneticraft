@@ -3,6 +3,7 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
 import com.cout970.magneticraft.block.itemblock.*
+import com.cout970.magneticraft.block.multiblock.BlockGrinder
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -27,6 +28,7 @@ val blocks = mapOf(
         pair(BlockAirLock),
         pair(BlockAirBubble),
         pair(BlockHydraulicPress),
+        pair(BlockGrinder),
         pair(BlockStripedMachineBlock),
         pair(BlockMachineBlockSupportColumn),
         pair(BlockMachineBlock),
