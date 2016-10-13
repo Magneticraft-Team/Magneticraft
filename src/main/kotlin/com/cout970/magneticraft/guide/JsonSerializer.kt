@@ -24,24 +24,10 @@ object JsonSerializer {
             .registerTypeAdapter(PageComponent::class.java, PageComponentSerializer)
             .registerTypeAdapter(ItemStack::class.java, ItemStackSerializer).create()!!
 
-    val BOOK_LOCATION = resource("guide/book.json")
+    val DEFAULT_BOOK_LOCATION = resource("guide/manual.json")
 
-    fun test() {
-//        write(File("test.json"), Book(listOf(
-//                BookEntry("Title1", listOf(
-//                        BookPage(listOf(
-//                                Image(Vec2d(0, 0), Vec2d(16, 16), resource("imageLocation")),
-//                                Link(LinkInfo("entryLinkName", 0), Text(Vec2d(0, 0), Vec2d(16, 16), "Link")),
-//                                StackIcon(Vec2d(0, 0), ItemStack(Items.APPLE)),
-//                                Text(Vec2d(0, 0), Vec2d(64, 64), "sampleText")
-//                        ))
-//                ))
-//        )))
-        write(File("test.json"), createBook())
-    }
-
-    fun read(): Book {
-        val reader = BOOK_LOCATION.getResource().inputStream.reader()
+    fun read(resource: ResourceLocation = DEFAULT_BOOK_LOCATION): Book {
+        val reader = resource.getResource().inputStream.reader()
         return GSON.fromJson(reader, Book::class.java)
     }
 
