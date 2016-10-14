@@ -12,8 +12,4 @@ install:
   
 #discord notifier
 notifications:
-  webhooks:
-    urls:
-      - http://2501.cypher.coffee:10000/travishook
-    on_success: never
-    on_failure: always
+  webhooks: http://2501.cypher.coffee:10000/travishook
