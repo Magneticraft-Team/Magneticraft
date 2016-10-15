@@ -35,7 +35,8 @@ val blocks = mapOf(
         withItemBlock(BlockCompactedLead),
         withItemBlock(BlockCompactedTungsten),
         withItemBlock(BlockSolarPanel),
-        withItemBlock(BlockElectricalMachineBlock)
+        withItemBlock(BlockElectricalMachineBlock),
+        withItemBlock(BlockCoke)
 )
 
 private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
