@@ -23,8 +23,6 @@ class ContainerIncendiaryGenerator(player: EntityPlayer, world: World, blockPos:
         bindPlayerInventory(player.inventory)
     }
 
-    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
-
     override fun sendDataToClient(): IBD? {
         tile!!
         val data = IBD()
