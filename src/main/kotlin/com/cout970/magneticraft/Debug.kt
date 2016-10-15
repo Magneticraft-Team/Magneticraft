@@ -18,7 +18,6 @@ import java.io.FileWriter
 object Debug {
     val DEBUG = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
     var srcDir: File? = null
-failRightHere!!@@ASDAS$GFVSDCFXXZ
 
     fun preInit(event: FMLPreInitializationEvent) {
         srcDir = searchSourceDir(event.modConfigurationDirectory)
