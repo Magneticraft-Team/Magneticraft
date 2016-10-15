@@ -66,9 +66,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
             return if (slot.inventory is InventoryPlayer) {
                 tryToMerge(playerIn, slot, false)
-                // Insert first non player slot
             } else {
-                // Insert player slot
                 tryToMerge(playerIn, slot, true)
             }
 
