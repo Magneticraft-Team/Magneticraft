@@ -22,6 +22,7 @@ abstract class CommonProxy {
         //Common preInit stuff
         registerBlocks()
         registerItems()
+        registerFuelHandler()
         registerTileEntities()
         registerOreDictionaryEntries()
         registerCapabilities()

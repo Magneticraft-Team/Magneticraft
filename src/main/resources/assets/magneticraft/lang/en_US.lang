@@ -47,6 +47,7 @@ item.magneticraft.hand_sieve.name=Hand Sieve
 item.magneticraft.coil_of_wire.name=Coil of Wire
 item.magneticraft.voltmeter.name=Voltmeter
 item.magneticraft.battery_item.name=Battery
+item.magneticraft.coal_coke.name=Coal Coke
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics
@@ -87,6 +88,7 @@ tile.magneticraft.machine_block_support_column.name=Support Column
 tile.magneticraft.striped_machine_block.name=Striped Machine Block
 tile.magneticraft.solar_panel.name=Solar Panel
 tile.magneticraft.electrical_machine_block.name=Electrical Machine Block
+tile.magneticraft.block_coal_coke.name=Block of Coal Coke
 
 itemGroup.magneticraft=Magneticraft
 
