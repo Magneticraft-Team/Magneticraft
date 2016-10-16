@@ -2,11 +2,11 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.BlockCoke
 import com.cout970.magneticraft.fuel.FuelHandler
-import com.cout970.magneticraft.fuel.FuelProvider
+import com.cout970.magneticraft.fuel.IFuel
 import com.cout970.magneticraft.item.ItemCoke
 import net.minecraftforge.fml.common.registry.GameRegistry
 
-val fuels = listOf<FuelProvider<*>>(
+val fuels = listOf<IFuel<*>>(
         ItemCoke,
         BlockCoke
 )
