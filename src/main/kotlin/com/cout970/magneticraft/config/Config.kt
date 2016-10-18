@@ -7,6 +7,7 @@ package com.cout970.magneticraft.config
 const val CATEGORY_GENERAL = "general"
 const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
+const val CATEGORY_FUEL = CATEGORY_GENERAL + ".fuel"
 
 object Config {
 
@@ -61,4 +62,6 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Item charge and discharge speed in Joules/tick (Watts)")
     var blockBatteryTransferRate: Int = 500
 
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Coke burn time.")
+    var cokeBurnTime: Int = 3200
 }

@@ -9,7 +9,7 @@ import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
-val BOOK = resource("textures/gui/guide/book.png")
+val BOOK_TEX = resource("textures/gui/guide/book.png")
 val ARROW_SIZE = Vec2d(18, 26)
 val FONT_HEIGHT = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT
 
@@ -62,7 +62,7 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
         val mouse = Vec2d(mouseX, mouseY)
         val mouseRelative = mouse - start
         if (mouseButton != 0) {
-            return;
+            return
         }
 
         if (hasPrevPair && Page.LEFT.isInsideArrow(mouseRelative)) {
@@ -88,7 +88,7 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
 
     fun drawBook() {
         GlStateManager.pushMatrix()
-        mc.textureManager.bindTexture(BOOK)
+        mc.textureManager.bindTexture(BOOK_TEX)
         GlStateManager.color(1f, 1f, 1f, 1f)
         drawModalRectWithCustomSizedTexture(start.xi, start.yi, 0f, 0f, size.xi, size.yi, 512f, 512f)
         GlStateManager.popMatrix()
@@ -131,7 +131,7 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
             val arrowStart = parent.start + arrowPos
 
             GlStateManager.pushMatrix()
-            parent.mc.textureManager.bindTexture(BOOK)
+            parent.mc.textureManager.bindTexture(BOOK_TEX)
             GlStateManager.color(1f, 1f, 1f, 1f)
 
             if (mouse.isInsideArrow()) {

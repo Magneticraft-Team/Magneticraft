@@ -26,8 +26,6 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos) :
         bindPlayerInventory(player.inventory)
     }
 
-    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
-
     override fun sendDataToClient(): IBD? {
         val data = IBD()
         tile!!

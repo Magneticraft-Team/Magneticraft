@@ -9,3 +9,6 @@ jdk:
   - oraclejdk8
 install:
   - ./gradlew setupCiWorkspace
+#discord notifier
+notifications:
+  webhooks: http://requestb.in/1egai0x1

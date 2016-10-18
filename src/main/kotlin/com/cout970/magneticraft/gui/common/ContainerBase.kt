@@ -2,6 +2,8 @@ package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.network.MessageContainerUpdate
+import com.cout970.magneticraft.util.getNonPlayerSlotRanges
+import com.cout970.magneticraft.util.getPlayerSlotRanges
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
@@ -46,8 +48,62 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
         }
     }
 
-    //this makes sure that the subclass handles shift click to avoid crashes
-    abstract override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack?
+    /**
+     * Try to merge the [stack] in any slot range specified in [ranges].
+     */
+    protected fun mergeItemStack(stack: ItemStack, ranges: List<IntRange>, reverseDirection: Boolean): Boolean {
+        ranges.forEach {
+            if (this.mergeItemStack(stack, it.start, it.endInclusive, reverseDirection))
+                return true
+        }
+
+        return false
+    }
+
+    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? {
+        if (index < this.inventorySlots.size) {
+            val slot = this.inventorySlots[index]
+
+            return if (slot.inventory is InventoryPlayer) {
+                tryToMerge(playerIn, slot, false)
+            } else {
+                tryToMerge(playerIn, slot, true)
+            }
+
+        }
+
+        return null
+    }
+
+    private fun tryToMerge(playerIn: EntityPlayer?, slot: Slot, playerSlot: Boolean): ItemStack? {
+
+        val stack = slot.stack
+
+        if (!slot.hasStack || stack == null || playerIn == null)
+            return null
+
+        val copy = stack.copy()
+
+        val slotRanges = (if (playerSlot) this.getPlayerSlotRanges(playerIn) else this.getNonPlayerSlotRanges())
+
+        slotRanges.let {
+            if (!this.mergeItemStack(stack, slotRanges, playerSlot))
+                return null
+
+            if (stack.stackSize == 0) {
+                slot.putStack(null)
+            } else {
+                slot.onSlotChanged()
+            }
+
+        }
+
+        // Avoid crash, Minecraft call the method 'transferSlot' recursively if 'returnedStack == inputStack'
+        if (copy.item == stack.item)
+            return null
+
+        return copy
+    }
 
     //Called every tick to get the changes in the server that need to be sent to the client
     abstract fun sendDataToClient(): IBD?
