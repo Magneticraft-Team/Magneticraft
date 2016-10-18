@@ -29,7 +29,7 @@ object TileRendererTableSieve : TileEntityRenderer<TileTableSieve>() {
 
             val h = 0.0625 * 7.50 + 0.0625 * 1.5 * process
             bindTexture(texture)
-            renderQuad(h);
+            renderQuad(h)
 
             popMatrix()
         }

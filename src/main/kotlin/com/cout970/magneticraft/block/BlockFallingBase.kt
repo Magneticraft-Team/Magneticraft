@@ -13,17 +13,13 @@ import java.util.*
  * Created by Yurgen on 18/10/2016.
  */
 
-open class BlockFallingBase : BlockBase {
-
-    constructor(registryName: String,
-                unlocalizedName: String = registryName) : super(Material.SAND, registryName,
-            unlocalizedName) {
-    }
-
-    constructor(materialIn: Material, registryName: String,
-                unlocalizedName: String = registryName) : super(materialIn, registryName,
-            unlocalizedName) {
-    }
+open class BlockFallingBase(
+        registryName: String,
+        unlocalizedName: String = registryName) :
+        BlockBase(
+                Material.SAND,
+                registryName,
+                unlocalizedName) {
 
     /**
      * Called after the block is set in the Chunk data, but before the Tile Entity is set

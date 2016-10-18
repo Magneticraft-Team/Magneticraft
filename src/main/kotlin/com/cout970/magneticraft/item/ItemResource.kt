@@ -12,5 +12,5 @@ object ItemResource : ItemBase("resource") {
     )
 
     override fun getUnlocalizedName(stack: ItemStack?): String =
-            "${unlocalizedName}_${ItemCrushedOre.variants[stack?.metadata]?.removePrefix("resource=")}"
+            "${unlocalizedName}_${ItemResource.variants[stack?.metadata]?.removePrefix("resource=")}"
 }

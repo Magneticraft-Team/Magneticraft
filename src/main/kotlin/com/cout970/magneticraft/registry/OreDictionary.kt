@@ -15,8 +15,8 @@ import net.minecraftforge.oredict.OreDictionary
  */
 fun registerOreDictionaryEntries() {
 
-    OreDictionary.registerOre("gemLapis", ItemStack(ItemCrushedMisc, 1, 1))
-    OreDictionary.registerOre("gemLapis", ItemStack(ItemPebblesMisc, 1, 1))
+    OreDictionary.registerOre("gemLapis", ItemStack(ItemCrushedLapis))
+    OreDictionary.registerOre("gemLapis", ItemStack(ItemPebblesLapis))
     OreDictionary.registerOre("plankWood", ItemStack(BlockFiberboard))
 
     for ((key, value) in BlockOre.inventoryVariants) {
