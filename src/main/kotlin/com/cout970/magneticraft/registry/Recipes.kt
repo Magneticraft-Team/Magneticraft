@@ -51,6 +51,21 @@ fun registerRecipes() {
     addCrushingTableRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(ItemLightPlate, 1, 4))
     addCrushingTableRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(ItemLightPlate, 1, 5))
 
+    //UTILITY CRUSHING TABLE RECIPES - ITEMS
+    addCrushingTableRecipe(ItemStack(BLAZE_ROD), ItemStack(BLAZE_POWDER, 3))
+    addCrushingTableRecipe(ItemStack(BONE), ItemStack(DYE, 4, 15))
+    addCrushingTableRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemCrushedMisc.stack(size = 4, meta = 1))
+    addCrushingTableRecipe(ItemStack(Blocks.COAL_ORE, 1), ItemCrushedMisc.stack(size = 2, meta = 2))
+
+    //UTILITY CRUSHING TABLE RECIPES - BLOCKS
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 0), ItemStack(Blocks.COBBLESTONE))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 0), ItemStack(Blocks.STONEBRICK, 1, 2))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), ItemStack(Blocks.MOSSY_COBBLESTONE))
+    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE, 1, 0))
+    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE, 1, 0))
+    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE, 1, 0))
+    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), ItemStack(Blocks.END_STONE, 1))
+
     //HYDRAULIC PRESS RECIPES
     addHydraulicPressRecipe(ItemStack(IRON_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 0), 120f)
     addHydraulicPressRecipe(ItemStack(GOLD_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 1), 50f)
@@ -61,12 +76,27 @@ fun registerRecipes() {
 
     addHydraulicPressRecipe(ItemStack(BlockLimestone, 4, 2), ItemStack(BlockBurntLimestone, 4, 2), 50f)
 
+    //UTILITY HYDRAUILIC PRESS RECIPES - BLOCKS
+    addHydraulicPressRecipe(ItemStack(Blocks.STONE, 1, 0), ItemStack(Blocks.COBBLESTONE), 55f)
+    addHydraulicPressRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), ItemStack(Blocks.MOSSY_COBBLESTONE), 55f)
+    addHydraulicPressRecipe(ItemStack(Blocks.STONEBRICK, 1, 0), ItemStack(Blocks.STONEBRICK, 1, 2), 55f)
+    addHydraulicPressRecipe(ItemStack(Blocks.END_BRICKS, 1, 0), ItemStack(Blocks.END_STONE, 1, 2), 100f)
+    addHydraulicPressRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE, 1, 0), 40f)
+    addHydraulicPressRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE, 1, 0), 40f)
+    addHydraulicPressRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE, 1, 0), 50f)
+
+    //UTILITY HYDRAUILIC PRESS RECIPES - ITEMS
+    addHydraulicPressRecipe(ItemStack(Blocks.REEDS, 2), ItemStack(PAPER, 1, 0), 30f)
+    addHydraulicPressRecipe(ItemStack(ItemResource, 2, 0), ItemStack(PAPER, 1, 0), 25f)
+
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 0), ItemStack(ItemLightPlate, 1, 0), 120f)
     addHydraulicPressRecipe(ItemStack(GOLD_NUGGET, 6), ItemStack(ItemLightPlate, 1, 1), 50f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 2), ItemStack(ItemLightPlate, 1, 2), 100f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 3), ItemStack(ItemLightPlate, 1, 3), 50f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 4), ItemStack(ItemLightPlate, 1, 4), 120f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
+
+    addHydraulicPressRecipe(ItemStack(BlockWoodChip), ItemStack(BlockFiberboard, 4), 50f)
 
     //GRINDER RECIPES
     addGrinderRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0), 5f)
@@ -75,6 +105,11 @@ fun registerRecipes() {
     addGrinderRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3), 50f)
     addGrinderRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4), 120f)
     addGrinderRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5), 150f)
+
+    addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), 50f)
+    addGrinderRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemCrushedMisc.stack(size = 4, meta = 1), 50f)
+    addGrinderRecipe(ItemStack(Blocks.COAL_ORE, 1), ItemCrushedMisc.stack(size = 2, meta = 1), 50f)
+    addGrinderRecipe(ItemStack((Blocks.LOG)), ItemCrushedMisc.stack(size = 16, meta = 0), 45f)
 
     //CRAFTING RECIPES
 
@@ -89,7 +124,9 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockCompactedLead), "iii", "iii", "iii", 'i', ItemStack(ItemIngot, 1, 3))
     addRecipe(ItemStack(BlockCompactedCobalt), "iii", "iii", "iii", 'i', ItemStack(ItemIngot, 1, 4))
     addRecipe(ItemStack(BlockCompactedTungsten), "iii", "iii", "iii", 'i', ItemStack(ItemIngot, 1, 5))
+    addRecipe(ItemStack(BlockWoodChip), "iii", "iii", "iii", 'i', ItemStack(ItemCrushedMisc, 1, 0))
     //other
+    addRecipe(ItemStack(ItemResource, 8, 0), "III", "IXI", "III", 'I', ItemStack(ItemCrushedMisc, 8, 0), 'X', "listAllWater")
     addRecipe(ItemStack(ItemIronHammer), true, "XX#", "XZX", "#Z#", 'X', of(IRON_INGOT), 'Z', of(STICK))
     addRecipe(ItemStack(ItemStoneHammer), true, "XX#", "XZX", "#Z#", 'X', of(COBBLESTONE), 'Z', of(STICK))
     addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
@@ -126,7 +163,7 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(ItemIngot, 1, 3), ItemStack(BlockOre, 1, 1))
     addSmeltingRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(BlockOre, 1, 2))
     addSmeltingRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(BlockOre, 1, 3))
-    //pebles
+    //pebbles
     addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 0))
     addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 1))
     addSmeltingRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(ItemPebbles, 1, 2))
@@ -140,11 +177,16 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(ItemIngot, 1, 3), ItemStack(ItemCrushedOre, 1, 3))
     addSmeltingRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(ItemCrushedOre, 1, 4))
     addSmeltingRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(ItemCrushedOre, 1, 5))
+    //charcoal
+    addSmeltingRecipe(ItemStack(BlockWoodChip, 1), ItemStack(Items.COAL, 1, 1))
 
     //TABLE SIEVE RECIPES
     for (i in ItemPebbles.variants.keys) {
         addTableSieveRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f)
     }
+    addTableSieveRecipe(ItemStack(ItemCrushedMisc, 1, 1), ItemStack(ItemPebblesMisc, 1, 1), ItemStack(DYE, 1, 4), 0.1f)
+    addTableSieveRecipe(ItemStack(ItemCrushedMisc, 1, 2), ItemStack(ItemPebblesMisc, 1, 2), ItemStack(DIAMOND), 0.001f)
+    addTableSieveRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Items.FLINT), 0.15f)
 
     //@formatter:on
 }

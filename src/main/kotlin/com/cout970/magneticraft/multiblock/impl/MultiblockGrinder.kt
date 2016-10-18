@@ -5,6 +5,7 @@ import coffee.cypher.mcextlib.extensions.vectors.times
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.block.PROPERTY_REDSTONE
 import com.cout970.magneticraft.block.decoration.BlockElectricalMachineBlock
 import com.cout970.magneticraft.block.decoration.BlockMachineBlock
 import com.cout970.magneticraft.block.decoration.BlockMachineBlockSupportColumn
@@ -68,11 +69,13 @@ object MultiblockGrinder : Multiblock() {
                         .withProperty(PROPERTY_ACTIVE, true)
                         .withProperty(PROPERTY_CENTER, true)
                         .withProperty(PROPERTY_DIRECTION, context.facing)
+                        .withProperty(PROPERTY_REDSTONE, false)
             } else {
                 BlockGrinder.defaultState
                         .withProperty(PROPERTY_ACTIVE, false)
                         .withProperty(PROPERTY_CENTER, true)
                         .withProperty(PROPERTY_DIRECTION, context.facing)
+                        .withProperty(PROPERTY_REDSTONE, false)
             }
         }
 

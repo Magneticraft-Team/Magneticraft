@@ -26,6 +26,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
+    @ConfigValue(category = CATEGORY_GENERAL, comment = "Set players on fire when processing blaze rods in the crushing table")
+    var crushingTableCausesFire = true
+
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
     var heatUnitCelsius = true
 
@@ -64,4 +67,16 @@ object Config {
 
     @ConfigValue(category = CATEGORY_FUEL, comment = "Coke burn time.")
     var cokeBurnTime: Int = 3200
+
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Crushed coal burn time.")
+    var crushedCoalBurnTime: Int = 1700
+
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Coal pebbles burn time.")
+    var coalPebbleBurnTime: Int = 1800
+
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Coal pebbles burn time.")
+    var woodChipBurnTime: Int = 40
+
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Coal pebbles burn time.")
+    var fiberboardBurnTime: Int = 150
 }

@@ -9,5 +9,5 @@ object BlockCoke : BlockBase(
         material = Material.ROCK,
         registryName = "block_coal_coke"), IFuel<Block> {
 
-    override fun getBurnTime(): Int = ItemCoke.getBurnTime() * 9
+    override fun getBurnTime(): Int = ItemCoke.getBurnTime() * 10
 }

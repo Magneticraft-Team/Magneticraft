@@ -5,8 +5,8 @@ import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
-import com.cout970.magneticraft.registry.sounds
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.registry.sounds
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block

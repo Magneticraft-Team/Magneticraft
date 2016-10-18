@@ -15,6 +15,8 @@ val blocks = mapOf(
         withItemBlock(BlockOre),
         withItemBlock(BlockLimestone),
         withItemBlock(BlockBurntLimestone),
+        withItemBlock(BlockWoodChip),
+        withItemBlock(BlockFiberboard),
         BlockFeedingTrough to ItemBlockFeedingTrough(),
         withItemBlock(BlockElectricConnector),
         BlockElectricPole to ItemBlockElectricPole(),
