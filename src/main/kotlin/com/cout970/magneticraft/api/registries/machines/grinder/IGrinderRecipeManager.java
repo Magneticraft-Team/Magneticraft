@@ -34,10 +34,12 @@ public interface IGrinderRecipeManager {
      * Creates a default recipe
      *
      * @param input   the input item and required stackSize
-     * @param output  the output stack
+     * @param output0  the primary output stack
+     * @param output1  the secondary output stack
+     * @param prob   the fractional chance to obtain secondary output
      * @param ticks   the amount of ticks needed to craft the result
      * @param oreDict if ore dictionary should be used to check the inputs
      * @return the new recipe
      */
-    IGrinderRecipe createRecipe(ItemStack input, ItemStack output, float ticks, boolean oreDict);
+    IGrinderRecipe createRecipe(ItemStack input, ItemStack output0, ItemStack output1, float prob, float ticks, boolean oreDict);
 }

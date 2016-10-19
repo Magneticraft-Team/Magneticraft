@@ -10,14 +10,20 @@ import net.minecraftforge.oredict.OreDictionary
  */
 data class GrinderRecipe(
         private val input: ItemStack,
-        private val output: ItemStack,
+        private val primaryOutput: ItemStack,
+        private val secondaryOutput: ItemStack,
+        private val prob: Float,
         private val ticks: Float,
         private val oreDict: Boolean
 ) : IGrinderRecipe {
 
     override fun getInput(): ItemStack = input.copy()
 
-    override fun getOutput(): ItemStack = output.copy()
+    override fun getPrimaryOutput(): ItemStack = primaryOutput.copy()
+
+    override fun getSecondaryOutput(): ItemStack = secondaryOutput.copy()
+
+    override fun getProbability(): Float = prob
 
     override fun getDuration(): Float = ticks
 

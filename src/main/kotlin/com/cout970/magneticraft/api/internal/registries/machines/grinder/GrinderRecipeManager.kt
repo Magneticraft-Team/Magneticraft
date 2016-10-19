@@ -27,7 +27,7 @@ object GrinderRecipeManager : IGrinderRecipeManager {
         return true
     }
 
-    override fun createRecipe(input: ItemStack, output: ItemStack, ticks: Float, oreDict: Boolean): IGrinderRecipe {
-        return GrinderRecipe(input, output, ticks, oreDict)
+    override fun createRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float, oreDict: Boolean): IGrinderRecipe {
+        return GrinderRecipe(input, output0, output1, prob, ticks, oreDict)
     }
 }

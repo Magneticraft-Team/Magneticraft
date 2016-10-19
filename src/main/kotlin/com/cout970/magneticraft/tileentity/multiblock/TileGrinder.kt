@@ -32,6 +32,7 @@ import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.ItemStackHandler
+import java.util.*
 
 /**
  * Created by cout970 on 19/08/2016.
@@ -67,12 +68,17 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     init {
         craftingProcess = CraftingProcess({//craft
             val recipe = getRecipe()!!
-            var result = recipe.output
+            var result = recipe.primaryOutput
+            var secondary = if (recipe.probability > 0 && Random().nextFloat() <= recipe.probability) recipe.secondaryOutput else null
             for (i in in_inv_size until inventory.slots) {
                 result = inventory.insertItem(i, result, false)
-                if (result == null) {
-                    consume_input()
-                    break
+                if (result != null) continue
+                for (j in in_inv_size until inventory.slots) {
+                    secondary = inventory.insertItem(i, secondary, false)
+                    if (secondary == null) {
+                        consume_input()
+                        break
+                    }
                 }
             }
         }, { //can craft
@@ -233,9 +239,15 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     fun check_output_valid(): Boolean {
         val recipe = getRecipe() ?: return false
         if (inventory[0]!!.stackSize < recipe.input.stackSize) return false
-        var output = recipe.output
+        var output = recipe.primaryOutput
+        var secondary = recipe.secondaryOutput
         for (i in in_inv_size until inventory.slots) {
-            output = inventory.insertItem(i, output, true) ?: return true
+            output = inventory.insertItem(i, output, true)
+            if (output != null) continue
+            for (j in in_inv_size until inventory.slots) {
+                secondary = inventory.insertItem(j, secondary, true) ?:
+                        return true
+            }
         }
         return false
     }

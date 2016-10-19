@@ -22,7 +22,21 @@ public interface IGrinderRecipe {
      *
      * @return The output of the recipe
      */
-    ItemStack getOutput();
+    ItemStack getPrimaryOutput();
+
+    /**
+     * The secondary result of this recipe
+     * WARNING: this should return a COPY of the output not the original instance of the output
+     *
+     * @return The secondary output of the recipe
+     */
+    ItemStack getSecondaryOutput();
+
+
+    /**
+     * Fractional chance to obtain secondary output
+     */
+    float getProbability();
 
     /**
      * The amount of ticks needed to complete the recipe
