@@ -8,6 +8,7 @@ const val CATEGORY_GENERAL = "general"
 const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
 const val CATEGORY_FUEL = CATEGORY_GENERAL + ".fuel"
+const val CATEGORY_HEAT = CATEGORY_GENERAL + ".heat"
 
 object Config {
 
@@ -61,4 +62,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_FUEL, comment = "Coke burn time.")
     var cokeBurnTime: Int = 3200
+
+    @ConfigValue(category = CATEGORY_HEAT, comment = "Firebox Production")
+    var fireboxMaxProduction = 40.0
 }

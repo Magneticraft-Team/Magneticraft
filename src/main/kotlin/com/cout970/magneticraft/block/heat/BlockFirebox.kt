@@ -1,6 +1,10 @@
-package com.cout970.magneticraft.block
+package com.cout970.magneticraft.block.heat
 
+import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.block.BlockMultiState
+import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.tileentity.electric.TileFirebox
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -13,6 +17,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 /**
@@ -30,6 +35,13 @@ object BlockFirebox : BlockMultiState(Material.ROCK, "firebox"), ITileEntityProv
             return true
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
+    }
+
+    override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {
+        super.onNeighborChange(world, pos, neighbor)
+        if (pos == null || world == null) return
+        val tile = world.getTile<TileFirebox>(pos) ?: return
+        tile.heat.refreshConnections()
     }
 
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {

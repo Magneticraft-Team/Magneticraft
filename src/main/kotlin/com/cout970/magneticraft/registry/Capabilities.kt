@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.energy.INodeHandler
 import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
 import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
 import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
+import com.cout970.magneticraft.api.heat.IHeatContainer
 import net.darkhax.tesla.api.ITeslaConsumer
 import net.darkhax.tesla.api.ITeslaHolder
 import net.darkhax.tesla.api.ITeslaProducer
@@ -34,6 +35,9 @@ import net.minecraftforge.items.IItemHandler
 
 @CapabilityInject(IItemHandler::class)
 var ITEM_HANDLER: Capability<IItemHandler>? = null
+
+@CapabilityInject(IItemHandler::class)
+var HEAT_HANDLER: Capability<IHeatContainer>? = null
 
 @CapabilityInject(INodeHandler::class)
 var NODE_HANDLER: Capability<INodeHandler>? = null

@@ -1,0 +1,27 @@
+package com.cout970.magneticraft.block.heat
+
+import coffee.cypher.mcextlib.extensions.worlds.getTile
+import com.cout970.magneticraft.block.BlockBase
+import com.cout970.magneticraft.tileentity.electric.TileInfiniteHeat
+import com.cout970.magneticraft.util.toCelsiusFromFahrenheit
+import net.minecraft.block.ITileEntityProvider
+import net.minecraft.block.material.Material
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
+import net.minecraft.world.World
+
+/**
+ * Created by cout970 on 04/07/2016.
+ */
+object BlockInfiniteHeat : BlockBase(Material.ROCK, "infinite_heat"), ITileEntityProvider {
+
+    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInfiniteHeat(1800.toCelsiusFromFahrenheit())
+
+    override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {
+        super.onNeighborChange(world, pos, neighbor)
+        if (pos == null || world == null) return
+        val tile = world.getTile<TileInfiniteHeat>(pos) ?: return
+        tile.heat.refreshConnections()
+    }
+}

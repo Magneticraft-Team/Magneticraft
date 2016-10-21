@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
+import com.cout970.magneticraft.block.heat.*
 import com.cout970.magneticraft.block.itemblock.*
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
@@ -21,9 +22,15 @@ val blocks = mapOf(
         withItemBlock(BlockElectricFurnace),
         BlockElectricPoleAdapter to ItemBlockElectricPoleAdapter(),
         withItemBlock(BlockBattery),
+        withItemBlock(BlockFirebox),
+        withItemBlock(BlockBrickFurnace),
+        withItemBlock(BlockHeatSink),
+        withItemBlock(BlockHeatReservoir),
         withItemBlock(BlockInfiniteWater),
         withItemBlock(BlockTileLimestone),
         withItemBlock(BlockInfiniteEnergy),
+        withItemBlock(BlockInfiniteHeat),
+        withItemBlock(BlockInfiniteCold),
         withItemBlock(BlockAirLock),
         withItemBlock(BlockAirBubble),
         withItemBlock(BlockHydraulicPress),
