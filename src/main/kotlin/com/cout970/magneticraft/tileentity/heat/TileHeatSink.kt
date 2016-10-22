@@ -23,15 +23,18 @@ class TileHeatSink : TileBase(), ITickable {
 
     override fun update() {
         if (!worldObj.isRemote) {
+            heat.updateHeat()
         }
     }
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setLong("heat", heat.heat)
+        serializeNBT()
     }
 
     override fun load(nbt: NBTTagCompound) {
         heat.heat = nbt.getLong("heat")
+        heat.refreshConnections()
     }
 
     @Suppress("UNCHECKED_CAST")

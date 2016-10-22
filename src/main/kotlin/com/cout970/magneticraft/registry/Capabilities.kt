@@ -36,7 +36,7 @@ import net.minecraftforge.items.IItemHandler
 @CapabilityInject(IItemHandler::class)
 var ITEM_HANDLER: Capability<IItemHandler>? = null
 
-@CapabilityInject(IItemHandler::class)
+@CapabilityInject(IHeatContainer::class)
 var HEAT_HANDLER: Capability<IHeatContainer>? = null
 
 @CapabilityInject(INodeHandler::class)

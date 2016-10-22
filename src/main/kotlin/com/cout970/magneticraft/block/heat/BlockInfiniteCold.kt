@@ -6,6 +6,9 @@ import com.cout970.magneticraft.tileentity.electric.TileInfiniteHeat
 import com.cout970.magneticraft.util.toCelsiusFromFahrenheit
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
@@ -22,6 +25,12 @@ object BlockInfiniteCold : BlockBase(Material.ROCK, "infinite_cold"), ITileEntit
         super.onNeighborChange(world, pos, neighbor)
         if (pos == null || world == null) return
         val tile = world.getTile<TileInfiniteHeat>(pos) ?: return
+        tile.heat.refreshConnections()
+    }
+
+    override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
+        val tile = worldIn?.getTile<TileInfiniteHeat>(pos) ?: return
         tile.heat.refreshConnections()
     }
 }

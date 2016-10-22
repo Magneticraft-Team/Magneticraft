@@ -7,7 +7,9 @@ import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
+import com.cout970.magneticraft.util.DEFAULT_COOKING_TEMPERATURE
 import com.cout970.magneticraft.util.DEFAULT_SMELTING_TEMPERATURE
+import net.minecraft.item.ItemFood
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
@@ -32,14 +34,22 @@ class TileBrickFurnace : TileBase(), ITickable {
 
     override fun update() {
         if (!worldObj.isRemote) {
-            if (heat.temperature >= DEFAULT_SMELTING_TEMPERATURE && canSmelt()) {
+            var smelting_temp = 0.0
+            if (inventory[0]?.item is ItemFood) {
+                smelting_temp = DEFAULT_COOKING_TEMPERATURE
+            } else {
+                smelting_temp = DEFAULT_SMELTING_TEMPERATURE
+            }
+            if (heat.temperature >= smelting_temp && canSmelt()) {
                 val applied = heat.temperature / DEFAULT_SMELTING_TEMPERATURE
+                heat.pullHeat((applied * FUEL_TO_HEAT).toLong(), false)
                 burningTime += (SPEED * applied).toFloat()
                 if (burningTime > MAX_BURNING_TIME) {
                     smelt()
                     burningTime -= MAX_BURNING_TIME
                 }
             }
+            heat.updateHeat()
         }
     }
 
@@ -75,9 +85,11 @@ class TileBrickFurnace : TileBase(), ITickable {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
         burningTime = nbt.getFloat("burningTime")
         heat.heat = nbt.getLong("heat")
+        heat.refreshConnections()
     }
 
     companion object {
+        val FUEL_TO_HEAT = 0.5f
         val MAX_BURNING_TIME = 100f //100 ticks => 5 seconds
         val SPEED = 1.5 // 50% faster than a vanilla furnace at minimum temperature
     }

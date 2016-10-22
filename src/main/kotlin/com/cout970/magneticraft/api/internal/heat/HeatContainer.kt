@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.api.heat.IHeatContainer
+import com.cout970.magneticraft.registry.HEAT_HANDLER
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import com.cout970.magneticraft.util.toKelvinFromMinecraftUnits
@@ -14,14 +16,20 @@ import java.util.*
  */
 open class HeatContainer(
         val tile: TileEntity,
-        private val specificHeat: Double = 1,
+        private val specificHeat: Double = 1.0,
         private val conductivity: Double = 0.05, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Evan small calues cause rapid heat transfer.  Very large values can cause strange directional transfer behavior
-        private val dissipation: Double = 0, //Fraction of temperature difference between current and ambient temperture dissipated per second
+        private val dissipation: Double = 0.0, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Even small values cause rapid heat dissipation
         private val maxHeat: Long = 100,
-        private var heat: Long = (STANDARD_AMBIENT_TEMPERATURE.toKelvinFromCelsius() * this.specificHeat).toLong()
+        private var heat: Long = (STANDARD_AMBIENT_TEMPERATURE.toKelvinFromCelsius() * specificHeat).toLong()
 ) : IHeatContainer {
+
+    override fun getDissipation(): Double = dissipation
+    override fun getConductivity(): Double = conductivity
+    override fun getMaxHeat(): Long = maxHeat
+    override fun getHeat(): Long = heat
+    override fun getSpecificHeat(): Double = specificHeat
 
     var ambientTemperatureCache: Double = STANDARD_AMBIENT_TEMPERATURE
 
@@ -69,7 +77,9 @@ open class HeatContainer(
     override fun refreshConnections() {
         activeConnections.clear()
         for (i in EnumFacing.values()) {
-            val temp = tile.world.getTileEntity(tile.pos.offset(i)) ?: continue
+            val tileOther = tile.world.getTileEntity(tile.pos.offset(i)) ?: continue
+            val container = HEAT_HANDLER!!.fromTile(tileOther) ?: continue
+            activeConnections.add(container)
         }
         ambientTemperatureCache = tile.world.getBiome(tile.pos).temperature.toKelvinFromMinecraftUnits()
     }

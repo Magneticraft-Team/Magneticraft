@@ -20,13 +20,15 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockHeatSink : BlockMultiState(Material.ROCK, "firebox"), ITileEntityProvider {
+object BlockHeatSink : BlockMultiState(Material.ROCK, "heat_sink"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileHeatSink()
 
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
+        val tile = worldIn?.getTile<TileHeatSink>(pos) ?: return
+        tile.heat.refreshConnections()
     }
 
     override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {

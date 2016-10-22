@@ -29,11 +29,17 @@ class TileFirebox(
 
     companion object {
         val FUEL_TO_HEAT = 0.5f
+        val DEFAULT_MAX_TEMP = 400.toKelvinFromCelsius()
     }
 
-    val heat = HeatContainer()
+    val heat = HeatContainer(dissipation = 0.0,
+            specificHeat = COPPER_HEAT_CAPACITY * 3,
+            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
+            conductivity = 0.05,
+            tile = this)
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
+    var maxBurningTemp = DEFAULT_MAX_TEMP
     var burningTime = 0f
 
     override fun update() {
@@ -43,6 +49,7 @@ class TileFirebox(
             if (burningTime <= 0) {
                 if (inventory[0] != null) {
                     val time = TileEntityFurnace.getItemBurnTime(inventory[0])
+
                     if (time > 0) {
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
@@ -66,14 +73,13 @@ class TileFirebox(
                 sendSyncData(data, Side.CLIENT)
             }
 
-            heat.
+            heat.updateHeat()
         }
     }
 
     override fun receiveSyncData(data: IBD, side: Side) {
         super.receiveSyncData(data, side)
         if (side == Side.SERVER) {
-            data.getBoolean(DATA_ID_MACHINE_WORKING, { fanAnimation.active = it })
             data.getLong(DATA_ID_MACHINE_WORKING, { heat.heat = it })
         }
     }
@@ -83,6 +89,7 @@ class TileFirebox(
         setFloat("maxBurningTime", maxBurningTime)
         setFloat("burningTime", burningTime)
         setLong("heat", heat.heat)
+
     }
 
     override fun load(nbt: NBTTagCompound) {
@@ -90,6 +97,7 @@ class TileFirebox(
         maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("burningTime")
         heat.heat = nbt.getLong("heat")
+        heat.refreshConnections()
     }
 
     override fun onBreak() {

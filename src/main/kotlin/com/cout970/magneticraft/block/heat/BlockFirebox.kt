@@ -47,6 +47,8 @@ object BlockFirebox : BlockMultiState(Material.ROCK, "firebox"), ITileEntityProv
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
+        val tile = worldIn?.getTile<TileFirebox>(pos) ?: return
+        tile.heat.refreshConnections()
     }
 
     override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal

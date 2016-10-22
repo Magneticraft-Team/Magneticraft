@@ -23,7 +23,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockBrickFurnace : BlockMultiState(Material.ROCK, "firebox"), ITileEntityProvider {
+object BlockBrickFurnace : BlockMultiState(Material.ROCK, "brick_furnace"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileBrickFurnace()
 
@@ -47,6 +47,8 @@ object BlockBrickFurnace : BlockMultiState(Material.ROCK, "firebox"), ITileEntit
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
+        val tile = worldIn?.getTile<TileBrickFurnace>(pos) ?: return
+        tile.heat.refreshConnections()
     }
 
     override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal

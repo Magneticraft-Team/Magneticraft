@@ -36,6 +36,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator Energy Production")
     var incendiaryGeneratorMaxProduction = 40.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Consumption")
+    var electricHeaterMaxConsumption = 20.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0
 
