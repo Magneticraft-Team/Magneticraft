@@ -1,15 +1,11 @@
 package com.cout970.magneticraft.api.internal.heat
 
-import com.cout970.magneticraft.api.heat.IHeatContainer
-import com.cout970.magneticraft.registry.HEAT_HANDLER
-import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.toKelvinFromCelsius
-import com.cout970.magneticraft.util.toKelvinFromMinecraftUnits
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
-import java.util.*
+import net.minecraft.world.World
 
 /**
  * Created by Yurgen on 19/10/2016.
@@ -22,8 +18,8 @@ open class HeatContainer(
         private val dissipation: Double = 0.0, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Even small values cause rapid heat dissipation
         private val maxHeat: Long = 100,
-        private var heat: Long = (STANDARD_AMBIENT_TEMPERATURE.toKelvinFromCelsius() * specificHeat).toLong()
-) : IHeatContainer {
+        private var heat: Long = 0
+) : IHeatNode {
 
     override fun getDissipation(): Double = dissipation
     override fun getConductivity(): Double = conductivity
@@ -33,12 +29,18 @@ open class HeatContainer(
 
     var ambientTemperatureCache: Double = STANDARD_AMBIENT_TEMPERATURE
 
+    override fun getWorld(): World = tile.world
+
     override fun setHeat(newHeat: Long) {
         heat = newHeat
     }
 
     override fun getTemperature(): Double {
         return heat / specificHeat
+    }
+
+    override fun setAmbientTemp(newAmbient: Double) {
+        ambientTemperatureCache = newAmbient
     }
 
     override fun getMaxTemperature(): Double {
@@ -66,50 +68,26 @@ open class HeatContainer(
         }
     }
 
-    val transferDelayMax: Int = 20 //1 per second
-    var transferDelay: Int = transferDelayMax
-    var activeConnections: MutableList<IHeatContainer> = ArrayList()
-
     override fun onOverTemperature() {
         //Default behavior is to do nothing
     }
 
-    override fun refreshConnections() {
-        activeConnections.clear()
-        for (i in EnumFacing.values()) {
-            val tileOther = tile.world.getTileEntity(tile.pos.offset(i)) ?: continue
-            val container = HEAT_HANDLER!!.fromTile(tileOther) ?: continue
-            activeConnections.add(container)
-        }
-        ambientTemperatureCache = tile.world.getBiome(tile.pos).temperature.toKelvinFromMinecraftUnits()
-    }
-
-    override fun getConnections(): List<IHeatContainer> {
-        return activeConnections
-    }
-
     override fun updateHeat() {
-        if (transferDelay == 0) {
-            if (dissipation > 0) {
-                dissipateHeat()
-            }
-            transferDelay = transferDelayMax
-            if (conductivity > 0) {
-                val connectionList = connections
-                for (i in connectionList) {
-                    if (temperature > i.temperature) {
-                        val minConductivity = Math.min(conductivity, i.conductivity) //Use the lowest conductivity.
-                        var heatToTransfer = (Math.floor((temperature - i.temperature) * minConductivity)).toLong()
-                        heatToTransfer -= i.pushHeat(heatToTransfer, false) //If the block accepts all the heat, we subtract all of it
-                        heat -= heatToTransfer                              //If there's any leftover, we effectively add it back
-                    }
-                }
-            }
-        } else {
-            transferDelay--
+        if (dissipation > 0) {
+            dissipateHeat()
         }
     }
 
+    override fun deserializeNBT(nbt: NBTTagCompound?) {
+        if (nbt == null) return
+        heat = nbt.getLong("heat")
+        ambientTemperatureCache = nbt.getDouble("ambient")
+    }
+
+    override fun serializeNBT() = NBTTagCompound().apply {
+        setLong("heat", heat)
+        setDouble("ambient", ambientTemperatureCache)
+    }
     override fun getPos(): BlockPos {
         return tile.pos
     }
@@ -122,5 +100,4 @@ open class HeatContainer(
         val newTemp = ((temperature - ambientTemperatureCache) * dissipation) + ambientTemperatureCache
         setHeat(getHeatFromTemperature(newTemp))
     }
-
 }

@@ -28,14 +28,14 @@ object BlockHeatSink : BlockMultiState(Material.ROCK, "heat_sink"), ITileEntityP
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
         val tile = worldIn?.getTile<TileHeatSink>(pos) ?: return
-        tile.heat.refreshConnections()
+        tile.updateHeatConnections()
     }
 
     override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {
         super.onNeighborChange(world, pos, neighbor)
-        if (pos == null || world == null) return
-        val tile = world.getTile<TileHeatSink>(pos) ?: return
-        tile.heat.refreshConnections()
+        if (pos == null) return
+        val tile = world?.getTile<TileHeatSink>(pos) ?: return
+        tile.updateHeatConnections()
     }
 
     override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal

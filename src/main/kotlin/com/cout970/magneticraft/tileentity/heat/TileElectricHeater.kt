@@ -1,20 +1,16 @@
 package com.cout970.magneticraft.tileentity.electric
 
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
-import com.cout970.magneticraft.registry.HEAT_HANDLER
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 import com.cout970.magneticraft.util.TIER_1_MACHINES_MIN_VOLTAGE
 import com.cout970.magneticraft.util.misc.IBD
 import com.cout970.magneticraft.util.toKelvinFromCelsius
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
-import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.Side
 
 /**
@@ -22,11 +18,14 @@ import net.minecraftforge.fml.relauncher.Side
  */
 
 class TileElectricHeater(
-) : TileElectricBase(), ITickable {
+) : TileElectricHeatBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>
         get() = listOf(mainNode)
+
+    override val heatNodes: List<IHeatNode>
+        get() = listOf(heat)
 
     companion object {
         val FUEL_TO_HEAT = 0.5f
@@ -47,7 +46,6 @@ class TileElectricHeater(
                 val fuel = SPEED * applied.toFloat() / Config.electricHeaterMaxConsumption.toFloat()
                 heat.pushHeat((fuel * FUEL_TO_HEAT).toLong(), false)
             }
-            heat.updateHeat()
         }
         super.update()
     }
@@ -57,25 +55,5 @@ class TileElectricHeater(
         if (side == Side.SERVER) {
             data.getLong(DATA_ID_MACHINE_WORKING, { heat.heat = it })
         }
-    }
-
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        setLong("heat", heat.heat)
-    }
-
-    override fun load(nbt: NBTTagCompound) {
-        heat.heat = nbt.getLong("heat")
-        heat.refreshConnections()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
-        if (capability == HEAT_HANDLER) return heat as T
-        return super.getCapability(capability, facing)
-    }
-
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
-        if (capability == HEAT_HANDLER) return true
-        return super.hasCapability(capability, facing)
     }
 }

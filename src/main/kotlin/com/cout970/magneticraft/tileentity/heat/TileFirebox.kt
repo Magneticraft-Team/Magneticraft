@@ -2,20 +2,18 @@ package com.cout970.magneticraft.tileentity.electric
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
-import com.cout970.magneticraft.registry.HEAT_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.items.ItemStackHandler
@@ -25,11 +23,10 @@ import net.minecraftforge.items.ItemStackHandler
  */
 
 class TileFirebox(
-) : TileBase(), ITickable {
+) : TileHeatBase() {
 
     companion object {
         val FUEL_TO_HEAT = 0.5f
-        val DEFAULT_MAX_TEMP = 400.toKelvinFromCelsius()
     }
 
     val heat = HeatContainer(dissipation = 0.0,
@@ -39,8 +36,10 @@ class TileFirebox(
             tile = this)
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
-    var maxBurningTemp = DEFAULT_MAX_TEMP
     var burningTime = 0f
+
+    override val heatNodes: List<IHeatNode>
+        get() = listOf(heat)
 
     override fun update() {
 
@@ -68,12 +67,11 @@ class TileFirebox(
             //sends an update to the client to start/stop the fan animation
             if (shouldTick(200)) {
                 val data = IBD()
-                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > STANDARD_AMBIENT_TEMPERATURE + 1)
+                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperatureCache + 1)
                 data.setLong(DATA_ID_MACHINE_HEAT, heat.heat)
                 sendSyncData(data, Side.CLIENT)
             }
-
-            heat.updateHeat()
+            super.update()
         }
     }
 
@@ -88,16 +86,14 @@ class TileFirebox(
         setTag("inventory", inventory.serializeNBT())
         setFloat("maxBurningTime", maxBurningTime)
         setFloat("burningTime", burningTime)
-        setLong("heat", heat.heat)
-
+        super.save()
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
         maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("burningTime")
-        heat.heat = nbt.getLong("heat")
-        heat.refreshConnections()
+        super.load(nbt)
     }
 
     override fun onBreak() {
@@ -112,13 +108,11 @@ class TileFirebox(
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
-        if (capability == HEAT_HANDLER) return heat as T
         return super.getCapability(capability, facing)
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == HEAT_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 

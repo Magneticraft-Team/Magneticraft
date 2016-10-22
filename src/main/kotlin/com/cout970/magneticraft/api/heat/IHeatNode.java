@@ -1,13 +1,12 @@
 package com.cout970.magneticraft.api.heat;
 
+import com.cout970.magneticraft.api.energy.INode;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.List;
 
 /**
  * Created by Yurgen on 19/10/2016.
  */
-public interface IHeatContainer {
+public interface IHeatNode extends INode {
 
     /**
      * Returns the current temperature of the block
@@ -33,6 +32,12 @@ public interface IHeatContainer {
      * Sets the current heat content of the block
      */
     void setHeat(long newHeat);
+
+
+    /**
+     * Sets the ambient temperature of the block
+     */
+    void setAmbientTemp(double newAmbient);
 
     /**
      * Returns the heat capacity of the block
@@ -65,20 +70,10 @@ public interface IHeatContainer {
      */
     long pullHeat(long heatOut, boolean simulate);
 
-    /*
-     * Returns list of directions with active heat connections
-     */
-    List<IHeatContainer> getConnections();
-
     /**
      * To be called when block exceeds maximum temperature
      */
     void onOverTemperature();
-
-    /**
-     * Re-scans directions which connect to heat containers.
-     */
-    void refreshConnections();
 
     /**
      * Called every tick to transfer heat

@@ -39,16 +39,16 @@ object BlockBrickFurnace : BlockMultiState(Material.ROCK, "brick_furnace"), ITil
 
     override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {
         super.onNeighborChange(world, pos, neighbor)
-        if (pos == null || world == null) return
-        val tile = world.getTile<TileBrickFurnace>(pos) ?: return
-        tile.heat.refreshConnections()
+        if (pos == null) return
+        val tile = world?.getTile<TileBrickFurnace>(pos) ?: return
+        tile.updateHeatConnections()
     }
 
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
         val tile = worldIn?.getTile<TileBrickFurnace>(pos) ?: return
-        tile.heat.refreshConnections()
+        tile.updateHeatConnections()
     }
 
     override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal

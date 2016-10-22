@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.util.toKelvinFromCelsius
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 
 /**
@@ -14,10 +15,14 @@ class InfiniteHeatContainer(
         private val temperature: Double = 1800.toKelvinFromCelsius()
 ) : HeatContainer(tile = tile, conductivity = conductivity, specificHeat = 0.0, dissipation = 0.0) {
 
-    override fun getConductivity(): Double = conductivity
-
     override fun getTemperature(): Double {
         return temperature
+    }
+
+    override fun setHeat(newHeat: Long) {
+    }
+
+    override fun setAmbientTemp(newAmbient: Double) {
     }
 
     override fun getMaxTemperature(): Double {
@@ -32,21 +37,12 @@ class InfiniteHeatContainer(
         return heatOut
     }
 
+    override fun deserializeNBT(nbt: NBTTagCompound?) {
+    }
+
+    override fun serializeNBT() = NBTTagCompound().apply {
+    }
+
     override fun updateHeat() {
-        if (transferDelay == 0) {
-            transferDelay = transferDelayMax
-            if (conductivity > 0) {
-                val connectionList = connections
-                for (i in connectionList) {
-                    if (temperature > i.temperature) {
-                        val minConductivity = Math.min(conductivity, i.conductivity) //Use the lowest conductivity.
-                        val heatToTransfer = (Math.floor((temperature - i.temperature) * minConductivity)).toLong()
-                        i.pushHeat(heatToTransfer, false)
-                    }
-                }
-            }
-        } else {
-            transferDelay--
-        }
     }
 }

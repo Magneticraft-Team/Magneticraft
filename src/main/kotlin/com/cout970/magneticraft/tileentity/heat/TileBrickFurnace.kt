@@ -1,10 +1,9 @@
 package com.cout970.magneticraft.tileentity.electric
 
 import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
-import com.cout970.magneticraft.registry.HEAT_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 import com.cout970.magneticraft.util.DEFAULT_COOKING_TEMPERATURE
@@ -14,20 +13,22 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.ItemStackHandler
 
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileBrickFurnace : TileBase(), ITickable {
+class TileBrickFurnace() : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = 0.05,
             tile = this)
+
+    override val heatNodes: List<IHeatNode>
+        get() = listOf(heat)
 
     val inventory = Inventory()
     var burningTime = 0f
@@ -41,7 +42,7 @@ class TileBrickFurnace : TileBase(), ITickable {
                 smelting_temp = DEFAULT_SMELTING_TEMPERATURE
             }
             if (heat.temperature >= smelting_temp && canSmelt()) {
-                val applied = heat.temperature / DEFAULT_SMELTING_TEMPERATURE
+                val applied = heat.temperature / smelting_temp
                 heat.pullHeat((applied * FUEL_TO_HEAT).toLong(), false)
                 burningTime += (SPEED * applied).toFloat()
                 if (burningTime > MAX_BURNING_TIME) {
@@ -49,7 +50,7 @@ class TileBrickFurnace : TileBase(), ITickable {
                     burningTime -= MAX_BURNING_TIME
                 }
             }
-            heat.updateHeat()
+            super.update()
         }
     }
 
@@ -78,14 +79,13 @@ class TileBrickFurnace : TileBase(), ITickable {
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
         setFloat("burningTime", burningTime)
-        setLong("heat", heat.heat)
+        super.save()
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
         burningTime = nbt.getFloat("burningTime")
-        heat.heat = nbt.getLong("heat")
-        heat.refreshConnections()
+        super.load(nbt)
     }
 
     companion object {
@@ -97,13 +97,11 @@ class TileBrickFurnace : TileBase(), ITickable {
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
-        if (capability == HEAT_HANDLER) return heat as T
         return super.getCapability(capability, facing)
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == HEAT_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 

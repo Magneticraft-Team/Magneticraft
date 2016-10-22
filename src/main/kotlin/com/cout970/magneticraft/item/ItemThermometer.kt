@@ -1,8 +1,10 @@
 package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.api.heat.IHeatHandler
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.registry.HEAT_HANDLER
+import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.util.*
 import net.minecraft.entity.player.EntityPlayer
@@ -32,11 +34,14 @@ object ItemThermometer : ItemBase("thermometer") {
         if (worldIn.isServer) {
             val tile = worldIn.getTileEntity(pos)
             if (tile != null) {
-                val handler = HEAT_HANDLER!!.fromTile(tile)
-                if (handler != null) {
-                    if (Config.heatUnitCelsius) playerIn.addChatComponentMessage(TextComponentString("%.2fC".format(handler.temperature.toCelsius())))
-                    else playerIn.addChatComponentMessage(TextComponentString("%.2fF".format(handler.temperature.toFahrenheit())))
-                    return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ)
+                val handler = NODE_HANDLER!!.fromTile(tile)
+                if (handler is IHeatHandler) {
+                    for (i in handler.nodes) {
+                        if (i !is IHeatNode) continue
+                        if (Config.heatUnitCelsius) playerIn.addChatComponentMessage(TextComponentString("%.2fC".format(i.temperature.toCelsius())))
+                        else playerIn.addChatComponentMessage(TextComponentString("%.2fF".format(i.temperature.toFahrenheit())))
+                        return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ)
+                    }
                 }
             }
             if (Config.heatUnitCelsius) playerIn.addChatComponentMessage(TextComponentString("Ambient: %.2fC".format(worldIn.getBiome(pos).temperature.toCelsiusFromMinecraftUnits())))
