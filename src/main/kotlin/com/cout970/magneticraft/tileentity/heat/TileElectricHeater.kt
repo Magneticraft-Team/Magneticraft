@@ -10,7 +10,6 @@ import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 import com.cout970.magneticraft.util.TIER_1_MACHINES_MIN_VOLTAGE
 import com.cout970.magneticraft.util.misc.IBD
-import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraftforge.fml.relauncher.Side
 
 /**
@@ -28,9 +27,7 @@ class TileElectricHeater(
         get() = listOf(heat)
 
     companion object {
-        val FUEL_TO_HEAT = 0.5f
-        val SPEED = 1
-        val DEFAULT_MAX_TEMP = 400.toKelvinFromCelsius()
+        val ENERGY_TO_HEAT = 20f
     }
 
     val heat = HeatContainer(dissipation = 0.0,
@@ -43,8 +40,8 @@ class TileElectricHeater(
         if (!worldObj.isRemote) {
             if (mainNode.voltage >= TIER_1_MACHINES_MIN_VOLTAGE && heat.heat < heat.maxHeat) {
                 val applied = mainNode.applyPower(-Config.electricHeaterMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
-                val fuel = SPEED * applied.toFloat() / Config.electricHeaterMaxConsumption.toFloat()
-                heat.pushHeat((fuel * FUEL_TO_HEAT).toLong(), false)
+                val energy = applied.toFloat() / Config.electricHeaterMaxConsumption.toFloat()
+                heat.pushHeat((energy * ENERGY_TO_HEAT).toLong(), false)
             }
         }
         super.update()

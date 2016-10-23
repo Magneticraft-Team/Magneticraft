@@ -11,6 +11,7 @@ import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.IBD
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -42,7 +43,7 @@ class TileFirebox(
         get() = listOf(heat)
 
     override fun update() {
-
+        var maxFuelTemp: Double = Config.defaultMaxTemp
         if (!worldObj.isRemote) {
             //consumes fuel
             if (burningTime <= 0) {
@@ -52,13 +53,14 @@ class TileFirebox(
                     if (time > 0) {
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
+                        maxFuelTemp = getMaxFuelHeat(inventory[0]!!)
                         inventory[0] = inventory[0]!!.consumeItem()
                         markDirty()
                     }
                 }
             }
             //burns fuel
-            if (burningTime > 0 && heat.heat < heat.maxHeat) {
+            if (burningTime > 0 && heat.heat < heat.maxHeat && heat.temperature < maxFuelTemp) {
                 val burningSpeed = Math.ceil(Config.fireboxMaxProduction / 10.0).toInt()
                 burningTime -= burningSpeed
                 heat.pushHeat((burningSpeed * FUEL_TO_HEAT).toLong(), false)
@@ -73,6 +75,18 @@ class TileFirebox(
             }
             super.update()
         }
+    }
+
+    var FuelCache: ItemStack? = null
+    var TempCache: Double = 400.0
+
+    fun getMaxFuelHeat(Input: ItemStack): Double {
+        if (Input.isItemEqual(FuelCache)) {
+            return TempCache
+        }
+        FuelCache = Input
+        TempCache = Config.fuelTemps.map.get(Input.item) ?: Config.defaultMaxTemp
+        return TempCache
     }
 
     override fun receiveSyncData(data: IBD, side: Side) {

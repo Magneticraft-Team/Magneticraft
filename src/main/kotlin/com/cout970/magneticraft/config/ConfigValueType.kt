@@ -5,5 +5,5 @@ package com.cout970.magneticraft.config
  */
 
 enum class ConfigValueType {
-    INT, BOOLEAN, DOUBLE, STRING, ORE
+    INT, BOOLEAN, DOUBLE, STRING, ORE, FUEL
 }
