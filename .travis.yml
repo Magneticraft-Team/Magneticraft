@@ -8,7 +8,6 @@ cache:
 jdk:
   - oraclejdk8
 install:
-  - exit 1
   - ./gradlew setupCiWorkspace
 #discord notifier
 notifications:
