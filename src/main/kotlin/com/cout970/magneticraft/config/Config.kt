@@ -2,6 +2,7 @@ package com.cout970.magneticraft.config
 
 import com.cout970.magneticraft.block.BlockCoke
 import com.cout970.magneticraft.item.ItemCoke
+import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
 
@@ -72,14 +73,14 @@ object Config {
     var cokeBurnTime: Int = 3200
 
     @ConfigValue(category = CATEGORY_FUEL, comment = "Default maximum fuel temperature in Celsius ")
-    var defaultMaxTemp: Double = 400.0
+    var defaultMaxTemp: Double = 400.0.toKelvinFromCelsius()
 
     @ConfigValue(category = CATEGORY_FUEL, comment = "List of fuels and associated maximum temperatures which have higher maximum temperatures than the default.")
     var fuelTemps: FuelConfig = FuelConfig(mapOf(
-            Items.COAL to 500.0, Blocks.COAL_BLOCK to 500.0,
-            ItemCoke to 600.0, BlockCoke to 600.0,
-            Items.LAVA_BUCKET to 800.0,
-            Items.BLAZE_ROD to 1800.0))
+            Items.COAL to 500.0.toKelvinFromCelsius(), Blocks.COAL_BLOCK to 500.0.toKelvinFromCelsius(),
+            ItemCoke to 600.0.toKelvinFromCelsius(), BlockCoke to 600.0.toKelvinFromCelsius(),
+            Items.LAVA_BUCKET to 800.0.toKelvinFromCelsius(),
+            Items.BLAZE_ROD to 1800.0.toKelvinFromCelsius()))
 
     @ConfigValue(category = CATEGORY_HEAT, comment = "Firebox Production")
     var fireboxMaxProduction = 40.0

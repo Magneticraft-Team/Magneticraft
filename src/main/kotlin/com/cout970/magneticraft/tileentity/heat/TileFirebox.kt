@@ -30,6 +30,7 @@ class TileFirebox(
         val FUEL_TO_HEAT = 0.5f
     }
 
+    var maxFuelTemp: Double = Config.defaultMaxTemp
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
@@ -43,7 +44,6 @@ class TileFirebox(
         get() = listOf(heat)
 
     override fun update() {
-        var maxFuelTemp: Double = Config.defaultMaxTemp
         if (!worldObj.isRemote) {
             //consumes fuel
             if (burningTime <= 0) {
