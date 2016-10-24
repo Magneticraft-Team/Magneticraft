@@ -12,6 +12,7 @@ import net.minecraft.world.World
  */
 open class HeatContainer(
         val tile: TileEntity,
+        private val emit: Boolean = true,
         private val specificHeat: Double = 1.0,
         private val conductivity: Double = 0.05, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Evan small calues cause rapid heat transfer.  Very large values can cause strange directional transfer behavior
@@ -21,6 +22,7 @@ open class HeatContainer(
         private var heat: Long = 0
 ) : IHeatNode {
 
+    override fun getEmit(): Boolean = emit
     override fun getDissipation(): Double = dissipation
     override fun getConductivity(): Double = conductivity
     override fun getMaxHeat(): Long = maxHeat
@@ -73,9 +75,7 @@ open class HeatContainer(
     }
 
     override fun updateHeat() {
-        if (dissipation > 0) {
-            dissipateHeat()
-        }
+        if (dissipation > 0) dissipateHeat()
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound?) {
@@ -87,7 +87,7 @@ open class HeatContainer(
     override fun serializeNBT() = NBTTagCompound().apply {
         setLong("heat", heat)
         setDouble("ambient", ambientTemperatureCache)
-    }
+    } 
     override fun getPos(): BlockPos {
         return tile.pos
     }

@@ -6,11 +6,12 @@ import com.cout970.magneticraft.api.internal.heat.InfiniteHeatContainer
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileInfiniteHeat(temperature: Double) : TileHeatBase() {
+class TileInfiniteHeat(temperature: Double, emit: Boolean = false) : TileHeatBase() {
 
     val heat = InfiniteHeatContainer(
             temperature = temperature,
-            tile = this)
+            tile = this,
+            emit = emit)
 
     override val heatNodes: List<IHeatNode>
         get() = listOf(heat)

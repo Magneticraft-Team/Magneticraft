@@ -8,12 +8,13 @@ import net.minecraft.tileentity.TileEntity
  * Created by Yurgen on 19/10/2016.
  */
 class InfiniteHeatContainer(
+        emit: Boolean = true,
         tile: TileEntity,
         conductivity: Double = 0.05, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Evan small calues cause rapid heat transfer.
         //Values above 0.5f are guaranteed to be unphysical.  Values above 0.1f are probably unphysical
         private val temperature: Double = 1800.toKelvinFromCelsius()
-) : HeatContainer(tile = tile, conductivity = conductivity, specificHeat = 0.0, dissipation = 0.0) {
+) : HeatContainer(tile = tile, conductivity = conductivity, specificHeat = 0.0, dissipation = 0.0, emit = emit) {
 
     override fun getTemperature(): Double {
         return temperature

@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing
  * Created by cout970 on 30/06/2016.
  */
 
+val PROPERTY_DUMMY: PropertyBool = PropertyBool.create("dummy")
 val PROPERTY_FACING: PropertyDirection = PropertyDirection.create("facing")
 val PROPERTY_DIRECTION: PropertyDirection = PropertyDirection.create("direction", listOf(*EnumFacing.HORIZONTALS))
 val PROPERTY_CENTER: PropertyBool = PropertyBool.create("center")

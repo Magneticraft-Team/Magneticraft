@@ -1,12 +1,16 @@
 package com.cout970.magneticraft.tileentity.electric
 
+import coffee.cypher.mcextlib.extensions.worlds.getBlock
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.HeatConnection
+import com.cout970.magneticraft.block.BlockBase
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.util.MAX_EMISSION_TEMP
+import com.cout970.magneticraft.util.MIN_EMISSION_TEMP
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.toKelvinFromMinecraftUnits
 import net.minecraft.nbt.NBTTagCompound
@@ -19,12 +23,26 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
 
     abstract val heatNodes: List<IHeatNode>
     val heatConnections = mutableListOf<IHeatConnection>()
+    val lightLevelUpdateDelay = 20
+    var lightLevelCache = 0.0f
 
     override fun update() {
         if (shouldTick(20)) {
             if (!worldObj.isRemote) {
                 heatNodes.forEach { it.updateHeat() }
                 heatConnections.forEach { it.iterate() }
+            }
+        }
+        if (shouldTick(lightLevelUpdateDelay)) {
+            heatNodes.forEach {
+                if (it.emit) {
+                    val lightLevel: Float = interpolate(it.temperature, MIN_EMISSION_TEMP, MAX_EMISSION_TEMP).toFloat()
+                    if (lightLevelCache != lightLevel) {
+                        lightLevelCache = lightLevel
+                        world.getBlock<BlockBase>(pos)?.setLightLevel(lightLevel)
+                        sendUpdateToNearPlayers()
+                    }
+                }
             }
         }
         super.update()
@@ -69,9 +87,12 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
         return super.writeToNBT(compound)
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound()
+    override fun save(): NBTTagCompound = NBTTagCompound().apply {
+        setFloat("lightLevelCache", lightLevelCache)
+    }
 
     override fun load(nbt: NBTTagCompound) {
+        lightLevelCache = nbt.getFloat("lightLevelCache")
     }
 
     override fun addConnection(connection: IHeatConnection) {

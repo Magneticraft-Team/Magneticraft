@@ -1,36 +1,15 @@
 package com.cout970.magneticraft.block.heat
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.block.BlockBase
-import com.cout970.magneticraft.tileentity.electric.TileBrickFurnace
 import com.cout970.magneticraft.tileentity.electric.TileElectricHeater
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockElectricHeater : BlockBase(Material.IRON, "electric_heater"), ITileEntityProvider {
+object BlockElectricHeater : BlockHeatBase(Material.IRON, "electric_heater"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileElectricHeater()
-
-    override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {
-        super.onNeighborChange(world, pos, neighbor)
-        if (pos == null) return
-        val tile = world?.getTile<TileElectricHeater>(pos) ?: return
-        tile.updateHeatConnections()
-    }
-
-    override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
-        val tile = worldIn?.getTile<TileBrickFurnace>(pos) ?: return
-        tile.updateHeatConnections()
-    }
 }

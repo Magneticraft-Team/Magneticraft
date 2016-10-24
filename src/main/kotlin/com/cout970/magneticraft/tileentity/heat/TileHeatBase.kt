@@ -8,6 +8,8 @@ import com.cout970.magneticraft.api.internal.energy.HeatConnection
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.MAX_EMISSION_TEMP
+import com.cout970.magneticraft.util.MIN_EMISSION_TEMP
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.toKelvinFromMinecraftUnits
 import net.minecraft.nbt.NBTTagCompound
@@ -22,12 +24,26 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     abstract val heatNodes: List<IHeatNode>
     val heatConnections = mutableListOf<IHeatConnection>()
+    val lightLevelUpdateDelay = 20
+    var lightLevelCache = 0.0f
 
     override fun update() {
         if (shouldTick(20)) {
             if (!worldObj.isRemote) {
                 heatNodes.forEach { it.updateHeat() }
                 heatConnections.forEach { it.iterate() }
+            }
+        }
+        if (shouldTick(lightLevelUpdateDelay)) {
+            heatNodes.forEach {
+                if (it.emit) {
+                    val lightLevel: Float = interpolate(it.temperature, MIN_EMISSION_TEMP, MAX_EMISSION_TEMP).toFloat()
+                    if (lightLevelCache != lightLevel) {
+                        lightLevelCache = lightLevel
+                        //world.getBlock<BlockBase>(pos)?.setLightLevel(lightLevel)
+                        //sendUpdateToNearPlayers()
+                    }
+                }
             }
         }
     }
@@ -77,9 +93,12 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         super.readFromNBT(compound)
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound()
+    override fun save(): NBTTagCompound = NBTTagCompound().apply {
+        setFloat("lightLevelCache", lightLevelCache)
+    }
 
     override fun load(nbt: NBTTagCompound) {
+        lightLevelCache = nbt.getFloat("lightLevelCache")
     }
 
     override fun writeToNBT(compound: NBTTagCompound?): NBTTagCompound? {
@@ -87,8 +106,13 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         for (i in 0 until heatNodes.size) {
             tag.setTag("HeatNode" + i, heatNodes[i].serializeNBT())
         }
-        compound!!.setTag("HeatNodes", tag)
         return super.writeToNBT(compound)
+    }
+
+    fun interpolate(v: Double, min: Double, max: Double): Double {
+        if (v < min) return 0.0
+        if (v > max) return 1.0
+        return (v - min) / (max - min)
     }
 
     @Suppress("UNCHECKED_CAST")

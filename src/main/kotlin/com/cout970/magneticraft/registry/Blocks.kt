@@ -22,16 +22,10 @@ val blocks = mapOf(
         withItemBlock(BlockElectricFurnace),
         BlockElectricPoleAdapter to ItemBlockElectricPoleAdapter(),
         withItemBlock(BlockBattery),
-        withItemBlock(BlockBrickFurnace),
-        withItemBlock(BlockFirebox),
-        withItemBlock(BlockHeatSink),
-        withItemBlock(BlockHeatReservoir),
         withItemBlock(BlockInfiniteWater),
         withItemBlock(BlockTileLimestone),
         withItemBlock(BlockInfiniteEnergy),
-        withItemBlock(BlockInfiniteHeat),
         withItemBlock(BlockInfiniteCold),
-        withItemBlock(BlockElectricHeater),
         withItemBlock(BlockAirLock),
         withItemBlock(BlockAirBubble),
         withItemBlock(BlockHydraulicPress),
@@ -47,6 +41,18 @@ val blocks = mapOf(
         withItemBlock(BlockCoke)
 )
 
+val lightBlocks = mapOf(
+        withItemBlock(BlockInfiniteHeat)
+)
+
+val tickBlocks = mapOf(
+        withItemBlock(BlockBrickFurnace),
+        withItemBlock(BlockFirebox),
+        withItemBlock(BlockHeatSink),
+        withItemBlock(BlockHeatReservoir),
+        withItemBlock(BlockElectricHeater)
+)
+
 private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
 
 /**
@@ -55,6 +61,14 @@ private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blo
 fun registerBlocks() {
     blocks.forEach {
         GameRegistry.register(it.key)
+        GameRegistry.register(it.value)
+    }
+    tickBlocks.forEach {
+        GameRegistry.register(it.key).tickRandomly = true
+        GameRegistry.register(it.value)
+    }
+    lightBlocks.forEach {
+        GameRegistry.register(it.key).setLightLevel(1.0f)
         GameRegistry.register(it.value)
     }
 }

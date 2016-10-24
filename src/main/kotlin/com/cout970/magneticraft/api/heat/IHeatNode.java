@@ -33,6 +33,10 @@ public interface IHeatNode extends INode {
      */
     void setHeat(long newHeat);
 
+    /**
+     * Return if this node corresponds to a light which should emit light at high temperatures
+     */
+    boolean getEmit();
 
     /**
      * Sets the ambient temperature of the block
