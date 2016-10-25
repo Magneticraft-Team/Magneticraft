@@ -11,4 +11,8 @@ install:
   - ./gradlew setupCiWorkspace
 #discord notifier
 notifications:
-  webhooks: http://requestb.in/1egai0x1
+  webhooks:
+    urls:
+      - http://2501.cypher.coffee:10000/travishook
+    on_success: never
+    on_failure: always
