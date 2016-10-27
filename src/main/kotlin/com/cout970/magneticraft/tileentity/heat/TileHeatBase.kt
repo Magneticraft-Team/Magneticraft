@@ -50,7 +50,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     override fun onLoad() {
         super.onLoad()
-        for (i in heatNodes) i.heat = (world.getBiome(pos).temperature.toKelvinFromMinecraftUnits() * i.specificHeat).toLong()
+        updateHeatConnections()
     }
 
     override fun updateHeatConnections() {

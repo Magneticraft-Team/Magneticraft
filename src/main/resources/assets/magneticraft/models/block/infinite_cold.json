@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "magneticraft:blocks/coal_coke_block"
+    "all": "magneticraft:blocks/infinite_cold"
   }
 }

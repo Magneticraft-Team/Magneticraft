@@ -6,6 +6,7 @@ import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.item.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
+import com.cout970.magneticraft.registry.registerColorHandlers
 import com.cout970.magneticraft.registry.registerSounds
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.TileCrushingTable
@@ -83,6 +84,11 @@ class ClientProxy : CommonProxy() {
         blockBase.inventoryVariants.forEach {
             ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
         }
+    }
+
+    override fun init() {
+        super.init()
+        registerColorHandlers()
     }
 
     override fun postInit() {

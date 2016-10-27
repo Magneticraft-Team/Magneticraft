@@ -2,7 +2,6 @@ package com.cout970.magneticraft.block.heat
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.block.BlockMultiState
-import com.cout970.magneticraft.block.PROPERTY_DUMMY
 import com.cout970.magneticraft.tileentity.electric.TileElectricHeatBase
 import com.cout970.magneticraft.tileentity.electric.TileHeatBase
 import com.cout970.magneticraft.tileentity.electric.TileHeatSink
@@ -26,7 +25,7 @@ abstract class BlockHeatBase(material: Material, name: String) : BlockMultiState
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState
 
-    override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, PROPERTY_DUMMY)
+    override fun createBlockState(): BlockStateContainer = BlockStateContainer(this)
 
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
@@ -46,7 +45,7 @@ abstract class BlockHeatBase(material: Material, name: String) : BlockMultiState
         val tileE = worldIn.getTile<TileElectricHeatBase>(pos)  //TODO: Make this not a hack
         if (tileE != null) {
             lightValue = (15f * tileE.lightLevelCache).toInt()
-        }
+        } 
     }
 
     override fun tickRate(worldIn: World?): Int {

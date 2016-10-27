@@ -1,0 +1,47 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "transform": "forge:default-block",
+    "textures": {
+      "all": "magneticraft:blocks/heat_sink"
+    }
+  },
+  "variants": {
+    "direction=north": [
+      {
+        "y": 0
+      }
+    ],
+    "direction=south": [
+      {
+        "y": 180
+      }
+    ],
+    "direction=west": [
+      {
+        "y": -90
+      }
+    ],
+    "direction=east": [
+      {
+        "y": 90
+      }
+    ],
+    "direction=up": [
+      {
+        "x": -90
+      }
+    ],
+    "direction=down": [
+      {
+        "x": 90
+      }
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ]
+  }
+}

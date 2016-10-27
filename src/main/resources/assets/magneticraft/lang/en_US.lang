@@ -72,6 +72,7 @@ tile.magneticraft.electric_pole.name=Electric Pole
 tile.magneticraft.electric_connector.name=Electric Connector
 tile.magneticraft.incendiary_generator.name=Incendiary Generator
 tile.magneticraft.electric_heater.name=Electric Heater
+tile.magneticraft.heat_pipe.name=Heat Pipe
 tile.magneticraft.block_battery.name=Battery Block
 tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
 tile.magneticraft.electric_furnace.name=Electric furnace

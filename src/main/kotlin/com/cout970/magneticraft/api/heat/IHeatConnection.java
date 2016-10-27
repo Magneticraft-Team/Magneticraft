@@ -21,3 +21,4 @@ public interface IHeatConnection {
      */
     void iterate();
 }
+
