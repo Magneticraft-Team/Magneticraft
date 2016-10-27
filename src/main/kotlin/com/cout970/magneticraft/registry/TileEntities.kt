@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.tileentity.*
+import com.cout970.magneticraft.tileentity.computer.TileComputer
 import com.cout970.magneticraft.tileentity.electric.*
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
@@ -25,7 +26,8 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileAirLock::class.java                 to "airlock",
         TileHydraulicPress::class.java          to "hydraulic_press",
         TileMultiblock::class.java              to "tile_multiblock",
-        TileSolarPanel::class.java              to "solar_panel"
+        TileSolarPanel::class.java              to "solar_panel",
+        TileComputer::class.java              to "computer"
 //        TileInserter::class.java                to "inserter"
 )
 //@formatter:on

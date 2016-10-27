@@ -17,6 +17,7 @@ import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 import net.minecraftforge.common.util.Constants
+import java.util.*
 
 /**
  * Created by cout970 on 29/06/2016.
@@ -47,6 +48,31 @@ fun ByteBuf.writeString(str: String) {
     for (i in 0 until array.size) {
         this.writeByte(array[i].toInt())
     }
+}
+
+fun ByteBuf.readByteArray(): ByteArray {
+    val size = Math.abs(this.readShort().toInt())
+    val buffer = ByteArray(size)
+    for (i in 0 until size) {
+        buffer[i] = this.readByte()
+    }
+    return buffer
+}
+
+fun ByteBuf.writeByteArray(array: ByteArray) {
+    this.writeShort(array.size)
+    for (i in 0 until array.size) {
+        this.writeByte(array[i].toInt())
+    }
+}
+
+fun ByteBuf.writeUUID(uuid: UUID) {
+    this.writeLong(uuid.mostSignificantBits)
+    this.writeLong(uuid.leastSignificantBits)
+}
+
+fun ByteBuf.readUUID(): UUID {
+    return UUID(this.readLong(), this.readLong())
 }
 
 fun EntityPlayer.sendMessage(str: String, vararg args: Any) {

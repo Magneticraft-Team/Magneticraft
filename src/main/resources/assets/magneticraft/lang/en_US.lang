@@ -47,6 +47,7 @@ item.magneticraft.hand_sieve.name=Hand Sieve
 item.magneticraft.coil_of_wire.name=Coil of Wire
 item.magneticraft.voltmeter.name=Voltmeter
 item.magneticraft.battery_item.name=Battery
+item.magneticraft.floppy_fisk.name=Floppy Disk
 
 magneticraft.guide.contents=Content Table
 magneticraft.guide.basics=Basics

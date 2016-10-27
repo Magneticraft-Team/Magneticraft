@@ -4,6 +4,7 @@ import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.gui.GuiHandler
 import com.cout970.magneticraft.multiblock.MultiblockManager
 import com.cout970.magneticraft.network.MessageContainerUpdate
+import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.registry.*
 import com.cout970.magneticraft.world.WorldGenerator
@@ -45,6 +46,7 @@ abstract class CommonProxy {
         Magneticraft.network.registerMessage(MessageContainerUpdate.Companion, MessageContainerUpdate::class.java, 0, Side.CLIENT)
         Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 1, Side.CLIENT)
         Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 2, Side.SERVER)
+        Magneticraft.network.registerMessage(MessageGuiUpdate.Companion, MessageGuiUpdate::class.java, 3, Side.SERVER)
     }
 
     open fun postInit() = Unit

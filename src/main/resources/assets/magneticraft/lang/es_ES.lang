@@ -46,6 +46,7 @@ item.magneticraft.hand_sieve.name=Tamiz Portatil
 item.magneticraft.coil_of_wire.name=Bobina de cobre
 item.magneticraft.voltmeter.name=Voltimetro
 item.magneticraft.battery_item.name=Bateria
+item.magneticraft.floppy_fisk.name=Disquete
 
 magneticraft.guide.contents=Tabla de Contenidos
 magneticraft.guide.basics=Principiante

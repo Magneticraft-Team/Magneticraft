@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.util.misc
 
+import com.cout970.magneticraft.util.readByteArray
 import com.cout970.magneticraft.util.readString
+import com.cout970.magneticraft.util.writeByteArray
 import com.cout970.magneticraft.util.writeString
 import io.netty.buffer.ByteBuf
 
@@ -39,6 +41,10 @@ class IBD {
         map.put(id, value)
     }
 
+    fun setByteArray(id: Int, value: ByteArray) {
+        map.put(id, value)
+    }
+
     fun getInteger(id: Int) = map[id] as Int
 
     fun getLong(id: Int) = map[id] as Long
@@ -50,6 +56,8 @@ class IBD {
     fun getBoolean(id: Int) = map[id] as Boolean
 
     fun getString(id: Int) = map[id] as String
+
+    fun getByteArray(id: Int) = map[id] as ByteArray
 
     fun getInteger(id: Int, action: (Int) -> Unit) {
         if (hasKey(id)) {
@@ -105,6 +113,15 @@ class IBD {
         }
     }
 
+    fun getByteArray(id: Int, action: (ByteArray) -> Unit) {
+        if (hasKey(id)) {
+            val value = map[id]
+            if (value is ByteArray) {
+                action.invoke(value)
+            }
+        }
+    }
+
     fun hasKey(id: Int) = map.containsKey(id)
 
     fun remove(id: Int) {
@@ -146,6 +163,9 @@ class IBD {
                 6 -> {
                     setString(id, buf.readString())
                 }
+                7 -> {
+                    setByteArray(id, buf.readByteArray())
+                }
             }
         }
     }
@@ -160,6 +180,7 @@ class IBD {
                 is Double -> 4
                 is Boolean -> 5
                 is String -> 6
+                is ByteArray -> 7
                 else -> throw IllegalStateException("Invalid value type: ${value.javaClass}, value:$value")
             }
             buf.writeByte(type)
@@ -182,6 +203,9 @@ class IBD {
                 }
                 6 -> {
                     buf.writeString(value as String)
+                }
+                7 -> {
+                    buf.writeByteArray(value as ByteArray)
                 }
                 else -> throw IllegalStateException("Invalid value type: ${value.javaClass}, value:$value")
             }

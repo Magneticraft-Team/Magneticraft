@@ -14,7 +14,7 @@ import java.io.IOException
 /**
  * Created by cout970 on 20/05/2016.
  */
-abstract class GuiBase(val container: ContainerBase) : GuiContainer(container), IGui {
+abstract class GuiBase(override val container: ContainerBase) : GuiContainer(container), IGui {
 
     override val components = mutableListOf<IComponent>()
 
