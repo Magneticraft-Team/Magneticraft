@@ -11,7 +11,7 @@ import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 class TileHeatReservoir() : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
-            specificHeat = COPPER_HEAT_CAPACITY * 3,
+            specificHeat = COPPER_HEAT_CAPACITY * 9,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = 0.05,
             tile = this)

@@ -17,7 +17,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockHeatSink : BlockHeatBase(Material.ROCK, "heat_sink"), ITileEntityProvider {
+object BlockHeatSink : BlockHeatMultistate(Material.ROCK, "heat_sink"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileHeatSink()
 

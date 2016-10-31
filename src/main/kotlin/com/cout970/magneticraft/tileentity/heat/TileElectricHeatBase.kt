@@ -1,18 +1,13 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import coffee.cypher.mcextlib.extensions.worlds.getBlock
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.HeatConnection
-import com.cout970.magneticraft.block.BlockBase
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.util.MAX_EMISSION_TEMP
-import com.cout970.magneticraft.util.MIN_EMISSION_TEMP
-import com.cout970.magneticraft.util.shouldTick
-import com.cout970.magneticraft.util.toKelvinFromMinecraftUnits
+import com.cout970.magneticraft.util.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 
@@ -25,6 +20,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
     val heatConnections = mutableListOf<IHeatConnection>()
     val lightLevelUpdateDelay = 20
     var lightLevelCache = 0.0f
+    var initiated = false
 
     override fun update() {
         if (shouldTick(20)) {
@@ -39,10 +35,16 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
                     val lightLevel: Float = interpolate(it.temperature, MIN_EMISSION_TEMP, MAX_EMISSION_TEMP).toFloat()
                     if (lightLevelCache != lightLevel) {
                         lightLevelCache = lightLevel
-                        world.getBlock<BlockBase>(pos)?.setLightLevel(lightLevel)
-                        sendUpdateToNearPlayers()
+                        //world.getBlock<BlockBase>(pos)?.setLightLevel(lightLevel)
+                        //sendUpdateToNearPlayers()
                     }
                 }
+            }
+        }
+        if (world.isServer) {
+            //update to sync connections every 20 seconds
+            if (shouldTick(400)) {
+                updateHeatConnections()
             }
         }
         super.update()
@@ -50,7 +52,11 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
 
     override fun onLoad() {
         super.onLoad()
-        for (i in heatNodes) i.heat = (world.getBiome(pos).temperature.toKelvinFromMinecraftUnits() * i.specificHeat).toLong()
+        if (initiated == false) {
+            updateHeatConnections()
+            for (i in heatNodes) i.heat = (world.getBiome(pos).temperature.toKelvinFromMinecraftUnits() * i.specificHeat).toLong()
+            initiated = true
+        }
     }
 
     override fun updateHeatConnections() {
@@ -58,6 +64,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
             heatConnections.clear() //Don't do this for internal heat connections
             for (j in EnumFacing.values()) {
                 val tileOther = world.getTileEntity(pos.offset(j)) ?: continue
+                if (tileOther === this) continue
                 val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
                 if (handler !is IHeatHandler) continue
                 for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
@@ -75,6 +82,12 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
                 heatNodes[i].deserializeNBT(tag.getCompoundTag("HeatNode" + i))
             }
         }
+        if (compound.hasKey("HeatConnections")) {
+            val tag = compound.getCompoundTag("HeatConnections")
+            for (i in 0 until heatNodes.size) {
+                heatNodes[i].deserializeNBT(tag.getCompoundTag("HeatConnection" + i))
+            }
+        }
         super.readFromNBT(compound)
     }
 
@@ -89,10 +102,12 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setFloat("lightLevelCache", lightLevelCache)
+        setBoolean("initiated", initiated)
     }
 
     override fun load(nbt: NBTTagCompound) {
         lightLevelCache = nbt.getFloat("lightLevelCache")
+        initiated = nbt.getBoolean("initiated")
     }
 
     override fun addConnection(connection: IHeatConnection) {

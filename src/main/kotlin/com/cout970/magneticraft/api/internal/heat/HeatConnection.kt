@@ -7,8 +7,8 @@ import com.cout970.magneticraft.api.heat.IHeatNode
  * Created by cout970 on 11/06/2016.
  */
 open class HeatConnection(
-        private val firstNode: IHeatNode,
-        private val secondNode: IHeatNode
+        private var firstNode: IHeatNode,
+        private var secondNode: IHeatNode
 ) : IHeatConnection {
 
     override fun getFirstNode() = firstNode

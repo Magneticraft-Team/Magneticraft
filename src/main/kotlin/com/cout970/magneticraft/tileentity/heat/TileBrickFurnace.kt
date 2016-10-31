@@ -19,7 +19,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileBrickFurnace() : TileHeatBase() {
+class TileBrickFurnace : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,

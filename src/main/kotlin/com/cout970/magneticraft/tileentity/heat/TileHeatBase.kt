@@ -8,10 +8,7 @@ import com.cout970.magneticraft.api.internal.energy.HeatConnection
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.MAX_EMISSION_TEMP
-import com.cout970.magneticraft.util.MIN_EMISSION_TEMP
-import com.cout970.magneticraft.util.shouldTick
-import com.cout970.magneticraft.util.toKelvinFromMinecraftUnits
+import com.cout970.magneticraft.util.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
@@ -26,6 +23,8 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
     val heatConnections = mutableListOf<IHeatConnection>()
     val lightLevelUpdateDelay = 20
     var lightLevelCache = 0.0f
+    var initiated = false
+    var firstTicks = -1
 
     override fun update() {
         if (shouldTick(20)) {
@@ -46,11 +45,30 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
                 }
             }
         }
+        if (world.isServer) {
+            //update to sync connections every 20 seconds
+            if (shouldTick(400)) {
+                updateHeatConnections()
+                sendUpdateToNearPlayers()
+            }
+            // when the world is loaded the player take some ticks to
+            // load so this wait for the player to send an update
+            if (firstTicks > 0) {
+                firstTicks--
+                if (firstTicks % 20 == 0) {
+                    sendUpdateToNearPlayers()
+                }
+            }
+        }
     }
 
     override fun onLoad() {
         super.onLoad()
-        updateHeatConnections()
+        if (initiated == false) {
+            updateHeatConnections()
+            for (i in heatNodes) i.heat = (world.getBiome(pos).temperature.toKelvinFromMinecraftUnits() * i.specificHeat).toLong()
+            initiated = true
+        }
     }
 
     override fun updateHeatConnections() {
@@ -58,6 +76,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
             heatConnections.clear() //Don't do this for internal heat connections
             for (j in EnumFacing.values()) {
                 val tileOther = world.getTileEntity(pos.offset(j)) ?: continue
+                if (tileOther === this) continue
                 val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
                 if (handler !is IHeatHandler) continue
                 for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
@@ -95,10 +114,12 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setFloat("lightLevelCache", lightLevelCache)
+        setBoolean("initiated", initiated)
     }
 
     override fun load(nbt: NBTTagCompound) {
         lightLevelCache = nbt.getFloat("lightLevelCache")
+        initiated = nbt.getBoolean("initiated")
     }
 
     override fun writeToNBT(compound: NBTTagCompound?): NBTTagCompound? {
@@ -106,6 +127,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         for (i in 0 until heatNodes.size) {
             tag.setTag("HeatNode" + i, heatNodes[i].serializeNBT())
         }
+        compound!!.setTag("HeatNodes", tag)
         return super.writeToNBT(compound)
     }
 

@@ -3,6 +3,7 @@ package com.cout970.magneticraft.registry
 import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.HeatExchangerRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
@@ -19,6 +20,7 @@ import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 import net.minecraftforge.oredict.ShapedOreRecipe
@@ -172,6 +174,10 @@ private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
 
 private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
     CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
+}
+
+private fun addHeatExchangerRecipe(input: FluidStack, output: FluidStack, heat: Long, minTemp: Double, maxTemp: Double, reverseLow: Boolean, reverseHigh: Boolean) {
+    HeatExchangerRecipeManager.registerRecipe(HeatExchangerRecipeManager.createRecipe(input, output, heat, minTemp, maxTemp, reverseLow, reverseHigh))
 }
 
 private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float) {

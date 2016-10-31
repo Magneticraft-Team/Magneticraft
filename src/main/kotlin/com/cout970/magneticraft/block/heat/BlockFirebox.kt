@@ -20,7 +20,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockFirebox : BlockHeatBase(Material.ROCK, "firebox"), ITileEntityProvider {
+object BlockFirebox : BlockHeatMultistate(Material.ROCK, "firebox"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileFirebox()
 

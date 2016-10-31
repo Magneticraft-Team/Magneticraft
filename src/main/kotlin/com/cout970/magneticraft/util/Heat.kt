@@ -17,6 +17,10 @@ val WATER_BOILING_POINT = 100.toKelvinFromCelsius()
 
 val COPPER_MELTING_POINT = 1085.toKelvinFromCelsius()
 val COPPER_HEAT_CAPACITY = 3.45
+val IRON_MELTING_POINT = 1538.toKelvinFromCelsius()
+val IRON_HEAT_CAPACITY = 3.5
+
+val ENERGY_TO_HEAT = 2f
 
 fun Number.toKelvinFromCelsius(): Double = this.toDouble() + 273.15
 

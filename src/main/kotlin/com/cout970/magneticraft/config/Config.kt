@@ -75,6 +75,12 @@ object Config {
     @ConfigValue(category = CATEGORY_FUEL, comment = "Default maximum fuel temperature in Celsius ")
     var defaultMaxTemp: Double = 400.0.toKelvinFromCelsius()
 
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine max temperature in Celsius ")
+    var defaultMachineMaxTemp: Double = 125.0.toKelvinFromCelsius()
+
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine safe temperature in Celsius ")
+    var defaultMachineSafeTemp: Double = 50.0.toKelvinFromCelsius()
+
     @ConfigValue(category = CATEGORY_FUEL, comment = "List of fuels and associated maximum temperatures which have higher maximum temperatures than the default.")
     var fuelTemps: FuelConfig = FuelConfig(mapOf(
             Items.COAL to 500.0.toKelvinFromCelsius(), Blocks.COAL_BLOCK to 500.0.toKelvinFromCelsius(),

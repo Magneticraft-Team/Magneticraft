@@ -87,7 +87,8 @@ open class HeatContainer(
     override fun serializeNBT() = NBTTagCompound().apply {
         setLong("heat", heat)
         setDouble("ambient", ambientTemperatureCache)
-    } 
+    }
+
     override fun getPos(): BlockPos {
         return tile.pos
     }
@@ -97,7 +98,7 @@ open class HeatContainer(
     }
 
     fun dissipateHeat() {
-        val newTemp = ((temperature - ambientTemperatureCache) * dissipation) + ambientTemperatureCache
+        val newTemp = ((temperature - ambientTemperatureCache) * (1 - dissipation)) + ambientTemperatureCache
         setHeat(getHeatFromTemperature(newTemp))
     }
 }

@@ -20,7 +20,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockBrickFurnace : BlockHeatBase(Material.ROCK, "brick_furnace"), ITileEntityProvider {
+object BlockBrickFurnace : BlockHeatMultistate(Material.ROCK, "brick_furnace"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileBrickFurnace()
 

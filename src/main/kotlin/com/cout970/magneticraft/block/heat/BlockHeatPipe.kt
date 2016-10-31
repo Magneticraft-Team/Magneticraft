@@ -20,7 +20,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockHeatPipe : BlockHeatBase(Material.ROCK, "heat_pipe"), ITileEntityProvider {
+object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEntityProvider {
 
     override fun isVisuallyOpaque(): Boolean = false
 

@@ -1,9 +1,7 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import coffee.cypher.mcextlib.extensions.worlds.getBlock
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
-import com.cout970.magneticraft.block.heat.BlockHeatPipe
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 import net.minecraft.util.EnumFacing
@@ -23,7 +21,7 @@ class TileHeatPipe() : TileHeatBase() {
 
     override fun onLoad() {
         super.onLoad()
-        val block = world.getBlock<BlockHeatPipe>(pos) ?: return
+        //val block = world.getBlock<BlockHeatPipe>(pos) ?: return
     }
 
     override val heatNodes: List<IHeatNode>

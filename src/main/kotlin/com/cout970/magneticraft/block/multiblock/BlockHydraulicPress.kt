@@ -33,7 +33,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 17/08/2016.
  */
-object BlockHydraulicPress : BlockMultiblock(Material.IRON, "hydraulic_press"), ITileEntityProvider {
+object BlockHydraulicPress : BlockMultiblockHeat(Material.IRON, "hydraulic_press"), ITileEntityProvider {
 
     init {
         defaultState = defaultState.withProperty(PROPERTY_CENTER, false).withProperty(PROPERTY_ACTIVE, false)
