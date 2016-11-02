@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.item
 
-import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.config.Config
@@ -15,7 +14,6 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
-import org.lwjgl.input.Keyboard
 
 /**
  * Created by cout970 on 20/07/2016.
@@ -25,10 +23,10 @@ object ItemThermometer : ItemBase("thermometer") {
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
 
         //DEBUG
-        if (Debug.DEBUG && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-            val tile = worldIn.getTileEntity(pos)
-            playerIn.sendMessage("Server: ${worldIn.isServer}, Tile: ${tile?.serializeNBT()}\n")
-        }
+        //if (Debug.DEBUG && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+        //    val tile = worldIn.getTileEntity(pos)
+        //    playerIn.sendMessage("Server: ${worldIn.isServer}, Tile: ${tile?.serializeNBT()}\n")
+        //}
 
         //NO DEBUG
         if (worldIn.isServer) {

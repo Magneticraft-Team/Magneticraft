@@ -1,11 +1,12 @@
 package com.cout970.magneticraft.api.registries.machines.heatexchanger;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Created by cout970 on 24/08/2016.
  */
-public interface IHeatExchangerRecipe {
+public interface IIceboxRecipe {
 
     /**
      * The input stack of this recipe
@@ -14,7 +15,7 @@ public interface IHeatExchangerRecipe {
      *
      * @return the stack used to find this recipe
      */
-    FluidStack getInput();
+    ItemStack getInput();
 
     /**
      * The output of this recipe
@@ -30,6 +31,21 @@ public interface IHeatExchangerRecipe {
      * @return the heat generated (or consumed, if negative) by this recipe
      */
     long getHeat();
+
+    /**
+     * The heat used or generated per kelvin heating the output up to ambient temperature
+     *
+     * @return the heat generated (or consumed, if negative) by this recipe
+     */
+    double getSpecificHeat();
+
+    /**
+     * The total heat change of this recipe for a given temperature
+     *
+     * @param temp The current temperature of the environment
+     * @return the heat generated (or consumed, if negative) by this recipe
+     */
+    long getTotalHeat(double temp);
 
     /**
      * The minimum temperature required for this recipe to occur
@@ -50,26 +66,18 @@ public interface IHeatExchangerRecipe {
      *
      * @return True if the recipe will occur in reverse if the temperature is below the minimum temperature
      */
-    boolean getReverseLow();
-
-    /**
-     * If the reaction is reversible at high temperatures
-     *
-     * @return True if the recipe will occur in reverse if the temperature is above the maximum temperature
-     */
-    boolean getReverseHigh();
+    boolean getReverse();
 
     /**
      * Checks if this recipes has the same input as the given argument
      *
-     * @param input the fluid to test if this recipe can be made from it
-     * @return true if the fluid matches the input of this recipe, false otherwise
+     * @param input the item to test if this recipe can be made from it
+     * @return true if the item matches the input of this recipe, false otherwise
      */
-    boolean matches(FluidStack input);
-
+    boolean matches(ItemStack input);
 
     /**
-     * Checks if this recipes has the same input as the given argument
+     * Checks if this recipes has the same output as the given argument
      *
      * @param output the fluid to test if this recipe can be made from it
      * @return true if the fluid matches the input of this recipe, false otherwise

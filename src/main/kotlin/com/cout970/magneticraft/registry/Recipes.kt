@@ -4,6 +4,7 @@ import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.HeatExchangerRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
@@ -13,6 +14,10 @@ import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
 import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
+import com.cout970.magneticraft.util.WATER_BOILING_POINT
+import com.cout970.magneticraft.util.WATER_HEAT_CAPACITY
+import com.cout970.magneticraft.util.WATER_HEAT_OF_FUSION
+import com.cout970.magneticraft.util.WATER_MELTING_POINT
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.*
@@ -20,6 +25,7 @@ import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -122,12 +128,19 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockElectricHeater), "XPX", "XFX", "XFX", 'P', "lightPlateCopper", 'F', ItemCoilOfWire, 'X', "ingotBrick")
     addRecipe(ItemStack(BlockBrickFurnace), "XXX", "XFX", "XPX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', Blocks.FURNACE)
     addRecipe(ItemStack(BlockFirebox), "XPX", "XFX", "XXX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', Blocks.FURNACE)
+    addRecipe(ItemStack(BlockIcebox), "XXX", "XFX", "XPX", 'X', "cobblestone", 'P', "lightPlateCopper", 'F', Blocks.CAULDRON)
     addRecipe(ItemStack(BlockHeatReservoir), "XPX", "XFX", "XXX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', BlockCompactedCopper)
     addRecipe(ItemStack(BlockHeatSink), "PPP", "XPX", 'X', "ingotBrick", 'P', "lightPlateCopper")
     addRecipe(ItemStack(BlockHeatPipe, 8), "BBB", "PIP", "BBB", 'B', "ingotBrick", 'P', "lightPlateCopper", 'I', "ingotCopper")
 
     addRecipe(ItemStack(BlockCoke), "XXX", "XXX", "XXX", 'X', of(ItemCoke))
     addRecipe(ItemStack(ItemCoke, 9), "###", "#X#", "###", 'X', of(BlockCoke))
+
+    //ICEBOX RECIPES
+    addIceboxRecipeWater(ItemStack(Items.SNOWBALL), 125, false)
+    addIceboxRecipeWater(ItemStack(Blocks.SNOW), 500, false)
+    addIceboxRecipeWater(ItemStack(Blocks.ICE), 900, true)
+    addIceboxRecipeWater(ItemStack(Blocks.PACKED_ICE), 1000, false)
 
     //SMELTING RECIPES
     addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 0), ItemStack(BlockLimestone, 1, 0))
@@ -186,6 +199,14 @@ private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: I
 
 private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
     HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
+}
+
+private fun addIceboxRecipe(input: ItemStack, output: FluidStack, heat: Long, specificHeat: Double, minTemp: Double, maxTemp: Double, reverse: Boolean) {
+    IceboxRecipeManager.registerRecipe(IceboxRecipeManager.createRecipe(input, output, heat, specificHeat, minTemp, maxTemp, reverse))
+}
+
+private fun addIceboxRecipeWater(input: ItemStack, output: Int, reverse: Boolean) {
+    IceboxRecipeManager.registerRecipe(IceboxRecipeManager.createRecipe(input, FluidStack(FluidRegistry.WATER, output), (WATER_HEAT_OF_FUSION * output / 1000).toLong(), WATER_HEAT_CAPACITY, WATER_MELTING_POINT, WATER_BOILING_POINT, reverse))
 }
 
 //function to get the first ore dictionary entry for the block if exist, or the block if not exist

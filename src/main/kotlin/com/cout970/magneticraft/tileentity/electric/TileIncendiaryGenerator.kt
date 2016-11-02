@@ -50,6 +50,7 @@ class TileIncendiaryGenerator(
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
     var burningTime = 0f
+    var ambientTemperature = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     var heat = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     val production = ValueAverage()
     var nanoBuckets = 0
@@ -78,9 +79,9 @@ class TileIncendiaryGenerator(
                 heat += burningSpeed * FUEL_TO_HEAT
             }
             //makes electricity from heat
-            if (heat > STANDARD_AMBIENT_TEMPERATURE + 75 && tank.fluidAmount > 0) {
+            if (heat > ambientTemperature + 75 && tank.fluidAmount > 0) {
 
-                val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 50)
+                val speed = interpolate(heat.toDouble(), ambientTemperature.toDouble(), MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
                 val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * prod, false)
                 production += applied
@@ -94,7 +95,7 @@ class TileIncendiaryGenerator(
                     nanoBuckets -= 1000
                     tank.drainInternal(1, true)
                 }
-            } else if (heat > STANDARD_AMBIENT_TEMPERATURE && tank.fluidAmount > 0) {
+            } else if (heat > ambientTemperature && tank.fluidAmount > 0) {
                 heat -= 0.109f
             }
             //updates the production counter
@@ -111,6 +112,11 @@ class TileIncendiaryGenerator(
         super.update()
     }
 
+    override fun onLoad() {
+        super.onLoad()
+        ambientTemperature = world.getBiome(pos).temperature.toKelvinFromMinecraftUnits().toFloat()
+    }
+
     override fun receiveSyncData(data: IBD, side: Side) {
         super.receiveSyncData(data, side)
         if (side == Side.SERVER) {
@@ -124,6 +130,7 @@ class TileIncendiaryGenerator(
         setFloat("maxBurningTime", maxBurningTime)
         setFloat("burningTime", burningTime)
         setFloat("heat", heat)
+        setFloat("ambientTemp", ambientTemperature)
         setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
     }
 
@@ -132,6 +139,7 @@ class TileIncendiaryGenerator(
         maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("burningTime")
         heat = nbt.getFloat("heat")
+        ambientTemperature = nbt.getFloat("ambientTemp")
         tank.readFromNBT(nbt.getCompoundTag("tank"))
     }
 

@@ -38,6 +38,7 @@ val blocks = mapOf(
         withItemBlock(BlockCompactedTungsten),
         withItemBlock(BlockSolarPanel),
         withItemBlock(BlockElectricalMachineBlock),
+        withItemBlock(BlockIcebox),
         withItemBlock(BlockCoke)
 )
 

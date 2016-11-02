@@ -80,6 +80,7 @@ tile.magneticraft.infinite_water.name=Infinite Water
 tile.magneticraft.infinite_heat.name=Infinite Heat
 tile.magneticraft.tile_limestone.name=Limestone Tiles
 tile.magneticraft.firebox.name=Firebox
+tile.magneticraft.icebox.name=Icebox
 tile.magneticraft.heat_sink.name=Heatsink
 tile.magneticraft.heat_reservoir.name=Heat Reservoir
 tile.magneticraft.brick_furnace.name=Brick Furnace

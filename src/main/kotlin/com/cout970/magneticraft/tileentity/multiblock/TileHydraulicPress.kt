@@ -152,6 +152,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
 
     companion object {
         val ENERGY_INPUT = BlockPos(1, 1, 0)
+        val HEAT_OUTPUT = BlockPos(-1, 1, 0)
     }
 
     override fun onBreak() {
@@ -167,15 +168,22 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() || facing == null))
-            return true
+        if (capability == NODE_HANDLER) {
+            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && (facing == direction.rotateY() ||
+                    direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() ||
+                            facing == null)))
+                return true
+        }
         return false
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY()) || facing == null)
-            return this as T
+        if (capability == NODE_HANDLER)
+            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && (facing == direction.rotateY()) || facing == null)
+                return this as T
+        if (direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY()))
+            return heatNodes as T
         return null
     }
 

@@ -39,7 +39,7 @@ public interface IHeatExchangerRecipeManager {
      * @param minTemp     the minimum temperature required for the recipe to craft
      * @param maxTemp     the maximum temperature at which the recipe can craft
      * @param reverseLow  if true, the recipe will run in reverse if below its minimum temperature
-     * @param reverseHigh if true, the recipe will run in reverse if above its minimum temperature
+     * @param reverseHigh if true, the recipe will run in reverse if above its maximum temperature
      */
     IHeatExchangerRecipe createRecipe(FluidStack input, FluidStack output, long heat, double minTemp, double maxTemp, boolean reverseLow, boolean reverseHigh);
 }

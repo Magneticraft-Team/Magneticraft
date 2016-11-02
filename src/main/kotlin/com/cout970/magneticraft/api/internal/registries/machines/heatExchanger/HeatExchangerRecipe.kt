@@ -27,4 +27,5 @@ data class HeatExchangerRecipe(
     override fun getReverseLow(): Boolean = reverseLow
 
     override fun matches(input: FluidStack?): Boolean = input?.isFluidEqual(this.input) ?: false
+    override fun matchesReverse(output: FluidStack?): Boolean = output?.isFluidEqual(this.output) ?: false
 }

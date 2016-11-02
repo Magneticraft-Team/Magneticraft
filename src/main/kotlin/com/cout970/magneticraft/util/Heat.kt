@@ -12,8 +12,11 @@ val DEFAULT_SMELTING_TEMPERATURE = 400.toKelvinFromCelsius()
 val MIN_EMISSION_TEMP = 480.toKelvinFromCelsius()
 //val MAX_EMISSION_TEMP = 1400.toKelvinFromCelsius()
 val MAX_EMISSION_TEMP = 800.toKelvinFromCelsius()
+
 val WATER_MELTING_POINT = 0.toKelvinFromCelsius()
 val WATER_BOILING_POINT = 100.toKelvinFromCelsius()
+val WATER_HEAT_CAPACITY = 4.18
+val WATER_HEAT_OF_FUSION = 334
 
 val COPPER_MELTING_POINT = 1085.toKelvinFromCelsius()
 val COPPER_HEAT_CAPACITY = 3.45

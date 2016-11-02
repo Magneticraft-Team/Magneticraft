@@ -90,4 +90,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_HEAT, comment = "Firebox Production")
     var fireboxMaxProduction = 40.0
+
+    @ConfigValue(category = CATEGORY_HEAT, comment = "Icebox Consumption")
+    var iceboxMaxConsumption = 20.0
 }
