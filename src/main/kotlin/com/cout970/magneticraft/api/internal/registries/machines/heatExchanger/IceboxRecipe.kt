@@ -34,5 +34,5 @@ data class IceboxRecipe(
     }
 
     override fun matches(input: ItemStack?): Boolean = input?.isItemEqual(this.input) ?: false
-    override fun matchesReverse(output: FluidStack?): Boolean = output?.isFluidEqual(this.output) ?: false
+    override fun matchesReverse(output: FluidStack?): Boolean = reverse && (output?.isFluidEqual(this.output) ?: false)
 }

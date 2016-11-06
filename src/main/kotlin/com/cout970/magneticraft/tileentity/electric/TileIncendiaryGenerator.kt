@@ -127,8 +127,8 @@ class TileIncendiaryGenerator(
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
-        setFloat("maxBurningTime", maxBurningTime)
-        setFloat("burningTime", burningTime)
+        setFloat("maxMeltingTime", maxBurningTime)
+        setFloat("meltingTime", burningTime)
         setFloat("heat", heat)
         setFloat("ambientTemp", ambientTemperature)
         setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
@@ -136,8 +136,8 @@ class TileIncendiaryGenerator(
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
-        maxBurningTime = nbt.getFloat("maxBurningTime")
-        burningTime = nbt.getFloat("burningTime")
+        maxBurningTime = nbt.getFloat("maxMeltingTime")
+        burningTime = nbt.getFloat("meltingTime")
         heat = nbt.getFloat("heat")
         ambientTemperature = nbt.getFloat("ambientTemp")
         tank.readFromNBT(nbt.getCompoundTag("tank"))

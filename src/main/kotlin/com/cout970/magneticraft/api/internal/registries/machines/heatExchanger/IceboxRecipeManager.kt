@@ -25,6 +25,15 @@ object IceboxRecipeManager : IIceboxRecipeManager {
         return null
     }
 
+    override fun findRecipeReverse(stack: FluidStack): IIceboxRecipe? {
+        for (rec in recipes) {
+            if (rec.matchesReverse(stack)) {
+                return rec
+            }
+        }
+        return null
+    }
+
     override fun registerRecipe(recipe: IIceboxRecipe): Boolean {
         if (findRecipe(recipe.input) != null) {
             return false

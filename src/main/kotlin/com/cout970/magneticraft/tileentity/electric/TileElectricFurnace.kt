@@ -66,12 +66,12 @@ class TileElectricFurnace : TileElectricBase() {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
-        setFloat("burningTime", burningTime)
+        setFloat("meltingTime", burningTime)
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
-        burningTime = nbt.getFloat("burningTime")
+        burningTime = nbt.getFloat("meltingTime")
     }
 
     companion object {

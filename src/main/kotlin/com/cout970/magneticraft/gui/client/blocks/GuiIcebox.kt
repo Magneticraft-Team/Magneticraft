@@ -35,7 +35,12 @@ class GuiIcebox(container: ContainerBase) : GuiBase(container) {
         }))
 
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.burningTime.toDouble() }, { Math.max(tile.maxBurningTime.toDouble(), 1.0) }, { 0.0 }),
-                1, Vec2d(102, 56) + box.start, { listOf("Fuel") }))
+                CallbackBarProvider({ tile.meltingTime.toDouble() }, { Math.max(tile.maxMeltingTime.toDouble(), 1.0) }, { 0.0 }),
+                1, Vec2d(102, 56) + box.start, { listOf("Melting") }))
+
+
+        components.add(CompVerticalBar(
+                CallbackBarProvider({ tile.freezingTime.toDouble() }, { Math.max(tile.maxFreezingTime.toDouble(), 1.0) }, { 0.0 }),
+                1, Vec2d(69, 56) + box.start, { listOf("Freezing") }))
     }
 }

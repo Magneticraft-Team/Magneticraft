@@ -78,13 +78,13 @@ class TileBrickFurnace : TileHeatBase() {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
-        setFloat("burningTime", burningTime)
+        setFloat("meltingTime", burningTime)
         super.save()
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
-        burningTime = nbt.getFloat("burningTime")
+        burningTime = nbt.getFloat("meltingTime")
         super.load(nbt)
     }
 

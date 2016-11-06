@@ -19,6 +19,14 @@ public interface IIceboxRecipeManager {
     IIceboxRecipe findRecipe(ItemStack input);
 
     /**
+     * Retrieves the first reverse-capable recipe that matches the given output
+     *
+     * @param output the output to check the recipes
+     * @return the recipes that matches the input or null if none matches the output
+     */
+    IIceboxRecipe findRecipeReverse(FluidStack output);
+
+    /**
      * The list with all registered recipes
      */
     List<IIceboxRecipe> getRecipes();

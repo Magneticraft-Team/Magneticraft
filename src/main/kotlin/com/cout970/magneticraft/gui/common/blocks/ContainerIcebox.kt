@@ -1,10 +1,7 @@
 package com.cout970.magneticraft.gui.common.blocks
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.gui.common.ContainerBase
-import com.cout970.magneticraft.gui.common.DATA_ID_BURNING_TIME
-import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
-import com.cout970.magneticraft.gui.common.DATA_ID_MAX_BURNING_TIME
+import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.tileentity.electric.TileIcebox
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
@@ -28,8 +25,10 @@ class ContainerIcebox(player: EntityPlayer, world: World, blockPos: BlockPos) : 
     override fun sendDataToClient(): IBD? {
         tile!!
         val data = IBD()
-        data.setFloat(DATA_ID_BURNING_TIME, tile.burningTime)
-        data.setFloat(DATA_ID_MAX_BURNING_TIME, tile.maxBurningTime)
+        data.setFloat(DATA_ID_BURNING_TIME, tile.meltingTime)
+        data.setFloat(DATA_ID_MAX_BURNING_TIME, tile.maxMeltingTime)
+        data.setFloat(DATA_ID_MAX_FREEZING_TIME, tile.maxFreezingTime)
+        data.setFloat(DATA_ID_FREEZING_TIME, tile.freezingTime)
         data.setLong(DATA_ID_MACHINE_HEAT, tile.heat.heat)
         data.merge(tile.tank.getData())
         return data
@@ -37,8 +36,10 @@ class ContainerIcebox(player: EntityPlayer, world: World, blockPos: BlockPos) : 
 
     override fun receiveDataFromServer(ibd: IBD) {
         tile!!
-        ibd.getFloat(DATA_ID_BURNING_TIME, { tile.burningTime = it })
-        ibd.getFloat(DATA_ID_MAX_BURNING_TIME, { tile.maxBurningTime = it })
+        ibd.getFloat(DATA_ID_BURNING_TIME, { tile.meltingTime = it })
+        ibd.getFloat(DATA_ID_MAX_BURNING_TIME, { tile.maxMeltingTime = it })
+        ibd.getFloat(DATA_ID_FREEZING_TIME, { tile.freezingTime = it })
+        ibd.getFloat(DATA_ID_MAX_FREEZING_TIME, { tile.maxFreezingTime = it })
         ibd.getLong(DATA_ID_MACHINE_HEAT, { tile.heat.heat = it })
         tile.tank.setData(ibd)
     }
