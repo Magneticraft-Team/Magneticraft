@@ -67,9 +67,10 @@ class TileIcebox(
             if (canMelt()) {
                 //Melting rate depends on difference between current temperature and recipe's temperature range
                 val burningSpeed = Math.ceil((Config.iceboxMaxConsumption * interpolate(heat.temperature, lastRecipe()!!.minTemp, lastRecipe()!!.maxTemp)) / 10.0).toInt()
-                if (tank.fillInternal(FluidStack(lastRecipe()!!.output.fluid, (lastRecipe()!!.output.amount * burningSpeed / maxBurningTime).toInt()), false) != 0) {  //This is lossy, but the fluid is considered a byproduct, so whatever
+                val outFluidInc = FluidStack(lastRecipe()!!.output.fluid, (lastRecipe()!!.output.amount * burningSpeed / maxBurningTime).toInt())
+                if (tank.fillInternal(outFluidInc, false) != 0) {  //This is lossy, but the fluid is considered a byproduct, so whatever
                     burningTime -= burningSpeed
-                    tank.fillInternal(lastRecipe()!!.output, true)
+                    tank.fillInternal(outFluidInc, true)
                     heat.pullHeat((burningSpeed).toLong(), false)
                 }
             }
@@ -121,7 +122,8 @@ class TileIcebox(
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
-        setTag("recipe_cache", lastInput?.serializeNBT())
+        if (lastInput != null)
+            setTag("recipe_cache", lastInput!!.serializeNBT())
         setFloat("maxBurningTime", maxBurningTime)
         setFloat("burningTime", burningTime)
         setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
@@ -130,7 +132,8 @@ class TileIcebox(
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
-        lastInput!!.deserializeNBT(nbt.getCompoundTag("recipe_cache"))
+        if (nbt.hasKey("recipe_cache") == false) lastInput == null
+        else lastInput!!.deserializeNBT(nbt.getCompoundTag("recipe_cache"))
         maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("burningTime")
         tank.readFromNBT(nbt.getCompoundTag("tank"))

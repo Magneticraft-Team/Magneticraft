@@ -26,6 +26,7 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileHydraulicPress::class.java          to "hydraulic_press",
         TileMultiblock::class.java              to "tile_multiblock",
         TileFirebox::class.java to "firebox",
+        TileIcebox::class.java to "icebox",
         TileInfiniteHeat::class.java to "infinite_heat",
         TileBrickFurnace::class.java to "brick_furnace",
         TileHeatPipe::class.java to "heat_pipe",

@@ -22,6 +22,7 @@ object GuiHandler : IGuiHandler {
             is TileBattery -> GuiBattery(serverElement)
             is TileElectricFurnace -> GuiElectricFurnace(serverElement)
             is TileFirebox -> GuiFirebox(serverElement)
+            is TileIcebox -> GuiIcebox(serverElement)
             is TileBrickFurnace -> GuiBrickFurnace(serverElement)
             else -> null
         }
@@ -35,6 +36,7 @@ object GuiHandler : IGuiHandler {
             is TileElectricFurnace -> ContainerElectricFurnace(player, world, BlockPos(x, y, z))
             is TileBrickFurnace -> ContainerBrickFurnace(player, world, BlockPos(x, y, z))
             is TileFirebox -> ContainerFirebox(player, world, BlockPos(x, y, z))
+            is TileIcebox -> ContainerIcebox(player, world, BlockPos(x, y, z))
             else -> null
         }
     }
