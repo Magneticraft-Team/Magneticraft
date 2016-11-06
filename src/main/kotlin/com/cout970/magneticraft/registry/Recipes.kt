@@ -128,7 +128,7 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockElectricHeater), "XPX", "XFX", "XFX", 'P', "lightPlateCopper", 'F', ItemCoilOfWire, 'X', "ingotBrick")
     addRecipe(ItemStack(BlockBrickFurnace), "XXX", "XFX", "XPX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', Blocks.FURNACE)
     addRecipe(ItemStack(BlockFirebox), "XPX", "XFX", "XXX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', Blocks.FURNACE)
-    addRecipe(ItemStack(BlockIcebox), "XXX", "XFX", "XPX", 'X', "cobblestone", 'P', "lightPlateCopper", 'F', Blocks.CAULDRON)
+    addRecipe(ItemStack(BlockIcebox), "XXX", "XFX", "XPX", 'X', "cobblestone", 'P', "lightPlateCopper", 'F', Items.CAULDRON)
     addRecipe(ItemStack(BlockHeatReservoir), "XPX", "XFX", "XXX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', BlockCompactedCopper)
     addRecipe(ItemStack(BlockHeatSink), "PPP", "XPX", 'X', "ingotBrick", 'P', "lightPlateCopper")
     addRecipe(ItemStack(BlockHeatPipe, 8), "BBB", "PIP", "BBB", 'B', "ingotBrick", 'P', "lightPlateCopper", 'I', "ingotCopper")
