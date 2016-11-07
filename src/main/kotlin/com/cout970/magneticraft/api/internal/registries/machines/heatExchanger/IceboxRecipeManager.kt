@@ -16,7 +16,7 @@ import java.util.*
 object IceboxRecipeManager : IIceboxRecipeManager {
 
     private val recipes = LinkedList<IIceboxRecipe>()
-    private val fluids = LinkedList<Fluid>()
+    private val fluids = mutableSetOf<Fluid>()
 
     override fun findRecipe(stack: ItemStack): IIceboxRecipe? {
         for (rec in recipes) {
@@ -46,7 +46,7 @@ object IceboxRecipeManager : IIceboxRecipeManager {
     }
 
     override fun getValidFluids(): List<Fluid> {
-        return fluids
+        return fluids.toList()
     }
 
     override fun getRecipes(): List<IIceboxRecipe> = Collections.synchronizedList(recipes)
