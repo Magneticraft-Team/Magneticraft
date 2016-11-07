@@ -3,6 +3,7 @@ package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
 import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipe
 import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipeManager
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import java.util.*
 
@@ -15,6 +16,7 @@ import java.util.*
 object IceboxRecipeManager : IIceboxRecipeManager {
 
     private val recipes = LinkedList<IIceboxRecipe>()
+    private val fluids = LinkedList<Fluid>()
 
     override fun findRecipe(stack: ItemStack): IIceboxRecipe? {
         for (rec in recipes) {
@@ -39,7 +41,12 @@ object IceboxRecipeManager : IIceboxRecipeManager {
             return false
         }
         recipes.add(recipe)
+        fluids.add(recipe.output.fluid)
         return true
+    }
+
+    override fun getValidFluids(): List<Fluid> {
+        return fluids
     }
 
     override fun getRecipes(): List<IIceboxRecipe> = Collections.synchronizedList(recipes)

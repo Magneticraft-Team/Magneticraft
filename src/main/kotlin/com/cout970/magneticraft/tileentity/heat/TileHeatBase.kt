@@ -66,7 +66,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         super.onLoad()
         if (initiated == false) {
             updateHeatConnections()
-            for (i in heatNodes) i.heat = (world.getBiome(pos).temperature.toKelvinFromMinecraftUnits() * i.specificHeat).toLong()
+            for (i in heatNodes) i.heat = (biomeTemptoKelvin(world, pos) * i.specificHeat).toLong()
             initiated = true
         }
     }
@@ -83,7 +83,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
                     heatConnections.add(HeatConnection(i, otherNode))
                 }
             }
-            i.setAmbientTemp(world.getBiome(pos).temperature.toKelvinFromMinecraftUnits()) //This might be unnecessary
+            i.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
         }
     }
 

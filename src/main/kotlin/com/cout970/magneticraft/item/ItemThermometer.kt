@@ -5,7 +5,10 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.biomeTemptoKelvin
+import com.cout970.magneticraft.util.isServer
+import com.cout970.magneticraft.util.toCelsius
+import com.cout970.magneticraft.util.toFahrenheit
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -42,8 +45,8 @@ object ItemThermometer : ItemBase("thermometer") {
                     }
                 }
             }
-            if (Config.heatUnitCelsius) playerIn.addChatComponentMessage(TextComponentString("Ambient: %.2fC".format(worldIn.getBiome(pos).temperature.toCelsiusFromMinecraftUnits())))
-            else playerIn.addChatComponentMessage(TextComponentString("Ambient: %.2fF".format(worldIn.getBiome(pos).temperature.toDouble().toFarenheitFromMinecraftUnits())))
+            if (Config.heatUnitCelsius) playerIn.addChatComponentMessage(TextComponentString("Ambient: %.2fC".format(biomeTemptoKelvin(worldIn, pos).toCelsius())))
+            else playerIn.addChatComponentMessage(TextComponentString("Ambient: %.2fF".format(biomeTemptoKelvin(worldIn, pos).toFahrenheit())))
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ)
     }

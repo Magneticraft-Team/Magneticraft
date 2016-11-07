@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.registries.machines.heatexchanger;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
@@ -25,6 +26,11 @@ public interface IIceboxRecipeManager {
      * @return the recipes that matches the input or null if none matches the output
      */
     IIceboxRecipe findRecipeReverse(FluidStack output);
+
+    /**
+     * The list with all valid output fluids
+     */
+    List<Fluid> getValidFluids();
 
     /**
      * The list with all registered recipes

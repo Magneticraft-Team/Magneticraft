@@ -114,7 +114,7 @@ class TileIncendiaryGenerator(
 
     override fun onLoad() {
         super.onLoad()
-        ambientTemperature = world.getBiome(pos).temperature.toKelvinFromMinecraftUnits().toFloat()
+        ambientTemperature = biomeTemptoKelvin(world, pos).toFloat()
     }
 
     override fun receiveSyncData(data: IBD, side: Side) {

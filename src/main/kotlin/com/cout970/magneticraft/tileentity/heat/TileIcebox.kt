@@ -33,8 +33,8 @@ class TileIcebox(
 ) : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
-            specificHeat = COPPER_HEAT_CAPACITY * 3,
-            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
+            specificHeat = IRON_HEAT_CAPACITY * 7,
+            maxHeat = (IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT).toLong(),
             conductivity = 0.05,
             tile = this)
     val inventory = ItemStackHandler(1)
@@ -92,6 +92,7 @@ class TileIcebox(
                     meltingTime -= meltingSpeed
                     tank.fillInternal(outFluidInc, true)
                     heat.pullHeat((meltingSpeed).toLong(), false)
+                    markDirty()
                 }
             } else if (canFreeze()) {
                 val freezingSpeed = Math.ceil(Config.iceboxMaxConsumption / 10.0).toInt()
@@ -107,6 +108,7 @@ class TileIcebox(
                     }
                     tank.drainInternal(outFluidInc, true)
                     heat.pushHeat((freezingSpeed).toLong(), false)
+                    markDirty()
                 }
             }
 

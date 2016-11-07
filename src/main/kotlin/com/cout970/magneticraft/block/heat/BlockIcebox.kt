@@ -18,6 +18,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraftforge.fluids.FluidStack
 
 /**
  * Created by cout970 on 04/07/2016.
@@ -34,10 +35,18 @@ object BlockIcebox : BlockHeatMultistate(Material.ROCK, "icebox"), ITileEntityPr
                 val tile = worldIn.getTile<TileIcebox>(pos)
                 if (tile != null) {
                     val filled = cap.fill(tile.tank.fluid, false)
-                    if (filled != null) {
+                    if (filled == 1000) {
                         val accepted = tile.tank.drain(filled, true)
                         if (accepted != null) {
                             cap.fill(accepted, true)
+                        }
+                        return true
+                    }
+                    val drained = cap.drain(1000, false)
+                    if (drained != null) {
+                        val accepted = tile.tank.fill(drained, true)
+                        if (accepted > 0 && !playerIn.capabilities.isCreativeMode) {
+                            cap.drain(FluidStack(drained, accepted), true)
                         }
                         return true
                     }

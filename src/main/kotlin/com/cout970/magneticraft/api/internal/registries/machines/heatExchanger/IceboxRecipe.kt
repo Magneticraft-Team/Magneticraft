@@ -28,7 +28,7 @@ data class IceboxRecipe(
     override fun getReverse(): Boolean = reverse
 
     override fun getTotalHeat(temp: Double): Long {
-        if (temp < minTemp) return 0
+        if (temp < minTemp) return heat
         if (temp > maxTemp) return (specificHeat * (maxTemp - minTemp)).toLong() + heat
         return (specificHeat * (temp - minTemp)).toLong() + heat
     }
