@@ -30,4 +30,11 @@ public interface IHeatHandler extends INodeHandler {
      * @param connection The connection that need to be removed
      */
     void removeConnection(IHeatConnection connection);
+
+    /**
+     * Notifies this handler that a connection needs to be removed, usually because the other block has been mined
+     *
+     * @param node The node corresponding to connections that need to be removed
+     */
+    void removeConnection(IHeatNode node);
 }

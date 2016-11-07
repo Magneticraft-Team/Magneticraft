@@ -35,7 +35,7 @@ object ItemThermometer : ItemBase("thermometer") {
         if (worldIn.isServer) {
             val tile = worldIn.getTileEntity(pos)
             if (tile != null) {
-                val handler = NODE_HANDLER!!.fromTile(tile)
+                val handler = NODE_HANDLER!!.fromTile(tile, facing)
                 if (handler is IHeatHandler) {
                     for (i in handler.nodes) {
                         if (i !is IHeatNode) continue

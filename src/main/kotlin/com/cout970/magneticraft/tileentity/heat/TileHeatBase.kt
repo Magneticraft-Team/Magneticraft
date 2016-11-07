@@ -20,7 +20,7 @@ import net.minecraftforge.common.capabilities.Capability
 abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     abstract val heatNodes: List<IHeatNode>
-    val heatConnections = mutableListOf<IHeatConnection>()
+    val heatConnections: MutableSet<IHeatConnection> = mutableSetOf()
     val lightLevelUpdateDelay = 20
     var lightLevelCache = 0.0f
     var initiated = false
@@ -73,14 +73,14 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     override fun updateHeatConnections() {
         for (i in heatNodes) {
-            heatConnections.clear() //Don't do this for internal heat connections
             for (j in EnumFacing.values()) {
                 val tileOther = world.getTileEntity(pos.offset(j)) ?: continue
                 if (tileOther === this) continue
-                val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
+                val handler = NODE_HANDLER!!.fromTile(tileOther, j) ?: continue
                 if (handler !is IHeatHandler) continue
                 for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
                     heatConnections.add(HeatConnection(i, otherNode))
+                    handler.addConnection(HeatConnection(otherNode, i))
                 }
             }
             i.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
@@ -96,6 +96,13 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     override fun removeConnection(connection: IHeatConnection) {
         heatConnections.remove(connection)
+    }
+
+    override fun removeConnection(node: IHeatNode) {
+        for (j in heatConnections) {
+            if (j.firstNode === node || j.secondNode === node)
+                heatConnections.remove(j)
+        }
     }
 
     override fun getConnections(): List<IHeatConnection> {
@@ -136,6 +143,20 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         if (v > max) return 1.0
         return (v - min) / (max - min)
     }
+
+    override fun onBreak() {
+        heatConnections.clear()
+//       for(i in EnumFacing.values()) {
+//           val tileOther = world.getTileEntity(pos.offset(i)) ?: continue
+//           if (tileOther === this) continue
+//          val handler = NODE_HANDLER!!.fromTile(tileOther, i) ?: continue
+//           if (handler !is IHeatHandler) continue
+//           for(j in heatNodes)
+//               handler.removeConnection(j)
+//       }
+        super.onBreak()
+    }
+
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {

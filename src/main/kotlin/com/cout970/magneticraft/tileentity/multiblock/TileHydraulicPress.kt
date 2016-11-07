@@ -6,8 +6,10 @@ import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.HeatConnection
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
@@ -19,6 +21,7 @@ import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.AnimationTimer
@@ -60,6 +63,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
             maxHeat = ((IRON_HEAT_CAPACITY * 10) * Config.defaultMachineMaxTemp).toLong(),
             conductivity = 0.05
     )
+
     override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
     val safeHeat: Long = ((IRON_HEAT_CAPACITY * 10 * Config.defaultMachineSafeTemp)).toLong()
@@ -128,6 +132,21 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     override fun onDeactivate() {
     }
 
+    override fun updateHeatConnections() {
+        for (j in POTENTIAL_CONNECTIONS) {
+            val relPos = direction.rotatePoint(BlockPos.ORIGIN, j)
+            val tileOther = world.getTileEntity(relPos)
+            if (tileOther == null) continue
+            val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
+            if (handler !is IHeatHandler) continue
+            for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                heatConnections.add(HeatConnection(heatNode, otherNode))
+                handler.addConnection(HeatConnection(otherNode, heatNode))
+            }
+        }
+        heatNode.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+    }
+
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
         PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
 
@@ -153,6 +172,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     companion object {
         val ENERGY_INPUT = BlockPos(1, 1, 0)
         val HEAT_OUTPUT = BlockPos(-1, 1, 0)
+        val POTENTIAL_CONNECTIONS = setOf(BlockPos(-2, 1, 0), BlockPos(-1, 1, 1), BlockPos(-1, 1, -1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
     }
 
     override fun onBreak() {
@@ -169,9 +189,9 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
         if (capability == NODE_HANDLER) {
-            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && (facing == direction.rotateY() ||
+            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos ||
                     direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() ||
-                            facing == null)))
+                            facing == null))
                 return true
         }
         return false
@@ -180,22 +200,23 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
         if (capability == NODE_HANDLER)
-            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && (facing == direction.rotateY()) || facing == null)
+            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos)
                 return this as T
         if (direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY()))
-            return heatNodes as T
+            return this as T
         return null
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == NODE_HANDLER) return false
+        if (capability == NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return Inventory(inventory) as T
+        if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }
 
