@@ -2,9 +2,12 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
+import com.cout970.magneticraft.block.fuel.BlockCharcoalSlab
+import com.cout970.magneticraft.block.fuel.BlockCoke
 import com.cout970.magneticraft.block.heat.*
 import com.cout970.magneticraft.block.itemblock.*
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
+import com.cout970.magneticraft.block.multiblock.BlockKiln
 import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -29,6 +32,7 @@ val blocks = mapOf(
         withItemBlock(BlockAirLock),
         withItemBlock(BlockAirBubble),
         withItemBlock(BlockHydraulicPress),
+        withItemBlock(BlockKiln),
         withItemBlock(BlockStripedMachineBlock),
         withItemBlock(BlockMachineBlockSupportColumn),
         withItemBlock(BlockMachineBlock),
@@ -39,7 +43,10 @@ val blocks = mapOf(
         withItemBlock(BlockSolarPanel),
         withItemBlock(BlockElectricalMachineBlock),
         withItemBlock(BlockIcebox),
-        withItemBlock(BlockCoke)
+        withItemBlock(BlockCoke),
+        withItemBlock(BlockGlazedBrick),
+        withItemBlock(BlockFluxedGravel),
+        withItemBlock(BlockCharcoalSlab)
 )
 
 val lightBlocks = mapOf(

@@ -38,11 +38,11 @@ fun renderMultiblockBlueprint(multiblock: Multiblock) {
                 val component = multiblock.scheme[i, j, k]
                 val blocks = component.getBlueprintBlocks(multiblock, BlockPos(i, j, k))
                 for (stack in blocks) {
+                    stack.item ?: continue
                     pushMatrix()
                     translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
                     val pos = vec3Of(i, j, k) - multiblock.center.toDoubleVec()
                     translate(pos.x, pos.y, pos.z)
-
                     if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
                         translate(0.0, -0.045, 0.125)
                         rotate(90f, 1f, 0f, 0f)

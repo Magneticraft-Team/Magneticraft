@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.block.BlockCoke
+import com.cout970.magneticraft.block.fuel.BlockCoke
 import com.cout970.magneticraft.fuel.FuelHandler
 import com.cout970.magneticraft.fuel.IFuel
 import com.cout970.magneticraft.item.ItemCoke

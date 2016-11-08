@@ -3,6 +3,7 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.electric.*
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
+import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -24,6 +25,7 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileInfiniteEnergy::class.java          to "infinite_energy",
         TileAirLock::class.java                 to "airlock",
         TileHydraulicPress::class.java          to "hydraulic_press",
+        TileKiln::class.java to "kiln",
         TileMultiblock::class.java              to "tile_multiblock",
         TileFirebox::class.java to "firebox",
         TileIcebox::class.java to "icebox",

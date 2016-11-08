@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "heat_pipe",
+    "model": "magneticraft:pipe/heat_pipe_0",
     "transform": "forge:default-block",
     "textures": {
       "texture": "magneticraft:blocks/heat_pipe"

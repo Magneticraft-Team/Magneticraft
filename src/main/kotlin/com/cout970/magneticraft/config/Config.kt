@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.config
 
-import com.cout970.magneticraft.block.BlockCoke
+import com.cout970.magneticraft.block.fuel.BlockCoke
 import com.cout970.magneticraft.item.ItemCoke
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.init.Blocks

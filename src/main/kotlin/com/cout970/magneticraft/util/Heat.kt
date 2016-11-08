@@ -17,6 +17,13 @@ val SNOW_CORRECTION_TEMP = 0.25f //Value to account for the fact that water free
 //val MAX_EMISSION_TEMP = 1400.toKelvinFromCelsius()
 val MAX_EMISSION_TEMP = 800.toKelvinFromCelsius()
 
+val QUARTZ_MELTING_POINT = 1750.toKelvinFromCelsius()
+val GLASS_MAKING_TEMP = 450.toKelvinFromCelsius()
+val FURNACE_BRICK_TEMP = 550.toKelvinFromCelsius()
+
+val COKE_REACTION_TEMP = 450.toKelvinFromCelsius()
+val CARBON_SUBLIMATION_POINT = 4000.toKelvinFromCelsius()
+
 val WATER_MELTING_POINT = 0.toKelvinFromCelsius()
 val WATER_BOILING_POINT = 100.toKelvinFromCelsius()
 val WATER_HEAT_CAPACITY = 4.18

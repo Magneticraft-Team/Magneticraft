@@ -3,21 +3,22 @@ package com.cout970.magneticraft.registry
 import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.KilnRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.HeatExchangerRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*
+import com.cout970.magneticraft.block.fuel.BlockCharcoalSlab
+import com.cout970.magneticraft.block.fuel.BlockCoke
 import com.cout970.magneticraft.block.heat.*
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
+import com.cout970.magneticraft.block.multiblock.BlockKiln
 import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
 import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
-import com.cout970.magneticraft.util.WATER_BOILING_POINT
-import com.cout970.magneticraft.util.WATER_HEAT_CAPACITY
-import com.cout970.magneticraft.util.WATER_HEAT_OF_FUSION
-import com.cout970.magneticraft.util.WATER_MELTING_POINT
+import com.cout970.magneticraft.util.*
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.*
@@ -76,6 +77,13 @@ fun registerRecipes() {
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 4), ItemStack(ItemLightPlate, 1, 4), 120f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
 
+    //KILN RECIPES
+    addKilnRecipe(ItemStack(COAL_BLOCK, 1, 0), ItemStack(BlockCoke), 50f, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
+    addKilnRecipe(ItemStack(Blocks.LOG, 1, 0), ItemStack(BlockCharcoalSlab), 25f, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
+    addKilnRecipe(ItemStack(Blocks.SAND, 1, 0), ItemStack(Blocks.GLASS), 25f, GLASS_MAKING_TEMP, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(Blocks.CLAY, 1, 0), ItemStack(Blocks.HARDENED_CLAY), 25f, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(BlockFluxedGravel), ItemStack(BlockGlazedBrick), 25f, FURNACE_BRICK_TEMP, QUARTZ_MELTING_POINT)
+
     //CRAFTING RECIPES
 
     //nuggets
@@ -96,6 +104,8 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
     addRecipe(ItemStack(BlockTileLimestone, 4, 0), "XY", "YX", 'X', ItemStack(BlockLimestone, 1, 0), 'Y', ItemStack(BlockBurntLimestone, 1, 0))
     addRecipe(ItemStack(BlockBurntLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockBurntLimestone, 1, 0))
+
+    addRecipe(ItemStack(BlockFluxedGravel, 4), "CSC", "LGF", "CSC", 'G', "gravel", 'C', Items.CLAY_BALL, 'L', "pebblesLead", 'F', "pebblesCobalt_Mgc", 'S', "sand")
 
 //    addRecipe(ItemStack(ItemGuideBook), "CB", 'C', "ingotCopper", 'B', of(BOOK))
     addRecipe(ItemStack(BlockIncendiaryGenerator), "ICI", "IFI", "IBI", 'I', "ingotIron", 'C', "ingotCopper", 'F', of(FURNACE), 'B', of(BRICK_BLOCK))
@@ -119,6 +129,7 @@ fun registerRecipes() {
 
     addRecipe(ItemStack(BlockTableSieve), "SPS", "I#I", "WWW", 'W', "plankWood", 'I', "ingotIron", 'P', of(PAPER), 'S', "slabWood")
     addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE_SLAB), 'W', "logWood")
+    addRecipe(ItemStack(BlockKiln), "BDB", "BPB", 'B', BlockBurntLimestone, 'P', "lightPlateCopper", 'D', Items.IRON_DOOR)
     addRecipe(ItemStack(BlockFeedingTrough), "M#M", "SWS", 'S', "stickWood", 'W', "plankWood", 'M', "slabWood")
 
     addRecipe(ItemStack(BlockElectricPole), "CPC", "#W#", "#W#", 'P', "plankWood", 'C', BlockElectricConnector, 'W', "logWood")
@@ -199,6 +210,10 @@ private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: I
 
 private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
     HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
+}
+
+private fun addKilnRecipe(input: ItemStack, output: ItemStack, ticks: Float, minTemp: Double, maxTemp: Double) {
+    KilnRecipeManager.registerRecipe(KilnRecipeManager.createRecipe(input, output, ticks, minTemp, maxTemp, true))
 }
 
 private fun addIceboxRecipe(input: ItemStack, output: FluidStack, heat: Long, specificHeat: Double, minTemp: Double, maxTemp: Double, reverse: Boolean) {

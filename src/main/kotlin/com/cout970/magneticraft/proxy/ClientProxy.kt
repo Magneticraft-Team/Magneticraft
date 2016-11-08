@@ -17,6 +17,7 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
+import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.tilerenderer.*
 import com.cout970.magneticraft.util.MOD_ID
@@ -68,6 +69,7 @@ class ClientProxy : CommonProxy() {
         register(TileElectricPoleAdapter::class.java, TileRendererElectricPoleAdapter)
         register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
         register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
+        register(TileKiln::class.java, TileRendererKiln)
         register(TileSolarPanel::class.java, TileRendererSolarPanel)
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading

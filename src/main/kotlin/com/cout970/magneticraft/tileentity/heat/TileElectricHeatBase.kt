@@ -102,12 +102,11 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setFloat("lightLevelCache", lightLevelCache)
-        setBoolean("initiated", initiated)
     }
 
     override fun load(nbt: NBTTagCompound) {
         lightLevelCache = nbt.getFloat("lightLevelCache")
-        initiated = nbt.getBoolean("initiated")
+        initiated = true
     }
 
     override fun addConnection(connection: IHeatConnection) {
