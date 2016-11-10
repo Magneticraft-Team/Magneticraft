@@ -8,10 +8,7 @@ import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerColorHandlers
 import com.cout970.magneticraft.registry.registerSounds
-import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.tileentity.TileCrushingTable
-import com.cout970.magneticraft.tileentity.TileFeedingTrough
-import com.cout970.magneticraft.tileentity.TileTableSieve
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
@@ -70,6 +67,7 @@ class ClientProxy : CommonProxy() {
         register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
         register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
         register(TileKiln::class.java, TileRendererKiln)
+        register(TileKilnShelf::class.java, TileRendererKilnShelf)
         register(TileSolarPanel::class.java, TileRendererSolarPanel)
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading

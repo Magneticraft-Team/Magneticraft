@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.api.registries.machines.kiln;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by cout970 on 22/08/2016.
@@ -17,12 +20,35 @@ public interface IKilnRecipe {
     ItemStack getInput();
 
     /**
+     * Whether this recipe outputs an item
+     *
+     * @return True if the recipe outputs an item
+     */
+    Boolean isItemRecipe();
+
+    /**
+     * Whether this recipe outputs a block
+     *
+     * @return True if the recipe outputs a block
+     */
+    Boolean isBlockRecipe();
+
+    /**
      * The result of this recipe
      * WARNING: this should return a COPY of the output not the original instance of the output
      *
      * @return The output of the recipe
      */
-    ItemStack getOutput();
+    @Nullable
+    ItemStack getItemOutput();
+
+    /**
+     * The result of this recipe
+     *
+     * @return The output of the recipe
+     */
+    @Nullable
+    IBlockState getBlockOutput();
 
     /**
      * The minimum temperature required for this recipe to occur
@@ -39,9 +65,9 @@ public interface IKilnRecipe {
     double getMaxTemp();
 
     /**
-     * The amount of ticks needed to complete the recipe
+     * The amount of update frequency intervals needed to complete the recipe
      */
-    float getDuration();
+    int getDuration();
 
     /**
      * Checks if this recipes has the same input as the given argument

@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress
 
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipeManager
+import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import java.util.*
 
@@ -27,7 +28,11 @@ object KilnRecipeManager : IKilnRecipeManager {
         return true
     }
 
-    override fun createRecipe(input: ItemStack, output: ItemStack, ticks: Float, minTemp: Double, maxTemp: Double, oreDict: Boolean): IKilnRecipe {
-        return KilnRecipe(input, output, ticks, minTemp, maxTemp, oreDict)
+    override fun createRecipe(input: ItemStack, output: ItemStack, duration: Int, minTemp: Double, maxTemp: Double, oreDict: Boolean): IKilnRecipe {
+        return KilnRecipe(input, output, null, duration, minTemp, maxTemp, oreDict)
+    }
+
+    override fun createRecipe(input: ItemStack, output: IBlockState, duration: Int, minTemp: Double, maxTemp: Double, oreDict: Boolean): IKilnRecipe {
+        return KilnRecipe(input, null, output, duration, minTemp, maxTemp, oreDict)
     }
 }

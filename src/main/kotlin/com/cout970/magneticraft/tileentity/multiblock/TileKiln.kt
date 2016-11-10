@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
+import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.HeatConnection
@@ -10,18 +11,19 @@ import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
-import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.TileKilnShelf
 import com.cout970.magneticraft.tileentity.electric.TileHeatBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.CraftingProcess
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.EntityLiving
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.DamageSource
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -48,50 +50,118 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     val heatNode = HeatContainer(
             emit = false,
             tile = this,
-            dissipation = 0.025,
-            specificHeat = IRON_HEAT_CAPACITY * 10, /*PLACEHOLDER*/
-            maxHeat = ((IRON_HEAT_CAPACITY * 10) * Config.defaultMachineMaxTemp).toLong(),
+            dissipation = 0.0,
+            specificHeat = LIMESTONE_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
+            maxHeat = ((LIMESTONE_HEAT_CAPACITY * 20) * LIMESTONE_MELTING_POINT).toLong(),
             conductivity = 0.05
     )
 
     override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
-    val craftingProcess: CraftingProcess
+    //Not using crafting process because I assumed that an array of lambdas will have horrible locality of reference
+    data class craftingSlot(
+            var craftingTime: Int = 0,
+            var stateCache: IBlockState? = null,
+            var inputCache: ItemStack? = null,
+            var recipeCache: IKilnRecipe? = null,
+            var stackCache: ItemStack? = null)
 
-    private var recipeCache: IKilnRecipe? = null
-    private var inputCache: ItemStack? = null
+    object craftingSlots {
+        var map: MutableMap<BlockPos, craftingSlot> = mutableMapOf()
+        fun getCraftingTimesArray(): IntArray {
+            var array = IntArray(map.size)
+            var index = 0
+            map.forEach { array.set(index, it.value.craftingTime); index++ }
+            return array
+        }
+
+        fun setAllCraftingTimes(array: IntArray) {
+            var index = 0
+            map.forEach { it.value.craftingTime = array[index]; index++ }
+        }
+    }
+
+    val updateFrequency: Int = 20
+    var doorOpen: Boolean = false
 
     init {
-        craftingProcess = CraftingProcess({//craft
-            val recipe = getRecipe()!!
-        }, { //can craft
-            false
-        }, { // use energy
-        }, {
-            getRecipe()?.duration ?: 120f
-        })
+        for (i in 0 until 3) {
+            for (j in 0 until 2) {
+                for (k in 0 until 3) {
+                    craftingSlots.map.put(BlockPos(i, j, k), craftingSlot())
+                }
+            }
+        }
     }
 
     override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
         return oldState?.block !== newSate?.block
     }
 
-    fun getRecipe(input: ItemStack): IKilnRecipe? {
-        if (input === inputCache) return recipeCache
-        val recipe = KilnRecipeManager.findRecipe(input)
+    fun getRecipe(input: BlockPos, slot: craftingSlot): IKilnRecipe? {
+        val state = world.getBlockState(input)
+        var stack: ItemStack
+        val tile = world.getTile<TileKilnShelf>(input)
+        if (tile != null) {
+            stack = tile.getStack() ?: return null
+        } else {
+            if (state !== slot.stateCache) { //Assuming getting state from block is potentially expensive, so two-stage caching
+                stack = ItemStack(state.block.getItemDropped(state, null, 0) ?: return null, 1, state.block.damageDropped(state)) //Quantity should be irrelevant, since recipes shouldn't ask for it
+                slot.stateCache = state
+                slot.stackCache = stack
+            } else {
+                stack = slot.stackCache!!
+            }
+        }
+        if (stack === slot.inputCache) return slot.recipeCache
+        val recipe = KilnRecipeManager.findRecipe(stack)
         if (recipe != null) {
-            recipeCache = recipe
-            inputCache = input
+            slot.recipeCache = recipe
+            slot.inputCache = stack
         }
         return recipe
     }
 
-    fun getRecipe(): IKilnRecipe? = null
+    fun canCraft(input: BlockPos, slot: craftingSlot): Boolean {
+        val recipe = getRecipe(input, slot) ?: return false
+        return heatNode.temperature > recipe.minTemp &&
+                heatNode.temperature < recipe.maxTemp
+    }
 
     override fun update() {
         if (worldObj.isServer && active) {
+            if (shouldTick(10)) {
+                if (heatNode.temperature > KILN_DAMAGE_TEMP) {
+                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, INTERNAL_AABB)
+                    entities.forEach {
+                        it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
+                    }
+                    if (heatNode.temperature > KILN_FIRE_TEMP)
+                        entities.forEach {
+                            it.setFire(5)
+                        }
+                }
+            }
             if (shouldTick(20)) sendUpdateToNearPlayers()
-            craftingProcess.tick(worldObj, 1f)
+            if (shouldTick(updateFrequency)) {
+                craftingSlots.map.forEach {
+                    if (!canCraft(it.key, it.value)) return@forEach
+                    val recipe: IKilnRecipe = getRecipe(it.key, it.value) ?: return@forEach
+                    if (it.value.craftingTime <= recipe.duration) {
+                        it.value.craftingTime += 1
+                        return@forEach
+                    }
+                    it.value.craftingTime = 0
+                    val tile = world.getTile<TileKilnShelf>(it.key)
+                    if (tile != null) {
+                        if (recipe.isItemRecipe)
+                            tile.setStack(recipe.itemOutput)
+                    } else {
+                        if (recipe.isBlockRecipe)
+                            world.setBlockState(it.key, recipe.blockOutput)
+                    }
+                }
+            }
         }
         super.update()
     }
@@ -127,13 +197,15 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
-        setTag("crafting", craftingProcess.serializeNBT())
+        setIntArray("times", craftingSlots.getCraftingTimesArray())
+        setBoolean("door", doorOpen)
         super.save()
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
         if (hasKey("direction")) multiblockFacing = getEnumFacing("direction")
-        if (hasKey("crafting")) craftingProcess.deserializeNBT(getCompoundTag("crafting"))
+        if (hasKey("times")) craftingSlots.setAllCraftingTimes(getIntArray("times"))
+        if (hasKey("door")) doorOpen = getBoolean("door")
         super.load(nbt)
     }
 
@@ -141,7 +213,14 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     companion object {
         val HEAT_INPUT = BlockPos(-1, 1, 0)
-        val POTENTIAL_CONNECTIONS = setOf(BlockPos(-2, 1, 0), BlockPos(-1, 1, 1), BlockPos(-1, 1, -1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
+        val POTENTIAL_CONNECTIONS = setOf(
+                BlockPos(-1, -1, 0),
+                /******************/
+                BlockPos(1, -1, 0),
+                BlockPos(-2, -1, 1), BlockPos(-2, -1, 2), BlockPos(-2, -1, 3),
+                BlockPos(2, -1, 1), BlockPos(2, -1, 2), BlockPos(2, -1, 3),
+                BlockPos(-1, -1, 4), BlockPos(0, -1, 4), BlockPos(1, -1, 4)) //Optimistation to stop multiblocks checking inside themselves for heat connections
+        val INTERNAL_AABB = AxisAlignedBB(BlockPos(3, 2, 2))
     }
 
     override fun onBreak() {

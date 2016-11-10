@@ -24,6 +24,11 @@ public interface IHeatNode extends INode {
     double getDissipation();
 
     /**
+     * Sets the heat dissipation of the block
+     */
+    void setDissipation(double newDissipation);
+
+    /**
      * Returns the current heat content of the block
      */
     long getHeat();

@@ -93,6 +93,7 @@ tile.magneticraft.airlock.name=Airlock
 tile.magneticraft.air_bubble.name=Air Bubble
 tile.magneticraft.hydraulic_press.name=Hydraulic Press
 tile.magneticraft.kiln.name=Beehive Kiln
+tile.magneticraft.kiln_shelf.name=Kiln Shelf
 tile.magneticraft.copper_block.name=Copper Block
 tile.magneticraft.cobalt_block.name=Cobalt Block
 tile.magneticraft.lead_block.name=Lead Block

@@ -16,3 +16,6 @@ map_Kd magneticraft:models/solar_panel
 
 newmtl kiln
 map_Kd magneticraft:models/kiln
+
+newmtl kiln_shelf
+map_Kd magneticraft:models/kiln_shelf

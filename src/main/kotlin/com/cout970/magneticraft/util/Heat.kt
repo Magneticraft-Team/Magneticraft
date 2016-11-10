@@ -24,6 +24,9 @@ val FURNACE_BRICK_TEMP = 550.toKelvinFromCelsius()
 val COKE_REACTION_TEMP = 450.toKelvinFromCelsius()
 val CARBON_SUBLIMATION_POINT = 4000.toKelvinFromCelsius()
 
+val LIMESTONE_HEAT_CAPACITY = 2.3
+val LIMESTONE_MELTING_POINT = 1400.toKelvinFromCelsius()
+
 val WATER_MELTING_POINT = 0.toKelvinFromCelsius()
 val WATER_BOILING_POINT = 100.toKelvinFromCelsius()
 val WATER_HEAT_CAPACITY = 4.18
@@ -33,6 +36,9 @@ val COPPER_MELTING_POINT = 1085.toKelvinFromCelsius()
 val COPPER_HEAT_CAPACITY = 3.45
 val IRON_MELTING_POINT = 1538.toKelvinFromCelsius()
 val IRON_HEAT_CAPACITY = 3.5
+
+val KILN_DAMAGE_TEMP = 125.toKelvinFromCelsius()
+val KILN_FIRE_TEMP = 250.toKelvinFromCelsius()
 
 val ENERGY_TO_HEAT = 2f
 

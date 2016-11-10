@@ -33,6 +33,7 @@ val blocks = mapOf(
         withItemBlock(BlockAirBubble),
         withItemBlock(BlockHydraulicPress),
         withItemBlock(BlockKiln),
+        withItemBlock(BlockKilnShelf),
         withItemBlock(BlockStripedMachineBlock),
         withItemBlock(BlockMachineBlockSupportColumn),
         withItemBlock(BlockMachineBlock),

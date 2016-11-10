@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress
 
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
+import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -10,8 +11,9 @@ import net.minecraftforge.oredict.OreDictionary
  */
 data class KilnRecipe(
         private val input: ItemStack,
-        private val output: ItemStack,
-        private val ticks: Float,
+        private val itemOutput: ItemStack?,
+        private val blockOutput: IBlockState?,
+        private val duration: Int,
         private val minTemp: Double,
         private val maxTemp: Double,
         private val oreDict: Boolean
@@ -19,9 +21,13 @@ data class KilnRecipe(
 
     override fun getInput(): ItemStack = input.copy()
 
-    override fun getOutput(): ItemStack = output.copy()
+    override fun getItemOutput(): ItemStack? = itemOutput?.copy()
+    override fun getBlockOutput(): IBlockState? = blockOutput
 
-    override fun getDuration(): Float = ticks
+    override fun isItemRecipe(): Boolean = itemOutput != null
+    override fun isBlockRecipe(): Boolean = blockOutput != null
+
+    override fun getDuration(): Int = duration
 
     override fun getMaxTemp(): Double = maxTemp
 

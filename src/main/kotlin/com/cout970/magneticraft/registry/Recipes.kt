@@ -20,6 +20,7 @@ import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import com.cout970.magneticraft.util.*
 import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.*
 import net.minecraft.init.Items
@@ -78,11 +79,11 @@ fun registerRecipes() {
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
 
     //KILN RECIPES
-    addKilnRecipe(ItemStack(COAL_BLOCK, 1, 0), ItemStack(BlockCoke), 50f, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
-    addKilnRecipe(ItemStack(Blocks.LOG, 1, 0), ItemStack(BlockCharcoalSlab), 25f, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
-    addKilnRecipe(ItemStack(Blocks.SAND, 1, 0), ItemStack(Blocks.GLASS), 25f, GLASS_MAKING_TEMP, QUARTZ_MELTING_POINT)
-    addKilnRecipe(ItemStack(Blocks.CLAY, 1, 0), ItemStack(Blocks.HARDENED_CLAY), 25f, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
-    addKilnRecipe(ItemStack(BlockFluxedGravel), ItemStack(BlockGlazedBrick), 25f, FURNACE_BRICK_TEMP, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(COAL_BLOCK, 1, 0), BlockCoke.defaultState, 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
+    addKilnRecipe(ItemStack(Blocks.LOG, 1, 0), BlockCharcoalSlab.defaultState, 25, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
+    addKilnRecipe(ItemStack(Blocks.SAND, 1, 0), Blocks.GLASS.defaultState, 25, GLASS_MAKING_TEMP, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(Blocks.CLAY, 1, 0), Blocks.HARDENED_CLAY.defaultState, 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(BlockFluxedGravel), BlockGlazedBrick.defaultState, 25, FURNACE_BRICK_TEMP, QUARTZ_MELTING_POINT)
 
     //CRAFTING RECIPES
 
@@ -212,8 +213,12 @@ private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: 
     HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
 }
 
-private fun addKilnRecipe(input: ItemStack, output: ItemStack, ticks: Float, minTemp: Double, maxTemp: Double) {
-    KilnRecipeManager.registerRecipe(KilnRecipeManager.createRecipe(input, output, ticks, minTemp, maxTemp, true))
+private fun addKilnRecipe(input: ItemStack, output: ItemStack, duration: Int, minTemp: Double, maxTemp: Double) {
+    KilnRecipeManager.registerRecipe(KilnRecipeManager.createRecipe(input, output, duration, minTemp, maxTemp, true))
+}
+
+private fun addKilnRecipe(input: ItemStack, output: IBlockState, duration: Int, minTemp: Double, maxTemp: Double) {
+    KilnRecipeManager.registerRecipe(KilnRecipeManager.createRecipe(input, output, duration, minTemp, maxTemp, true))
 }
 
 private fun addIceboxRecipe(input: ItemStack, output: FluidStack, heat: Long, specificHeat: Double, minTemp: Double, maxTemp: Double, reverse: Boolean) {

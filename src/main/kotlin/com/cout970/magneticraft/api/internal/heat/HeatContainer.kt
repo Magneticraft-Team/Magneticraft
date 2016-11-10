@@ -16,7 +16,7 @@ open class HeatContainer(
         private val specificHeat: Double = 1.0,
         private val conductivity: Double = 0.05, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Evan small calues cause rapid heat transfer.  Very large values can cause strange directional transfer behavior
-        private val dissipation: Double = 0.0, //Fraction of temperature difference between current and ambient temperture dissipated per second
+        private var dissipation: Double = 0.0, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Even small values cause rapid heat dissipation
         private val maxHeat: Long = 100,
         private var heat: Long = 0
@@ -32,6 +32,10 @@ open class HeatContainer(
     var ambientTemperatureCache: Double = STANDARD_AMBIENT_TEMPERATURE
 
     override fun getWorld(): World = tile.world
+
+    override fun setDissipation(newDissipation: Double) {
+        dissipation = newDissipation
+    }
 
     override fun setHeat(newHeat: Long) {
         heat = newHeat
