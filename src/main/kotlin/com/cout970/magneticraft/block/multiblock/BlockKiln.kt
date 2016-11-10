@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block.multiblock
 
+import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
@@ -109,6 +110,8 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
         if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state]) {
             if (!PROPERTY_ACTIVE[state]) {
                 activateMultiblock(MultiblockContext(MultiblockKiln, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
+            } else if (PROPERTY_CENTER[state] || PROPERTY_CENTER[worldIn.getBlockState(pos.down())]) {
+                worldIn.getTile<TileKiln>(pos)?.doorOpen?.not()
             }
         }
         return true

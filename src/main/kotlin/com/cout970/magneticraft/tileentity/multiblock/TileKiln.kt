@@ -124,7 +124,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     fun canCraft(input: BlockPos, slot: craftingSlot): Boolean {
         val recipe = getRecipe(input, slot) ?: return false
-        return heatNode.temperature > recipe.minTemp &&
+        return !doorOpen &&
+                heatNode.temperature > recipe.minTemp &&
                 heatNode.temperature < recipe.maxTemp
     }
 
@@ -133,16 +134,24 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             if (shouldTick(10)) {
                 if (heatNode.temperature > KILN_DAMAGE_TEMP) {
                     val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, INTERNAL_AABB)
-                    entities.forEach {
-                        it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
-                    }
-                    if (heatNode.temperature > KILN_FIRE_TEMP)
+                    if (!entities.isEmpty()) {
                         entities.forEach {
-                            it.setFire(5)
+                            it.air -= 1
+                            it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
                         }
+                        if (heatNode.temperature > KILN_FIRE_TEMP)
+                            entities.forEach {
+                                it.setFire(5)
+                            }
+                        sendUpdateToNearPlayers()
+                    }
                 }
             }
-            if (shouldTick(20)) sendUpdateToNearPlayers()
+            if (shouldTick(20)) {
+                if (doorOpen) heatNode.dissipation = 0.1
+                else heatNode.dissipation = 0.0
+                sendUpdateToNearPlayers()
+            }
             if (shouldTick(updateFrequency)) {
                 craftingSlots.map.forEach {
                     if (!canCraft(it.key, it.value)) return@forEach
