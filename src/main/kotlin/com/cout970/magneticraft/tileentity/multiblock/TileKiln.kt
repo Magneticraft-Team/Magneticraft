@@ -136,7 +136,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                     val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, INTERNAL_AABB)
                     if (!entities.isEmpty()) {
                         entities.forEach {
-                            it.air -= 1
+                            if (!doorOpen) it.air -= 1
                             it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
                         }
                         if (heatNode.temperature > KILN_FIRE_TEMP)
