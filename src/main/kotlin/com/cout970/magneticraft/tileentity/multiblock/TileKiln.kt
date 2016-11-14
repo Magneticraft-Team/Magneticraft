@@ -1,7 +1,9 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
+import coffee.cypher.mcextlib.extensions.aabb.plus
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
+import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -88,7 +90,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         for (i in 0 until 3) {
             for (j in 0 until 2) {
                 for (k in 0 until 3) {
-                    craftingSlots.map.put(BlockPos(i, j, k), craftingSlot())
+                    craftingSlots.map.put(BlockPos(i, j, k) + BlockPos(1, 0, 1), craftingSlot())
                 }
             }
         }
@@ -133,7 +135,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         if (worldObj.isServer && active) {
             if (shouldTick(10)) {
                 if (heatNode.temperature > KILN_DAMAGE_TEMP) {
-                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, INTERNAL_AABB)
+                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
                     if (!entities.isEmpty()) {
                         entities.forEach {
                             if (!doorOpen) it.air -= 1
@@ -154,20 +156,20 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             }
             if (shouldTick(updateFrequency)) {
                 craftingSlots.map.forEach {
-                    if (!canCraft(it.key, it.value)) return@forEach
-                    val recipe: IKilnRecipe = getRecipe(it.key, it.value) ?: return@forEach
+                    if (!canCraft(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos, it.value)) return@forEach
+                    val recipe: IKilnRecipe = getRecipe(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos, it.value) ?: return@forEach
                     if (it.value.craftingTime <= recipe.duration) {
                         it.value.craftingTime += 1
                         return@forEach
                     }
                     it.value.craftingTime = 0
-                    val tile = world.getTile<TileKilnShelf>(it.key)
+                    val tile = world.getTile<TileKilnShelf>(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos)
                     if (tile != null) {
                         if (recipe.isItemRecipe)
                             tile.setStack(recipe.itemOutput)
                     } else {
                         if (recipe.isBlockRecipe)
-                            world.setBlockState(it.key, recipe.blockOutput)
+                            world.setBlockState(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos, recipe.blockOutput)
                     }
                 }
             }
@@ -221,7 +223,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(2, 0, 0)) to (pos + BlockPos(3, 3, 5))
 
     companion object {
-        val HEAT_INPUT = BlockPos(-1, 1, 0)
+        val HEAT_INPUTS = setOf(BlockPos(-2, 0, 2), BlockPos(0, 0, 4), BlockPos(2, 0, 2))
         val POTENTIAL_CONNECTIONS = setOf(
                 BlockPos(-1, -1, 0),
                 /******************/
@@ -238,17 +240,23 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
         if (capability == NODE_HANDLER) {
-            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_INPUT) == relPos)
-                return true
+            val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
+            HEAT_INPUTS.forEach {
+                if (it == transPos)
+                    return true
+            }
         }
         return false
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER)
-            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_INPUT) == relPos)
-                return this as T
+        if (capability == NODE_HANDLER) {
+            val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
+            HEAT_INPUTS.forEach {
+                if (it == transPos) return this as T
+            }
+        }
         return null
     }
 

@@ -15,11 +15,19 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 object BlockKilnShelf : BlockBase(Material.IRON, "kiln_shelf"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileKilnShelf()
+
+    override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = BlockTableSieve.TABLE_SIEVE_BOX
+
+    override fun isFullBlock(state: IBlockState?) = false
+    override fun isOpaqueCube(state: IBlockState?) = false
+    override fun isFullCube(state: IBlockState?) = false
+    override fun isVisuallyOpaque() = false
 
     override fun onBlockActivated(
             world: World, pos: BlockPos, state: IBlockState,

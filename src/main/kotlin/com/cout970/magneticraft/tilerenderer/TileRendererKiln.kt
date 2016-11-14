@@ -26,8 +26,8 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
         }
         GlStateManager.pushMatrix()
         GlStateManager.translate(x, y, z)
-        rotateFromCenter(te.direction, 90f)
-        GlStateManager.translate(-1.0, 0.0, 0.0)
+        rotateFromCenter(te.direction, 0f)
+        GlStateManager.translate(0.0, 0.0, 2.0)
         bindTexture(texture)
 
         model.render()

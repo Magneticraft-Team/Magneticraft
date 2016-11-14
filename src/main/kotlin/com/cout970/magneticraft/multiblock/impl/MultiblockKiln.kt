@@ -41,6 +41,7 @@ object MultiblockKiln : Multiblock() {
                 Blocks.AIR.defaultState, Blocks.AIR.defaultState)
 
         val B: IMultiblockComponent = SingleBlockComponent(BlockBurntLimestone.defaultState.withProperty(BlockBurntLimestone.LIMESTONE_STATES, BlockLimestone.LimestoneStates.BRICK), replacement)
+        val L: IMultiblockComponent = SingleBlockComponent(BlockBurntLimestone.defaultState.withProperty(BlockBurntLimestone.LIMESTONE_STATES, BlockLimestone.LimestoneStates.NORMAL), replacement)
 
         val D: IMultiblockComponent = SingleBlockComponent(BlockMachineBlock.defaultState, replacement)
 
@@ -60,20 +61,20 @@ object MultiblockKiln : Multiblock() {
 
         scheme = yLayers(
                 zLayers(listOf(A, B, B, B, A),
+                        listOf(B, L, B, L, B),
                         listOf(B, B, B, B, B),
-                        listOf(B, B, B, B, B),
-                        listOf(B, B, B, B, B),
+                        listOf(B, L, B, L, B),
                         listOf(A, B, B, B, A)),
-                zLayers(listOf(B, B, D, B, B),
+                zLayers(listOf(L, B, D, B, L),
                         listOf(B, A, A, A, B),
+                        listOf(L, A, A, A, L),
                         listOf(B, A, A, A, B),
+                        listOf(L, B, L, B, L)),
+                zLayers(listOf(L, B, M, B, L),
                         listOf(B, A, A, A, B),
-                        listOf(B, B, B, B, B)),
-                zLayers(listOf(B, B, M, B, B),
+                        listOf(L, A, A, A, L),
                         listOf(B, A, A, A, B),
-                        listOf(B, A, A, A, B),
-                        listOf(B, A, A, A, B),
-                        listOf(B, B, B, B, B))
+                        listOf(L, B, L, B, L))
         )
     }
 
