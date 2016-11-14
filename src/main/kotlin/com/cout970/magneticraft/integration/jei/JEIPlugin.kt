@@ -4,10 +4,13 @@ import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockTableSieve
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
+import com.cout970.magneticraft.block.multiblock.BlockKiln
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeCategory
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeHandler
 import com.cout970.magneticraft.integration.jei.hydraulicpress.HydraulicPressRecipeCategory
 import com.cout970.magneticraft.integration.jei.hydraulicpress.HydraulicPressRecipeHandler
+import com.cout970.magneticraft.integration.jei.hydraulicpress.KilnRecipeCategory
+import com.cout970.magneticraft.integration.jei.hydraulicpress.KilnRecipeHandler
 import com.cout970.magneticraft.integration.jei.sievetable.TableSieveRecipeCategory
 import com.cout970.magneticraft.integration.jei.sievetable.TableSieveRecipeHandler
 import mezz.jei.api.IJeiRuntime
@@ -26,6 +29,7 @@ class JEIPlugin : IModPlugin {
         val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
         val TABLE_SIEVE_ID = "magneticraft.table_sieve"
         val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
+        val KILN_ID = "magneticraft.kiln"
     }
 
     override fun register(registry: IModRegistry) {
@@ -47,6 +51,12 @@ class JEIPlugin : IModPlugin {
         registry.addRecipeCategories(HydraulicPressRecipeCategory)
         registry.addRecipeCategoryCraftingItem(ItemStack(BlockHydraulicPress), HYDRAULIC_PRESS_ID)
         registry.addRecipes(MagneticraftApi.getHydraulicPressRecipeManager().recipes)
+
+        //kiln recipes
+        registry.addRecipeHandlers(KilnRecipeHandler)
+        registry.addRecipeCategories(KilnRecipeCategory)
+        registry.addRecipeCategoryCraftingItem(ItemStack(BlockKiln), KILN_ID)
+        registry.addRecipes(MagneticraftApi.getKilnRecipeManager().recipes)
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {}

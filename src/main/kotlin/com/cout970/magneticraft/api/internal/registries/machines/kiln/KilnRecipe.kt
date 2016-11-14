@@ -3,6 +3,7 @@ package com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import net.minecraft.block.state.IBlockState
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -23,6 +24,8 @@ data class KilnRecipe(
 
     override fun getItemOutput(): ItemStack? = itemOutput?.copy()
     override fun getBlockOutput(): IBlockState? = blockOutput
+    override fun getBlockOutputAsItem(): ItemStack? =
+            if (blockOutput == null) null else ItemStack(Item.getItemFromBlock(blockOutput.block) ?: null, 1, blockOutput.block.damageDropped(blockOutput))
 
     override fun isItemRecipe(): Boolean = itemOutput != null
     override fun isBlockRecipe(): Boolean = blockOutput != null

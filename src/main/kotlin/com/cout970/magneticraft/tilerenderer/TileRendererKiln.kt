@@ -32,7 +32,7 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
         if (te.doorOpen) {
             model.render()
         } else {
-
+            model.render()
         }
         GlStateManager.popMatrix()
     }

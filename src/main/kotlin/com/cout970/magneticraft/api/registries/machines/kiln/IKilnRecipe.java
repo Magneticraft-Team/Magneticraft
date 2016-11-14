@@ -55,6 +55,16 @@ public interface IKilnRecipe {
      *
      * @return the minimum temperature at which this recipe will occur
      */
+
+    @Nullable
+    ItemStack getBlockOutputAsItem();
+
+    /**
+     * The minimum temperature required for this recipe to occur
+     *
+     * @return the minimum temperature at which this recipe will occur
+     */
+
     double getMinTemp();
 
     /**
