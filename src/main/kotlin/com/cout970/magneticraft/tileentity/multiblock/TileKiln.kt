@@ -144,7 +144,9 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                         if (!entities.isEmpty()) {
                             entities.forEach {
                                 if (!doorOpen) it.air -= 1
-                                it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
+                                val damage = (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat()
+                                if (it.health < damage) it.setFire(1)
+                                it.attackEntityFrom(DamageSource.inFire, damage)
                             }
                             if (heatNode.temperature > KILN_FIRE_TEMP && doorOpen)
                                 entities.forEach {

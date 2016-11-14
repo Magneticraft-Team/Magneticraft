@@ -182,6 +182,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
                 val item = inventory[i]
                 if (item != null) {
                     dropItem(item, pos)
+                    dropItem(item, pos)
                 }
             }
         }

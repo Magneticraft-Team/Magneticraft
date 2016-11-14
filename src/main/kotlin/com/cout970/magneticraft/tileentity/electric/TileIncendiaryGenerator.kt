@@ -130,7 +130,6 @@ class TileIncendiaryGenerator(
         setFloat("maxMeltingTime", maxBurningTime)
         setFloat("meltingTime", burningTime)
         setFloat("heat", heat)
-        setFloat("ambientTemp", ambientTemperature)
         setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
     }
 
@@ -139,7 +138,6 @@ class TileIncendiaryGenerator(
         maxBurningTime = nbt.getFloat("maxMeltingTime")
         burningTime = nbt.getFloat("meltingTime")
         heat = nbt.getFloat("heat")
-        ambientTemperature = nbt.getFloat("ambientTemp")
         tank.readFromNBT(nbt.getCompoundTag("tank"))
     }
 
