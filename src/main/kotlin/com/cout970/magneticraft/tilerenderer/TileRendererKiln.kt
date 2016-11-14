@@ -29,8 +29,11 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
         rotateFromCenter(te.direction, 0f)
         GlStateManager.translate(0.0, 0.0, 2.0)
         bindTexture(texture)
+        if (te.doorOpen) {
+            model.render()
+        } else {
 
-        model.render()
+        }
         GlStateManager.popMatrix()
     }
 

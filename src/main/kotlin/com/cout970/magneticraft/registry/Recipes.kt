@@ -79,11 +79,18 @@ fun registerRecipes() {
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
 
     //KILN RECIPES
-    addKilnRecipe(ItemStack(COAL_BLOCK, 1, 0), BlockCoke.defaultState, 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
+    addKilnRecipe(ItemStack(COAL_BLOCK), BlockCoke.defaultState, 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
     addKilnRecipe(ItemStack(Blocks.LOG, 1, 0), BlockCharcoalSlab.defaultState, 25, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
-    addKilnRecipe(ItemStack(Blocks.SAND, 1, 0), Blocks.GLASS.defaultState, 25, GLASS_MAKING_TEMP, QUARTZ_MELTING_POINT)
-    addKilnRecipe(ItemStack(Blocks.CLAY, 1, 0), Blocks.HARDENED_CLAY.defaultState, 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(Blocks.SAND), Blocks.GLASS.defaultState, 25, GLASS_MAKING_TEMP, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(Blocks.CLAY), Blocks.HARDENED_CLAY.defaultState, 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
     addKilnRecipe(ItemStack(BlockFluxedGravel), BlockGlazedBrick.defaultState, 25, FURNACE_BRICK_TEMP, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(Blocks.SPONGE, 1, 1), ItemStack(Blocks.SPONGE, 1, 0), 25, WATER_BOILING_POINT, COKE_REACTION_TEMP)
+
+    //KILN SHELF RECIPES
+    addKilnRecipe(ItemStack(COAL, 1, 0), ItemStack(ItemCoke), 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
+    addKilnRecipe(ItemStack(CLAY_BALL), ItemStack(BRICK), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
+    addKilnRecipe(ItemStack(CHORUS_FRUIT), ItemStack(CHORUS_FRUIT_POPPED, 1, 0), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
+
 
     //CRAFTING RECIPES
 
@@ -131,6 +138,7 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockTableSieve), "SPS", "I#I", "WWW", 'W', "plankWood", 'I', "ingotIron", 'P', of(PAPER), 'S', "slabWood")
     addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE_SLAB), 'W', "logWood")
     addRecipe(ItemStack(BlockKiln), "BDB", "BPB", 'B', BlockBurntLimestone, 'P', "lightPlateCopper", 'D', Items.IRON_DOOR)
+    addRecipe(ItemStack(BlockKilnShelf), "BPB", "B#B", 'B', of(IRON_BARS), 'P', "lightPlateIron")
     addRecipe(ItemStack(BlockFeedingTrough), "M#M", "SWS", 'S', "stickWood", 'W', "plankWood", 'M', "slabWood")
 
     addRecipe(ItemStack(BlockElectricPole), "CPC", "#W#", "#W#", 'P', "plankWood", 'C', BlockElectricConnector, 'W', "logWood")

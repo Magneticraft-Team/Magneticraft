@@ -110,8 +110,10 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
         if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state]) {
             if (!PROPERTY_ACTIVE[state]) {
                 activateMultiblock(MultiblockContext(MultiblockKiln, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
-            } else if (PROPERTY_CENTER[state] || PROPERTY_CENTER[worldIn.getBlockState(pos.down())]) {
+            } else if (PROPERTY_CENTER[state]) {
                 worldIn.getTile<TileKiln>(pos)?.doorOpen?.not()
+            } else if (PROPERTY_CENTER[worldIn.getBlockState(pos.down())]) {
+                worldIn.getTile<TileKiln>(pos.down())?.doorOpen?.not()
             }
         }
         return true

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.multiblock.impl
 
 import coffee.cypher.mcextlib.extensions.aabb.to
+import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.times
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
@@ -79,32 +80,32 @@ object MultiblockKiln : Multiblock() {
     }
 
     override fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf(
-            Vec3d(-24.0, 0.0, -24.0) * PIXEL to Vec3d(-16.0, 24.0, 40.0) * PIXEL,
-            Vec3d(32.0, 0.0, -24.0) * PIXEL to Vec3d(40.0, 24.0, 40.0) * PIXEL,
-            Vec3d(-22.0, 24.0, -22.0) * PIXEL to Vec3d(-16.0, 40.0, 38.0) * PIXEL,
-            Vec3d(32.0, 24.0, -22.0) * PIXEL to Vec3d(38.0, 40.0, 38.0) * PIXEL,
-            Vec3d(-16.0, 0.0, 32.0) * PIXEL to Vec3d(32.0, 24.0, 40.0) * PIXEL,
-            Vec3d(-16.0, 24.0, 32.0) * PIXEL to Vec3d(32.0, 40.0, 38.0) * PIXEL,
-            Vec3d(-20.0, 40.0, -20.0) * PIXEL to Vec3d(36.0, 44.0, 36.0) * PIXEL,
-            Vec3d(-24.0, -1.0, -12.0) * PIXEL to Vec3d(-19.0, 44.0, -6.0) * PIXEL,
-            Vec3d(0.0, 0.0, -20.0) * PIXEL to Vec3d(16.0, 32.0, -16.0) * PIXEL,
-            Vec3d(-24.0, 44.0, -12.0) * PIXEL to Vec3d(40.0, 46.0, -6.0) * PIXEL,
-            Vec3d(-24.0, -1.0, 22.0) * PIXEL to Vec3d(-19.0, 44.0, 28.0) * PIXEL,
-            Vec3d(-24.0, 44.0, 22.0) * PIXEL to Vec3d(40.0, 46.0, 28.0) * PIXEL,
-            Vec3d(-13.0, 44.0, -16.0) * PIXEL to Vec3d(29.0, 47.0, 32.0) * PIXEL,
-            Vec3d(35.0, -1.0, -12.0) * PIXEL to Vec3d(40.0, 44.0, -6.0) * PIXEL,
-            Vec3d(35.0, -1.0, 22.0) * PIXEL to Vec3d(40.0, 44.0, 28.0) * PIXEL,
-            Vec3d(-16.0, 0.0, -24.0) * PIXEL to Vec3d(0.0, 24.0, -16.0) * PIXEL,
-            Vec3d(-16.0, 24.0, -22.0) * PIXEL to Vec3d(0.0, 40.0, -16.0) * PIXEL,
-            Vec3d(16.0, 0.0, -24.0) * PIXEL to Vec3d(32.0, 24.0, -16.0) * PIXEL,
-            Vec3d(16.0, 24.0, -22.0) * PIXEL to Vec3d(32.0, 40.0, -16.0) * PIXEL,
-            Vec3d(0.0, 32.0, -22.0) * PIXEL to Vec3d(16.0, 40.0, -16.0) * PIXEL,
-            Vec3d(-10.0, -1.0, -24.0) * PIXEL to Vec3d(-4.0, 44.0, -19.0) * PIXEL,
-            Vec3d(-10.0, 44.0, -24.0) * PIXEL to Vec3d(-4.0, 46.0, 40.0) * PIXEL,
-            Vec3d(20.0, -1.0, -24.0) * PIXEL to Vec3d(26.0, 44.0, -19.0) * PIXEL,
-            Vec3d(20.0, 44.0, -24.0) * PIXEL to Vec3d(26.0, 46.0, 40.0) * PIXEL,
-            Vec3d(-10.0, -1.0, 35.0) * PIXEL to Vec3d(-4.0, 44.0, 40.0) * PIXEL,
-            Vec3d(20.0, -1.0, 35.0) * PIXEL to Vec3d(26.0, 44.0, 40.0) * PIXEL
+            Vec3d(-24.0, 0.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-16.0, 24.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(32.0, 0.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(40.0, 24.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-22.0, 24.0, -22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-16.0, 40.0, 38.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(32.0, 24.0, -22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(38.0, 40.0, 38.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-16.0, 0.0, 32.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(32.0, 24.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-16.0, 24.0, 32.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(32.0, 40.0, 38.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-20.0, 40.0, -20.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(36.0, 44.0, 36.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-24.0, -1.0, -12.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-19.0, 44.0, -6.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(0.0, 0.0, -20.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(16.0, 32.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-24.0, 44.0, -12.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(40.0, 46.0, -6.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-24.0, -1.0, 22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-19.0, 44.0, 28.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-24.0, 44.0, 22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(40.0, 46.0, 28.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-13.0, 44.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(29.0, 47.0, 32.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(35.0, -1.0, -12.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(40.0, 44.0, -6.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(35.0, -1.0, 22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(40.0, 44.0, 28.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-16.0, 0.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(0.0, 24.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-16.0, 24.0, -22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(0.0, 40.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(16.0, 0.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(32.0, 24.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(16.0, 24.0, -22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(32.0, 40.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(0.0, 32.0, -22.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(16.0, 40.0, -16.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-10.0, -1.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-4.0, 44.0, -19.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-10.0, 44.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-4.0, 46.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(20.0, -1.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(26.0, 44.0, -19.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(20.0, 44.0, -24.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(26.0, 46.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(-10.0, -1.0, 35.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(-4.0, 44.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0),
+            Vec3d(20.0, -1.0, 35.0) * PIXEL + Vec3d(0.0, 0.0, 2.0) to Vec3d(26.0, 44.0, 40.0) * PIXEL + Vec3d(0.0, 0.0, 2.0)
     )
 
     override fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent> = listOf()

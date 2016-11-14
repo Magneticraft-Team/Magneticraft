@@ -23,10 +23,12 @@ import com.cout970.magneticraft.tileentity.electric.TileHeatBase
 import com.cout970.magneticraft.util.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.DamageSource
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumParticleTypes
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -83,6 +85,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         }
     }
 
+    fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
+
     val updateFrequency: Int = 20
     var doorOpen: Boolean = false
 
@@ -90,7 +94,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         for (i in 0 until 3) {
             for (j in 0 until 2) {
                 for (k in 0 until 3) {
-                    craftingSlots.map.put(BlockPos(i, j, k) + BlockPos(1, 0, 1), craftingSlot())
+                    craftingSlots.map.put(BlockPos(i, j, k) + BlockPos(-1, 0, 1), craftingSlot())
                 }
             }
         }
@@ -108,7 +112,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             stack = tile.getStack() ?: return null
         } else {
             if (state !== slot.stateCache) { //Assuming getting state from block is potentially expensive, so two-stage caching
-                stack = ItemStack(state.block.getItemDropped(state, null, 0) ?: return null, 1, state.block.damageDropped(state)) //Quantity should be irrelevant, since recipes shouldn't ask for it
+                stack = ItemStack(Item.getItemFromBlock(state.block) ?: return null, 1, state.block.damageDropped(state)) //Quantity should be irrelevant, since recipes shouldn't ask for it
                 slot.stateCache = state
                 slot.stackCache = stack
             } else {
@@ -132,45 +136,58 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     }
 
     override fun update() {
-        if (worldObj.isServer && active) {
-            if (shouldTick(10)) {
-                if (heatNode.temperature > KILN_DAMAGE_TEMP) {
-                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
-                    if (!entities.isEmpty()) {
-                        entities.forEach {
-                            if (!doorOpen) it.air -= 1
-                            it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
-                        }
-                        if (heatNode.temperature > KILN_FIRE_TEMP)
+        if (worldObj.isServer) {
+            if (active) {
+                if (shouldTick(10)) {
+                    if (heatNode.temperature > KILN_DAMAGE_TEMP) {
+                        val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
+                        if (!entities.isEmpty()) {
                             entities.forEach {
-                                it.setFire(5)
+                                if (!doorOpen) it.air -= 1
+                                it.attackEntityFrom(DamageSource.inFire, (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat())
                             }
-                        sendUpdateToNearPlayers()
+                            if (heatNode.temperature > KILN_FIRE_TEMP && doorOpen)
+                                entities.forEach {
+                                    it.setFire(5)
+                                }
+                            sendUpdateToNearPlayers()
+                        }
+                    }
+                }
+                if (shouldTick(20)) {
+                    if (doorOpen) heatNode.dissipation = 0.1
+                    else heatNode.dissipation = 0.0
+                    sendUpdateToNearPlayers()
+                }
+                if (shouldTick(updateFrequency)) {
+                    craftingSlots.map.forEach {
+                        if (!canCraft(posTransform(it.key), it.value)) return@forEach
+                        val recipe: IKilnRecipe = getRecipe(posTransform(it.key), it.value) ?: return@forEach
+                        if (it.value.craftingTime <= recipe.duration) {
+                            it.value.craftingTime += 1
+                            return@forEach
+                        }
+                        it.value.craftingTime = 0
+                        val tile = world.getTile<TileKilnShelf>(posTransform(it.key))
+                        if (tile != null) {
+                            if (recipe.isItemRecipe)
+                                tile.setStack(recipe.itemOutput)
+                        } else {
+                            if (recipe.isBlockRecipe)
+                                world.setBlockState(posTransform(it.key), recipe.blockOutput)
+                        }
                     }
                 }
             }
-            if (shouldTick(20)) {
-                if (doorOpen) heatNode.dissipation = 0.1
-                else heatNode.dissipation = 0.0
-                sendUpdateToNearPlayers()
-            }
-            if (shouldTick(updateFrequency)) {
+        } else {
+            if (shouldTick(5)) {
                 craftingSlots.map.forEach {
-                    if (!canCraft(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos, it.value)) return@forEach
-                    val recipe: IKilnRecipe = getRecipe(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos, it.value) ?: return@forEach
-                    if (it.value.craftingTime <= recipe.duration) {
-                        it.value.craftingTime += 1
-                        return@forEach
-                    }
-                    it.value.craftingTime = 0
-                    val tile = world.getTile<TileKilnShelf>(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos)
-                    if (tile != null) {
-                        if (recipe.isItemRecipe)
-                            tile.setStack(recipe.itemOutput)
-                    } else {
-                        if (recipe.isBlockRecipe)
-                            world.setBlockState(direction.rotatePoint(BlockPos.ORIGIN, it.key) + pos, recipe.blockOutput)
-                    }
+                    if (it.value.craftingTime == 0) return@forEach
+                    val partPos = posTransform(it.key)
+                    val d3 = (partPos.x.toFloat() + world.rand.nextFloat()).toDouble()
+                    val d4 = (partPos.y.toFloat() + world.rand.nextFloat()).toDouble()
+                    val d5 = (partPos.z.toFloat() + world.rand.nextFloat()).toDouble()
+                    world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0, 0.0, 0.0, *IntArray(0))
                 }
             }
         }
@@ -223,15 +240,14 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(2, 0, 0)) to (pos + BlockPos(3, 3, 5))
 
     companion object {
-        val HEAT_INPUTS = setOf(BlockPos(-2, 0, 2), BlockPos(0, 0, 4), BlockPos(2, 0, 2))
+        val HEAT_INPUTS = setOf(BlockPos(-2, 0, 1), BlockPos(-2, 0, 2), BlockPos(-2, 0, 3),
+                BlockPos(-1, 0, 4), BlockPos(0, 0, 4), BlockPos(1, 0, 4),
+                BlockPos(2, 0, 1), BlockPos(2, 0, 2), BlockPos(2, 0, 3))
         val POTENTIAL_CONNECTIONS = setOf(
-                BlockPos(-1, -1, 0),
-                /******************/
-                BlockPos(1, -1, 0),
                 BlockPos(-2, -1, 1), BlockPos(-2, -1, 2), BlockPos(-2, -1, 3),
                 BlockPos(2, -1, 1), BlockPos(2, -1, 2), BlockPos(2, -1, 3),
                 BlockPos(-1, -1, 4), BlockPos(0, -1, 4), BlockPos(1, -1, 4)) //Optimistation to stop multiblocks checking inside themselves for heat connections
-        val INTERNAL_AABB = AxisAlignedBB(BlockPos(3, 2, 2))
+        val INTERNAL_AABB = AxisAlignedBB(-0.25, 0.0, -0.25, 3.25, 2.5, 3.25)
     }
 
     override fun onBreak() {
