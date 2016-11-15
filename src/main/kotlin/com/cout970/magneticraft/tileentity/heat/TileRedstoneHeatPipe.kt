@@ -10,7 +10,7 @@ import net.minecraft.util.EnumFacing
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileHeatPipe() : TileHeatBase() {
+class TileRedstoneHeatPipe() : TileHeatBase() {
 
     val activeSides: MutableSet<EnumFacing> = mutableSetOf()
 

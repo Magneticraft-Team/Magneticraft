@@ -34,7 +34,7 @@ class TileFirebox(
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
-            conductivity = 0.05,
+            conductivity = DEFAULT_CONDUCTIVITY,
             tile = this)
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f

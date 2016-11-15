@@ -61,7 +61,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 10, /*PLACEHOLDER*/
             maxHeat = ((IRON_HEAT_CAPACITY * 10) * Config.defaultMachineMaxTemp).toLong(),
-            conductivity = 0.05
+            conductivity = DEFAULT_CONDUCTIVITY
     )
 
     override val heatNodes: List<IHeatNode> get() = listOf(heatNode)

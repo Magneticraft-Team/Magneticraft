@@ -57,7 +57,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             dissipation = 0.0,
             specificHeat = LIMESTONE_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
             maxHeat = ((LIMESTONE_HEAT_CAPACITY * 20) * LIMESTONE_MELTING_POINT).toLong(),
-            conductivity = 0.05
+            conductivity = DEFAULT_CONDUCTIVITY
     )
 
     override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
@@ -257,7 +257,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER) {
+        if (capability == NODE_HANDLER && facing == EnumFacing.DOWN) {
             val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
             HEAT_INPUTS.forEach {
                 if (it == transPos)
@@ -269,7 +269,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER) {
+        if (capability == NODE_HANDLER && facing == EnumFacing.DOWN) {
             val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
             HEAT_INPUTS.forEach {
                 if (it == transPos) return this as T

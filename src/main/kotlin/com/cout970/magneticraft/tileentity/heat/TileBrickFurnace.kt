@@ -4,10 +4,7 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
-import com.cout970.magneticraft.util.COPPER_MELTING_POINT
-import com.cout970.magneticraft.util.DEFAULT_COOKING_TEMPERATURE
-import com.cout970.magneticraft.util.DEFAULT_SMELTING_TEMPERATURE
+import com.cout970.magneticraft.util.*
 import net.minecraft.item.ItemFood
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
@@ -24,7 +21,7 @@ class TileBrickFurnace : TileHeatBase() {
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
-            conductivity = 0.05,
+            conductivity = DEFAULT_CONDUCTIVITY,
             tile = this)
 
     override val heatNodes: List<IHeatNode>

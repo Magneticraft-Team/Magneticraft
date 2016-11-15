@@ -19,6 +19,11 @@ public interface IHeatNode extends INode {
     double getConductivity();
 
     /**
+     * Sets the heat dissipation of the block
+     */
+    void setConductivity(double newConductivity);
+
+    /**
      * Returns the heat dissipation of the block
      */
     double getDissipation();

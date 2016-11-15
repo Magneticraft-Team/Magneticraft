@@ -12,10 +12,14 @@ val STANDARD_TEMPERATURE = 0.toKelvinFromCelsius()
 val STANDARD_AMBIENT_TEMPERATURE = 25.toKelvinFromCelsius()
 val DEFAULT_COOKING_TEMPERATURE = 180.toKelvinFromCelsius()
 val DEFAULT_SMELTING_TEMPERATURE = 400.toKelvinFromCelsius()
+val DEFAULT_CONDUCTIVITY = 0.05
+
+
 val MIN_EMISSION_TEMP = 480.toKelvinFromCelsius()
-val SNOW_CORRECTION_TEMP = 0.25f //Value to account for the fact that water freezes in some above-freezing biomes if it is snowy
 //val MAX_EMISSION_TEMP = 1400.toKelvinFromCelsius()
 val MAX_EMISSION_TEMP = 800.toKelvinFromCelsius()
+
+val SNOW_CORRECTION_TEMP = 0.25f //Value to account for the fact that water freezes in some above-freezing biomes if it is snowy
 
 val QUARTZ_MELTING_POINT = 1750.toKelvinFromCelsius()
 val GLASS_MAKING_TEMP = 450.toKelvinFromCelsius()

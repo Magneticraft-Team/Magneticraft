@@ -35,7 +35,7 @@ class TileIcebox(
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = IRON_HEAT_CAPACITY * 7,
             maxHeat = (IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT).toLong(),
-            conductivity = 0.05,
+            conductivity = DEFAULT_CONDUCTIVITY,
             tile = this)
     val inventory = ItemStackHandler(1)
     var maxMeltingTime = 0f

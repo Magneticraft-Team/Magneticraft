@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -14,7 +15,7 @@ open class HeatContainer(
         val tile: TileEntity,
         private val emit: Boolean = true,
         private val specificHeat: Double = 1.0,
-        private val conductivity: Double = 0.05, //Fraction of temperature difference between current and ambient temperture dissipated per second
+        private var conductivity: Double = DEFAULT_CONDUCTIVITY, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Evan small calues cause rapid heat transfer.  Very large values can cause strange directional transfer behavior
         private var dissipation: Double = 0.0, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Even small values cause rapid heat dissipation
@@ -35,6 +36,10 @@ open class HeatContainer(
 
     override fun setDissipation(newDissipation: Double) {
         dissipation = newDissipation
+    }
+
+    override fun setConductivity(newConductivity: Double) {
+        conductivity = newConductivity
     }
 
     override fun setHeat(newHeat: Long) {
@@ -85,11 +90,15 @@ open class HeatContainer(
     override fun deserializeNBT(nbt: NBTTagCompound?) {
         if (nbt == null) return
         heat = nbt.getLong("heat")
+        conductivity = nbt.getDouble("conductivity")
+        dissipation = nbt.getDouble("dissipation")
         ambientTemperatureCache = nbt.getDouble("ambient")
     }
 
     override fun serializeNBT() = NBTTagCompound().apply {
         setLong("heat", heat)
+        setDouble("conductivity", conductivity)
+        setDouble("dissipation", dissipation)
         setDouble("ambient", ambientTemperatureCache)
     }
 

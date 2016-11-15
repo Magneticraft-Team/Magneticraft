@@ -6,10 +6,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
-import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
-import com.cout970.magneticraft.util.COPPER_MELTING_POINT
-import com.cout970.magneticraft.util.ENERGY_TO_HEAT
-import com.cout970.magneticraft.util.TIER_1_MACHINES_MIN_VOLTAGE
+import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraftforge.fml.relauncher.Side
 
@@ -30,7 +27,7 @@ class TileElectricHeater(
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
-            conductivity = 0.05,
+            conductivity = DEFAULT_CONDUCTIVITY,
             tile = this)
 
     override fun update() {

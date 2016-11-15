@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.api.internal.heat
 
+import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -10,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
 class InfiniteHeatContainer(
         emit: Boolean = true,
         tile: TileEntity,
-        conductivity: Double = 0.05, //Fraction of temperature difference between current and ambient temperture dissipated per second
+        conductivity: Double = DEFAULT_CONDUCTIVITY, //Fraction of temperature difference between current and ambient temperture dissipated per second
         //Evan small calues cause rapid heat transfer.
         //Values above 0.5f are guaranteed to be unphysical.  Values above 0.1f are probably unphysical
         private val temperature: Double = 1800.toKelvinFromCelsius()

@@ -60,6 +60,7 @@ val tickBlocks = mapOf(
         withItemBlock(BlockHeatSink),
         withItemBlock(BlockHeatReservoir),
         withItemBlock(BlockHeatPipe),
+        withItemBlock(BlockRedstoneHeatPipe),
         withItemBlock(BlockElectricHeater)
 )
 
