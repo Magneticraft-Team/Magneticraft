@@ -1,6 +1,5 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.guide.JsonSerializer
 import com.cout970.magneticraft.util.MOD_ID
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -17,7 +16,6 @@ import java.io.FileWriter
  * Stuff that only works in the dev-environment
  */
 object Debug {
-
     val DEBUG = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
     var srcDir: File? = null
 
@@ -26,9 +24,8 @@ object Debug {
         if (srcDir == null) {
             com.cout970.magneticraft.util.error("Error trying to find the source directory")
         }
-        JsonSerializer.test()
 //        setTicksPerSecond(80)
-        //Log.debug("Source folder found at ${srcDir?.absolutePath}")
+//        Log.debug("Source folder found at ${srcDir?.absolutePath}")
 //        for(i in ItemCrushedOre.CRUSHED_ORES.keys){
 //            createItemJson("crushed_ore_${ItemCrushedOre.CRUSHED_ORES[i]}", "crushed_ore/${ItemCrushedOre.CRUSHED_ORES[i]}")
 //        }

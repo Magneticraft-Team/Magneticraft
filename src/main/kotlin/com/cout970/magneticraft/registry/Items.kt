@@ -20,7 +20,8 @@ val items = listOf(
         ItemVoltmeter,
         ItemNugget,
         ItemBattery,
-        ItemFloppyDisk
+        ItemFloppyDisk,
+        ItemCoke
 )
 
 /**

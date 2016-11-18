@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 import net.minecraftforge.oredict.ShapedOreRecipe
+import net.minecraftforge.oredict.ShapelessOreRecipe
 
 /**
  * Created by cout970 on 11/06/2016.
@@ -105,6 +106,8 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockElectricPole), "CPC", "#W#", "#W#", 'P', of(PLANKS), 'C', BlockElectricConnector, 'W', of(LOG))
     addRecipe(ItemStack(BlockSolarPanel), "LCL", "I#I", "IPI", 'L', "lightPlateLead", 'C', ItemCoilOfWire, 'I', "lightPlateIron", 'P', "heavyPlateIron")
     addRecipe(ItemStack(BlockElectricalMachineBlock), "III", "PWP", "III",  'I', "ingotIron", 'P', "lightPlateIron", 'W', ItemCoilOfWire)
+    addRecipe(ItemStack(BlockCoke), "XXX", "XXX", "XXX", 'X', of(ItemCoke))
+    addRecipe(ItemStack(ItemCoke, 9), "###", "#X#", "###", 'X', of(BlockCoke))
 
     //SMELTING RECIPES
     addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 0), ItemStack(BlockLimestone, 1, 0))
@@ -139,6 +142,10 @@ fun registerRecipes() {
 
 private fun addRecipe(result: ItemStack, vararg craft: Any) {
     GameRegistry.addRecipe(ShapedOreRecipe(result, *craft))
+}
+
+private fun addShapelessRecipe(result: ItemStack, vararg craft: Any) {
+    GameRegistry.addRecipe(ShapelessOreRecipe(result, *craft))
 }
 
 private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {

@@ -2,12 +2,11 @@ package com.cout970.magneticraft.guide.components
 
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
 import com.cout970.magneticraft.guide.BookPage
-import com.cout970.magneticraft.guide.builders.GUIDE_FOLDER
+import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.shuffled
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.item.ItemStack
-import net.minecraft.util.ResourceLocation
 
 class Recipe(
         position: Vec2d,
@@ -20,7 +19,7 @@ class Recipe(
 
         const val DISPLAY_TIME = 20
 
-        val GRID_TEXTURE = ResourceLocation("$GUIDE_FOLDER/grid.png")
+        val GRID_TEXTURE = resource("textures/gui/guide/grid.png")
         val GRID_SIZE = Vec2d(88, 56)
         val STACK_OFFSET = Array(3) { row ->
             Array(3) { column ->

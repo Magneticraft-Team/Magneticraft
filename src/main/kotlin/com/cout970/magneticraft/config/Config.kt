@@ -8,6 +8,7 @@ const val CATEGORY_GENERAL = "general"
 const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
 const val CATEGORY_PC = CATEGORY_GENERAL + ".pc"
+const val CATEGORY_FUEL = CATEGORY_GENERAL + ".fuel"
 
 object Config {
 
@@ -65,4 +66,6 @@ object Config {
     @ConfigValue(category = CATEGORY_PC, comment = "Max TCP connections in all PCs")
     var maxTcpConnections: Int = 8
 
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Coke burn time.")
+    var cokeBurnTime: Int = 3200
 }
