@@ -13,3 +13,6 @@ map_Kd magneticraft:models/hydraulic_press
 
 newmtl solar_panel
 map_Kd magneticraft:models/solar_panel
+
+newmtl computer
+map_Kd magneticraft:models/computer

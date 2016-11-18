@@ -7,6 +7,7 @@ package com.cout970.magneticraft.config
 const val CATEGORY_GENERAL = "general"
 const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
+const val CATEGORY_PC = CATEGORY_GENERAL + ".pc"
 
 object Config {
 
@@ -57,5 +58,11 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Item charge and discharge speed in Joules/tick (Watts)")
     var blockBatteryTransferRate: Int = 500
+
+    @ConfigValue(category = CATEGORY_PC, comment = "Allow TCP connections in PCs")
+    var allowTcpConnections: Boolean = true
+
+    @ConfigValue(category = CATEGORY_PC, comment = "Max TCP connections in all PCs")
+    var maxTcpConnections: Int = 8
 
 }

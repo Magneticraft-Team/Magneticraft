@@ -17,7 +17,7 @@ import net.minecraftforge.items.SlotItemHandler
 class ContainerMonitor(val tile: TileComputer, player: EntityPlayer, world: World, blockPos: BlockPos) : ContainerBase(player, world, blockPos) {
 
     init {
-        addSlotToContainer(object : SlotItemHandler(tile.inv, 0, -18, 200) {
+        addSlotToContainer(object : SlotItemHandler(tile.inv, 0, 64, 233) {
             override fun canTakeStack(playerIn: EntityPlayer?): Boolean = false
         })
     }
@@ -28,6 +28,7 @@ class ContainerMonitor(val tile: TileComputer, player: EntityPlayer, world: Worl
         val ibd = IBD()
         tile.monitor.saveToClient(ibd)
         ibd.setBoolean(3, tile.motherboard.isOnline())
+
         return ibd
     }
 

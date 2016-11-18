@@ -78,7 +78,6 @@ object ItemFloppyDisk : ItemBase("floppy_disk") {
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
                 if (!parent.exists()) parent.mkdir()
                 val file = File(parent, "floppy_${label.replace(Pattern.compile("[^(\\w|\\d)]+").toRegex(), "_")}.img")
-                println(file)
                 return file
             } else {
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")

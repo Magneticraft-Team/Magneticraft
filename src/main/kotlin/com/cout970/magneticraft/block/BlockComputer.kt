@@ -7,10 +7,13 @@ import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.computer.TileComputer
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.isServer
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
@@ -22,7 +25,16 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 2016/09/30.
  */
-object BlockComputer : BlockBase(Material.IRON, "computer"), ITileEntityProvider {
+object BlockComputer : BlockMultiState(Material.IRON, "computer"), ITileEntityProvider {
+
+    init {
+        lightOpacity = 0
+    }
+
+    override fun isFullBlock(state: IBlockState?) = false
+    override fun isOpaqueCube(state: IBlockState?) = false
+    override fun isFullCube(state: IBlockState?) = false
+    override fun isVisuallyOpaque() = false
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileComputer()
 
@@ -65,4 +77,15 @@ object BlockComputer : BlockBase(Material.IRON, "computer"), ITileEntityProvider
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
     }
+
+    override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
+        worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
+    }
+
+    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal
+
+    override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_DIRECTION, EnumFacing.getHorizontal(meta))
+
+    override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, PROPERTY_DIRECTION)
 }

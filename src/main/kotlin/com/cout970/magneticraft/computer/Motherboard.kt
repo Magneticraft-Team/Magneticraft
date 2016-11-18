@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class Motherboard(private val cpu: ICPU, private val memory: IMemory, private val rom: IROM, val tile: TileComputer) : IMotherboard {
 
-    var CPU_CLOCK = 50000 / 20
+    val CPU_CLOCK = 1000000 / 20
     private var cpuCycles = -1
     private var clock = 0
     private var bus: Bus = Bus(memory, mutableMapOf(0xFF to DeviceMotherboard(tile, this)))
@@ -18,7 +18,6 @@ class Motherboard(private val cpu: ICPU, private val memory: IMemory, private va
 
     init {
         cpu.setMotherboard(this)
-        CPU_CLOCK = 100000 / 20
     }
 
     fun attach(id: Int, dev: IDevice) {
@@ -106,7 +105,7 @@ class Motherboard(private val cpu: ICPU, private val memory: IMemory, private va
 
     override fun serializeNBT(): NBTTagCompound {
         val nbt = NBTTagCompound()
-//        cpuCycles = nbt.getInteger("cycles")
+        if (nbt.hasKey("cycles")) cpuCycles = nbt.getInteger("cycles")
         nbt.setTag("cpu", cpu.serializeNBT())
         nbt.setTag("ram", memory.serializeNBT())
         return nbt

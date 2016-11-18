@@ -2,8 +2,8 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.util.misc.IBD
-import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.split
+import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -42,9 +42,9 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
     var mouseX = 0
     var mouseY = 0
 
-    val screenSize: Int get() = 4000
-    val lines: Int get() = 50
-    val columns: Int get() = 80
+    val lines: Int = 35
+    val columns: Int = 80
+    val screenSize: Int = lines * columns
     val isActive: Boolean get() = !parent.isInvalid
 
     override fun readByte(pointer: Int): Byte {
@@ -58,9 +58,9 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
             20 -> regMouseBufferPtr.toByte()                     //20, mouseBufferPtr
             21 -> regKeyBufferSize.toByte()                      //21, mouseBufferSize
             in 22..58 -> getMouseBuffer()[pointer - 22]          //22, struct mouse[6]
-            in 60.splitRange() -> lines.split(pointer - 60)     //60, int lines
-            in 64.splitRange() -> columns.split(pointer - 64)   //64, int columns
-            in 68.splitRange() -> cursorLine.split(pointer - 68)//68, short cursorLine
+            in 60.splitRange() -> lines.split(pointer - 60)      //60, int lines
+            in 64.splitRange() -> columns.split(pointer - 64)    //64, int columns
+            in 68.splitRange() -> cursorLine.split(pointer - 68) //68, short cursorLine
             in 72.splitRange() -> cursorColumn.split(pointer - 72)//72, short cursorColumn
             76, 77 -> 0                                          //76, order
             78, 79 -> currentLine.split(pointer - 78)            //78, currentLine
@@ -110,7 +110,7 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
     }
 
     fun getScreenBuffer(): ByteArray {
-        if (screenBuffer == null || screenBuffer!!.size != 4000) screenBuffer = ByteArray(4000)
+        if (screenBuffer == null || screenBuffer!!.size != screenSize) screenBuffer = ByteArray(screenSize)
         return screenBuffer!!
     }
 

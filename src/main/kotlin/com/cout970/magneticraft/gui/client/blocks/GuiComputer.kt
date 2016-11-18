@@ -13,7 +13,7 @@ class GuiComputer(val comp: TileComputer, val contMonitor: ContainerMonitor) : G
 
     init {
         xSize = 350
-        ySize = 230
+        ySize = 255
     }
 
     override fun initComponents() {
@@ -23,7 +23,7 @@ class GuiComputer(val comp: TileComputer, val contMonitor: ContainerMonitor) : G
                 return true
             }
         }
-        components.add(CompBackground("old_monitor", textureSize = Vec2d(512, 512), size = Vec2d(350, 230)))
+        components.add(CompBackground("old_monitor", textureSize = Vec2d(512, 512), size = Vec2d(350, 255)))
         components.add(MonitorComponent(comp.monitor))
         components.add(SimpleButton(0, Vec2d(23, 220), listener, Vec2d(0, 49)))
         components.add(SimpleButton(1, Vec2d(33, 220), listener, Vec2d(0, 49)))

@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos
  * Created by cout970 on 17/07/2016.
  */
 
+
 fun ItemStack.checkNBT() {
     if (this.tagCompound == null) {
         this.tagCompound = NBTTagCompound()

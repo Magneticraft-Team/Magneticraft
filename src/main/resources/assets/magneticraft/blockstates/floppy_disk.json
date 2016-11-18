@@ -5,15 +5,15 @@
         "transform": "forge:default-item"
     },
     "variants": {
-        "normal": {
+        "normal": [{
             "textures": {
                 "layer0": "magneticraft:items/floppy_disk"
             }
-        },
-        "bash": {
+        }],
+        "bash": [{
             "textures": {
                 "layer0": "magneticraft:items/floppy_disk_1"
             }
-        }
+        }]
     }
 }

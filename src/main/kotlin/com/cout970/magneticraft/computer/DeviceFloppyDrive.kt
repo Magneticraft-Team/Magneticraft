@@ -117,7 +117,7 @@ class DeviceFloppyDrive(val parent: TileEntity, val getDisk: () -> IFloppyDisk?)
 
     override fun readByte(addr: Int): Byte {
 
-        val a = when (addr) {
+        return when (addr) {
             0 -> (if (isActive) 1 else 0).toByte()                              //00, byte online
             1 -> 0.toByte()                                                     //01, byte type
             2, 3 -> status.split(addr - 2)                                      //02,03, short status
@@ -132,7 +132,6 @@ class DeviceFloppyDrive(val parent: TileEntity, val getDisk: () -> IFloppyDisk?)
             in 16..(1024 + 15) -> getBuffer()[addr - 16]                        //16, byte[] buffer
             else -> 0
         }
-        return a
     }
 
     override fun writeByte(addr: Int, data: Byte) {

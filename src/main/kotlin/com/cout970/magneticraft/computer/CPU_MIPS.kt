@@ -529,9 +529,8 @@ class CPU_MIPS : ICPU {
         motherboard = mb
     }
 
-    override fun deserializeNBT(tag: NBTTagCompound?) {
-        if (tag != null && tag.hasKey("CPU")) {
-            val nbt = tag.getCompoundTag("CPU")
+    override fun deserializeNBT(nbt: NBTTagCompound?) {
+        if (nbt!!.hasKey("PC")) {
             registers = nbt.getIntArray("Regs")
             if (registers.size != 32) {
                 registers = IntArray(32)

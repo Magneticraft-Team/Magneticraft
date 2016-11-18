@@ -29,6 +29,9 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
         GL11.glColor4f(76.0f / 256f, 1.0f, 0.0f, 1.0f)
         val lines = monitor.lines
         val columns = monitor.columns
+        val scale = 4
+        val size = Vec2d(scale, scale)
+
         for (line in 0..lines - 1) {
             for (column in 0..columns - 1) {
                 var character = monitor.getChar(line * columns + column) and 0xFF
@@ -36,8 +39,12 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
                     character = character xor 128
                 }
                 if (character != 32 && character != 0) {
-                    gui.drawScaledTexture(gui.box.start + Vec2d(15 + column * 4, 15 + line * 4), Vec2d(4, 4),
-                            Vec2d((character and 15) * 4, (character shr 4) * 4), Vec2d(64, 64))
+                    val pos = gui.box.start + Vec2d(15 + column * scale, 15 + line * (scale + 2))
+                    val x = character and 15
+                    val y = character shr 4
+                    gui.drawScaledTexture(Box(pos, size), Vec2d(x, y) * 16, Vec2d(16, 16), Vec2d(256, 256))
+//                    gui.drawScaledTexture(gui.box.start + Vec2d(15 + column * 3, 15 + line * 5.4), Vec2d(4, 4),
+//                            Vec2d((character and 15) * 4, (character shr 4) * 4), Vec2d(64, 64))
                 }
             }
         }

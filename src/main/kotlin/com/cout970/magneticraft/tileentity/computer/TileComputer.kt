@@ -18,6 +18,7 @@ class TileComputer : TileBase(), ITickable {
 
     val motherboard = Motherboard(CPU_MIPS(), RAM(0x10000, false), ROM(resource("bios.bin")), this)
     val inv = ItemStackHandler(1)
+    val internetCard = DeviceNetworkCard(this)
     val monitor = DeviceMonitor(this)
     val floppy = DeviceFloppyDrive(this) {
         if (inv[0] == null) null else ITEM_FLOPPY_DISK!!.fromItem(inv[0]!!)
@@ -26,6 +27,7 @@ class TileComputer : TileBase(), ITickable {
     init {
         motherboard.attach(0, floppy)
         motherboard.attach(1, monitor)
+        motherboard.attach(2, internetCard)
     }
 
     override fun update() {
