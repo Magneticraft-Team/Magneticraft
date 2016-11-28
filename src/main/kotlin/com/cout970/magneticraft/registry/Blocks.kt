@@ -6,6 +6,7 @@ import com.cout970.magneticraft.block.fuel.BlockCharcoalSlab
 import com.cout970.magneticraft.block.fuel.BlockCoke
 import com.cout970.magneticraft.block.heat.*
 import com.cout970.magneticraft.block.itemblock.*
+import com.cout970.magneticraft.block.multiblock.BlockGrinder
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.multiblock.BlockKiln
 import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
@@ -18,6 +19,8 @@ val blocks = mapOf(
         withItemBlock(BlockOre),
         withItemBlock(BlockLimestone),
         withItemBlock(BlockBurntLimestone),
+        withItemBlock(BlockWoodChip),
+        withItemBlock(BlockFiberboard),
         BlockFeedingTrough to ItemBlockFeedingTrough(),
         withItemBlock(BlockElectricConnector),
         BlockElectricPole to ItemBlockElectricPole(),
@@ -34,6 +37,7 @@ val blocks = mapOf(
         withItemBlock(BlockHydraulicPress),
         withItemBlock(BlockKiln),
         withItemBlock(BlockKilnShelf),
+        withItemBlock(BlockGrinder),
         withItemBlock(BlockStripedMachineBlock),
         withItemBlock(BlockMachineBlockSupportColumn),
         withItemBlock(BlockMachineBlock),

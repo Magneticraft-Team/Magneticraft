@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.electric.*
+import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
@@ -27,6 +28,7 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileHydraulicPress::class.java          to "hydraulic_press",
         TileKiln::class.java to "kiln",
         TileKilnShelf::class.java to "kiln_shelf",
+        TileGrinder::class.java to "grinder",
         TileMultiblock::class.java              to "tile_multiblock",
         TileFirebox::class.java to "firebox",
         TileIcebox::class.java to "icebox",

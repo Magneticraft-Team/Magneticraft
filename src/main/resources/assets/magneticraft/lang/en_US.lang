@@ -9,12 +9,21 @@ item.magneticraft.crushed_ore_lead.name=Lead Chunk
 item.magneticraft.crushed_ore_cobalt.name=Cobalt Chunk
 item.magneticraft.crushed_ore_tungsten.name=Tungsten Chunk
 
+item.magneticraft.crushed_misc_lapis.name = Lapis Lazuli Chunk
+
+item.magneticraft.crushed_coal.name = Crushed Coal
+item.magneticraft.wood_chips.name = Wood Chips
+
 item.magneticraft.pebbles_iron.name=Iron Pebbles
 item.magneticraft.pebbles_gold.name=Gold Pebbles
 item.magneticraft.pebbles_copper.name=Copper Pebbles
 item.magneticraft.pebbles_lead.name=Lead Pebbles
 item.magneticraft.pebbles_cobalt.name=Cobalt Pebbles
 item.magneticraft.pebbles_tungsten.name=Tungsten Pebbles
+
+item.magneticraft.coal_pebbles.name = Coal Pebbles
+
+item.magneticraft.pebbles_misc_lapis.name = Lapis Lazuli Gems
 
 item.magneticraft.heavy_plate_iron.name=Heavy Iron Plate
 item.magneticraft.heavy_plate_gold.name=Heavy Gold Plate
@@ -36,6 +45,7 @@ item.magneticraft.nugget_copper.name=Copper Nugget
 item.magneticraft.nugget_lead.name=Lead Nugget
 item.magneticraft.nugget_cobalt.name=Cobalt Nugget
 item.magneticraft.nugget_tungsten.name=Tungsten Nugget
+
 
 item.magneticraft.ingot_copper.name=Copper Ingot
 item.magneticraft.ingot_lead.name=Lead Ingot
@@ -105,6 +115,7 @@ tile.magneticraft.air_bubble.name=Air Bubble
 tile.magneticraft.hydraulic_press.name=Hydraulic Press
 tile.magneticraft.kiln.name=Beehive Kiln
 tile.magneticraft.solar_panel.name=Solar Panel
+tile.magneticraft.grinder.name=Grinder
 
 tile.magneticraft.copper_block.name=Copper Block
 tile.magneticraft.cobalt_block.name=Cobalt Block
@@ -116,6 +127,9 @@ tile.magneticraft.machine_block_support_column.name=Support Column
 tile.magneticraft.striped_machine_block.name=Striped Machine Block
 tile.magneticraft.electrical_machine_block.name=Electrical Machine Block
 
+tile.magneticraft.block_coal_coke.name=Block of Coal Coke
+tile.magneticraft.block_wood_chip.name=Block of Wood Chips
+tile.magneticraft.fiberboard_block.name=Fiberboard Planks
 
 itemGroup.magneticraft=Magneticraft
 
@@ -123,7 +137,6 @@ text.magneticraft.wire_connect.success=Wire attached
 text.magneticraft.wire_connect.fail=Unable to connect wire
 text.magneticraft.wire_connect.same_block=Unable to connect wire to the same block
 text.magneticraft.wire_connect.no_other_connector=No position set
-
 text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
@@ -132,6 +145,7 @@ text.magneticraft.jei.table_sieve=Table Sieve
 text.magneticraft.jei.hydraulic_press=Hydraulic Press
 text.magneticraft.jei.kiln=Beehive Kiln
 
+text.magneticraft.jei.grinder=Grinder
 text.magneticraft.multiblock.error_count=Found %d errors trying to active the multiblock
 text.magneticraft.multiblock.first_errors=Showing the %d first errors:
 text.magneticraft.multiblock.all_errors=Showing all errors:

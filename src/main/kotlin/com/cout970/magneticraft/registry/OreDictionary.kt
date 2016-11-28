@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.BlockOre
+import com.cout970.magneticraft.block.decoration.BlockFiberboard
 import com.cout970.magneticraft.item.*
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
@@ -13,6 +14,10 @@ import net.minecraftforge.oredict.OreDictionary
  * This register all the ore dictionary names
  */
 fun registerOreDictionaryEntries() {
+
+    OreDictionary.registerOre("gemLapis", ItemStack(ItemCrushedLapis))
+    OreDictionary.registerOre("gemLapis", ItemStack(ItemPebblesLapis))
+    OreDictionary.registerOre("plankWood", ItemStack(BlockFiberboard))
 
     for ((key, value) in BlockOre.inventoryVariants) {
         val parts = value.split("=")

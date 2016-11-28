@@ -21,7 +21,7 @@ abstract class Multiblock {
     abstract fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent>
 
     companion object {
-        fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> = args.map { MultiblockLayer(it) }
+        fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> = args.map(::MultiblockLayer)
         fun zLayers(vararg args: List<IMultiblockComponent>): List<List<IMultiblockComponent>> = listOf(*args)
     }
 
