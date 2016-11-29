@@ -1,21 +1,10 @@
 package com.cout970.magneticraft.gui
 
-import com.cout970.magneticraft.gui.client.blocks.GuiBattery
-import com.cout970.magneticraft.gui.client.blocks.GuiElectricFurnace
-import com.cout970.magneticraft.gui.client.blocks.GuiGrinder
-import com.cout970.magneticraft.gui.client.blocks.GuiIncendiaryGenerator
 import com.cout970.magneticraft.gui.client.blocks.*
 import com.cout970.magneticraft.gui.common.ContainerBase
-import com.cout970.magneticraft.gui.common.blocks.ContainerBattery
-import com.cout970.magneticraft.gui.common.blocks.ContainerElectricFurnace
-import com.cout970.magneticraft.gui.common.blocks.ContainerGrinder
-import com.cout970.magneticraft.gui.common.blocks.ContainerIncendiaryGenerator
-import com.cout970.magneticraft.tileentity.electric.TileBattery
-import com.cout970.magneticraft.tileentity.electric.TileElectricFurnace
-import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
-import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
 import com.cout970.magneticraft.gui.common.blocks.*
 import com.cout970.magneticraft.tileentity.electric.*
+import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

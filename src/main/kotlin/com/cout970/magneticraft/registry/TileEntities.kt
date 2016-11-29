@@ -2,11 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.electric.*
-import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
-import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
-import com.cout970.magneticraft.tileentity.multiblock.TileKiln
-import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
-import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
+import com.cout970.magneticraft.tileentity.multiblock.*
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 //Map with all the TileEntities in the mod

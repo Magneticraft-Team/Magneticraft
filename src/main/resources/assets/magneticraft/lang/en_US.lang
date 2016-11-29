@@ -9,7 +9,7 @@ item.magneticraft.crushed_ore_lead.name=Lead Chunk
 item.magneticraft.crushed_ore_cobalt.name=Cobalt Chunk
 item.magneticraft.crushed_ore_tungsten.name=Tungsten Chunk
 
-item.magneticraft.crushed_misc_lapis.name = Lapis Lazuli Chunk
+item.magneticraft.crushed_lapis.name = Lapis Lazuli Chunk
 
 item.magneticraft.crushed_coal.name = Crushed Coal
 item.magneticraft.wood_chips.name = Wood Chips
@@ -23,7 +23,7 @@ item.magneticraft.pebbles_tungsten.name=Tungsten Pebbles
 
 item.magneticraft.coal_pebbles.name = Coal Pebbles
 
-item.magneticraft.pebbles_misc_lapis.name = Lapis Lazuli Gems
+item.magneticraft.lapis_pebbles.name = Lapis Lazuli Pebbles
 
 item.magneticraft.heavy_plate_iron.name=Heavy Iron Plate
 item.magneticraft.heavy_plate_gold.name=Heavy Gold Plate
@@ -102,6 +102,7 @@ tile.magneticraft.firebox.name=Firebox
 tile.magneticraft.icebox.name=Icebox
 tile.magneticraft.heat_sink.name=Heatsink
 tile.magneticraft.heat_reservoir.name=Heat Reservoir
+tile.magneticraft.thermometer_block.name=Thermocouple
 tile.magneticraft.brick_furnace.name=Brick Furnace
 
 tile.magneticraft.infinite_water.name=Infinite Water

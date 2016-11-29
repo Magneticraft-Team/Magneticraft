@@ -1,11 +1,17 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
+import coffee.cypher.mcextlib.extensions.aabb.plus
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
+import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.heat.IHeatHandler
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.api.internal.energy.HeatConnection
+import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
@@ -16,7 +22,8 @@ import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
+import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.electric.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.CraftingProcess
@@ -37,7 +44,7 @@ import java.util.*
 /**
  * Created by cout970 on 19/08/2016.
  */
-class TileGrinder : TileElectricBase(), IMultiblockCenter {
+class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     override var multiblock: Multiblock?
         get() = MultiblockGrinder
@@ -51,7 +58,21 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
 
     override var multiblockFacing: EnumFacing? = null
 
+    val heatNode = HeatContainer(
+            emit = false,
+            tile = this,
+            dissipation = 0.025,
+            specificHeat = IRON_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
+            maxHeat = ((IRON_HEAT_CAPACITY * 20) * Config.defaultMachineMaxTemp).toLong(),
+            conductivity = DEFAULT_CONDUCTIVITY
+    )
+
+    override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
+
     val hammerAnimation = AnimationTimer()
+    val safeHeat: Long = ((IRON_HEAT_CAPACITY * 20 * Config.defaultMachineSafeTemp)).toLong()
+    val efficiency = 0.9
+    var overtemp = false
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val in_inv_size = 4
@@ -59,8 +80,6 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     val inventory = ItemStackHandler(in_inv_size + out_inv_size)
     val craftingProcess: CraftingProcess
     val production = ValueAverage()
-
-    var redPower: Int = 0
 
     private var recipeCache: IGrinderRecipe? = null
     private var inputCache: ItemStack? = null
@@ -77,15 +96,19 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
                     secondary = inventory.insertItem(i, secondary, false)
                     if (secondary == null) {
                         consume_input()
-                        break
+                        return@CraftingProcess
                     }
                 }
             }
         }, { //can craft
             node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
                     && check_output_valid()
+                    && overtemp == false
         }, { // use energy
-            val applied = node.applyPower(-Config.grinderConsumption * it, false)
+            val applied = node.applyPower(-Config.grinderConsumption * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE) * 6, false)
+            if (heatNode.pushHeat((applied * (1 - efficiency) * ENERGY_TO_HEAT).toLong(), false) > 0) { //If there's any heat leftover after we tried to push heat, the machine has overheated
+                overtemp = true
+            }
             production += applied
         }, {
             getRecipe()?.duration ?: 120f
@@ -95,6 +118,8 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
         return oldState?.block !== newSate?.block
     }
+
+    fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
 
     fun getRecipe(input: ItemStack): IGrinderRecipe? {
         if (input === inputCache) return recipeCache
@@ -114,8 +139,9 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
                 suckItems()
                 sendUpdateToNearPlayers()
             }
-            craftingProcess.tick(worldObj, if (redPower == 0) 1f else (node.voltage * TIER_1_MACHINES_MIN_VOLTAGE).toFloat())
+            craftingProcess.tick(worldObj, 1.0f)
             production.tick()
+            if (heatNode.heat < safeHeat) overtemp = false
         }
         super.update()
     }
@@ -138,12 +164,14 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
         setTag("inv", inventory.serializeNBT())
         setTag("crafting", craftingProcess.serializeNBT())
+        super.save()
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
         if (hasKey("direction")) multiblockFacing = getEnumFacing("direction")
         if (hasKey("inv")) inventory.deserializeNBT(getCompoundTag("inv"))
         if (hasKey("crafting")) craftingProcess.deserializeNBT(getCompoundTag("crafting"))
+        super.load(nbt)
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 2, 0)) to (pos + BlockPos(2, 4, 3))
@@ -152,6 +180,8 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
         val ENERGY_INPUT = BlockPos(1, 0, 1)
         val ITEM_INPUT = BlockPos(0, 2, 1)
         val ITEM_OUTPUT = BlockPos(0, 0, 2)
+        val HEAT_OUTPUT = BlockPos(-1, 0, 1)
+        val POTENTIAL_CONNECTIONS = setOf(BlockPos(-2, 0, 1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
     }
 
     override fun onBreak() {
@@ -166,8 +196,25 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
         }
     }
 
+    override fun updateHeatConnections() {
+        for (j in POTENTIAL_CONNECTIONS) {
+            val relPos = posTransform(j)
+            val tileOther = world.getTileEntity(relPos)
+            if (tileOther == null) continue
+            val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
+            if (handler !is IHeatHandler) continue
+            for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                heatConnections.add(HeatConnection(heatNode, otherNode))
+                handler.addConnection(HeatConnection(otherNode, heatNode))
+            }
+        }
+        heatNode.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+    }
+
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() || facing == null))
+        if (capability == NODE_HANDLER && (facing == null ||
+                (direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && facing == direction.rotateY()) ||
+                direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && facing == direction.rotateYCCW()))
             return true
         if (capability == ITEM_HANDLER) {
             if (facing == null)
@@ -182,7 +229,9 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() || facing == null))
+        if (capability == NODE_HANDLER && (facing == null ||
+                (direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && facing == direction.rotateY()) ||
+                direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && facing == direction.rotateYCCW()))
             return this as T
         if (capability == ITEM_HANDLER) {
             if (facing == null)
@@ -197,7 +246,7 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == NODE_HANDLER) return false
+        if (capability == NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
@@ -211,6 +260,7 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
             else
                 return Out_Inventory(inventory, in_inv_size, out_inv_size) as T
         }
+        if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }
 
@@ -253,7 +303,7 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     }
 
     fun suckItems() {
-        val aabb = AxisAlignedBB(pos.up(2).add(direction.rotatePoint(BlockPos.ORIGIN, BlockPos(-1.0, 0.0, 0.0))), pos.up(3).add(direction.rotatePoint(BlockPos.ORIGIN, BlockPos(2.0, 1.0, 3.0))))
+        val aabb = direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toDoubleVec()
         val items = worldObj.getEntitiesWithinAABB(EntityItem::class.java, aabb)
         for (i in items) {
             val item = i.entityItem

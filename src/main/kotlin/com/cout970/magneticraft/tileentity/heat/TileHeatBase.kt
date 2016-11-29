@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraftforge.common.capabilities.Capability
+import java.lang.Math.floor
 
 /**
  * Created by cout970 on 04/07/2016.
@@ -25,6 +26,11 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
     var lightLevelCache = 0.0f
     var initiated = false
     var firstTicks = -1
+
+    override fun getComparitorOutput(): Int {
+        val node = heatNodes.first()
+        return floor(node.temperature / node.maxTemperature).toInt()
+    }
 
     override fun update() {
         if (shouldTick(20)) {

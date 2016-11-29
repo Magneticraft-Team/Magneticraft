@@ -65,6 +65,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     //Not using crafting process because I assumed that an array of lambdas will have horrible locality of reference
     data class craftingSlot(
             var craftingTime: Int = 0,
+            var iscrafting: Boolean = false,
             var stateCache: IBlockState? = null,
             var inputCache: ItemStack? = null,
             var recipeCache: IKilnRecipe? = null,
@@ -79,9 +80,21 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             return array
         }
 
+        fun getIsCraftingArray(): ByteArray {
+            var array = ByteArray(map.size)
+            var index = 0
+            map.forEach { array.set(index, if (it.value.iscrafting) 1 else 0); index++ }
+            return array
+        }
+
         fun setAllCraftingTimes(array: IntArray) {
             var index = 0
             map.forEach { it.value.craftingTime = array[index]; index++ }
+        }
+
+        fun setAllIsCrafting(array: ByteArray) {
+            var index = 0
+            map.forEach { it.value.iscrafting = array[index] != 0.toByte(); index++ }
         }
     }
 
@@ -163,13 +176,18 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                 }
                 if (shouldTick(updateFrequency)) {
                     craftingSlots.map.forEach {
-                        if (!canCraft(posTransform(it.key), it.value)) return@forEach
+                        if (!canCraft(posTransform(it.key), it.value)) {
+                            it.value.iscrafting = false
+                            return@forEach
+                        }
                         val recipe: IKilnRecipe = getRecipe(posTransform(it.key), it.value) ?: return@forEach
                         if (it.value.craftingTime <= recipe.duration) {
                             it.value.craftingTime += 1
+                            it.value.iscrafting = true
                             return@forEach
                         }
                         it.value.craftingTime = 0
+                        it.value.iscrafting = false
                         val tile = world.getTile<TileKilnShelf>(posTransform(it.key))
                         if (tile != null) {
                             if (recipe.isItemRecipe)
@@ -184,7 +202,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         } else {
             if (shouldTick(5)) {
                 craftingSlots.map.forEach {
-                    if (it.value.craftingTime == 0) return@forEach
+                    if (it.value.iscrafting) return@forEach
                     val partPos = posTransform(it.key)
                     val d3 = (partPos.x.toFloat() + world.rand.nextFloat()).toDouble()
                     val d4 = (partPos.y.toFloat() + world.rand.nextFloat()).toDouble()
@@ -206,7 +224,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     override fun updateHeatConnections() {
         for (j in POTENTIAL_CONNECTIONS) {
-            val relPos = direction.rotatePoint(BlockPos.ORIGIN, j)
+            val relPos = posTransform(j)
             val tileOther = world.getTileEntity(relPos)
             if (tileOther == null) continue
             val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
@@ -228,6 +246,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
         setIntArray("times", craftingSlots.getCraftingTimesArray())
+        setByteArray("isCrafting", craftingSlots.getIsCraftingArray())
         setBoolean("door", doorOpen)
         super.save()
     }
@@ -235,6 +254,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override fun load(nbt: NBTTagCompound) = nbt.run {
         if (hasKey("direction")) multiblockFacing = getEnumFacing("direction")
         if (hasKey("times")) craftingSlots.setAllCraftingTimes(getIntArray("times"))
+        if (hasKey("isCrafting")) craftingSlots.setAllIsCrafting(getByteArray("isCrafting"))
         if (hasKey("door")) doorOpen = getBoolean("door")
         super.load(nbt)
     }

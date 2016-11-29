@@ -7,8 +7,7 @@ import net.minecraft.item.Item
 /**
  * Created by cout970 on 11/06/2016.
  */
-object ItemCrushedLapis : ItemBase("crushed_lapis") {
-}
+object ItemCrushedLapis : ItemBase("crushed_lapis")
 
 object ItemCrushedCoal : ItemBase("crushed_coal"), IFuel<Item> {
     override fun getBurnTime(): Int = Config.crushedCoalBurnTime

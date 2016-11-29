@@ -98,14 +98,14 @@ class TileFirebox(
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
-        setFloat("maxMeltingTime", maxBurningTime)
+        setFloat("maxBurningTime", maxBurningTime)
         setFloat("meltingTime", burningTime)
         super.save()
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
-        maxBurningTime = nbt.getFloat("maxMeltingTime")
+        maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("meltingTime")
         super.load(nbt)
     }

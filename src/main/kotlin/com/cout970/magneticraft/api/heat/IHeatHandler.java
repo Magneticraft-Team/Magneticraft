@@ -14,6 +14,8 @@ public interface IHeatHandler extends INodeHandler {
      */
     List<IHeatConnection> getConnections();
 
+    int getComparitorOutput();
+
     /**
      * Re-scans directions which connect to heat containers.
      */

@@ -22,6 +22,11 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
     var lightLevelCache = 0.0f
     var initiated = false
 
+    override fun getComparitorOutput(): Int {
+        val node = heatNodes.first()
+        return Math.floor(node.temperature / node.maxTemperature).toInt()
+    }
+
     override fun update() {
         if (shouldTick(20)) {
             if (!worldObj.isRemote) {

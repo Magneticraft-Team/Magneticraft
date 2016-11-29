@@ -2,9 +2,14 @@ package com.cout970.magneticraft.gui.client.blocks
 
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.GuiBase
-import com.cout970.magneticraft.gui.client.components.*
+import com.cout970.magneticraft.gui.client.components.CallbackBarProvider
+import com.cout970.magneticraft.gui.client.components.CompBackground
+import com.cout970.magneticraft.gui.client.components.CompElectricBar
+import com.cout970.magneticraft.gui.client.components.CompVerticalBar
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
+import com.cout970.magneticraft.util.toCelsius
+import com.cout970.magneticraft.util.toFahrenheit
 import com.cout970.magneticraft.util.vector.Vec2d
 
 /**
@@ -19,7 +24,16 @@ class GuiGrinder(container: ContainerBase) : GuiBase(container) {
 
         components.add(CompElectricBar(tile.node, Vec2d(47, 64) + box.start))
 
-        components.add(CompGreenLight(Vec2d(57, 58) + box.start, { tile.redPower > 0 }))
+        components.add(CompVerticalBar(
+                CallbackBarProvider({ tile.heatNode.temperature }, { tile.heatNode.maxTemperature }, { tile.heatNode.ambientTemperatureCache }),
+                2, Vec2d(91, 56) + box.start, {
+            listOf(
+                    if (Config.heatUnitCelsius) {
+                        String.format("%.2fC", tile.heatNode.temperature.toCelsius())
+                    } else {
+                        String.format("%.2fF", tile.heatNode.temperature.toFahrenheit())
+                    })
+        }))
 
         components.add(CompVerticalBar(
                 CallbackBarProvider({ tile.production.storage.toDouble() }, { Config.grinderConsumption * 2 }, { 0.0 }),

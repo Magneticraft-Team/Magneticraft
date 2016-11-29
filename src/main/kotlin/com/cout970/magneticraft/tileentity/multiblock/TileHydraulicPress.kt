@@ -103,6 +103,8 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
         return oldState?.block !== newSate?.block
     }
 
+    fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
+
     fun getRecipe(input: ItemStack): IHydraulicPressRecipe? {
         if (input === inputCache) return recipeCache
         val recipe = HydraulicPressRecipeManager.findRecipe(input)
@@ -134,7 +136,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
 
     override fun updateHeatConnections() {
         for (j in POTENTIAL_CONNECTIONS) {
-            val relPos = direction.rotatePoint(BlockPos.ORIGIN, j)
+            val relPos = direction.rotatePoint(BlockPos.ORIGIN, j) + pos
             val tileOther = world.getTileEntity(relPos)
             if (tileOther == null) continue
             val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue

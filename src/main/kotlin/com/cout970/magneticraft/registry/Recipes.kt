@@ -23,8 +23,10 @@ import com.cout970.magneticraft.item.hammers.ItemStoneHammer
 import com.cout970.magneticraft.util.*
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.*
+import net.minecraft.init.Enchantments
 import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.Item
@@ -45,6 +47,9 @@ import net.minecraftforge.oredict.ShapelessOreRecipe
  */
 fun registerRecipes() {
     //@formatter:off
+
+    val stampedString = "Stamped"
+    val heavyString = "Heavy Duty"
 
     //CRUSHING TABLE RECIPES
     addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
@@ -151,6 +156,64 @@ fun registerRecipes() {
 
     //CRAFTING RECIPES
 
+    //stamped items
+    fun addStampedRecipe(result: ItemStack, vararg craft: Any) {
+        addEnchantRecipe(result, stampedString, listOf(Pair(Enchantments.UNBREAKING, 1)), *craft)
+    }
+
+    fun addStampedPartRecipe(result: ItemStack, vararg craft: Any) {
+        addLoreRecipe(result, stampedString, *craft)
+    }
+
+    fun addHeavyRecipe(result: ItemStack, vararg craft: Any) {
+        addEnchantRecipe(result, heavyString, listOf(Pair(Enchantments.UNBREAKING, 3), Pair(Enchantments.PROTECTION, 1)), *craft)
+    }
+
+    addStampedPartRecipe(ItemStack(Items.MINECART), "I#I", "III", 'I', "lightPlateIron")
+    addStampedPartRecipe(ItemStack(Items.CAULDRON), "I#I", "I#I", "III", 'I', "lightPlateIron")
+    addStampedPartRecipe(ItemStack(Items.BUCKET), "I#I", "#I#", 'I', "lightPlateIron")
+    addStampedPartRecipe(ItemStack(Items.IRON_DOOR, 3), "II", "II", "II", 'I', "lightPlateIron")
+    addStampedPartRecipe(ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE), "II", 'I', "lightPlateIron")
+    addStampedPartRecipe(ItemStack(Blocks.IRON_TRAPDOOR), "II", "II", 'I', "lightPlateIron")
+    addStampedPartRecipe(ItemStack(Blocks.HOPPER), "I#I", "ICI", "#I#", 'I', "lightPlateIron", 'C', "chestWood")
+
+    addStampedPartRecipe(ItemStack(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE), "II", 'I', "lightPlateGold")
+
+    addStampedRecipe(ItemStack(Items.SHEARS), "#I", "I#", 'I', "lightPlateIron")
+    addStampedRecipe(ItemStack(Items.IRON_SWORD), "I", "I", "S", 'I', "lightPlateIron", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.IRON_AXE), "II", "IS", "#S", 'I', "lightPlateIron", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.IRON_HOE), "II", "#S", "#S", 'I', "lightPlateIron", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.IRON_SHOVEL), "I", "S", "S", 'I', "lightPlateIron", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.IRON_PICKAXE), "III", "#S#", "#S#", 'I', "lightPlateIron", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.IRON_BOOTS), "I#I", "I#I", 'I', "lightPlateIron")
+    addStampedRecipe(ItemStack(Items.IRON_HELMET), "III", "I#I", 'I', "lightPlateIron")
+    addStampedRecipe(ItemStack(Items.IRON_LEGGINGS), "III", "I#I", "I#I", 'I', "lightPlateIron")
+    addStampedRecipe(ItemStack(Items.IRON_CHESTPLATE), "I#I", "III", "III", 'I', "lightPlateIron")
+    addStampedRecipe(ItemStack(Items.SHIELD), "PIP", "PPP", "#P#", 'I', "lightPlateIron", 'P', "plankWood")
+    addStampedRecipe(ItemStack(ItemIronHammer), "II#", "ISI", "#S#", 'I', "lightPlateIron", 'S', "stickWood")
+
+    addStampedRecipe(ItemStack(Items.GOLDEN_SWORD), "I", "I", "S", 'I', "lightPlateGold", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.GOLDEN_AXE), "II", "IS", "#S", 'I', "lightPlateGold", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.GOLDEN_HOE), "II", "#S", "#S", 'I', "lightPlateGold", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.GOLDEN_SHOVEL), "I", "S", "S", 'I', "lightPlateGold", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.GOLDEN_PICKAXE), "III", "#S#", "#S#", 'I', "lightPlateGold", 'S', "stickWood")
+    addStampedRecipe(ItemStack(Items.GOLDEN_BOOTS), "I#I", "I#I", 'I', "lightPlateGold")
+    addStampedRecipe(ItemStack(Items.GOLDEN_HELMET), "III", "I#I", 'I', "lightPlateGold")
+    addStampedRecipe(ItemStack(Items.GOLDEN_LEGGINGS), "III", "I#I", "I#I", 'I', "lightPlateGold")
+    addStampedRecipe(ItemStack(Items.GOLDEN_CHESTPLATE), "I#I", "III", "III", 'I', "lightPlateGold")
+
+    addHeavyRecipe(ItemStack(Items.IRON_BOOTS), "I#I", "I#I", 'I', "heavyPlateIron")
+    addHeavyRecipe(ItemStack(Items.IRON_HELMET), "III", "I#I", 'I', "heavyPlateIron")
+    addHeavyRecipe(ItemStack(Items.IRON_LEGGINGS), "III", "I#I", "I#I", 'I', "heavyPlateIron")
+    addHeavyRecipe(ItemStack(Items.IRON_CHESTPLATE), "I#I", "III", "III", 'I', "heavyPlateIron")
+
+    addHeavyRecipe(ItemStack(Items.GOLDEN_BOOTS), "I#I", "I#I", 'I', "heavyPlateGold")
+    addHeavyRecipe(ItemStack(Items.GOLDEN_HELMET), "III", "I#I", 'I', "heavyPlateGold")
+    addHeavyRecipe(ItemStack(Items.GOLDEN_LEGGINGS), "III", "I#I", "I#I", 'I', "heavyPlateGold")
+    addHeavyRecipe(ItemStack(Items.GOLDEN_CHESTPLATE), "I#I", "III", "III", 'I', "heavyPlateGold")
+
+    addHeavyRecipe(ItemStack(Items.SHIELD), "PIP", "PPP", "#P#", 'I', "heavyPlateIron", 'P', "plankWood")
+
     //nuggets
     addRecipe(ItemStack(ItemNugget, 9, 0), "I", 'I', "ingotIron")
     addRecipe(ItemStack(ItemNugget, 9, 2), "I", 'I', "ingotCopper")
@@ -164,18 +227,12 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockCompactedTungsten), "iii", "iii", "iii", 'i', ItemStack(ItemIngot, 1, 5))
     addRecipe(ItemStack(BlockWoodChip), "iii", "iii", "iii", 'i', ItemStack(ItemWoodChip))
     //other
-    addRecipe(ItemStack(ItemIronHammer), true, "XX#", "XZX", "#Z#", 'X', "ingotIron", 'Z', "stickWood")
+    addRecipe(ItemStack(ItemIronHammer), true, "PX#", "XZX", "#Z#", 'P', "lightPlateIron", 'X', "ingotIron", 'Z', "stickWood")
     addRecipe(ItemStack(ItemStoneHammer), true, "XX#", "XZX", "#Z#", 'X', "cobblestone", 'Z', "stickWood")
-
-    addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone, 1, 0))
-    addRecipe(ItemStack(BlockTileLimestone, 4, 0), "XY", "YX", 'X', ItemStack(BlockLimestone, 1, 0), 'Y', ItemStack(BlockBurntLimestone, 1, 0))
-    addRecipe(ItemStack(BlockBurntLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockBurntLimestone, 1, 0))
 
     addRecipe(ItemStack(BlockFluxedGravel, 4), "CSC", "LGF", "CSC", 'G', "gravel", 'C', Items.CLAY_BALL, 'L', "pebblesLead", 'F', "pebblesCobalt_Mgc", 'S', "sand")
 
     addRecipe(ItemStack(ItemResource, 8), "III", "IXI", "III", 'I', ItemStack(ItemWoodChip), 'X', "listAllWater")
-    addRecipe(ItemStack(ItemIronHammer), true, "XX#", "XZX", "#Z#", 'X', of(IRON_INGOT), 'Z', of(STICK))
-    addRecipe(ItemStack(ItemStoneHammer), true, "XX#", "XZX", "#Z#", 'X', of(COBBLESTONE), 'Z', of(STICK))
     addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone))
     addRecipe(ItemStack(BlockTileLimestone, 4), "XY", "YX", 'X', ItemStack(BlockLimestone), 'Y', ItemStack(BlockBurntLimestone))
     addRecipe(ItemStack(BlockBurntLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockBurntLimestone))
@@ -217,7 +274,9 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockHeatReservoir), "XPX", "XFX", "XXX", 'X', "ingotBrick", 'P', "lightPlateCopper", 'F', BlockCompactedCopper)
     addRecipe(ItemStack(BlockHeatSink), "PPP", "XPX", 'X', "ingotBrick", 'P', "lightPlateCopper")
     addRecipe(ItemStack(BlockHeatPipe, 8), "BBB", "PIP", "BBB", 'B', "ingotBrick", 'P', "lightPlateCopper", 'I', "ingotCopper")
-    addRecipe(ItemStack(BlockRedstoneHeatPipe), "C", "P", 'P', BlockHeatPipe, 'C', Items.COMPARATOR)
+    addRecipe(ItemStack(BlockRedstoneHeatPipe), "C", "P", 'P', BlockHeatPipe, 'C', Items.REPEATER)
+
+    addRecipe(ItemStack(BlockThermometer), "#C#", "IPD", 'C', Items.COMPARATOR, 'I', "ingotTungsten", 'D', "ingotIron", 'P', BlockHeatPipe)
 
     addRecipe(ItemStack(BlockCoke), "XXX", "XXX", "XXX", 'X', of(ItemCoke))
     addRecipe(ItemStack(ItemCoke, 9), "###", "#X#", "###", 'X', of(BlockCoke))
@@ -266,6 +325,27 @@ fun registerRecipes() {
 
 private fun addRecipe(result: ItemStack, vararg craft: Any) {
     GameRegistry.addRecipe(ShapedOreRecipe(result, *craft))
+}
+
+private fun addEnchantRecipe(result: ItemStack, enchants: List<Pair<Enchantment, Int>>, vararg craft: Any) {
+    enchants.forEach {
+        result.addEnchantment(it.first, it.second)
+    }
+    addRecipe(result, *craft)
+}
+
+private fun addLoreRecipe(result: ItemStack, lore: String, enchants: List<Pair<Enchantment, Int>>, vararg craft: Any) {
+    result.setLore(listOf(lore))
+    addEnchantRecipe(result, enchants, *craft)
+}
+
+private fun addEnchantRecipe(result: ItemStack, lore: String, enchants: List<Pair<Enchantment, Int>>, vararg craft: Any) {
+    addLoreRecipe(result, lore, enchants, *craft)
+}
+
+private fun addLoreRecipe(result: ItemStack, lore: String, vararg craft: Any) {
+    result.setLore(listOf(lore))
+    addRecipe(result, *craft)
 }
 
 private fun addShapelessRecipe(result: ItemStack, vararg craft: Any) {

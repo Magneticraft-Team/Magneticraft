@@ -2,6 +2,8 @@ package com.cout970.magneticraft.util
 
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.NBTTagList
+import net.minecraft.nbt.NBTTagString
 import net.minecraft.util.math.BlockPos
 
 /**
@@ -37,6 +39,16 @@ fun ItemStack.setDouble(key: String, value:Double){
 fun ItemStack.getDouble(key: String): Double{
     checkNBT()
     return tagCompound!!.getDouble(key)
+}
+
+fun ItemStack.setLore(values: List<String>) {
+    var list = NBTTagList()
+    var tag = NBTTagCompound()
+    values.forEach {
+        list.appendTag(NBTTagString(it))
+    }
+    tag.setTag("Lore", list)
+    this.setTagInfo("display", tag)
 }
 
 fun ItemStack.setBlockPos(key: String, pos: BlockPos) {

@@ -17,6 +17,7 @@ import com.cout970.magneticraft.util.fluid.Tank
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.IBD
 import com.cout970.magneticraft.util.misc.ValueAverage
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -50,6 +51,7 @@ class TileIncendiaryGenerator(
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
     var burningTime = 0f
+    var maxFuelTemp = Config.defaultMaxTemp
     var ambientTemperature = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     var heat = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     val production = ValueAverage()
@@ -65,6 +67,7 @@ class TileIncendiaryGenerator(
                 if (inventory[0] != null) {
                     val time = TileEntityFurnace.getItemBurnTime(inventory[0])
                     if (time > 0) {
+                        maxFuelTemp = getMaxFuelHeat(inventory[0]!!)
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
                         inventory[0] = inventory[0]!!.consumeItem()
@@ -73,7 +76,7 @@ class TileIncendiaryGenerator(
                 }
             }
             //burns fuel
-            if (burningTime > 0 && heat < MAX_HEAT) {
+            if (burningTime > 0 && heat < MAX_HEAT && heat < maxFuelTemp) {
                 val burningSpeed = Math.ceil(Config.incendiaryGeneratorMaxProduction / 10.0).toInt()
                 burningTime -= burningSpeed
                 heat += burningSpeed * FUEL_TO_HEAT
@@ -127,17 +130,19 @@ class TileIncendiaryGenerator(
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
-        setFloat("maxMeltingTime", maxBurningTime)
+        setFloat("maxBurningTime", maxBurningTime)
         setFloat("meltingTime", burningTime)
         setFloat("heat", heat)
+        setDouble("fuelTemp", maxFuelTemp)
         setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
-        maxBurningTime = nbt.getFloat("maxMeltingTime")
+        maxBurningTime = nbt.getFloat("maxBurningTime")
         burningTime = nbt.getFloat("meltingTime")
         heat = nbt.getFloat("heat")
+        maxFuelTemp = nbt.getDouble("fuelTemo")
         tank.readFromNBT(nbt.getCompoundTag("tank"))
     }
 
@@ -152,6 +157,18 @@ class TileIncendiaryGenerator(
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean {
         return facing == EnumFacing.UP
+    }
+
+    var FuelCache: ItemStack? = null
+    var TempCache: Double = Config.defaultMaxTemp
+
+    fun getMaxFuelHeat(Input: ItemStack): Double {
+        if (Input.isItemEqual(FuelCache)) {
+            return TempCache
+        }
+        FuelCache = Input
+        TempCache = Config.fuelTemps.map.get(Input.item) ?: Config.defaultMaxTemp
+        return TempCache
     }
 
     @Suppress("UNCHECKED_CAST")
