@@ -83,13 +83,13 @@ object Config {
     @ConfigValue(category = CATEGORY_FUEL, comment = "Coke burn time.")
     var cokeBurnTime: Int = 3200
 
-    @ConfigValue(category = CATEGORY_FUEL, comment = "Default maximum fuel temperature in Celsius ")
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Default maximum fuel temperature in Kelvin")
     var defaultMaxTemp: Double = 400.toKelvinFromCelsius()
 
-    @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine max temperature in Celsius ")
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine max temperature in Kelvin")
     var defaultMachineMaxTemp: Double = 125.0.toKelvinFromCelsius()
 
-    @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine safe temperature in Celsius ")
+    @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine safe temperature in Kelvin")
     var defaultMachineSafeTemp: Double = 50.0.toKelvinFromCelsius()
 
     @ConfigValue(category = CATEGORY_FUEL, comment = "List of fuels and associated maximum temperatures which have higher maximum temperatures than the default.")

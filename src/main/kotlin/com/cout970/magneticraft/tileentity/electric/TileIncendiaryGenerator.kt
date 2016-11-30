@@ -17,7 +17,6 @@ import com.cout970.magneticraft.util.fluid.Tank
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.IBD
 import com.cout970.magneticraft.util.misc.ValueAverage
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -45,6 +44,8 @@ class TileIncendiaryGenerator(
         val HEAT_TO_WATTS = FUEL_TO_WATTS / FUEL_TO_HEAT
     }
 
+    val fuelHelper = fuelTempHelper()
+
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>
         get() = listOf(mainNode)
@@ -67,7 +68,7 @@ class TileIncendiaryGenerator(
                 if (inventory[0] != null) {
                     val time = TileEntityFurnace.getItemBurnTime(inventory[0])
                     if (time > 0) {
-                        maxFuelTemp = getMaxFuelHeat(inventory[0]!!)
+                        maxFuelTemp = fuelHelper.temp(inventory[0]!!)
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
                         inventory[0] = inventory[0]!!.consumeItem()
@@ -157,18 +158,6 @@ class TileIncendiaryGenerator(
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean {
         return facing == EnumFacing.UP
-    }
-
-    var FuelCache: ItemStack? = null
-    var TempCache: Double = Config.defaultMaxTemp
-
-    fun getMaxFuelHeat(Input: ItemStack): Double {
-        if (Input.isItemEqual(FuelCache)) {
-            return TempCache
-        }
-        FuelCache = Input
-        TempCache = Config.fuelTemps.map.get(Input.item) ?: Config.defaultMaxTemp
-        return TempCache
     }
 
     @Suppress("UNCHECKED_CAST")
