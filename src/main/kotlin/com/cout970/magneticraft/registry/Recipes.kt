@@ -240,6 +240,7 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockIncendiaryGenerator), "ICI", "IFI", "IBI", 'I', "ingotIron", 'C', "ingotCopper", 'F', of(FURNACE), 'B', of(BRICK_BLOCK))
 
     addRecipe(ItemStack(ItemCoilOfWire), "#C#", "C#C", "#C#", 'C', "ingotCopper")
+    addRecipe(ItemStack(ItemCoilOfWire), "CCC", "CCC", "CCC", 'C', ItemStack(Blocks.IRON_BARS))
     addRecipe(ItemStack(ItemVoltmeter), "WIW", "PRP", "CPC", 'C', "ingotCopper", 'I', "ingotIron", 'P', "plankWood", 'R', ItemCoilOfWire, 'W', of(WOOL))
     addRecipe(ItemStack(ItemThermometer), "GIG", "PRP", "TPT", 'T', "ingotTungsten", 'I', "ingotIron", 'P', "plankWood", 'R', ItemCoilOfWire, 'G', "blockGlass")
 

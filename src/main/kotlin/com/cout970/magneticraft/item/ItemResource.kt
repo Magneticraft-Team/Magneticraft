@@ -8,7 +8,8 @@ import net.minecraft.item.ItemStack
 object ItemResource : ItemBase("resource") {
 
     override val variants = mapOf(
-            0 to "resource=pulpWood"
+            0 to "resource=pulpWood",
+            1 to "resource=itemMesh"
     )
 
     override fun getUnlocalizedName(stack: ItemStack?): String =
