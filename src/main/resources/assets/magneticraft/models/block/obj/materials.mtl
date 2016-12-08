@@ -14,6 +14,12 @@ map_Kd magneticraft:models/hydraulic_press
 newmtl solar_panel
 map_Kd magneticraft:models/solar_panel
 
+newmtl grinder
+map_Kd magneticraft:models/grinder
+
+newmtl grinder_block
+map_Kd magneticraft:models/grinder_block
+
 newmtl kiln
 map_Kd magneticraft:models/kiln
 

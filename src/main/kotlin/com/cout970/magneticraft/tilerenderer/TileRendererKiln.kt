@@ -40,7 +40,7 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         try {
-            val dyn = getModelObj(resource("models/block/obj/kiln.obj"))
+            val dyn = getModelObj(resource("models/block/obj/beehive_kiln.obj"))
             this.model = ModelCacheFactory.createCachedModel(dyn.model, 1)
         } catch (e: Exception) {
         }

@@ -5,6 +5,7 @@ import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
+import com.cout970.magneticraft.Magneticraft.DamageSourceKiln
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.HeatConnection
@@ -26,7 +27,6 @@ import net.minecraft.entity.EntityLiving
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.DamageSource
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumParticleTypes
 import net.minecraft.util.math.AxisAlignedBB
@@ -159,7 +159,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                                 if (!doorOpen) it.air -= 1
                                 val damage = (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat()
                                 if (it.health < damage) it.setFire(1)
-                                it.attackEntityFrom(DamageSource.inFire, damage)
+                                it.attackEntityFrom(DamageSourceKiln, damage)
                             }
                             if (heatNode.temperature > KILN_FIRE_TEMP && doorOpen)
                                 entities.forEach {
@@ -202,7 +202,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         } else {
             if (shouldTick(5)) {
                 craftingSlots.map.forEach {
-                    if (it.value.iscrafting) return@forEach
+                    if (!it.value.iscrafting) return@forEach
                     val partPos = posTransform(it.key)
                     val d3 = (partPos.x.toFloat() + world.rand.nextFloat()).toDouble()
                     val d4 = (partPos.y.toFloat() + world.rand.nextFloat()).toDouble()

@@ -6,6 +6,7 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
+import com.cout970.magneticraft.Magneticraft.DamageSourceGrinder
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -29,6 +30,7 @@ import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.CraftingProcess
 import com.cout970.magneticraft.util.misc.ValueAverage
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -73,6 +75,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     val safeHeat: Long = ((IRON_HEAT_CAPACITY * 20 * Config.defaultMachineSafeTemp)).toLong()
     val efficiency = 0.9
     var overtemp = false
+    val GrinderDamage = 8f
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val in_inv_size = 4
@@ -139,6 +142,18 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
                 suckItems()
                 sendUpdateToNearPlayers()
             }
+            if (shouldTick(10)) {
+                if (node.voltage > TIER_1_MACHINES_MIN_VOLTAGE) {
+                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
+                    if (!entities.isEmpty()) {
+                        entities.forEach {
+                            it.attackEntityFrom(DamageSourceGrinder, (GrinderDamage * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE)).toFloat())
+                            craftingProcess.useEnergy
+                        }
+                        sendUpdateToNearPlayers()
+                    }
+                }
+            }
             craftingProcess.tick(worldObj, 1.0f)
             production.tick()
             if (heatNode.heat < safeHeat) overtemp = false
@@ -177,11 +192,12 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 2, 0)) to (pos + BlockPos(2, 4, 3))
 
     companion object {
-        val ENERGY_INPUT = BlockPos(1, 0, 1)
+        val ENERGY_INPUT = BlockPos(0, 0, 1)
         val ITEM_INPUT = BlockPos(0, 2, 1)
         val ITEM_OUTPUT = BlockPos(0, 0, 2)
-        val HEAT_OUTPUT = BlockPos(-1, 0, 1)
+        val HEAT_OUTPUT = BlockPos(0, 0, 1)
         val POTENTIAL_CONNECTIONS = setOf(BlockPos(-2, 0, 1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
+        val INTERNAL_AABB = AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 3.0, 3.0)
     }
 
     override fun onBreak() {

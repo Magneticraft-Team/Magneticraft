@@ -7,6 +7,7 @@ import com.cout970.magneticraft.util.LANG_ADAPTER
 import com.cout970.magneticraft.util.MOD_ID
 import com.cout970.magneticraft.util.MOD_NAME
 import com.cout970.magneticraft.util.MOD_VERSION
+import net.minecraft.util.DamageSource
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -27,6 +28,10 @@ import java.io.File
 )
 //Singleton, see KotlinAdapter to know how it's loaded by forge
 object Magneticraft {
+
+    var DamageSourceKiln = DamageSource("kiln").setFireDamage()
+
+    var DamageSourceGrinder = DamageSource("grinder")
 
     //Mod logger, please use the functions in utils.Logger instead
     lateinit var log: Logger

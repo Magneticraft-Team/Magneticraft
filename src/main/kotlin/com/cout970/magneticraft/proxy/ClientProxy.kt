@@ -14,6 +14,7 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
+import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
@@ -68,6 +69,7 @@ class ClientProxy : CommonProxy() {
         register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
         register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
         register(TileKiln::class.java, TileRendererKiln)
+        register(TileGrinder::class.java, TileRendererGrinder)
         register(TileKilnShelf::class.java, TileRendererKilnShelf)
         register(TileSolarPanel::class.java, TileRendererSolarPanel)
 

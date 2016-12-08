@@ -1,8 +1,9 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "top": "magneticraft:blocks/brick_furnace",
+    "top": "magneticraft:blocks/brick_furnace_top",
     "front": "magneticraft:blocks/brick_furnace_front",
-    "side": "magneticraft:blocks/brick_furnace"
+    "side": "magneticraft:blocks/brick_furnace_side",
+    "bottom": "magneticraft:blocks/brick_furnace_side"
   }
 }
