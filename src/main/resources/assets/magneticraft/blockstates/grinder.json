@@ -6,22 +6,90 @@
   "variants": {
     "direction=north": [
       {
-        "y": 0
+        "transform": {
+          "translation": [
+            0.5,
+            0,
+            0.5
+          ],
+          "rotation": [
+            {
+              "x": 0
+            },
+            {
+              "y": 0
+            },
+            {
+              "z": 0
+            }
+          ]
+        }
       }
     ],
     "direction=south": [
       {
-        "y": 180
+        "transform": {
+          "translation": [
+            -0.5,
+            0,
+            -0.5
+          ],
+          "rotation": [
+            {
+              "x": 0
+            },
+            {
+              "y": 180
+            },
+            {
+              "z": 0
+            }
+          ]
+        }
       }
     ],
     "direction=west": [
       {
-        "y": -90
+        "transform": {
+          "translation": [
+            0.5,
+            0,
+            -0.5
+          ],
+          "rotation": [
+            {
+              "x": 0
+            },
+            {
+              "y": 90
+            },
+            {
+              "z": 0
+            }
+          ]
+        }
       }
     ],
     "direction=east": [
       {
-        "y": 90
+        "transform": {
+          "translation": [
+            -0.5,
+            0,
+            0.5
+          ],
+          "rotation": [
+            {
+              "x": 0
+            },
+            {
+              "y": -90
+            },
+            {
+              "z": 0
+            }
+          ]
+        }
       }
     ],
     "inventory": [
