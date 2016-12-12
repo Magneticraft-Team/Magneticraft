@@ -115,7 +115,7 @@ fun registerRecipes() {
 
     //UTILITY HYDRAUILIC PRESS RECIPES - ITEMS
     addHydraulicPressRecipe(ItemStack(Items.REEDS, 2), ItemStack(PAPER), 30f)
-    addHydraulicPressRecipe(ItemStack(ItemResource, 2), ItemStack(PAPER), 25f)
+    addHydraulicPressRecipe(ItemStack(ItemPulpWood, 2), ItemStack(PAPER), 25f)
 
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 0), ItemStack(ItemLightPlate, 1, 0), 120f)
     addHydraulicPressRecipe(ItemStack(GOLD_NUGGET, 6), ItemStack(ItemLightPlate, 1, 1), 50f)
@@ -232,7 +232,7 @@ fun registerRecipes() {
 
     addRecipe(ItemStack(BlockFluxedGravel, 4), "CSC", "LGF", "CSC", 'G', "gravel", 'C', Items.CLAY_BALL, 'L', "pebblesLead", 'F', "pebblesCobalt_Mgc", 'S', "sand")
 
-    addRecipe(ItemStack(ItemResource, 8), "III", "IXI", "III", 'I', ItemStack(ItemWoodChip), 'X', "listAllWater")
+    addRecipe(ItemStack(ItemPulpWood, 8), "III", "IXI", "III", 'I', ItemStack(ItemWoodChip), 'X', "listAllWater")
     addRecipe(ItemStack(BlockLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockLimestone))
     addRecipe(ItemStack(BlockTileLimestone, 4), "XY", "YX", 'X', ItemStack(BlockLimestone), 'Y', ItemStack(BlockBurntLimestone))
     addRecipe(ItemStack(BlockBurntLimestone, 4, 1), "XX", "XX", 'X', ItemStack(BlockBurntLimestone))
@@ -240,7 +240,7 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockIncendiaryGenerator), "ICI", "IFI", "IBI", 'I', "ingotIron", 'C', "ingotCopper", 'F', of(FURNACE), 'B', of(BRICK_BLOCK))
 
     addRecipe(ItemStack(ItemCoilOfWire), "#C#", "C#C", "#C#", 'C', "ingotCopper")
-    addRecipe(ItemStack(ItemCoilOfWire), "CCC", "CCC", "CCC", 'C', ItemStack(Blocks.IRON_BARS))
+    addRecipe(ItemStack(ItemMesh), "CCC", "CCC", "CCC", 'C', ItemStack(Blocks.IRON_BARS))
     addRecipe(ItemStack(ItemVoltmeter), "WIW", "PRP", "CPC", 'C', "ingotCopper", 'I', "ingotIron", 'P', "plankWood", 'R', ItemCoilOfWire, 'W', of(WOOL))
     addRecipe(ItemStack(ItemThermometer), "GIG", "PRP", "TPT", 'T', "ingotTungsten", 'I', "ingotIron", 'P', "plankWood", 'R', ItemCoilOfWire, 'G', "blockGlass")
 

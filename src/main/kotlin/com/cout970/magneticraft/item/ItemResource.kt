@@ -1,17 +1,8 @@
 package com.cout970.magneticraft.item
 
-import net.minecraft.item.ItemStack
-
 /**
- * Created by cout970 on 23/06/2016.
+ * Created by cout970 on 11/06/2016.
  */
-object ItemResource : ItemBase("resource") {
+object ItemPulpWood : ItemBase("pulp_wood")
 
-    override val variants = mapOf(
-            0 to "resource=pulpWood",
-            1 to "resource=itemMesh"
-    )
-
-    override fun getUnlocalizedName(stack: ItemStack?): String =
-            "${unlocalizedName}_${ItemResource.variants[stack?.metadata]?.removePrefix("resource=")}"
-}
+object ItemMesh : ItemBase("item_mesh")

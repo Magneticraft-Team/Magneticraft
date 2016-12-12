@@ -9,10 +9,12 @@ item.magneticraft.crushed_ore_lead.name=Lead Chunk
 item.magneticraft.crushed_ore_cobalt.name=Cobalt Chunk
 item.magneticraft.crushed_ore_tungsten.name=Tungsten Chunk
 
-item.magneticraft.crushed_lapis.name = Lapis Lazuli Chunk
+item.magneticraft.crushed_lapis.name=Lapis Lazuli Chunk
 
-item.magneticraft.crushed_coal.name = Crushed Coal
-item.magneticraft.wood_chips.name = Wood Chips
+item.magneticraft.crushed_coal.name=Crushed Coal
+item.magneticraft.wood_chip.name=Wood Chips
+item.magneticraft.pulp_wood.name=Wood Pulp
+item.magneticraft.item_mesh.name=Iron Mesh
 
 item.magneticraft.pebbles_iron.name=Iron Pebbles
 item.magneticraft.pebbles_gold.name=Gold Pebbles
@@ -21,9 +23,9 @@ item.magneticraft.pebbles_lead.name=Lead Pebbles
 item.magneticraft.pebbles_cobalt.name=Cobalt Pebbles
 item.magneticraft.pebbles_tungsten.name=Tungsten Pebbles
 
-item.magneticraft.coal_pebbles.name = Coal Pebbles
+item.magneticraft.coal_pebbles.name=Coal Pebbles
 
-item.magneticraft.lapis_pebbles.name = Lapis Lazuli Pebbles
+item.magneticraft.lapis_pebbles.name=Lapis Lazuli Pebbles
 
 item.magneticraft.heavy_plate_iron.name=Heavy Iron Plate
 item.magneticraft.heavy_plate_gold.name=Heavy Gold Plate
