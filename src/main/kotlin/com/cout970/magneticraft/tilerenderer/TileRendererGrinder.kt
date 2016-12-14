@@ -29,7 +29,7 @@ object TileRendererGrinder : TileEntityRenderer<TileGrinder>() {
         rotateFromCenter(te.direction, 0f)
         GlStateManager.translate(0.0, 0.0, 2.0)
         bindTexture(texture)
-        model.render()
+//        model.render()
         GlStateManager.popMatrix()
     }
 

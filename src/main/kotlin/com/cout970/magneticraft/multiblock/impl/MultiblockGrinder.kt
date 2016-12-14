@@ -57,7 +57,7 @@ object MultiblockGrinder : Multiblock() {
                             BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.axis))
                 }, ItemStack(BlockMachineBlockSupportColumn, 1, 2), replacement)
 
-        val A: IMultiblockComponent = SingleBlockComponent(Blocks.AIR.defaultState, replacement)
+        val A: IMultiblockComponent = SingleBlockComponent(Blocks.AIR.defaultState, Blocks.AIR.defaultState)
         val F: IMultiblockComponent = SingleBlockComponent(BlockStripedMachineBlock.defaultState, replacement)
 
         val M: IMultiblockComponent = MainBlockComponent(BlockGrinder) { context, state, activate ->

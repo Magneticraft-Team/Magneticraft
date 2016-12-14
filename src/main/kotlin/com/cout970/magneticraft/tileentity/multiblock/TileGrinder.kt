@@ -31,7 +31,6 @@ import com.cout970.magneticraft.util.misc.CraftingProcess
 import com.cout970.magneticraft.util.misc.ValueAverage
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -58,6 +57,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         set(value) {/* ignored */
         }
 
+
     override var multiblockFacing: EnumFacing? = null
 
     val heatNode = HeatContainer(
@@ -79,8 +79,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val in_inv_size = 4
-    val out_inv_size = 4
-    val inventory = ItemStackHandler(in_inv_size + out_inv_size)
+    val inventory = ItemStackHandler(in_inv_size)
     val craftingProcess: CraftingProcess
     val production = ValueAverage()
 
@@ -89,23 +88,19 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     init {
         craftingProcess = CraftingProcess({//craft
+            val outputHelper = itemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
             val recipe = getRecipe()!!
             var result = recipe.primaryOutput
-            var secondary = if (recipe.probability > 0 && Random().nextFloat() <= recipe.probability) recipe.secondaryOutput else null
-            for (i in in_inv_size until inventory.slots) {
-                result = inventory.insertItem(i, result, false)
-                if (result != null) continue
-                for (j in in_inv_size until inventory.slots) {
-                    secondary = inventory.insertItem(i, secondary, false)
-                    if (secondary == null) {
-                        consume_input()
-                        return@CraftingProcess
-                    }
-                }
+            val secondary = if (recipe.probability > 0 && Random().nextFloat() <= recipe.probability) recipe.secondaryOutput else null
+            result = outputHelper.ejectItems(result, false)
+            if (secondary != null) outputHelper.ejectItems(secondary, false) //This will lose secondaries if there's no space for them after adding the result
+            if (result == null) {
+                consumeInput()
+                return@CraftingProcess
             }
         }, { //can craft
             node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
-                    && check_output_valid()
+                    && checkOutputValid()
                     && overtemp == false
         }, { // use energy
             val applied = node.applyPower(-Config.grinderConsumption * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE) * 6, false)
@@ -138,8 +133,9 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     override fun update() {
         if (worldObj.isServer && active) {
+            val inputHelper = itemInputHelper(world, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toDoubleVec(), inventory)
             if (shouldTick(20)) {
-                suckItems()
+                inputHelper.suckItems()
                 sendUpdateToNearPlayers()
             }
             if (shouldTick(10)) {
@@ -192,11 +188,12 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 2, 0)) to (pos + BlockPos(2, 4, 3))
 
     companion object {
-        val ENERGY_INPUT = BlockPos(0, 0, 1)
-        val ITEM_INPUT = BlockPos(0, 2, 1)
-        val ITEM_OUTPUT = BlockPos(0, 0, 2)
-        val HEAT_OUTPUT = BlockPos(0, 0, 1)
-        val POTENTIAL_CONNECTIONS = setOf(BlockPos(-2, 0, 1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
+        val ENERGY_INPUT = BlockPos(0, 1, 1)
+        val ITEM_INPUT = BlockPos(0, 3, 1)
+        val ITEM_OUTPUT = BlockPos(0, 1, 2)
+        val ITEM_OUTPUT_OFF = BlockPos(0, 0, 1)
+        val HEAT_OUTPUT = BlockPos(0, 1, 1)
+        val POTENTIAL_CONNECTIONS = setOf(BlockPos(-1, 1, 1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
         val INTERNAL_AABB = AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 3.0, 3.0)
     }
 
@@ -253,9 +250,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
             if (facing == null)
                 return inventory as T
             if (direction.rotatePoint(BlockPos.ORIGIN, ITEM_INPUT) == relPos && facing == EnumFacing.UP)
-                return In_Inventory(inventory, in_inv_size) as T
-            if (direction.rotatePoint(BlockPos.ORIGIN, ITEM_OUTPUT) == relPos && facing == direction.rotateY())
-                return Out_Inventory(inventory, in_inv_size, out_inv_size) as T
+                return inInventory(inventory, in_inv_size) as T
         }
         return null
     }
@@ -272,9 +267,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
             if (facing == null)
                 return inventory as T
             if (facing == EnumFacing.UP)
-                return In_Inventory(inventory, in_inv_size) as T
-            else
-                return Out_Inventory(inventory, in_inv_size, out_inv_size) as T
+                return inInventory(inventory, in_inv_size) as T
         }
         if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
@@ -287,7 +280,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     //If the last crafting action empties the active slot,
     // take the last filled slot, and place it in the last empty slot below it in the queue.
     // Repeat until the queue is sorted
-    fun consume_input() {
+    fun consumeInput() {
         val recipe = getRecipe() ?: return
         inventory[0]!!.stackSize -= recipe.input.stackSize
         if (inventory[0]!!.stackSize == 0) inventory[0] = null
@@ -302,65 +295,23 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         }
     }
 
-    fun check_output_valid(): Boolean {
+    fun checkOutputValid(): Boolean {
+        val outputHelper = itemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
         val recipe = getRecipe() ?: return false
         if (inventory[0]!!.stackSize < recipe.input.stackSize) return false
-        var output = recipe.primaryOutput
-        var secondary = recipe.secondaryOutput
-        for (i in in_inv_size until inventory.slots) {
-            output = inventory.insertItem(i, output, true)
-            if (output != null) continue
-            for (j in in_inv_size until inventory.slots) {
-                secondary = inventory.insertItem(j, secondary, true) ?:
-                        return true
-            }
-        }
-        return false
+        if (outputHelper.ejectItems(recipe.primaryOutput, true) != null) return false
+        if (outputHelper.ejectItems(recipe.secondaryOutput, true) != null) return false
+        //Technically means that secondary output will be wasted if the output inventory only has room for the primary under certain circumstances
+        return true
     }
 
-    fun suckItems() {
-        val aabb = direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toDoubleVec()
-        val items = worldObj.getEntitiesWithinAABB(EntityItem::class.java, aabb)
-        for (i in items) {
-            val item = i.entityItem
-            for (j in 0 until in_inv_size) {
-                val inserted = inventory.insertItem(j, item, false)
-                if (inserted != null) {
-                    i.setEntityItemStack(inserted)
-                } else {
-                    i.setDead()
-                    break
-                }
-            }
-        }
-    }
-
-    class In_Inventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
+    class inInventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
         override fun getSlots(): Int {
             return in_size
         }
 
         override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack? {
             return null
-        }
-    }
-
-    class Out_Inventory(val inv: IItemHandler, private val in_size: Int, private val out_size: Int) : IItemHandler by inv {
-
-        override fun getSlots(): Int {
-            return out_size
-        }
-
-        override fun getStackInSlot(slot: Int): ItemStack {
-            return getStackInSlot(slot + in_size)
-        }
-
-        override fun insertItem(slot: Int, stack: ItemStack?, simulate: Boolean): ItemStack? {
-            return stack
-        }
-
-        override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack? {
-            return inv.extractItem(slot + in_size, amount, simulate)
         }
     }
 }

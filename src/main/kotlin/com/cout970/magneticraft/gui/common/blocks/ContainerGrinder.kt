@@ -24,11 +24,6 @@ class ContainerGrinder(player: EntityPlayer, world: World, blockPos: BlockPos) :
             for (i in 0 until 4) {
                 addSlotToContainer(InSlotItemHandler(inv, i, 102 + 20 * i, 16))
             }
-            addSlotToContainer(OutSlotItemHandler(inv, 4, 102, 48))
-            addSlotToContainer(OutSlotItemHandler(inv, 5, 102, 66))
-            addSlotToContainer(OutSlotItemHandler(inv, 6, 120, 48))
-            addSlotToContainer(OutSlotItemHandler(inv, 7, 120, 66)
-            )
         }
         bindPlayerInventory(player.inventory)
     }
@@ -57,16 +52,6 @@ class ContainerGrinder(player: EntityPlayer, world: World, blockPos: BlockPos) :
     class InSlotItemHandler(slot: IItemHandler, index: Int, xPosition: Int, yPosition: Int) : SlotItemHandler(slot, index, xPosition, yPosition) {
         override fun isItemValid(stack: ItemStack?): Boolean {
             return true
-        }
-
-        override fun canTakeStack(playerIn: EntityPlayer?): Boolean {
-            return true
-        }
-    }
-
-    class OutSlotItemHandler(slot: IItemHandler, index: Int, xPosition: Int, yPosition: Int) : SlotItemHandler(slot, index, xPosition, yPosition) {
-        override fun isItemValid(stack: ItemStack?): Boolean {
-            return false
         }
 
         override fun canTakeStack(playerIn: EntityPlayer?): Boolean {

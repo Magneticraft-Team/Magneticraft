@@ -98,8 +98,6 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         }
     }
 
-    fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
-
     val updateFrequency: Int = 20
     var doorOpen: Boolean = false
 
@@ -239,6 +237,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
         PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
+
+    fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
 
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
         PROPERTY_ACTIVE[getBlockState()] else false

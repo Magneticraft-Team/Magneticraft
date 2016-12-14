@@ -3,13 +3,12 @@ package com.cout970.magneticraft.tileentity
 import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
-import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.util.itemInputHelper
+import com.cout970.magneticraft.util.itemOutputHelper
 import com.cout970.magneticraft.util.shouldTick
-import net.minecraft.entity.item.EntityItem
+import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.items.ItemStackHandler
@@ -21,10 +20,10 @@ import java.util.*
 class TileTableSieve : TileBase(), ITickable {
 
     val inventory = ItemStackHandler(1)
-    val output = mutableListOf<ItemStack>()
     val craftingTime = 40
-    var tickCounter = 0
+    var progress = 0
     var size = 0
+
 
     companion object {
         val UPDATE_TIME = 20
@@ -45,90 +44,36 @@ class TileTableSieve : TileBase(), ITickable {
 
     override fun update() {
         //gets the item on top of the block
+        val inputHelper = itemInputHelper(world, AxisAlignedBB(pos, pos.up().add(1.0, 1.0, 1.0)), inventory)
         if (shouldTick(UPDATE_TIME)) {
-            suckItems()
+            inputHelper.suckItems()
         }
 
-        if (!output.isEmpty()) {
-            ejectItems()
-        }
-        if (inventory[0] != null && output.isEmpty()) {
+        if (inventory[0] != null) {
             //waits until the item crafting is done
-            if (tickCounter > craftingTime) {
-                tickCounter = 0
+            if (progress > craftingTime) {
+                progress = 0
                 craftItem()
             } else {
-                tickCounter++
-            }
-        }
-    }
-
-    fun ejectItems() {
-        val state = worldObj.getBlockState(pos.down())
-        val tile = worldObj.getTileEntity(pos.down())
-        if (tile != null) {
-            val inventory = ITEM_HANDLER!!.fromTile(tile, EnumFacing.UP)
-            if (inventory != null) {
-                val iterator = output.iterator()
-                while (iterator.hasNext()) {
-                    val output = iterator.next()
-                    for (slot in 0 until inventory.slots) {
-                        val result = inventory.insertItem(slot, output.copy(), true)
-                        if (result == null) {
-                            inventory.insertItem(slot, output.copy(), false)
-                            iterator.remove()
-                            break
-                        }
-                    }
-                }
-            }
-        }
-        //TODO find a better way to know if you can drop the item or not
-        if (!state.isFullCube) {
-            while (!output.isEmpty()) {
-                dropOutput(output.first().copy())
-                output.removeAt(0)
-            }
-        }
-    }
-
-    fun dropOutput(item: ItemStack) {
-        if (!world.isRemote) {
-            val entityItem = EntityItem(world, pos.x.toDouble() + 0.5, pos.y.toDouble() - 0.5, pos.z.toDouble() + 0.5, item)
-            entityItem.motionX = 0.0
-            entityItem.motionY = 0.0
-            entityItem.motionZ = 0.0
-            entityItem.setDefaultPickupDelay()
-            world.spawnEntityInWorld(entityItem)
-        }
-    }
-
-    fun suckItems() {
-        val aabb = AxisAlignedBB(pos, pos.up().add(1.0, 1.0, 1.0))
-        val items = worldObj.getEntitiesWithinAABB(EntityItem::class.java, aabb)
-        for (i in items) {
-            val item = i.entityItem
-            if (getRecipe(item) == null) continue
-            val inserted = inventory.insertItem(0, item, false)
-            if (inserted != null) {
-                i.setEntityItemStack(inserted)
-            } else {
-                i.setDead()
+                progress++
             }
         }
     }
 
     fun craftItem() {
+        val outputHelper = itemOutputHelper(world, pos, vec3Of(0, -1, 0))
         val stack = inventory[0]!!
-        val recipe = getRecipe(stack)!!
-        output.add(recipe.primaryOutput)
-        val extra = recipe.secondaryOutput
-        if (extra != null && Random().nextFloat() < recipe.probability) {
-            output.add(extra)
-        }
-        stack.stackSize--
-        if (stack.stackSize <= 0) {
-            inventory.setStackInSlot(0, null)
+        val recipe = getRecipe(stack) ?: return
+        if (stack.stackSize < recipe.input.stackSize) return
+        val primary = recipe.primaryOutput
+        val secondary = if (Random().nextFloat() < recipe.probability) recipe.secondaryOutput else null
+        if (outputHelper.ejectItems(primary, true) == null && outputHelper.ejectItems(secondary, true) == null) {
+            outputHelper.ejectItems(primary, false)
+            outputHelper.ejectItems(secondary, false)
+            stack.stackSize -= recipe.input.stackSize
+            if (stack.stackSize <= 0) {
+                inventory.setStackInSlot(0, null)
+            }
         }
     }
 
@@ -144,9 +89,6 @@ class TileTableSieve : TileBase(), ITickable {
         if (!worldObj.isRemote) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
-            }
-            for (i in output) {
-                dropItem(i, pos)
             }
         }
     }
