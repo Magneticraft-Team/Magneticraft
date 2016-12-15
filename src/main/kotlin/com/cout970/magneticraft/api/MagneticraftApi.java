@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.KilnRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.SifterRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
@@ -11,6 +12,7 @@ import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeMa
 import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipeManager;
 
 /**
@@ -35,6 +37,10 @@ public class MagneticraftApi {
 
     public static IKilnRecipeManager getKilnRecipeManager() {
         return KilnRecipeManager.INSTANCE;
+    }
+
+    public static ISifterRecipeManager getSifterRecipeManager() {
+        return SifterRecipeManager.INSTANCE;
     }
 
     public static ITableSieveRecipeManager getTableSieveRecipeManager() {

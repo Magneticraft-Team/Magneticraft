@@ -3,14 +3,19 @@ package com.cout970.magneticraft.integration.jei
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.block.BlockCrushingTable
 import com.cout970.magneticraft.block.BlockTableSieve
+import com.cout970.magneticraft.block.multiblock.BlockGrinder
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.multiblock.BlockKiln
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeCategory
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeHandler
+import com.cout970.magneticraft.integration.jei.crushingtable.GrinderRecipeCategory
+import com.cout970.magneticraft.integration.jei.crushingtable.GrinderRecipeHandler
 import com.cout970.magneticraft.integration.jei.hydraulicpress.HydraulicPressRecipeCategory
 import com.cout970.magneticraft.integration.jei.hydraulicpress.HydraulicPressRecipeHandler
 import com.cout970.magneticraft.integration.jei.hydraulicpress.KilnRecipeCategory
 import com.cout970.magneticraft.integration.jei.hydraulicpress.KilnRecipeHandler
+import com.cout970.magneticraft.integration.jei.sievetable.SifterRecipeCategory
+import com.cout970.magneticraft.integration.jei.sievetable.SifterRecipeHandler
 import com.cout970.magneticraft.integration.jei.sievetable.TableSieveRecipeCategory
 import com.cout970.magneticraft.integration.jei.sievetable.TableSieveRecipeHandler
 import mezz.jei.api.IJeiRuntime
@@ -30,6 +35,8 @@ class JEIPlugin : IModPlugin {
         val TABLE_SIEVE_ID = "magneticraft.table_sieve"
         val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
         val KILN_ID = "magneticraft.kiln"
+        val GRINDER_ID = "magneticraft.grinder"
+        val SIFTER_ID = "magneticraft.softer"
     }
 
     override fun register(registry: IModRegistry) {
@@ -52,11 +59,23 @@ class JEIPlugin : IModPlugin {
         registry.addRecipeCategoryCraftingItem(ItemStack(BlockHydraulicPress), HYDRAULIC_PRESS_ID)
         registry.addRecipes(MagneticraftApi.getHydraulicPressRecipeManager().recipes)
 
+        //grinder recipes
+        registry.addRecipeHandlers(GrinderRecipeHandler)
+        registry.addRecipeCategories(GrinderRecipeCategory)
+        registry.addRecipeCategoryCraftingItem(ItemStack(BlockGrinder), GRINDER_ID)
+        registry.addRecipes(MagneticraftApi.getGrinderRecipeManager().recipes)
+
         //kiln recipes
         registry.addRecipeHandlers(KilnRecipeHandler)
         registry.addRecipeCategories(KilnRecipeCategory)
         registry.addRecipeCategoryCraftingItem(ItemStack(BlockKiln), KILN_ID)
         registry.addRecipes(MagneticraftApi.getKilnRecipeManager().recipes)
+
+        //sifter recipes
+        registry.addRecipeHandlers(SifterRecipeHandler)
+        registry.addRecipeCategories(SifterRecipeCategory)
+        registry.addRecipeCategoryCraftingItem(ItemStack(BlockSifter), SIFTER_ID)
+        registry.addRecipes(MagneticraftApi.getSifterRecipeManager().recipes)
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {}

@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.KilnRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.sifter.SifterRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.HeatExchangerRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
@@ -248,7 +249,9 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockInfiniteWater), "IBI", "TCT", "IBI", 'C', "ingotCobalt", 'I', "ingotIron", 'T', "ingotTungsten", 'B', Items.WATER_BUCKET)
 
     addRecipe(ItemStack(BlockMachineBlock, 2), "SSS", "I#I", "PIP", 'I', "ingotLead", 'S', BlockBurntLimestone, 'P', "lightPlateIron")
+    addRecipe(ItemStack(BlockMesh, 3), "SPS", "MMM", "SPS", 'M', ItemMesh, 'S', BlockBurntLimestone, 'P', "lightPlateIron")
     addRecipe(ItemStack(BlockHydraulicPress), "PPP", "IMI", "SSS", 'I', "ingotLead", 'S', BlockBurntLimestone, 'P', "lightPlateIron", 'M', BlockMachineBlock)
+    addRecipe(ItemStack(BlockSifter), "PHP", "IMI", "SSS", 'I', "ingotLead", 'S', BlockBurntLimestone, 'P', "lightPlateIron", 'M', BlockMachineBlock, 'H', Blocks.HOPPER)
     addRecipe(ItemStack(BlockGrinder), "PPP", "IWI", "MMM", 'I', "lightPlateLead", 'M', BlockMachineBlock, 'P', "heavyPlateIron", 'W', ItemCoilOfWire)
     addRecipe(ItemStack(BlockMachineBlockSupportColumn, 4), "PSP", "OSO", "PSP", 'O', "lightPlateLead", 'S', BlockBurntLimestone, 'P', "lightPlateIron")
     addRecipe(ItemStack(BlockStripedMachineBlock, 8), "YSB", "S#S", "BSY", 'Y', "dyeYellow", 'S', BlockBurntLimestone, 'B', "dyeBlack")
@@ -321,6 +324,15 @@ fun registerRecipes() {
     addTableSieveRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(DIAMOND), 0.001f)
     addTableSieveRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Items.FLINT), 0.15f)
 
+    //SIFTER RECIPES
+    for (i in ItemPebbles.variants.keys) {
+        addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f, 20f)
+    }
+    addSifterRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f, 20f)
+    addSifterRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(Items.COAL), 0.1f, ItemStack(DIAMOND), 0.001f, 20f)
+    addSifterRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Items.FLINT), 0.15f, ItemStack(Items.FLINT), 0.15f, 20f)
+
+
     //@formatter:on
 }
 
@@ -371,6 +383,18 @@ private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: I
 
 private fun addTableSieveRecipe(input: ItemStack, output: ItemStack) {
     TableSieveRecipeManager.registerRecipe(TableSieveRecipeManager.createRecipe(input, output, output, 0f, true))
+}
+
+private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack, prob2: Float, duration: Float) {
+    SifterRecipeManager.registerRecipe(SifterRecipeManager.createRecipe(input, output0, output1, prob1, output2, prob2, duration, true))
+}
+
+private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, duration: Float) {
+    SifterRecipeManager.registerRecipe(SifterRecipeManager.createRecipe(input, output0, output1, prob1, output1, 0f, duration, true))
+}
+
+private fun addSifterRecipe(input: ItemStack, output0: ItemStack, duration: Float) {
+    SifterRecipeManager.registerRecipe(SifterRecipeManager.createRecipe(input, output0, output0, 0f, output0, 0f, duration, true))
 }
 
 private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {

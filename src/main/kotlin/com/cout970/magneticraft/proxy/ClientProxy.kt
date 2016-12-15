@@ -14,10 +14,7 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
-import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
-import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
-import com.cout970.magneticraft.tileentity.multiblock.TileKiln
-import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
+import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.tilerenderer.*
 import com.cout970.magneticraft.util.MOD_ID
 import net.minecraftforge.client.event.ModelBakeEvent
@@ -69,6 +66,7 @@ class ClientProxy : CommonProxy() {
         register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
         register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
         register(TileKiln::class.java, TileRendererKiln)
+        register(TileSifter::class.java, TileRendererSifter)
         register(TileGrinder::class.java, TileRendererGrinder)
         register(TileKilnShelf::class.java, TileRendererKilnShelf)
         register(TileSolarPanel::class.java, TileRendererSolarPanel)
