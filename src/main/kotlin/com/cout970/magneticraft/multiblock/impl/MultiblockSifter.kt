@@ -1,14 +1,12 @@
 package com.cout970.magneticraft.multiblock.impl
 
-import BlockSifter
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.times
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
-import com.cout970.magneticraft.block.decoration.BlockMachineBlock
-import com.cout970.magneticraft.block.decoration.BlockMachineBlockSupportColumn
-import com.cout970.magneticraft.block.decoration.BlockMesh
+import com.cout970.magneticraft.block.decoration.*
+import com.cout970.magneticraft.block.multiblock.BlockSifter
 import com.cout970.magneticraft.multiblock.BlockData
 import com.cout970.magneticraft.multiblock.IMultiblockComponent
 import com.cout970.magneticraft.multiblock.Multiblock
@@ -29,9 +27,9 @@ import net.minecraft.util.text.ITextComponent
 object MultiblockSifter : Multiblock() {
 
     override val name: String = "sifter"
-    override val size: BlockPos = BlockPos(1, 2, 4)
+    override val size: BlockPos = BlockPos(3, 2, 4)
     override val scheme: List<MultiblockLayer>
-    override val center: BlockPos = BlockPos(0, 1, 0)
+    override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
         val replacement = BlockSifter.defaultState
@@ -43,12 +41,12 @@ object MultiblockSifter : Multiblock() {
 
         val B: IMultiblockComponent = SingleBlockComponent(BlockMachineBlock.defaultState, replacement)
 
-        val L: IMultiblockComponent = SingleBlockComponent(BlockMachineBlock.defaultState, replacement)
+        val L: IMultiblockComponent = SingleBlockComponent(BlockBurntLimestone.defaultState.withProperty(BlockBurntLimestone.LIMESTONE_STATES, BlockLimestone.LimestoneStates.BRICK), replacement)
 
         val C: IMultiblockComponent = ContextBlockComponent(
                 { ctx ->
                     BlockMachineBlockSupportColumn.defaultState.withProperty(BlockMachineBlockSupportColumn.PROPERTY_STATES,
-                            BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.rotateY().axis))
+                            BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.axis))
                 }, ItemStack(BlockMachineBlockSupportColumn, 1, 1), replacement)
 
         val M: IMultiblockComponent = MainBlockComponent(BlockSifter) { context, state, activate ->
@@ -69,8 +67,8 @@ object MultiblockSifter : Multiblock() {
                 zLayers(listOf(C, S, C),
                         listOf(C, S, C),
                         listOf(C, S, C),
-                        listOf(C, M, C)),
-                zLayers(listOf(L, L, B),
+                        listOf(C, B, C)),
+                zLayers(listOf(L, M, B),
                         listOf(L, L, B),
                         listOf(L, L, B),
                         listOf(L, L, B)))

@@ -6,6 +6,7 @@ import com.cout970.magneticraft.block.BlockTableSieve
 import com.cout970.magneticraft.block.multiblock.BlockGrinder
 import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
 import com.cout970.magneticraft.block.multiblock.BlockKiln
+import com.cout970.magneticraft.block.multiblock.BlockSifter
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeCategory
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeHandler
 import com.cout970.magneticraft.integration.jei.crushingtable.GrinderRecipeCategory

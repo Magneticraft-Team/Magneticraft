@@ -194,7 +194,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         val ITEM_OUTPUT_OFF = BlockPos(0, 0, 1)
         val HEAT_OUTPUT = BlockPos(0, 1, 1)
         val POTENTIAL_CONNECTIONS = setOf(BlockPos(-1, 1, 1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
-        val INTERNAL_AABB = AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 3.0, 3.0)
+        val INTERNAL_AABB = AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 3.5, 3.0)
     }
 
     override fun onBreak() {
@@ -251,6 +251,8 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
                 return inventory as T
             if (direction.rotatePoint(BlockPos.ORIGIN, ITEM_INPUT) == relPos && facing == EnumFacing.UP)
                 return inInventory(inventory, in_inv_size) as T
+            if (direction.rotatePoint(BlockPos.ORIGIN, ITEM_INPUT) == relPos && facing == EnumFacing.UP)
+                return outInventory() as T
         }
         return null
     }
@@ -308,6 +310,24 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     class inInventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
         override fun getSlots(): Int {
             return in_size
+        }
+
+        override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack? {
+            return null
+        }
+    }
+
+    class outInventory() : IItemHandler {
+        override fun getSlots(): Int {
+            return 0
+        }
+
+        override fun getStackInSlot(slot: Int): ItemStack? {
+            return null
+        }
+
+        override fun insertItem(slot: Int, stack: ItemStack?, simulate: Boolean): ItemStack? {
+            return stack
         }
 
         override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack? {

@@ -23,6 +23,7 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileAirLock::class.java                 to "airlock",
         TileHydraulicPress::class.java          to "hydraulic_press",
         TileKiln::class.java to "kiln",
+        TileSifter::class.java to "sifter",
         TileKilnShelf::class.java to "kiln_shelf",
         TileGrinder::class.java to "grinder",
         TileMultiblock::class.java              to "tile_multiblock",

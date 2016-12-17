@@ -1,7 +1,8 @@
+package com.cout970.magneticraft.block.multiblock
+
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
-import com.cout970.magneticraft.block.multiblock.BlockMultiblock
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock

@@ -14,10 +14,7 @@ import com.cout970.magneticraft.block.decoration.*
 import com.cout970.magneticraft.block.fuel.BlockCharcoalSlab
 import com.cout970.magneticraft.block.fuel.BlockCoke
 import com.cout970.magneticraft.block.heat.*
-import com.cout970.magneticraft.block.multiblock.BlockGrinder
-import com.cout970.magneticraft.block.multiblock.BlockHydraulicPress
-import com.cout970.magneticraft.block.multiblock.BlockKiln
-import com.cout970.magneticraft.block.multiblock.BlockSolarPanel
+import com.cout970.magneticraft.block.multiblock.*
 import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
@@ -326,11 +323,11 @@ fun registerRecipes() {
 
     //SIFTER RECIPES
     for (i in ItemPebbles.variants.keys) {
-        addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f, 20f)
+        addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(ItemPebbles, 1, ItemPebbles.secondaries.get(i)!!), 0.1f, ItemStack(GRAVEL), 0.15f, 20f)
     }
-    addSifterRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f, 20f)
+    addSifterRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f, ItemStack(COBBLESTONE), 0.1f, 20f)
     addSifterRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(Items.COAL), 0.1f, ItemStack(DIAMOND), 0.001f, 20f)
-    addSifterRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Items.FLINT), 0.15f, ItemStack(Items.FLINT), 0.15f, 20f)
+    addSifterRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Blocks.SAND), 0.1f, ItemStack(Items.FLINT), 0.2f, 20f)
 
 
     //@formatter:on

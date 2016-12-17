@@ -5,7 +5,7 @@ import com.cout970.loader.api.model.ICachedModel
 import com.cout970.loader.api.model.IModelFilter
 import com.cout970.loader.api.model.IModelPart
 import com.cout970.loader.api.model.IObjGroup
-import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
+import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
 import com.cout970.magneticraft.tileentity.multiblock.TileSifter
 import com.cout970.magneticraft.util.resource
 import com.google.common.base.Predicates
@@ -25,7 +25,7 @@ object TileRendererSifter : TileEntityRenderer<TileSifter>() {
             GlStateManager.pushMatrix()
             GlStateManager.translate(x, y, z)
             rotateFromCenter(te.direction, 0f)
-            renderMultiblockBlueprint(MultiblockHydraulicPress)
+            renderMultiblockBlueprint(MultiblockSifter)
             GlStateManager.popMatrix()
             return
         }
@@ -34,11 +34,11 @@ object TileRendererSifter : TileEntityRenderer<TileSifter>() {
 
         rotateFromCenter(te.direction, 0f)
         bindTexture(texture)
-        noHammer.render()
+//        noHammer.render()
 
         val speed = 360f
 
-        hammer.render()
+//        hammer.render()
         GlStateManager.popMatrix()
     }
 

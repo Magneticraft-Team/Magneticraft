@@ -28,7 +28,7 @@ object SifterRecipeManager : ISifterRecipeManager {
         return true
     }
 
-    override fun createRecipe(input: ItemStack, primary: ItemStack, secondary: ItemStack?, secondaryChance: Float, tertiary: ItemStack?, tertiaryChance: Float, duration: Float, oreDict: Boolean): ISifterRecipe {
+    override fun createRecipe(input: ItemStack, primary: ItemStack, secondary: ItemStack, secondaryChance: Float, tertiary: ItemStack, tertiaryChance: Float, duration: Float, oreDict: Boolean): ISifterRecipe {
         return SifterRecipe(input, primary, secondary, secondaryChance, tertiary, tertiaryChance, duration, oreDict)
     }
 }

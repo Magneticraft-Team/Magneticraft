@@ -4,7 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.KilnRecipeManager;
-import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.SifterRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.sifter.SifterRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;

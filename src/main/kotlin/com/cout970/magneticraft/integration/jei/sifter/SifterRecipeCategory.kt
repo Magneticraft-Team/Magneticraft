@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft
  */
 object SifterRecipeCategory : IRecipeCategory<SifterRecipeWrapper> {
 
-    private val title = Translator.translateToLocal("text.magneticraft.jei.table_sieve")
+    private val title = Translator.translateToLocal("text.magneticraft.jei.sifter")
     private val background = DrawableResource(resource("textures/gui/jei/gui.png"), 64, 0, 64, 64, 5, 5, 25, 25)
 
     override fun drawAnimations(minecraft: Minecraft) {
@@ -25,16 +25,16 @@ object SifterRecipeCategory : IRecipeCategory<SifterRecipeWrapper> {
 
     override fun setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: SifterRecipeWrapper) {
         recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
-        recipeLayout.itemStacks.init(1, false, 48 - 9, 51 - 5)
+        recipeLayout.itemStacks.init(1, false, 48 - 18, 51 - 5)
         recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
         recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primary)
-        if (recipeWrapper.recipe.secondaryChance == 0f) {
-            recipeLayout.itemStacks.init(2, false, 48 + 9, 51 - 5)
+        if (recipeWrapper.recipe.secondaryChance > 0f) {
+            recipeLayout.itemStacks.init(2, false, 48, 51 - 5)
             recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondary)
             recipeLayout.itemStacks.addTooltipCallback { slot, input, stack, list -> if (slot == 2) list.add("Probability: %.1f%%".format(recipeWrapper.recipe.secondaryChance * 100)) }
         }
-        if (recipeWrapper.recipe.tertiaryChance == 0f) {
-            recipeLayout.itemStacks.init(3, false, 48 + 27, 51 - 5)
+        if (recipeWrapper.recipe.tertiaryChance > 0f) {
+            recipeLayout.itemStacks.init(3, false, 48 + 18, 51 - 5)
             recipeLayout.itemStacks.set(3, recipeWrapper.recipe.tertiary)
             recipeLayout.itemStacks.addTooltipCallback { slot, input, stack, list -> if (slot == 3) list.add("Probability: %.1f%%".format(recipeWrapper.recipe.tertiaryChance * 100)) }
         }
