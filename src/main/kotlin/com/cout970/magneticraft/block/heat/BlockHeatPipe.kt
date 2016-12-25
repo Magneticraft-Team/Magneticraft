@@ -5,7 +5,7 @@ import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileHeatPipe
+import com.cout970.magneticraft.tileentity.heat.TileHeatPipe
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer

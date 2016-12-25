@@ -4,7 +4,7 @@ import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.block.heat.BlockHeatPipe
 import com.cout970.magneticraft.block.heat.BlockHeatReservoir
 import com.cout970.magneticraft.block.heat.BlockHeatSink
-import com.cout970.magneticraft.tileentity.electric.TileHeatBase
+import com.cout970.magneticraft.tileentity.heat.TileHeatBase
 import com.cout970.magneticraft.util.MAX_EMISSION_TEMP
 import com.cout970.magneticraft.util.MIN_EMISSION_TEMP
 import net.minecraft.block.state.IBlockState
@@ -28,16 +28,15 @@ fun registerColorHandlers() {
 }
 
 private fun registerBlockColorHandlers(blockColors: BlockColors) {
-    blockColors.registerBlockColorHandler(heatColorHandler(), BlockHeatReservoir, BlockHeatPipe, BlockHeatSink)
+    blockColors.registerBlockColorHandler(HeatColorHandler(), BlockHeatReservoir, BlockHeatPipe, BlockHeatSink)
 }
 
 @SideOnly(Side.CLIENT)
-class heatColorHandler : IBlockColor {
+class HeatColorHandler : IBlockColor {
     override fun colorMultiplier(state: IBlockState?, worldIn: IBlockAccess?, pos: BlockPos?, tintIndex: Int): Int {
         if (tintIndex < 0) return 0
         if (pos == null) return 0
-        val temp = worldIn?.getTile<TileHeatBase>(pos)?.heatNodes?.first()?.temperature
-        if (temp == null) return 0
+        val temp = worldIn?.getTile<TileHeatBase>(pos)?.heatNodes?.first()?.temperature ?: return 0
         val color = Color((interpolate(temp, MIN_EMISSION_TEMP, MAX_EMISSION_TEMP) * 255).toInt(), 0, 0)
         return color.rgb
     }

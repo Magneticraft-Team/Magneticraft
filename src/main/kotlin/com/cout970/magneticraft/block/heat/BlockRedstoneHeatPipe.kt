@@ -2,7 +2,7 @@ package com.cout970.magneticraft.block.heat
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.block.PROPERTY_OPEN
-import com.cout970.magneticraft.tileentity.electric.TileRedstoneHeatPipe
+import com.cout970.magneticraft.tileentity.heat.TileRedstoneHeatPipe
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.Block

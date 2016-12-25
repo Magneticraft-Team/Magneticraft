@@ -5,7 +5,6 @@ import com.cout970.loader.api.model.ICachedModel
 import com.cout970.magneticraft.multiblock.impl.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.util.resource
-import net.minecraft.client.renderer.GlStateManager
 
 /**
  * Created by cout970 on 2016/09/06.
@@ -17,21 +16,21 @@ object TileRendererSolarPanel : TileEntityRenderer<TileSolarPanel>() {
 
     override fun renderTileEntityAt(te: TileSolarPanel, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         if (!te.active) {
-            GlStateManager.pushMatrix()
-            GlStateManager.translate(x, y, z)
+            pushMatrix()
+            translate(x, y, z)
             rotateFromCenter(te.direction, 0f)
             renderMultiblockBlueprint(MultiblockSolarPanel)
-            GlStateManager.popMatrix()
+            popMatrix()
             return
         }
-        GlStateManager.pushMatrix()
-        GlStateManager.translate(x, y, z)
+        pushMatrix()
+        translate(x, y, z)
         rotateFromCenter(te.direction, 90f)
-        GlStateManager.translate(-1.0, 0.0, 0.0)
+        translate(-1.0, 0.0, 0.0)
         bindTexture(texture)
 
         model.render()
-        GlStateManager.popMatrix()
+        popMatrix()
     }
 
     override fun onModelRegistryReload() {

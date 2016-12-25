@@ -22,8 +22,8 @@ import net.minecraft.world.World
 object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
 
     override fun onBlockPlaced(worldIn: World?, pos: BlockPos?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase?): IBlockState {
-        return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, facing))
+        return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
     }
 
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos?, state: IBlockState?, placer: EntityLivingBase?, stack: ItemStack?) {
@@ -43,7 +43,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
         val tile = blockAccess.getTileEntity(pos.offset(PROPERTY_DIRECTION[blockState])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is IHeatHandler)
-            return handler.comparitorOutput
+            return handler.comparatorOutput
         return 0
     }
 
@@ -51,7 +51,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
         val tile = blockAccess.getTileEntity(pos.offset(PROPERTY_DIRECTION[blockState])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is IHeatHandler)
-            return handler.comparitorOutput
+            return handler.comparatorOutput
         return 0
     }
 
@@ -59,7 +59,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
         val tile = worldIn.getTileEntity(pos.offset(PROPERTY_DIRECTION[blockState])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is IHeatHandler)
-            return handler.comparitorOutput
+            return handler.comparatorOutput
         return 0
     }
 

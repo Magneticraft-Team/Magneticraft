@@ -7,7 +7,7 @@ import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.CompFluidBar
 import com.cout970.magneticraft.gui.client.components.CompVerticalBar
 import com.cout970.magneticraft.gui.common.ContainerBase
-import com.cout970.magneticraft.tileentity.electric.TileIcebox
+import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.toFahrenheit
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -24,7 +24,7 @@ class GuiIcebox(container: ContainerBase) : GuiBase(container) {
         components.add(CompFluidBar(Vec2d(80, 56) + box.start, tile.tank))
 
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.heat.temperature }, { tile.heat.maxTemperature }, { tile.heat.ambientTemperatureCache }),
+                CallbackBarProvider({ tile.heat.temperature }, { tile.heat.maxTemperature }, { tile.heat.ambientTemperature }),
                 2, Vec2d(91, 56) + box.start, {
             listOf(
                     if (Config.heatUnitCelsius) {

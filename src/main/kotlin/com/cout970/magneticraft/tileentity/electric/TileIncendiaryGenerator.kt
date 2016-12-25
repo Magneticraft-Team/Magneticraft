@@ -44,7 +44,7 @@ class TileIncendiaryGenerator(
         val HEAT_TO_WATTS = FUEL_TO_WATTS / FUEL_TO_HEAT
     }
 
-    val fuelHelper = fuelTempHelper()
+    val fuelCache = FuelCache()
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>
@@ -68,7 +68,7 @@ class TileIncendiaryGenerator(
                 if (inventory[0] != null) {
                     val time = TileEntityFurnace.getItemBurnTime(inventory[0])
                     if (time > 0) {
-                        maxFuelTemp = fuelHelper.temp(inventory[0]!!)
+                        maxFuelTemp = fuelCache.getOrChange(inventory[0]!!)
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
                         inventory[0] = inventory[0]!!.consumeItem()
@@ -118,7 +118,7 @@ class TileIncendiaryGenerator(
 
     override fun onLoad() {
         super.onLoad()
-        ambientTemperature = biomeTemptoKelvin(world, pos).toFloat()
+        ambientTemperature = biomeTempToKelvin(world, pos).toFloat()
     }
 
     override fun receiveSyncData(data: IBD, side: Side) {

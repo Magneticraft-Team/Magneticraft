@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.InfiniteHeatContainer

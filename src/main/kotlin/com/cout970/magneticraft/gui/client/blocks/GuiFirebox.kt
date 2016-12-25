@@ -6,7 +6,7 @@ import com.cout970.magneticraft.gui.client.components.CallbackBarProvider
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.CompVerticalBar
 import com.cout970.magneticraft.gui.common.ContainerBase
-import com.cout970.magneticraft.tileentity.electric.TileFirebox
+import com.cout970.magneticraft.tileentity.heat.TileFirebox
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.toFahrenheit
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -21,7 +21,7 @@ class GuiFirebox(container: ContainerBase) : GuiBase(container) {
         val tile = (container.tileEntity as TileFirebox)
 
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.heat.temperature }, { tile.heat.maxTemperature }, { tile.heat.ambientTemperatureCache }),
+                CallbackBarProvider({ tile.heat.temperature }, { tile.heat.maxTemperature }, { tile.heat.ambientTemperature }),
                 2, Vec2d(91, 56) + box.start, {
             listOf(
                     if (Config.heatUnitCelsius) {

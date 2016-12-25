@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "magneticraft:obj/solar_panel_base.obj"
+    "model": "magneticraft:obj/beehive_kiln.obj"
   },
   "variants": {
     "direction=north": [

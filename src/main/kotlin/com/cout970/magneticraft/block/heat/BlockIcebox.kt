@@ -4,7 +4,7 @@ import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.registry.FLUID_HANDLER
-import com.cout970.magneticraft.tileentity.electric.TileIcebox
+import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material

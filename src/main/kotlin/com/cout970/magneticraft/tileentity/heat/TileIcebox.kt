@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
@@ -6,7 +6,6 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager
 import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipe
-import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
@@ -26,17 +25,19 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 04/07/2016.
  */
 
-class TileIcebox(
-        val tank: Tank = object : Tank(4000) {
-            override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
-        }
-) : TileHeatBase() {
+class TileIcebox : TileHeatBase() {
+
+    val tank: Tank = object : Tank(4000) {
+        override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
+    }
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = IRON_HEAT_CAPACITY * 7,
             maxHeat = (IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            tile = this)
+            worldGetter = this::getWorld,
+            posGetter = this::getPos)
+
     val inventory = ItemStackHandler(1)
     var maxMeltingTime = 0f
     var meltingTime = 0f
@@ -56,7 +57,7 @@ class TileIcebox(
                 if (inventory[0] != null) {
                     lastInput = getRecipe()?.input
                     if (lastInput != null) {
-                        val time = lastRecipe()?.getTotalHeat(heat.ambientTemperatureCache) ?: 0
+                        val time = lastRecipe()?.getTotalHeat(heat.ambientTemperature) ?: 0
 
                         if (time > 0) {
                             maxMeltingTime = time.toFloat()
@@ -73,7 +74,7 @@ class TileIcebox(
                 if (tank.fluid != null) {
                     lastOutput = getRecipeReverse()?.output
                     if (lastOutput != null) {
-                        val time = lastRecipe()?.getTotalHeat(heat.ambientTemperatureCache) ?: 0
+                        val time = lastRecipe()?.getTotalHeat(heat.ambientTemperature) ?: 0
 
                         if (time > 0) {
                             maxFreezingTime = time.toFloat()
@@ -115,7 +116,7 @@ class TileIcebox(
             //sends an update to the client to start/stop the fan animation
             if (shouldTick(200)) {
                 val data = IBD()
-                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperatureCache + 1)
+                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperature + 1)
                 data.setLong(DATA_ID_MACHINE_HEAT, heat.heat)
                 sendSyncData(data, Side.CLIENT)
             }
@@ -227,13 +228,5 @@ class TileIcebox(
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
         return super.hasCapability(capability, facing)
-    }
-
-    fun getDirection(): EnumFacing {
-        val state = world.getBlockState(pos)
-        if (PROPERTY_DIRECTION.isIn(state)) {
-            return PROPERTY_DIRECTION[state]
-        }
-        return EnumFacing.NORTH
     }
 }

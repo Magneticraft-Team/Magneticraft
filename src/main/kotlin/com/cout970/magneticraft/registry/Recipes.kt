@@ -277,7 +277,8 @@ fun registerRecipes() {
     addRecipe(ItemStack(BlockHeatPipe, 8), "BBB", "PIP", "BBB", 'B', "ingotBrick", 'P', "lightPlateCopper", 'I', "ingotCopper")
     addRecipe(ItemStack(BlockRedstoneHeatPipe), "C", "P", 'P', BlockHeatPipe, 'C', Items.REPEATER)
 
-    addRecipe(ItemStack(BlockThermometer), "#C#", "IPD", 'C', Items.COMPARATOR, 'I', "ingotTungsten", 'D', "ingotIron", 'P', BlockHeatPipe)
+    //why? "Found an itemStack with a null item. This is an error from another mod."
+//    addRecipe(ItemStack(BlockThermometer), "#C#", "IPD", 'C', Items.COMPARATOR, 'I', "ingotTungsten", 'D', "ingotIron", 'P', BlockHeatPipe)
 
     addRecipe(ItemStack(BlockCoke), "XXX", "XXX", "XXX", 'X', of(ItemCoke))
     addRecipe(ItemStack(ItemCoke, 9), "###", "#X#", "###", 'X', of(BlockCoke))

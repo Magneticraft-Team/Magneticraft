@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
@@ -22,30 +22,30 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 04/07/2016.
  */
 
-class TileFirebox(
-) : TileHeatBase() {
+class TileFirebox : TileHeatBase() {
 
     companion object {
         val FUEL_TO_HEAT = 0.5f
     }
 
-    var fuelHelper = fuelTempHelper()
-
+    var fuelHelper = FuelCache()
     var maxFuelTemp: Double = Config.defaultMaxTemp
+    val inventory = ItemStackHandler(1)
+    var maxBurningTime = 0f
+    var burningTime = 0f
+
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            tile = this)
-    val inventory = ItemStackHandler(1)
-    var maxBurningTime = 0f
-    var burningTime = 0f
+            worldGetter = this::getWorld,
+            posGetter = this::getPos)
 
     override val heatNodes: List<IHeatNode>
         get() = listOf(heat)
 
     override fun update() {
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             //consumes fuel
             if (burningTime <= 0) {
                 if (inventory[0] != null) {
@@ -54,7 +54,7 @@ class TileFirebox(
                     if (time > 0) {
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
-                        maxFuelTemp = fuelHelper.temp(inventory[0]!!)
+                        maxFuelTemp = fuelHelper.getOrChange(inventory[0]!!)
                         inventory[0] = inventory[0]!!.consumeItem()
                         markDirty()
                     }
@@ -70,7 +70,7 @@ class TileFirebox(
             //sends an update to the client to start/stop the fan animation
             if (shouldTick(200)) {
                 val data = IBD()
-                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperatureCache + 1)
+                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperature + 1)
                 data.setLong(DATA_ID_MACHINE_HEAT, heat.heat)
                 sendSyncData(data, Side.CLIENT)
             }

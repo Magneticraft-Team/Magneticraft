@@ -9,7 +9,6 @@ import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
 import com.cout970.magneticraft.tileentity.multiblock.TileSifter
 import com.cout970.magneticraft.util.resource
 import com.google.common.base.Predicates
-import net.minecraft.client.renderer.GlStateManager
 
 /**
  * Created by cout970 on 21/08/2016.
@@ -22,15 +21,15 @@ object TileRendererSifter : TileEntityRenderer<TileSifter>() {
 
     override fun renderTileEntityAt(te: TileSifter, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         if (!te.active) {
-            GlStateManager.pushMatrix()
-            GlStateManager.translate(x, y, z)
+            pushMatrix()
+            translate(x, y, z)
             rotateFromCenter(te.direction, 0f)
             renderMultiblockBlueprint(MultiblockSifter)
-            GlStateManager.popMatrix()
+            popMatrix()
             return
         }
-        GlStateManager.pushMatrix()
-        GlStateManager.translate(x, y, z)
+        pushMatrix()
+        translate(x, y, z)
 
         rotateFromCenter(te.direction, 0f)
         bindTexture(texture)
@@ -39,7 +38,7 @@ object TileRendererSifter : TileEntityRenderer<TileSifter>() {
         val speed = 360f
 
 //        hammer.render()
-        GlStateManager.popMatrix()
+        popMatrix()
     }
 
     override fun onModelRegistryReload() {

@@ -2,7 +2,7 @@ package com.cout970.magneticraft.gui.common.blocks
 
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.gui.common.*
-import com.cout970.magneticraft.tileentity.electric.TileIcebox
+import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos

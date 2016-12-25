@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.api.heat;
 
 import com.cout970.magneticraft.api.energy.INode;
-import net.minecraft.util.math.BlockPos;
 
 /**
  * Created by Yurgen on 19/10/2016.
@@ -93,6 +92,4 @@ public interface IHeatNode extends INode {
      * Called every tick to transfer heat
      */
     void updateHeat();
-
-    BlockPos getPos();
 }

@@ -6,9 +6,7 @@ import com.cout970.magneticraft.util.checkNBT
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.hasKey
 import com.cout970.magneticraft.util.setBlockPos
-import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumActionResult

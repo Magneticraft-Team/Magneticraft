@@ -2,7 +2,7 @@ package com.cout970.magneticraft.block.heat
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
-import com.cout970.magneticraft.tileentity.electric.TileFirebox
+import com.cout970.magneticraft.tileentity.heat.TileFirebox
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material

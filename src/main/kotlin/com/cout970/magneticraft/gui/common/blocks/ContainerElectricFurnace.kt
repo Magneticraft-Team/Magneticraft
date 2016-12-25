@@ -6,12 +6,8 @@ import com.cout970.magneticraft.gui.common.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.gui.common.DATA_ID_VOLTAGE
 import com.cout970.magneticraft.tileentity.electric.TileElectricFurnace
-import com.cout970.magneticraft.util.getNonPlayerSlotRanges
-import com.cout970.magneticraft.util.getPlayerSlotRanges
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.player.InventoryPlayer
-import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

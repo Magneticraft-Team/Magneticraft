@@ -2,9 +2,14 @@
 buildscript {
     repositories {
         jcenter()
+
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
+        }
+        maven{
+            name = "kotlin-eap"
+            url = "https://dl.bintray.com/kotlin/kotlin-eap-1.1/"
         }
         mavenCentral()
     }
@@ -93,6 +98,10 @@ repositories {
     maven {
         name = "Tesla Api"
         url 'http://maven.epoxide.xyz'
+    }
+    maven{
+        name = "kotlin-eap"
+        url = "https://dl.bintray.com/kotlin/kotlin-eap-1.1/"
     }
     mavenCentral()
 }

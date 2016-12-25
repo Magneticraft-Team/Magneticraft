@@ -3,7 +3,6 @@ package com.cout970.magneticraft.block
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
-import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile

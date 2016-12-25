@@ -25,7 +25,7 @@ class GuiGrinder(container: ContainerBase) : GuiBase(container) {
         components.add(CompElectricBar(tile.node, Vec2d(47, 64) + box.start))
 
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.heatNode.temperature }, { tile.heatNode.maxTemperature }, { tile.heatNode.ambientTemperatureCache }),
+                CallbackBarProvider({ tile.heatNode.temperature }, { tile.heatNode.maxTemperature }, { tile.heatNode.ambientTemperature }),
                 2, Vec2d(91, 56) + box.start, {
             listOf(
                     if (Config.heatUnitCelsius) {

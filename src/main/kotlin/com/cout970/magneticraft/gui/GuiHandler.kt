@@ -3,7 +3,12 @@ package com.cout970.magneticraft.gui
 import com.cout970.magneticraft.gui.client.blocks.*
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.gui.common.blocks.*
-import com.cout970.magneticraft.tileentity.electric.*
+import com.cout970.magneticraft.tileentity.electric.TileBattery
+import com.cout970.magneticraft.tileentity.electric.TileElectricFurnace
+import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
+import com.cout970.magneticraft.tileentity.heat.TileBrickFurnace
+import com.cout970.magneticraft.tileentity.heat.TileFirebox
+import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos

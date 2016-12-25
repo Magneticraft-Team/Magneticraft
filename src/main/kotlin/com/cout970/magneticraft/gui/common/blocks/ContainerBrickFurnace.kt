@@ -4,7 +4,7 @@ import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.gui.common.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
-import com.cout970.magneticraft.tileentity.electric.TileBrickFurnace
+import com.cout970.magneticraft.tileentity.heat.TileBrickFurnace
 import com.cout970.magneticraft.util.misc.IBD
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack

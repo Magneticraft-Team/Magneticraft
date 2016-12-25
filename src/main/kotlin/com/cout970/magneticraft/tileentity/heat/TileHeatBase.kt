@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.heat.IHeatConnection
@@ -27,7 +27,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
     var initiated = false
     var firstTicks = -1
 
-    override fun getComparitorOutput(): Int {
+    override fun getComparatorOutput(): Int {
         val node = heatNodes.first()
         return floor(node.temperature / node.maxTemperature).toInt()
     }
@@ -72,7 +72,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         super.onLoad()
         if (initiated == false) {
             updateHeatConnections()
-            for (i in heatNodes) i.heat = (biomeTemptoKelvin(world, pos) * i.specificHeat).toLong()
+            for (i in heatNodes) i.heat = (biomeTempToKelvin(world, pos) * i.specificHeat).toLong()
             initiated = true
         }
     }
@@ -89,7 +89,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
                     handler.addConnection(HeatConnection(otherNode, i))
                 }
             }
-            i.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+            i.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
         }
     }
 

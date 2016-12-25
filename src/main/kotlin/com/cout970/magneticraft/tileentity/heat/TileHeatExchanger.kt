@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
@@ -16,19 +16,19 @@ import net.minecraftforge.fluids.FluidStack
  */
 class TileHeatExchanger() : TileHeatBase() {
 
-    val itank: Tank = object : Tank(4000) {
+    val inputTank: Tank = object : Tank(4000) {
         override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
     }
 
-    val otank: Tank = object : Tank(4000) {
+    val outputTank: Tank = object : Tank(4000) {
         override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) {
-            if (facing == EnumFacing.DOWN) return itank as T
-            else return otank as T
+            if (facing == EnumFacing.DOWN) return inputTank as T
+            else return outputTank as T
         }
         return super.getCapability(capability, facing)
     }
@@ -42,7 +42,8 @@ class TileHeatExchanger() : TileHeatBase() {
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            tile = this)
+            worldGetter = this::getWorld,
+            posGetter = this::getPos)
 
     override val heatNodes: List<IHeatNode>
         get() = listOf(heat)

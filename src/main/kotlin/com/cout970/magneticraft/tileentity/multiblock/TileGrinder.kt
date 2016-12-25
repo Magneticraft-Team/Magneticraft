@@ -24,9 +24,8 @@ import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricHeatBase
+import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.CraftingProcess
 import com.cout970.magneticraft.util.misc.ValueAverage
 import net.minecraft.block.state.IBlockState
@@ -62,7 +61,8 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     val heatNode = HeatContainer(
             emit = false,
-            tile = this,
+            worldGetter = this::getWorld,
+            posGetter = this::getPos,
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
             maxHeat = ((IRON_HEAT_CAPACITY * 20) * Config.defaultMachineMaxTemp).toLong(),
@@ -71,10 +71,9 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
-    val hammerAnimation = AnimationTimer()
     val safeHeat: Long = ((IRON_HEAT_CAPACITY * 20 * Config.defaultMachineSafeTemp)).toLong()
     val efficiency = 0.9
-    var overtemp = false
+    var overTemp = false
     val GrinderDamage = 8f
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
@@ -101,11 +100,11 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         }, { //can craft
             node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
                     && checkOutputValid()
-                    && overtemp == false
+                    && overTemp == false
         }, { // use energy
             val applied = node.applyPower(-Config.grinderConsumption * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE) * 6, false)
             if (heatNode.pushHeat((applied * (1 - efficiency) * ENERGY_TO_HEAT).toLong(), false) > 0) { //If there's any heat leftover after we tried to push heat, the machine has overheated
-                overtemp = true
+                overTemp = true
             }
             production += applied
         }, {
@@ -152,7 +151,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
             }
             craftingProcess.tick(worldObj, 1.0f)
             production.tick()
-            if (heatNode.heat < safeHeat) overtemp = false
+            if (heatNode.heat < safeHeat) overTemp = false
         }
         super.update()
     }
@@ -212,16 +211,14 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     override fun updateHeatConnections() {
         for (j in POTENTIAL_CONNECTIONS) {
             val relPos = posTransform(j)
-            val tileOther = world.getTileEntity(relPos)
-            if (tileOther == null) continue
-            val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
-            if (handler !is IHeatHandler) continue
+            val tileOther = world.getTileEntity(relPos) ?: continue
+            val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
             for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
                 heatConnections.add(HeatConnection(heatNode, otherNode))
                 handler.addConnection(HeatConnection(otherNode, heatNode))
             }
         }
-        heatNode.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+        heatNode.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {

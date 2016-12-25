@@ -22,7 +22,7 @@ import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricHeatBase
+import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.CraftingProcess
@@ -57,7 +57,8 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     val hammerAnimation = AnimationTimer()
     val heatNode = HeatContainer(
             emit = false,
-            tile = this,
+            worldGetter = this::getWorld,
+            posGetter = this::getPos,
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 10, /*PLACEHOLDER*/
             maxHeat = ((IRON_HEAT_CAPACITY * 10) * Config.defaultMachineMaxTemp).toLong(),
@@ -146,7 +147,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
                 handler.addConnection(HeatConnection(otherNode, heatNode))
             }
         }
-        heatNode.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+        heatNode.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
     }
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))

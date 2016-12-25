@@ -2,10 +2,12 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
+import com.cout970.loader.api.model.IModelPart
+import com.cout970.loader.api.model.IObjGroup
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.util.resource
-import net.minecraft.client.renderer.GlStateManager
+import com.google.common.base.Predicate
 
 /**
  * Created by cout970 on 21/08/2016.
@@ -14,35 +16,40 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
 
     val texture = resource("textures/models/kiln.png")
     lateinit var model: ICachedModel
+    lateinit var door: ICachedModel
 
     override fun renderTileEntityAt(te: TileKiln, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         if (!te.active) {
-            GlStateManager.pushMatrix()
-            GlStateManager.translate(x, y, z)
+            pushMatrix()
+            translate(x, y, z)
             rotateFromCenter(te.direction, 0f)
             renderMultiblockBlueprint(MultiblockKiln)
-            GlStateManager.popMatrix()
+            popMatrix()
             return
         }
-        GlStateManager.pushMatrix()
-        GlStateManager.translate(x, y, z)
+        pushMatrix()
+        translate(x, y, z)
         rotateFromCenter(te.direction, 0f)
-        GlStateManager.translate(0.0, 0.0, 2.0)
+        translate(0.0, 0.0, 2.0)
         bindTexture(texture)
+        model.render()
         if (te.doorOpen) {
-            model.render()
-        } else {
-            model.render()
+            rotate(90, y = 1)
         }
-        GlStateManager.popMatrix()
+        door.render()
+        popMatrix()
     }
 
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         try {
             val dyn = getModelObj(resource("models/block/obj/beehive_kiln.obj"))
-            this.model = ModelCacheFactory.createCachedModel(dyn.model, 1)
+            val predicate: Predicate<IModelPart> = Predicate { (it as? IObjGroup)?.getName()?.contains("door") ?: false }
+
+            this.model = ModelCacheFactory.createCachedModel(dyn.filterNot(predicate), 1)
+            this.door = ModelCacheFactory.createCachedModel(dyn.filter(predicate), 1)
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

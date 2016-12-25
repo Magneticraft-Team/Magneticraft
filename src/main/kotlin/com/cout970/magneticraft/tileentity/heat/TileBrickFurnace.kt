@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -22,7 +22,8 @@ class TileBrickFurnace : TileHeatBase() {
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            tile = this)
+            worldGetter = this::getWorld,
+            posGetter = this::getPos)
 
     override val heatNodes: List<IHeatNode>
         get() = listOf(heat)
@@ -31,8 +32,9 @@ class TileBrickFurnace : TileHeatBase() {
     var burningTime = 0f
 
     override fun update() {
-        if (!worldObj.isRemote) {
-            var smelting_temp = 0.0
+        if (worldObj.isServer) {
+            val smelting_temp: Double
+
             if (inventory[0]?.item is ItemFood) {
                 smelting_temp = DEFAULT_COOKING_TEMPERATURE
             } else {
@@ -47,8 +49,8 @@ class TileBrickFurnace : TileHeatBase() {
                     burningTime -= MAX_BURNING_TIME
                 }
             }
-            super.update()
         }
+        super.update()
     }
 
     fun canSmelt(): Boolean {

@@ -3,7 +3,6 @@ package com.cout970.magneticraft.tilerenderer
 import com.cout970.magneticraft.tileentity.TileKilnShelf
 import com.cout970.magneticraft.util.resource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.item.ItemSkull
 

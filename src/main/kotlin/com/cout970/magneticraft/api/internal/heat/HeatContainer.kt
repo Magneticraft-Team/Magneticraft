@@ -4,7 +4,6 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -12,13 +11,19 @@ import net.minecraft.world.World
  * Created by Yurgen on 19/10/2016.
  */
 open class HeatContainer(
-        val tile: TileEntity,
+        val worldGetter: ()-> World,
+        val posGetter: ()-> BlockPos,
         private val emit: Boolean = true,
         private val specificHeat: Double = 1.0,
-        private var conductivity: Double = DEFAULT_CONDUCTIVITY, //Fraction of temperature difference between current and ambient temperture dissipated per second
-        //Evan small calues cause rapid heat transfer.  Very large values can cause strange directional transfer behavior
-        private var dissipation: Double = 0.0, //Fraction of temperature difference between current and ambient temperture dissipated per second
+
+        //Fraction of temperature difference between current and ambient temperature dissipated per second
+        //Evan small values cause rapid heat transfer.  Very large values can cause strange directional transfer behavior
+        private var conductivity: Double = DEFAULT_CONDUCTIVITY,
+
+        //Fraction of temperature difference between current and ambient temperature dissipated per second
         //Even small values cause rapid heat dissipation
+        private var dissipation: Double = 0.0,
+
         private val maxHeat: Long = 100,
         private var heat: Long = 0
 ) : IHeatNode {
@@ -30,9 +35,9 @@ open class HeatContainer(
     override fun getHeat(): Long = heat
     override fun getSpecificHeat(): Double = specificHeat
 
-    var ambientTemperatureCache: Double = STANDARD_AMBIENT_TEMPERATURE
+    var ambientTemperature: Double = STANDARD_AMBIENT_TEMPERATURE
 
-    override fun getWorld(): World = tile.world
+    override fun getWorld(): World = worldGetter()
 
     override fun setDissipation(newDissipation: Double) {
         dissipation = newDissipation
@@ -51,7 +56,7 @@ open class HeatContainer(
     }
 
     override fun setAmbientTemp(newAmbient: Double) {
-        ambientTemperatureCache = newAmbient
+        ambientTemperature = newAmbient
     }
 
     override fun getMaxTemperature(): Double {
@@ -87,31 +92,28 @@ open class HeatContainer(
         if (dissipation > 0) dissipateHeat()
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) {
-        if (nbt == null) return
+    override fun deserializeNBT(nbt: NBTTagCompound) {
         heat = nbt.getLong("heat")
         conductivity = nbt.getDouble("conductivity")
         dissipation = nbt.getDouble("dissipation")
-        ambientTemperatureCache = nbt.getDouble("ambient")
+        ambientTemperature = nbt.getDouble("ambient")
     }
 
     override fun serializeNBT() = NBTTagCompound().apply {
         setLong("heat", heat)
         setDouble("conductivity", conductivity)
         setDouble("dissipation", dissipation)
-        setDouble("ambient", ambientTemperatureCache)
+        setDouble("ambient", ambientTemperature)
     }
 
-    override fun getPos(): BlockPos {
-        return tile.pos
-    }
+    override fun getPos(): BlockPos = posGetter()
 
-    fun getHeatFromTemperature(Temp: Double): Long {
-        return (Temp * specificHeat).toLong()
+    fun getHeatFromTemperature(temp: Double): Long {
+        return (temp * specificHeat).toLong()
     }
 
     fun dissipateHeat() {
-        val newTemp = ((temperature - ambientTemperatureCache) * (1 - dissipation)) + ambientTemperatureCache
+        val newTemp = ((temperature - ambientTemperature) * (1 - dissipation)) + ambientTemperature
         setHeat(getHeatFromTemperature(newTemp))
     }
 }

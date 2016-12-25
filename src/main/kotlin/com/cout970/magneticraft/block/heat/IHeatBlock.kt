@@ -3,8 +3,8 @@ package com.cout970.magneticraft.block.heat
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricHeatBase
-import com.cout970.magneticraft.tileentity.electric.TileHeatBase
+import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
+import com.cout970.magneticraft.tileentity.heat.TileHeatBase
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess

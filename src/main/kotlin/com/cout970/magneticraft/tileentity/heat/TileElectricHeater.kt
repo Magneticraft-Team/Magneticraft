@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -14,8 +14,7 @@ import net.minecraftforge.fml.relauncher.Side
  * Created by cout970 on 04/07/2016.
  */
 
-class TileElectricHeater(
-) : TileElectricHeatBase() {
+class TileElectricHeater : TileElectricHeatBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>
@@ -28,7 +27,8 @@ class TileElectricHeater(
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            tile = this)
+            worldGetter = this::getWorld,
+            posGetter = this::getPos)
 
     override fun update() {
         if (!worldObj.isRemote) {

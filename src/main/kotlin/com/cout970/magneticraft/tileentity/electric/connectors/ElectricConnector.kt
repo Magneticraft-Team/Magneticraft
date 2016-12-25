@@ -6,8 +6,8 @@ import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
-import com.cout970.magneticraft.tilerenderer.PIXEL
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
+import com.cout970.magneticraft.tilerenderer.PIXEL
 import com.google.common.collect.ImmutableList
 import net.minecraft.util.math.Vec3d
 

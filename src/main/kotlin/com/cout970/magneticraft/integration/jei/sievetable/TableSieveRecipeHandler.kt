@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.integration.jei.sievetable
 
-import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipe
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
 import com.cout970.magneticraft.integration.jei.JEIPlugin
 import mezz.jei.api.recipe.IRecipeHandler

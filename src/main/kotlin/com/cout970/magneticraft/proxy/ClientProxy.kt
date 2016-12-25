@@ -3,7 +3,7 @@ package com.cout970.magneticraft.proxy
 import coffee.cypher.mcextlib.extensions.resources.toModel
 import com.cout970.loader.api.ModelRegistry
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
-import com.cout970.magneticraft.gui.client.tooltipHandler
+import com.cout970.magneticraft.gui.client.TooltipHandler
 import com.cout970.magneticraft.item.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
@@ -74,7 +74,7 @@ class ClientProxy : CommonProxy() {
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
 
-        MinecraftForge.EVENT_BUS.register(tooltipHandler())
+        MinecraftForge.EVENT_BUS.register(TooltipHandler())
     }
 
     fun ItemBase.registerInvRender() {

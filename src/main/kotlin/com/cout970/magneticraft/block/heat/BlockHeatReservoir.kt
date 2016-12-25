@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.tileentity.electric.TileHeatReservoir
+import com.cout970.magneticraft.tileentity.heat.TileHeatReservoir
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity

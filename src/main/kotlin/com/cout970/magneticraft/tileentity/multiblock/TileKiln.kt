@@ -20,7 +20,7 @@ import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileKilnShelf
-import com.cout970.magneticraft.tileentity.electric.TileHeatBase
+import com.cout970.magneticraft.tileentity.heat.TileHeatBase
 import com.cout970.magneticraft.util.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
@@ -53,7 +53,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     val heatNode = HeatContainer(
             emit = false,
-            tile = this,
+            worldGetter = this::getWorld,
+            posGetter = this::getPos,
             dissipation = 0.0,
             specificHeat = LIMESTONE_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
             maxHeat = ((LIMESTONE_HEAT_CAPACITY * 20) * LIMESTONE_MELTING_POINT).toLong(),
@@ -63,27 +64,27 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
     //Not using crafting process because I assumed that an array of lambdas will have horrible locality of reference
-    data class craftingSlot(
+    data class CraftingSlot(
             var craftingTime: Int = 0,
-            var iscrafting: Boolean = false,
+            var isCrafting: Boolean = false,
             var stateCache: IBlockState? = null,
             var inputCache: ItemStack? = null,
             var recipeCache: IKilnRecipe? = null,
             var stackCache: ItemStack? = null)
 
-    object craftingSlots {
-        var map: MutableMap<BlockPos, craftingSlot> = mutableMapOf()
+    object CraftingSlots {
+        var map: MutableMap<BlockPos, CraftingSlot> = mutableMapOf()
         fun getCraftingTimesArray(): IntArray {
-            var array = IntArray(map.size)
+            val array = IntArray(map.size)
             var index = 0
             map.forEach { array.set(index, it.value.craftingTime); index++ }
             return array
         }
 
         fun getIsCraftingArray(): ByteArray {
-            var array = ByteArray(map.size)
+            val array = ByteArray(map.size)
             var index = 0
-            map.forEach { array.set(index, if (it.value.iscrafting) 1 else 0); index++ }
+            map.forEach { array.set(index, if (it.value.isCrafting) 1 else 0); index++ }
             return array
         }
 
@@ -94,7 +95,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
         fun setAllIsCrafting(array: ByteArray) {
             var index = 0
-            map.forEach { it.value.iscrafting = array[index] != 0.toByte(); index++ }
+            map.forEach { it.value.isCrafting = array[index] != 0.toByte(); index++ }
         }
     }
 
@@ -105,7 +106,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         for (i in 0 until 3) {
             for (j in 0 until 2) {
                 for (k in 0 until 3) {
-                    craftingSlots.map.put(BlockPos(i, j, k) + BlockPos(-1, 0, 1), craftingSlot())
+                    CraftingSlots.map.put(BlockPos(i, j, k) + BlockPos(-1, 0, 1), CraftingSlot())
                 }
             }
         }
@@ -115,9 +116,9 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         return oldState?.block !== newSate?.block
     }
 
-    fun getRecipe(input: BlockPos, slot: craftingSlot): IKilnRecipe? {
+    fun getRecipe(input: BlockPos, slot: CraftingSlot): IKilnRecipe? {
         val state = world.getBlockState(input)
-        var stack: ItemStack
+        val stack: ItemStack
         val tile = world.getTile<TileKilnShelf>(input)
         if (tile != null) {
             stack = tile.getStack() ?: return null
@@ -139,7 +140,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         return recipe
     }
 
-    fun canCraft(input: BlockPos, slot: craftingSlot): Boolean {
+    fun canCraft(input: BlockPos, slot: CraftingSlot): Boolean {
         val recipe = getRecipe(input, slot) ?: return false
         return !doorOpen &&
                 heatNode.temperature > recipe.minTemp &&
@@ -173,19 +174,19 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                     sendUpdateToNearPlayers()
                 }
                 if (shouldTick(updateFrequency)) {
-                    craftingSlots.map.forEach {
+                    CraftingSlots.map.forEach {
                         if (!canCraft(posTransform(it.key), it.value)) {
-                            it.value.iscrafting = false
+                            it.value.isCrafting = false
                             return@forEach
                         }
                         val recipe: IKilnRecipe = getRecipe(posTransform(it.key), it.value) ?: return@forEach
                         if (it.value.craftingTime <= recipe.duration) {
                             it.value.craftingTime += 1
-                            it.value.iscrafting = true
+                            it.value.isCrafting = true
                             return@forEach
                         }
                         it.value.craftingTime = 0
-                        it.value.iscrafting = false
+                        it.value.isCrafting = false
                         val tile = world.getTile<TileKilnShelf>(posTransform(it.key))
                         if (tile != null) {
                             if (recipe.isItemRecipe)
@@ -199,8 +200,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             }
         } else {
             if (shouldTick(5)) {
-                craftingSlots.map.forEach {
-                    if (!it.value.iscrafting) return@forEach
+                CraftingSlots.map.forEach {
+                    if (!it.value.isCrafting) return@forEach
                     val partPos = posTransform(it.key)
                     val d3 = (partPos.x.toFloat() + world.rand.nextFloat()).toDouble()
                     val d4 = (partPos.y.toFloat() + world.rand.nextFloat()).toDouble()
@@ -232,7 +233,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                 handler.addConnection(HeatConnection(otherNode, heatNode))
             }
         }
-        heatNode.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+        heatNode.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
     }
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
@@ -245,16 +246,16 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
-        setIntArray("times", craftingSlots.getCraftingTimesArray())
-        setByteArray("isCrafting", craftingSlots.getIsCraftingArray())
+        setIntArray("times", CraftingSlots.getCraftingTimesArray())
+        setByteArray("isCrafting", CraftingSlots.getIsCraftingArray())
         setBoolean("door", doorOpen)
         super.save()
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
         if (hasKey("direction")) multiblockFacing = getEnumFacing("direction")
-        if (hasKey("times")) craftingSlots.setAllCraftingTimes(getIntArray("times"))
-        if (hasKey("isCrafting")) craftingSlots.setAllIsCrafting(getByteArray("isCrafting"))
+        if (hasKey("times")) CraftingSlots.setAllCraftingTimes(getIntArray("times"))
+        if (hasKey("isCrafting")) CraftingSlots.setAllIsCrafting(getByteArray("isCrafting"))
         if (hasKey("door")) doorOpen = getBoolean("door")
         super.load(nbt)
     }

@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.util
 
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.util.misc.CacheNode
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -64,18 +66,9 @@ fun Number.toCelsius(): Double = this.toDouble() - 273.15
 
 fun Number.toFahrenheit(): Double = this.toCelsius() * 9 / 5 + 32
 
-fun biomeTemptoKelvin(worldIn: World, pos: BlockPos): Double = ((worldIn.getBiome(pos).getFloatTemperature(pos) - if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f).toKelvinFromMinecraftUnits())
+fun biomeTempToKelvin(worldIn: World, pos: BlockPos): Double = ((worldIn.getBiome(pos).getFloatTemperature(pos) - if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f).toKelvinFromMinecraftUnits())
 
-class fuelTempHelper() {
-    private var FuelCache: ItemStack? = null
-    private var TempCache: Double = 0.0
 
-    fun temp(Input: ItemStack): Double {
-        if (Input.isItemEqual(FuelCache)) {
-            return TempCache
-        }
-        FuelCache = Input
-        TempCache = Config.fuelTemps.map.get(Input.item) ?: Config.defaultMaxTemp
-        return TempCache
-    }
-}
+private fun lookupTemp(stack: ItemStack): Double = Config.fuelTemps.map[stack.item] ?: Config.defaultMaxTemp
+
+class FuelCache() : CacheNode<ItemStack, Double>(ItemStack(Blocks.AIR), ::lookupTemp, ItemStack::isItemEqual)

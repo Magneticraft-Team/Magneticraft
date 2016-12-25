@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.electric
+package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.heat.IHeatConnection
@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.HeatConnection
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.util.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -22,7 +23,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
     var lightLevelCache = 0.0f
     var initiated = false
 
-    override fun getComparitorOutput(): Int {
+    override fun getComparatorOutput(): Int {
         val node = heatNodes.first()
         return Math.floor(node.temperature / node.maxTemperature).toInt()
     }
@@ -59,7 +60,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
         super.onLoad()
         if (initiated == false) {
             updateHeatConnections()
-            for (i in heatNodes) i.heat = (biomeTemptoKelvin(world, pos) * i.specificHeat).toLong()
+            for (i in heatNodes) i.heat = (biomeTempToKelvin(world, pos) * i.specificHeat).toLong()
             initiated = true
         }
     }
@@ -76,7 +77,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
                     handler.addConnection(HeatConnection(otherNode, i))
                 }
             }
-            i.setAmbientTemp(biomeTemptoKelvin(world, pos)) //This might be unnecessary
+            i.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
         }
     }
 
