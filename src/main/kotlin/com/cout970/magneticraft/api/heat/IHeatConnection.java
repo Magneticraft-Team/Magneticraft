@@ -16,7 +16,7 @@ public interface IHeatConnection {
     IHeatNode getSecondNode();
 
     /**
-     * This function balances the voltage between the two nodes
+     * This function balances the heat between the two nodes
      * This should be called every tick and only in the server side
      */
     void iterate();

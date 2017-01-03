@@ -7,7 +7,7 @@ import com.cout970.magneticraft.util.toKelvinFromCelsius
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileInfiniteHeat(temperature: Double, emit: Boolean = false) : TileHeatBase() {
+abstract class TileInfiniteHeat(temperature: Double, emit: Boolean = false) : TileHeatBase() {
 
     val heat = InfiniteHeatContainer(
             temperature = temperature,
@@ -16,6 +16,8 @@ class TileInfiniteHeat(temperature: Double, emit: Boolean = false) : TileHeatBas
 
     override val heatNodes: List<IHeatNode>
         get() = listOf(heat)
-
-    constructor() : this(temperature = (-50).toKelvinFromCelsius(), emit = false)
 }
+
+//Minecraft needs an empty constructor to be able to load TileEntities from save files
+class TileInfiniteHeatCold : TileInfiniteHeat(temperature = (-50).toKelvinFromCelsius(), emit = false)
+class TileInfiniteHeatHot : TileInfiniteHeat(1800.toKelvinFromCelsius())

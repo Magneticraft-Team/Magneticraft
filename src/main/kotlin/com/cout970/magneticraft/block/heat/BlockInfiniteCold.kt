@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.tileentity.heat.TileInfiniteHeat
-import com.cout970.magneticraft.util.toKelvinFromCelsius
+import com.cout970.magneticraft.tileentity.heat.TileInfiniteHeatCold
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
@@ -12,6 +11,6 @@ import net.minecraft.world.World
  */
 object BlockInfiniteCold : BlockHeatBase(Material.ROCK, "infinite_cold"), ITileEntityProvider {
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInfiniteHeat(temperature = (-50).toKelvinFromCelsius(), emit = false)
+    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInfiniteHeatCold()
 
 }

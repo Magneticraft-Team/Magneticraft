@@ -33,11 +33,9 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
     }
 
     override fun update() {
-        if (shouldTick(20)) {
-            if (!worldObj.isRemote) {
-                heatNodes.forEach { it.updateHeat() }
-                heatConnections.forEach { it.iterate() }
-            }
+        if (worldObj.isServer) {
+            heatNodes.forEach { it.updateHeat() }
+            heatConnections.forEach { it.iterate() }
         }
         if (shouldTick(lightLevelUpdateDelay)) {
             heatNodes.forEach {
@@ -70,7 +68,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
 
     override fun onLoad() {
         super.onLoad()
-        if (initiated == false) {
+        if (!initiated) {
             updateHeatConnections()
             for (i in heatNodes) i.heat = (guessAmbientTemp(world, pos) * i.specificHeat).toLong()
             initiated = true
@@ -82,8 +80,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
             for (j in EnumFacing.values()) {
                 val tileOther = world.getTileEntity(pos.offset(j)) ?: continue
                 if (tileOther === this) continue
-                val handler = NODE_HANDLER!!.fromTile(tileOther, j) ?: continue
-                if (handler !is IHeatHandler) continue
+                val handler = (NODE_HANDLER!!.fromTile(tileOther, j) ?: continue) as? IHeatHandler ?: continue
                 for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
                     heatConnections.add(HeatConnection(i, otherNode))
                     handler.addConnection(HeatConnection(otherNode, i))

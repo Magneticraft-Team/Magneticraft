@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block.heat
 
 import com.cout970.magneticraft.tileentity.heat.TileInfiniteHeat
+import com.cout970.magneticraft.tileentity.heat.TileInfiniteHeatHot
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -19,7 +20,7 @@ object BlockInfiniteHeat : BlockHeatBase(Material.ROCK, "infinite_heat"), ITileE
         setLightLevel(1.0f)
     }
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInfiniteHeat(1800.toKelvinFromCelsius())
+    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInfiniteHeatHot()
 
     override fun getLightValue(state: IBlockState?, world: IBlockAccess?, pos: BlockPos?): Int {
         return lightValue
