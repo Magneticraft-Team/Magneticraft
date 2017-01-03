@@ -15,6 +15,10 @@ import net.minecraft.world.World
  */
 object BlockInfiniteHeat : BlockHeatBase(Material.ROCK, "infinite_heat"), ITileEntityProvider {
 
+    init {
+        setLightLevel(1.0f)
+    }
+
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInfiniteHeat(1800.toKelvinFromCelsius())
 
     override fun getLightValue(state: IBlockState?, world: IBlockAccess?, pos: BlockPos?): Int {

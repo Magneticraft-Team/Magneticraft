@@ -11,7 +11,8 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-abstract class BlockHeatBase(material: Material, name: String) : BlockBase(material, name), ITileEntityProvider, IHeatBlock {
+abstract class BlockHeatBase(material: Material, name: String) : BlockBase(material,
+        name), ITileEntityProvider, IHeatBlock {
 
 //  override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
 //      super.onBlockPlacedBy(worldIn, pos, state, placer, stack)

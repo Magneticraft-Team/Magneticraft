@@ -50,24 +50,21 @@ val blocks = mapOf(
         withItemBlock(BlockCoke),
         withItemBlock(BlockGlazedBrick),
         withItemBlock(BlockFluxedGravel),
-        withItemBlock(BlockCharcoalSlab)
-)
+        withItemBlock(BlockCharcoalSlab),
 
-val lightBlocks = mapOf(
-        withItemBlock(BlockInfiniteHeat)
-)
+        withItemBlock(BlockInfiniteHeat),
 
-val tickBlocks = mapOf(
-        withItemBlock(BlockBrickFurnace),
-        withItemBlock(BlockFirebox),
-        withItemBlock(BlockHeatSink),
-        withItemBlock(BlockHeatReservoir),
-        withItemBlock(BlockHeatPipe),
-        withItemBlock(BlockRedstoneHeatPipe),
-        withItemBlock(BlockElectricHeater)
+        withItemBlockAndTick(BlockBrickFurnace),
+        withItemBlockAndTick(BlockFirebox),
+        withItemBlockAndTick(BlockHeatSink),
+        withItemBlockAndTick(BlockHeatReservoir),
+        withItemBlockAndTick(BlockHeatPipe),
+        withItemBlockAndTick(BlockRedstoneHeatPipe),
+        withItemBlockAndTick(BlockElectricHeater)
 )
 
 private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
+private fun withItemBlockAndTick(blockBase: BlockBase) = blockBase.apply { tickRandomly = true } to ItemBlockBase(blockBase)
 
 /**
  * Registers all the blocks in the mod, called by CommonProxy
@@ -75,14 +72,6 @@ private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blo
 fun registerBlocks() {
     blocks.forEach {
         GameRegistry.register(it.key)
-        GameRegistry.register(it.value)
-    }
-    tickBlocks.forEach {
-        GameRegistry.register(it.key).tickRandomly = true
-        GameRegistry.register(it.value)
-    }
-    lightBlocks.forEach {
-        GameRegistry.register(it.key).setLightLevel(1.0f)
         GameRegistry.register(it.value)
     }
 }

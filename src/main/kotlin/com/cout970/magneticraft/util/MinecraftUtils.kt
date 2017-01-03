@@ -30,6 +30,7 @@ fun TileEntity.shouldTick(time: Int): Boolean {
 }
 
 operator fun <T : Comparable<T>> IProperty<T>.get(state: IBlockState): T = state.getValue(this)
+operator fun <T : Comparable<T>> IBlockState.get(property: IProperty<T>): T = getValue(property)
 
 fun <T : Comparable<T>> IProperty<T>.isIn(state: IBlockState): Boolean = this in state.properties
 

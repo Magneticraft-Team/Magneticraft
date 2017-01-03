@@ -16,7 +16,7 @@ val PROPERTY_SOUTH: PropertyBool = PropertyBool.create("south")
 val PROPERTY_EAST: PropertyBool = PropertyBool.create("east")
 val PROPERTY_WEST: PropertyBool = PropertyBool.create("west")
 
-val PropertyDirections: Map<EnumFacing, PropertyBool> = mapOf(EnumFacing.UP to PROPERTY_UP,
+val propertyDirections: Map<EnumFacing, PropertyBool> = mapOf(EnumFacing.UP to PROPERTY_UP,
         EnumFacing.DOWN to PROPERTY_DOWN,
         EnumFacing.NORTH to PROPERTY_NORTH,
         EnumFacing.SOUTH to PROPERTY_SOUTH,
@@ -28,4 +28,5 @@ val PROPERTY_DIRECTION: PropertyDirection = PropertyDirection.create("direction"
 val PROPERTY_CENTER: PropertyBool = PropertyBool.create("center")
 val PROPERTY_ACTIVE: PropertyBool = PropertyBool.create("active")
 val PROPERTY_OPEN: PropertyBool = PropertyBool.create("open")
-val ELECTRIC_POLE_PLACE: PropertyEnum<BlockElectricPoleBase.ElectricPoleStates> = PropertyEnum.create("place", BlockElectricPoleBase.ElectricPoleStates::class.java)
+val ELECTRIC_POLE_PLACE: PropertyEnum<BlockElectricPoleBase.ElectricPoleStates> = PropertyEnum.create("place",
+        BlockElectricPoleBase.ElectricPoleStates::class.java)
