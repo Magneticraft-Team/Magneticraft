@@ -31,9 +31,9 @@ class ItemDeconstructionPlanner() : ItemBase("deconstruction_planner") {
 
     override fun updateItemStackNBT(nbt: NBTTagCompound?): Boolean {
         if (nbt == null) return super.updateItemStackNBT(nbt)
-        var xArray = IntArray(designations.size)
-        var yArray = IntArray(designations.size)
-        var zArray = IntArray(designations.size)
+        val xArray = IntArray(designations.size)
+        val yArray = IntArray(designations.size)
+        val zArray = IntArray(designations.size)
         designations.forEachIndexed { i, blockPos ->
             xArray.set(i, blockPos.x)
             yArray.set(i, blockPos.y)

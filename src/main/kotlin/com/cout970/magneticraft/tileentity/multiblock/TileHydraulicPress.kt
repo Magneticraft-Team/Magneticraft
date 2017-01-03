@@ -104,8 +104,6 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
         return oldState?.block !== newSate?.block
     }
 
-    fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
-
     fun getRecipe(input: ItemStack): IHydraulicPressRecipe? {
         if (input === inputCache) return recipeCache
         val recipe = HydraulicPressRecipeManager.findRecipe(input)
@@ -138,16 +136,14 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     override fun updateHeatConnections() {
         for (j in POTENTIAL_CONNECTIONS) {
             val relPos = direction.rotatePoint(BlockPos.ORIGIN, j) + pos
-            val tileOther = world.getTileEntity(relPos)
-            if (tileOther == null) continue
-            val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
-            if (handler !is IHeatHandler) continue
+            val tileOther = world.getTileEntity(relPos) ?: continue
+            val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
             for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
                 heatConnections.add(HeatConnection(heatNode, otherNode))
                 handler.addConnection(HeatConnection(otherNode, heatNode))
             }
         }
-        heatNode.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
+        heatNode.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
     }
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))

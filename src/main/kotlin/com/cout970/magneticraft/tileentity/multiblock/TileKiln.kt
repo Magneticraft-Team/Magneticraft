@@ -5,7 +5,6 @@ import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.Magneticraft.DamageSourceKiln
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.HeatConnection
@@ -158,7 +157,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                                 if (!doorOpen) it.air -= 1
                                 val damage = (heatNode.temperature / KILN_DAMAGE_TEMP).toFloat()
                                 if (it.health < damage) it.setFire(1)
-                                it.attackEntityFrom(DamageSourceKiln, damage)
+                                it.attackEntityFrom(DamageSources.damageSourceKiln, damage)
                             }
                             if (heatNode.temperature > KILN_FIRE_TEMP && doorOpen)
                                 entities.forEach {
@@ -233,7 +232,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
                 handler.addConnection(HeatConnection(otherNode, heatNode))
             }
         }
-        heatNode.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
+        heatNode.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
     }
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))

@@ -6,7 +6,6 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
-import com.cout970.magneticraft.Magneticraft.DamageSourceGrinder
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -74,7 +73,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     val safeHeat: Long = ((IRON_HEAT_CAPACITY * 20 * Config.defaultMachineSafeTemp)).toLong()
     val efficiency = 0.9
     var overTemp = false
-    val GrinderDamage = 8f
+    val grinderDamage = 8f
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val in_inv_size = 4
@@ -142,7 +141,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
                     val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
                     if (!entities.isEmpty()) {
                         entities.forEach {
-                            it.attackEntityFrom(DamageSourceGrinder, (GrinderDamage * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE)).toFloat())
+                            it.attackEntityFrom(DamageSources.damageSourceGrinder, (grinderDamage * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE)).toFloat())
                             craftingProcess.useEnergy
                         }
                         sendUpdateToNearPlayers()
@@ -218,7 +217,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
                 handler.addConnection(HeatConnection(otherNode, heatNode))
             }
         }
-        heatNode.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
+        heatNode.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {

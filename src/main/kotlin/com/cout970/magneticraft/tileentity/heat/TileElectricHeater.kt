@@ -31,7 +31,7 @@ class TileElectricHeater : TileElectricHeatBase() {
             posGetter = this::getPos)
 
     override fun update() {
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (mainNode.voltage >= TIER_1_MACHINES_MIN_VOLTAGE && heat.heat < heat.maxHeat) {
                 val applied = mainNode.applyPower(-Config.electricHeaterMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
                 val energy = applied.toFloat()

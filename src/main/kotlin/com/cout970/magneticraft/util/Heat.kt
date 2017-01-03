@@ -4,6 +4,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.misc.CacheNode
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -52,11 +53,18 @@ val ENERGY_TO_HEAT = 2f
 
 fun Number.toKelvinFromCelsius(): Double = this.toDouble() + 273.15
 
-fun Number.toKelvinFromMinecraftUnits(): Double = ((this.toDouble() - 0.15) * 25) + 273.15
+fun Number.toKelvinFromMinecraftUnits(): Double = toCelsiusFromMinecraftUnits().toKelvinFromCelsius()
+
+fun Number.toCelsiusFromMinecraftUnits(): Double {
+    val x = toDouble()
+    if (x < 2.0) {
+        return -x * x * 6 + x * 30
+    } else {
+        return -x * x * 6 + x * 30 + 10 * (x - 2.0) * (x - 2.0)
+    }
+}
 
 fun Number.toFarenheitFromMinecraftUnits(): Double = this.toKelvinFromMinecraftUnits().toFahrenheit()
-
-fun Number.toCelsiusFromMinecraftUnits(): Double = (this.toDouble() - 0.15) * 25
 
 fun Number.toKelvinFromFahrenheit(): Double = this.toCelsiusFromFahrenheit().toKelvinFromCelsius()
 
@@ -66,8 +74,33 @@ fun Number.toCelsius(): Double = this.toDouble() - 273.15
 
 fun Number.toFahrenheit(): Double = this.toCelsius() * 9 / 5 + 32
 
-fun biomeTempToKelvin(worldIn: World, pos: BlockPos): Double = ((worldIn.getBiome(pos).getFloatTemperature(pos) - if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f).toKelvinFromMinecraftUnits())
+fun guessAmbientTemp(worldIn: World, pos: BlockPos, range: Int = 10): Double {
+    var sum = 0.0
+    var count = 0
+    for (i in -range..range) {
+        if (i == 0) {
+            sum += testBiomeHeat(worldIn, pos)
+            count++
+        } else {
+            sum += testBiomeHeat(worldIn, pos.offset(EnumFacing.NORTH, i))
+            sum += testBiomeHeat(worldIn, pos.offset(EnumFacing.EAST, i))
+            count += 2
+        }
+    }
+    var water = 1
+    for (side in EnumFacing.values()) {
+        if (worldIn.getBlockState(pos.offset(side)).block == Blocks.WATER) {
+            water++
+        }
+    }
+    return ((sum / count).toCelsius() / water).toKelvinFromCelsius()
+}
 
+fun testBiomeHeat(worldIn: World, pos: BlockPos): Double {
+    val biome = worldIn.getBiome(pos)
+    val correction = if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f
+    return (biome.getFloatTemperature(pos) - correction).toKelvinFromMinecraftUnits()
+}
 
 private fun lookupTemp(stack: ItemStack): Double = Config.fuelTemps.map[stack.item] ?: Config.defaultMaxTemp
 

@@ -72,7 +72,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
         super.onLoad()
         if (initiated == false) {
             updateHeatConnections()
-            for (i in heatNodes) i.heat = (biomeTempToKelvin(world, pos) * i.specificHeat).toLong()
+            for (i in heatNodes) i.heat = (guessAmbientTemp(world, pos) * i.specificHeat).toLong()
             initiated = true
         }
     }
@@ -89,7 +89,7 @@ abstract class TileHeatBase : TileBase(), ITickable, IHeatHandler {
                     handler.addConnection(HeatConnection(otherNode, i))
                 }
             }
-            i.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
+            i.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
         }
     }
 

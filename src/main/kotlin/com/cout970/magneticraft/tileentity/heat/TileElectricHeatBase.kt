@@ -29,11 +29,9 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
     }
 
     override fun update() {
-        if (shouldTick(20)) {
-            if (!worldObj.isRemote) {
-                heatNodes.forEach { it.updateHeat() }
-                heatConnections.forEach { it.iterate() }
-            }
+        if (worldObj.isServer) {
+            heatNodes.forEach { it.updateHeat() }
+            heatConnections.forEach { it.iterate() }
         }
         if (shouldTick(lightLevelUpdateDelay)) {
             heatNodes.forEach {
@@ -60,7 +58,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
         super.onLoad()
         if (initiated == false) {
             updateHeatConnections()
-            for (i in heatNodes) i.heat = (biomeTempToKelvin(world, pos) * i.specificHeat).toLong()
+            for (i in heatNodes) i.heat = (guessAmbientTemp(world, pos) * i.specificHeat).toLong()
             initiated = true
         }
     }
@@ -77,7 +75,7 @@ abstract class TileElectricHeatBase : TileElectricBase(), IHeatHandler {
                     handler.addConnection(HeatConnection(otherNode, i))
                 }
             }
-            i.setAmbientTemp(biomeTempToKelvin(world, pos)) //This might be unnecessary
+            i.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
         }
     }
 
