@@ -57,8 +57,8 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     val hammerAnimation = AnimationTimer()
     val heatNode = HeatContainer(
             emit = false,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos,
+            worldGetter = { this.world },
+            posGetter = { this.getPos() },
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 10, /*PLACEHOLDER*/
             maxHeat = ((IRON_HEAT_CAPACITY * 10) * Config.defaultMachineMaxTemp).toLong(),

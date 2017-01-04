@@ -41,8 +41,8 @@ val tiles = mapOf<Class<out TileBase>, String>(
         TileElectricHeater::class.java          to "electric_heater",
         TileHeatSink::class.java                to "heat_sink",
         TileHeatReservoir::class.java           to "heat_reservoir",
-        TileSolarPanel::class.java              to "solar_panel"
-        TileComputer::class.java              to "computer"
+        TileSolarPanel::class.java to "solar_panel",
+        TileComputer::class.java to "computer"
 //        TileInserter::class.java                to "inserter"
 )
 //@formatter:on

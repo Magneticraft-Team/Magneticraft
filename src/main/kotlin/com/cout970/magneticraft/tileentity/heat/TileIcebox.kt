@@ -35,8 +35,8 @@ class TileIcebox : TileHeatBase() {
             specificHeat = IRON_HEAT_CAPACITY * 7,
             maxHeat = (IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos)
+            worldGetter = { this.world },
+            posGetter = { this.getPos() })
 
     val inventory = ItemStackHandler(1)
     var maxMeltingTime = 0f

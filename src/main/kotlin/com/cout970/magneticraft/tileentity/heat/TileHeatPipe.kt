@@ -10,7 +10,7 @@ import net.minecraft.util.EnumFacing
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileHeatPipe() : TileHeatBase() {
+class TileHeatPipe : TileHeatBase() {
 
     val activeSides: MutableSet<EnumFacing> = mutableSetOf()
 
@@ -18,8 +18,8 @@ class TileHeatPipe() : TileHeatBase() {
             specificHeat = COPPER_HEAT_CAPACITY * 3 / 8,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT / 8).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos)
+            worldGetter = { this.world },
+            posGetter = { this.getPos() })
 
     override fun onLoad() {
         super.onLoad()

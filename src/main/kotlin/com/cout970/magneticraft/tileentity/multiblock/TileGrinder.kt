@@ -60,8 +60,8 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     val heatNode = HeatContainer(
             emit = false,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos,
+            worldGetter = { this.world },
+            posGetter = { this.getPos() },
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
             maxHeat = ((IRON_HEAT_CAPACITY * 20) * Config.defaultMachineMaxTemp).toLong(),
@@ -313,7 +313,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         }
     }
 
-    class outInventory() : IItemHandler {
+    class outInventory : IItemHandler {
         override fun getSlots(): Int {
             return 0
         }

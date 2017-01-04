@@ -52,8 +52,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
 
     val heatNode = HeatContainer(
             emit = false,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos,
+            worldGetter = { this.world },
+            posGetter = { this.getPos() },
             dissipation = 0.0,
             specificHeat = LIMESTONE_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
             maxHeat = ((LIMESTONE_HEAT_CAPACITY * 20) * LIMESTONE_MELTING_POINT).toLong(),
