@@ -28,6 +28,7 @@ val items = listOf(
         ItemThermometer,
         ItemNugget,
         ItemBattery,
+        ItemFloppyDisk,
         ItemCoke
 )
 

@@ -22,7 +22,7 @@ class MessageContainerUpdate() : IMessage {
     //Data buffer
     var ibd: IBD? = null
 
-    constructor(ibd: IBD?) : this() {
+    constructor(ibd: IBD) : this() {
         this.ibd = ibd
     }
 

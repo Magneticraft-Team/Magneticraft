@@ -1,7 +1,16 @@
 package com.cout970.magneticraft.gui
 
+import com.cout970.magneticraft.gui.client.blocks.GuiBattery
+import com.cout970.magneticraft.gui.client.blocks.GuiElectricFurnace
+import com.cout970.magneticraft.gui.client.blocks.GuiIncendiaryGenerator
+import com.cout970.magneticraft.gui.client.blocks.GuiComputer
 import com.cout970.magneticraft.gui.client.blocks.*
 import com.cout970.magneticraft.gui.common.ContainerBase
+import com.cout970.magneticraft.gui.common.blocks.ContainerBattery
+import com.cout970.magneticraft.gui.common.blocks.ContainerElectricFurnace
+import com.cout970.magneticraft.gui.common.blocks.ContainerIncendiaryGenerator
+import com.cout970.magneticraft.gui.common.blocks.ContainerMonitor
+import com.cout970.magneticraft.tileentity.computer.TileComputer
 import com.cout970.magneticraft.gui.common.blocks.*
 import com.cout970.magneticraft.tileentity.electric.TileBattery
 import com.cout970.magneticraft.tileentity.electric.TileElectricFurnace
@@ -27,6 +36,7 @@ object GuiHandler : IGuiHandler {
             is TileIncendiaryGenerator -> GuiIncendiaryGenerator(serverElement)
             is TileBattery -> GuiBattery(serverElement)
             is TileElectricFurnace -> GuiElectricFurnace(serverElement)
+            is TileComputer -> GuiComputer(tile, serverElement as ContainerMonitor)
             is TileFirebox -> GuiFirebox(serverElement)
             is TileIcebox -> GuiIcebox(serverElement)
             is TileBrickFurnace -> GuiBrickFurnace(serverElement)
@@ -45,6 +55,7 @@ object GuiHandler : IGuiHandler {
             is TileBrickFurnace -> ContainerBrickFurnace(player, world, BlockPos(x, y, z))
             is TileFirebox -> ContainerFirebox(player, world, BlockPos(x, y, z))
             is TileIcebox -> ContainerIcebox(player, world, BlockPos(x, y, z))
+            is TileComputer -> ContainerMonitor(tile, player, world, BlockPos(x, y, z))
             else -> null
         }
     }

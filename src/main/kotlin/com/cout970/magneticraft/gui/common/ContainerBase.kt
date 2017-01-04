@@ -2,9 +2,11 @@ package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.network.MessageContainerUpdate
+import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.util.getNonPlayerSlotRanges
 import com.cout970.magneticraft.util.getPlayerSlotRanges
 import com.cout970.magneticraft.util.misc.IBD
+import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.InventoryPlayer
@@ -44,6 +46,11 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
             val ibd = sendDataToClient()
             if (ibd != null) {
                 Magneticraft.network.sendTo(MessageContainerUpdate(ibd), player)
+            }
+        } else if (player is EntityPlayerSP) {
+            val ibd = sendDataToServer()
+            if (ibd != null) {
+                Magneticraft.network.sendToServer(MessageGuiUpdate(ibd, player.persistentID))
             }
         }
     }
@@ -106,8 +113,15 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
     }
 
     //Called every tick to get the changes in the server that need to be sent to the client
-    abstract fun sendDataToClient(): IBD?
+    open fun sendDataToClient(): IBD? = null
+
+    //Called every tick to get the changes in the client that need to be sent to the server
+    //for example buttons
+    open fun sendDataToServer(): IBD? = null
 
     //called when server data is received
-    abstract fun receiveDataFromServer(ibd: IBD)
+    open fun receiveDataFromServer(ibd: IBD) = Unit
+
+    //called when client data is received
+    open fun receiveDataFromClient(ibd: IBD) = Unit
 }
