@@ -1,7 +1,7 @@
-package com.cout970.magneticraft.api.internal.registries.machines.heatexchanger
+package com.cout970.magneticraft.api.internal.registries.machines.heatrecipes
 
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipe
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipeManager
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipe
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipeManager
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack

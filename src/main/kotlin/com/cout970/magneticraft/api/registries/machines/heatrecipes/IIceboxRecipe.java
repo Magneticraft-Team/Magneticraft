@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.registries.machines.heatexchanger;
+package com.cout970.magneticraft.api.registries.machines.heatrecipes;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
