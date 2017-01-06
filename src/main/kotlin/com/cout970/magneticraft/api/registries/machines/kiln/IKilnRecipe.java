@@ -24,14 +24,14 @@ public interface IKilnRecipe {
      *
      * @return True if the recipe outputs an item
      */
-    Boolean isItemRecipe();
+    boolean isItemRecipe();
 
     /**
      * Whether this recipe outputs a block
      *
      * @return True if the recipe outputs a block
      */
-    Boolean isBlockRecipe();
+    boolean isBlockRecipe();
 
     /**
      * The result of this recipe

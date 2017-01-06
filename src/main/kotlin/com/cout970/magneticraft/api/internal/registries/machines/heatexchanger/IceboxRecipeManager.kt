@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
+package com.cout970.magneticraft.api.internal.registries.machines.heatexchanger
 
 import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipe
 import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipeManager
@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.FluidStack
 import java.util.*
 
 /**
- * Created by cout970 on 16/06/2016.
+ * Created by Yurgen on 16/06/2016.
  */
 /**
  * Internal class only please use MagneticraftApi.getHeatExchangerRecipeManager() instead

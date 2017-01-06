@@ -24,5 +24,5 @@ fun debug(vararg obj: Any?) {
             s.append(", ")
         }
     }
-    Magneticraft.log.info("[$MOD_ID][DEBUG]${s.toString()}")
+    Magneticraft.log.info("[$MOD_ID][DEBUG]$s")
 }

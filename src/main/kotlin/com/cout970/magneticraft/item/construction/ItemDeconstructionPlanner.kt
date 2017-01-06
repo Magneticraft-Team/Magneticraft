@@ -20,7 +20,7 @@ import net.minecraft.world.World
  * Created by Yurgen on 01/12/2016.
  */
 
-class ItemDeconstructionPlanner() : ItemBase("deconstruction_planner") {
+class ItemDeconstructionPlanner : ItemBase("deconstruction_planner") {
     var designations: MutableSet<BlockPos> = mutableSetOf()
 
     var width = 1.0

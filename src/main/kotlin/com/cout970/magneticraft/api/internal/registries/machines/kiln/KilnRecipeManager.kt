@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress
+package com.cout970.magneticraft.api.internal.registries.machines.kiln
 
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipeManager
@@ -7,10 +7,10 @@ import net.minecraft.item.ItemStack
 import java.util.*
 
 /**
- * Created by cout970 on 22/08/2016.
+ * Created by Yurgen on 22/08/2016.
  */
 /**
- * Internal class only please use MagneticraftApi.getHydraulicPressRecipeManager() instead
+ * Internal class only please use MagneticraftApi.getKilnRecipeManager() instead
  */
 object KilnRecipeManager : IKilnRecipeManager {
 

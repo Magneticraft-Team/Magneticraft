@@ -133,17 +133,17 @@ class DefaultManualConnectionHandler : IManualConnectionHandler {
     override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): Boolean = false
 }
 
-class DefaultItemEnergyConsumer() : IEnergyConsumerItem {
+class DefaultItemEnergyConsumer : IEnergyConsumerItem {
 
     override fun giveEnergy(power: Double, simulated: Boolean): Double = 0.0
 }
 
-class DefaultItemEnergyProvider() : IEnergyProviderItem {
+class DefaultItemEnergyProvider : IEnergyProviderItem {
 
     override fun takeEnergy(power: Double, simulated: Boolean): Double = 0.0
 }
 
-class DefaultItemEnergyStorage() : IEnergyStorageItem {
+class DefaultItemEnergyStorage : IEnergyStorageItem {
 
     override fun getStoredEnergy(): Double = 0.0
 

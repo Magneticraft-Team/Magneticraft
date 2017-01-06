@@ -7,9 +7,9 @@ import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
-import com.cout970.magneticraft.api.internal.energy.HeatConnection
+import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
-import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.KilnRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.kiln.KilnRecipeManager
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION

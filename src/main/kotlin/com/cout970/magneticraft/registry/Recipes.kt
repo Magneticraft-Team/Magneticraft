@@ -3,11 +3,11 @@ package com.cout970.magneticraft.registry
 import coffee.cypher.mcextlib.extensions.items.stack
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.heatexchanger.HeatExchangerRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.heatexchanger.IceboxRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
-import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.KilnRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.kiln.KilnRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sifter.SifterRecipeManager
-import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.HeatExchangerRecipeManager
-import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.block.decoration.*

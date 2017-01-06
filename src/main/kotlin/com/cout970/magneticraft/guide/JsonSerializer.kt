@@ -41,7 +41,7 @@ object JsonSerializer {
 
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
 @kotlin.annotation.Target(AnnotationTarget.FIELD)
-annotation class JsonIgnore()
+annotation class JsonIgnore
 
 object Estrategy : ExclusionStrategy {
 

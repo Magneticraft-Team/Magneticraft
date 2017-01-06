@@ -122,7 +122,7 @@ struct driver_internet_socket {
 
     override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
 
-    class Connection() {
+    class Connection {
         var socket: Socket? = null
         val status: Int get() = if (socket != null && socket!!.isConnected) 1 else 0
         var error: Int = 0
