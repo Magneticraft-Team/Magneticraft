@@ -4,20 +4,14 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "working=off": [
-            {
-                "model": "magneticraft:heater_off"
-            }
-        ],
-        "working=on": [
-            {
-                "model": "magneticraft:heater_on"
-            }
-        ],
-        "inventory": [
-            {
-                "model": "magneticraft:heater_off"
-            }
-        ]
+        "on": [{
+            "model": "magneticraft:heater_on"
+        }],
+        "off": [{
+            "model": "magneticraft:heater_off"
+        }],
+        "inventory": [{
+            "model": "magneticraft:heater_off"
+        }]
     }
 }

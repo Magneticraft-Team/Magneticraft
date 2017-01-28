@@ -97,7 +97,8 @@ tile.magneticraft.block_battery.name=Battery Block
 tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
 tile.magneticraft.electric_furnace.name=Electric furnace
 
-tile.magneticraft.electric_heater.name=Electric Heater
+tile.magneticraft.electric_heater_off.name=Electric Heater
+tile.magneticraft.electric_heater_on.name=Electric Heater
 tile.magneticraft.heat_pipe.name=Heat Pipe
 tile.magneticraft.redstone_heat_pipe.name=Redstone Heat Pipe
 tile.magneticraft.firebox.name=Firebox

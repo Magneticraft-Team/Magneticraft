@@ -64,7 +64,8 @@ val blocks = mapOf(
 )
 
 private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)
-private fun withItemBlockAndTick(blockBase: BlockBase) = blockBase.apply { tickRandomly = true } to ItemBlockBase(blockBase)
+private fun withItemBlockAndTick(blockBase: BlockBase) = blockBase.apply { tickRandomly = true } to ItemBlockBase(
+        blockBase)
 
 /**
  * Registers all the blocks in the mod, called by CommonProxy
