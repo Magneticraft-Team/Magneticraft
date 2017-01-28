@@ -8,7 +8,6 @@ import com.cout970.loader.api.model.IObjGroup
 import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.util.resource
 import com.google.common.base.Predicates
-import net.minecraft.client.renderer.GlStateManager.*
 
 /**
  * Created by cout970 on 25/08/2016.

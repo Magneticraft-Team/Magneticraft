@@ -3,20 +3,18 @@ package com.cout970.magneticraft.proxy
 import coffee.cypher.mcextlib.extensions.resources.toModel
 import com.cout970.loader.api.ModelRegistry
 import com.cout970.magneticraft.block.itemblock.ItemBlockBase
+import com.cout970.magneticraft.gui.client.TooltipHandler
 import com.cout970.magneticraft.item.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
+import com.cout970.magneticraft.registry.registerColorHandlers
 import com.cout970.magneticraft.registry.registerSounds
-import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.tileentity.TileCrushingTable
-import com.cout970.magneticraft.tileentity.TileFeedingTrough
-import com.cout970.magneticraft.tileentity.TileTableSieve
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
-import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
-import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
+import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.tilerenderer.*
 import com.cout970.magneticraft.util.MOD_ID
 import net.minecraftforge.client.event.ModelBakeEvent
@@ -67,10 +65,16 @@ class ClientProxy : CommonProxy() {
         register(TileElectricPoleAdapter::class.java, TileRendererElectricPoleAdapter)
         register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
         register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
+        register(TileKiln::class.java, TileRendererKiln)
+        register(TileSifter::class.java, TileRendererSifter)
+        register(TileGrinder::class.java, TileRendererGrinder)
+        register(TileKilnShelf::class.java, TileRendererKilnShelf)
         register(TileSolarPanel::class.java, TileRendererSolarPanel)
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
+
+        MinecraftForge.EVENT_BUS.register(TooltipHandler())
     }
 
     fun ItemBase.registerInvRender() {
@@ -83,6 +87,11 @@ class ClientProxy : CommonProxy() {
         blockBase.inventoryVariants.forEach {
             ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
         }
+    }
+
+    override fun init() {
+        super.init()
+        registerColorHandlers()
     }
 
     override fun postInit() {

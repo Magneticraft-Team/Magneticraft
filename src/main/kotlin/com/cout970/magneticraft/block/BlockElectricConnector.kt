@@ -6,13 +6,12 @@ import coffee.cypher.mcextlib.extensions.vectors.times
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
-import com.cout970.magneticraft.block.PROPERTY_FACING
-import com.cout970.magneticraft.tilerenderer.PIXEL
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
+import com.cout970.magneticraft.tilerenderer.PIXEL
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider

@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "up": "magneticraft:blocks/heat_reservoir_top",
+    "down": "magneticraft:blocks/heat_reservoir_side",
+    "north": "magneticraft:blocks/heat_reservoir_side",
+    "south": "magneticraft:blocks/heat_reservoir_side",
+    "east": "magneticraft:blocks/heat_reservoir_side",
+    "west": "magneticraft:blocks/heat_reservoir_side"
+  }
+}

@@ -44,12 +44,16 @@ class TileIncendiaryGenerator(
         val HEAT_TO_WATTS = FUEL_TO_WATTS / FUEL_TO_HEAT
     }
 
+    val fuelCache = FuelCache()
+
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>
         get() = listOf(mainNode)
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
     var burningTime = 0f
+    var maxFuelTemp = Config.defaultMaxTemp
+    var ambientTemperature = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     var heat = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     val production = ValueAverage()
     var nanoBuckets = 0
@@ -64,6 +68,7 @@ class TileIncendiaryGenerator(
                 if (inventory[0] != null) {
                     val time = TileEntityFurnace.getItemBurnTime(inventory[0])
                     if (time > 0) {
+                        maxFuelTemp = fuelCache.getOrChange(inventory[0]!!)
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
                         inventory[0] = inventory[0]!!.consumeItem()
@@ -72,15 +77,15 @@ class TileIncendiaryGenerator(
                 }
             }
             //burns fuel
-            if (burningTime > 0 && heat < MAX_HEAT) {
+            if (burningTime > 0 && heat < MAX_HEAT && heat < maxFuelTemp) {
                 val burningSpeed = Math.ceil(Config.incendiaryGeneratorMaxProduction / 10.0).toInt()
                 burningTime -= burningSpeed
                 heat += burningSpeed * FUEL_TO_HEAT
             }
             //makes electricity from heat
-            if (heat > STANDARD_AMBIENT_TEMPERATURE + 75 && tank.fluidAmount > 0) {
+            if (heat > ambientTemperature + 75 && tank.fluidAmount > 0) {
 
-                val speed = interpolate(heat.toDouble(), STANDARD_AMBIENT_TEMPERATURE, MAX_HEAT - 50)
+                val speed = interpolate(heat.toDouble(), ambientTemperature.toDouble(), MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
                 val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * prod, false)
                 production += applied
@@ -94,7 +99,7 @@ class TileIncendiaryGenerator(
                     nanoBuckets -= 1000
                     tank.drainInternal(1, true)
                 }
-            } else if (heat > STANDARD_AMBIENT_TEMPERATURE && tank.fluidAmount > 0) {
+            } else if (heat > ambientTemperature && tank.fluidAmount > 0) {
                 heat -= 0.109f
             }
             //updates the production counter
@@ -111,6 +116,11 @@ class TileIncendiaryGenerator(
         super.update()
     }
 
+    override fun onLoad() {
+        super.onLoad()
+        ambientTemperature = guessAmbientTemp(world, pos).toFloat()
+    }
+
     override fun receiveSyncData(data: IBD, side: Side) {
         super.receiveSyncData(data, side)
         if (side == Side.SERVER) {
@@ -122,16 +132,18 @@ class TileIncendiaryGenerator(
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         setTag("inventory", inventory.serializeNBT())
         setFloat("maxBurningTime", maxBurningTime)
-        setFloat("burningTime", burningTime)
+        setFloat("meltingTime", burningTime)
         setFloat("heat", heat)
+        setDouble("fuelTemp", maxFuelTemp)
         setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
         maxBurningTime = nbt.getFloat("maxBurningTime")
-        burningTime = nbt.getFloat("burningTime")
+        burningTime = nbt.getFloat("meltingTime")
         heat = nbt.getFloat("heat")
+        maxFuelTemp = nbt.getDouble("fuelTemo")
         tank.readFromNBT(nbt.getCompoundTag("tank"))
     }
 
@@ -169,7 +181,7 @@ class TileIncendiaryGenerator(
         return EnumFacing.NORTH
     }
 
-    class TileIncendiaryGeneratorBottom() : TileBase() {
+    class TileIncendiaryGeneratorBottom : TileBase() {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {

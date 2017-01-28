@@ -9,6 +9,7 @@ import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
@@ -49,6 +50,9 @@ object BlockCrushingTable : BlockBase(
 
             if (tile.canDamage() && item is ItemHammer) {
                 tile.doDamage(item.damage)
+                if (tile.getStack()!!.isItemEqual(ItemStack(Items.BLAZE_ROD))) {
+                    player.setFire(5)
+                }
                 item.onHit(heldItem!!, player)
             } else {
                 player.inventory.addItemStackToInventory(tile.getStack())

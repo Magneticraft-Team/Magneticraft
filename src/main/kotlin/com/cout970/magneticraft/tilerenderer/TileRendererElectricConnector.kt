@@ -14,7 +14,6 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.vec3Of
 import com.google.common.base.Predicates
-import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.Vec3d
 

@@ -1,0 +1,402 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "magneticraft:pipe/heat_pipe_0",
+    "transform": "forge:default-block",
+    "textures": {
+      "texture": "magneticraft:blocks/heat_pipe"
+    }
+  },
+  "__comment": "blockstate parameters MUST be in alphabetical order!",
+  "variants": {
+    "down=false,east=false,north=false,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_0",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_n",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_n",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_n",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_n",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_n",
+      "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_n",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 90,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_ns",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 270,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_ns",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_ns",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 270,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 270,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nw",
+      "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=false,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 90,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nsw",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsw",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsw",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 270,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_dnu",
+      "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=false,north=false,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nuw",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=true,up=false,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 180,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=false,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=false,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 180,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 90,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 180,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_ensw",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_ensw",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 180,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=false,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_ensw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=true,north=false,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=false,east=false,north=true,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_nsuw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=true,up=true,west=false": {
+      "model": "magneticraft:pipe/heat_pipe_desuw",
+      "x": 0,
+      "y": 270,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=true,up=false,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_desuw",
+      "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=false,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_desuw",
+      "x": 0,
+      "y": 180,
+      "uvlock": true
+    },
+    "down=true,east=true,north=false,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_desuw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=false,north=true,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_desuw",
+      "x": 0,
+      "y": 90,
+      "uvlock": true
+    },
+    "down=false,east=true,north=true,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_desuw",
+      "x": 90,
+      "y": 0,
+      "uvlock": true
+    },
+    "down=true,east=true,north=true,south=true,up=true,west=true": {
+      "model": "magneticraft:pipe/heat_pipe_densuw",
+      "x": 0,
+      "y": 0,
+      "uvlock": true
+    },
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ]
+  }
+}

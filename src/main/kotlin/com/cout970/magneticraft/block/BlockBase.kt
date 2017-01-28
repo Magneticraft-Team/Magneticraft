@@ -43,6 +43,7 @@ abstract class BlockBase(
 
     open fun getItemName(stack: ItemStack?): String? = unlocalizedName
 
+    // Called in server and client
     override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?, willHarvest: Boolean): Boolean {
         if (world!!.isRemote) {
             val tile = world.getTile<TileBase>(pos!!)
@@ -51,6 +52,7 @@ abstract class BlockBase(
         return super.removedByPlayer(state, world, pos, player, willHarvest)
     }
 
+    // Only called in the server
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         val tile = worldIn.getTile<TileBase>(pos)
         tile?.onBreak()

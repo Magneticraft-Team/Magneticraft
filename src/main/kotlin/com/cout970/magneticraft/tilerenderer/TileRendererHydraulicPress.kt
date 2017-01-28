@@ -11,7 +11,6 @@ import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.util.resource
 import com.google.common.base.Predicates
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemSkull
@@ -27,31 +26,31 @@ object TileRendererHydraulicPress : TileEntityRenderer<TileHydraulicPress>() {
 
     override fun renderTileEntityAt(te: TileHydraulicPress, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         if (!te.active) {
-            GlStateManager.pushMatrix()
-            GlStateManager.translate(x, y, z)
+            pushMatrix()
+            translate(x, y, z)
             rotateFromCenter(te.direction, 0f)
             renderMultiblockBlueprint(MultiblockHydraulicPress)
-            GlStateManager.popMatrix()
+            popMatrix()
             return
         }
-        GlStateManager.pushMatrix()
-        GlStateManager.translate(x, y, z)
+        pushMatrix()
+        translate(x, y, z)
 
         val stack = te.inventory[0]
         if (stack != null) {
-            GlStateManager.pushMatrix()
-            GlStateManager.translate(0.5, 0.9375, 0.3125)
+            pushMatrix()
+            translate(0.5, 0.9375, 0.3125)
             if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
-                GlStateManager.translate(0.0, -0.045, 1 / 16.0)
-                GlStateManager.rotate(90f, 1f, 0f, 0f)
+                translate(0.0, -0.045, 1 / 16.0)
+                rotate(90f, 1f, 0f, 0f)
             } else {
-                GlStateManager.translate(0.0, -0.125, 0.0625 * 3)
+                translate(0.0, -0.125, 0.0625 * 3)
             }
 
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
             Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
-            GlStateManager.popMatrix()
+            popMatrix()
         }
 
         rotateFromCenter(te.direction, 0f)
@@ -68,9 +67,9 @@ object TileRendererHydraulicPress : TileEntityRenderer<TileHydraulicPress>() {
         }
 
         val state = (te.hammerAnimation.getMotionState(speed) + 1f) * 0.5f
-        GlStateManager.translate(0f, -state * 8f / 16f, 0f)
+        translate(0f, -state * 8f / 16f, 0f)
         hammer.render()
-        GlStateManager.popMatrix()
+        popMatrix()
     }
 
     override fun onModelRegistryReload() {

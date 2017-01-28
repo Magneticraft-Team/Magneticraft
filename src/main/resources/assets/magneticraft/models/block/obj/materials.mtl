@@ -16,3 +16,18 @@ map_Kd magneticraft:models/solar_panel
 
 newmtl computer
 map_Kd magneticraft:models/computer
+
+newmtl grinder
+map_Kd magneticraft:models/grinder
+
+newmtl grinder_block
+map_Kd magneticraft:models/grinder_block
+
+newmtl kiln
+map_Kd magneticraft:models/kiln
+
+newmtl kiln_shelf
+map_Kd magneticraft:models/kiln_shelf
+
+newmtl sifter
+map_Kd magneticraft:models/sifter

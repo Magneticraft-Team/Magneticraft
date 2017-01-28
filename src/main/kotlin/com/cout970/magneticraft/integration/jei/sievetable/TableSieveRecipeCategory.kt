@@ -26,9 +26,10 @@ object TableSieveRecipeCategory : IRecipeCategory<TableSieveRecipeWrapper> {
     override fun setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: TableSieveRecipeWrapper) {
         recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
         recipeLayout.itemStacks.init(1, false, 48 - 9, 51 - 5)
-        recipeLayout.itemStacks.init(2, false, 48 + 9, 51 - 5)
         recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
         recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primaryOutput)
+        if (recipeWrapper.recipe.probability == 0f) return
+        recipeLayout.itemStacks.init(2, false, 48 + 9, 51 - 5)
         recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput)
         recipeLayout.itemStacks.addTooltipCallback { slot, input, stack, list -> if (slot == 2) list.add("Probability: %.1f%%".format(recipeWrapper.recipe.probability * 100)) }
     }

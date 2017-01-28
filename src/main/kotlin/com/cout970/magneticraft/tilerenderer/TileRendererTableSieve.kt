@@ -3,7 +3,6 @@ package com.cout970.magneticraft.tilerenderer
 import coffee.cypher.mcextlib.extensions.inventories.get
 import com.cout970.magneticraft.tileentity.TileTableSieve
 import com.cout970.magneticraft.util.resource
-import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
@@ -20,16 +19,15 @@ object TileRendererTableSieve : TileEntityRenderer<TileTableSieve>() {
         if (item != null) {
             pushMatrix()
             translate(x, y, z)
-            color(1f, 1f, 1f, 1f)
             val size = item.stackSize
             var process = 0.0
             if (size != 0) {
-                process = (size + (1 - (te.tickCounter / TileTableSieve.UPDATE_TIME.toDouble()))) / 64
+                process = (size + (1 - (te.progress / TileTableSieve.UPDATE_TIME.toDouble()))) / 64
             }
 
             val h = 0.0625 * 7.50 + 0.0625 * 1.5 * process
             bindTexture(texture)
-            renderQuad(h);
+            renderQuad(h)
 
             popMatrix()
         }

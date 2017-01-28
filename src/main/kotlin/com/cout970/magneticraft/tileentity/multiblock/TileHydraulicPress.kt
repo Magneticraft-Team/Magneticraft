@@ -6,7 +6,11 @@ import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.heat.IHeatHandler
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.api.internal.heat.HeatConnection
+import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
@@ -17,7 +21,8 @@ import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
+import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.AnimationTimer
 import com.cout970.magneticraft.util.misc.CraftingProcess
@@ -35,7 +40,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 19/08/2016.
  */
-class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
+class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
 
     override var multiblock: Multiblock?
         get() = MultiblockHydraulicPress
@@ -50,6 +55,21 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     override var multiblockFacing: EnumFacing? = null
 
     val hammerAnimation = AnimationTimer()
+    val heatNode = HeatContainer(
+            emit = false,
+            worldGetter = { this.world },
+            posGetter = { this.getPos() },
+            dissipation = 0.025,
+            specificHeat = IRON_HEAT_CAPACITY * 10, /*PLACEHOLDER*/
+            maxHeat = ((IRON_HEAT_CAPACITY * 10) * Config.defaultMachineMaxTemp).toLong(),
+            conductivity = DEFAULT_CONDUCTIVITY
+    )
+
+    override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
+
+    val safeHeat: Long = ((IRON_HEAT_CAPACITY * 10 * Config.defaultMachineSafeTemp)).toLong()
+    val efficiency = 0.9
+    var overtemp = false
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val inventory = ItemStackHandler(1)
@@ -67,9 +87,14 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
             node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
                     && getRecipe() != null
                     && inventory[0]!!.stackSize == getRecipe()!!.input.stackSize
+                    && overtemp == false
 
         }, { // use energy
-            node.applyPower(-Config.hydraulicPressConsumption, false)
+            val applied = Config.hydraulicPressConsumption * interpolate(node.voltage, 60.0, 70.0)
+            node.applyPower(-applied, false)
+            if (heatNode.pushHeat((applied * (1 - efficiency) * ENERGY_TO_HEAT).toLong(), false) > 0) { //If there's any heat leftover after we tried to push heat, the machine has overheated
+                overtemp = true
+            }
         }, {
             getRecipe()?.duration ?: 120f
         })
@@ -95,6 +120,7 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
         if (worldObj.isServer && active) {
             if (shouldTick(20)) sendUpdateToNearPlayers()
             craftingProcess.tick(worldObj, 1f)
+            if (heatNode.heat < safeHeat) overtemp = false
         }
         super.update()
     }
@@ -107,6 +133,19 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     override fun onDeactivate() {
     }
 
+    override fun updateHeatConnections() {
+        for (j in POTENTIAL_CONNECTIONS) {
+            val relPos = direction.rotatePoint(BlockPos.ORIGIN, j) + pos
+            val tileOther = world.getTileEntity(relPos) ?: continue
+            val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
+            for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                heatConnections.add(HeatConnection(heatNode, otherNode))
+                handler.addConnection(HeatConnection(otherNode, heatNode))
+            }
+        }
+        heatNode.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
+    }
+
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
         PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
 
@@ -117,18 +156,22 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
         setTag("inv", inventory.serializeNBT())
         setTag("crafting", craftingProcess.serializeNBT())
+        super.save()
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
         if (hasKey("direction")) multiblockFacing = getEnumFacing("direction")
         if (hasKey("inv")) inventory.deserializeNBT(getCompoundTag("inv"))
         if (hasKey("crafting")) craftingProcess.deserializeNBT(getCompoundTag("crafting"))
+        super.load(nbt)
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 0, 1)) to (pos + BlockPos(2, 5, 2))
 
     companion object {
         val ENERGY_INPUT = BlockPos(1, 1, 0)
+        val HEAT_OUTPUT = BlockPos(-1, 1, 0)
+        val POTENTIAL_CONNECTIONS = setOf(BlockPos(-2, 1, 0), BlockPos(-1, 1, 1), BlockPos(-1, 1, -1)) //Optimistation to stop multiblocks checking inside themselves for heat connections
     }
 
     override fun onBreak() {
@@ -138,33 +181,42 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
                 val item = inventory[i]
                 if (item != null) {
                     dropItem(item, pos)
+                    dropItem(item, pos)
                 }
             }
         }
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() || facing == null))
-            return true
+        if (capability == NODE_HANDLER) {
+            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos ||
+                    direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY() ||
+                            facing == null))
+                return true
+        }
         return false
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER && direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY()) || facing == null)
+        if (capability == NODE_HANDLER)
+            if (direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos)
+                return this as T
+        if (direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && (facing == direction.rotateY()))
             return this as T
         return null
     }
 
     override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == NODE_HANDLER) return false
+        if (capability == NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return Inventory(inventory) as T
+        if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }
 

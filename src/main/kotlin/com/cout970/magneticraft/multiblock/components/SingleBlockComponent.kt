@@ -5,6 +5,7 @@ import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.util.plus
 import com.cout970.magneticraft.util.translate
 import net.minecraft.block.state.IBlockState
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
@@ -54,7 +55,8 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
             tile.multiblockFacing = null
             tile.centerPos = null
         }
-        context.world.setBlockState(pos, origin)
+        if (origin != Blocks.AIR.defaultState) //Special case, don't overwrite blocks with air
+            context.world.setBlockState(pos, origin)
     }
 
     override fun getBlueprintBlocks(multiblock: Multiblock, blockPos: BlockPos): List<ItemStack> = listOf(ItemStack(origin.block, origin.block.getMetaFromState(origin)))

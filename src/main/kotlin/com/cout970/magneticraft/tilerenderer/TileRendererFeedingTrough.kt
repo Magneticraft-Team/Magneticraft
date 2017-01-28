@@ -7,7 +7,6 @@ import com.cout970.magneticraft.block.BlockFeedingTrough
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.entity.RenderEntityItem
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.util.EnumFacing
@@ -135,9 +134,9 @@ object TileRendererFeedingTrough : TileEntityRenderer<TileFeedingTrough>() {
     }
 
     private fun rotate(x: Number, y: Number, z: Number) {
-        GlStateManager.rotate(z.toFloat(), 0f, 0f, 1f)
-        GlStateManager.rotate(y.toFloat(), 0f, 1f, 0f)
-        GlStateManager.rotate(x.toFloat(), 1f, 0f, 0f)
+        rotate(z, 0f, 0f, 1f)
+        rotate(y, 0f, 1f, 0f)
+        rotate(x, 1f, 0f, 0f)
     }
 
     private fun init() {

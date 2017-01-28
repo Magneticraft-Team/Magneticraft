@@ -26,6 +26,7 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
     val node = ElectricNode({ worldObj }, { pos })
 
     override val electricNodes: List<IElectricNode> = listOf(node)
+    var ambientTemperature = STANDARD_AMBIENT_TEMPERATURE.toFloat()
 
     override var multiblock: Multiblock?
         get() = MultiblockSolarPanel
@@ -63,8 +64,8 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
                         }
                     }
                 }
-                if (count > 0) {
-                    node.applyPower((1 - interpolate(node.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * Config.solarPanelMaxProduction * (count / 9f), false)
+                if (count > 0) { //Generate slightly less than double power in desert, 75% power in ice plains
+                    node.applyPower((1 - interpolate(node.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * Config.solarPanelMaxProduction * (count / 9f) * (1 + ambientTemperature / 2.0), false)
                 }
             }
         }
@@ -79,6 +80,11 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
     }
 
     override fun onDeactivate() {
+    }
+
+    override fun onLoad() {
+        super.onLoad()
+        ambientTemperature = world.getBiome(pos).getFloatTemperature(pos)
     }
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {

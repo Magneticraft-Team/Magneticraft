@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.guide
 
-import com.cout970.magneticraft.guide.BookEntry
 import java.util.*
 
 object EntryRegistry {

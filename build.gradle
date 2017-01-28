@@ -6,6 +6,11 @@ buildscript {
             name = 'forge'
             url = 'http://files.minecraftforge.net/maven'
         }
+        maven{
+            name = "kotlin-eap"
+            url = "https://dl.bintray.com/kotlin/kotlin-eap-1.1/"
+        }
+        mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
@@ -66,7 +71,7 @@ configurations {
 
 repositories {
     jcenter()
-    
+
     maven {
         name = 'Mobius Repo'
         url = 'http://mobiusstrip.eu/maven'
@@ -91,6 +96,11 @@ repositories {
         name = 'Tesla Api'
         url 'http://maven.epoxide.xyz'
     }
+    maven{
+        name = "kotlin-eap"
+        url = "https://dl.bintray.com/kotlin/kotlin-eap-1.1/"
+    }
+    mavenCentral()
 }
 
 dependencies {
@@ -142,11 +152,9 @@ curseforge {
 
     project {
         id = '224808'
-        
         mainArtifact(jar) {
             displayName = 'Magneticraft ' + version
         }
-
         releaseType = 'release'
         changelog = file('./changelogs/' + version + '.txt')
         if (!changelog.exists()) {

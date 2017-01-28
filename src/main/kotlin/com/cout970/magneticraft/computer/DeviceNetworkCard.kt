@@ -91,7 +91,6 @@ struct driver_internet_socket {
             }
             else -> 0
         }
-        println("addr: %d -> %d".format(addr - 8, a))
         return a
     }
 
@@ -122,7 +121,7 @@ struct driver_internet_socket {
 
     override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
 
-    class Connection() {
+    class Connection {
         var socket: Socket? = null
         val status: Int get() = if (socket != null && socket!!.isConnected) 1 else 0
         var error: Int = 0
@@ -135,11 +134,9 @@ struct driver_internet_socket {
         var readCache: Int = -1
 
         fun read(index: Int): Byte {
-            println("in: $index -> $readCache")
             if (index == 3) {
                 if (inputStream != null) {
                     readCache = inputStream!!.read()
-                    println("read: $index -> $readCache")
                 } else {
                     readCache = -1
                 }
@@ -150,7 +147,6 @@ struct driver_internet_socket {
 
         fun write(data: Byte) {
             if (outputStream != null) {
-                println("out: $data, connected: $status")
                 outputStream!!.write(data.toInt() and 255)
             }
         }

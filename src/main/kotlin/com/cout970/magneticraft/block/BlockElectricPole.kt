@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.block
 
-import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider

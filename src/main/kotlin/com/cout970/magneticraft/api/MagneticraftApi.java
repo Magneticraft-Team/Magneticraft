@@ -1,10 +1,18 @@
 package com.cout970.magneticraft.api;
 
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.heatrecipes.IceboxRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.kiln.KilnRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.sifter.SifterRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipeManager;
 
 /**
@@ -17,6 +25,22 @@ public class MagneticraftApi {
 
     public static IHydraulicPressRecipeManager getHydraulicPressRecipeManager() {
         return HydraulicPressRecipeManager.INSTANCE;
+    }
+
+    public static IGrinderRecipeManager getGrinderRecipeManager() {
+        return GrinderRecipeManager.INSTANCE;
+    }
+
+    public static IIceboxRecipeManager getIceboxRecipeManager() {
+        return IceboxRecipeManager.INSTANCE;
+    }
+
+    public static IKilnRecipeManager getKilnRecipeManager() {
+        return KilnRecipeManager.INSTANCE;
+    }
+
+    public static ISifterRecipeManager getSifterRecipeManager() {
+        return SifterRecipeManager.INSTANCE;
     }
 
     public static ITableSieveRecipeManager getTableSieveRecipeManager() {
