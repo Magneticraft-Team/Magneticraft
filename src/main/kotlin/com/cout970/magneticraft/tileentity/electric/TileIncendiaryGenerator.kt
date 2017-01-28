@@ -181,7 +181,7 @@ class TileIncendiaryGenerator(
         return EnumFacing.NORTH
     }
 
-    class TileIncendiaryGeneratorBottom() : TileBase() {
+    class TileIncendiaryGeneratorBottom : TileBase() {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {

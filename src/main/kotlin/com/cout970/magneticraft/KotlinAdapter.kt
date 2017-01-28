@@ -8,8 +8,8 @@ import java.lang.reflect.Field
 import java.lang.reflect.Method
 
 /**
- * This class allow to load the Mod class (Magneticraft.kt) into forge, this is needed because this
- * class is a object (Singleton)
+ * This class allows to load the Mod class (Magneticraft.kt) into forge, this is needed because this
+ * class is an object (Singleton)
  */
 @Suppress("unused")
 class KotlinAdapter : ILanguageAdapter {

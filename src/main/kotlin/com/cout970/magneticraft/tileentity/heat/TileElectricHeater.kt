@@ -27,8 +27,8 @@ class TileElectricHeater : TileElectricHeatBase() {
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos)
+            worldGetter = { this.world },
+            posGetter = { this.getPos() })
 
     override fun update() {
         if (worldObj.isServer) {

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
  * Created by Yurgen on 30/11/2016.
  */
 
-class TooltipHandler() {
+class TooltipHandler {
     val fuelCache = FuelCache()
 
     @SubscribeEvent

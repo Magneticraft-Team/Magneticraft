@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.internal.energy
+package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -7,8 +7,8 @@ import com.cout970.magneticraft.api.heat.IHeatNode
  * Created by cout970 on 11/06/2016.
  */
 open class HeatConnection(
-        private var firstNode: IHeatNode,
-        private var secondNode: IHeatNode
+        private val firstNode: IHeatNode,
+        private val secondNode: IHeatNode
 ) : IHeatConnection {
 
     override fun getFirstNode() = firstNode

@@ -38,8 +38,8 @@ class TileFirebox : TileHeatBase() {
             specificHeat = COPPER_HEAT_CAPACITY * 3,
             maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos)
+            worldGetter = { this.world },
+            posGetter = { this.getPos() })
 
     override val heatNodes: List<IHeatNode>
         get() = listOf(heat)

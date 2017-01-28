@@ -10,33 +10,34 @@ import net.minecraft.util.math.BlockPos
  * Created by cout970 on 17/07/2016.
  */
 
+
 fun ItemStack.checkNBT() {
     if (this.tagCompound == null) {
         this.tagCompound = NBTTagCompound()
     }
 }
 
-fun ItemStack.hasKey(key:String):Boolean {
+fun ItemStack.hasKey(key: String): Boolean {
     checkNBT()
     return tagCompound!!.hasKey(key)
 }
 
-fun ItemStack.setString(key: String, value:String){
+fun ItemStack.setString(key: String, value: String) {
     checkNBT()
     return tagCompound!!.setString(key, value)
 }
 
-fun ItemStack.getString(key: String): String{
+fun ItemStack.getString(key: String): String {
     checkNBT()
     return tagCompound!!.getString(key)
 }
 
-fun ItemStack.setDouble(key: String, value:Double){
+fun ItemStack.setDouble(key: String, value: Double) {
     checkNBT()
     return tagCompound!!.setDouble(key, value)
 }
 
-fun ItemStack.getDouble(key: String): Double{
+fun ItemStack.getDouble(key: String): Double {
     checkNBT()
     return tagCompound!!.getDouble(key)
 }
@@ -49,6 +50,26 @@ fun ItemStack.setLore(values: List<String>) {
     }
     tag.setTag("Lore", list)
     this.setTagInfo("display", tag)
+}
+
+fun ItemStack.setInteger(key: String, value: Int) {
+    checkNBT()
+    return tagCompound!!.setInteger(key, value)
+}
+
+fun ItemStack.getInteger(key: String): Int {
+    checkNBT()
+    return tagCompound!!.getInteger(key)
+}
+
+fun ItemStack.setBoolean(key: String, value: Boolean) {
+    checkNBT()
+    return tagCompound!!.setBoolean(key, value)
+}
+
+fun ItemStack.getBoolean(key: String): Boolean {
+    checkNBT()
+    return tagCompound!!.getBoolean(key)
 }
 
 fun ItemStack.setBlockPos(key: String, pos: BlockPos) {

@@ -1,12 +1,12 @@
-package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
+package com.cout970.magneticraft.api.internal.registries.machines.heatrecipes
 
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IHeatExchangerRecipe
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IHeatExchangerRecipeManager
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IHeatExchangerRecipe
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IHeatExchangerRecipeManager
 import net.minecraftforge.fluids.FluidStack
 import java.util.*
 
 /**
- * Created by cout970 on 16/06/2016.
+ * Created by Yurgen on 16/06/2016.
  */
 /**
  * Internal class only please use MagneticraftApi.getHeatExchangerRecipeManager() instead

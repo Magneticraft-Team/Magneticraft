@@ -1,11 +1,11 @@
-package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
+package com.cout970.magneticraft.api.internal.registries.machines.heatrecipes
 
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipe
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipe
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 
 /**
- * Created by cout970 on 16/06/2016.
+ * Created by Yurgen on 16/06/2016.
  */
 data class IceboxRecipe(
         private val input: ItemStack,

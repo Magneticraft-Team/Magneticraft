@@ -1,11 +1,13 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.energy.INodeHandler
 import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
 import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
 import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
+import com.cout970.magneticraft.item.ItemFloppyDisk
 import net.darkhax.tesla.api.ITeslaConsumer
 import net.darkhax.tesla.api.ITeslaHolder
 import net.darkhax.tesla.api.ITeslaProducer
@@ -62,6 +64,9 @@ var ITEM_ENERGY_PROVIDER: Capability<IEnergyProviderItem>? = null
 @CapabilityInject(IEnergyStorageItem::class)
 var ITEM_ENERGY_STORAGE: Capability<IEnergyStorageItem>? = null
 
+@CapabilityInject(IFloppyDisk::class)
+var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
+
 /**
  * This is called on the server and the client at preInit
  */
@@ -71,6 +76,9 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IEnergyProviderItem::class.java, EmptyStorage(), { DefaultItemEnergyProvider() })
     CapabilityManager.INSTANCE.register(IEnergyStorageItem::class.java, EmptyStorage(), { DefaultItemEnergyStorage() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
+    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
+        ItemFloppyDisk.FloppyDisk(ItemStack(ItemFloppyDisk, 1, 0, ItemFloppyDisk.createNBT("default", 128, true, true)))
+    })
 }
 
 /**
@@ -125,17 +133,17 @@ class DefaultManualConnectionHandler : IManualConnectionHandler {
     override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): Boolean = false
 }
 
-class DefaultItemEnergyConsumer() : IEnergyConsumerItem {
+class DefaultItemEnergyConsumer : IEnergyConsumerItem {
 
     override fun giveEnergy(power: Double, simulated: Boolean): Double = 0.0
 }
 
-class DefaultItemEnergyProvider() : IEnergyProviderItem {
+class DefaultItemEnergyProvider : IEnergyProviderItem {
 
     override fun takeEnergy(power: Double, simulated: Boolean): Double = 0.0
 }
 
-class DefaultItemEnergyStorage() : IEnergyStorageItem {
+class DefaultItemEnergyStorage : IEnergyStorageItem {
 
     override fun getStoredEnergy(): Double = 0.0
 

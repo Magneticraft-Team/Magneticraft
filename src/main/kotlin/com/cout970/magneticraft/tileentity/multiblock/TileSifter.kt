@@ -243,7 +243,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
 
     fun consumeInput(stage: Stage, simulate: Boolean): Boolean {
         val recipe = getRecipe(stage) ?: return false
-        var result: ItemStack?
+        val result: ItemStack?
         if (stage != Stage.TERTIARY) {
             result = inventory.insertItem(stage.ord, recipe.input, simulate)
         } else result = null
@@ -258,7 +258,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         val ord = stage.ord
         val outputHelper = itemOutputHelper(world, posTransform(OUTPUTS[ord - 1]), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
         val recipe = getRecipe(stage) ?: return false
-        var output: ItemStack
+        val output: ItemStack
         when (ord) {
             1 -> output = recipe.primary
             2 -> output = recipe.secondary
@@ -280,7 +280,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         }
     }
 
-    class outInventory() : IItemHandler {
+    class outInventory : IItemHandler {
         override fun getSlots(): Int {
             return 0
         }

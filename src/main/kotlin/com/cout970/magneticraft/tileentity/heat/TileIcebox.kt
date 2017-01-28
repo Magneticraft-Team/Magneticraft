@@ -4,8 +4,8 @@ import coffee.cypher.mcextlib.extensions.inventories.get
 import coffee.cypher.mcextlib.extensions.inventories.set
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
-import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.IceboxRecipeManager
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IIceboxRecipe
+import com.cout970.magneticraft.api.internal.registries.machines.heatrecipes.IceboxRecipeManager
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipe
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
@@ -35,8 +35,8 @@ class TileIcebox : TileHeatBase() {
             specificHeat = IRON_HEAT_CAPACITY * 7,
             maxHeat = (IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT).toLong(),
             conductivity = DEFAULT_CONDUCTIVITY,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos)
+            worldGetter = { this.world },
+            posGetter = { this.getPos() })
 
     val inventory = ItemStackHandler(1)
     var maxMeltingTime = 0f

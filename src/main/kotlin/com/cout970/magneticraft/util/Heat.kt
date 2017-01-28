@@ -104,4 +104,4 @@ fun testBiomeHeat(worldIn: World, pos: BlockPos): Double {
 
 private fun lookupTemp(stack: ItemStack): Double = Config.fuelTemps.map[stack.item] ?: Config.defaultMaxTemp
 
-class FuelCache() : CacheNode<ItemStack, Double>(ItemStack(Blocks.AIR), ::lookupTemp, ItemStack::isItemEqual)
+class FuelCache : CacheNode<ItemStack, Double>(ItemStack(Blocks.AIR), ::lookupTemp, ItemStack::isItemEqual)

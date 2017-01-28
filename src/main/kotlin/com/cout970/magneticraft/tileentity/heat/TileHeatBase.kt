@@ -4,7 +4,7 @@ import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
-import com.cout970.magneticraft.api.internal.energy.HeatConnection
+import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase

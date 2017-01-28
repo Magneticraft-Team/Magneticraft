@@ -59,6 +59,7 @@ item.magneticraft.coil_of_wire.name=Coil of Wire
 item.magneticraft.voltmeter.name=Voltmeter
 item.magneticraft.thermometer.name=Thermometer
 item.magneticraft.battery_item.name=Battery
+item.magneticraft.floppy_disk.name=Floppy Disk
 item.magneticraft.coal_coke.name=Coal Coke
 
 magneticraft.guide.contents=Content Table

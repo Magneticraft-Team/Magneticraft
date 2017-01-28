@@ -60,7 +60,8 @@ val blocks = mapOf(
         withItemBlockAndTick(BlockHeatReservoir),
         withItemBlockAndTick(BlockHeatPipe),
         withItemBlockAndTick(BlockRedstoneHeatPipe),
-        withItemBlockAndTick(BlockElectricHeater)
+        withItemBlockAndTick(BlockElectricHeater),
+        withItemBlock(BlockComputer)
 )
 
 private fun withItemBlock(blockBase: BlockBase) = blockBase to ItemBlockBase(blockBase)

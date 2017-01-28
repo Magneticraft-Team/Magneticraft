@@ -10,7 +10,7 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
-import com.cout970.magneticraft.api.internal.energy.HeatConnection
+import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
@@ -60,8 +60,8 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     val heatNode = HeatContainer(
             emit = false,
-            worldGetter = this::getWorld,
-            posGetter = this::getPos,
+            worldGetter = { this.world },
+            posGetter = { this.getPos() },
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
             maxHeat = ((IRON_HEAT_CAPACITY * 20) * Config.defaultMachineMaxTemp).toLong(),
@@ -313,7 +313,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         }
     }
 
-    class outInventory() : IItemHandler {
+    class outInventory : IItemHandler {
         override fun getSlots(): Int {
             return 0
         }

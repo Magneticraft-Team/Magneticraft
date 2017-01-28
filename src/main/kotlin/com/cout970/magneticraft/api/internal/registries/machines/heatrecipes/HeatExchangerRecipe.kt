@@ -1,10 +1,10 @@
-package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
+package com.cout970.magneticraft.api.internal.registries.machines.heatrecipes
 
-import com.cout970.magneticraft.api.registries.machines.heatexchanger.IHeatExchangerRecipe
+import com.cout970.magneticraft.api.registries.machines.heatrecipes.IHeatExchangerRecipe
 import net.minecraftforge.fluids.FluidStack
 
 /**
- * Created by cout970 on 16/06/2016.
+ * Created by Yurgen on 16/06/2016.
  */
 data class HeatExchangerRecipe(
         private val input: FluidStack,
