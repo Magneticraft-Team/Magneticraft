@@ -1,69 +1,129 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:obj/beehive_kiln.obj"
-  },
-  "variants": {
-    "direction=north": [
-      {
-        "y": -90
-      }
-    ],
-    "direction=south": [
-      {
-        "y": 90
-      }
-    ],
-    "direction=west": [
-      {
-        "y": 180
-      }
-    ],
-    "direction=east": [
-      {
-        "y": 0
-      }
-    ],
-    "inventory": [
-      {
-        "transform": {
-          "ground": {
-            "translation": [0, 0, 0],
-            "rotation": [{ "x": 0 }, { "y": 0 }, { "z": 0 }],
-            "scale": [0.05, 0.05, 0.05]
-          },
-          "gui": {
-            "translation": [0, -0.1875, 0],
-            "rotation": [{ "x": 30 }, { "y": 315 }, { "z": 0 }],
-            "scale": [0.16, 0.16, 0.16]
-          },
-          "fixed": {
-            "translation": [0, 0, 0],
-            "rotation": [{ "x": 0 }, { "y": 0 }, { "z": 0 }],
-            "scale": [0.05, 0.05, 0.05]
-          },
-          "thirdperson_righthand": {
-            "translation": [0, 0.15625, 0],
-            "rotation": [{ "x": 75 }, { "y": 45 }, { "z": 0 }],
-            "scale": [0.0375, 0.0375, 0.0375]
-          },
-          "thirdperson_lefthand": {
-            "translation": [0, 0.15625, 0],
-            "rotation": [{ "x": 75 }, { "y": 225 }, { "z": 0 }],
-            "scale": [0.0375, 0.0375, 0.0375]
-          },
-          "firstperson_righthand": {
-            "translation": [0, 0, 0],
-            "rotation": [{ "x": 0 }, { "y": 45 }, { "z": 0 }],
-            "scale": [0.01, 0.01, 0.01]
-          },
-          "firstperson_lefthand": {
-            "translation": [0, 0, 0],
-            "rotation": [{ "x": 0 }, { "y": 225 }, { "z": 0 }],
-            "scale": [0.01, 0.01, 0.01]
-          }
-        }
-      }
-    ]
-  }
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:obj/beehive_kiln.obj"
+    },
+    "variants": {
+        "direction=north": [
+            {
+                "y": -90,
+                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+            }
+        ],
+        "direction=south": [
+            {
+                "y": 90,
+                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+            }
+        ],
+        "direction=west": [
+            {
+                "y": 180,
+                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+            }
+        ],
+        "direction=east": [
+            {
+                "y": 0,
+                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+            }
+        ],
+        "inventory": [
+            {
+                "transform": {
+                    "ground": {
+                        "translation": [ 0, 0, 0 ],
+                        "rotation": [
+                            {
+                                "x": 0
+                            }, {
+                                "y": 0
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.05, 0.05, 0.05 ]
+                    },
+                    "gui": {
+                        "translation": [ 0, -0.1875, 0 ],
+                        "rotation": [
+                            {
+                                "x": 30
+                            }, {
+                                "y": 315
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.16, 0.16, 0.16 ]
+                    },
+                    "fixed": {
+                        "translation": [ 0, 0, 0 ],
+                        "rotation": [
+                            {
+                                "x": 0
+                            }, {
+                                "y": 0
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.05, 0.05, 0.05 ]
+                    },
+                    "thirdperson_righthand": {
+                        "translation": [ 0, 0.15625, 0 ],
+                        "rotation": [
+                            {
+                                "x": 75
+                            }, {
+                                "y": 45
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.0375, 0.0375, 0.0375 ]
+                    },
+                    "thirdperson_lefthand": {
+                        "translation": [ 0, 0.15625, 0 ],
+                        "rotation": [
+                            {
+                                "x": 75
+                            }, {
+                                "y": 225
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.0375, 0.0375, 0.0375 ]
+                    },
+                    "firstperson_righthand": {
+                        "translation": [ 0, 0, 0 ],
+                        "rotation": [
+                            {
+                                "x": 0
+                            }, {
+                                "y": 45
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.01, 0.01, 0.01 ]
+                    },
+                    "firstperson_lefthand": {
+                        "translation": [ 0, 0, 0 ],
+                        "rotation": [
+                            {
+                                "x": 0
+                            }, {
+                                "y": 225
+                            }, {
+                                "z": 0
+                            }
+                        ],
+                        "scale": [ 0.01, 0.01, 0.01 ]
+                    }
+                }
+            }
+        ]
+    }
 }

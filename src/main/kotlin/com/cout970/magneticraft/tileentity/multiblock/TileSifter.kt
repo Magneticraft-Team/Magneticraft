@@ -213,11 +213,11 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
                 return this as T
         if (capability == ITEM_HANDLER) {
             if (facing == EnumFacing.UP && ITEM_INPUT == transPos)
-                return inInventory(inventory, 1) as T
+                return InputInventory(inventory, 1) as T
             if (facing == direction.rotateYCCW()) {
                 OUTPUTS.forEach {
                     if (it == transPos)
-                        return outInventory() as T
+                        return OutputInventory() as T
                 }
             }
         }
@@ -232,7 +232,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
-        if (capability == ITEM_HANDLER) return inInventory(inventory, 1) as T
+        if (capability == ITEM_HANDLER) return InputInventory(inventory, 1) as T
         if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }
@@ -270,7 +270,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         return true
     }
 
-    class inInventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
+    class InputInventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
         override fun getSlots(): Int {
             return in_size
         }
@@ -280,7 +280,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         }
     }
 
-    class outInventory : IItemHandler {
+    class OutputInventory : IItemHandler {
         override fun getSlots(): Int {
             return 0
         }

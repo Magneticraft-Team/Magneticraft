@@ -104,7 +104,7 @@ tile.magneticraft.heat_pipe.name=Heat Pipe
 tile.magneticraft.redstone_heat_pipe.name=Redstone Heat Pipe
 tile.magneticraft.firebox.name=Firebox
 tile.magneticraft.icebox.name=Icebox
-tile.magneticraft.heat_sink.name=Heatsink
+tile.magneticraft.heat_sink.name=Heat sink
 tile.magneticraft.heat_reservoir.name=Heat Reservoir
 tile.magneticraft.thermometer_block.name=Thermocouple
 tile.magneticraft.brick_furnace.name=Brick Furnace
@@ -116,6 +116,7 @@ tile.magneticraft.infinite_energy.name=Infinite Energy
 
 tile.magneticraft.airlock.name=Airlock
 tile.magneticraft.air_bubble.name=Air Bubble
+tile.magneticraft.computer.name=Computer
 
 tile.magneticraft.hydraulic_press.name=Hydraulic Press
 tile.magneticraft.kiln.name=Beehive Kiln

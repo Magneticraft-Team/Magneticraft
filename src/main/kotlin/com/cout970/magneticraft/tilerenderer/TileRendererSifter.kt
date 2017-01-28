@@ -2,13 +2,9 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
-import com.cout970.loader.api.model.IModelFilter
-import com.cout970.loader.api.model.IModelPart
-import com.cout970.loader.api.model.IObjGroup
 import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
 import com.cout970.magneticraft.tileentity.multiblock.TileSifter
 import com.cout970.magneticraft.util.resource
-import com.google.common.base.Predicates
 
 /**
  * Created by cout970 on 21/08/2016.
@@ -16,10 +12,10 @@ import com.google.common.base.Predicates
 object TileRendererSifter : TileEntityRenderer<TileSifter>() {
 
     val texture = resource("textures/models/sifter.png")
-    lateinit var noHammer: ICachedModel
-    lateinit var hammer: ICachedModel
+    var allModel: ICachedModel? = null
 
-    override fun renderTileEntityAt(te: TileSifter, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
+    override fun renderTileEntityAt(te: TileSifter, x: Double, y: Double, z: Double, partialTicks: Float,
+                                    destroyStage: Int) {
         if (!te.active) {
             pushMatrix()
             translate(x, y, z)
@@ -30,14 +26,10 @@ object TileRendererSifter : TileEntityRenderer<TileSifter>() {
         }
         pushMatrix()
         translate(x, y, z)
-
-        rotateFromCenter(te.direction, 0f)
+        rotateFromCenter(te.direction, 1800f)
+        translate(z = 2.0)
         bindTexture(texture)
-//        noHammer.render()
-
-        val speed = 360f
-
-//        hammer.render()
+        allModel?.render()
         popMatrix()
     }
 
@@ -45,11 +37,7 @@ object TileRendererSifter : TileEntityRenderer<TileSifter>() {
         super.onModelRegistryReload()
         try {
             val model = getModelObj(resource("models/block/obj/sifter.obj"))
-            val hasFan = object : IModelFilter {
-                override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("head") || it.getName().contains("rod") else false
-            }
-            noHammer = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(hasFan)), 1)
-            hammer = ModelCacheFactory.createCachedModel(model.filter(hasFan), 1)
+            this.allModel = ModelCacheFactory.createCachedModel(model.model, 1)
         } catch (e: Exception) {
         }
     }

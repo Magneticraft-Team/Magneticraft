@@ -28,3 +28,6 @@ map_Kd magneticraft:models/kiln
 
 newmtl kiln_shelf
 map_Kd magneticraft:models/kiln_shelf
+
+newmtl sifter
+map_Kd magneticraft:models/sifter

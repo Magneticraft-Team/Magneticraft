@@ -18,7 +18,8 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
     lateinit var model: ICachedModel
     lateinit var door: ICachedModel
 
-    override fun renderTileEntityAt(te: TileKiln, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
+    override fun renderTileEntityAt(te: TileKiln, x: Double, y: Double, z: Double, partialTicks: Float,
+                                    destroyStage: Int) {
         if (!te.active) {
             pushMatrix()
             translate(x, y, z)
@@ -29,8 +30,8 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
         }
         pushMatrix()
         translate(x, y, z)
-        rotateFromCenter(te.direction, 0f)
-        translate(0.0, 0.0, 2.0)
+        rotateFromCenter(te.direction, 180f)
+        translate(z = -2.0)
         bindTexture(texture)
         model.render()
         if (te.doorOpen) {
@@ -44,7 +45,9 @@ object TileRendererKiln : TileEntityRenderer<TileKiln>() {
         super.onModelRegistryReload()
         try {
             val dyn = getModelObj(resource("models/block/obj/beehive_kiln.obj"))
-            val predicate: Predicate<IModelPart> = Predicate { (it as? IObjGroup)?.getName()?.contains("door") ?: false }
+            val predicate: Predicate<IModelPart> = Predicate {
+                (it as? IObjGroup)?.getName()?.contains("door") ?: false
+            }
 
             this.model = ModelCacheFactory.createCachedModel(dyn.filterNot(predicate), 1)
             this.door = ModelCacheFactory.createCachedModel(dyn.filter(predicate), 1)
