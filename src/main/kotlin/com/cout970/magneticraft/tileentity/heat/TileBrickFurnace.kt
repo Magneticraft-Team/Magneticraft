@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.registry.ITEM_HANDLER

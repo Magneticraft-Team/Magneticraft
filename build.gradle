@@ -12,6 +12,8 @@ buildscript {
         }
         mavenCentral()
     }
+    kotlin_version = "1.1.0-beta-38"
+
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -104,10 +106,11 @@ repositories {
 }
 
 dependencies {
-    shade "coffee.cypher.mcextlib:mc-extlib:$extlib_version"
+//    shade "coffee.cypher.mcextlib:mc-extlib:$extlib_version"
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     deobfCompile "mezz.jei:jei_$mc_version:$jei_version"
     shade files("./lib/ModelLibrary-${model_lib_version}.jar")
+    shade files("./lib/mc-extlib-1.4.0.jar")
     compile "net.darkhax.tesla:Tesla:$tesla_version"
 }
 
@@ -131,7 +134,7 @@ jar {
 shadowJar {
     relocate 'kotlin', 'com.cout970.magneticraft.internal.shade.kotlin'
     relocate 'org.jetbrains.annotations', 'com.cout970.magneticraft.internal.shade.annotations'
-    relocate 'coffee.cypher.mcextlib', 'com.cout970.magneticraft.internal.shade.mcextlib'
+//    relocate 'coffee.cypher.mcextlib', 'com.cout970.magneticraft.internal.shade.mcextlib'
     relocate 'com.cout970.loader', 'com.cout970.magneticraft.internal.shade.modellib'
 }
 

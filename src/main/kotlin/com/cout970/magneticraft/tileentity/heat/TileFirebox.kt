@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.set
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
@@ -55,7 +55,7 @@ class TileFirebox : TileHeatBase() {
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
                         maxFuelTemp = fuelHelper.getOrChange(inventory[0]!!)
-                        inventory[0] = inventory[0]!!.consumeItem()
+                        inventory.setStackInSlot(0, inventory[0]!!.consumeItem())
                         markDirty()
                     }
                 }

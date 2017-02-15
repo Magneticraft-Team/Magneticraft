@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tileentity
 
-import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
 import com.cout970.magneticraft.util.itemInputHelper

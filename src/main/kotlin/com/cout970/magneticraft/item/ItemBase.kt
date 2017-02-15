@@ -14,6 +14,7 @@ abstract class ItemBase(
     registryName: String,
     unlocalizedName: String = registryName
 ) : Item() {
+
     open val variants = mapOf(
         0 to "inventory"
     )

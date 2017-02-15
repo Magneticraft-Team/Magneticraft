@@ -2,8 +2,8 @@ package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.plus
 import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
@@ -281,14 +281,14 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     fun consumeInput() {
         val recipe = getRecipe() ?: return
         inventory[0]!!.stackSize -= recipe.input.stackSize
-        if (inventory[0]!!.stackSize == 0) inventory[0] = null
+        if (inventory[0]!!.stackSize == 0) inventory.setStackInSlot(0, null)
         else return
         for (i in (1 until in_inv_size).reversed()) {
             if (inventory[i] == null) continue
             for (j in (0 until i).reversed()) {
                 if (inventory[j] != null) continue
                 inventory[j] = inventory[i]
-                inventory[i] = null
+                inventory.setStackInSlot(i, null)
             }
         }
     }

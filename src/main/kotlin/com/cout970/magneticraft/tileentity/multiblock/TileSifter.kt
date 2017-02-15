@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.util.get
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
@@ -19,7 +19,6 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.CraftingProcess
-import com.sun.javaws.exceptions.InvalidArgumentException
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -263,7 +262,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
             1 -> output = recipe.primary
             2 -> output = recipe.secondary
             3 -> output = recipe.tertiary
-            else -> throw InvalidArgumentException(arrayOf("Sifter output corruption detected."))
+            else -> throw IllegalArgumentException("Sifter output corruption detected.")
         }
         if (inventory[ord - 1]!!.stackSize < recipe.input.stackSize) return false
         if (outputHelper.ejectItems(output, simulate) != null) return false

@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.set
 import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.energy.IElectricNode
@@ -81,7 +81,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     init {
         craftingProcess = CraftingProcess({//craft
             val recipe = getRecipe()!!
-            inventory[0] = null
+            inventory.setStackInSlot(0, null)
             inventory[0] = recipe.output
         }, { //can craft
             node.voltage > TIER_1_MACHINES_MIN_VOLTAGE

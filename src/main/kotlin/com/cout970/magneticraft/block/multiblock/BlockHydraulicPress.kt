@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block.multiblock
 
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.util.set
+import com.cout970.magneticraft.util.get
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
