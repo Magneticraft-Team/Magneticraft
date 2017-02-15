@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tilerenderer
 
-import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.util.get
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
 import com.cout970.loader.api.model.IModelFilter

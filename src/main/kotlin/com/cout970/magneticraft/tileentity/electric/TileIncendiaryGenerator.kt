@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.set
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
@@ -71,7 +71,7 @@ class TileIncendiaryGenerator(
                         maxFuelTemp = fuelCache.getOrChange(inventory[0]!!)
                         maxBurningTime = time.toFloat()
                         burningTime = time.toFloat()
-                        inventory[0] = inventory[0]!!.consumeItem()
+                        inventory.setStackInSlot(0, inventory[0]!!.consumeItem())
                         markDirty()
                     }
                 }

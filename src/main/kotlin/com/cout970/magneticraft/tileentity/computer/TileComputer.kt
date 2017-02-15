@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tileentity.computer
 
-import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.computer.*
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem

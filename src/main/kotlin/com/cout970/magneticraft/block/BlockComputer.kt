@@ -1,8 +1,10 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+
+
 import coffee.cypher.mcextlib.extensions.worlds.getTile
+import com.cout970.magneticraft.util.set
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+import com.cout970.magneticraft.util.set
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.shouldTick
 import net.minecraft.item.ItemStack

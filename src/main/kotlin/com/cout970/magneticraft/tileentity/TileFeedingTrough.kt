@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
 import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.inventories.get
+import com.cout970.magneticraft.util.get
 import coffee.cypher.mcextlib.extensions.vectors.plus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.block.BlockFeedingTrough
