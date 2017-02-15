@@ -4,8 +4,10 @@ import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.multiblock.Multiblock
+import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.rotateBox
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
@@ -154,6 +156,13 @@ fun rotateFromCenter(facing: EnumFacing, optional: Float = 0f) {
     translate(0.5, 0.5, 0.5)
     rotate(angle, 0f, 1f, 0f)
     translate(-0.5, -0.5, -0.5)
+}
+
+fun renderMultiblockBoundingBoxes(te: TileMultiblock){
+    val global = te.multiblock!!.getGlobalCollisionBox().map {
+        te.multiblockFacing!!.rotateBox(vec3Of(0.5, 0.5, 0.5), it)
+    }
+    global.forEach(::renderBox)
 }
 
 fun renderFloatingLabel(str: String, pos: Vec3d) {
