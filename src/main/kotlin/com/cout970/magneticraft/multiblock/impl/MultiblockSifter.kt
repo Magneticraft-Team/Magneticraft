@@ -41,11 +41,14 @@ object MultiblockSifter : Multiblock() {
 
         val B: IMultiblockComponent = SingleBlockComponent(BlockMachineBlock.defaultState, replacement)
 
-        val L: IMultiblockComponent = SingleBlockComponent(BlockBurntLimestone.defaultState.withProperty(BlockBurntLimestone.LIMESTONE_STATES, BlockLimestone.LimestoneStates.BRICK), replacement)
+        val L: IMultiblockComponent = SingleBlockComponent(
+                BlockBurntLimestone.defaultState.withProperty(BlockBurntLimestone.LIMESTONE_STATES,
+                        BlockLimestone.LimestoneStates.BRICK), replacement)
 
         val C: IMultiblockComponent = ContextBlockComponent(
                 { ctx ->
-                    BlockMachineBlockSupportColumn.defaultState.withProperty(BlockMachineBlockSupportColumn.PROPERTY_STATES,
+                    BlockMachineBlockSupportColumn.defaultState.withProperty(
+                            BlockMachineBlockSupportColumn.PROPERTY_STATES,
                             BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.axis))
                 }, ItemStack(BlockMachineBlockSupportColumn, 1, 1), replacement)
 
@@ -75,35 +78,68 @@ object MultiblockSifter : Multiblock() {
     }
 
     override fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf(
-            Vec3d(-14.0, 4.0, 1.0) * PIXEL to Vec3d(-3.0, 20.0, 15.0) * PIXEL,
-            Vec3d(2.0, 0.0, 2.0) * PIXEL to Vec3d(14.0, 14.0, 14.0) * PIXEL,
-            Vec3d(2.0, 24.0, 2.0) * PIXEL to Vec3d(14.0, 42.0, 3.0) * PIXEL,
-            Vec3d(0.0, 24.0, 3.0) * PIXEL to Vec3d(3.0, 42.0, 4.0) * PIXEL,
-            Vec3d(0.0, 24.0, 12.0) * PIXEL to Vec3d(3.0, 42.0, 13.0) * PIXEL,
-            Vec3d(2.0, 24.0, 13.0) * PIXEL to Vec3d(14.0, 42.0, 14.0) * PIXEL,
-            Vec3d(-7.0, 25.0, 0.9000000953674316) * PIXEL to Vec3d(23.0, 28.0, 3.9000000953674316) * PIXEL,
-            Vec3d(-6.0, 24.0, 0.0) * PIXEL to Vec3d(-3.0, 29.0, 4.0) * PIXEL,
-            Vec3d(-11.0, 1.0, 3.0) * PIXEL to Vec3d(-1.0, 32.0, 13.0) * PIXEL,
-            Vec3d(15.0, 26.0, 4.0) * PIXEL to Vec3d(25.0, 54.0, 12.0) * PIXEL,
-            Vec3d(19.0, 24.0, 0.0) * PIXEL to Vec3d(22.0, 29.0, 4.0) * PIXEL,
-            Vec3d(19.0, 4.0, 1.0) * PIXEL to Vec3d(30.0, 20.0, 15.0) * PIXEL,
-            Vec3d(17.0, 1.0, 3.0) * PIXEL to Vec3d(27.0, 32.0, 13.0) * PIXEL,
-            Vec3d(-11.0, 54.0, 2.0) * PIXEL to Vec3d(27.0, 62.0, 14.0) * PIXEL,
-            Vec3d(-9.0, 26.0, 4.0) * PIXEL to Vec3d(1.0, 54.0, 12.0) * PIXEL,
-            Vec3d(-16.0, 0.0, 0.0) * PIXEL to Vec3d(-2.0, 4.0, 16.0) * PIXEL,
-            Vec3d(18.0, 0.0, 0.0) * PIXEL to Vec3d(32.0, 4.0, 16.0) * PIXEL,
-            Vec3d(-7.0, 25.0, 12.099999904632568) * PIXEL to Vec3d(23.0, 28.0, 15.099999904632568) * PIXEL,
-            Vec3d(19.0, 24.0, 12.0) * PIXEL to Vec3d(22.0, 29.0, 16.0) * PIXEL,
-            Vec3d(-6.0, 24.0, 12.0) * PIXEL to Vec3d(-3.0, 29.0, 16.0) * PIXEL,
-            Vec3d(13.0, 24.0, 12.0) * PIXEL to Vec3d(16.0, 42.0, 13.0) * PIXEL,
-            Vec3d(13.0, 24.0, 3.0) * PIXEL to Vec3d(16.0, 42.0, 4.0) * PIXEL,
-            Vec3d(-2.0, 0.0, 3.0) * PIXEL to Vec3d(-1.0, 1.0, 13.0) * PIXEL,
-            Vec3d(17.0, 0.0, 3.0) * PIXEL to Vec3d(18.0, 1.0, 13.0) * PIXEL,
-            Vec3d(27.0, 18.0, 4.0) * PIXEL to Vec3d(31.0, 30.0, 12.0) * PIXEL,
-            Vec3d(31.0, 22.0, 6.0) * PIXEL to Vec3d(32.0, 26.0, 10.0) * PIXEL,
-            Vec3d(3.0, 22.0, 3.0) * PIXEL to Vec3d(13.0, 36.0, 13.0) * PIXEL,
-            Vec3d(6.5, 36.0, 6.5) * PIXEL to Vec3d(9.5, 64.0, 9.5) * PIXEL
+            Vec3d(23.000, 0.000, 57.000) * PIXEL to Vec3d(27.000, 12.000, 61.000) * PIXEL,
+            Vec3d(-13.000, 0.000, 2.000) * PIXEL to Vec3d(29.000, 28.000, 12.000) * PIXEL,
+            Vec3d(-4.000, 15.005, 26.994) * PIXEL to Vec3d(20.000, 17.882, 45.000) * PIXEL,
+            Vec3d(-4.000, 20.005, 11.994) * PIXEL to Vec3d(20.000, 22.882, 30.000) * PIXEL,
+            Vec3d(-4.000, 10.005, 41.994) * PIXEL to Vec3d(20.000, 12.882, 60.000) * PIXEL,
+            Vec3d(-5.000, 19.901, 11.000) * PIXEL to Vec3d(-4.000, 23.981, 31.099) * PIXEL,
+            Vec3d(20.000, 19.901, 11.000) * PIXEL to Vec3d(21.000, 23.981, 31.099) * PIXEL,
+            Vec3d(-5.000, 14.901, 10.087) * PIXEL to Vec3d(-4.000, 20.653, 46.099) * PIXEL,
+            Vec3d(20.000, 14.901, 10.087) * PIXEL to Vec3d(21.000, 20.653, 46.099) * PIXEL,
+            Vec3d(-5.000, 10.005, 11.169) * PIXEL to Vec3d(-4.000, 17.221, 61.105) * PIXEL,
+            Vec3d(20.000, 10.005, 11.169) * PIXEL to Vec3d(21.000, 17.221, 61.105) * PIXEL,
+            Vec3d(21.000, 0.000, 61.000) * PIXEL to Vec3d(29.000, 14.000, 64.000) * PIXEL,
+            Vec3d(-13.000, 0.000, 61.000) * PIXEL to Vec3d(-5.000, 14.000, 64.000) * PIXEL,
+            Vec3d(22.000, 15.605, 10.058) * PIXEL to Vec3d(28.000, 27.369, 39.058) * PIXEL,
+            Vec3d(1.000, 26.960, 1.060) * PIXEL to Vec3d(15.000, 32.000, 3.710) * PIXEL,
+            Vec3d(1.000, 26.960, 8.290) * PIXEL to Vec3d(15.000, 32.000, 10.940) * PIXEL,
+            Vec3d(0.060, 26.960, 2.000) * PIXEL to Vec3d(2.710, 32.000, 10.000) * PIXEL,
+            Vec3d(13.290, 26.960, 2.000) * PIXEL to Vec3d(15.940, 32.000, 10.000) * PIXEL,
+            Vec3d(0.000, 31.000, 1.000) * PIXEL to Vec3d(1.000, 32.000, 11.000) * PIXEL,
+            Vec3d(15.000, 31.000, 1.000) * PIXEL to Vec3d(16.000, 32.000, 11.000) * PIXEL,
+            Vec3d(1.000, 31.000, 10.000) * PIXEL to Vec3d(15.000, 32.000, 11.000) * PIXEL,
+            Vec3d(1.000, 31.000, 1.000) * PIXEL to Vec3d(15.000, 32.000, 2.000) * PIXEL,
+            Vec3d(0.000, 28.000, 10.000) * PIXEL to Vec3d(1.000, 31.000, 11.000) * PIXEL,
+            Vec3d(1.000, 28.000, 10.000) * PIXEL to Vec3d(2.000, 31.000, 11.000) * PIXEL,
+            Vec3d(14.000, 28.000, 10.000) * PIXEL to Vec3d(15.000, 31.000, 11.000) * PIXEL,
+            Vec3d(15.000, 28.000, 10.000) * PIXEL to Vec3d(16.000, 31.000, 11.000) * PIXEL,
+            Vec3d(15.000, 28.000, 9.000) * PIXEL to Vec3d(16.000, 31.000, 10.000) * PIXEL,
+            Vec3d(0.000, 28.000, 9.000) * PIXEL to Vec3d(1.000, 31.000, 10.000) * PIXEL,
+            Vec3d(0.000, 28.000, 2.000) * PIXEL to Vec3d(1.000, 31.000, 3.000) * PIXEL,
+            Vec3d(0.000, 28.000, 1.000) * PIXEL to Vec3d(1.000, 31.000, 2.000) * PIXEL,
+            Vec3d(1.000, 28.000, 1.000) * PIXEL to Vec3d(2.000, 31.000, 2.000) * PIXEL,
+            Vec3d(14.000, 28.000, 1.000) * PIXEL to Vec3d(15.000, 31.000, 2.000) * PIXEL,
+            Vec3d(15.000, 28.000, 1.000) * PIXEL to Vec3d(16.000, 31.000, 2.000) * PIXEL,
+            Vec3d(15.000, 28.000, 2.000) * PIXEL to Vec3d(16.000, 31.000, 3.000) * PIXEL,
+            Vec3d(-2.000, 0.000, 0.000) * PIXEL to Vec3d(18.000, 28.000, 2.000) * PIXEL,
+            Vec3d(-1.000, 25.342, 11.412) * PIXEL to Vec3d(17.000, 26.860, 16.489) * PIXEL,
+            Vec3d(-1.000, 22.359, 11.099) * PIXEL to Vec3d(-0.000, 25.865, 16.385) * PIXEL,
+            Vec3d(16.000, 22.359, 11.099) * PIXEL to Vec3d(17.000, 25.865, 16.385) * PIXEL,
+            Vec3d(-0.000, 22.672, 12.093) * PIXEL to Vec3d(16.000, 25.761, 13.401) * PIXEL,
+            Vec3d(-7.000, 0.000, 57.000) * PIXEL to Vec3d(23.000, 2.000, 61.000) * PIXEL,
+            Vec3d(-7.000, 0.000, 42.000) * PIXEL to Vec3d(23.000, 2.000, 46.000) * PIXEL,
+            Vec3d(-7.000, 0.000, 27.000) * PIXEL to Vec3d(23.000, 2.000, 31.000) * PIXEL,
+            Vec3d(-7.000, 0.000, 12.000) * PIXEL to Vec3d(23.000, 2.000, 16.000) * PIXEL,
+            Vec3d(23.000, 0.000, 42.000) * PIXEL to Vec3d(27.000, 15.000, 46.000) * PIXEL,
+            Vec3d(23.000, 0.000, 12.000) * PIXEL to Vec3d(27.000, 23.000, 16.000) * PIXEL,
+            Vec3d(23.000, 0.000, 27.000) * PIXEL to Vec3d(27.000, 19.000, 31.000) * PIXEL,
+            Vec3d(-11.000, 0.000, 12.000) * PIXEL to Vec3d(-7.000, 23.000, 16.000) * PIXEL,
+            Vec3d(-11.000, 0.000, 27.000) * PIXEL to Vec3d(-7.000, 19.000, 31.000) * PIXEL,
+            Vec3d(-11.000, 0.000, 42.000) * PIXEL to Vec3d(-7.000, 15.000, 46.000) * PIXEL,
+            Vec3d(-11.000, 0.000, 57.000) * PIXEL to Vec3d(-7.000, 12.000, 61.000) * PIXEL,
+            Vec3d(-7.000, 5.000, 12.000) * PIXEL to Vec3d(23.000, 9.000, 61.000) * PIXEL,
+            Vec3d(4.000, 3.000, 48.000) * PIXEL to Vec3d(12.000, 5.000, 56.000) * PIXEL,
+            Vec3d(4.000, 3.000, 33.000) * PIXEL to Vec3d(12.000, 5.000, 41.000) * PIXEL,
+            Vec3d(4.000, 3.000, 18.000) * PIXEL to Vec3d(12.000, 5.000, 26.000) * PIXEL,
+            Vec3d(-7.000, 9.000, 29.000) * PIXEL to Vec3d(23.000, 11.000, 44.000) * PIXEL,
+            Vec3d(-7.000, 9.000, 12.000) * PIXEL to Vec3d(23.000, 13.000, 29.000) * PIXEL,
+            Vec3d(1.500, 27.200, 3.000) * PIXEL to Vec3d(14.500, 28.200, 9.000) * PIXEL,
+            Vec3d(22.000, 8.364, 37.910) * PIXEL to Vec3d(28.000, 19.292, 64.030) * PIXEL,
+            Vec3d(-12.000, 15.605, 10.058) * PIXEL to Vec3d(-6.000, 27.369, 39.058) * PIXEL,
+            Vec3d(-12.000, 8.364, 37.910) * PIXEL to Vec3d(-6.000, 19.292, 64.030) * PIXEL
     )
 
-    override fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent> = listOf()
+    override fun checkExtraRequirements(data: MutableList<BlockData>,
+                                        context: MultiblockContext): List<ITextComponent> = listOf()
 }

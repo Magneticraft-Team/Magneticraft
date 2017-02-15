@@ -1,9 +1,8 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.set
-import coffee.cypher.mcextlib.extensions.vectors.minus
+import coffee.cypher.mcextlib.extensions.inventories.get
+import coffee.cypher.mcextlib.extensions.inventories.set
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatHandler
@@ -81,7 +80,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
     init {
         craftingProcess = CraftingProcess({//craft
             val recipe = getRecipe()!!
-            inventory.setStackInSlot(0, null)
+            inventory[0] = null
             inventory[0] = recipe.output
         }, { //can craft
             node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
@@ -166,7 +165,9 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
         super.load(nbt)
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 0, 1)) to (pos + BlockPos(2, 5, 2))
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+            multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
+
 
     companion object {
         val ENERGY_INPUT = BlockPos(1, 1, 0)

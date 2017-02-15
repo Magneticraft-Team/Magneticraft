@@ -2,7 +2,6 @@ package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.plus
 import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.vectors.minus
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.heat.IHeatHandler
@@ -259,7 +258,9 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         super.load(nbt)
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(2, 0, 0)) to (pos + BlockPos(3, 3, 5))
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+            multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
+
 
     companion object {
         val HEAT_INPUTS = setOf(BlockPos(-2, 0, 1), BlockPos(-2, 0, 2), BlockPos(-2, 0, 3),

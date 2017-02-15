@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
-import com.cout970.magneticraft.util.get
-import coffee.cypher.mcextlib.extensions.vectors.minus
+import coffee.cypher.mcextlib.extensions.inventories.get
+import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
@@ -19,6 +19,7 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.misc.CraftingProcess
+import com.sun.javaws.exceptions.InvalidArgumentException
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -55,42 +56,52 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
     override val electricNodes: List<IElectricNode> get() = listOf(node)
     val inventory = ItemStackHandler(4)
-    var craftingProcess: MutableMap<Stage, CraftingProcess>
+    var craftingProcess: Map<Stage, CraftingProcess>
 
     private var recipeCache: ISifterRecipe? = null
     private var inputCache: ItemStack? = null
 
     init {
-        craftingProcess = mutableMapOf(Stage.PRIMARY to CraftingProcess({//craft
-            consumeInput(Stage.PRIMARY, false)
-            outputItems(Stage.PRIMARY, false)
-        }, { //can craft
-            canCraft(Stage.PRIMARY)
-        }, { // use energy
-            useEnergy()
-        }, {
-            getRecipe(Stage.PRIMARY)?.duration ?: 120f
-        }),
-                Stage.SECONDARY to CraftingProcess({//craft
+        craftingProcess = mapOf(
+                Stage.PRIMARY to CraftingProcess({
+                    //craft
+                    consumeInput(Stage.PRIMARY, false)
+                    outputItems(Stage.PRIMARY, false)
+                }, {
+                    //can craft
+                    canCraft(Stage.PRIMARY)
+                }, {
+                    // use energy
+                    useEnergy()
+                }, {
+                    getRecipe(Stage.PRIMARY)?.duration ?: 120f
+                }),
+                Stage.SECONDARY to CraftingProcess({
+                    //craft
                     val recipe = getRecipe(Stage.SECONDARY)!!
                     consumeInput(Stage.SECONDARY, false)
                     if (recipe.secondaryChance > 0 && Random().nextFloat() <= recipe.secondaryChance)
                         outputItems(Stage.SECONDARY, false)
-                }, { //can craft
+                }, {
+                    //can craft
                     canCraft(Stage.SECONDARY)
-                }, { // use energy
+                }, {
+                    // use energy
                     useEnergy()
                 }, {
                     getRecipe(Stage.SECONDARY)?.duration ?: 120f
                 }),
-                Stage.TERTIARY to CraftingProcess({//craft
+                Stage.TERTIARY to CraftingProcess({
+                    //craft
                     val recipe = getRecipe(Stage.SECONDARY)!!
                     consumeInput(Stage.TERTIARY, false)
                     if (recipe.tertiaryChance > 0 && Random().nextFloat() <= recipe.tertiaryChance)
                         outputItems(Stage.TERTIARY, false)
-                }, { //can craft
+                }, {
+                    //can craft
                     canCraft(Stage.TERTIARY)
-                }, { // use energy
+                }, {
+                    // use energy
                     useEnergy()
                 }, {
                     getRecipe(Stage.TERTIARY)?.duration ?: 120f
@@ -102,8 +113,9 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         node.applyPower(-applied, false)
     }
 
-    private fun canCraft(stage: Stage): Boolean = node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
-            && consumeInput(stage, true) && consumeInput(stage, false)
+    private fun canCraft(stage: Stage): Boolean {
+        return node.voltage > TIER_1_MACHINES_MIN_VOLTAGE && consumeInput(stage, true)
+    }
 
     override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
         return oldState?.block !== newSate?.block
@@ -121,7 +133,9 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         return recipe
     }
 
-    fun getRecipe(stage: Stage): ISifterRecipe? = if (inventory[stage.ord - 1] != null) getRecipe(inventory[stage.ord - 1]!!) else null
+    fun getRecipe(stage: Stage): ISifterRecipe? {
+        return if (inventory[stage.ord - 1] != null) getRecipe(inventory[stage.ord - 1]!!) else null
+    }
 
     override fun update() {
         if (worldObj.isServer && active) {
@@ -136,8 +150,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         sendUpdateToNearPlayers()
     }
 
-    override fun onDeactivate() {
-    }
+    override fun onDeactivate() = Unit
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
         PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
@@ -161,15 +174,16 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         }
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 0, 1)) to (pos + BlockPos(2, 5, 2))
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+            multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
 
     companion object {
         val ENERGY_INPUT = BlockPos(0, 1, 0)
         val ITEM_INPUT = BlockPos(0, 1, 0)
-        val PRIMARY_OUTPUT = BlockPos(1, 0, 3)
-        val SECONDARY_OUTPUT = BlockPos(1, 0, 2)
-        val TERTIARY_OUTPUT = BlockPos(1, 0, 1)
-        val ITEM_OUTPUT_OFF = BlockPos(1, 0, 0)
+        val PRIMARY_OUTPUT = BlockPos(0, -1, 1)
+        val SECONDARY_OUTPUT = BlockPos(0, -1, 2)
+        val TERTIARY_OUTPUT = BlockPos(0, -1, 3)
+        val ITEM_OUTPUT_OFF = BlockPos(0, 0, 4)
         val OUTPUTS = arrayListOf(PRIMARY_OUTPUT, SECONDARY_OUTPUT, TERTIARY_OUTPUT)
     }
 
@@ -179,7 +193,6 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
             val item = inventory[0] //Slots 1 to 3 are virtual slots that should be already considered consumed
             if (item != null) {
                 dropItem(item, pos)
-                dropItem(item, pos)
             }
         }
     }
@@ -187,8 +200,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
         val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
         if (capability == NODE_HANDLER) {
-            if (ENERGY_INPUT == transPos && (facing == direction.rotateY() ||
-                    facing == null))
+            if (ENERGY_INPUT == transPos && (facing == direction.rotateY() || facing == null))
                 return true
         }
         if (capability == ITEM_HANDLER) {
@@ -243,11 +255,17 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     fun consumeInput(stage: Stage, simulate: Boolean): Boolean {
         val recipe = getRecipe(stage) ?: return false
         val result: ItemStack?
+
         if (stage != Stage.TERTIARY) {
-            result = inventory.insertItem(stage.ord, recipe.input, simulate)
-        } else result = null
+            result = inventory.extractItem(stage.ord, recipe.input.stackSize, simulate)
+        } else {
+            result = null
+        }
+
         if (result == null) {
-            if (!simulate) inventory[stage.ord - 1]!!.consumeItem(recipe.input.stackSize)
+            if (!simulate) {
+                inventory[stage.ord - 1] = inventory[stage.ord - 1]!!.consumeItem(recipe.input.stackSize)
+            }
             return true
         }
         return false
@@ -255,14 +273,15 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
 
     fun outputItems(stage: Stage, simulate: Boolean): Boolean {
         val ord = stage.ord
-        val outputHelper = itemOutputHelper(world, posTransform(OUTPUTS[ord - 1]), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
+        val outputHelper = itemOutputHelper(world, posTransform(OUTPUTS[ord - 1]),
+                direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
         val recipe = getRecipe(stage) ?: return false
         val output: ItemStack
         when (ord) {
             1 -> output = recipe.primary
             2 -> output = recipe.secondary
             3 -> output = recipe.tertiary
-            else -> throw IllegalArgumentException("Sifter output corruption detected.")
+            else -> throw InvalidArgumentException(arrayOf("Sifter output corruption detected."))
         }
         if (inventory[ord - 1]!!.stackSize < recipe.input.stackSize) return false
         if (outputHelper.ejectItems(output, simulate) != null) return false

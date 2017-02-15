@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.vectors.minus
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
@@ -74,7 +73,9 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(2, 0, 2)) to (pos + BlockPos(3, 1, 3))
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+            multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
+
 
     override fun onActivate() {
     }
