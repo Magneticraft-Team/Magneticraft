@@ -9,17 +9,11 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.Slot
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagInt
-import net.minecraft.nbt.NBTTagList
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
-import net.minecraftforge.common.util.Constants
 import java.util.*
 
 /**
@@ -91,23 +85,6 @@ fun translate(str: String, vararg args: Any) = TextComponentTranslation(str, *ar
 
 val World.isServer: Boolean get() = !isRemote
 val World.isClient: Boolean get() = isRemote
-
-fun NBTTagCompound.setBlockPos(key: String, pos: BlockPos) = setTag(key, NBTTagList().apply {
-    appendTag(NBTTagInt(pos.x))
-    appendTag(NBTTagInt(pos.y))
-    appendTag(NBTTagInt(pos.z))
-})
-
-fun NBTTagCompound.getBlockPos(key: String): BlockPos {
-    val list = getTagList(key, Constants.NBT.TAG_INT)
-    return BlockPos(list.getIntAt(0), list.getIntAt(1), list.getIntAt(2))
-}
-
-fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing) {
-    setInteger(key, facing.ordinal)
-}
-
-fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))!!
 
 fun AxisAlignedBB.cut(other: AxisAlignedBB): AxisAlignedBB? {
     if (!this.intersectsWith(other)) return null

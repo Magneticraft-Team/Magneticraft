@@ -3,8 +3,8 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
-import com.cout970.magneticraft.util.itemInputHelper
-import com.cout970.magneticraft.util.itemOutputHelper
+import com.cout970.magneticraft.util.ItemInputHelper
+import com.cout970.magneticraft.util.ItemOutputHelper
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.item.ItemStack
@@ -44,7 +44,7 @@ class TileTableSieve : TileBase(), ITickable {
 
     override fun update() {
         //gets the item on top of the block
-        val inputHelper = itemInputHelper(world, AxisAlignedBB(pos, pos.up().add(1.0, 1.0, 1.0)), inventory)
+        val inputHelper = ItemInputHelper(world, AxisAlignedBB(pos, pos.up().add(1.0, 1.0, 1.0)), inventory)
         if (shouldTick(UPDATE_TIME)) {
             inputHelper.suckItems()
         }
@@ -61,7 +61,7 @@ class TileTableSieve : TileBase(), ITickable {
     }
 
     fun craftItem() {
-        val outputHelper = itemOutputHelper(world, pos, vec3Of(0, -1, 0))
+        val outputHelper = ItemOutputHelper(world, pos, vec3Of(0, -1, 0))
         val stack = inventory[0]!!
         val recipe = getRecipe(stack) ?: return
         if (stack.stackSize < recipe.input.stackSize) return

@@ -18,7 +18,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by Yurgen on 13/12/2016.
  */
 
-class itemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemStackHandler) {
+class ItemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemStackHandler) {
 
     fun suckItems() {
         val items = world.getEntitiesWithinAABB(EntityItem::class.java, inBox)
@@ -37,7 +37,7 @@ class itemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemS
     }
 }
 
-class itemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
+class ItemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
 
     val outDirection = EnumFacing.getFacingFromVector(off.x.toFloat(), off.y.toFloat(), off.z.toFloat()).opposite
 

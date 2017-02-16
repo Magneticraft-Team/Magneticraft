@@ -86,7 +86,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     init {
         craftingProcess = CraftingProcess({//craft
-            val outputHelper = itemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
+            val outputHelper = ItemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
             val recipe = getRecipe()!!
             var result = recipe.primaryOutput
             val secondary = if (recipe.probability > 0 && Random().nextFloat() <= recipe.probability) recipe.secondaryOutput else null
@@ -131,7 +131,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     override fun update() {
         if (worldObj.isServer && active) {
-            val inputHelper = itemInputHelper(world, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toDoubleVec(), inventory)
+            val inputHelper = ItemInputHelper(world, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toDoubleVec(), inventory)
             if (shouldTick(20)) {
                 inputHelper.suckItems()
                 sendUpdateToNearPlayers()
@@ -294,7 +294,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     }
 
     fun checkOutputValid(): Boolean {
-        val outputHelper = itemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
+        val outputHelper = ItemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
         val recipe = getRecipe() ?: return false
         if (inventory[0]!!.stackSize < recipe.input.stackSize) return false
         if (outputHelper.ejectItems(recipe.primaryOutput, true) != null) return false

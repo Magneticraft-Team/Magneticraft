@@ -1,16 +1,18 @@
 package com.cout970.magneticraft.util
 
+import coffee.cypher.mcextlib.extensions.vectors.x
+import coffee.cypher.mcextlib.extensions.vectors.y
+import coffee.cypher.mcextlib.extensions.vectors.z
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagList
-import net.minecraft.nbt.NBTTagString
+import net.minecraft.nbt.*
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Vec3d
+import net.minecraftforge.common.util.Constants
 
 /**
  * Created by cout970 on 17/07/2016.
  */
-
-
 fun ItemStack.checkNBT() {
     if (this.tagCompound == null) {
         this.tagCompound = NBTTagCompound()
@@ -43,8 +45,8 @@ fun ItemStack.getDouble(key: String): Double {
 }
 
 fun ItemStack.setLore(values: List<String>) {
-    var list = NBTTagList()
-    var tag = NBTTagCompound()
+    val list = NBTTagList()
+    val tag = NBTTagCompound()
     values.forEach {
         list.appendTag(NBTTagString(it))
     }
@@ -86,3 +88,31 @@ fun ItemStack.getBlockPos(key: String): BlockPos {
     val tag = tagCompound!!.getCompoundTag(key)
     return BlockPos(tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"))
 }
+
+fun NBTTagCompound.setBlockPos(key: String, pos: BlockPos) = setTag(key, NBTTagList().apply {
+    appendTag(NBTTagInt(pos.x))
+    appendTag(NBTTagInt(pos.y))
+    appendTag(NBTTagInt(pos.z))
+})
+
+fun NBTTagCompound.getVector3(key: String): Vec3d {
+    val list = getTagList(key, Constants.NBT.TAG_DOUBLE)
+    return Vec3d(list.getDoubleAt(0), list.getDoubleAt(1), list.getDoubleAt(2))
+}
+
+fun NBTTagCompound.setVector3(key: String, pos: Vec3d) = setTag(key, NBTTagList().apply {
+    appendTag(NBTTagDouble(pos.x))
+    appendTag(NBTTagDouble(pos.y))
+    appendTag(NBTTagDouble(pos.z))
+})
+
+fun NBTTagCompound.getBlockPos(key: String): BlockPos {
+    val list = getTagList(key, Constants.NBT.TAG_INT)
+    return BlockPos(list.getIntAt(0), list.getIntAt(1), list.getIntAt(2))
+}
+
+fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing) {
+    setInteger(key, facing.ordinal)
+}
+
+fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))!!

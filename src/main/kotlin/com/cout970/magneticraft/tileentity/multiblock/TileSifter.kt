@@ -2,7 +2,6 @@ package com.cout970.magneticraft.tileentity.multiblock
 
 import coffee.cypher.mcextlib.extensions.aabb.to
 import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
 import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
@@ -273,7 +272,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
 
     fun outputItems(stage: Stage, simulate: Boolean): Boolean {
         val ord = stage.ord
-        val outputHelper = itemOutputHelper(world, posTransform(OUTPUTS[ord - 1]),
+        val outputHelper = ItemOutputHelper(world, posTransform(OUTPUTS[ord - 1]),
                 direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
         val recipe = getRecipe(stage) ?: return false
         val output: ItemStack
