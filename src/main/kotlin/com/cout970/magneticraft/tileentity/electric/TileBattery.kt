@@ -9,7 +9,7 @@ import com.cout970.magneticraft.registry.ITEM_ENERGY_CONSUMER
 import com.cout970.magneticraft.registry.ITEM_ENERGY_PROVIDER
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.misc.ValueAverage
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.items.ItemStackHandler

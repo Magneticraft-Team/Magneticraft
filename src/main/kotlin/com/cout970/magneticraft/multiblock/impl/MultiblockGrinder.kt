@@ -45,21 +45,20 @@ object MultiblockGrinder : Multiblock() {
 
         val B: IMultiblockComponent = SingleBlockComponent(BlockMachineBlock.defaultState, replacement)
 
-        val P: IMultiblockComponent = ContextBlockComponent(
-                { ctx ->
-                    BlockMachineBlockSupportColumn.defaultState.withProperty(
-                            BlockMachineBlockSupportColumn.PROPERTY_STATES,
-                            BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.rotateY().axis))
-                }, ItemStack(BlockMachineBlockSupportColumn, 1, 1), replacement)
+        val P: IMultiblockComponent = ContextBlockComponent({ ctx ->
+            BlockMachineBlockSupportColumn.defaultState.withProperty(
+                    BlockMachineBlockSupportColumn.PROPERTY_STATES,
+                    BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.rotateY().axis))
+        }, ItemStack(BlockMachineBlockSupportColumn, 1, 1), replacement)
 
-        val O: IMultiblockComponent = ContextBlockComponent(
-                { ctx ->
-                    BlockMachineBlockSupportColumn.defaultState.withProperty(
-                            BlockMachineBlockSupportColumn.PROPERTY_STATES,
-                            BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.axis))
-                }, ItemStack(BlockMachineBlockSupportColumn, 1, 2), replacement)
+        val O: IMultiblockComponent = ContextBlockComponent({ ctx ->
+            BlockMachineBlockSupportColumn.defaultState.withProperty(
+                    BlockMachineBlockSupportColumn.PROPERTY_STATES,
+                    BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.axis))
+        }, ItemStack(BlockMachineBlockSupportColumn, 1, 2), replacement)
 
         val A: IMultiblockComponent = SingleBlockComponent(Blocks.AIR.defaultState, Blocks.AIR.defaultState)
+
         val F: IMultiblockComponent = SingleBlockComponent(BlockStripedMachineBlock.defaultState, replacement)
 
         val M: IMultiblockComponent = MainBlockComponent(BlockGrinder) { context, state, activate ->

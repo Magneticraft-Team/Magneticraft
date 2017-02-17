@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.util
 
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.util.misc.CacheNode
+import com.cout970.magneticraft.misc.render.CacheNode
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.network
 
 import com.cout970.magneticraft.gui.common.ContainerBase
-import com.cout970.magneticraft.util.misc.IBD
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.readUUID
 import com.cout970.magneticraft.util.writeUUID
 import io.netty.buffer.ByteBuf

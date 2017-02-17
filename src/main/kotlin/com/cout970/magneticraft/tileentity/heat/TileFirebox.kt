@@ -10,7 +10,7 @@ import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.IBD
+import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing

@@ -11,8 +11,8 @@ import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.fluid.Tank
-import com.cout970.magneticraft.util.misc.IBD
+import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing

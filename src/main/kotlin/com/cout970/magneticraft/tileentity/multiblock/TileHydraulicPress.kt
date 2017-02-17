@@ -15,6 +15,7 @@ import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydrauli
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
@@ -23,8 +24,8 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.AnimationTimer
-import com.cout970.magneticraft.util.misc.CraftingProcess
+import com.cout970.magneticraft.misc.render.AnimationTimer
+import com.cout970.magneticraft.misc.crafting.CraftingProcess
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -83,7 +84,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
             inventory[0] = null
             inventory[0] = recipe.output
         }, { //can craft
-            node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
+            node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
                     && getRecipe() != null
                     && inventory[0]!!.stackSize == getRecipe()!!.input.stackSize
                     && overtemp == false

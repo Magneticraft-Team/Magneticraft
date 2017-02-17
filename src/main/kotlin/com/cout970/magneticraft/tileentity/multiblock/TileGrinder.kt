@@ -17,6 +17,7 @@ import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
@@ -25,8 +26,9 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.CraftingProcess
-import com.cout970.magneticraft.util.misc.ValueAverage
+import com.cout970.magneticraft.misc.crafting.CraftingProcess
+import com.cout970.magneticraft.misc.damage.DamageSources
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
 import net.minecraft.item.ItemStack
@@ -97,11 +99,12 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
                 return@CraftingProcess
             }
         }, { //can craft
-            node.voltage > TIER_1_MACHINES_MIN_VOLTAGE
+            node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
                     && checkOutputValid()
                     && overTemp == false
         }, { // use energy
-            val applied = node.applyPower(-Config.grinderConsumption * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE) * 6, false)
+            val interp = interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE)
+            val applied = node.applyPower(-Config.grinderConsumption * interp * 6, false)
             if (heatNode.pushHeat((applied * (1 - efficiency) * ENERGY_TO_HEAT).toLong(), false) > 0) { //If there's any heat leftover after we tried to push heat, the machine has overheated
                 overTemp = true
             }
@@ -137,11 +140,12 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
                 sendUpdateToNearPlayers()
             }
             if (shouldTick(10)) {
-                if (node.voltage > TIER_1_MACHINES_MIN_VOLTAGE) {
+                if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
                     val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
                     if (!entities.isEmpty()) {
+                        val interp = interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE)
                         entities.forEach {
-                            it.attackEntityFrom(DamageSources.damageSourceGrinder, (grinderDamage * interpolate(node.voltage, TIER_1_MACHINES_MIN_VOLTAGE, TIER_1_MAX_VOLTAGE)).toFloat())
+                            it.attackEntityFrom(DamageSources.damageSourceGrinder, (grinderDamage * interp).toFloat())
                             craftingProcess.useEnergy
                         }
                         sendUpdateToNearPlayers()

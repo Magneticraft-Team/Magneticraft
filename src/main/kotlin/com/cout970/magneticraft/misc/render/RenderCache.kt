@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.render
 
 import net.minecraft.client.renderer.GlStateManager.*
 import org.lwjgl.opengl.GL11

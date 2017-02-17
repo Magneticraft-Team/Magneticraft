@@ -2,7 +2,7 @@ package com.cout970.magneticraft.tileentity.electric
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
-import com.cout970.magneticraft.util.TIER_1_MAX_VOLTAGE
+import com.cout970.magneticraft.misc.ElectricConstants
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -12,7 +12,7 @@ class TileInfiniteEnergy : TileElectricBase() {
 
     var mainNode = object : ElectricNode({ world }, { pos }, capacity = 1.25) {
         override fun getVoltage(): Double {
-            return TIER_1_MAX_VOLTAGE
+            return ElectricConstants.TIER_1_MAX_VOLTAGE
         }
 
         override fun applyCurrent(current: Double) {

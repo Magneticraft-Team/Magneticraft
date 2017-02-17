@@ -12,6 +12,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.kiln.KilnRecipe
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.damage.DamageSources
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln

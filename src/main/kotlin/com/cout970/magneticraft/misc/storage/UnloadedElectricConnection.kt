@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.storage
 
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler

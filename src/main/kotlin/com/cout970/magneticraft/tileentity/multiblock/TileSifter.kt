@@ -11,6 +11,7 @@ import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
@@ -18,8 +19,7 @@ import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.CraftingProcess
-import com.sun.javaws.exceptions.InvalidArgumentException
+import com.cout970.magneticraft.misc.crafting.CraftingProcess
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -114,7 +114,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     }
 
     private fun canCraft(stage: Stage): Boolean {
-        return node.voltage > TIER_1_MACHINES_MIN_VOLTAGE && consumeInput(stage, true)
+        return node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && consumeInput(stage, true)
     }
 
     override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
@@ -281,7 +281,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
             1 -> output = recipe.primary
             2 -> output = recipe.secondary
             3 -> output = recipe.tertiary
-            else -> throw InvalidArgumentException(arrayOf("Sifter output corruption detected."))
+            else -> throw IllegalArgumentException("Sifter output corruption detected.")
         }
         if (inventory[ord - 1]!!.stackSize < recipe.input.stackSize) return false
         if (outputHelper.ejectItems(output, simulate) != null) return false

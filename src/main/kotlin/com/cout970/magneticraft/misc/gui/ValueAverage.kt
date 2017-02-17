@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.gui
 
 /**
  * Created by cout970 on 10/07/2016.

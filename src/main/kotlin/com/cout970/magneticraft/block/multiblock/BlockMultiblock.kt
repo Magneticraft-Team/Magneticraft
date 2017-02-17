@@ -72,7 +72,7 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
                     .map { it.key to it.value }
                     .sortedBy { it.second!!.hitVec.distanceTo(start) }
                     .firstOrNull()?.first
-            return res?.offset(pos).getOr(EMPTY_AABB)
+            return res?.offset(pos) ?: EMPTY_AABB
         }
         return super.getSelectedBoundingBox(state, worldIn, pos)
     }
