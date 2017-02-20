@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util
+package com.cout970.magneticraft.misc.damage
 
 import net.minecraft.util.DamageSource
 

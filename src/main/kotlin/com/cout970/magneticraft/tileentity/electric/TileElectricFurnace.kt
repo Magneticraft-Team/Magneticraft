@@ -5,8 +5,8 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.TIER_1_MACHINES_MIN_VOLTAGE
-import com.cout970.magneticraft.util.misc.ValueAverage
+import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.ElectricConstants
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
@@ -28,7 +28,7 @@ class TileElectricFurnace : TileElectricBase() {
 
     override fun update() {
         if (!worldObj.isRemote) {
-            if (mainNode.voltage >= TIER_1_MACHINES_MIN_VOLTAGE && canSmelt()) {
+            if (mainNode.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && canSmelt()) {
                 val applied = mainNode.applyPower(-Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
                 burningTime += SPEED * applied.toFloat() / Config.electricFurnaceMaxConsumption.toFloat()
                 production += applied

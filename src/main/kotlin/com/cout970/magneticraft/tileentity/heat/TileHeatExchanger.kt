@@ -6,7 +6,7 @@ import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
-import com.cout970.magneticraft.util.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.Tank
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fluids.FluidStack

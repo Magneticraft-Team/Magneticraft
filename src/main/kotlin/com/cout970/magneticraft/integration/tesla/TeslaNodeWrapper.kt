@@ -2,7 +2,7 @@ package com.cout970.magneticraft.integration.tesla
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.util.TIER_1_MAX_VOLTAGE
+import com.cout970.magneticraft.misc.ElectricConstants.TIER_1_MAX_VOLTAGE
 import net.darkhax.tesla.api.ITeslaConsumer
 import net.darkhax.tesla.api.ITeslaHolder
 import net.darkhax.tesla.api.ITeslaProducer
@@ -14,7 +14,9 @@ class TeslaNodeWrapper(
         val node: IElectricNode
 ) : ITeslaHolder, ITeslaProducer, ITeslaConsumer {
 
-    override fun getCapacity(): Long = (Config.wattsToTesla * node.capacity * TIER_1_MAX_VOLTAGE * TIER_1_MAX_VOLTAGE / 2).toLong()
+    override fun getCapacity(): Long {
+        return (Config.wattsToTesla * node.capacity * TIER_1_MAX_VOLTAGE * TIER_1_MAX_VOLTAGE / 2).toLong()
+    }
 
     override fun getStoredPower(): Long = (Config.wattsToTesla * node.capacity * node.voltage * node.voltage / 2).toLong()
 

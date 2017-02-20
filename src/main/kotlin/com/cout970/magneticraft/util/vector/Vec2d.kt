@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.util.vector
 
-import com.cout970.magneticraft.util.misc.Box
+import com.cout970.magneticraft.misc.gui.Box
 
 /**
  * Created by cout970 on 14/05/2016.

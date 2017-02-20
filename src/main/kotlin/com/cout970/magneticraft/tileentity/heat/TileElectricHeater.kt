@@ -6,8 +6,9 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.misc.IBD
+import com.cout970.magneticraft.misc.network.IBD
 import net.minecraftforge.fml.relauncher.Side
 
 /**
@@ -32,7 +33,7 @@ class TileElectricHeater : TileElectricHeatBase() {
 
     override fun update() {
         if (worldObj.isServer) {
-            if (mainNode.voltage >= TIER_1_MACHINES_MIN_VOLTAGE && heat.heat < heat.maxHeat) {
+            if (mainNode.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && heat.heat < heat.maxHeat) {
                 val applied = mainNode.applyPower(-Config.electricHeaterMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
                 val energy = applied.toFloat()
                 heat.pushHeat((energy * ENERGY_TO_HEAT).toLong(), false)

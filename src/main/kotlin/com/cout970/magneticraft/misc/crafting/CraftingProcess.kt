@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.crafting
 
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
@@ -7,21 +7,15 @@ import net.minecraftforge.common.util.INBTSerializable
 /**
  * Created by cout970 on 22/08/2016.
  */
-class CraftingProcess : INBTSerializable<NBTTagCompound> {
+class CraftingProcess(
+        var craft: () -> Unit,
+        var canCraft: () -> Boolean,
+        var useEnergy: (Float) -> Unit,
+        var limit: () -> Float = { 100f }
+) : INBTSerializable<NBTTagCompound> {
 
-    var craft: () -> Unit
-    var canCraft: () -> Boolean
-    var useEnergy: (Float) -> Unit
-    var limit: () -> Float
     var timer = 0f
     var lastTick = 0L
-
-    constructor(craft: () -> Unit, canCraft: () -> Boolean, useEnergy: (Float) -> Unit, limit: () -> Float = { 100f }) {
-        this.craft = craft
-        this.canCraft = canCraft
-        this.useEnergy = useEnergy
-        this.limit = limit
-    }
 
     fun tick(world: World, speed: Float) {
         if (canCraft()) {

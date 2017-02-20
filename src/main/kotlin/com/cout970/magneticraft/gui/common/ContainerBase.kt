@@ -5,7 +5,7 @@ import com.cout970.magneticraft.network.MessageContainerUpdate
 import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.util.getNonPlayerSlotRanges
 import com.cout970.magneticraft.util.getPlayerSlotRanges
-import com.cout970.magneticraft.util.misc.IBD
+import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP

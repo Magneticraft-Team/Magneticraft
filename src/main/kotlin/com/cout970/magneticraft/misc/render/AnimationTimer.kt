@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.render
 
 /**
  * Created by cout970 on 16/07/2016.

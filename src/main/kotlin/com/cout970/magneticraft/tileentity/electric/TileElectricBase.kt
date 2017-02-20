@@ -8,8 +8,8 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.isServer
-import com.cout970.magneticraft.util.misc.RenderCache
-import com.cout970.magneticraft.util.misc.UnloadedElectricConnection
+import com.cout970.magneticraft.misc.render.RenderCache
+import com.cout970.magneticraft.misc.storage.UnloadedElectricConnection
 import com.cout970.magneticraft.util.shouldTick
 import com.cout970.magneticraft.util.with
 import com.google.common.base.Predicate

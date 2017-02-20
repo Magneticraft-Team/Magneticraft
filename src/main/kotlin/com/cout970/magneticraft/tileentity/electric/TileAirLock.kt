@@ -5,7 +5,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.BlockAirBubble
 import com.cout970.magneticraft.block.BlockAirLock
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.util.TIER_1_MACHINES_MIN_VOLTAGE
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.util.isServer
 import com.cout970.magneticraft.util.shouldTick
 import net.minecraft.block.Block
@@ -27,7 +27,7 @@ class TileAirLock : TileElectricBase() {
         super.update()
         if (worldObj.isServer && shouldTick(40)) {
             Config.airlockBubbleCost = 2.0
-            if (node.voltage >= TIER_1_MACHINES_MIN_VOLTAGE) {
+            if (node.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
                 val array = Array(range * 2 + 1, { Array(range * 2 + 1, { Array<Block?>(range * 2 + 1, { null }) }) })
                 //fin water
                 for (j in -range..range) {
@@ -77,7 +77,7 @@ class TileAirLock : TileElectricBase() {
                                 val y = j + range
                                 val z = k + range
                                 if (array[x][y][z] == BlockAirBubble) {
-                                    if (node.voltage >= TIER_1_MACHINES_MIN_VOLTAGE) {
+                                    if (node.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
                                         worldObj.setBlockState(pos.add(i, j, k), BlockAirBubble.defaultState.withProperty(BlockAirBubble.PROPERTY_DECAY, false))
                                         node.applyPower(-Config.airlockBubbleCost, false)
                                     } else {
@@ -90,7 +90,7 @@ class TileAirLock : TileElectricBase() {
                         }
                     }
                 }
-                if (node.voltage >= TIER_1_MACHINES_MIN_VOLTAGE) {
+                if (node.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
                     for (j_ in -range..range) {
                         for (k in -range..range) {
                             for (i in -range..range) {
@@ -100,7 +100,7 @@ class TileAirLock : TileElectricBase() {
                                     val y = j + range
                                     val z = k + range
                                     if (array[x][y][z] == Blocks.AIR) {
-                                        if (node.voltage >= TIER_1_MACHINES_MIN_VOLTAGE) {
+                                        if (node.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
                                             worldObj.setBlockToAir(pos.add(i, j, k))
                                             node.applyPower(-Config.airlockAirCost, false)
                                         }

@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.gui.client
 
-import com.cout970.magneticraft.util.misc.Box
+import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
 
 /**

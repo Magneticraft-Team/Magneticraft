@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.network
 
 import com.cout970.magneticraft.util.readByteArray
 import com.cout970.magneticraft.util.readString

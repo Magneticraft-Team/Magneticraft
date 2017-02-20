@@ -9,14 +9,15 @@ import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.util.fluid.Tank
-import com.cout970.magneticraft.util.misc.AnimationTimer
-import com.cout970.magneticraft.util.misc.IBD
-import com.cout970.magneticraft.util.misc.ValueAverage
+import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.render.AnimationTimer
+import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -87,7 +88,12 @@ class TileIncendiaryGenerator(
 
                 val speed = interpolate(heat.toDouble(), ambientTemperature.toDouble(), MAX_HEAT - 50)
                 val prod = Config.incendiaryGeneratorMaxProduction * speed
-                val applied = mainNode.applyPower((1 - interpolate(mainNode.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * prod, false)
+                val interp = interpolate(
+                        v = mainNode.voltage,
+                        min = ElectricConstants.TIER_1_MAX_VOLTAGE,
+                        max = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+                )
+                val applied = mainNode.applyPower((1 - interp) * prod, false)
                 production += applied
 
                 heat -= applied.toFloat() / HEAT_TO_WATTS

@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockSolarPanel
@@ -64,7 +65,8 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
                     }
                 }
                 if (count > 0) { //Generate slightly less than double power in desert, 75% power in ice plains
-                    node.applyPower((1 - interpolate(node.voltage, TIER_1_MAX_VOLTAGE, TIER_1_GENERATORS_MAX_VOLTAGE)) * Config.solarPanelMaxProduction * (count / 9f) * (1 + ambientTemperature / 2.0), false)
+                    val interp = interpolate(node.voltage, ElectricConstants.TIER_1_MAX_VOLTAGE, ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE)
+                    node.applyPower((1 - interp) * Config.solarPanelMaxProduction * (count / 9f) * (1 + ambientTemperature / 2.0), false)
                 }
             }
         }

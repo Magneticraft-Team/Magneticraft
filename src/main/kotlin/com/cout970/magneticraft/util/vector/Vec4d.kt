@@ -7,31 +7,32 @@ import net.minecraft.util.math.Vec3d
  */
 
 data class Vec4d(val x: Double, val y: Double, val z: Double, val w: Double) {
+
     companion object {
         val ZERO = Vec4d(0, 0, 0, 0)
     }
 
-    val lengthSquared = x * x + y * y + z * z + w * w
+    val lengthSquared get () =  x * x + y * y + z * z + w * w
 
-    val length = Math.sqrt(lengthSquared)
+    val length get () = Math.sqrt(lengthSquared)
 
     constructor(x: Number, y: Number, z: Number, w: Number) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
 
-    fun getXf(): Float = x.toFloat()
+    val xf: Float get() = x.toFloat()
 
-    fun getYf(): Float = y.toFloat()
+    val yf: Float get() = y.toFloat()
 
-    fun getZf(): Float = z.toFloat()
+    val zf: Float get() = z.toFloat()
 
-    fun getWf(): Float = w.toFloat()
+    val wf: Float get() = w.toFloat()
 
-    fun getXi(): Int = x.toInt()
+    val xi: Int get() = x.toInt()
 
-    fun getYi(): Int = y.toInt()
+    val yi: Int get() = y.toInt()
 
-    fun getZi(): Int = z.toInt()
+    val zi: Int get() = z.toInt()
 
-    fun getWi(): Int = w.toInt()
+    val wi: Int get() = w.toInt()
 
     fun xy() = Vec2d(x, y)
 

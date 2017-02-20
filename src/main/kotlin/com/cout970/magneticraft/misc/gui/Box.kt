@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.util.misc
+package com.cout970.magneticraft.misc.gui
 
 import com.cout970.magneticraft.util.vector.Vec2d
 
