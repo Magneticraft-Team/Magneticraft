@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.multiblock
 
 
-import com.cout970.magneticraft.util.vector.toAABBWith
-import com.cout970.magneticraft.util.vector.unaryMinus
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Vec3d
 import net.minecraft.util.text.ITextComponent
 
 /**
@@ -30,4 +30,6 @@ abstract class Multiblock {
     open fun onDeactivate(data: List<BlockData>, context: MultiblockContext) = Unit
 
     open fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN toAABBWith size).offset(-center))
+
+    infix fun Vec3d.to(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
 }

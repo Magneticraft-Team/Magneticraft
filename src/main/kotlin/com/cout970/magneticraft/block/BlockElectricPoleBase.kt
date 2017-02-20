@@ -11,7 +11,7 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
-import com.cout970.magneticraft.util.vector.to
+import com.cout970.magneticraft.util.vector.toAABBWith
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -37,7 +37,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
 
     val boundingBox by lazy {
         val size = 0.0625 * 3
-        Vec3d(0.5 - size, 0.0, 0.5 - size) to Vec3d(0.5 + size, 1.0, 0.5 + size)
+        Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size)
     }
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox

@@ -29,10 +29,6 @@ infix fun Vec3i.toAABBWith(other: Vec3i) = AxisAlignedBB(this.toBlockPos(), othe
 infix fun BlockPos.toAABBWith(other: BlockPos) = AxisAlignedBB(this.toBlockPos(), other.toBlockPos())
 infix fun Vec3d.toAABBWith(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
 
-infix fun Vec3i.to(other: Vec3i) = AxisAlignedBB(this.toBlockPos(), other.toBlockPos())
-infix fun BlockPos.to(other: BlockPos) = AxisAlignedBB(this.toBlockPos(), other.toBlockPos())
-infix fun Vec3d.to(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
-
 //Box deconstruction
 
 operator fun AxisAlignedBB.component1() = Vec3d(minX, minY, minZ)

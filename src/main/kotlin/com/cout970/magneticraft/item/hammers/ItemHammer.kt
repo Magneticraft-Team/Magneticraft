@@ -2,7 +2,6 @@ package com.cout970.magneticraft.item.hammers
 
 import com.cout970.magneticraft.item.ItemBase
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.DamageSource
 import net.minecraftforge.fml.relauncher.Side

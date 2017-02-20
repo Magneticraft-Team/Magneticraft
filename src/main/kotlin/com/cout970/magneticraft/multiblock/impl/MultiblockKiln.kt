@@ -19,7 +19,6 @@ import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
 import com.cout970.magneticraft.tilerenderer.PIXEL
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.times
-import com.cout970.magneticraft.util.vector.to
 import net.minecraft.init.Blocks
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos

@@ -5,7 +5,7 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import com.cout970.magneticraft.util.vector.isHorizontal
-import com.cout970.magneticraft.util.vector.to
+import com.cout970.magneticraft.util.vector.toAABBWith
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
@@ -30,7 +30,7 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
 
     lateinit var FEEDING_TROUGH_IS_CENTER: PropertyBool
     lateinit var FEEDING_TROUGH_SIDE_POSITION: PropertyDirection
-    val boundingBox = Vec3d.ZERO to Vec3d(1.0, 0.75, 1.0)
+    val boundingBox = Vec3d.ZERO toAABBWith Vec3d(1.0, 0.75, 1.0)
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox
 
