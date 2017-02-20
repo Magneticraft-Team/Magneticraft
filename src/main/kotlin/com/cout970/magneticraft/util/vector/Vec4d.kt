@@ -5,7 +5,7 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 14/05/2016.
  */
-
+@Suppress("unused")
 data class Vec4d(val x: Double, val y: Double, val z: Double, val w: Double) {
 
     companion object {

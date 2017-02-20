@@ -133,6 +133,8 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
         keyPressed = key
     }
 
+    // Not sure if i want to implement this
+    @Suppress("unused")
     fun onCursorClick(x: Int, y: Int, button: Int) {
         isMousePressed = true
         mouseX = x

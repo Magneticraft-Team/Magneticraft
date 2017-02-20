@@ -79,9 +79,6 @@ open class BlockFallingBase(
         return 2
     }
 
-    open fun onEndFalling(worldIn: World, pos: BlockPos) {
-    }
-
     companion object {
         var fallInstantly: Boolean = false
 

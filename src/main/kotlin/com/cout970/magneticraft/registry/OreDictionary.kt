@@ -78,9 +78,11 @@ fun registerOreDictionaryEntries() {
     }
 }
 
+
 /**
  * Return one of the items registered with 'name' in the ore dictionary or null if there is none with that name
  */
+@Suppress("unused")
 fun getItemFromDict(name: String): ItemStack? {
     return OreDictionary.getOres(name).firstOrNull()?.copy()
 }

@@ -17,6 +17,8 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 25/08/2016.
  */
+// TODO add to game or remove
+@Suppress("unused")
 object BlockInserter : BlockMultiState(Material.IRON, "inserter"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileInserter()

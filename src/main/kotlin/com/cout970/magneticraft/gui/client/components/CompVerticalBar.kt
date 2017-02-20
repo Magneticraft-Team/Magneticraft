@@ -45,8 +45,3 @@ open class CallbackBarProvider(val callback: () -> Double, val max: () -> Double
 
     override fun getLevel(): Float = clamp((callback.invoke() - min.invoke()) / (max.invoke() - min.invoke()), 1.0, 0.0).toFloat()
 }
-
-open class InvertedCallbackBarProvider(val callback: () -> Double, val max: () -> Double, val min: () -> Double) : IBarProvider {
-
-    override fun getLevel(): Float = clamp(1 - ((callback.invoke() - min.invoke()) / (max.invoke() - min.invoke())), 1.0, 0.0).toFloat()
-}

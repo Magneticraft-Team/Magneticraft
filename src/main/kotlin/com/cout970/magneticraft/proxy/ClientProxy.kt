@@ -30,6 +30,7 @@ import net.minecraftforge.fml.relauncher.Side
  * This class extends the functionality of CommonProxy but adds
  * thing only for the client: sounds, models, textures and renders
  */
+@Suppress("unused")
 class ClientProxy : CommonProxy() {
 
     //List of registered TileEntityRenderers

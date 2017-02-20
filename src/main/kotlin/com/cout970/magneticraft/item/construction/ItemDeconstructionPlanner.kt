@@ -16,10 +16,13 @@ import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
+
 /**
  * Created by Yurgen on 01/12/2016.
  */
 
+//TODO add to game or remove
+@Suppress("unused")
 class ItemDeconstructionPlanner : ItemBase("deconstruction_planner") {
     var designations: MutableSet<BlockPos> = mutableSetOf()
 

@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.computer.ICPU
 /**
  * Created by cout970 on 03/06/2016.
  */
+@Suppress("unused")
 class HardwareFailure : ICPU.IInterruption {
 
     override fun getCode(): Int {

@@ -2,6 +2,7 @@ package com.cout970.magneticraft.misc.network
 
 import io.netty.buffer.ByteBuf
 
+@Suppress("unused")
 /**
  * Created by cout970 on 09/07/2016.
  *

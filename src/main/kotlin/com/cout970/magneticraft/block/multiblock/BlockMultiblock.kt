@@ -28,6 +28,7 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
         lightOpacity = 0
     }
 
+    @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
         if (entityBox != null) {
             val tile = worldIn.getTileEntity(pos)

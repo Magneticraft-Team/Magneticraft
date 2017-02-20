@@ -35,12 +35,11 @@ import net.minecraft.world.World
  */
 object BlockGrinder : BlockMultiblockHeat(Material.IRON, "grinder"), ITileEntityProvider {
 
-    private val REDSTONE_INPUT = BlockPos(-1, 0, 1)
-
     init {
         defaultState = defaultState.withProperty(PROPERTY_CENTER, false).withProperty(PROPERTY_ACTIVE, false)
     }
 
+    @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
         if (state[PROPERTY_ACTIVE] && entityBox != null) {
             return super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn)

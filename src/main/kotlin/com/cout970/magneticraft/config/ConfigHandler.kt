@@ -38,7 +38,7 @@ object ConfigHandler {
     }
 
     fun loadFields() {
-        val clazz = instance.javaClass
+        val clazz = instance::class.java
         val fields = clazz.declaredFields
         wrappers.clear()
 
@@ -54,7 +54,6 @@ object ConfigHandler {
                     String::class.java -> StringFieldWrapper(f, annotation)
                     Float::class.java -> FloatFieldWrapper(f, annotation)
                     OreConfig::class.java -> OreConfigFieldWrapper(f, annotation)
-                // FuelConfig::class.java -> FuelConfigFieldWrapper(f, annotation)
                     GaussOreConfig::class.java -> GaussOreConfigFieldWrapper(f, annotation)
                     else -> null
                 }?.let {
@@ -129,13 +128,6 @@ object ConfigHandler {
             val min = handler.config.getInteger(category, "minLevel", (field.get(handler.instance) as OreConfig).minLevel, "Min level to generate the ore")
 
             field.set(handler.instance, OreConfig(chunk, vein, max, min, active))
-        }
-    }
-
-    class FuelConfigFieldWrapper(field: Field, annotation: ConfigValue) : FieldWrapper(field, annotation, ConfigValueType.FUEL) {
-
-        override fun read(handler: ConfigHandler) {
-            //TODO: Implement This
         }
     }
 

@@ -5,7 +5,6 @@ import com.cout970.magneticraft.util.vector.Vec2d
 
 const val GUIDE_LANG = "${MOD_ID}.guide"
 val PAGE_SIZE = Vec2d(108, 141)
-val PAGE_CENTER = PAGE_SIZE.center()
 
 data class Book(val entries: List<BookEntry>)
 

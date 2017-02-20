@@ -39,6 +39,7 @@ object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
+    // TODO implement this
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Set players on fire when processing blaze" +
                                                         " rods in the crushing table")
     var crushingTableCausesFire = true

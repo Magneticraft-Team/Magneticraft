@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.cout970.magneticraft.util.vector
 
 import net.minecraft.util.EnumFacing

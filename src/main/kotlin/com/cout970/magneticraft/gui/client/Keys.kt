@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.cout970.magneticraft.gui.client
 
 import net.minecraft.client.Minecraft

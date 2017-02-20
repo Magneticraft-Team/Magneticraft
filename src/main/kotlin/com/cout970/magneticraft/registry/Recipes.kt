@@ -39,16 +39,11 @@ import net.minecraftforge.oredict.ShapelessOreRecipe
 
 /**
  * Created by cout970 on 11/06/2016.
- */
-
-/**
+ * Modified by Yuren
  * Called by CommonProxy to register all the recipes in the mod
  */
 fun registerRecipes() {
     //@formatter:off
-
-    val stampedString = "Stamped"
-    val heavyString = "Heavy Duty"
 
     //CRUSHING TABLE RECIPES
     addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
@@ -62,7 +57,6 @@ fun registerRecipes() {
     addCrushingTableRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4))
     addCrushingTableRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5))
     addCrushingTableRecipe(ItemStack(BlockLimestone, 1, 2), ItemStack(BlockBurntLimestone, 1, 2))
-
     addCrushingTableRecipe(ItemStack(IRON_INGOT, 1), ItemStack(ItemLightPlate, 1, 0))
     addCrushingTableRecipe(ItemStack(GOLD_INGOT, 1), ItemStack(ItemLightPlate, 1, 1))
     addCrushingTableRecipe(ItemStack(ItemIngot, 1, 2), ItemStack(ItemLightPlate, 1, 2))
@@ -95,7 +89,6 @@ fun registerRecipes() {
     addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(ItemHeavyPlate, 1, 3), 50f)
     addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(ItemHeavyPlate, 1, 4), 120f)
     addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(ItemHeavyPlate, 1, 5), 150f)
-
     addHydraulicPressRecipe(ItemStack(BlockLimestone, 4, 2), ItemStack(BlockBurntLimestone, 4, 2), 50f)
 
     //UTILITY HYDRAUILIC PRESS RECIPES - BLOCKS
@@ -109,19 +102,18 @@ fun registerRecipes() {
     addHydraulicPressRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE), 40f)
     addHydraulicPressRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE), 40f)
     addHydraulicPressRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE), 50f)
-
     addHydraulicPressRecipe(ItemStack(Blocks.ICE), ItemStack(Blocks.PACKED_ICE), 200f)
 
     //UTILITY HYDRAUILIC PRESS RECIPES - ITEMS
     addHydraulicPressRecipe(ItemStack(Items.REEDS, 2), ItemStack(PAPER), 30f)
     addHydraulicPressRecipe(ItemStack(ItemPulpWood, 2), ItemStack(PAPER), 25f)
-
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 0), ItemStack(ItemLightPlate, 1, 0), 120f)
     addHydraulicPressRecipe(ItemStack(GOLD_NUGGET, 6), ItemStack(ItemLightPlate, 1, 1), 50f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 2), ItemStack(ItemLightPlate, 1, 2), 100f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 3), ItemStack(ItemLightPlate, 1, 3), 50f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 4), ItemStack(ItemLightPlate, 1, 4), 120f)
     addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
+    addHydraulicPressRecipe(ItemStack(BlockWoodChip), ItemStack(BlockFiberboard, 4), 50f)
 
     //KILN RECIPES
     addKilnRecipe(ItemStack(COAL_BLOCK), BlockCoke.defaultState, 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
@@ -136,9 +128,6 @@ fun registerRecipes() {
     addKilnRecipe(ItemStack(CLAY_BALL), ItemStack(BRICK), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
     addKilnRecipe(ItemStack(CHORUS_FRUIT), ItemStack(CHORUS_FRUIT_POPPED, 1, 0), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
 
-
-    addHydraulicPressRecipe(ItemStack(BlockWoodChip), ItemStack(BlockFiberboard, 4), 50f)
-
     //GRINDER RECIPES
     addGrinderRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0), ItemStack(Blocks.GRAVEL), 1f, 5f)
     //TODO: Remove iron placeholder values
@@ -147,26 +136,12 @@ fun registerRecipes() {
     addGrinderRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
     addGrinderRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4), ItemStack(Blocks.GRAVEL), 0.15f, 120f)
     addGrinderRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5), ItemStack(Blocks.GRAVEL), 0.15f, 150f)
-
     addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
     addGrinderRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemCrushedLapis.stack(size = 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
     addGrinderRecipe(ItemStack(Blocks.COAL_ORE, 1), ItemCrushedCoal.stack(size = 2), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
     addGrinderRecipe(ItemStack((Blocks.LOG)), ItemWoodChip.stack(size = 16), 45f)
 
     //CRAFTING RECIPES
-
-    //stamped items
-    fun addStampedRecipe(result: ItemStack, vararg craft: Any) {
-        addEnchantRecipe(result, stampedString, listOf(Pair(Enchantments.UNBREAKING, 1)), *craft)
-    }
-
-    fun addStampedPartRecipe(result: ItemStack, vararg craft: Any) {
-        addLoreRecipe(result, stampedString, *craft)
-    }
-
-    fun addHeavyRecipe(result: ItemStack, vararg craft: Any) {
-        addEnchantRecipe(result, heavyString, listOf(Pair(Enchantments.UNBREAKING, 3), Pair(Enchantments.PROTECTION, 1)), *craft)
-    }
 
     addStampedPartRecipe(ItemStack(Items.MINECART), "I#I", "III", 'I', "lightPlateIron")
     addStampedPartRecipe(ItemStack(Items.CAULDRON), "I#I", "I#I", "III", 'I', "lightPlateIron")
@@ -175,9 +150,7 @@ fun registerRecipes() {
     addStampedPartRecipe(ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE), "II", 'I', "lightPlateIron")
     addStampedPartRecipe(ItemStack(Blocks.IRON_TRAPDOOR), "II", "II", 'I', "lightPlateIron")
     addStampedPartRecipe(ItemStack(Blocks.HOPPER), "I#I", "ICI", "#I#", 'I', "lightPlateIron", 'C', "chestWood")
-
     addStampedPartRecipe(ItemStack(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE), "II", 'I', "lightPlateGold")
-
     addStampedRecipe(ItemStack(Items.SHEARS), "#I", "I#", 'I', "lightPlateIron")
     addStampedRecipe(ItemStack(Items.IRON_SWORD), "I", "I", "S", 'I', "lightPlateIron", 'S', "stickWood")
     addStampedRecipe(ItemStack(Items.IRON_AXE), "II", "IS", "#S", 'I', "lightPlateIron", 'S', "stickWood")
@@ -190,7 +163,6 @@ fun registerRecipes() {
     addStampedRecipe(ItemStack(Items.IRON_CHESTPLATE), "I#I", "III", "III", 'I', "lightPlateIron")
     addStampedRecipe(ItemStack(Items.SHIELD), "PIP", "PPP", "#P#", 'I', "lightPlateIron", 'P', "plankWood")
     addStampedRecipe(ItemStack(ItemIronHammer), "II#", "ISI", "#S#", 'I', "lightPlateIron", 'S', "stickWood")
-
     addStampedRecipe(ItemStack(Items.GOLDEN_SWORD), "I", "I", "S", 'I', "lightPlateGold", 'S', "stickWood")
     addStampedRecipe(ItemStack(Items.GOLDEN_AXE), "II", "IS", "#S", 'I', "lightPlateGold", 'S', "stickWood")
     addStampedRecipe(ItemStack(Items.GOLDEN_HOE), "II", "#S", "#S", 'I', "lightPlateGold", 'S', "stickWood")
@@ -200,17 +172,14 @@ fun registerRecipes() {
     addStampedRecipe(ItemStack(Items.GOLDEN_HELMET), "III", "I#I", 'I', "lightPlateGold")
     addStampedRecipe(ItemStack(Items.GOLDEN_LEGGINGS), "III", "I#I", "I#I", 'I', "lightPlateGold")
     addStampedRecipe(ItemStack(Items.GOLDEN_CHESTPLATE), "I#I", "III", "III", 'I', "lightPlateGold")
-
     addHeavyRecipe(ItemStack(Items.IRON_BOOTS), "I#I", "I#I", 'I', "heavyPlateIron")
     addHeavyRecipe(ItemStack(Items.IRON_HELMET), "III", "I#I", 'I', "heavyPlateIron")
     addHeavyRecipe(ItemStack(Items.IRON_LEGGINGS), "III", "I#I", "I#I", 'I', "heavyPlateIron")
     addHeavyRecipe(ItemStack(Items.IRON_CHESTPLATE), "I#I", "III", "III", 'I', "heavyPlateIron")
-
     addHeavyRecipe(ItemStack(Items.GOLDEN_BOOTS), "I#I", "I#I", 'I', "heavyPlateGold")
     addHeavyRecipe(ItemStack(Items.GOLDEN_HELMET), "III", "I#I", 'I', "heavyPlateGold")
     addHeavyRecipe(ItemStack(Items.GOLDEN_LEGGINGS), "III", "I#I", "I#I", 'I', "heavyPlateGold")
     addHeavyRecipe(ItemStack(Items.GOLDEN_CHESTPLATE), "I#I", "III", "III", 'I', "heavyPlateGold")
-
     addHeavyRecipe(ItemStack(Items.SHIELD), "PIP", "PPP", "#P#", 'I', "heavyPlateIron", 'P', "plankWood")
 
     //nuggets
@@ -331,7 +300,6 @@ fun registerRecipes() {
     addSifterRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(Items.COAL), 0.1f, ItemStack(DIAMOND), 0.001f, 20f)
     addSifterRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Blocks.SAND), 0.1f, ItemStack(Items.FLINT), 0.2f, 20f)
 
-
     //@formatter:on
 }
 
@@ -351,7 +319,8 @@ private fun addLoreRecipe(result: ItemStack, lore: String, enchants: List<Pair<E
     addEnchantRecipe(result, enchants, *craft)
 }
 
-private fun addEnchantRecipe(result: ItemStack, lore: String, enchants: List<Pair<Enchantment, Int>>, vararg craft: Any) {
+private fun addEnchantRecipe(result: ItemStack, lore: String, enchants: List<Pair<Enchantment, Int>>,
+                             vararg craft: Any) {
     addLoreRecipe(result, lore, enchants, *craft)
 }
 
@@ -372,8 +341,10 @@ private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
     CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
 }
 
-private fun addHeatExchangerRecipe(input: FluidStack, output: FluidStack, heat: Long, minTemp: Double, maxTemp: Double, reverseLow: Boolean, reverseHigh: Boolean) {
-    HeatExchangerRecipeManager.registerRecipe(HeatExchangerRecipeManager.createRecipe(input, output, heat, minTemp, maxTemp, reverseLow, reverseHigh))
+private fun addHeatExchangerRecipe(input: FluidStack, output: FluidStack, heat: Long, minTemp: Double, maxTemp: Double,
+                                   reverseLow: Boolean, reverseHigh: Boolean) {
+    HeatExchangerRecipeManager.registerRecipe(
+            HeatExchangerRecipeManager.createRecipe(input, output, heat, minTemp, maxTemp, reverseLow, reverseHigh))
 }
 
 private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float) {
@@ -384,16 +355,20 @@ private fun addTableSieveRecipe(input: ItemStack, output: ItemStack) {
     TableSieveRecipeManager.registerRecipe(TableSieveRecipeManager.createRecipe(input, output, output, 0f, true))
 }
 
-private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack, prob2: Float, duration: Float) {
-    SifterRecipeManager.registerRecipe(SifterRecipeManager.createRecipe(input, output0, output1, prob1, output2, prob2, duration, true))
+private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack,
+                            prob2: Float, duration: Float) {
+    SifterRecipeManager.registerRecipe(
+            SifterRecipeManager.createRecipe(input, output0, output1, prob1, output2, prob2, duration, true))
 }
 
 private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, duration: Float) {
-    SifterRecipeManager.registerRecipe(SifterRecipeManager.createRecipe(input, output0, output1, prob1, output1, 0f, duration, true))
+    SifterRecipeManager.registerRecipe(
+            SifterRecipeManager.createRecipe(input, output0, output1, prob1, output1, 0f, duration, true))
 }
 
 private fun addSifterRecipe(input: ItemStack, output0: ItemStack, duration: Float) {
-    SifterRecipeManager.registerRecipe(SifterRecipeManager.createRecipe(input, output0, output0, 0f, output0, 0f, duration, true))
+    SifterRecipeManager.registerRecipe(
+            SifterRecipeManager.createRecipe(input, output0, output0, 0f, output0, 0f, duration, true))
 }
 
 private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
@@ -408,12 +383,16 @@ private fun addKilnRecipe(input: ItemStack, output: IBlockState, duration: Int, 
     KilnRecipeManager.registerRecipe(KilnRecipeManager.createRecipe(input, output, duration, minTemp, maxTemp, true))
 }
 
-private fun addIceboxRecipe(input: ItemStack, output: FluidStack, heat: Long, specificHeat: Double, minTemp: Double, maxTemp: Double, reverse: Boolean) {
-    IceboxRecipeManager.registerRecipe(IceboxRecipeManager.createRecipe(input, output, heat, specificHeat, minTemp, maxTemp, reverse))
+private fun addIceboxRecipe(input: ItemStack, output: FluidStack, heat: Long, specificHeat: Double, minTemp: Double,
+                            maxTemp: Double, reverse: Boolean) {
+    IceboxRecipeManager.registerRecipe(
+            IceboxRecipeManager.createRecipe(input, output, heat, specificHeat, minTemp, maxTemp, reverse))
 }
 
 private fun addIceboxRecipeWater(input: ItemStack, output: Int, reverse: Boolean) {
-    IceboxRecipeManager.registerRecipe(IceboxRecipeManager.createRecipe(input, FluidStack(FluidRegistry.WATER, output), (WATER_HEAT_OF_FUSION * output / 1000).toLong(), WATER_HEAT_CAPACITY, WATER_MELTING_POINT, WATER_BOILING_POINT, reverse))
+    IceboxRecipeManager.registerRecipe(IceboxRecipeManager.createRecipe(input, FluidStack(FluidRegistry.WATER, output),
+            (WATER_HEAT_OF_FUSION * output / 1000).toLong(), WATER_HEAT_CAPACITY, WATER_MELTING_POINT,
+            WATER_BOILING_POINT, reverse))
 }
 
 private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float) {
@@ -422,6 +401,18 @@ private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: Item
 
 private fun addGrinderRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
     GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output, output, 0f, ticks, true))
+}
+
+private fun addStampedRecipe(result: ItemStack, vararg craft: Any) {
+    addEnchantRecipe(result, "Stamped", listOf(Pair(Enchantments.UNBREAKING, 1)), *craft)
+}
+
+private fun addStampedPartRecipe(result: ItemStack, vararg craft: Any) {
+    addLoreRecipe(result, "Stamped", *craft)
+}
+
+private fun addHeavyRecipe(result: ItemStack, vararg craft: Any) {
+    addEnchantRecipe(result, "Heavy Duty", listOf(Pair(Enchantments.UNBREAKING, 3), Pair(Enchantments.PROTECTION, 1)),*craft)
 }
 
 //function to get the first ore dictionary entry for the block if exist, or the block if not exist

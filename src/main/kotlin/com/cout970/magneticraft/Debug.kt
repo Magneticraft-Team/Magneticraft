@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.io.File
 import java.io.FileWriter
 
+@Suppress("unused")
 /**
  * Created by cout970 on 11/06/2016.
  *

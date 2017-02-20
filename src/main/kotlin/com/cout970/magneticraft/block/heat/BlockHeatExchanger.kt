@@ -9,6 +9,8 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
+//TODO add to game or remove
+@Suppress("unused")
 object BlockHeatExchanger : BlockHeatBase(Material.ROCK, "heat_exchanger"), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileHeatExchanger()

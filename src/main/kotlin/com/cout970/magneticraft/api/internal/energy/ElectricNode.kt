@@ -8,6 +8,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 11/06/2016.
  */
+@Suppress("unused")
 open class ElectricNode(
         private val worldGetter: () -> World,
         private val posGetter: () -> BlockPos,

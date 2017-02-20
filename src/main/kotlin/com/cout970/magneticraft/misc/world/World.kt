@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.cout970.magneticraft.misc.world
 
 import net.minecraft.world.World

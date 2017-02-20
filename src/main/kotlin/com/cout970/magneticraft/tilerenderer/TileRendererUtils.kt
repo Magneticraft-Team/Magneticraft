@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.api.energy.IElectricConnection

@@ -32,6 +32,8 @@ object JsonSerializer {
         return GSON.fromJson(reader, Book::class.java)
     }
 
+    // Debug only
+    @Suppress("unused")
     fun write(file: File, book: Book) {
         file.outputStream().writer().use {
             GSON.toJson(book, it)

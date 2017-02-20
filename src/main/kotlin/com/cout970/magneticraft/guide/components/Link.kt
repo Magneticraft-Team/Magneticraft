@@ -5,6 +5,7 @@ import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.guide.LinkInfo
 import com.cout970.magneticraft.util.vector.Vec2d
 
+@Suppress("unused")
 class Link(val target: LinkInfo, val base: PageComponent) : PageComponent(base.position) {
 
     override val id: String = "link"

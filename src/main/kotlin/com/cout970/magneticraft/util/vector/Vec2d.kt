@@ -6,15 +6,16 @@ import com.cout970.magneticraft.misc.gui.Box
  * Created by cout970 on 14/05/2016.
  */
 
+@Suppress("unused")
 data class Vec2d(val x: Double, val y: Double) {
 
     companion object {
         val ZERO = Vec2d(0.0, 0.0)
     }
 
-    val lengthSquared by lazy { x * x + y * y }
+    val lengthSquared get() = x * x + y * y
 
-    val length by lazy { Math.sqrt(lengthSquared) }
+    val length get() = Math.sqrt(lengthSquared)
 
     constructor(x: Number, y: Number) : this(x.toDouble(), y.toDouble())
     constructor(x: Number) : this(x.toDouble(), x.toDouble())

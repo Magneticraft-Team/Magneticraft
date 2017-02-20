@@ -35,22 +35,11 @@ abstract class ItemHammer(type: String, val material: ToolMaterial) : ItemBase("
         return true
     }
 
-    fun getToolMaterial(): Item.ToolMaterial {
-        return this.material
-    }
-
     /**
      * Return the enchantability factor of the item, most of the time is based on material.
      */
     override fun getItemEnchantability(): Int {
         return this.material.enchantability
-    }
-
-    /**
-     * Return the name for this tool's material.
-     */
-    fun getToolMaterialName(): String {
-        return this.material.toString()
     }
 
     /**

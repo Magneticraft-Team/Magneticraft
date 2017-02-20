@@ -3,7 +3,6 @@ package com.cout970.magneticraft.world
 import com.cout970.magneticraft.config.OreConfig
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.google.common.base.Predicate
-import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.util.math.BlockPos
@@ -23,11 +22,7 @@ open class OreGenerator(
     val config: OreConfig
 ) : IWorldGenerator {
 
-    constructor(ore: Block, config: OreConfig) : this(ore.defaultState, Predicate { input -> input?.block == Blocks.STONE }, config)
-
     constructor(ore: IBlockState, config: OreConfig) : this(ore, Predicate { input -> input?.block == Blocks.STONE }, config)
-
-    constructor(ore: Block, meta: Int, config: OreConfig, target: Predicate<IBlockState>) : this(ore.getStateFromMeta(meta), target, config)
 
     override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?, chunkProvider: IChunkProvider?) {
         if (world == null || random == null) return

@@ -19,6 +19,8 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
+// TODO add to game or remove
+@Suppress("unused")
 object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
 
     override fun onBlockPlaced(worldIn: World?, pos: BlockPos?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase?): IBlockState {

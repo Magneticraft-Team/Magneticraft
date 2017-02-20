@@ -19,7 +19,6 @@ import java.nio.charset.Charset
  */
 class DeviceNetworkCard(val parent: TileEntity) : IDevice {
 
-    val sockets = arrayOfNulls<Socket>(4)
     val status = 0
     val isActive: Boolean get() = !parent.isInvalid
     val internetAllowed: Boolean get() = Config.allowTcpConnections

@@ -10,6 +10,7 @@ interface IConfig {
 
     fun save()
 
+    @Suppress("unused")
     fun getConfigFile(): File
 
     fun getString(category: String, key: String, defaultValue: String, comment: String): String

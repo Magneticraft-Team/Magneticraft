@@ -12,6 +12,7 @@ import com.google.common.base.Predicates
 /**
  * Created by cout970 on 25/08/2016.
  */
+// TODO finish
 object TileRendererInserter : TileEntityRenderer<TileInserter>() {
 
     lateinit var block: ICachedModel
@@ -29,7 +30,7 @@ object TileRendererInserter : TileEntityRenderer<TileInserter>() {
         try {
             val model = TileRendererIncendiaryGenerator.getModelObj(resource("models/block/obj/inserter.obj"))
             val hasFan = object : IModelFilter {
-                override fun apply(it: IModelPart?): Boolean = if (it is IObjGroup) it.getName().contains("fan") else false
+                override fun apply(it: IModelPart?): Boolean = (it as? IObjGroup)?.getName()?.contains("fan") ?: false
             }
             block = ModelCacheFactory.createCachedModel(model.filter(Predicates.not(hasFan)), 1)
 //            harm = ModelCacheFactory.createCachedModel(model.filter(hasFan), 1)
