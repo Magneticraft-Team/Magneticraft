@@ -39,7 +39,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe
 
 /**
  * Created by cout970 on 11/06/2016.
- * Modified by Yuren
+ * Modified by Yurgen
  * Called by CommonProxy to register all the recipes in the mod
  */
 fun registerRecipes() {
