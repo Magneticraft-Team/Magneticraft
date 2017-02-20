@@ -1,9 +1,10 @@
 package com.cout970.magneticraft.api.internal.energy
 
-import coffee.cypher.mcextlib.extensions.vectors.length
-import coffee.cypher.mcextlib.extensions.vectors.minus
+
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.util.vector.length
+import com.cout970.magneticraft.util.vector.minus
 
 /**
  * Created by cout970 on 11/06/2016.

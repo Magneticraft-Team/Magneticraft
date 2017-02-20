@@ -1,11 +1,12 @@
 package com.cout970.magneticraft.block.heat
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.heat.TileIcebox
-import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -68,7 +69,7 @@ object BlockIcebox : BlockHeatMultistate(Material.ROCK, "icebox"), ITileEntityPr
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
     }
 
-    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal
+    override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_DIRECTION].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_DIRECTION, EnumFacing.getHorizontal(meta))
 

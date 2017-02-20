@@ -1,16 +1,17 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import coffee.cypher.mcextlib.extensions.vectors.length
-import coffee.cypher.mcextlib.extensions.vectors.minus
+
 import com.cout970.magneticraft.api.energy.*
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
+import com.cout970.magneticraft.misc.energy.UnloadedElectricConnection
+import com.cout970.magneticraft.misc.render.RenderCache
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.isServer
-import com.cout970.magneticraft.misc.render.RenderCache
-import com.cout970.magneticraft.misc.storage.UnloadedElectricConnection
-import com.cout970.magneticraft.util.shouldTick
+import com.cout970.magneticraft.util.vector.length
+import com.cout970.magneticraft.util.vector.minus
 import com.cout970.magneticraft.util.with
 import com.google.common.base.Predicate
 import net.minecraft.nbt.NBTTagCompound

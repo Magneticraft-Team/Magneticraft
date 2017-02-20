@@ -1,9 +1,10 @@
 package com.cout970.magneticraft.gui.common.blocks
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.gui.common.*
-import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

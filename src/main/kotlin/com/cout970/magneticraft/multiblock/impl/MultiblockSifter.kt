@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.multiblock.impl
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.vectors.times
+
+
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
@@ -15,6 +15,8 @@ import com.cout970.magneticraft.multiblock.components.ContextBlockComponent
 import com.cout970.magneticraft.multiblock.components.MainBlockComponent
 import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
 import com.cout970.magneticraft.tilerenderer.PIXEL
+import com.cout970.magneticraft.util.vector.times
+import com.cout970.magneticraft.util.vector.to
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos

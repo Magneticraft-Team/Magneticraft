@@ -1,14 +1,15 @@
 package com.cout970.magneticraft.util
 
-import coffee.cypher.mcextlib.extensions.vectors.x
-import coffee.cypher.mcextlib.extensions.vectors.y
-import coffee.cypher.mcextlib.extensions.vectors.z
+import com.cout970.magneticraft.util.vector.xd
+import com.cout970.magneticraft.util.vector.yd
+import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraftforge.common.util.Constants
+import java.util.*
 
 /**
  * Created by cout970 on 17/07/2016.
@@ -101,9 +102,9 @@ fun NBTTagCompound.getVector3(key: String): Vec3d {
 }
 
 fun NBTTagCompound.setVector3(key: String, pos: Vec3d) = setTag(key, NBTTagList().apply {
-    appendTag(NBTTagDouble(pos.x))
-    appendTag(NBTTagDouble(pos.y))
-    appendTag(NBTTagDouble(pos.z))
+    appendTag(NBTTagDouble(pos.xd))
+    appendTag(NBTTagDouble(pos.yd))
+    appendTag(NBTTagDouble(pos.zd))
 })
 
 fun NBTTagCompound.getBlockPos(key: String): BlockPos {
@@ -116,3 +117,36 @@ fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing) {
 }
 
 fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))!!
+
+// Builders
+
+fun newNbt(func: NBTTagCompound.() -> Unit): NBTTagCompound {
+    val nbt = NBTTagCompound()
+    func(nbt)
+    return nbt
+}
+
+fun NBTTagList.newNbt(func: NBTTagCompound.() -> Unit) {
+    val nbt = NBTTagCompound()
+    func(nbt)
+    appendTag(nbt)
+}
+
+fun NBTTagCompound.list(key: String, func: NBTTagList.()->Unit){
+    val list = NBTTagList()
+    func(list)
+    setTag(key, list)
+}
+
+fun NBTTagCompound.add(key: String, value: Int) = setInteger(key, value)
+fun NBTTagCompound.add(key: String, value: Float) = setFloat(key, value)
+fun NBTTagCompound.add(key: String, value: Double) = setDouble(key, value)
+fun NBTTagCompound.add(key: String, value: Byte) = setByte(key, value)
+fun NBTTagCompound.add(key: String, value: Short) = setShort(key, value)
+fun NBTTagCompound.add(key: String, value: Long) = setLong(key, value)
+fun NBTTagCompound.add(key: String, value: UUID) = setUniqueId(key, value)
+fun NBTTagCompound.add(key: String, value: EnumFacing) = setEnumFacing(key, value)
+fun NBTTagCompound.add(key: String, value: BlockPos) = setBlockPos(key, value)
+fun NBTTagCompound.add(key: String, value: Vec3d) = setVector3(key, value)
+fun NBTTagCompound.add(key: String, value: IntArray) = setIntArray(key, value)
+fun NBTTagCompound.add(key: String, value: String) = setString(key, value)

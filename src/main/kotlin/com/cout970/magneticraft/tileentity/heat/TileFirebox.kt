@@ -1,16 +1,23 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.set
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
-import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.inventory.consumeItem
+import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
+import com.cout970.magneticraft.util.COPPER_MELTING_POINT
+import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
+import com.cout970.magneticraft.util.FuelCache
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -124,7 +131,7 @@ class TileFirebox : TileHeatBase() {
     fun getDirection(): EnumFacing {
         val state = world.getBlockState(pos)
         if (PROPERTY_DIRECTION.isIn(state)) {
-            return PROPERTY_DIRECTION[state]
+            return state[PROPERTY_DIRECTION]
         }
         return EnumFacing.NORTH
     }

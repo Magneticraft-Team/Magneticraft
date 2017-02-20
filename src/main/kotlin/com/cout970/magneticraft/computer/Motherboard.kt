@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.*
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.computer.TileComputer
-import com.cout970.magneticraft.util.isServer
 import net.minecraft.nbt.NBTTagCompound
 
 /**

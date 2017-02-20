@@ -5,10 +5,14 @@ import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.MAX_EMISSION_TEMP
+import com.cout970.magneticraft.util.MIN_EMISSION_TEMP
+import com.cout970.magneticraft.util.guessAmbientTemp
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 

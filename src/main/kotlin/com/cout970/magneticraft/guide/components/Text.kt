@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.guide.components
 
-import coffee.cypher.mcextlib.extensions.strings.i18n
+
 import com.cout970.magneticraft.gui.client.guide.FONT_HEIGHT
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
@@ -8,6 +8,7 @@ import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.guide.GUIDE_LANG
 import com.cout970.magneticraft.guide.JsonIgnore
 import com.cout970.magneticraft.guide.LinkInfo
+import com.cout970.magneticraft.util.i18n
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.resources.I18n
 

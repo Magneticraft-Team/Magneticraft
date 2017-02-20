@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.multiblock
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import com.cout970.magneticraft.util.unaryMinus
+
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.unaryMinus
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
@@ -28,5 +29,5 @@ abstract class Multiblock {
     open fun onActivate(data: List<BlockData>, context: MultiblockContext) = Unit
     open fun onDeactivate(data: List<BlockData>, context: MultiblockContext) = Unit
 
-    open fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN to size).offset(-center))
+    open fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN toAABBWith size).offset(-center))
 }

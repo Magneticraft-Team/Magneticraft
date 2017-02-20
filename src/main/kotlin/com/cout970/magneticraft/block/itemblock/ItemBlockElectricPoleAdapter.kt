@@ -1,11 +1,12 @@
 package com.cout970.magneticraft.block.itemblock
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.block.BlockElectricPole
 import com.cout970.magneticraft.block.BlockElectricPoleAdapter
 import com.cout970.magneticraft.block.BlockElectricPoleBase
 import com.cout970.magneticraft.block.ELECTRIC_POLE_PLACE
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.with

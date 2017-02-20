@@ -1,18 +1,18 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.vectors.plus
-import coffee.cypher.mcextlib.extensions.vectors.times
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
-import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tilerenderer.PIXEL
-import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.times
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.toVec3d
 import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -64,22 +64,22 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
         val facing = PROPERTY_FACING[state]!!
         return when (facing) {
             EnumFacing.DOWN -> {
-                Vec3d(PIXEL * 5, 0.0, PIXEL * 5) to Vec3d(1.0 - PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5)
+                Vec3d(PIXEL * 5, 0.0, PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5)
             }
             EnumFacing.UP -> {
-                Vec3d(PIXEL * 5, 1.0 - PIXEL * 5, PIXEL * 5) to Vec3d(1.0 - PIXEL * 5, 1.0, 1.0 - PIXEL * 5)
+                Vec3d(PIXEL * 5, 1.0 - PIXEL * 5, PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, 1.0, 1.0 - PIXEL * 5)
             }
             EnumFacing.NORTH -> {
-                Vec3d(PIXEL * 5, PIXEL * 5, 0.0) to Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, PIXEL * 5)
+                Vec3d(PIXEL * 5, PIXEL * 5, 0.0) toAABBWith Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, PIXEL * 5)
             }
             EnumFacing.SOUTH -> {
-                Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5) to Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0)
+                Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0)
             }
             EnumFacing.WEST -> {
-                Vec3d(0.0, PIXEL * 5, PIXEL * 5) to Vec3d(PIXEL * 5, 1.0 - PIXEL * 5, 1.0 - PIXEL * 5)
+                Vec3d(0.0, PIXEL * 5, PIXEL * 5) toAABBWith Vec3d(PIXEL * 5, 1.0 - PIXEL * 5, 1.0 - PIXEL * 5)
             }
             EnumFacing.EAST -> {
-                Vec3d(1 - PIXEL * 5, PIXEL * 5, PIXEL * 5) to Vec3d(1.0, 1.0 - PIXEL * 5, 1.0 - PIXEL * 5)
+                Vec3d(1 - PIXEL * 5, PIXEL * 5, PIXEL * 5) toAABBWith Vec3d(1.0, 1.0 - PIXEL * 5, 1.0 - PIXEL * 5)
             }
         }
     }
@@ -124,11 +124,11 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
     fun canStayInSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
         if (worldIn.isSideSolid(pos.offset(side), side.opposite, false)) return true
 
-        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) to Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
-        val temp = side.directionVec.toDoubleVec() * 0.625 + Vec3d(0.5, 0.5, 0.5)
+        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) toAABBWith  Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
+        val temp = side.directionVec.toVec3d() * 0.625 + Vec3d(0.5, 0.5, 0.5)
         val blockPos = pos.offset(side)
 
-        box = box.union(temp to temp).offset(pos)
+        box = box.union(temp toAABBWith temp).offset(pos)
         val state = worldIn.getBlockState(blockPos)
         val list = mutableListOf<AxisAlignedBB>()
 
@@ -137,7 +137,7 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
     }
 
     override fun neighborChanged(state: IBlockState, world: World, pos: BlockPos, blockIn: Block?) {
-        val dir = PROPERTY_FACING[state]
+        val dir = state[PROPERTY_FACING]
         if (!canStayInSide(world, pos, dir)) {
             world.destroyBlock(pos, true)
         }

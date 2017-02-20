@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.util
 
-import coffee.cypher.mcextlib.extensions.vectors.*
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.BlockPos
+
+import com.cout970.magneticraft.util.vector.minus
+import com.cout970.magneticraft.util.vector.xd
+import com.cout970.magneticraft.util.vector.yd
+import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.math.Vec3i
 
 infix fun Int.roundTo(factor: Int) = (this / factor) * factor
 
@@ -23,15 +24,10 @@ fun hasIntersection(aFirst: Vec3d, aSecond: Vec3d, bFirst: Vec3d, bSecond: Vec3d
         return false
 
     val s = dc.crossProduct(db).dotProduct(da.crossProduct(db)) / norm2(da.crossProduct(db))
-    if (s >= 0.0 && s <= 1.0) {
+    if (s in 0.0..1.0) {
         return true
     }
     return false
 }
 
-private fun norm2(v: Vec3d): Double = v.x * v.x + v.y * v.y + v.z * v.z
-
-operator fun BlockPos.plus(dir: EnumFacing) = this.offset(dir)!!
-operator fun BlockPos.plus(dir: BlockPos) = this.add(dir)!!
-operator fun BlockPos.unaryMinus() = BlockPos(-x, -y, -z)
-operator fun Vec3i.plus(dir: EnumFacing) = this.toBlockPos().offset(dir)!!
+private fun norm2(v: Vec3d): Double = v.xd * v.xd + v.yd * v.yd + v.zd * v.zd

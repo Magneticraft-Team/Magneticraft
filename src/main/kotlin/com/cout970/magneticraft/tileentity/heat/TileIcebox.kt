@@ -1,7 +1,5 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.set
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.heatrecipes.IceboxRecipeManager
@@ -9,10 +7,15 @@ import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecip
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
-import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.inventory.consumeItem
+import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
+import com.cout970.magneticraft.util.IRON_HEAT_CAPACITY
+import com.cout970.magneticraft.util.IRON_MELTING_POINT
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing

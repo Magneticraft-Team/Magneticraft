@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.electric.TileAirLock
-import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -31,7 +31,7 @@ object BlockAirLock : BlockBase(Material.IRON, "airlock"), ITileEntityProvider {
                     if (i * i + j * j + k * k <= length) {
                         val state = world.getBlockState(pos.add(i, j, k))
                         if (state.block == BlockAirBubble) {
-                            if (!BlockAirBubble.PROPERTY_DECAY[state]) {
+                            if (!state[BlockAirBubble.PROPERTY_DECAY]) {
                                 world.setBlockState(pos.add(i, j, k), state.withProperty(BlockAirBubble.PROPERTY_DECAY, true))
                                 world.scheduleUpdate(pos.add(i, j, k), this, 0)
                             }

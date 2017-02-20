@@ -1,12 +1,12 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound

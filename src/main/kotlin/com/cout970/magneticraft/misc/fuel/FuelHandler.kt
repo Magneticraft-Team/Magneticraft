@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.fuel
+package com.cout970.magneticraft.misc.fuel
 
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.IFuelHandler

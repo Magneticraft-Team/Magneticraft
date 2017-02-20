@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.util
 
+import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
 
 /**

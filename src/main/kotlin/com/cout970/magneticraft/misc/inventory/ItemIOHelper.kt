@@ -1,10 +1,11 @@
-package com.cout970.magneticraft.util
+package com.cout970.magneticraft.misc.inventory
 
-import coffee.cypher.mcextlib.extensions.vectors.x
-import coffee.cypher.mcextlib.extensions.vectors.y
-import coffee.cypher.mcextlib.extensions.vectors.z
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.xd
+import com.cout970.magneticraft.util.vector.yd
+import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
@@ -18,6 +19,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by Yurgen on 13/12/2016.
  */
 
+//TODO remove
 class ItemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemStackHandler) {
 
     fun suckItems() {
@@ -39,7 +41,7 @@ class ItemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemS
 
 class ItemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
 
-    val outDirection = EnumFacing.getFacingFromVector(off.x.toFloat(), off.y.toFloat(), off.z.toFloat()).opposite
+    val outDirection = EnumFacing.getFacingFromVector(off.xd.toFloat(), off.yd.toFloat(), off.zd.toFloat()).opposite
 
     fun ejectItems(item: ItemStack?, simulate: Boolean): ItemStack? {
         if (item == null) return null

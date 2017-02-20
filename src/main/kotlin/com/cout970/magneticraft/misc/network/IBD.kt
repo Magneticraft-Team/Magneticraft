@@ -1,9 +1,5 @@
 package com.cout970.magneticraft.misc.network
 
-import com.cout970.magneticraft.util.readByteArray
-import com.cout970.magneticraft.util.readString
-import com.cout970.magneticraft.util.writeByteArray
-import com.cout970.magneticraft.util.writeString
 import io.netty.buffer.ByteBuf
 
 /**

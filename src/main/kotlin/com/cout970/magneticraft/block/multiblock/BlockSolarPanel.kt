@@ -1,16 +1,17 @@
 package com.cout970.magneticraft.block.multiblock
 
-import coffee.cypher.mcextlib.extensions.aabb.to
+
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.isServer
-import com.cout970.magneticraft.util.rotateBox
+import com.cout970.magneticraft.util.vector.rotateBox
+import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -45,7 +46,7 @@ object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEnt
             return super.getBoundingBox(state, source, pos)
         }
         val dir = PROPERTY_DIRECTION[state]
-        return dir.rotateBox(vec3Of(0.5, 0, 0.5), vec3Of(0.25, 0, 0) to vec3Of(0.75, 0.75, 0.5))
+        return dir.rotateBox(vec3Of(0.5, 0, 0.5), vec3Of(0.25, 0, 0) toAABBWith vec3Of(0.75, 0.75, 0.5))
     }
 
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {

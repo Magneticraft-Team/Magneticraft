@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
-import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum

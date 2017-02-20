@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.network.MessageTileUpdate
-import com.cout970.magneticraft.util.isServer
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.network.MessageTileUpdate
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayerMP

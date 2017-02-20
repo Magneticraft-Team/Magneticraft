@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.aabb.to
+
 import com.cout970.magneticraft.tileentity.TileTableSieve
+import com.cout970.magneticraft.util.vector.toAABBWith
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -20,7 +21,7 @@ import net.minecraft.world.World
  */
 object BlockTableSieve : BlockBase(Material.WOOD, "table_sieve"), ITileEntityProvider {
 
-    val TABLE_SIEVE_BOX = Vec3d.ZERO to Vec3d(1.0, 9.0 / 16.0, 1.0)
+    val TABLE_SIEVE_BOX = Vec3d.ZERO toAABBWith Vec3d(1.0, 9.0 / 16.0, 1.0)
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = TABLE_SIEVE_BOX
 

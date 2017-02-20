@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.tilerenderer
 
-import coffee.cypher.mcextlib.extensions.vectors.minus
+
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
+import com.cout970.magneticraft.util.vector.minus
 
 /**
  * Created by cout970 on 06/07/2016.

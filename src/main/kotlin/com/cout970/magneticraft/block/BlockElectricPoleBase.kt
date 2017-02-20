@@ -1,15 +1,17 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
+
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
-import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.vector.to
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState

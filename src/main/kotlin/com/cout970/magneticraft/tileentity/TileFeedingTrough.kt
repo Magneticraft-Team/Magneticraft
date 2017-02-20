@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.tileentity
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import com.cout970.magneticraft.util.get
-import coffee.cypher.mcextlib.extensions.vectors.plus
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.block.BlockFeedingTrough
-import com.cout970.magneticraft.util.shouldTick
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.toVec3d
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.passive.EntityAnimal
 import net.minecraft.init.Items
@@ -37,15 +37,15 @@ class TileFeedingTrough : TileBase(), ITickable {
             }
             if (shouldTick(WAIT_TIME) && inventory[0] != null) {
                 //getting the bounding box to search animals
-                var start = pos.toDoubleVec().addVector(-3.5, -1.0, -3.5)
-                var end = pos.toDoubleVec().addVector(4.5, 2.0, 4.5)
+                var start = pos.toVec3d().addVector(-3.5, -1.0, -3.5)
+                var end = pos.toVec3d().addVector(4.5, 2.0, 4.5)
                 val dir = worldObj.getBlockState(pos).getValue(BlockFeedingTrough.FEEDING_TROUGH_SIDE_POSITION)
                 if (dir.axisDirection == EnumFacing.AxisDirection.POSITIVE) {
-                    end += dir.directionVec.toDoubleVec()
+                    end += dir.directionVec.toVec3d()
                 } else {
-                    start += dir.directionVec.toDoubleVec()
+                    start += dir.directionVec.toVec3d()
                 }
-                val box = start to end
+                val box = start toAABBWith end
                 //getting the animals
                 val totalAnimals = worldObj.getEntitiesInAABBexcluding(null, box, { it is EntityAnimal })
                 val validAnimals = totalAnimals.map { it as EntityAnimal }

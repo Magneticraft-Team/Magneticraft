@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.registry
 
-import coffee.cypher.mcextlib.extensions.items.stack
+
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.heatrecipes.HeatExchangerRecipeManager
@@ -18,6 +18,7 @@ import com.cout970.magneticraft.block.multiblock.*
 import com.cout970.magneticraft.item.*
 import com.cout970.magneticraft.item.hammers.ItemIronHammer
 import com.cout970.magneticraft.item.hammers.ItemStoneHammer
+import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.util.*
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -324,7 +325,7 @@ fun registerRecipes() {
 
     //SIFTER RECIPES
     for (i in ItemPebbles.variants.keys) {
-        addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(ItemPebbles, 1, ItemPebbles.secondaries.get(i)!!), 0.1f, ItemStack(GRAVEL), 0.15f, 20f)
+        addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(ItemPebbles, 1, ItemPebbles.secondaries[i]!!), 0.1f, ItemStack(GRAVEL), 0.15f, 20f)
     }
     addSifterRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f, ItemStack(COBBLESTONE), 0.1f, 20f)
     addSifterRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(Items.COAL), 0.1f, ItemStack(DIAMOND), 0.001f, 20f)

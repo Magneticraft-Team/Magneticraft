@@ -2,8 +2,8 @@ package com.cout970.magneticraft.network
 
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.util.readUUID
-import com.cout970.magneticraft.util.writeUUID
+import com.cout970.magneticraft.misc.network.readUUID
+import com.cout970.magneticraft.misc.network.writeUUID
 import io.netty.buffer.ByteBuf
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage

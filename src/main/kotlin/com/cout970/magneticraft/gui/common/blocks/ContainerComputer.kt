@@ -2,9 +2,9 @@ package com.cout970.magneticraft.gui.common.blocks
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.gui.common.ContainerBase
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.tileentity.computer.TileComputer
-import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos

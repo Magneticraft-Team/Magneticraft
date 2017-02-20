@@ -2,12 +2,12 @@
 
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.blocks.creativeTab
-import coffee.cypher.mcextlib.extensions.items.stack
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
+import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.MOD_ID
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -38,7 +38,7 @@ abstract class BlockBase(
         this.registryName = resource(registryName)
         setHardness(1.5F)
         setResistance(10.0F)
-        creativeTab = CreativeTabMg
+        setCreativeTab(CreativeTabMg)
     }
 
     open fun getItemName(stack: ItemStack?): String? = unlocalizedName

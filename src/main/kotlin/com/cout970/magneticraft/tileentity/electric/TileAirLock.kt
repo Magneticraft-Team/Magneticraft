@@ -6,8 +6,8 @@ import com.cout970.magneticraft.block.BlockAirBubble
 import com.cout970.magneticraft.block.BlockAirLock
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
-import com.cout970.magneticraft.util.isServer
-import com.cout970.magneticraft.util.shouldTick
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound

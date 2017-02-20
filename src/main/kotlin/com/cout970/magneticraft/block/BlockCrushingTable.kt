@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.item.hammers.ItemHammer
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileCrushingTable
+import com.cout970.magneticraft.util.vector.toAABBWith
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -23,7 +23,7 @@ object BlockCrushingTable : BlockBase(
         registryName = "crushing_table"
 ), ITileEntityProvider {
 
-    val boundingBox = Vec3d.ZERO to Vec3d(1.0, 0.875, 1.0)
+    val boundingBox = Vec3d.ZERO toAABBWith  Vec3d(1.0, 0.875, 1.0)
 
     override fun isFullBlock(state: IBlockState?) = false
     override fun isOpaqueCube(state: IBlockState?) = false

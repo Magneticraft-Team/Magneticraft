@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.tileentity
 
-import com.cout970.magneticraft.util.set
-import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.shouldTick
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing

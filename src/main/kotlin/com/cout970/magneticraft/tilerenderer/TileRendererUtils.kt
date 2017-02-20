@@ -1,14 +1,12 @@
 package com.cout970.magneticraft.tilerenderer
 
-import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.rotateBox
-import com.cout970.magneticraft.util.vector.vec3Of
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.GlStateManager.*
@@ -43,8 +41,8 @@ fun renderMultiblockBlueprint(multiblock: Multiblock) {
                     stack.item ?: continue
                     pushMatrix()
                     translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
-                    val pos = vec3Of(i, j, k) - multiblock.center.toDoubleVec()
-                    translate(pos.x, pos.y, pos.z)
+                    val pos = vec3Of(i, j, k) - multiblock.center.toVec3d()
+                    translate(pos.xd, pos.yd, pos.zd)
                     if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
                         translate(0.0, -0.045, 0.125)
                         rotate(90f, 1f, 0f, 0f)
@@ -87,11 +85,11 @@ fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms
 }
 
 fun customRotate(rot: Vec3d, pos: Vec3d) {
-    translate(pos.x, pos.y, pos.z)
+    translate(pos.xd, pos.yd, pos.zd)
     rotate(rot.xCoord.toFloat(), 1f, 0f, 0f)
     rotate(rot.yCoord.toFloat(), 0f, 1f, 0f)
     rotate(rot.zCoord.toFloat(), 0f, 0f, 1f)
-    translate(-pos.x, -pos.y, -pos.z)
+    translate(-pos.xd, -pos.yd, -pos.zd)
 }
 
 fun renderBox(box: AxisAlignedBB) {
@@ -247,7 +245,7 @@ fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnec
     for (c in origins.indices) {
         val order = b.getConnectorIndex(c, a, con)
         val start = origins[c]
-        val end = direction.toDoubleVec().add(destinations[order])
+        val end = direction.toVec3d().add(destinations[order])
 
         val tes = Tessellator.getInstance()
         val buffer = tes.buffer

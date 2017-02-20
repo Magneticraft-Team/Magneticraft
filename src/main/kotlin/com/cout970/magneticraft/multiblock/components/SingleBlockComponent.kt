@@ -2,8 +2,8 @@ package com.cout970.magneticraft.multiblock.components
 
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.multiblock.*
-import com.cout970.magneticraft.util.plus
-import com.cout970.magneticraft.util.translate
+import com.cout970.magneticraft.util.i18n
+import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
@@ -20,10 +20,12 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != origin) {
-            if(Debug.DEBUG) {
+            if (Debug.DEBUG) {
                 context.world.setBlockState(pos, origin)
             }
-            return listOf(translate("text.magneticraft.multiblock.invalid_block", "[%d, %d, %d]".format(pos.x, pos.y, pos.z), state.toString(), origin.toString()))
+            val keyStr = "text.magneticraft.multiblock.invalid_block"
+            val vecStr = "[%d, %d, %d]".format(pos.x, pos.y, pos.z)
+            return listOf(keyStr.i18n(vecStr, state.toString(), origin.toString()))
         }
         return emptyList()
     }
@@ -59,5 +61,6 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
             context.world.setBlockState(pos, origin)
     }
 
-    override fun getBlueprintBlocks(multiblock: Multiblock, blockPos: BlockPos): List<ItemStack> = listOf(ItemStack(origin.block, origin.block.getMetaFromState(origin)))
+    override fun getBlueprintBlocks(multiblock: Multiblock, blockPos: BlockPos): List<ItemStack> = listOf(
+            ItemStack(origin.block, origin.block.getMetaFromState(origin)))
 }

@@ -1,17 +1,18 @@
 package com.cout970.magneticraft.block.multiblock
 
-import com.cout970.magneticraft.util.set
-import com.cout970.magneticraft.util.get
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.isServer
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -40,7 +41,7 @@ object BlockHydraulicPress : BlockMultiblockHeat(Material.IRON, "hydraulic_press
     }
 
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
-        if (PROPERTY_ACTIVE[state] && entityBox != null) {
+        if (state[PROPERTY_ACTIVE] && entityBox != null) {
             return super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn)
         }
         return addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos))

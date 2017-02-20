@@ -7,8 +7,12 @@ import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.misc.ElectricConstants
-import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
+import com.cout970.magneticraft.util.COPPER_MELTING_POINT
+import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
+import com.cout970.magneticraft.util.ENERGY_TO_HEAT
 import net.minecraftforge.fml.relauncher.Side
 
 /**

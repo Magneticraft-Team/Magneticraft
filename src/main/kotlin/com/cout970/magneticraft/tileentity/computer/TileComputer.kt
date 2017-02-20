@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.tileentity.computer
 
-import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.computer.*
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.isServer
 import com.cout970.magneticraft.util.resource
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ITickable

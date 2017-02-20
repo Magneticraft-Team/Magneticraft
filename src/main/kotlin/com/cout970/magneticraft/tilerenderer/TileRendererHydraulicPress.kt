@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.tilerenderer
 
-import com.cout970.magneticraft.util.get
 import com.cout970.loader.api.ModelCacheFactory
 import com.cout970.loader.api.model.ICachedModel
 import com.cout970.loader.api.model.IModelFilter
 import com.cout970.loader.api.model.IModelPart
 import com.cout970.loader.api.model.IObjGroup
+import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.util.resource

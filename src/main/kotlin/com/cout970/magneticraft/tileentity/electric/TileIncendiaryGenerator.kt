@@ -1,8 +1,6 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.set
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
@@ -10,14 +8,23 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.inventory.consumeItem
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.render.AnimationTimer
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.misc.fluid.Tank
-import com.cout970.magneticraft.misc.render.AnimationTimer
-import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.util.FuelCache
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.util.guessAmbientTemp
+import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -182,7 +189,7 @@ class TileIncendiaryGenerator(
     fun getDirection(): EnumFacing {
         val state = world.getBlockState(pos)
         if (PROPERTY_DIRECTION.isIn(state)) {
-            return PROPERTY_DIRECTION[state]
+            return state[PROPERTY_DIRECTION]
         }
         return EnumFacing.NORTH
     }

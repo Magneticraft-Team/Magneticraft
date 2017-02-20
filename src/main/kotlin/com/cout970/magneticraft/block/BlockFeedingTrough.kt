@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.block
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.vectors.isHorizontal
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
-import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.util.vector.isHorizontal
+import com.cout970.magneticraft.util.vector.to
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
@@ -34,7 +35,7 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox
 
     override fun createNewTileEntity(worldIn: World?, meta: Int) =
-        if (FEEDING_TROUGH_IS_CENTER[getStateFromMeta(meta)!!])
+        if (getStateFromMeta(meta)!!.get(FEEDING_TROUGH_IS_CENTER))
             TileFeedingTrough()
         else null
 

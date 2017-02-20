@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tilerenderer
 
-import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.tileentity.TileTableSieve
 import com.cout970.magneticraft.util.resource
 import net.minecraft.client.renderer.Tessellator

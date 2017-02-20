@@ -3,9 +3,9 @@ package com.cout970.magneticraft.block.heat
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.block.BlockMultiState
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.util.get
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -40,7 +40,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
     }
 
     override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
-        val tile = blockAccess.getTileEntity(pos.offset(PROPERTY_DIRECTION[blockState])) ?: return 0
+        val tile = blockAccess.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is IHeatHandler)
             return handler.comparatorOutput
@@ -48,7 +48,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
     }
 
     override fun getStrongPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
-        val tile = blockAccess.getTileEntity(pos.offset(PROPERTY_DIRECTION[blockState])) ?: return 0
+        val tile = blockAccess.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is IHeatHandler)
             return handler.comparatorOutput
@@ -56,7 +56,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
     }
 
     override fun getComparatorInputOverride(blockState: IBlockState, worldIn: World, pos: BlockPos): Int {
-        val tile = worldIn.getTileEntity(pos.offset(PROPERTY_DIRECTION[blockState])) ?: return 0
+        val tile = worldIn.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is IHeatHandler)
             return handler.comparatorOutput

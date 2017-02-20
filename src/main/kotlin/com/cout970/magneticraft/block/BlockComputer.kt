@@ -2,15 +2,16 @@ package com.cout970.magneticraft.block
 
 
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.util.set
-import com.cout970.magneticraft.util.get
+
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.computer.TileComputer
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.isServer
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -51,7 +52,7 @@ object BlockComputer : BlockMultiState(Material.IRON, "computer"), ITileEntityPr
                         val tile = worldIn.getTile<TileComputer>(pos)
                         if (tile != null && tile.inv[0] == null) {
                             val index = playerIn.inventory.currentItem
-                            if (index >= 0 && index < 9) {
+                            if (index in 0..8) {
                                 tile.inv[0] = playerIn.inventory.removeStackFromSlot(index)
                             }
                         } else {
@@ -85,7 +86,7 @@ object BlockComputer : BlockMultiState(Material.IRON, "computer"), ITileEntityPr
         worldIn?.setBlockState(pos, defaultState.withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite))
     }
 
-    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal
+    override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_DIRECTION].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_DIRECTION, EnumFacing.getHorizontal(meta))
 

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block.decoration
 
 import com.cout970.magneticraft.block.BlockFallingBase
-import com.cout970.magneticraft.fuel.IFuel
+import com.cout970.magneticraft.misc.fuel.IFuel
 import com.cout970.magneticraft.item.ItemWoodChip
 import net.minecraft.block.Block
 import net.minecraft.util.EnumFacing

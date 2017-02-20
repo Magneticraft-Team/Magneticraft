@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.block.heat
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.block.*
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileHeatPipe
@@ -31,7 +32,7 @@ object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEnt
         super.onNeighborChange(world, pos, neighbor)
         if (pos == null || neighbor == null) return
         val tile = world?.getTile<TileHeatPipe>(pos) ?: return
-        val neighborTile = world?.getTileEntity(neighbor) ?: return
+        val neighborTile = world.getTileEntity(neighbor) ?: return
         val handler = NODE_HANDLER!!.fromTile(neighborTile) ?: return
         val facing = EnumFacing.getFacingFromVector((neighbor.x - pos.x).toFloat(), (neighbor.y - pos.y).toFloat(), (neighbor.z - pos.z).toFloat())
         if (handler is IHeatHandler)
@@ -44,7 +45,7 @@ object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEnt
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
         val tile = worldIn?.getTile<TileHeatPipe>(pos) ?: return
         for (i in EnumFacing.values()) {
-            val neighborTile = worldIn?.getTileEntity(pos.offset(i)) ?: continue
+            val neighborTile = worldIn.getTileEntity(pos.offset(i)) ?: continue
             val handler = NODE_HANDLER!!.fromTile(neighborTile) ?: continue
             if (handler is IHeatHandler)
                 tile.activeSides.add(i)
@@ -55,12 +56,7 @@ object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEnt
         if (state == null) return defaultState
         if (pos == null) return state
         val tile = worldIn?.getTile<TileHeatPipe>(pos) ?: return state
-//      for(i in EnumFacing.VALUES) {
-//          if (tile.activeSides.contains(i))
-//              state.withProperty(PropertyDirections.get(i), true)
-//          else
-//              state.withProperty(PropertyDirections.get(i), false)
-//      }
+
         return state.withProperty(PROPERTY_NORTH, tile.activeSides.contains(EnumFacing.NORTH)).//TODO: HACK
                 withProperty(PROPERTY_SOUTH, tile.activeSides.contains(EnumFacing.SOUTH)).
                 withProperty(PROPERTY_EAST, tile.activeSides.contains(EnumFacing.EAST)).

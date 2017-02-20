@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.TileInserter
-import com.cout970.magneticraft.util.get
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -28,7 +28,7 @@ object BlockInserter : BlockMultiState(Material.IRON, "inserter"), ITileEntityPr
     override fun isFullCube(state: IBlockState?) = false
     override fun isVisuallyOpaque() = false
 
-    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].horizontalIndex
+    override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_DIRECTION].horizontalIndex
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_DIRECTION, EnumFacing.getHorizontal(meta))
 

@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.network
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
-import com.cout970.magneticraft.tileentity.TileBase
+
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.tileentity.TileBase
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos

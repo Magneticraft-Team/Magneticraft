@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import coffee.cypher.mcextlib.extensions.vectors.toBlockPos
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.INodeHandler
@@ -9,14 +8,15 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_FACING
 import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.integration.tesla.TeslaNodeWrapper
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.registry.TESLA_CONSUMER
 import com.cout970.magneticraft.registry.TESLA_PRODUCER
 import com.cout970.magneticraft.registry.TESLA_STORAGE
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricConnector
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.isIn
-import com.cout970.magneticraft.util.plus
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.toBlockPos
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -79,7 +79,7 @@ class TileElectricConnector : TileElectricBase() {
     fun getFacing(): EnumFacing {
         val state = getBlockState()
         if (PROPERTY_FACING.isIn(state)) {
-            return PROPERTY_FACING[state]
+            return state[PROPERTY_FACING]
         }
         return EnumFacing.DOWN
     }

@@ -2,8 +2,8 @@ package com.cout970.magneticraft.multiblock.components
 
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.multiblock.*
-import com.cout970.magneticraft.util.plus
-import com.cout970.magneticraft.util.translate
+import com.cout970.magneticraft.util.i18n
+import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -25,7 +25,10 @@ class ContextBlockComponent(
             if(Debug.DEBUG) {
                 context.world.setBlockState(pos, getter(context))
             }
-            return listOf(translate("text.magneticraft.multiblock.invalid_block", "[%d, %d, %d]".format(pos.x, pos.y, pos.z), state.toString(), getter(context)))
+            val keyStr = "text.magneticraft.multiblock.invalid_block"
+            val vecStr = "[%d, %d, %d]".format(pos.x, pos.y, pos.z)
+
+            return listOf(keyStr.i18n(vecStr, state.toString(), getter(context)))
         }
         return emptyList()
     }

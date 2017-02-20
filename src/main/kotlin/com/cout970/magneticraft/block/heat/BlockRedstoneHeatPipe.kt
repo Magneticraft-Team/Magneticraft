@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.block.heat
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.block.PROPERTY_OPEN
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.heat.TileRedstoneHeatPipe
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
-import com.cout970.magneticraft.util.get
 import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -29,7 +30,7 @@ object BlockRedstoneHeatPipe : BlockHeatMultistate(Material.ROCK, "redstone_heat
     }
 
     override fun getMetaFromState(state: IBlockState): Int {
-        if (PROPERTY_OPEN[state]) return 1 else return 0
+        if (state[PROPERTY_OPEN]) return 1 else return 0
     }
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.
@@ -43,7 +44,7 @@ object BlockRedstoneHeatPipe : BlockHeatMultistate(Material.ROCK, "redstone_heat
         if (!worldIn.isRemote) {
             val flag = worldIn.isBlockPowered(pos)
             if (flag || blockIn.defaultState.canProvidePower()) {
-                if (PROPERTY_OPEN[state] != flag) {
+                if (state.get(PROPERTY_OPEN) != flag) {
                     worldIn.setBlockState(pos, defaultState.withProperty(PROPERTY_OPEN, flag))
                     val tile = worldIn.getTile<TileRedstoneHeatPipe>(pos)
                     tile?.heat?.conductivity = if (flag) 0.0 else DEFAULT_CONDUCTIVITY

@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.tileentity
 
-import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.api.internal.registries.machines.tablesieve.TableSieveRecipeManager
 import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
-import com.cout970.magneticraft.util.ItemInputHelper
-import com.cout970.magneticraft.util.ItemOutputHelper
-import com.cout970.magneticraft.util.shouldTick
+import com.cout970.magneticraft.misc.inventory.ItemInputHelper
+import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound

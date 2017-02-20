@@ -1,14 +1,13 @@
 package com.cout970.magneticraft.tileentity
 
-import com.cout970.magneticraft.util.set
-import com.cout970.magneticraft.util.get
-import coffee.cypher.mcextlib.extensions.vectors.*
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.sounds
-import com.cout970.magneticraft.util.shouldTick
-import com.cout970.magneticraft.util.vector.vec3Of
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.ParticleBreaking
@@ -82,7 +81,7 @@ class TileCrushingTable : TileBase(), ITickable {
 
     @SideOnly(Side.CLIENT)
     private fun spawnParticles() {
-        val center = pos.toDoubleVec() + vec3Of(0.5, 0.95, 0.5)
+        val center = pos.toVec3d() + vec3Of(0.5, 0.95, 0.5)
         val stack = getStack() ?: return
         val item = stack.item ?: return
 
@@ -92,7 +91,7 @@ class TileCrushingTable : TileBase(), ITickable {
             val rand = Random()
 
             for (i in 0..5) {
-                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.x, center.y, center.z,
+                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.xd, center.yd, center.zd,
                         (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15, Block.getStateId(state))
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }
@@ -101,7 +100,7 @@ class TileCrushingTable : TileBase(), ITickable {
             val rand = Random()
 
             for (i in 0..5) {
-                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.x, center.y, center.z,
+                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.xd, center.yd, center.zd,
                         (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15, Item.getIdFromItem(item), stack.itemDamage)
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }

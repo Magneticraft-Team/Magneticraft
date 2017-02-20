@@ -1,15 +1,16 @@
 package com.cout970.magneticraft.block.multiblock
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.isServer
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer

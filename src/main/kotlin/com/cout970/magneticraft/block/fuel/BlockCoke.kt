@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block.fuel
 
 import com.cout970.magneticraft.block.BlockBase
-import com.cout970.magneticraft.fuel.IFuel
+import com.cout970.magneticraft.misc.fuel.IFuel
 import com.cout970.magneticraft.item.ItemCoke
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material

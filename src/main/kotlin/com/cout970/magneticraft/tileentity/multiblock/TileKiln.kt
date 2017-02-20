@@ -1,9 +1,5 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import coffee.cypher.mcextlib.extensions.aabb.plus
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
-import coffee.cypher.mcextlib.extensions.worlds.getTile
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
@@ -12,7 +8,12 @@ import com.cout970.magneticraft.api.internal.registries.machines.kiln.KilnRecipe
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.damage.DamageSources
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
@@ -21,6 +22,7 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileKilnShelf
 import com.cout970.magneticraft.tileentity.heat.TileHeatBase
 import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
 import net.minecraft.item.Item
@@ -151,7 +153,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
             if (active) {
                 if (shouldTick(10)) {
                     if (heatNode.temperature > KILN_DAMAGE_TEMP) {
-                        val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
+                        val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toVec3d(), INTERNAL_AABB) + pos.toVec3d())
                         if (!entities.isEmpty()) {
                             entities.forEach {
                                 if (!doorOpen) it.air -= 1
@@ -223,10 +225,8 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override fun updateHeatConnections() {
         for (j in POTENTIAL_CONNECTIONS) {
             val relPos = posTransform(j)
-            val tileOther = world.getTileEntity(relPos)
-            if (tileOther == null) continue
-            val handler = NODE_HANDLER!!.fromTile(tileOther) ?: continue
-            if (handler !is IHeatHandler) continue
+            val tileOther = world.getTileEntity(relPos) ?: continue
+            val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
             for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
                 heatConnections.add(HeatConnection(heatNode, otherNode))
                 handler.addConnection(HeatConnection(otherNode, heatNode))
@@ -236,12 +236,12 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     }
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
-        PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
+        getBlockState()[PROPERTY_DIRECTION] else EnumFacing.NORTH
 
     fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
 
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
-        PROPERTY_ACTIVE[getBlockState()] else false
+        getBlockState()[PROPERTY_ACTIVE] else false
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
@@ -259,7 +259,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         super.load(nbt)
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(BlockPos.ORIGIN,
             multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
 
 
@@ -267,15 +267,13 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         val HEAT_INPUTS = setOf(BlockPos(-2, 0, 1), BlockPos(-2, 0, 2), BlockPos(-2, 0, 3),
                 BlockPos(-1, 0, 4), BlockPos(0, 0, 4), BlockPos(1, 0, 4),
                 BlockPos(2, 0, 1), BlockPos(2, 0, 2), BlockPos(2, 0, 3))
+
+        //Optimistation to stop multiblocks checking inside themselves for heat connections
         val POTENTIAL_CONNECTIONS = setOf(
                 BlockPos(-2, -1, 1), BlockPos(-2, -1, 2), BlockPos(-2, -1, 3),
                 BlockPos(2, -1, 1), BlockPos(2, -1, 2), BlockPos(2, -1, 3),
-                BlockPos(-1, -1, 4), BlockPos(0, -1, 4), BlockPos(1, -1, 4)) //Optimistation to stop multiblocks checking inside themselves for heat connections
+                BlockPos(-1, -1, 4), BlockPos(0, -1, 4), BlockPos(1, -1, 4))
         val INTERNAL_AABB = AxisAlignedBB(-0.25, 0.0, -0.25, 3.25, 2.5, 3.25)
-    }
-
-    override fun onBreak() {
-        super.onBreak()
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {

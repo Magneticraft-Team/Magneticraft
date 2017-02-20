@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.*
 import net.minecraft.item.ItemFood

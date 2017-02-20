@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.tilerenderer
 
-import coffee.cypher.mcextlib.extensions.vectors.x
-import coffee.cypher.mcextlib.extensions.vectors.y
-import coffee.cypher.mcextlib.extensions.vectors.z
 import com.cout970.magneticraft.block.BlockFeedingTrough
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
+import com.cout970.magneticraft.util.vector.xd
+import com.cout970.magneticraft.util.vector.yd
+import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.entity.RenderEntityItem
@@ -123,14 +123,14 @@ object TileRendererFeedingTrough : TileEntityRenderer<TileFeedingTrough>() {
         translate(PIXEL * 16, 0.0, 0.0)
         rotate(0, -90, 0)
 
-        translate(pos.x * PIXEL, pos.y * PIXEL, pos.z * PIXEL)
+        translate(pos.xd * PIXEL, pos.yd * PIXEL, pos.zd * PIXEL)
 
-        translate(rotPos.x * PIXEL, rotPos.y * PIXEL, rotPos.z * PIXEL)
-        rotate(rot.x, rot.y, rot.z)
-        translate(-rotPos.x * PIXEL, -rotPos.y * PIXEL, -rotPos.z * PIXEL)
+        translate(rotPos.xd * PIXEL, rotPos.yd * PIXEL, rotPos.zd * PIXEL)
+        rotate(rot.xd, rot.yd, rot.zd)
+        translate(-rotPos.xd * PIXEL, -rotPos.yd * PIXEL, -rotPos.zd * PIXEL)
 
         translate(PIXEL * 4, 0.0, 0.0)
-        GlStateManager.scale(scale.x, scale.y, scale.z)
+        GlStateManager.scale(scale.xd, scale.yd, scale.zd)
     }
 
     private fun rotate(x: Number, y: Number, z: Number) {

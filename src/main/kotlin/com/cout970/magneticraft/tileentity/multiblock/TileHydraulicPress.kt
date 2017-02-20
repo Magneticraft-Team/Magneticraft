@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import coffee.cypher.mcextlib.extensions.aabb.to
-import coffee.cypher.mcextlib.extensions.inventories.get
-import coffee.cypher.mcextlib.extensions.inventories.set
+
+
+
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatHandler
@@ -16,6 +16,14 @@ import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.crafting.CraftingProcess
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.render.AnimationTimer
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
@@ -24,8 +32,10 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.misc.render.AnimationTimer
-import com.cout970.magneticraft.misc.crafting.CraftingProcess
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.rotatePoint
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.unaryMinus
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -166,7 +176,7 @@ class TileHydraulicPress : TileElectricHeatBase(), IMultiblockCenter {
         super.load(nbt)
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(BlockPos.ORIGIN,
             multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
 
 

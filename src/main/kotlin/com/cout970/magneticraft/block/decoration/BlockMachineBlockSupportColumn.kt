@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block.decoration
 
 import com.cout970.magneticraft.block.BlockMultiState
-import com.cout970.magneticraft.util.get
+import com.cout970.magneticraft.misc.block.get
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
@@ -33,7 +33,7 @@ object BlockMachineBlockSupportColumn : BlockMultiState(Material.IRON, "machine_
     lateinit var PROPERTY_STATES: PropertyEnum<States>
         private set
 
-    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_STATES[state].ordinal
+    override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_STATES].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_STATES, States.values()[meta])
 

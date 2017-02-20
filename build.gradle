@@ -106,11 +106,9 @@ repositories {
 }
 
 dependencies {
-//    shade "coffee.cypher.mcextlib:mc-extlib:$extlib_version"
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     deobfCompile "mezz.jei:jei_$mc_version:$jei_version"
     shade files("./lib/ModelLibrary-${model_lib_version}.jar")
-    shade files("./lib/mc-extlib-1.4.0.jar")
     compile "net.darkhax.tesla:Tesla:$tesla_version"
 }
 

@@ -1,11 +1,5 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import coffee.cypher.mcextlib.extensions.aabb.plus
-import coffee.cypher.mcextlib.extensions.aabb.to
-import com.cout970.magneticraft.util.get
-import com.cout970.magneticraft.util.set
-import coffee.cypher.mcextlib.extensions.vectors.minus
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -18,6 +12,17 @@ import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.crafting.CraftingProcess
+import com.cout970.magneticraft.misc.damage.DamageSources
+import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.inventory.ItemInputHelper
+import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
@@ -26,9 +31,7 @@ import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.util.*
-import com.cout970.magneticraft.misc.crafting.CraftingProcess
-import com.cout970.magneticraft.misc.damage.DamageSources
-import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
 import net.minecraft.item.ItemStack
@@ -88,7 +91,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     init {
         craftingProcess = CraftingProcess({//craft
-            val outputHelper = ItemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
+            val outputHelper = ItemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toVec3d())
             val recipe = getRecipe()!!
             var result = recipe.primaryOutput
             val secondary = if (recipe.probability > 0 && Random().nextFloat() <= recipe.probability) recipe.secondaryOutput else null
@@ -134,14 +137,14 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
 
     override fun update() {
         if (worldObj.isServer && active) {
-            val inputHelper = ItemInputHelper(world, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toDoubleVec(), inventory)
+            val inputHelper = ItemInputHelper(world, direction.rotateBox(BlockPos.ORIGIN.toVec3d(), (AxisAlignedBB(-1.0, 2.0, 0.0, 2.0, 4.0, 3.0))) + pos.toVec3d(), inventory)
             if (shouldTick(20)) {
                 inputHelper.suckItems()
                 sendUpdateToNearPlayers()
             }
             if (shouldTick(10)) {
                 if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
-                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toDoubleVec(), INTERNAL_AABB) + pos.toDoubleVec())
+                    val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toVec3d(), INTERNAL_AABB) + pos.toVec3d())
                     if (!entities.isEmpty()) {
                         val interp = interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE)
                         entities.forEach {
@@ -168,10 +171,10 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     }
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
-        PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
+        getBlockState()[PROPERTY_DIRECTION] else EnumFacing.NORTH
 
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
-        PROPERTY_ACTIVE[getBlockState()] else false
+        getBlockState()[PROPERTY_ACTIVE] else false
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
@@ -187,7 +190,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         super.load(nbt)
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 2, 0)) to (pos + BlockPos(2, 4, 3))
+    override fun getRenderBoundingBox(): AxisAlignedBB = (pos - BlockPos(1, 2, 0)) toAABBWith (pos + BlockPos(2, 4, 3))
 
     companion object {
         val ENERGY_INPUT = BlockPos(0, 1, 1)
@@ -298,7 +301,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     }
 
     fun checkOutputValid(): Boolean {
-        val outputHelper = ItemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toDoubleVec())
+        val outputHelper = ItemOutputHelper(world, posTransform(ITEM_OUTPUT), direction.rotatePoint(BlockPos(0, 0, 0), ITEM_OUTPUT_OFF).toVec3d())
         val recipe = getRecipe() ?: return false
         if (inventory[0]!!.stackSize < recipe.input.stackSize) return false
         if (outputHelper.ejectItems(recipe.primaryOutput, true) != null) return false

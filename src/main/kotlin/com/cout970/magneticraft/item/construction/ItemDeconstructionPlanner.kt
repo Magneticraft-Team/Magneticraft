@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.item.construction
 
-import coffee.cypher.mcextlib.extensions.aabb.plus
-import coffee.cypher.mcextlib.extensions.vectors.toDoubleVec
 import com.cout970.magneticraft.item.ItemBase
-import com.cout970.magneticraft.util.isServer
-import com.cout970.magneticraft.util.rotateBox
+import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.rotateBox
+import com.cout970.magneticraft.util.vector.toVec3d
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -59,7 +59,7 @@ class ItemDeconstructionPlanner : ItemBase("deconstruction_planner") {
 
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer?, worldIn: World?, pos: BlockPos?, hand: EnumHand?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
         if (pos == null || playerIn == null || worldIn == null || facing == null) return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ)
-        val box = facing.rotateBox(pos.toDoubleVec(), (AxisAlignedBB(-width, -height, 0.0, width, height, depth))) + pos.toDoubleVec()
+        val box = facing.rotateBox(pos.toVec3d(), (AxisAlignedBB(-width, -height, 0.0, width, height, depth))) + pos.toVec3d()
         for (i in box.minX.toInt() until box.maxX.toInt()) {
             for (j in box.minY.toInt() until box.maxY.toInt()) {
                 for (k in box.minZ.toInt() until box.maxZ.toInt()) {

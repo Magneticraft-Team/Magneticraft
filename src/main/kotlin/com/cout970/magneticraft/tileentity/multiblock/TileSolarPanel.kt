@@ -1,17 +1,26 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import coffee.cypher.mcextlib.extensions.aabb.to
+
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.util.getEnumFacing
+import com.cout970.magneticraft.util.setEnumFacing
+import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.rotatePoint
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.unaryMinus
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -75,7 +84,7 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
 
     override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN to direction.rotatePoint(BlockPos.ORIGIN,
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(BlockPos.ORIGIN,
             multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
 
 

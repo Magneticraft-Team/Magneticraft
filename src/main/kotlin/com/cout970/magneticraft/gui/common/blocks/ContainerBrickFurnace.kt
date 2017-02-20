@@ -1,11 +1,12 @@
 package com.cout970.magneticraft.gui.common.blocks
 
-import coffee.cypher.mcextlib.extensions.worlds.getTile
+
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.gui.common.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_HEAT
-import com.cout970.magneticraft.tileentity.heat.TileBrickFurnace
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.tileentity.heat.TileBrickFurnace
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
