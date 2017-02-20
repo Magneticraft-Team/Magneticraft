@@ -52,10 +52,10 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
     override var multiblockFacing: EnumFacing? = null
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
-        PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
+        getBlockState()[PROPERTY_DIRECTION] else EnumFacing.NORTH
 
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
-        PROPERTY_ACTIVE[getBlockState()] else false
+        getBlockState()[PROPERTY_ACTIVE] else false
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean = false
 

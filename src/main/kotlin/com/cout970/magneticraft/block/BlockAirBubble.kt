@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.misc.block.get
@@ -44,14 +46,14 @@ object BlockAirBubble : BlockMultiState(Material.GLASS, "air_bubble") {
 
     override fun updateTick(worldIn: World, pos: BlockPos, state: IBlockState, rand: Random?) {
         super.updateTick(worldIn, pos, state, rand)
-        if (PROPERTY_DECAY[state]) {
+        if (state[PROPERTY_DECAY]) {
             worldIn.setBlockToAir(pos)
         }
     }
 
     override fun neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block?) {
         super.neighborChanged(state, worldIn, pos, blockIn)
-        if (PROPERTY_DECAY[state] && RANDOM.nextBoolean()) {
+        if (state[PROPERTY_DECAY] && RANDOM.nextBoolean()) {
             worldIn.setBlockToAir(pos)
         }
     }

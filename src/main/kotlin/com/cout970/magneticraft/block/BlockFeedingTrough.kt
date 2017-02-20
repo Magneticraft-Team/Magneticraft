@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block
 
 
@@ -62,10 +64,10 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
     }
 
     private fun getTileEntity(worldIn: World, pos: BlockPos, state: IBlockState) =
-        if (FEEDING_TROUGH_IS_CENTER[state]) {
+        if (state[FEEDING_TROUGH_IS_CENTER]) {
             worldIn.getTile<TileFeedingTrough>(pos)
         } else {
-            val dir = FEEDING_TROUGH_SIDE_POSITION[state]
+            val dir = state[FEEDING_TROUGH_SIDE_POSITION]
             worldIn.getTile<TileFeedingTrough>(pos.add(dir.directionVec))
         }
 
@@ -80,12 +82,12 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         super.breakBlock(worldIn, pos, state)
-        val dir = FEEDING_TROUGH_SIDE_POSITION[state]
+        val dir = state[FEEDING_TROUGH_SIDE_POSITION]
         worldIn.setBlockToAir(pos.add(dir.directionVec))
     }
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType {
-        if (!FEEDING_TROUGH_IS_CENTER[state]) {
+        if (!state[FEEDING_TROUGH_IS_CENTER]) {
             return EnumBlockRenderType.INVISIBLE
         }
         return super.getRenderType(state)
@@ -101,8 +103,8 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
             return 0
         }
 
-        val sideMeta = EnumFacing.HORIZONTALS.indexOf(FEEDING_TROUGH_SIDE_POSITION[state]) shl 1
-        val centerMeta = if (FEEDING_TROUGH_IS_CENTER[state]) 1 else 0
+        val sideMeta = EnumFacing.HORIZONTALS.indexOf(state[FEEDING_TROUGH_SIDE_POSITION]) shl 1
+        val centerMeta = if (state[FEEDING_TROUGH_IS_CENTER]) 1 else 0
 
         return sideMeta + centerMeta
     }

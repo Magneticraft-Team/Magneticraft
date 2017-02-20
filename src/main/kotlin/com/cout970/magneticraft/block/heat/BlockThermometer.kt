@@ -65,7 +65,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
         return 0
     }
 
-    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_DIRECTION[state].ordinal
+    override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_DIRECTION].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_DIRECTION, EnumFacing.getFront(meta))
 

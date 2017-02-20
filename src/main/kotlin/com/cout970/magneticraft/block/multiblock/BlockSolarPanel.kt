@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block.multiblock
 
 
@@ -42,22 +44,22 @@ object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEnt
     }
 
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess?, pos: BlockPos?): AxisAlignedBB {
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             return super.getBoundingBox(state, source, pos)
         }
-        val dir = PROPERTY_DIRECTION[state]
+        val dir = state[PROPERTY_DIRECTION]
         return dir.rotateBox(vec3Of(0.5, 0, 0.5), vec3Of(0.25, 0, 0) toAABBWith vec3Of(0.75, 0.75, 0.5))
     }
 
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
-        if (PROPERTY_ACTIVE[state] && entityBox != null) {
+        if (state[PROPERTY_ACTIVE] && entityBox != null) {
             return super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn)
         }
         return addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos))
     }
 
     override fun getSelectedBoundingBox(state: IBlockState, worldIn: World, pos: BlockPos): AxisAlignedBB {
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             return super.getSelectedBoundingBox(state, worldIn, pos)
         }
         return getBoundingBox(state, worldIn, pos).offset(pos)
@@ -69,18 +71,18 @@ object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEnt
     override fun isVisuallyOpaque() = false
 
     override fun canRenderInLayer(state: IBlockState, layer: BlockRenderLayer?): Boolean {
-        return PROPERTY_CENTER[state] && !PROPERTY_ACTIVE[state] && super.canRenderInLayer(state, layer)
+        return state[PROPERTY_CENTER] && !state[PROPERTY_ACTIVE] && super.canRenderInLayer(state, layer)
     }
 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = createTileEntity(worldIn, getStateFromMeta(meta))
 
     override fun createTileEntity(world: World, state: IBlockState): TileEntity? {
-        if (PROPERTY_CENTER[state]) return TileSolarPanel()
+        if (state[PROPERTY_CENTER]) return TileSolarPanel()
         return TileMultiblock()
     }
 
     override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?, willHarvest: Boolean): Boolean {
-        if (PROPERTY_ACTIVE[state!!] && world!!.isServer) {
+        if (state!![PROPERTY_ACTIVE] && world!!.isServer) {
             breakBlock(world, pos!!, state)
             return false
         } else {
@@ -90,13 +92,13 @@ object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEnt
 
     override fun getMetaFromState(state: IBlockState): Int {
         var meta = 0
-        if (PROPERTY_CENTER[state]) {
+        if (state[PROPERTY_CENTER]) {
             meta = meta or 8
         }
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             meta = meta or 4
         }
-        val dir = PROPERTY_DIRECTION[state]
+        val dir = state[PROPERTY_DIRECTION]
         meta = meta or ((dir.ordinal - 2) and 3)
         return meta
     }
@@ -118,16 +120,16 @@ object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEnt
     }
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state]) {
-            if (!PROPERTY_ACTIVE[state]) {
-                activateMultiblock(MultiblockContext(MultiblockSolarPanel, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
+        if (worldIn.isServer && hand == EnumHand.MAIN_HAND && state[PROPERTY_CENTER]) {
+            if (!state[PROPERTY_ACTIVE]) {
+                activateMultiblock(MultiblockContext(MultiblockSolarPanel, worldIn, pos, state[PROPERTY_DIRECTION], playerIn))
             }
         }
-        return hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state] && !PROPERTY_ACTIVE[state]
+        return hand == EnumHand.MAIN_HAND && state[PROPERTY_CENTER] && !state[PROPERTY_ACTIVE]
     }
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             super.breakBlock(worldIn, pos, state)
         }
     }

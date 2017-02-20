@@ -159,10 +159,10 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     override fun onDeactivate() = Unit
 
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
-        PROPERTY_DIRECTION[getBlockState()] else EnumFacing.NORTH
+        getBlockState()[PROPERTY_DIRECTION] else EnumFacing.NORTH
 
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
-        PROPERTY_ACTIVE[getBlockState()] else false
+        getBlockState()[PROPERTY_ACTIVE] else false
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)

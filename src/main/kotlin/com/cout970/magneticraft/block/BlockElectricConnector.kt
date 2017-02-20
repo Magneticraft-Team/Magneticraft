@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
@@ -61,7 +63,7 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
     }
 
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess?, pos: BlockPos?): AxisAlignedBB {
-        val facing = PROPERTY_FACING[state]!!
+        val facing = state[PROPERTY_FACING]!!
         return when (facing) {
             EnumFacing.DOWN -> {
                 Vec3d(PIXEL * 5, 0.0, PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5)
@@ -97,7 +99,7 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType = EnumBlockRenderType.INVISIBLE
 
-    override fun getMetaFromState(state: IBlockState): Int = PROPERTY_FACING[state].ordinal
+    override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_FACING].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_FACING, EnumFacing.getFront(meta))
 

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block
 
 
@@ -48,7 +50,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
     override fun isVisuallyOpaque() = false
 
     override fun getMetaFromState(state: IBlockState): Int =
-            ELECTRIC_POLE_PLACE[state].ordinal
+            state[ELECTRIC_POLE_PLACE].ordinal
 
     override fun getStateFromMeta(meta: Int): IBlockState? =
             defaultState.withProperty(ELECTRIC_POLE_PLACE, ElectricPoleStates.values()[meta])
@@ -98,7 +100,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         super.breakBlock(worldIn, pos, state)
-        val place = ELECTRIC_POLE_PLACE[state]
+        val place = state[ELECTRIC_POLE_PLACE]
         if (place == ElectricPoleStates.DOWN_1 || place == ElectricPoleStates.DOWN_2 || place == ElectricPoleStates.DOWN_3 || place == ElectricPoleStates.DOWN_4) {
             val newPos = getMainPos(state, pos)
             worldIn.setBlockToAir(newPos)
@@ -110,7 +112,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
     }
 
     fun getMainPos(state: IBlockState, pos: BlockPos): BlockPos {
-        return when (ELECTRIC_POLE_PLACE[state]) {
+        return when (state[ELECTRIC_POLE_PLACE]) {
             ElectricPoleStates.DOWN_1 -> pos.offset(EnumFacing.UP, 1)
             ElectricPoleStates.DOWN_2 -> pos.offset(EnumFacing.UP, 2)
             ElectricPoleStates.DOWN_3 -> pos.offset(EnumFacing.UP, 3)
@@ -120,7 +122,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
     }
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType {
-        return when (ELECTRIC_POLE_PLACE[state]) {
+        return when (state[ELECTRIC_POLE_PLACE]) {
             ElectricPoleStates.DOWN_1 -> EnumBlockRenderType.INVISIBLE
             ElectricPoleStates.DOWN_2 -> EnumBlockRenderType.INVISIBLE
             ElectricPoleStates.DOWN_3 -> EnumBlockRenderType.INVISIBLE

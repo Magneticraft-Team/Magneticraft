@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block.multiblock
 
 
@@ -39,14 +41,14 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
     }
 
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
-        if (PROPERTY_ACTIVE[state] && entityBox != null) {
+        if (state[PROPERTY_ACTIVE] && entityBox != null) {
             return super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn)
         }
         return addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos))
     }
 
     override fun getSelectedBoundingBox(state: IBlockState, worldIn: World, pos: BlockPos): AxisAlignedBB {
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             return super.getSelectedBoundingBox(state, worldIn, pos)
         }
         return FULL_BLOCK_AABB.offset(pos)
@@ -58,18 +60,18 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
     override fun isVisuallyOpaque() = false
 
     override fun canRenderInLayer(state: IBlockState, layer: BlockRenderLayer?): Boolean {
-        return PROPERTY_CENTER[state] && !PROPERTY_ACTIVE[state] && super.canRenderInLayer(state, layer)
+        return state[PROPERTY_CENTER] && !state[PROPERTY_ACTIVE] && super.canRenderInLayer(state, layer)
     }
 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = createTileEntity(worldIn, getStateFromMeta(meta))
 
     override fun createTileEntity(world: World, state: IBlockState): TileEntity? {
-        if (PROPERTY_CENTER[state]) return TileKiln()
+        if (state[PROPERTY_CENTER]) return TileKiln()
         return TileMultiblock()
     }
 
     override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?, willHarvest: Boolean): Boolean {
-        if (PROPERTY_ACTIVE[state!!] && world!!.isServer) {
+        if (state!![PROPERTY_ACTIVE] && world!!.isServer) {
             breakBlock(world, pos!!, state)
             return false
         } else {
@@ -79,13 +81,13 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
 
     override fun getMetaFromState(state: IBlockState): Int {
         var meta = 0
-        if (PROPERTY_CENTER[state]) {
+        if (state[PROPERTY_CENTER]) {
             meta = meta or 8
         }
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             meta = meta or 4
         }
-        val dir = PROPERTY_DIRECTION[state]
+        val dir = state[PROPERTY_DIRECTION]
         meta = meta or ((dir.ordinal - 2) and 3)
         return meta
     }
@@ -108,12 +110,12 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
     }
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (worldIn.isServer && hand == EnumHand.MAIN_HAND && PROPERTY_CENTER[state]) {
-            if (!PROPERTY_ACTIVE[state]) {
-                activateMultiblock(MultiblockContext(MultiblockKiln, worldIn, pos, PROPERTY_DIRECTION[state], playerIn))
-            } else if (PROPERTY_CENTER[state]) {
+        if (worldIn.isServer && hand == EnumHand.MAIN_HAND && state[PROPERTY_CENTER]) {
+            if (!state[PROPERTY_ACTIVE]) {
+                activateMultiblock(MultiblockContext(MultiblockKiln, worldIn, pos, state[PROPERTY_DIRECTION], playerIn))
+            } else if (state[PROPERTY_CENTER]) {
                 worldIn.getTile<TileKiln>(pos)?.doorOpen?.not()
-            } else if (PROPERTY_CENTER[worldIn.getBlockState(pos.down())]) {
+            } else if (worldIn.getBlockState(pos.down())[PROPERTY_CENTER]) {
                 worldIn.getTile<TileKiln>(pos.down())?.doorOpen?.not()
             }
         }
@@ -121,7 +123,7 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
     }
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
-        if (PROPERTY_ACTIVE[state]) {
+        if (state[PROPERTY_ACTIVE]) {
             super.breakBlock(worldIn, pos, state)
         }
     }

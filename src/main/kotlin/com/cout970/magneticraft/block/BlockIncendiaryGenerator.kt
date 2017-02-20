@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OverridingDeprecatedMember")
+
 package com.cout970.magneticraft.block
 
 
@@ -39,7 +41,7 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
     override fun getRenderType(state: IBlockState): EnumBlockRenderType = EnumBlockRenderType.INVISIBLE
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity? {
-        if (PROPERTY_LOCATION[getStateFromMeta(meta)] == Location.TOP) {
+        if (getStateFromMeta(meta)[PROPERTY_LOCATION] == Location.TOP) {
             return TileIncendiaryGenerator()
         }
         return TileIncendiaryGenerator.TileIncendiaryGeneratorBottom()
@@ -47,7 +49,7 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         super.breakBlock(worldIn, pos, state)
-        if (PROPERTY_LOCATION[state] == Location.TOP) {
+        if (state[PROPERTY_LOCATION] == Location.TOP) {
             worldIn.setBlockToAir(pos.add(0, -1, 0))
         } else {
             worldIn.setBlockToAir(pos.add(0, 1, 0))
@@ -57,7 +59,7 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
     override fun onBlockActivated(worldIn: World, position: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (worldIn.isRemote) return true
         if (playerIn.isSneaking) return false
-        val location = PROPERTY_LOCATION[state]
+        val location = state[PROPERTY_LOCATION]
         var pos = position
         if (location == Location.BASE) {
             pos = pos.add(0, 1, 0)
@@ -90,9 +92,9 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
     }
 
     override fun getMetaFromState(state: IBlockState): Int {
-        val location = PROPERTY_LOCATION[state]
+        val location = state[PROPERTY_LOCATION]
         if (location == Location.BASE) return 0
-        return PROPERTY_DIRECTION[state].horizontalIndex + 1
+        return state[PROPERTY_DIRECTION].horizontalIndex + 1
     }
 
     override fun getStateFromMeta(meta: Int): IBlockState {
