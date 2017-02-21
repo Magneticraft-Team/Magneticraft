@@ -1,6 +1,7 @@
-package com.cout970.magneticraft.integration.jei.sievetable
+package com.cout970.magneticraft.integration.jei.sifter
 
 import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipe
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.IRecipeWrapper
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fluids.FluidStack
@@ -10,11 +11,9 @@ import net.minecraftforge.fluids.FluidStack
  */
 class SifterRecipeWrapper(val recipe: ISifterRecipe) : IRecipeWrapper {
 
-    override fun drawAnimations(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int) {
-    }
+    override fun drawAnimations(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int) {}
 
-    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
-    }
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {}
 
     override fun getTooltipStrings(mouseX: Int, mouseY: Int): MutableList<String>? = mutableListOf()
 
@@ -27,4 +26,6 @@ class SifterRecipeWrapper(val recipe: ISifterRecipe) : IRecipeWrapper {
     override fun getFluidOutputs(): MutableList<FluidStack>? = mutableListOf()
 
     override fun getInputs(): MutableList<Any?>? = mutableListOf(recipe.input)
+
+    override fun getIngredients(ingredients: IIngredients?) {}
 }

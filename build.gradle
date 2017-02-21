@@ -107,7 +107,7 @@ repositories {
 
 dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    deobfCompile "mezz.jei:jei_$mc_version:$jei_version"
+    compile "mezz.jei:jei_$mc_version:$jei_version"
     shade files("./lib/ModelLibrary-${model_lib_version}.jar")
     compile "net.darkhax.tesla:Tesla:$tesla_version"
 }

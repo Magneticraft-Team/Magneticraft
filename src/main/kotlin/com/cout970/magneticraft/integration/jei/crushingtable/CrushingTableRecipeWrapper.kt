@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.integration.jei.crushingtable
 
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.IRecipeWrapper
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fluids.FluidStack
@@ -9,6 +10,8 @@ import net.minecraftforge.fluids.FluidStack
  * Created by cout970 on 23/07/2016.
  */
 class CrushingTableRecipeWrapper(val recipe : ICrushingTableRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients?) {}
 
     override fun drawAnimations(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int) = Unit
 

@@ -1,7 +1,8 @@
-package com.cout970.magneticraft.integration.jei.crushingtable
+package com.cout970.magneticraft.integration.jei.grinder
 
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
 import com.cout970.magneticraft.integration.jei.JEIPlugin
+import com.cout970.magneticraft.integration.jei.grinder.GrinderRecipeWrapper
 import mezz.jei.api.recipe.IRecipeHandler
 import mezz.jei.api.recipe.IRecipeWrapper
 

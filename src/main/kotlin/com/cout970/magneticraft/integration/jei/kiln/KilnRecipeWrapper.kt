@@ -1,6 +1,7 @@
-package com.cout970.magneticraft.integration.jei.hydraulicpress
+package com.cout970.magneticraft.integration.jei.kiln
 
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.IRecipeWrapper
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fluids.FluidStack
@@ -25,4 +26,6 @@ class KilnRecipeWrapper(val recipe: IKilnRecipe) : IRecipeWrapper {
     override fun getFluidOutputs(): MutableList<FluidStack>? = mutableListOf()
 
     override fun getInputs(): MutableList<Any?>? = mutableListOf(recipe.input)
+
+    override fun getIngredients(ingredients: IIngredients?) {}
 }

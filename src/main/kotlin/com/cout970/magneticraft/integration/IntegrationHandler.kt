@@ -12,7 +12,7 @@ object IntegrationHandler {
     var TESLA = false
 
     fun preInit(){
-        JEI = Loader.isModLoaded("JEI")
+        JEI = Loader.isModLoaded("JEI") || Loader.isModLoaded("jei")
         TESLA = Loader.isModLoaded("tesla")
     }
 }

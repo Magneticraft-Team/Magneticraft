@@ -1,7 +1,8 @@
-package com.cout970.magneticraft.integration.jei.hydraulicpress
+package com.cout970.magneticraft.integration.jei.kiln
 
 import com.cout970.magneticraft.api.registries.machines.kiln.IKilnRecipe
 import com.cout970.magneticraft.integration.jei.JEIPlugin
+import com.cout970.magneticraft.integration.jei.kiln.KilnRecipeWrapper
 import mezz.jei.api.recipe.IRecipeHandler
 import mezz.jei.api.recipe.IRecipeWrapper
 

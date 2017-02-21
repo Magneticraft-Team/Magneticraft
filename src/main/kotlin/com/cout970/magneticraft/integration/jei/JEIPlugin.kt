@@ -9,20 +9,19 @@ import com.cout970.magneticraft.block.multiblock.BlockKiln
 import com.cout970.magneticraft.block.multiblock.BlockSifter
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeCategory
 import com.cout970.magneticraft.integration.jei.crushingtable.CrushingTableRecipeHandler
-import com.cout970.magneticraft.integration.jei.crushingtable.GrinderRecipeCategory
-import com.cout970.magneticraft.integration.jei.crushingtable.GrinderRecipeHandler
+import com.cout970.magneticraft.integration.jei.grinder.GrinderRecipeCategory
+import com.cout970.magneticraft.integration.jei.grinder.GrinderRecipeHandler
 import com.cout970.magneticraft.integration.jei.hydraulicpress.HydraulicPressRecipeCategory
 import com.cout970.magneticraft.integration.jei.hydraulicpress.HydraulicPressRecipeHandler
-import com.cout970.magneticraft.integration.jei.hydraulicpress.KilnRecipeCategory
-import com.cout970.magneticraft.integration.jei.hydraulicpress.KilnRecipeHandler
-import com.cout970.magneticraft.integration.jei.sievetable.SifterRecipeCategory
-import com.cout970.magneticraft.integration.jei.sievetable.SifterRecipeHandler
+import com.cout970.magneticraft.integration.jei.kiln.KilnRecipeCategory
+import com.cout970.magneticraft.integration.jei.kiln.KilnRecipeHandler
+import com.cout970.magneticraft.integration.jei.sifter.SifterRecipeCategory
+import com.cout970.magneticraft.integration.jei.sifter.SifterRecipeHandler
 import com.cout970.magneticraft.integration.jei.sievetable.TableSieveRecipeCategory
 import com.cout970.magneticraft.integration.jei.sievetable.TableSieveRecipeHandler
-import mezz.jei.api.IJeiRuntime
-import mezz.jei.api.IModPlugin
-import mezz.jei.api.IModRegistry
+import mezz.jei.api.*
 import mezz.jei.api.JEIPlugin
+import mezz.jei.api.ingredients.IModIngredientRegistration
 import net.minecraft.item.ItemStack
 
 /**
@@ -31,7 +30,7 @@ import net.minecraft.item.ItemStack
 @JEIPlugin
 class JEIPlugin : IModPlugin {
 
-    companion object{
+    companion object {
         val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
         val TABLE_SIEVE_ID = "magneticraft.table_sieve"
         val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
@@ -80,4 +79,8 @@ class JEIPlugin : IModPlugin {
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {}
+
+    override fun registerItemSubtypes(subtypeRegistry: ISubtypeRegistry?) {}
+
+    override fun registerIngredients(registry: IModIngredientRegistration) {}
 }
