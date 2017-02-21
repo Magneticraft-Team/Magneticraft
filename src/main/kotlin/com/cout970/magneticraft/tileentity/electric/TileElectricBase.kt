@@ -203,12 +203,12 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     open fun getMaxWireDistance() = 16.0
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == NODE_HANDLER) return getNodeHandler(facing) as T
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == NODE_HANDLER) return getNodeHandler(facing) != null
         return super.hasCapability(capability, facing)
     }

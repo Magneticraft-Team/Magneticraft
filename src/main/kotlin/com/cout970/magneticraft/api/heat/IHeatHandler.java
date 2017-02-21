@@ -14,13 +14,6 @@ public interface IHeatHandler extends INodeHandler {
      */
     List<IHeatConnection> getConnections();
 
-    int getComparatorOutput();
-
-    /**
-     * Re-scans directions which connect to heat containers.
-     */
-    void updateHeatConnections();
-
     /**
      * Adds a new heat connection to this handler.
      */
@@ -32,11 +25,4 @@ public interface IHeatHandler extends INodeHandler {
      * @param connection The connection that need to be removed
      */
     void removeConnection(IHeatConnection connection);
-
-    /**
-     * Notifies this handler that a connection needs to be removed, usually because the other block has been mined
-     *
-     * @param node The node corresponding to connections that need to be removed
-     */
-    void removeConnection(IHeatNode node);
 }

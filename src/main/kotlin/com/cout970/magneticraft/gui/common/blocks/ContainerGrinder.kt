@@ -37,7 +37,7 @@ class ContainerGrinder(player: EntityPlayer, world: World, blockPos: BlockPos) :
         data.setDouble(DATA_ID_VOLTAGE, tile.node.voltage)
         data.setFloat(DATA_ID_BURNING_TIME, tile.craftingProcess.timer)
         data.setFloat(DATA_ID_MACHINE_PRODUCTION, tile.production.average)
-        data.setLong(DATA_ID_MACHINE_HEAT, tile.heatNode.heat)
+        data.setDouble(DATA_ID_MACHINE_HEAT, tile.heatNode.heat)
         return data
     }
 
@@ -46,7 +46,7 @@ class ContainerGrinder(player: EntityPlayer, world: World, blockPos: BlockPos) :
         ibd.getDouble(DATA_ID_VOLTAGE, { tile.node.voltage = it })
         ibd.getFloat(DATA_ID_BURNING_TIME, { tile.craftingProcess.timer = it })
         ibd.getFloat(DATA_ID_MACHINE_PRODUCTION, { tile.production.storage = it })
-        ibd.getLong(DATA_ID_MACHINE_HEAT, { tile.heatNode.heat = it })
+        ibd.getDouble(DATA_ID_MACHINE_HEAT, { tile.heatNode.heat = it })
     }
 
 

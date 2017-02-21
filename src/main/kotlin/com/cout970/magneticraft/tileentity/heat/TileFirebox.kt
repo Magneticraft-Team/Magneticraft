@@ -14,10 +14,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
-import com.cout970.magneticraft.util.COPPER_MELTING_POINT
-import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
-import com.cout970.magneticraft.util.FuelCache
+import com.cout970.magneticraft.util.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -43,7 +40,7 @@ class TileFirebox : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
-            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
+            maxHeat = COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT,
             conductivity = DEFAULT_CONDUCTIVITY,
             worldGetter = { this.world },
             posGetter = { this.getPos() })
@@ -71,14 +68,14 @@ class TileFirebox : TileHeatBase() {
             if (burningTime > 0 && heat.heat < heat.maxHeat && heat.temperature < maxFuelTemp) {
                 val burningSpeed = Math.ceil(Config.fireboxMaxProduction / 10.0).toInt()
                 burningTime -= burningSpeed
-                heat.pushHeat((burningSpeed * FUEL_TO_HEAT).toLong(), false)
+                heat.applyHeat(burningSpeed.toDouble() * FUEL_TO_HEAT, false)
             }
 
             //sends an update to the client to start/stop the fan animation
             if (shouldTick(200)) {
                 val data = IBD()
-                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperature + 1)
-                data.setLong(DATA_ID_MACHINE_HEAT, heat.heat)
+                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > STANDARD_AMBIENT_TEMPERATURE + 1)
+                data.setDouble(DATA_ID_MACHINE_HEAT, heat.heat)
                 sendSyncData(data, Side.CLIENT)
             }
             super.update()
@@ -90,7 +87,7 @@ class TileFirebox : TileHeatBase() {
     override fun receiveSyncData(data: IBD, side: Side) {
         super.receiveSyncData(data, side)
         if (side == Side.SERVER) {
-            data.getLong(DATA_ID_MACHINE_WORKING, { heat.heat = it })
+            data.getDouble(DATA_ID_MACHINE_WORKING, { heat.heat = it })
         }
     }
 
@@ -118,12 +115,12 @@ class TileFirebox : TileHeatBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
         return super.hasCapability(capability, facing)
     }

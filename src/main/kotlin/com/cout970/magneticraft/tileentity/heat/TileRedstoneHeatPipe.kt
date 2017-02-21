@@ -16,7 +16,7 @@ class TileRedstoneHeatPipe : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3 / 8,
-            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT / 8).toLong(),
+            maxHeat = COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT / 8,
             conductivity = DEFAULT_CONDUCTIVITY,
             worldGetter = { this.world },
             posGetter = { this.getPos() })

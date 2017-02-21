@@ -7,6 +7,7 @@ import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.CompVerticalBar
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.tileentity.heat.TileBrickFurnace
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.toFahrenheit
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -25,7 +26,7 @@ class GuiBrickFurnace(container: ContainerBase) : GuiBase(container) {
         components.add(CompVerticalBar(callback, 2, Vec2d(80, 64) + box.start, { listOf("Burning: " + "%.1f".format(callback.getLevel() * 100) + "%") }))
 
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.heat.temperature }, { tile.heat.maxTemperature }, { tile.heat.ambientTemperature }),
+                CallbackBarProvider({ tile.heat.temperature }, { tile.heat.maxTemperature }, { STANDARD_AMBIENT_TEMPERATURE }),
                 2, Vec2d(91, 56) + box.start, {
             listOf(
                     if (Config.heatUnitCelsius) {

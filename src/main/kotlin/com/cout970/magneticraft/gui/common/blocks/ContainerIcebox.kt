@@ -30,7 +30,7 @@ class ContainerIcebox(player: EntityPlayer, world: World, blockPos: BlockPos) : 
         data.setFloat(DATA_ID_MAX_BURNING_TIME, tile.maxMeltingTime)
         data.setFloat(DATA_ID_MAX_FREEZING_TIME, tile.maxFreezingTime)
         data.setFloat(DATA_ID_FREEZING_TIME, tile.freezingTime)
-        data.setLong(DATA_ID_MACHINE_HEAT, tile.heat.heat)
+        data.setDouble(DATA_ID_MACHINE_HEAT, tile.heat.heat)
         data.merge(tile.tank.getData())
         return data
     }
@@ -41,7 +41,7 @@ class ContainerIcebox(player: EntityPlayer, world: World, blockPos: BlockPos) : 
         ibd.getFloat(DATA_ID_MAX_BURNING_TIME, { tile.maxMeltingTime = it })
         ibd.getFloat(DATA_ID_FREEZING_TIME, { tile.freezingTime = it })
         ibd.getFloat(DATA_ID_MAX_FREEZING_TIME, { tile.maxFreezingTime = it })
-        ibd.getLong(DATA_ID_MACHINE_HEAT, { tile.heat.heat = it })
+        ibd.getDouble(DATA_ID_MACHINE_HEAT, { tile.heat.heat = it })
         tile.tank.setData(ibd)
     }
 }

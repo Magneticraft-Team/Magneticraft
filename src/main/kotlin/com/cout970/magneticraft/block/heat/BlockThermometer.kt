@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.block.BlockMultiState
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import net.minecraft.block.material.Material
@@ -44,24 +44,24 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
     override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         val tile = blockAccess.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
-        if (handler is IHeatHandler)
-            return handler.comparatorOutput
+        if (handler is HeatHandler)
+            return handler.getComparatorOutput()
         return 0
     }
 
     override fun getStrongPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         val tile = blockAccess.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
-        if (handler is IHeatHandler)
-            return handler.comparatorOutput
+        if (handler is HeatHandler)
+            return handler.getComparatorOutput()
         return 0
     }
 
     override fun getComparatorInputOverride(blockState: IBlockState, worldIn: World, pos: BlockPos): Int {
         val tile = worldIn.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
-        if (handler is IHeatHandler)
-            return handler.comparatorOutput
+        if (handler is HeatHandler)
+            return handler.getComparatorOutput()
         return 0
     }
 

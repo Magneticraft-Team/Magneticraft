@@ -14,45 +14,30 @@ public interface IHeatNode extends INode {
 
     /**
      * Returns the thermal conductivity of the block
+     * Fraction of temperature difference between current and ambient temperature dissipated per second
+     * Small values cause fast heat transfer.
+     * Very large values can cause strange directional transfer behavior || why?? //TODO fix
+     * default value: 1.0
      */
     double getConductivity();
 
     /**
-     * Sets the heat dissipation of the block
-     */
-    @Deprecated
-    void setConductivity(double newConductivity);
-
-    /**
      * Returns the heat dissipation of the block
+     * Fraction of temperature difference between current and ambient temperature dissipated per second
+     * Small values cause fast heat dissipation
+     * default value: 0.0
      */
     double getDissipation();
 
     /**
-     * Sets the heat dissipation of the block
-     */
-    @Deprecated
-    void setDissipation(double newDissipation);
-
-    /**
      * Returns the current heat content of the block
      */
-    long getHeat();
+    double getHeat();
 
     /**
-     * Sets the current heat content of the block
+     * Returns the maximum heat content of the block
      */
-    void setHeat(long newHeat);
-
-    /**
-     * Return if this node corresponds to a light which should emit light at high temperatures
-     */
-    boolean emitsLight();
-
-    /**
-     * Sets the ambient temperature of the block
-     */
-    void setAmbientTemp(double newAmbient);
+    double getMaxHeat();
 
     /**
      * Returns the heat capacity of the block
@@ -67,33 +52,16 @@ public interface IHeatNode extends INode {
     double getMaxTemperature();
 
     /**
-     * Returns the maximum heat content of the block
+     * Inserts heat or extracts heat from the node
+     *
+     * @param heatArg heat ti insert if positive, heat to extract if negative
+     * @param simulate true if the internal heat should not be modified
+     * @return heat inserted or extracted, always positive
      */
-    long getMaxHeat();
+    double applyHeat(double heatArg, boolean simulate);
 
     /**
-     * High temperature blocks should attempt to push heat into low temperature blocks every second based
-     * based on temperature difference and conductivity
-     * Returns any heat left over after push
-     * If simulate is true, don't actually move any heat
+     * Called every tick to dissipate heat
      */
-    long pushHeat(long heatIn, boolean simulate);
-
-    /**
-     * Returns actual heat pulled
-     * If simulate is true, don't actually move any heat
-     */
-    long pullHeat(long heatOut, boolean simulate);
-
-    /**
-     * To be called when block exceeds maximum temperature
-     */
-    @Deprecated
-    void onOverTemperature();
-
-    /**
-     * Called every tick to transfer heat
-     */
-    @Deprecated
-    void updateHeat();
+    void iterate();
 }

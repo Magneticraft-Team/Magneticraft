@@ -11,6 +11,8 @@ import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.damage.DamageSources
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
@@ -19,8 +21,8 @@ import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.TileKilnShelf
-import com.cout970.magneticraft.tileentity.heat.TileHeatBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
@@ -30,6 +32,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumParticleTypes
+import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -38,7 +41,7 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 19/08/2016.
  */
-class TileKiln : TileHeatBase(), IMultiblockCenter {
+class TileKiln : TileBase(), IMultiblockCenter, ITickable {
 
     override var multiblock: Multiblock?
         get() = MultiblockKiln
@@ -53,16 +56,30 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
     override var multiblockFacing: EnumFacing? = null
 
     val heatNode = HeatContainer(
-            emit = false,
             worldGetter = { this.world },
             posGetter = { this.getPos() },
             dissipation = 0.0,
             specificHeat = LIMESTONE_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
-            maxHeat = ((LIMESTONE_HEAT_CAPACITY * 20) * LIMESTONE_MELTING_POINT).toLong(),
+            maxHeat = (LIMESTONE_HEAT_CAPACITY * 20) * LIMESTONE_MELTING_POINT,
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
+    val heatHandler: HeatHandler = object: HeatHandler(this, heatNodes){
+        override fun updateHeatConnections() {
+            for (j in POTENTIAL_CONNECTIONS) {
+                val relPos = posTransform(j)
+                val tileOther = world.getTileEntity(relPos) ?: continue
+                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
+                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                    connections.add(HeatConnection(heatNode, otherNode))
+                    handler.addConnection(HeatConnection(otherNode, heatNode))
+                }
+            }
+        }
+    }
+    override val traits: List<ITileTrait> = listOf(heatHandler)
+
+    val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
     //Not using crafting process because I assumed that an array of lambdas will have horrible locality of reference
     data class CraftingSlot(
@@ -78,7 +95,7 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         fun getCraftingTimesArray(): IntArray {
             val array = IntArray(map.size)
             var index = 0
-            map.forEach { array.set(index, it.value.craftingTime); index++ }
+            map.forEach { array[index] = it.value.craftingTime; index++ }
             return array
         }
 
@@ -219,22 +236,6 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         sendUpdateToNearPlayers()
     }
 
-    override fun onDeactivate() {
-    }
-
-    override fun updateHeatConnections() {
-        for (j in POTENTIAL_CONNECTIONS) {
-            val relPos = posTransform(j)
-            val tileOther = world.getTileEntity(relPos) ?: continue
-            val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
-            for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
-                heatConnections.add(HeatConnection(heatNode, otherNode))
-                handler.addConnection(HeatConnection(otherNode, heatNode))
-            }
-        }
-        heatNode.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
-    }
-
     val direction: EnumFacing get() = if (PROPERTY_DIRECTION.isIn(getBlockState()))
         getBlockState()[PROPERTY_DIRECTION] else EnumFacing.NORTH
 
@@ -298,13 +299,13 @@ class TileKiln : TileHeatBase(), IMultiblockCenter {
         return null
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }

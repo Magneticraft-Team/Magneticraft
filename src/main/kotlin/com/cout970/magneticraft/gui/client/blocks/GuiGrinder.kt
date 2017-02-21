@@ -8,6 +8,7 @@ import com.cout970.magneticraft.gui.client.components.CompElectricBar
 import com.cout970.magneticraft.gui.client.components.CompVerticalBar
 import com.cout970.magneticraft.gui.common.ContainerBase
 import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.toFahrenheit
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -25,7 +26,7 @@ class GuiGrinder(container: ContainerBase) : GuiBase(container) {
         components.add(CompElectricBar(tile.node, Vec2d(47, 64) + box.start))
 
         components.add(CompVerticalBar(
-                CallbackBarProvider({ tile.heatNode.temperature }, { tile.heatNode.maxTemperature }, { tile.heatNode.ambientTemperature }),
+                CallbackBarProvider({ tile.heatNode.temperature }, { tile.heatNode.maxTemperature }, { STANDARD_AMBIENT_TEMPERATURE }),
                 2, Vec2d(91, 56) + box.start, {
             listOf(
                     if (Config.heatUnitCelsius) {

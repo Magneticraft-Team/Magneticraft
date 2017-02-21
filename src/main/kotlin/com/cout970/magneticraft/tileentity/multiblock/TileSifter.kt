@@ -241,14 +241,14 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         return null
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
         if (capability == NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return InputInventory(inventory, 1) as T
         if (capability == NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)

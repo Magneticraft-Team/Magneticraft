@@ -13,9 +13,7 @@ import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
-import com.cout970.magneticraft.util.IRON_HEAT_CAPACITY
-import com.cout970.magneticraft.util.IRON_MELTING_POINT
+import com.cout970.magneticraft.util.*
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -36,7 +34,7 @@ class TileIcebox : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = IRON_HEAT_CAPACITY * 7,
-            maxHeat = (IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT).toLong(),
+            maxHeat = IRON_HEAT_CAPACITY * 3 * IRON_MELTING_POINT,
             conductivity = DEFAULT_CONDUCTIVITY,
             worldGetter = { this.world },
             posGetter = { this.getPos() })
@@ -60,7 +58,7 @@ class TileIcebox : TileHeatBase() {
                 if (inventory[0] != null) {
                     lastInput = getRecipe()?.input
                     if (lastInput != null) {
-                        val time = lastRecipe()?.getTotalHeat(heat.ambientTemperature) ?: 0
+                        val time = lastRecipe()?.getTotalHeat(guessAmbientTemp(world, pos)) ?: 0
 
                         if (time > 0) {
                             maxMeltingTime = time.toFloat()
@@ -77,7 +75,7 @@ class TileIcebox : TileHeatBase() {
                 if (tank.fluid != null) {
                     lastOutput = getRecipeReverse()?.output
                     if (lastOutput != null) {
-                        val time = lastRecipe()?.getTotalHeat(heat.ambientTemperature) ?: 0
+                        val time = lastRecipe()?.getTotalHeat(guessAmbientTemp(world, pos)) ?: 0
 
                         if (time > 0) {
                             maxFreezingTime = time.toFloat()
@@ -95,7 +93,7 @@ class TileIcebox : TileHeatBase() {
                 if (tank.fillInternal(outFluidInc, false) != 0) {  //This is lossy, but the fluid is considered a byproduct, so whatever
                     meltingTime -= meltingSpeed
                     tank.fillInternal(outFluidInc, true)
-                    heat.pullHeat((meltingSpeed).toLong(), false)
+                    heat.applyHeat(-meltingSpeed.toDouble(), false)
                     markDirty()
                 }
             } else if (canFreeze()) {
@@ -111,7 +109,7 @@ class TileIcebox : TileHeatBase() {
                         }
                     }
                     tank.drainInternal(outFluidInc, true)
-                    heat.pushHeat((freezingSpeed).toLong(), false)
+                    heat.applyHeat(freezingSpeed.toDouble(), false)
                     markDirty()
                 }
             }
@@ -119,9 +117,9 @@ class TileIcebox : TileHeatBase() {
             //sends an update to the client to start/stop the fan animation
             if (shouldTick(200)) {
                 val data = IBD()
-                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > heat.ambientTemperature + 1)
-                data.setLong(DATA_ID_MACHINE_HEAT, heat.heat)
-                sendSyncData(data, Side.CLIENT)
+                data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > guessAmbientTemp(world, pos) + 1)
+                data.setDouble(DATA_ID_MACHINE_HEAT, heat.heat)
+                tileSendSyncData(data, Side.CLIENT)
             }
             super.update()
         }
@@ -184,7 +182,7 @@ class TileIcebox : TileHeatBase() {
     override fun receiveSyncData(data: IBD, side: Side) {
         super.receiveSyncData(data, side)
         if (side == Side.SERVER) {
-            data.getLong(DATA_ID_MACHINE_WORKING, { heat.heat = it })
+            data.getDouble(DATA_ID_MACHINE_WORKING, { heat.heat = it })
         }
     }
 
@@ -223,12 +221,12 @@ class TileIcebox : TileHeatBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
         return super.hasCapability(capability, facing)
     }

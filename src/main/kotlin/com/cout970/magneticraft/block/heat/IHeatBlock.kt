@@ -1,9 +1,8 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.api.heat.IHeatHandler
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
 import com.cout970.magneticraft.tileentity.heat.TileHeatBase
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.math.BlockPos
@@ -20,9 +19,6 @@ interface IHeatBlock {
         if (tile is TileHeatBase) {
             return (15f * tile.lightLevelCache).toInt()
         }
-        if (tile is TileElectricHeatBase) {
-            return (15f * tile.lightLevelCache).toInt()
-        }
         return 0
     }
 
@@ -30,7 +26,8 @@ interface IHeatBlock {
         if (pos == null) return
         val tile = world?.getTileEntity(pos) ?: return
         val handler = NODE_HANDLER!!.fromTile(tile) ?: return
-        if (handler is IHeatHandler)
+        if (handler is HeatHandler) {
             handler.updateHeatConnections()
+        }
     }
 }

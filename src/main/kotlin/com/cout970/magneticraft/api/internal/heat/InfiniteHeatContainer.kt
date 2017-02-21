@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -9,45 +10,26 @@ import net.minecraft.tileentity.TileEntity
  * Created by Yurgen on 19/10/2016.
  */
 class InfiniteHeatContainer(
-        emit: Boolean = true,
         tile: TileEntity,
-
-        //Fraction of temperature difference between current and ambient temperture dissipated per second
-        //Evan small values cause rapid heat transfer.
-        //Values above 0.5f are guaranteed to be unphysical.  Values above 0.1f are probably unphysical
         conductivity: Double = DEFAULT_CONDUCTIVITY,
-
         private val temperature: Double = 1800.toKelvinFromCelsius()
-) : HeatContainer({ tile.world }, { tile.pos }, conductivity = conductivity, specificHeat = 0.0, dissipation = 0.0, emit = emit) {
+) : HeatContainer({ tile.world }, { tile.pos }, conductivity = conductivity, specificHeat = 0.0, dissipation = 0.0) {
 
     override fun getTemperature(): Double {
         return temperature
-    }
-
-    override fun setHeat(newHeat: Long) {
-    }
-
-    override fun setAmbientTemp(newAmbient: Double) {
     }
 
     override fun getMaxTemperature(): Double {
         return temperature
     }
 
-    override fun pushHeat(heatIn: Long, simulate: Boolean): Long {
-        return 0
+    override fun applyHeat(heatIn: Double, simulate: Boolean): Double {
+        return Math.max(0.0, -heatIn)
     }
 
-    override fun pullHeat(heatOut: Long, simulate: Boolean): Long {
-        return heatOut
-    }
+    override fun deserializeNBT(nbt: NBTTagCompound) = Unit
 
-    override fun deserializeNBT(nbt: NBTTagCompound) {
-    }
+    override fun serializeNBT() = newNbt {  }
 
-    override fun serializeNBT() = NBTTagCompound().apply {
-    }
-
-    override fun updateHeat() {
-    }
+    override fun iterate() = Unit
 }

@@ -21,7 +21,7 @@ class TileBrickFurnace : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
-            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
+            maxHeat = COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT,
             conductivity = DEFAULT_CONDUCTIVITY,
             worldGetter = { this.world },
             posGetter = { this.getPos() })
@@ -43,7 +43,7 @@ class TileBrickFurnace : TileHeatBase() {
             }
             if (heat.temperature >= smelting_temp && canSmelt()) {
                 val applied = heat.temperature / smelting_temp
-                heat.pullHeat((applied * FUEL_TO_HEAT).toLong(), false)
+                heat.applyHeat(-applied * FUEL_TO_HEAT, false)
                 burningTime += (SPEED * applied).toFloat()
                 if (burningTime > MAX_BURNING_TIME) {
                     smelt()
@@ -95,12 +95,12 @@ class TileBrickFurnace : TileHeatBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
         return super.hasCapability(capability, facing)
     }

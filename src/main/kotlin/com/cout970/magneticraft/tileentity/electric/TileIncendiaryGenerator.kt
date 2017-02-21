@@ -174,13 +174,13 @@ class TileIncendiaryGenerator(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) return this as T
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == FLUID_HANDLER) return true
         if (capability == ITEM_HANDLER) return true
         return super.hasCapability(capability, facing)
@@ -197,13 +197,13 @@ class TileIncendiaryGenerator(
     class TileIncendiaryGeneratorBottom : TileBase() {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+        override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
             val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
             if (tile != null) return tile.getCapability(capability, facing)
             return super.getCapability(capability, facing)
         }
 
-        override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+        override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
             val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
             if (tile != null) return tile.hasCapability(capability, facing)
             return super.hasCapability(capability, facing)

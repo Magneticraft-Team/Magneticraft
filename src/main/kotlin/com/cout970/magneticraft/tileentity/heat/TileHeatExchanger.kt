@@ -25,7 +25,7 @@ class TileHeatExchanger : TileHeatBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) {
             if (facing == EnumFacing.DOWN) return inputTank as T
             else return outputTank as T
@@ -33,14 +33,14 @@ class TileHeatExchanger : TileHeatBase() {
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == FLUID_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
-            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
+            maxHeat = COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT,
             conductivity = DEFAULT_CONDUCTIVITY,
             worldGetter = { this.world },
             posGetter = { this.getPos() })

@@ -20,9 +20,15 @@ open class HeatConnection(
         if (minConductivity <= 0) return
         //Heat moving in the other direction is handled in the other entity
         if (firstNode.temperature > secondNode.temperature) {
-            var heatToTransfer = (Math.floor(Math.abs(firstNode.temperature - secondNode.temperature) * minConductivity)).toLong()
-            heatToTransfer -= secondNode.pushHeat(heatToTransfer, false) //If the block accepts all the heat, we subtract all of it
-            firstNode.pullHeat(heatToTransfer, false)                    //If there's any leftover, we effectively add it back
+            val tempDiff = Math.abs(firstNode.temperature - secondNode.temperature)
+            var heatTransfer = Math.floor(tempDiff * minConductivity)
+            //simulated, this is used to get the min between
+            //the amount that 'second' can accept and the amount that 'first' can lose
+            heatTransfer = secondNode.applyHeat(heatTransfer, true)
+            heatTransfer = firstNode.applyHeat(-heatTransfer, true)
+            //no simulated
+            secondNode.applyHeat(heatTransfer, false)
+            firstNode.applyHeat(-heatTransfer, false)
         }
     }
 

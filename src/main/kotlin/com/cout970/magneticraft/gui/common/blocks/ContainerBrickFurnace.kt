@@ -56,13 +56,13 @@ class ContainerBrickFurnace(player: EntityPlayer, world: World, blockPos: BlockP
         tile!!
         val data = IBD()
         data.setFloat(DATA_ID_BURNING_TIME, tile.burningTime)
-        data.setLong(DATA_ID_MACHINE_HEAT, tile.heat.heat)
+        data.setDouble(DATA_ID_MACHINE_HEAT, tile.heat.heat)
         return data
     }
 
     override fun receiveDataFromServer(ibd: IBD) {
         tile!!
         ibd.getFloat(DATA_ID_BURNING_TIME, { tile.burningTime = it })
-        ibd.getLong(DATA_ID_MACHINE_HEAT, { tile.heat.heat = it })
+        ibd.getDouble(DATA_ID_MACHINE_HEAT, { tile.heat.heat = it })
     }
 }

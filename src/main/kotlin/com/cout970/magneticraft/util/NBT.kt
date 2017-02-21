@@ -140,6 +140,18 @@ fun NBTTagCompound.list(key: String, func: NBTTagList.()->Unit){
     setTag(key, list)
 }
 
+fun NBTTagCompound.getList(key: String): NBTTagList {
+    return getTagList(key, Constants.NBT.TAG_COMPOUND)
+}
+
+fun NBTTagList.forEach(func: NBTTagCompound.() -> Unit){
+    for(i in 0 until tagCount()){
+        getCompoundTagAt(i).func()
+    }
+}
+
+fun NBTTagList.getTagCompound(index: Int) = getCompoundTagAt(index)!!
+
 fun NBTTagCompound.add(key: String, value: Int) = setInteger(key, value)
 fun NBTTagCompound.add(key: String, value: Float) = setFloat(key, value)
 fun NBTTagCompound.add(key: String, value: Double) = setDouble(key, value)

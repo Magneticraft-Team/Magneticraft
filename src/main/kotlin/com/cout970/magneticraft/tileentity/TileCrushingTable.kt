@@ -123,11 +123,11 @@ class TileCrushingTable : TileBase(), ITickable {
         damageTaken = nbt.getInteger("damage")
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?) =
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?) =
             (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         return if (capability == ITEM_HANDLER) {
             inventory as T
         } else {

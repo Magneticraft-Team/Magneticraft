@@ -21,6 +21,8 @@ import com.cout970.magneticraft.misc.inventory.ItemInputHelper
 import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
@@ -29,7 +31,7 @@ import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.heat.TileElectricHeatBase
+import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
@@ -48,7 +50,7 @@ import java.util.*
 /**
  * Created by cout970 on 19/08/2016.
  */
-class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
+class TileGrinder : TileElectricBase(), IMultiblockCenter {
 
     override var multiblock: Multiblock?
         get() = MultiblockGrinder
@@ -60,20 +62,33 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         set(value) {/* ignored */
         }
 
+    val heatHandler: HeatHandler = object : HeatHandler(this, heatNodes){
+        override fun updateHeatConnections() {
+            for (j in POTENTIAL_CONNECTIONS) {
+                val relPos = posTransform(j)
+                val tileOther = world.getTileEntity(relPos) ?: continue
+                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
+                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                    connections.add(HeatConnection(heatNode, otherNode))
+                    handler.addConnection(HeatConnection(otherNode, heatNode))
+                }
+            }
+        }
+    }
+    override val traits: List<ITileTrait> = listOf(heatHandler)
 
     override var multiblockFacing: EnumFacing? = null
 
     val heatNode = HeatContainer(
-            emit = false,
             worldGetter = { this.world },
             posGetter = { this.getPos() },
             dissipation = 0.025,
             specificHeat = IRON_HEAT_CAPACITY * 20, /*PLACEHOLDER*/
-            maxHeat = ((IRON_HEAT_CAPACITY * 20) * Config.defaultMachineMaxTemp).toLong(),
+            maxHeat = (IRON_HEAT_CAPACITY * 20.0) * Config.defaultMachineMaxTemp,
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    override val heatNodes: List<IHeatNode> get() = listOf(heatNode)
+    val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
     val safeHeat: Long = ((IRON_HEAT_CAPACITY * 20 * Config.defaultMachineSafeTemp)).toLong()
     val efficiency = 0.9
@@ -108,7 +123,7 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         }, { // use energy
             val interp = interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE)
             val applied = node.applyPower(-Config.grinderConsumption * interp * 6, false)
-            if (heatNode.pushHeat((applied * (1 - efficiency) * ENERGY_TO_HEAT).toLong(), false) > 0) { //If there's any heat leftover after we tried to push heat, the machine has overheated
+            if (heatNode.applyHeat(applied * (1 - efficiency) * ENERGY_TO_HEAT, false) > 0) { //If there's any heat leftover after we tried to push heat, the machine has overheated
                 overTemp = true
             }
             production += applied
@@ -205,26 +220,10 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
     override fun onBreak() {
         super.onBreak()
         if (worldObj.isServer) {
-            for (i in 0 until inventory.slots) {
-                val item = inventory[i]
-                if (item != null) {
-                    dropItem(item, pos)
-                }
-            }
+            (0 until inventory.slots)
+                    .mapNotNull { inventory[it] }
+                    .forEach { dropItem(it, pos) }
         }
-    }
-
-    override fun updateHeatConnections() {
-        for (j in POTENTIAL_CONNECTIONS) {
-            val relPos = posTransform(j)
-            val tileOther = world.getTileEntity(relPos) ?: continue
-            val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
-            for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
-                heatConnections.add(HeatConnection(heatNode, otherNode))
-                handler.addConnection(HeatConnection(otherNode, heatNode))
-            }
-        }
-        heatNode.setAmbientTemp(guessAmbientTemp(world, pos)) //This might be unnecessary
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
@@ -260,14 +259,14 @@ class TileGrinder : TileElectricHeatBase(), IMultiblockCenter {
         return null
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
         if (capability == NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) {
             if (facing == null)
                 return inventory as T

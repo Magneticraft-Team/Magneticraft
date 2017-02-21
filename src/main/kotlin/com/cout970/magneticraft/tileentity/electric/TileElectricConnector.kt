@@ -99,14 +99,14 @@ class TileElectricConnector : TileElectricBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>?, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)) {
             return teslaWrapper as T
         }
         return super.getCapability(capability, facing)
     }
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean {
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)) return true
         return super.hasCapability(capability, facing)
     }

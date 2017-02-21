@@ -13,7 +13,7 @@ class TileHeatReservoir : TileHeatBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 9,
-            maxHeat = (COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT).toLong(),
+            maxHeat = COPPER_HEAT_CAPACITY * 3 * COPPER_MELTING_POINT,
             conductivity = DEFAULT_CONDUCTIVITY,
             worldGetter = { this.world },
             posGetter = { this.getPos() })
