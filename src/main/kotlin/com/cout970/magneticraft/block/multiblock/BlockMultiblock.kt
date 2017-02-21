@@ -64,7 +64,7 @@ abstract class BlockMultiblock(material: Material, name: String) : BlockMultiSta
 
             val start = player.getPositionEyes(0f)
             val look = player.getLook(0f)
-            val blockReachDistance = Minecraft.getMinecraft().playerController.blockReachDistance
+            val blockReachDistance = Minecraft.getMinecraft().playerController!!.blockReachDistance
             val end = start.addVector(look.xCoord * blockReachDistance, look.yCoord * blockReachDistance, look.zCoord * blockReachDistance)
 
             boxes.forEach { list.add(it.offset(relPos)) }

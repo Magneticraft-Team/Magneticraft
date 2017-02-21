@@ -91,7 +91,7 @@ class TileCrushingTable : TileBase(), ITickable {
             val rand = Random()
 
             for (i in 0..5) {
-                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.xd, center.yd, center.zd,
+                val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world, center.xd, center.yd, center.zd,
                         (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15, Block.getStateId(state))
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }
@@ -100,7 +100,7 @@ class TileCrushingTable : TileBase(), ITickable {
             val rand = Random()
 
             for (i in 0..5) {
-                val particle = factory.getEntityFX(EnumParticleTypes.BLOCK_DUST.particleID, world, center.xd, center.yd, center.zd,
+                val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world, center.xd, center.yd, center.zd,
                         (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15, Item.getIdFromItem(item), stack.itemDamage)
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }

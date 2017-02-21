@@ -37,14 +37,14 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 minecraft {
-    version = '1.9.4-12.17.0.1968'
+    version = '1.10.2-12.18.3.2185'
     runDir = 'run'
     useDepAts = true
 
     replaceIn 'src/main/kotlin/com/cout970/magneticraft/util/Metadata.kt'
     replace '@VERSION@', project.version
 
-    mappings = 'snapshot_20160619'
+    mappings = 'snapshot_20161111'
     makeObfSourceJar = false
 }
 
@@ -132,7 +132,6 @@ jar {
 shadowJar {
     relocate 'kotlin', 'com.cout970.magneticraft.internal.shade.kotlin'
     relocate 'org.jetbrains.annotations', 'com.cout970.magneticraft.internal.shade.annotations'
-//    relocate 'coffee.cypher.mcextlib', 'com.cout970.magneticraft.internal.shade.mcextlib'
     relocate 'com.cout970.loader', 'com.cout970.magneticraft.internal.shade.modellib'
 }
 

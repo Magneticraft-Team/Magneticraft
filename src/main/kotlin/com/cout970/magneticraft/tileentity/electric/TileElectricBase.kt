@@ -94,8 +94,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
             loop@for (dir in NEGATIVE_DIRECTIONS) {
                 val tile = worldObj.getTileEntity(thisNode.pos.offset(dir)) ?: continue@loop
                 if (tile === this) continue@loop
-                val handler = NODE_HANDLER!!.fromTile(tile, dir.opposite)
-                if (handler !is IElectricNodeHandler) continue@loop
+                val handler = NODE_HANDLER!!.fromTile(tile, dir.opposite) as? IElectricNodeHandler ?: continue@loop
                 for (otherNode in handler.nodes.filter { it is IElectricNode }.map { it as IElectricNode }) {
                     if (this.canConnect(thisNode, handler, otherNode, dir) && handler.canConnect(otherNode, this, thisNode, dir.opposite)) {
                         val connection = ElectricConnection(thisNode, otherNode)
