@@ -20,6 +20,7 @@ public interface IHeatNode extends INode {
     /**
      * Sets the heat dissipation of the block
      */
+    @Deprecated
     void setConductivity(double newConductivity);
 
     /**
@@ -30,6 +31,7 @@ public interface IHeatNode extends INode {
     /**
      * Sets the heat dissipation of the block
      */
+    @Deprecated
     void setDissipation(double newDissipation);
 
     /**
@@ -45,7 +47,7 @@ public interface IHeatNode extends INode {
     /**
      * Return if this node corresponds to a light which should emit light at high temperatures
      */
-    boolean getEmit();
+    boolean emitsLight();
 
     /**
      * Sets the ambient temperature of the block
@@ -86,10 +88,12 @@ public interface IHeatNode extends INode {
     /**
      * To be called when block exceeds maximum temperature
      */
+    @Deprecated
     void onOverTemperature();
 
     /**
      * Called every tick to transfer heat
      */
+    @Deprecated
     void updateHeat();
 }

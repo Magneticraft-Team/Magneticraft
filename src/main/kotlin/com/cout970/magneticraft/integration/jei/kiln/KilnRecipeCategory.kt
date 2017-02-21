@@ -38,13 +38,13 @@ object KilnRecipeCategory : IRecipeCategory<KilnRecipeWrapper> {
         recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
         if (recipeWrapper.recipe.isBlockRecipe) recipeLayout.itemStacks.set(1, recipeWrapper.recipe.blockOutputAsItem!!)
         else recipeLayout.itemStacks.set(1, recipeWrapper.recipe.itemOutput!!)
-        recipeLayout.itemStacks.addTooltipCallback { slot, input, stack, list ->
+        recipeLayout.itemStacks.addTooltipCallback({ slot, _, _, list ->
             if (slot == 1) {
                 val str1 = "Min: %.1fC ".format(recipeWrapper.recipe.minTemp.toCelsius())
                 val str2 = "Max: %.1fC".format(recipeWrapper.recipe.maxTemp.toCelsius())
                 list.add(str1 + str2)
             }
-        }
+        })
     }
 
     override fun getIcon(): IDrawable? = null

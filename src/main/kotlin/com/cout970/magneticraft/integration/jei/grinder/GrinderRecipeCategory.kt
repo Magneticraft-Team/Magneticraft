@@ -39,7 +39,7 @@ object GrinderRecipeCategory : IRecipeCategory<GrinderRecipeWrapper> {
         if (recipeWrapper.recipe.probability == 0f) return
         recipeLayout.itemStacks.init(2, false, 48 + 9, 51 - 5)
         recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput)
-        recipeLayout.itemStacks.addTooltipCallback { slot, input, stack, list ->
+        recipeLayout.itemStacks.addTooltipCallback { slot, _, _, list ->
             if (slot == 2) list.add("Probability: %.1f%%".format(recipeWrapper.recipe.probability * 100))
         }
     }

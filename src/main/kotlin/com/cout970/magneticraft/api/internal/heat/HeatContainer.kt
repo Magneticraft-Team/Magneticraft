@@ -28,7 +28,7 @@ open class HeatContainer(
         private var heat: Long = 0
 ) : IHeatNode {
 
-    override fun getEmit(): Boolean = emit
+    override fun emitsLight(): Boolean = emit
     override fun getDissipation(): Double = dissipation
     override fun getConductivity(): Double = conductivity
     override fun getMaxHeat(): Long = maxHeat
