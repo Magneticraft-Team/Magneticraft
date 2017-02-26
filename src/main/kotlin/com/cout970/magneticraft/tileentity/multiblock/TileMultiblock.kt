@@ -56,9 +56,6 @@ open class TileMultiblock : TileBase(), ITileMultiblock {
         }
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound()
-
-    override fun load(nbt: NBTTagCompound) = Unit
 
     override fun onActivate() {}
 

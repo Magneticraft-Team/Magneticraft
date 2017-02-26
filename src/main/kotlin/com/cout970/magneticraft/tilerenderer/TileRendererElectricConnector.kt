@@ -8,7 +8,7 @@ import com.cout970.loader.api.model.IObjGroup
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.util.resource
@@ -30,7 +30,7 @@ object TileRendererElectricConnector : TileEntityRenderer<TileElectricConnector>
 
         //create cache for wire connections
         te.wireRender.update {
-            for (i in te.outputWiredConnections) {
+            for (i in te.traitElectricity.outputWiredConnections) {
                 renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.035)
             }
         }
@@ -68,10 +68,10 @@ object TileRendererElectricConnector : TileEntityRenderer<TileElectricConnector>
             te.hasBase = true
             val tile = te.world.getTileEntity(te.pos.offset(te.getFacing()))
             if (tile != null) {
-                val handler = NODE_HANDLER!!.fromTile(tile, te.getFacing().opposite)
+                val handler = ELECTRIC_NODE_HANDLER!!.fromTile(tile, te.getFacing().opposite)
                 if (handler is IElectricNodeHandler) {
                     val node = handler.nodes.firstOrNull { it is IElectricNode }
-                    if (node != null && handler.canConnect(node as IElectricNode, te, te.mainNode, te.getFacing().opposite)) {
+                    if (node != null && handler.canConnect(node as IElectricNode, te.traitElectricity, te.mainNode, te.getFacing().opposite)) {
                         te.hasBase = false
                     }
                 }

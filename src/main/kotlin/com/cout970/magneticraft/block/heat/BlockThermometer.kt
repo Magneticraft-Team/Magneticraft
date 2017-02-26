@@ -4,7 +4,7 @@ import com.cout970.magneticraft.block.BlockMultiState
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.TraitHeat
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -43,7 +43,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
 
     override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         val tile = blockAccess.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
-        val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
+        val handler = HEAT_NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is TraitHeat)
             return handler.getComparatorOutput()
         return 0
@@ -51,7 +51,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
 
     override fun getStrongPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         val tile = blockAccess.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
-        val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
+        val handler = HEAT_NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is TraitHeat)
             return handler.getComparatorOutput()
         return 0
@@ -59,7 +59,7 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
 
     override fun getComparatorInputOverride(blockState: IBlockState, worldIn: World, pos: BlockPos): Int {
         val tile = worldIn.getTileEntity(pos.offset(blockState[PROPERTY_DIRECTION])) ?: return 0
-        val handler = NODE_HANDLER!!.fromTile(tile) ?: return 0
+        val handler = HEAT_NODE_HANDLER!!.fromTile(tile) ?: return 0
         if (handler is TraitHeat)
             return handler.getComparatorOutput()
         return 0
@@ -70,5 +70,4 @@ object BlockThermometer : BlockMultiState(Material.ROCK, "thermometer_block") {
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_DIRECTION, EnumFacing.getFront(meta))
 
     override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, PROPERTY_DIRECTION)
-
 }

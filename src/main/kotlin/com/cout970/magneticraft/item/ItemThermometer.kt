@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.item
 
-import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.util.guessAmbientTemp
 import com.cout970.magneticraft.util.toCelsius
@@ -35,8 +35,8 @@ object ItemThermometer : ItemBase("thermometer") {
         if (worldIn.isServer) {
             val tile = worldIn.getTileEntity(pos)
             if (tile != null) {
-                val handler = NODE_HANDLER!!.fromTile(tile, facing)
-                if (handler is IHeatHandler) {
+                val handler = HEAT_NODE_HANDLER!!.fromTile(tile, facing)
+                if (handler is IHeatNodeHandler) {
                     for (i in handler.nodes) {
                         if (i !is IHeatNode) continue
                         if (Config.heatUnitCelsius) playerIn.addChatComponentMessage(TextComponentString("%.2fC".format(i.temperature.toCelsius())))

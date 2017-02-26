@@ -11,8 +11,8 @@ import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
@@ -96,11 +96,13 @@ class TileFirebox : TileBase() {
         }
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        setTag("inventory", inventory.serializeNBT())
-        setFloat("maxBurningTime", maxBurningTime)
-        setFloat("meltingTime", burningTime)
-        super.save()
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+            add("maxBurningTime", maxBurningTime)
+            add("meltingTime", burningTime)
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {

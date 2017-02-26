@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.block.heat
 
 
-import com.cout970.magneticraft.api.heat.IHeatHandler
+import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.misc.tileentity.getTile
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileHeatPipe
 import net.minecraft.block.ITileEntityProvider
@@ -33,9 +33,9 @@ object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEnt
         if (pos == null || neighbor == null) return
         val tile = world?.getTile<TileHeatPipe>(pos) ?: return
         val neighborTile = world.getTileEntity(neighbor) ?: return
-        val handler = NODE_HANDLER!!.fromTile(neighborTile) ?: return
+        val handler = HEAT_NODE_HANDLER!!.fromTile(neighborTile) ?: return
         val facing = EnumFacing.getFacingFromVector((neighbor.x - pos.x).toFloat(), (neighbor.y - pos.y).toFloat(), (neighbor.z - pos.z).toFloat())
-        if (handler is IHeatHandler)
+        if (handler is IHeatNodeHandler)
             tile.activeSides.add(facing)
         else
             tile.activeSides.remove(facing)
@@ -46,8 +46,8 @@ object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEnt
         val tile = worldIn?.getTile<TileHeatPipe>(pos) ?: return
         for (i in EnumFacing.values()) {
             val neighborTile = worldIn.getTileEntity(pos.offset(i)) ?: continue
-            val handler = NODE_HANDLER!!.fromTile(neighborTile) ?: continue
-            if (handler is IHeatHandler)
+            val handler = HEAT_NODE_HANDLER!!.fromTile(neighborTile) ?: continue
+            if (handler is IHeatNodeHandler)
                 tile.activeSides.add(i)
         }
     }

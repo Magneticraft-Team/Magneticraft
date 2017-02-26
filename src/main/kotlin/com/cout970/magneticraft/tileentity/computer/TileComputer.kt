@@ -6,6 +6,8 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.resource
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ITickable
@@ -39,12 +41,13 @@ class TileComputer : TileBase(), ITickable {
     }
 
     override fun save(): NBTTagCompound {
-        return NBTTagCompound().apply {
-            setTag("motherboard", motherboard.serializeNBT())
-            setTag("monitor", monitor.serializeNBT())
-            setTag("floppy", floppy.serializeNBT())
-            setTag("inv", inv.serializeNBT())
+        val nbt = newNbt {
+            add("motherboard", motherboard.serializeNBT())
+            add("monitor", monitor.serializeNBT())
+            add("floppy", floppy.serializeNBT())
+            add("inv", inv.serializeNBT())
         }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {
@@ -52,5 +55,6 @@ class TileComputer : TileBase(), ITickable {
         monitor.deserializeNBT(nbt.getCompoundTag("monitor"))
         floppy.deserializeNBT(nbt.getCompoundTag("floppy"))
         inv.deserializeNBT(nbt.getCompoundTag("inv"))
+        super.load(nbt)
     }
 }

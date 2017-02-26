@@ -4,12 +4,13 @@ package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
-import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricConnector
 import com.cout970.magneticraft.tilerenderer.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -40,24 +41,33 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
 /**
  * Created by cout970 on 29/06/2016.
  */
-object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connector"), ITileEntityProvider, IManualConnectionHandler, ICapabilityProvider {
+object BlockElectricConnector : BlockMultiState(Material.IRON,
+        "electric_connector"), ITileEntityProvider, IManualConnectionHandler, ICapabilityProvider {
 
-    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer,
+                                  hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float,
+                                  hitZ: Float): Boolean {
         if (playerIn.isSneaking && playerIn.heldItemMainhand == null) {
-            val te = worldIn.getTile<TileElectricBase>(pos)
+            val te = worldIn.getTile<TileBase>(pos)
             if (te != null) {
-                te.autoConnectWires = !te.autoConnectWires
-                if (!te.autoConnectWires) {
-                    te.clearWireConnections()
-                }
-                if (worldIn.isServer) {
-                    if (te.autoConnectWires) {
-                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.activate"))
-                    } else {
-                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.deactivate"))
+                val trait = te.traits.find { it is TraitElectricity }
+                if (trait is TraitElectricity) {
+                    trait.autoConnectWires = !trait.autoConnectWires
+                    if (!trait.autoConnectWires) {
+                        trait.clearWireConnections()
                     }
+                    if (worldIn.isServer) {
+                        if (trait.autoConnectWires) {
+                            playerIn.addChatComponentMessage(
+                                    TextComponentTranslation("text.magneticraft.auto_connect.activate"))
+                        } else {
+                            playerIn.addChatComponentMessage(
+                                    TextComponentTranslation("text.magneticraft.auto_connect.deactivate"))
+                        }
+                    }
+                    return true
                 }
-                return true
+
             }
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
@@ -94,7 +104,8 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileElectricConnector()
 
-    override fun onBlockPlaced(worldIn: World?, pos: BlockPos?, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase?): IBlockState {
+    override fun onBlockPlaced(worldIn: World?, pos: BlockPos?, facing: EnumFacing, hitX: Float, hitY: Float,
+                               hitZ: Float, meta: Int, placer: EntityLivingBase?): IBlockState {
         return defaultState.withProperty(PROPERTY_FACING, facing.opposite)
     }
 
@@ -102,19 +113,22 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
 
     override fun getMetaFromState(state: IBlockState): Int = state[PROPERTY_FACING].ordinal
 
-    override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_FACING, EnumFacing.getFront(meta))
+    override fun getStateFromMeta(meta: Int): IBlockState = defaultState.withProperty(PROPERTY_FACING,
+            EnumFacing.getFront(meta))
 
     override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, PROPERTY_FACING)
 
-    override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): BlockPos? = thisBlock
+    override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?,
+                            stack: ItemStack?): BlockPos? = thisBlock
 
-    override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer, side: EnumFacing, stack: ItemStack): Boolean {
+    override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
+                             side: EnumFacing, stack: ItemStack): Boolean {
         val tile = world.getTile<TileElectricConnector>(thisBlock)
         val other = world.getTileEntity(otherBlock)
         if (tile == null || other == null) {
             return false
         }
-        val handler = NODE_HANDLER!!.fromTile(other) ?: return false
+        val handler = ELECTRIC_NODE_HANDLER!!.fromTile(other) ?: return false
         return tile.connectWire(handler, side)
     }
 
@@ -127,7 +141,7 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
     fun canStayInSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
         if (worldIn.isSideSolid(pos.offset(side), side.opposite, false)) return true
 
-        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) toAABBWith  Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
+        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) toAABBWith Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
         val temp = side.directionVec.toVec3d() * 0.625 + Vec3d(0.5, 0.5, 0.5)
         val blockPos = pos.offset(side)
 
@@ -150,5 +164,6 @@ object BlockElectricConnector : BlockMultiState(Material.IRON, "electric_connect
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(capability: Capability<T>?, facing: EnumFacing?): T = this as T
 
-    override fun hasCapability(capability: Capability<*>?, facing: EnumFacing?): Boolean = capability == MANUAL_CONNECTION_HANDLER
+    override fun hasCapability(capability: Capability<*>?,
+                               facing: EnumFacing?): Boolean = capability == MANUAL_CONNECTION_HANDLER
 }

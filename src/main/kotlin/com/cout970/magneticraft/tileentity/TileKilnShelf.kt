@@ -5,6 +5,8 @@ import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -28,10 +30,13 @@ class TileKilnShelf : TileBase(), ITickable {
         inventory[0] = stack?.copy()
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        if (getStack() != null) {
-            setTag("stack", NBTTagCompound().apply { getStack()?.writeToNBT(this) })
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            if (getStack() != null) {
+                add("stack", getStack()!!.serializeNBT())
+            }
         }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {
@@ -40,6 +45,7 @@ class TileKilnShelf : TileBase(), ITickable {
         } else {
             null
         }
+        super.load(nbt)
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?) =

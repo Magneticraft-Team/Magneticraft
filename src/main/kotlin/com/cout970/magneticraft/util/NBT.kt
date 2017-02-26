@@ -134,7 +134,7 @@ fun NBTTagList.newNbt(func: NBTTagCompound.() -> Unit) {
     appendTag(nbt)
 }
 
-fun NBTTagCompound.list(key: String, func: NBTTagList.()->Unit){
+fun NBTTagCompound.list(key: String, func: NBTTagList.() -> Unit) {
     val list = NBTTagList()
     func(list)
     setTag(key, list)
@@ -144,9 +144,19 @@ fun NBTTagCompound.getList(key: String): NBTTagList {
     return getTagList(key, Constants.NBT.TAG_COMPOUND)
 }
 
-fun NBTTagList.forEach(func: NBTTagCompound.() -> Unit){
-    for(i in 0 until tagCount()){
-        getCompoundTagAt(i).func()
+fun NBTTagList.forEach(func: (NBTTagCompound) -> Unit) {
+    for (i in 0 until tagCount()) {
+        func(getCompoundTagAt(i))
+    }
+}
+
+fun NBTTagCompound.readList(key: String, func: (NBTTagList) -> Unit) {
+    if (hasKey(key)) {
+        try {
+            func(getList(key))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 
@@ -164,3 +174,4 @@ fun NBTTagCompound.add(key: String, value: BlockPos) = setBlockPos(key, value)
 fun NBTTagCompound.add(key: String, value: Vec3d) = setVector3(key, value)
 fun NBTTagCompound.add(key: String, value: IntArray) = setIntArray(key, value)
 fun NBTTagCompound.add(key: String, value: String) = setString(key, value)
+fun NBTTagCompound.add(key: String, value: NBTTagCompound) = setTag(key, value)

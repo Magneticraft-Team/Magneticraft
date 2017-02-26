@@ -13,10 +13,10 @@ object TileRendererElectricPoleAdapter : TileEntityRenderer<TileElectricPoleAdap
     override fun renderTileEntityAt(te: TileElectricPoleAdapter, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
 
         te.wireRender.update {
-            for (i in te.outputWiredConnections) {
+            for (i in te.traitElectricity.outputWiredConnections) {
                 renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
             }
-            for (i in te.inputWiredConnections) {
+            for (i in te.traitElectricity.inputWiredConnections) {
                 if (i.secondNode == te.firstNode) continue
                 //wires are renderer twice to fix a render bug in vanilla
                 val trans = i.firstNode.pos - i.secondNode.pos

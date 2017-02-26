@@ -6,12 +6,13 @@ package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
-import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.vector.toAABBWith
@@ -137,7 +138,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
         val mainPos = getMainPos(state, thisBlock)
         val tile = world.getTileEntity(mainPos)
         val other = world.getTileEntity(otherBlock) ?: return false
-        val handler = NODE_HANDLER!!.fromTile(other) ?: return false
+        val handler = ELECTRIC_NODE_HANDLER!!.fromTile(other) ?: return false
         if (tile is TileElectricPole) {
             return tile.connectWire(handler, side)
         }
@@ -154,20 +155,25 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (playerIn.isSneaking && playerIn.heldItemMainhand == null) {
-            val te = worldIn.getTile<TileElectricBase>(pos)
+            val te = worldIn.getTile<TileBase>(pos)
             if (te != null) {
-                te.autoConnectWires = !te.autoConnectWires
-                if (!te.autoConnectWires) {
-                    te.clearWireConnections()
-                }
-                if (worldIn.isServer) {
-                    if (te.autoConnectWires) {
-                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.activate"))
-                    } else {
-                        playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.deactivate"))
+                val trait = te.traits.find { it is TraitElectricity }
+                if (trait is TraitElectricity) {
+                    trait.autoConnectWires = !trait.autoConnectWires
+                    if (!trait.autoConnectWires) {
+                        trait.clearWireConnections()
                     }
+                    if (worldIn.isServer) {
+                        if (trait.autoConnectWires) {
+                            playerIn.addChatComponentMessage(
+                                    TextComponentTranslation("text.magneticraft.auto_connect.activate"))
+                        } else {
+                            playerIn.addChatComponentMessage(
+                                    TextComponentTranslation("text.magneticraft.auto_connect.deactivate"))
+                        }
+                    }
+                    return true
                 }
-                return true
             }
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)

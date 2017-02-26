@@ -32,7 +32,7 @@ class ItemBlockElectricPoleAdapter : ItemBlockBase(BlockElectricPoleAdapter) {
             val tile = worldIn.getTile<TileElectricPole>(main)
             val connections = mutableListOf<IElectricConnection>()
             if (tile != null) {
-                connections.addAll(tile.outputWiredConnections with tile.inputWiredConnections)
+                connections.addAll(tile.traitElectricity.outputWiredConnections with tile.traitElectricity.inputWiredConnections)
             }
             val yaw = if (placer.rotationYaw >= 180) {
                 placer.rotationYaw - 360

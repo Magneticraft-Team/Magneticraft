@@ -10,8 +10,8 @@ import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
@@ -91,9 +91,13 @@ class TileIcebox : TileBase() {
             //burns fuel
             if (canMelt()) {
                 //Melting rate depends on difference between current temperature and recipe's temperature range
-                val meltingSpeed = Math.ceil((Config.iceboxMaxConsumption * interpolate(heat.temperature, lastRecipe()!!.minTemp, lastRecipe()!!.maxTemp)) / 10.0).toInt()
-                val outFluidInc = FluidStack(lastRecipe()!!.output.fluid, (lastRecipe()!!.output.amount * meltingSpeed / maxMeltingTime).toInt())
-                if (tank.fillInternal(outFluidInc, false) != 0) {  //This is lossy, but the fluid is considered a byproduct, so whatever
+                val meltingSpeed = Math.ceil(
+                        (Config.iceboxMaxConsumption * interpolate(heat.temperature, lastRecipe()!!.minTemp,
+                                lastRecipe()!!.maxTemp)) / 10.0).toInt()
+                val outFluidInc = FluidStack(lastRecipe()!!.output.fluid,
+                        (lastRecipe()!!.output.amount * meltingSpeed / maxMeltingTime).toInt())
+                if (tank.fillInternal(outFluidInc,
+                        false) != 0) {  //This is lossy, but the fluid is considered a byproduct, so whatever
                     meltingTime -= meltingSpeed
                     tank.fillInternal(outFluidInc, true)
                     heat.applyHeat(-meltingSpeed.toDouble(), false)
@@ -101,9 +105,12 @@ class TileIcebox : TileBase() {
                 }
             } else if (canFreeze()) {
                 val freezingSpeed = Math.ceil(Config.iceboxMaxConsumption / 10.0).toInt()
-                val outFluidInc = FluidStack(lastRecipeReverse()!!.output.fluid, (lastRecipe()!!.output.amount * freezingSpeed / maxMeltingTime).toInt())
-                if (tank.drainInternal(outFluidInc, false) != null) {  //This is lossy, but the fluid is considered a byproduct, so whatever
-                    if (freezingTime - freezingSpeed > 0 || inventory.insertItem(0, lastRecipeReverse()!!.input, true) == null) //If we would need to insert output, check to see if possible
+                val outFluidInc = FluidStack(lastRecipeReverse()!!.output.fluid,
+                        (lastRecipe()!!.output.amount * freezingSpeed / maxMeltingTime).toInt())
+                if (tank.drainInternal(outFluidInc,
+                        false) != null) {  //This is lossy, but the fluid is considered a byproduct, so whatever
+                    if (freezingTime - freezingSpeed > 0 || inventory.insertItem(0, lastRecipeReverse()!!.input,
+                            true) == null) //If we would need to insert output, check to see if possible
                         freezingTime -= freezingSpeed
                     if (freezingTime <= 0) {
                         inventory.insertItem(0, lastRecipeReverse()!!.input, false)
@@ -135,17 +142,19 @@ class TileIcebox : TileBase() {
 
     fun canMelt(): Boolean
             = lastRecipe() != null
-            && meltingTime > 0
-            && heat.temperature > Math.ceil(lastRecipe()!!.minTemp) //Ensure min melting temp is strictly greater than max freezing temp
-            && heat.heat < heat.maxHeat
-            && heat.temperature < lastRecipe()!!.maxTemp
+              && meltingTime > 0
+              && heat.temperature > Math.ceil(
+            lastRecipe()!!.minTemp) //Ensure min melting temp is strictly greater than max freezing temp
+              && heat.heat < heat.maxHeat
+              && heat.temperature < lastRecipe()!!.maxTemp
 
     fun canFreeze(): Boolean {
         return lastRecipeReverse() != null
-                && freezingTime > 0
-                && lastRecipeReverse()!!.reverse
-                && heat.temperature < Math.floor(lastRecipeReverse()!!.minTemp) //Ensure min melting temp is strictly greater than max freezing temp
-                && heat.heat < heat.maxHeat
+               && freezingTime > 0
+               && lastRecipeReverse()!!.reverse
+               && heat.temperature < Math.floor(
+                lastRecipeReverse()!!.minTemp) //Ensure min melting temp is strictly greater than max freezing temp
+               && heat.heat < heat.maxHeat
     }
 
     fun lastRecipe(): IIceboxRecipe? {
@@ -189,16 +198,18 @@ class TileIcebox : TileBase() {
         }
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        setTag("inventory", inventory.serializeNBT())
-        if (lastInput != null)
-            setTag("recipe_cache", lastInput!!.serializeNBT())
-        setFloat("maxMeltingTime", maxMeltingTime)
-        setFloat("meltingTime", meltingTime)
-        setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
-        if (lastOutput != null)
-            setTag("reverse_cache", NBTTagCompound().apply { lastOutput!!.writeToNBT(this) })
-        super.save()
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+            if (lastInput != null)
+                add("recipe_cache", lastInput!!.serializeNBT())
+            add("maxMeltingTime", maxMeltingTime)
+            add("meltingTime", meltingTime)
+            add("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
+            if (lastOutput != null)
+                add("reverse_cache", NBTTagCompound().apply { lastOutput!!.writeToNBT(this) })
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {

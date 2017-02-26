@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Yurgen on 19/10/2016.
  */
-public interface IHeatHandler extends INodeHandler {
+public interface IHeatNodeHandler extends INodeHandler {
 
     /*
      * Returns list of directions with active heat connections

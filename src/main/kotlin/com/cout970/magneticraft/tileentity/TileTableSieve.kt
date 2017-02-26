@@ -7,6 +7,8 @@ import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -78,11 +80,16 @@ class TileTableSieve : TileBase(), ITickable {
         }
     }
 
-    override fun save(): NBTTagCompound =
-            NBTTagCompound().apply { setTag("inventory", inventory.serializeNBT()) }
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+        }
+        return super.save().also { it.merge(nbt) }
+    }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
+        super.load(nbt)
     }
 
     override fun onBreak() {

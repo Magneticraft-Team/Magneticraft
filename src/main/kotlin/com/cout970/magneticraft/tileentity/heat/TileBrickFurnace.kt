@@ -2,8 +2,8 @@ package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.misc.inventory.get
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
@@ -80,10 +80,12 @@ class TileBrickFurnace : TileBase() {
         inventory.ignoreFilter = false
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        setTag("inventory", inventory.serializeNBT())
-        setFloat("meltingTime", burningTime)
-        super.save()
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+            add("meltingTime", burningTime)
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {

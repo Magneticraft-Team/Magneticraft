@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
@@ -11,15 +10,15 @@ import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.damage.DamageSources
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.TileKilnShelf
@@ -44,10 +43,12 @@ import net.minecraftforge.common.capabilities.Capability
 class TileKiln : TileBase(), IMultiblockCenter, ITickable {
 
     override var multiblock: Multiblock? get() = MultiblockKiln
-        set(value) {/* ignored */}
+        set(value) {/* ignored */
+        }
 
     override var centerPos: BlockPos? get() = BlockPos.ORIGIN
-        set(value) {/* ignored */}
+        set(value) {/* ignored */
+        }
 
     override var multiblockFacing: EnumFacing? = null
 
@@ -256,7 +257,7 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             for (j in POTENTIAL_CONNECTIONS) {
                 val relPos = posTransform(j)
                 val tileOther = world.getTileEntity(relPos) ?: continue
-                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
+                val handler = (HEAT_NODE_HANDLER!!.fromTile(tileOther) ?: continue) ?: continue
                 for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
                     connections.add(HeatConnection(heatNode, otherNode))
                     handler.addConnection(HeatConnection(otherNode, heatNode))
@@ -279,7 +280,7 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER && facing == EnumFacing.DOWN) {
+        if (capability == HEAT_NODE_HANDLER && facing == EnumFacing.DOWN) {
             val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
             HEAT_INPUTS.forEach {
                 if (it == transPos)
@@ -291,7 +292,7 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER && facing == EnumFacing.DOWN) {
+        if (capability == HEAT_NODE_HANDLER && facing == EnumFacing.DOWN) {
             val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
             HEAT_INPUTS.forEach {
                 if (it == transPos) return this as T

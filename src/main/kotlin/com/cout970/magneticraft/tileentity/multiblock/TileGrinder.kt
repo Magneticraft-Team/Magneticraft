@@ -1,8 +1,7 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
@@ -21,17 +20,18 @@ import com.cout970.magneticraft.misc.inventory.ItemInputHelper
 import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
@@ -50,17 +50,13 @@ import java.util.*
 /**
  * Created by cout970 on 19/08/2016.
  */
-class TileGrinder : TileElectricBase(), IMultiblockCenter {
+class TileGrinder : TileBase(), IMultiblockCenter {
 
-    override var multiblock: Multiblock?
-        get() = MultiblockGrinder
-        set(value) {/* ignored */
-        }
+    override var multiblock: Multiblock? get() = MultiblockGrinder
+        set(value) {/* ignored */}
 
-    override var centerPos: BlockPos?
-        get() = BlockPos.ORIGIN
-        set(value) {/* ignored */
-        }
+    override var centerPos: BlockPos? get() = BlockPos.ORIGIN
+        set(value) {/* ignored */}
 
     val heatNode = HeatContainer(
             worldGetter = { this.world },
@@ -71,35 +67,20 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    val heatNodes: List<IHeatNode> = listOf(heatNode)
+    val traitHeat: TraitHeat = TraitHeat(this, listOf(heatNode), this::updateHeatConnections)
 
-    val traitHeat: TraitHeat = TraitHeat(this, heatNodes, this::updateHeatConnections)
+    val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
 
-    fun updateHeatConnections(traitHeat: TraitHeat) {
-        traitHeat.apply {
-            for (j in POTENTIAL_CONNECTIONS) {
-                val relPos = posTransform(j)
-                val tileOther = world.getTileEntity(relPos) ?: continue
-                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
-                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
-                    connections.add(HeatConnection(heatNode, otherNode))
-                    handler.addConnection(HeatConnection(otherNode, heatNode))
-                }
-            }
-        }
-    }
+    val traitElectricity = TraitElectricity(this, listOf(node))
 
-    override val traits: List<ITileTrait> = listOf(traitHeat)
+    override val traits: List<ITileTrait> = listOf(traitHeat, traitElectricity)
 
     override var multiblockFacing: EnumFacing? = null
-
 
     val safeHeat: Long = ((IRON_HEAT_CAPACITY * 20 * Config.defaultMachineSafeTemp)).toLong()
     val efficiency = 0.9
     var overTemp = false
     val grinderDamage = 8f
-    val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
-    override val electricNodes: List<IElectricNode> get() = listOf(node)
     val in_inv_size = 4
     val inventory = ItemStackHandler(in_inv_size)
     val craftingProcess: CraftingProcess
@@ -205,11 +186,15 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
         getBlockState()[PROPERTY_ACTIVE] else false
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
-        setTag("inv", inventory.serializeNBT())
-        setTag("crafting", craftingProcess.serializeNBT())
-        super.save()
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            if (multiblockFacing != null){
+                add("direction", multiblockFacing!!)
+            }
+            add("inv", inventory.serializeNBT())
+            add("crafting", craftingProcess.serializeNBT())
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
@@ -242,12 +227,15 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        if (capability == NODE_HANDLER && (facing == null ||
-                                           (direction.rotatePoint(BlockPos.ORIGIN,
-                                                   ENERGY_INPUT) == relPos && facing == direction.rotateY()) ||
-                                           direction.rotatePoint(BlockPos.ORIGIN,
-                                                   HEAT_OUTPUT) == relPos && facing == direction.rotateYCCW()))
-            return true
+
+        if(capability == HEAT_NODE_HANDLER){
+            if(facing == null ||
+               direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && facing == direction.rotateY() ||
+               direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && facing == direction.rotateYCCW()){
+                return true
+            }
+        }
+
         if (capability == ITEM_HANDLER) {
             if (facing == null)
                 return true
@@ -261,26 +249,27 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        if (capability == NODE_HANDLER && (facing == null ||
-                                           (direction.rotatePoint(BlockPos.ORIGIN,
-                                                   ENERGY_INPUT) == relPos && facing == direction.rotateY()) ||
-                                           direction.rotatePoint(BlockPos.ORIGIN,
-                                                   HEAT_OUTPUT) == relPos && facing == direction.rotateYCCW()))
-            return this as T
+        if(capability == HEAT_NODE_HANDLER){
+            if(facing == null ||
+               direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) == relPos && facing == direction.rotateY() ||
+               direction.rotatePoint(BlockPos.ORIGIN, HEAT_OUTPUT) == relPos && facing == direction.rotateYCCW()){
+                return traitHeat as T
+            }
+        }
         if (capability == ITEM_HANDLER) {
             if (facing == null)
                 return inventory as T
             if (direction.rotatePoint(BlockPos.ORIGIN, ITEM_INPUT) == relPos && facing == EnumFacing.UP)
-                return inInventory(inventory, in_inv_size) as T
+                return InInventory(inventory, in_inv_size) as T
             if (direction.rotatePoint(BlockPos.ORIGIN, ITEM_INPUT) == relPos && facing == EnumFacing.UP)
-                return outInventory() as T
+                return OutInventory() as T
         }
         return null
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == NODE_HANDLER) return true
+        if (capability == HEAT_NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
@@ -290,9 +279,9 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
             if (facing == null)
                 return inventory as T
             if (facing == EnumFacing.UP)
-                return inInventory(inventory, in_inv_size) as T
+                return InInventory(inventory, in_inv_size) as T
         }
-        if (capability == NODE_HANDLER) return this as T
+        if (capability == HEAT_NODE_HANDLER) return traitHeat as T
         return super.getCapability(capability, facing)
     }
 
@@ -329,7 +318,22 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
         return true
     }
 
-    class inInventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
+    fun updateHeatConnections(traitHeat: TraitHeat) {
+        traitHeat.apply {
+            for (j in POTENTIAL_CONNECTIONS) {
+                val relPos = posTransform(j)
+                val tileOther = world.getTileEntity(relPos) ?: continue
+                val handler = (HEAT_NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatNodeHandler ?: continue
+                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                    connections.add(HeatConnection(heatNode, otherNode))
+                    handler.addConnection(HeatConnection(otherNode, heatNode))
+                }
+            }
+        }
+    }
+
+    //TODO add an utility class for this
+    class InInventory(val inv: IItemHandler, private val in_size: Int) : IItemHandler by inv {
         override fun getSlots(): Int {
             return in_size
         }
@@ -339,7 +343,7 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
         }
     }
 
-    class outInventory : IItemHandler {
+    class OutInventory : IItemHandler {
         override fun getSlots(): Int {
             return 0
         }

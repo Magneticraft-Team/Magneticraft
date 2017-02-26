@@ -19,6 +19,7 @@ import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.SPacketUpdateTileEntity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.common.network.NetworkRegistry
@@ -27,7 +28,7 @@ import net.minecraftforge.fml.relauncher.Side
 /**
  * Base class for all the TileEntities in the mod
  */
-abstract class TileBase : TileEntity() {
+abstract class TileBase : TileEntity(), ITickable {
 
     open val traits = listOf<ITileTrait>()
 
@@ -47,7 +48,7 @@ abstract class TileBase : TileEntity() {
         blockState = null
     }
 
-    open fun update(){
+    override fun update() {
         traits.forEach(ITileTrait::update)
     }
 
@@ -60,7 +61,13 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun onLoad() {
-        traits.forEach(ITileTrait::onLoad)
+        try {
+
+            traits.forEach(ITileTrait::onLoad)
+        } catch (e: Exception) {
+            println(this::class)
+            e.printStackTrace()
+        }
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
@@ -68,7 +75,8 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        return traits.find { it.hasCapability(capability, facing) }?.getCapability(capability, facing)
+        val list = traits.filter { it.hasCapability(capability, facing) }
+        return list.first().getCapability(capability, facing)
     }
 
     /**
@@ -107,9 +115,9 @@ abstract class TileBase : TileEntity() {
 
     open fun save(): NBTTagCompound {
         val traitNbts = traits.mapNotNull { it.serialize() }
-        if(traitNbts.isNotEmpty()){
+        if (traitNbts.isNotEmpty()) {
             return newNbt {
-                list("_traits"){
+                list("_traits") {
                     traitNbts.forEach { appendTag(it) }
                 }
             }
@@ -117,8 +125,8 @@ abstract class TileBase : TileEntity() {
         return NBTTagCompound()
     }
 
-    open fun load(nbt: NBTTagCompound){
-        if(nbt.hasKey("_traits")){
+    open fun load(nbt: NBTTagCompound) {
+        if (nbt.hasKey("_traits")) {
             val list = nbt.getList("_traits")
             traits.forEachIndexed { index, trait ->
                 trait.deserialize(list.getTagCompound(index))

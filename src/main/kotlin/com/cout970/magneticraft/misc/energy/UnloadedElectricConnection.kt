@@ -3,9 +3,9 @@ package com.cout970.magneticraft.misc.energy
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -32,8 +32,8 @@ data class UnloadedElectricConnection(
         if (tile0 == null || tile1 == null) {
             return true
         }
-        val handler0 = NODE_HANDLER!!.fromTile(tile0)
-        val handler1 = NODE_HANDLER!!.fromTile(tile1)
+        val handler0 = ELECTRIC_NODE_HANDLER!!.fromTile(tile0)
+        val handler1 = ELECTRIC_NODE_HANDLER!!.fromTile(tile1)
         if (handler0 !is IElectricNodeHandler || handler1 !is IElectricNodeHandler) {
             return true
         }
@@ -53,7 +53,7 @@ data class UnloadedElectricConnection(
         if (node1 !is IWireConnector) {
             return true
         }
-        TileElectricBase.connectNodes(handler0, node0, handler1, node1)
+        TraitElectricity.connectNodes(handler0, node0, handler1, node1)
         return true
     }
 
@@ -68,7 +68,7 @@ data class UnloadedElectricConnection(
         fun save(con: IElectricConnection): NBTTagCompound {
             return NBTTagCompound().apply {
                 val pos0 = con.firstNode.pos
-                val handler0 = TileElectricBase.getHandler(con.firstNode)
+                val handler0 = TraitElectricity.getHandler(con.firstNode)
                 val index0 = handler0!!.nodes.indexOfFirst { con.firstNode == it }
                 setInteger("x0", pos0.x)
                 setInteger("y0", pos0.y)
@@ -76,7 +76,7 @@ data class UnloadedElectricConnection(
                 setInteger("index0", index0)
 
                 val pos1 = con.secondNode.pos
-                val handler1 = TileElectricBase.getHandler(con.secondNode)
+                val handler1 = TraitElectricity.getHandler(con.secondNode)
                 val index1 = handler1!!.nodes.indexOfFirst { con.secondNode == it }
                 setInteger("x1", pos1.x)
                 setInteger("y1", pos1.y)

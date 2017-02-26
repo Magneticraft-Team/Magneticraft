@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity.electric
 
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
@@ -16,16 +15,15 @@ import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.render.AnimationTimer
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.FuelCache
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.guessAmbientTemp
-import com.cout970.magneticraft.util.toKelvinFromCelsius
+import com.cout970.magneticraft.util.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -43,7 +41,7 @@ class TileIncendiaryGenerator(
         val tank: Tank = object : Tank(4000) {
             override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
         }
-) : TileElectricBase(), IFluidHandler by tank {
+) : TileBase(), IFluidHandler by tank {
 
     companion object {
         val MAX_HEAT = 500.toKelvinFromCelsius()
@@ -56,8 +54,12 @@ class TileIncendiaryGenerator(
     val fuelCache = FuelCache()
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
-    override val electricNodes: List<IElectricNode>
-        get() = listOf(mainNode)
+
+    val traitElectricity = TraitElectricity(this, listOf(mainNode),
+            canConnectAtSideImpl = this::canConnectAtSide)
+
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
+
     val inventory = ItemStackHandler(1)
     var maxBurningTime = 0f
     var burningTime = 0f
@@ -126,7 +128,7 @@ class TileIncendiaryGenerator(
                 data.setFloat(DATA_ID_MACHINE_HEAT, heat)
                 sendSyncData(data, Side.CLIENT)
             }
-            if(shouldTick(200)) {
+            if (shouldTick(200)) {
                 ambientTemperature = guessAmbientTemp(world, pos).toFloat()
             }
         }
@@ -141,13 +143,16 @@ class TileIncendiaryGenerator(
         }
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        setTag("inventory", inventory.serializeNBT())
-        setFloat("maxBurningTime", maxBurningTime)
-        setFloat("meltingTime", burningTime)
-        setFloat("heat", heat)
-        setDouble("fuelTemp", maxFuelTemp)
-        setTag("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+            add("maxBurningTime", maxBurningTime)
+            add("meltingTime", burningTime)
+            add("heat", heat)
+            add("fuelTemp", maxFuelTemp)
+            add("tank", NBTTagCompound().apply { tank.writeToNBT(this) })
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {
@@ -157,6 +162,7 @@ class TileIncendiaryGenerator(
         heat = nbt.getFloat("heat")
         maxFuelTemp = nbt.getDouble("fuelTemo")
         tank.readFromNBT(nbt.getCompoundTag("tank"))
+        super.load(nbt)
     }
 
     override fun onBreak() {
@@ -168,7 +174,7 @@ class TileIncendiaryGenerator(
         }
     }
 
-    override fun canConnectAtSide(facing: EnumFacing?): Boolean {
+    fun canConnectAtSide(facing: EnumFacing?): Boolean {
         return facing == EnumFacing.UP
     }
 
@@ -208,7 +214,5 @@ class TileIncendiaryGenerator(
             return super.hasCapability(capability, facing)
         }
 
-        override fun save(): NBTTagCompound = NBTTagCompound()
-        override fun load(nbt: NBTTagCompound) = Unit
     }
 }

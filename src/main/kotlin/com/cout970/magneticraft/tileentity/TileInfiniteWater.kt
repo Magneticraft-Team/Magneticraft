@@ -2,7 +2,6 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.fromTile
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraftforge.fluids.FluidRegistry
@@ -25,7 +24,4 @@ class TileInfiniteWater : TileBase(), ITickable {
             }
         }
     }
-
-    override fun save(): NBTTagCompound = NBTTagCompound()
-    override fun load(nbt: NBTTagCompound) = Unit
 }

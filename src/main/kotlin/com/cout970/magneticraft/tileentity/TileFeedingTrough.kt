@@ -4,6 +4,8 @@ import com.cout970.magneticraft.block.BlockFeedingTrough
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.toVec3d
@@ -79,11 +81,16 @@ class TileFeedingTrough : TileBase(), ITickable {
         return inventory.extractItem(0, 64, false)
     }
 
-    override fun save(): NBTTagCompound =
-            NBTTagCompound().apply { setTag("inventory", inventory.serializeNBT()) }
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+        }
+        return super.save().also { it.merge(nbt) }
+    }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
+        super.load(nbt)
     }
 
     override fun onBreak() {

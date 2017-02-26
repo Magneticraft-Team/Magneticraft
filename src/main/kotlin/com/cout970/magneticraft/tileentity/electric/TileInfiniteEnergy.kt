@@ -1,14 +1,15 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.misc.ElectricConstants
-import net.minecraft.nbt.NBTTagCompound
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
+import com.cout970.magneticraft.tileentity.TileBase
 
 /**
  * Created by cout970 on 27/07/2016.
  */
-class TileInfiniteEnergy : TileElectricBase() {
+class TileInfiniteEnergy : TileBase() {
 
     var mainNode = object : ElectricNode({ world }, { pos }, capacity = 1.25) {
         override fun getVoltage(): Double {
@@ -22,11 +23,7 @@ class TileInfiniteEnergy : TileElectricBase() {
         override fun applyPower(power: Double, simulated: Boolean): Double = power
     }
 
-    override val electricNodes: List<IElectricNode>
-        get() = listOf(mainNode)
+    val traitElectricity = TraitElectricity(this, listOf(mainNode))
 
-    override fun save(): NBTTagCompound = NBTTagCompound()
-
-    override fun load(nbt: NBTTagCompound) {
-    }
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
 }

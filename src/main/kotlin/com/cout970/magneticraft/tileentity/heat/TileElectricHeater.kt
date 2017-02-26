@@ -1,38 +1,27 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
-import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
-import com.cout970.magneticraft.util.COPPER_MELTING_POINT
-import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
-import com.cout970.magneticraft.util.ENERGY_TO_HEAT
+import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.*
 import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 04/07/2016.
  */
 
-class TileElectricHeater : TileElectricBase() {
-
-    val traitHeat: TraitHeat = TraitHeat(this, heatNodes)
-    override val traits: List<ITileTrait> = listOf(traitHeat)
+class TileElectricHeater : TileBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
-    override val electricNodes: List<IElectricNode>
-        get() = listOf(mainNode)
-
-    val heatNodes: List<IHeatNode>
-        get() = listOf(heat)
+    val traitElectricity = TraitElectricity(this, listOf(mainNode))
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
@@ -41,6 +30,9 @@ class TileElectricHeater : TileElectricBase() {
             worldGetter = { this.world },
             posGetter = { this.getPos() })
 
+    val traitHeat: TraitHeat = TraitHeat(this, listOf(heat))
+
+    override val traits: List<ITileTrait> = listOf(traitHeat, traitElectricity)
     override fun update() {
         if (worldObj.isServer) {
             if (mainNode.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && heat.heat < heat.maxHeat) {

@@ -1,12 +1,12 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.computer.IFloppyDisk
-import com.cout970.magneticraft.api.energy.IManualConnectionHandler
-import com.cout970.magneticraft.api.energy.INode
-import com.cout970.magneticraft.api.energy.INodeHandler
+import com.cout970.magneticraft.api.energy.*
 import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
 import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
 import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
+import com.cout970.magneticraft.api.heat.IHeatConnection
+import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.item.ItemFloppyDisk
 import net.darkhax.tesla.api.ITeslaConsumer
 import net.darkhax.tesla.api.ITeslaHolder
@@ -37,8 +37,11 @@ import net.minecraftforge.items.IItemHandler
 @CapabilityInject(IItemHandler::class)
 var ITEM_HANDLER: Capability<IItemHandler>? = null
 
-@CapabilityInject(INodeHandler::class)
-var NODE_HANDLER: Capability<INodeHandler>? = null
+@CapabilityInject(IElectricNodeHandler::class)
+var ELECTRIC_NODE_HANDLER: Capability<IElectricNodeHandler>? = null
+
+@CapabilityInject(IHeatNodeHandler::class)
+var HEAT_NODE_HANDLER: Capability<IHeatNodeHandler>? = null
 
 @CapabilityInject(IManualConnectionHandler::class)
 var MANUAL_CONNECTION_HANDLER: Capability<IManualConnectionHandler>? = null
@@ -71,7 +74,8 @@ var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
  * This is called on the server and the client at preInit
  */
 fun registerCapabilities() {
-    CapabilityManager.INSTANCE.register(INodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
+    CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
+    CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IEnergyConsumerItem::class.java, EmptyStorage(), { DefaultItemEnergyConsumer() })
     CapabilityManager.INSTANCE.register(IEnergyProviderItem::class.java, EmptyStorage(), { DefaultItemEnergyProvider() })
     CapabilityManager.INSTANCE.register(IEnergyStorageItem::class.java, EmptyStorage(), { DefaultItemEnergyStorage() })
@@ -119,18 +123,32 @@ class EmptyStorage<T> : Capability.IStorage<T> {
 /**
  * Default implementation of API interfaces, used to register Capabilities
  */
-class DefaultNodeProvider : INodeHandler {
+class DefaultNodeProvider : INodeHandler, IElectricNodeHandler, IHeatNodeHandler {
 
     override fun getNodes(): List<INode> = listOf()
-
     override fun getPos(): BlockPos = BlockPos.ORIGIN
+    override fun getInputConnections(): MutableList<IElectricConnection> = mutableListOf()
+    override fun getOutputConnections(): MutableList<IElectricConnection> = mutableListOf()
+
+    override fun canConnect(thisNode: IElectricNode?, other: IElectricNodeHandler?, otherNode: IElectricNode?,
+                            side: EnumFacing?): Boolean {
+        return false
+    }
+
+    override fun addConnection(connection: IElectricConnection?, side: EnumFacing?, output: Boolean) = Unit
+    override fun removeConnection(connection: IElectricConnection?) = Unit
+    override fun getConnections(): MutableList<IHeatConnection> = mutableListOf()
+    override fun addConnection(connection: IHeatConnection?) = Unit
+    override fun removeConnection(connection: IHeatConnection?) = Unit
 }
 
 class DefaultManualConnectionHandler : IManualConnectionHandler {
 
-    override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): BlockPos? = thisBlock
+    override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?,
+                            stack: ItemStack?): BlockPos? = thisBlock
 
-    override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?, stack: ItemStack?): Boolean = false
+    override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?,
+                             side: EnumFacing?, stack: ItemStack?): Boolean = false
 }
 
 class DefaultItemEnergyConsumer : IEnergyConsumerItem {

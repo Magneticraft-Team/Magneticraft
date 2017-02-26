@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.registries.machines.sifter.SifterRecipeManager
 import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipe
@@ -15,16 +14,17 @@ import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.registry.NODE_HANDLER
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
-import com.cout970.magneticraft.util.getEnumFacing
-import com.cout970.magneticraft.util.setEnumFacing
+import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
@@ -41,26 +41,26 @@ import java.util.*
 /**
  * Created by cout970 on 19/08/2016.
  */
-class TileSifter : TileElectricBase(), IMultiblockCenter {
+class TileSifter : TileBase(), IMultiblockCenter {
 
-    override var multiblock: Multiblock?
-        get() = MultiblockSifter
-        set(value) {/* ignored */
-        }
+    override var multiblock: Multiblock? get() = MultiblockSifter
+        set(value) {/* ignored */}
 
-    override var centerPos: BlockPos?
-        get() = BlockPos.ORIGIN
-        set(value) {/* ignored */
-        }
+    override var centerPos: BlockPos? get() = BlockPos.ORIGIN
+        set(value) {/* ignored */}
 
     override var multiblockFacing: EnumFacing? = null
 
     enum class Stage(val ord: Int) {
-        PRIMARY(1), SECONDARY(2), TERTIARY(3)
+        PRIMARY (1), SECONDARY(2), TERTIARY(3)
     }
 
     val node = ElectricNode({ worldObj }, { pos + direction.rotatePoint(BlockPos.ORIGIN, ENERGY_INPUT) })
-    override val electricNodes: List<IElectricNode> get() = listOf(node)
+
+    val traitElectricity = TraitElectricity(this, listOf(node))
+
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
+
     val inventory = ItemStackHandler(4)
     var craftingProcess: Map<Stage, CraftingProcess>
 
@@ -164,12 +164,17 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
         getBlockState()[PROPERTY_ACTIVE] else false
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
-        setTag("inv", inventory.serializeNBT())
-        craftingProcess.forEach {
-            setTag("crafting" + it.key.ord, it.value.serializeNBT())
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            if (multiblockFacing != null){
+                add("direction", multiblockFacing!!)
+            }
+            add("inv", inventory.serializeNBT())
+            craftingProcess.forEach {
+                add("crafting" + it.key.ord, it.value.serializeNBT())
+            }
         }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
@@ -178,6 +183,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
         craftingProcess.forEach {
             if (hasKey("crafting" + it.key.ord)) it.value.deserializeNBT(getCompoundTag("crafting"))
         }
+        super.load(nbt)
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(BlockPos.ORIGIN,
@@ -205,7 +211,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
         val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
-        if (capability == NODE_HANDLER) {
+        if (capability == ELECTRIC_NODE_HANDLER) {
             if (ENERGY_INPUT == transPos && (facing == direction.rotateY() || facing == null))
                 return true
         }
@@ -225,7 +231,7 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
         val transPos = direction.rotatePoint(BlockPos.ORIGIN, relPos)
-        if (capability == NODE_HANDLER)
+        if (capability == ELECTRIC_NODE_HANDLER)
             if (ENERGY_INPUT == transPos && (facing == direction.rotateY()))
                 return this as T
         if (capability == ITEM_HANDLER) {
@@ -243,14 +249,14 @@ class TileSifter : TileElectricBase(), IMultiblockCenter {
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         if (capability == ITEM_HANDLER) return true
-        if (capability == NODE_HANDLER) return true
+        if (capability == ELECTRIC_NODE_HANDLER) return true
         return super.hasCapability(capability, facing)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return InputInventory(inventory, 1) as T
-        if (capability == NODE_HANDLER) return this as T
+        if (capability == ELECTRIC_NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)
     }
 

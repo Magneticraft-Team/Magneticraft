@@ -1,16 +1,19 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_ENERGY_CONSUMER
 import com.cout970.magneticraft.registry.ITEM_ENERGY_PROVIDER
 import com.cout970.magneticraft.registry.fromItem
+import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.interpolate
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.items.ItemStackHandler
@@ -18,11 +21,14 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 11/07/2016.
  */
-class TileBattery : TileElectricBase() {
+class TileBattery : TileBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
-    override val electricNodes: List<IElectricNode>
-        get() = listOf(mainNode)
+    val traitElectricity = TraitElectricity(this, listOf(mainNode),
+            canConnectAtSideImpl = this::canConnectAtSide)
+
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
+
     var storage: Int = 0
     val inventory = ItemStackHandler(2)
     val chargeRate = ValueAverage(20)
@@ -87,10 +93,11 @@ class TileBattery : TileElectricBase() {
         val nbt = NBTTagCompound()
         nbt.setInteger("storage", storage)
         nbt.setTag("inventory", inventory.serializeNBT())
-        return nbt
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {
+        super.load(nbt)
         storage = nbt.getInteger("storage")
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
     }
@@ -100,7 +107,7 @@ class TileBattery : TileElectricBase() {
         return state[PROPERTY_DIRECTION]
     }
 
-    override fun canConnectAtSide(facing: EnumFacing?): Boolean {
+    fun canConnectAtSide(facing: EnumFacing?): Boolean {
         return facing == null || facing == getFacing()
     }
 

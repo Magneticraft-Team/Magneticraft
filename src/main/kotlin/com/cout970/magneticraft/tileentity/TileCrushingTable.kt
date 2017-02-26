@@ -9,6 +9,8 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.sounds
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -109,11 +111,14 @@ class TileCrushingTable : TileBase(), ITickable {
         }
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        if (getStack() != null) {
-            setTag("stack", NBTTagCompound().apply { getStack()?.writeToNBT(this) })
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            if (getStack() != null) {
+                add("stack",getStack()!!.serializeNBT())
+            }
+            add("damage", damageTaken)
         }
-        setInteger("damage", damageTaken)
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {
@@ -123,6 +128,7 @@ class TileCrushingTable : TileBase(), ITickable {
             null
         }
         damageTaken = nbt.getInteger("damage")
+        super.load(nbt)
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?) =

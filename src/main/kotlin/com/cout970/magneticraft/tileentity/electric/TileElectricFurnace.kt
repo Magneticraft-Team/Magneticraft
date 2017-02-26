@@ -1,13 +1,18 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.interpolate
+import com.cout970.magneticraft.util.newNbt
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
@@ -18,19 +23,22 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileElectricFurnace : TileElectricBase() {
+class TileElectricFurnace : TileBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
-    override val electricNodes: List<IElectricNode>
-        get() = listOf(mainNode)
+
+    val traitElectricity = TraitElectricity(this, listOf(mainNode))
+
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
     val inventory = Inventory()
-    var burningTime = 0f
     val production = ValueAverage()
+    var burningTime = 0f
 
     override fun update() {
         if (worldObj.isServer) {
             if (mainNode.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && canSmelt()) {
-                val applied = mainNode.applyPower(-Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
+                val applied = mainNode.applyPower(
+                        -Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
                 burningTime += SPEED * applied.toFloat() / Config.electricFurnaceMaxConsumption.toFloat()
                 production += applied
                 if (burningTime > MAX_BURNING_TIME) {
@@ -65,14 +73,18 @@ class TileElectricFurnace : TileElectricBase() {
         inventory.ignoreFilter = false
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        setTag("inventory", inventory.serializeNBT())
-        setFloat("meltingTime", burningTime)
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            add("inventory", inventory.serializeNBT())
+            add("meltingTime", burningTime)
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) {
         inventory.deserializeNBT(nbt.getCompoundTag("inventory"))
         burningTime = nbt.getFloat("meltingTime")
+        super.load(nbt)
     }
 
     companion object {
@@ -94,12 +106,9 @@ class TileElectricFurnace : TileElectricBase() {
     override fun onBreak() {
         super.onBreak()
         if (worldObj.isServer) {
-            for (i in 0 until inventory.slots) {
-                val item = inventory[i]
-                if (item != null) {
-                    dropItem(item, pos)
-                }
-            }
+            (0 until inventory.slots)
+                    .mapNotNull { inventory[it] }
+                    .forEach { dropItem(it, pos) }
         }
     }
 

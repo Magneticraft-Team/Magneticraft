@@ -1,24 +1,27 @@
 package com.cout970.magneticraft.tileentity.electric
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.BlockAirBubble
 import com.cout970.magneticraft.block.BlockAirLock
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.tileentity.TileBase
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 18/08/2016.
  */
-class TileAirLock : TileElectricBase() {
+class TileAirLock : TileBase() {
 
     val node = ElectricNode({ worldObj }, { pos }, capacity = 2.0)
-    override val electricNodes: List<IElectricNode> = listOf(node)
+    val traitElectricity = TraitElectricity(this, listOf(node))
+
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
 
     val range = 10
     val length = 9 * 9
@@ -115,8 +118,4 @@ class TileAirLock : TileElectricBase() {
             }
         }
     }
-
-    override fun save(): NBTTagCompound = NBTTagCompound()
-
-    override fun load(nbt: NBTTagCompound) = Unit
 }

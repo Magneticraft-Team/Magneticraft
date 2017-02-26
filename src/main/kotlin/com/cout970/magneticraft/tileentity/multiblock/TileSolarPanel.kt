@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 
-import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
@@ -9,14 +8,14 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.Multiblock
 import com.cout970.magneticraft.multiblock.impl.MultiblockSolarPanel
-import com.cout970.magneticraft.tileentity.electric.TileElectricBase
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.getEnumFacing
-import com.cout970.magneticraft.util.setEnumFacing
+import com.cout970.magneticraft.tileentity.TileBase
+import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotatePoint
 import com.cout970.magneticraft.util.vector.toAABBWith
@@ -30,11 +29,14 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 2016/09/06.
  */
-class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
+class TileSolarPanel : TileBase(), IMultiblockCenter {
 
     val node = ElectricNode({ worldObj }, { pos })
+    val traitElectricity = TraitElectricity(this, listOf(node),
+            canConnectAtSideImpl = this::canConnectAtSide)
 
-    override val electricNodes: List<IElectricNode> = listOf(node)
+    override val traits: List<ITileTrait> = listOf(traitElectricity)
+
     var ambientTemperature = STANDARD_AMBIENT_TEMPERATURE.toFloat()
 
     override var multiblock: Multiblock?
@@ -82,7 +84,7 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
     }
 
 
-    override fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
+    fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
 
     override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(BlockPos.ORIGIN,
             multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
@@ -99,12 +101,16 @@ class TileSolarPanel : TileElectricBase(), IMultiblockCenter {
         ambientTemperature = world.getBiome(pos).getFloatTemperature(pos)
     }
 
-    override fun save(): NBTTagCompound = NBTTagCompound().apply {
-        if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)
+    override fun save(): NBTTagCompound {
+        val nbt = newNbt {
+            if (multiblockFacing != null) add("direction", multiblockFacing!!)
+        }
+        return super.save().also { it.merge(nbt) }
     }
 
     override fun load(nbt: NBTTagCompound) = nbt.run {
         if (hasKey("direction")) multiblockFacing = getEnumFacing("direction")
+        super.load(nbt)
     }
 
     override fun shouldRenderInPass(pass: Int): Boolean {

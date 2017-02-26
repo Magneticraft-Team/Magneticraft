@@ -2,11 +2,11 @@ package com.cout970.magneticraft.misc.tileentity
 
 import com.cout970.magneticraft.api.energy.INode
 import com.cout970.magneticraft.api.heat.IHeatConnection
-import com.cout970.magneticraft.api.heat.IHeatHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.registry.NODE_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
@@ -21,7 +21,7 @@ class TraitHeat(
         tile: TileBase,
         val heatNodes: List<IHeatNode>,
         val updateConnectionsImpl: (TraitHeat) -> Unit = TraitHeat.Companion::updateHeatConnections
-) : TileTrait(tile), IHeatHandler {
+) : TileTrait(tile), IHeatNodeHandler {
 
     private val connections: MutableList<IHeatConnection> = mutableListOf()
     private var initiated = false
@@ -79,7 +79,7 @@ class TraitHeat(
     override fun onBreak() {
         for (i in EnumFacing.values()) {
             val tileOther = world.getTileEntity(pos.offset(i)) ?: continue
-            val handler = (NODE_HANDLER!!.fromTile(tileOther, i) ?: continue) as? IHeatHandler ?: continue
+            val handler = (HEAT_NODE_HANDLER!!.fromTile(tileOther, i) ?: continue) as? IHeatNodeHandler ?: continue
             for (otherNode in heatNodes) {
                 connections.forEach { connection ->
                     handler.removeConnection(connection)
@@ -120,13 +120,11 @@ class TraitHeat(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        if (capability == NODE_HANDLER) return this as T
-        return super.getCapability(capability, facing)
+        return this as T
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
-        if (capability == NODE_HANDLER) return true
-        return super.hasCapability(capability, facing)
+        return capability == HEAT_NODE_HANDLER
     }
 
     companion object {
@@ -138,8 +136,8 @@ class TraitHeat(
                 for (node in heatNodes) {
                     for (side in EnumFacing.values()) {
                         val tileOther = world.getTileEntity(pos.offset(side)) ?: continue
-                        val handler = (NODE_HANDLER!!.fromTile(tileOther,
-                                side) ?: continue) as? IHeatHandler ?: continue
+                        val handler = (HEAT_NODE_HANDLER!!.fromTile(tileOther,
+                                side) ?: continue) as? IHeatNodeHandler ?: continue
                         val heatNodes = handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }
 
                         for (otherNode in heatNodes) {

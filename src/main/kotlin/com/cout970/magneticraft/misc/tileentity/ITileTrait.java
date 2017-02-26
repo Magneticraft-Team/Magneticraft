@@ -15,23 +15,29 @@ import org.jetbrains.annotations.Nullable;
 public interface ITileTrait extends ICapabilityProvider {
 
     BlockPos getPos();
+
     World getWorld();
 
     void update();
 
     void deserialize(@NotNull NBTTagCompound nbt);
-    @Nullable NBTTagCompound serialize();
 
-    default void onLoad(){}
-    default void onBreak(){}
+    @Nullable
+    NBTTagCompound serialize();
+
+    default void onLoad() {
+    }
+
+    default void onBreak() {
+    }
 
     @Override
-    default boolean hasCapability(Capability<?> capability, @javax.annotation.Nullable EnumFacing enumFacing) {
+    default boolean hasCapability(@NotNull Capability<?> capability, @javax.annotation.Nullable EnumFacing enumFacing) {
         return false;
     }
 
     @Override
-    default <T> T getCapability(Capability<T> capability, @javax.annotation.Nullable EnumFacing enumFacing) {
+    default <T> T getCapability(@NotNull Capability<T> capability, @javax.annotation.Nullable EnumFacing enumFacing) {
         return null;
     }
 }
