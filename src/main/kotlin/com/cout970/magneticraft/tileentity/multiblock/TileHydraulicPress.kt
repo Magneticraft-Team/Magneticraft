@@ -52,19 +52,16 @@ import net.minecraftforge.items.ItemStackHandler
  */
 class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
 
-    override var multiblock: Multiblock?
-        get() = MultiblockHydraulicPress
-        set(value) {/* ignored */
-        }
+    override var multiblock: Multiblock? get() = MultiblockHydraulicPress
+        set(value) {/* ignored */}
 
-    override var centerPos: BlockPos?
-        get() = BlockPos.ORIGIN
-        set(value) {/* ignored */
-        }
+    override var centerPos: BlockPos? get() = BlockPos.ORIGIN
+        set(value) {/* ignored */}
 
     override var multiblockFacing: EnumFacing? = null
 
     val hammerAnimation = AnimationTimer()
+
     val heatNode = HeatContainer(
             worldGetter = { this.world },
             posGetter = { this.getPos() },
@@ -74,19 +71,8 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    val heatHandler: HeatHandler = object : HeatHandler(this, heatNodes){
-        override fun updateHeatConnections() {
-            for (j in POTENTIAL_CONNECTIONS) {
-                val relPos = direction.rotatePoint(BlockPos.ORIGIN, j) + pos
-                val tileOther = world.getTileEntity(relPos) ?: continue
-                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
-                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
-                    connections.add(HeatConnection(heatNode, otherNode))
-                    handler.addConnection(HeatConnection(otherNode, heatNode))
-                }
-            }
-        }
-    }
+    val heatHandler: HeatHandler = HeatHandler(this, heatNodes, this::updateHeatConnections)
+
     override val traits: List<ITileTrait> = listOf(heatHandler)
 
     val heatNodes: List<IHeatNode> get() = listOf(heatNode)
@@ -163,6 +149,20 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
 
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
         getBlockState()[PROPERTY_ACTIVE] else false
+
+    fun updateHeatConnections(heatHandler: HeatHandler) {
+        heatHandler.apply {
+            for (j in POTENTIAL_CONNECTIONS) {
+                val relPos = direction.rotatePoint(BlockPos.ORIGIN, j) + pos
+                val tileOther = world.getTileEntity(relPos) ?: continue
+                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
+                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                    connections.add(HeatConnection(heatNode, otherNode))
+                    handler.addConnection(HeatConnection(otherNode, heatNode))
+                }
+            }
+        }
+    }
 
     override fun save(): NBTTagCompound = NBTTagCompound().apply {
         if (multiblockFacing != null) setEnumFacing("direction", multiblockFacing!!)

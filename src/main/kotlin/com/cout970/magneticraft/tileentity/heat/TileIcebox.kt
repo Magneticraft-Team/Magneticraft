@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.api.internal.registries.machines.heatrecipes.IceboxRecipeManager
 import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipe
@@ -11,8 +10,11 @@ import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -26,7 +28,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 04/07/2016.
  */
 
-class TileIcebox : TileHeatBase() {
+class TileIcebox : TileBase() {
 
     val tank: Tank = object : Tank(4000) {
         override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
@@ -39,6 +41,10 @@ class TileIcebox : TileHeatBase() {
             worldGetter = { this.world },
             posGetter = { this.getPos() })
 
+    val heatHandler: HeatHandler = HeatHandler(this, listOf(heat))
+
+    override val traits: List<ITileTrait> = listOf(heatHandler)
+
     val inventory = ItemStackHandler(1)
     var maxMeltingTime = 0f
     var meltingTime = 0f
@@ -46,10 +52,6 @@ class TileIcebox : TileHeatBase() {
     var freezingTime = 0f
     private var lastInput: ItemStack? = null
     private var lastOutput: FluidStack? = null
-
-
-    override val heatNodes: List<IHeatNode>
-        get() = listOf(heat)
 
     override fun update() {
         if (!worldObj.isRemote) {

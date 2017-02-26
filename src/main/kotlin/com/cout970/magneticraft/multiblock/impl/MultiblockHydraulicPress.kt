@@ -40,31 +40,33 @@ object MultiblockHydraulicPress : Multiblock() {
                 .withProperty(PROPERTY_ACTIVE, true)
 
         val S: IMultiblockComponent = SingleBlockComponent(
-                BlockMachineBlockSupportColumn.defaultState.withProperty(BlockMachineBlockSupportColumn.PROPERTY_STATES,
-                        BlockMachineBlockSupportColumn.States.LINES_Y), replacement)
+                BlockMachineBlockSupportColumn.defaultState
+                        .withProperty(BlockMachineBlockSupportColumn.PROPERTY_STATES,
+                                BlockMachineBlockSupportColumn.States.LINES_Y),
+                replacement)
 
         val B: IMultiblockComponent = SingleBlockComponent(BlockMachineBlock.defaultState, replacement)
 
-        val P: IMultiblockComponent = ContextBlockComponent(
-                { ctx ->
-                    BlockMachineBlockSupportColumn.defaultState.withProperty(BlockMachineBlockSupportColumn.PROPERTY_STATES,
-                            BlockMachineBlockSupportColumn.States.fromAxis(ctx.facing.rotateY().axis))
-                }, ItemStack(BlockMachineBlockSupportColumn, 1, 1), replacement)
+        val P: IMultiblockComponent = ContextBlockComponent({ (_, _, _, facing) ->
+            val axis = BlockMachineBlockSupportColumn.States.fromAxis(facing.rotateY().axis)
+            BlockMachineBlockSupportColumn.defaultState
+                    .withProperty(BlockMachineBlockSupportColumn.PROPERTY_STATES, axis)
+        }, ItemStack(BlockMachineBlockSupportColumn, 1, 1), replacement)
 
         val I: IMultiblockComponent = SingleBlockComponent(Blocks.IRON_BLOCK.defaultState, replacement)
         val F: IMultiblockComponent = SingleBlockComponent(BlockStripedMachineBlock.defaultState, replacement)
 
-        val M: IMultiblockComponent = MainBlockComponent(BlockHydraulicPress) { context, state, activate ->
+        val M: IMultiblockComponent = MainBlockComponent(BlockHydraulicPress) { (_, _, _, facing), _, activate ->
             if (activate) {
                 BlockHydraulicPress.defaultState
                         .withProperty(PROPERTY_ACTIVE, true)
                         .withProperty(PROPERTY_CENTER, true)
-                        .withProperty(PROPERTY_DIRECTION, context.facing)
+                        .withProperty(PROPERTY_DIRECTION, facing)
             } else {
                 BlockHydraulicPress.defaultState
                         .withProperty(PROPERTY_ACTIVE, false)
                         .withProperty(PROPERTY_CENTER, true)
-                        .withProperty(PROPERTY_DIRECTION, context.facing)
+                        .withProperty(PROPERTY_DIRECTION, facing)
             }
         }
 
@@ -76,6 +78,7 @@ object MultiblockHydraulicPress : Multiblock() {
         )
     }
 
+    //@formatter:off
     override fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf(
             Vec3d(-14.0, 4.0, 1.0) * PIXEL to Vec3d(-3.0, 20.0, 15.0) * PIXEL,
             Vec3d(2.0, 0.0, 2.0) * PIXEL to Vec3d(14.0, 14.0, 14.0) * PIXEL,
@@ -106,6 +109,8 @@ object MultiblockHydraulicPress : Multiblock() {
             Vec3d(3.0, 22.0, 3.0) * PIXEL to Vec3d(13.0, 36.0, 13.0) * PIXEL,
             Vec3d(6.5, 36.0, 6.5) * PIXEL to Vec3d(9.5, 64.0, 9.5) * PIXEL
     )
+    //@formatter:on
 
-    override fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent> = listOf()
+    override fun checkExtraRequirements(data: MutableList<BlockData>,
+                                        context: MultiblockContext): List<ITextComponent> = listOf()
 }

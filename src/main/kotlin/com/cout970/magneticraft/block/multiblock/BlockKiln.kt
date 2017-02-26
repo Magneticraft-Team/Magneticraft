@@ -37,10 +37,14 @@ import net.minecraft.world.World
 object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvider {
 
     init {
-        defaultState = defaultState.withProperty(PROPERTY_CENTER, false).withProperty(PROPERTY_ACTIVE, false)
+        defaultState = defaultState
+                .withProperty(PROPERTY_CENTER, false)
+                .withProperty(PROPERTY_ACTIVE, false)
     }
 
-    override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?, collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
+    override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB?,
+                                       collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?) {
+
         if (state[PROPERTY_ACTIVE] && entityBox != null) {
             return super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn)
         }
@@ -63,14 +67,16 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
         return state[PROPERTY_CENTER] && !state[PROPERTY_ACTIVE] && super.canRenderInLayer(state, layer)
     }
 
-    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = createTileEntity(worldIn, getStateFromMeta(meta))
+    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = createTileEntity(worldIn,
+            getStateFromMeta(meta))
 
     override fun createTileEntity(world: World, state: IBlockState): TileEntity? {
         if (state[PROPERTY_CENTER]) return TileKiln()
         return TileMultiblock()
     }
 
-    override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?, willHarvest: Boolean): Boolean {
+    override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?,
+                                 willHarvest: Boolean): Boolean {
         if (state!![PROPERTY_ACTIVE] && world!!.isServer) {
             breakBlock(world, pos!!, state)
             return false
@@ -102,14 +108,17 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
         return BlockStateContainer(this, PROPERTY_CENTER, PROPERTY_ACTIVE, PROPERTY_DIRECTION)
     }
 
-    override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
+    override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase,
+                                 stack: ItemStack?) {
         worldIn.setBlockState(pos, defaultState
                 .withProperty(PROPERTY_DIRECTION, placer.horizontalFacing.opposite)
                 .withProperty(PROPERTY_CENTER, true)
                 .withProperty(PROPERTY_ACTIVE, false))
     }
 
-    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float,
+                                  hitZ: Float): Boolean {
         if (worldIn.isServer && hand == EnumHand.MAIN_HAND && state[PROPERTY_CENTER]) {
             if (!state[PROPERTY_ACTIVE]) {
                 activateMultiblock(MultiblockContext(MultiblockKiln, worldIn, pos, state[PROPERTY_DIRECTION], playerIn))
@@ -128,5 +137,7 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
         }
     }
 
-    override fun getCustomStateMapper(): IStateMapper = StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build()
+    override fun getCustomStateMapper(): IStateMapper {
+        return StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build()
+    }
 }

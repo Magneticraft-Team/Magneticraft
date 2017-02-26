@@ -16,7 +16,8 @@ object MultiblockManager {
     private val multiblocks = mutableMapOf<String, Multiblock>()
 
     fun registerMultiblock(mb: Multiblock) {
-        if (mb.name in multiblocks) throw IllegalArgumentException("Multiblock with name: ${mb.name} is already registered")
+        if (mb.name in multiblocks) throw IllegalArgumentException(
+                "Multiblock with name: ${mb.name} is already registered")
         multiblocks.put(mb.name, mb)
     }
 
@@ -40,7 +41,8 @@ object MultiblockManager {
         for (j in 0 until context.multiblock.size.y) {
             for (i in 0 until context.multiblock.size.x) {
                 for (k in 0 until context.multiblock.size.z) {
-                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(context.multiblock.center)
+                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(
+                            context.multiblock.center)
                     val comp = context.multiblock.scheme[i, j, k]
                     val res = comp.checkBlock(pos, context)
                     data.add(comp.getBlockData(pos, context))
@@ -60,17 +62,23 @@ object MultiblockManager {
     fun activateMultiblockStructure(context: MultiblockContext) {
         val data = mutableListOf<BlockData>()
 
-        for (j in 0 until context.multiblock.size.y) {
-            for (i in 0 until context.multiblock.size.x) {
-                for (k in 0 until context.multiblock.size.z) {
-                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(context.multiblock.center)
-                    val comp = context.multiblock.scheme[i, j, k]
-                    comp.activateBlock(pos, context)
-                    data.add(comp.getBlockData(pos, context))
+        try {
+            for (j in 0 until context.multiblock.size.y) {
+                for (i in 0 until context.multiblock.size.x) {
+                    for (k in 0 until context.multiblock.size.z) {
+                        val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(
+                                context.multiblock.center)
+                        val comp = context.multiblock.scheme[i, j, k]
+                        comp.activateBlock(pos, context)
+                        data.add(comp.getBlockData(pos, context))
+                    }
                 }
             }
+            context.multiblock.onActivate(data, context)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            deactivateMultiblockStructure(context)
         }
-        context.multiblock.onActivate(data, context)
     }
 
     /**
@@ -82,7 +90,8 @@ object MultiblockManager {
         for (j in 0 until context.multiblock.size.y) {
             for (i in 0 until context.multiblock.size.x) {
                 for (k in 0 until context.multiblock.size.z) {
-                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(context.multiblock.center)
+                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(
+                            context.multiblock.center)
                     val comp = context.multiblock.scheme[i, j, k]
                     comp.deactivateBlock(pos, context)
                     data.add(comp.getBlockData(pos, context))

@@ -12,4 +12,14 @@ abstract class TileTrait(val tile: TileBase) : ITileTrait {
     override fun getPos(): BlockPos = tile.pos
     override fun getWorld(): World = tile.world
 
+    private var firstTick = false
+
+    override fun update() {
+        if (!firstTick){
+            firstTick = true
+            onFullyLoad()
+        }
+    }
+
+    open fun onFullyLoad() = Unit
 }

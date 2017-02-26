@@ -7,25 +7,25 @@
         "direction=north": [
             {
                 "y": -90,
-                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+                "model": "magneticraft:box"
             }
         ],
         "direction=south": [
             {
                 "y": 90,
-                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+                "model": "magneticraft:box"
             }
         ],
         "direction=west": [
             {
                 "y": 180,
-                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+                "model": "magneticraft:box"
             }
         ],
         "direction=east": [
             {
                 "y": 0,
-                "model": "magneticraft:obj/beehive_kiln_tiny.obj"
+                "model": "magneticraft:box"
             }
         ],
         "inventory": [

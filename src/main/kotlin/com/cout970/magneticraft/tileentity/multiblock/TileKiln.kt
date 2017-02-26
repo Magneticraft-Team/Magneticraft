@@ -43,15 +43,11 @@ import net.minecraftforge.common.capabilities.Capability
  */
 class TileKiln : TileBase(), IMultiblockCenter, ITickable {
 
-    override var multiblock: Multiblock?
-        get() = MultiblockKiln
-        set(value) {/* ignored */
-        }
+    override var multiblock: Multiblock? get() = MultiblockKiln
+        set(value) {/* ignored */}
 
-    override var centerPos: BlockPos?
-        get() = BlockPos.ORIGIN
-        set(value) {/* ignored */
-        }
+    override var centerPos: BlockPos? get() = BlockPos.ORIGIN
+        set(value) {/* ignored */}
 
     override var multiblockFacing: EnumFacing? = null
 
@@ -64,19 +60,8 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    val heatHandler: HeatHandler = object: HeatHandler(this, heatNodes){
-        override fun updateHeatConnections() {
-            for (j in POTENTIAL_CONNECTIONS) {
-                val relPos = posTransform(j)
-                val tileOther = world.getTileEntity(relPos) ?: continue
-                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
-                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
-                    connections.add(HeatConnection(heatNode, otherNode))
-                    handler.addConnection(HeatConnection(otherNode, heatNode))
-                }
-            }
-        }
-    }
+    val heatHandler: HeatHandler = HeatHandler(this, heatNodes, this::updateHeatConnections)
+
     override val traits: List<ITileTrait> = listOf(heatHandler)
 
     val heatNodes: List<IHeatNode> get() = listOf(heatNode)
@@ -142,7 +127,8 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             stack = tile.getStack() ?: return null
         } else {
             if (state !== slot.stateCache) { //Assuming getting state from block is potentially expensive, so two-stage caching
-                stack = ItemStack(Item.getItemFromBlock(state.block) ?: return null, 1, state.block.damageDropped(state)) //Quantity should be irrelevant, since recipes shouldn't ask for it
+                stack = ItemStack(Item.getItemFromBlock(state.block) ?: return null, 1, state.block.damageDropped(
+                        state)) //Quantity should be irrelevant, since recipes shouldn't ask for it
                 slot.stateCache = state
                 slot.stackCache = stack
             } else {
@@ -161,8 +147,8 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
     fun canCraft(input: BlockPos, slot: CraftingSlot): Boolean {
         val recipe = getRecipe(input, slot) ?: return false
         return !doorOpen &&
-                heatNode.temperature > recipe.minTemp &&
-                heatNode.temperature < recipe.maxTemp
+               heatNode.temperature > recipe.minTemp &&
+               heatNode.temperature < recipe.maxTemp
     }
 
     override fun update() {
@@ -170,7 +156,8 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             if (active) {
                 if (shouldTick(10)) {
                     if (heatNode.temperature > KILN_DAMAGE_TEMP) {
-                        val entities = world.getEntitiesWithinAABB(EntityLiving::class.java, direction.rotateBox(BlockPos.ORIGIN.toVec3d(), INTERNAL_AABB) + pos.toVec3d())
+                        val entities = world.getEntitiesWithinAABB(EntityLiving::class.java,
+                                direction.rotateBox(BlockPos.ORIGIN.toVec3d(), INTERNAL_AABB) + pos.toVec3d())
                         if (!entities.isEmpty()) {
                             entities.forEach {
                                 if (!doorOpen) it.air -= 1
@@ -260,9 +247,23 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
         super.load(nbt)
     }
 
-    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(BlockPos.ORIGIN,
+    override fun getRenderBoundingBox(): AxisAlignedBB = (BlockPos.ORIGIN toAABBWith direction.rotatePoint(
+            BlockPos.ORIGIN,
             multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
 
+    fun updateHeatConnections(heatHandler: HeatHandler) {
+        heatHandler.apply {
+            for (j in POTENTIAL_CONNECTIONS) {
+                val relPos = posTransform(j)
+                val tileOther = world.getTileEntity(relPos) ?: continue
+                val handler = (NODE_HANDLER!!.fromTile(tileOther) ?: continue) as? IHeatHandler ?: continue
+                for (otherNode in handler.nodes.filter { it is IHeatNode }.map { it as IHeatNode }) {
+                    connections.add(HeatConnection(heatNode, otherNode))
+                    handler.addConnection(HeatConnection(otherNode, heatNode))
+                }
+            }
+        }
+    }
 
     companion object {
         val HEAT_INPUTS = setOf(BlockPos(-2, 0, 1), BlockPos(-2, 0, 2), BlockPos(-2, 0, 3),
@@ -297,17 +298,6 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             }
         }
         return null
-    }
-
-    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
-        if (capability == NODE_HANDLER) return true
-        return super.hasCapability(capability, facing)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        if (capability == NODE_HANDLER) return this as T
-        return super.getCapability(capability, facing)
     }
 
     override fun shouldRenderInPass(pass: Int): Boolean {

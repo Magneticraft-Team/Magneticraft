@@ -1,10 +1,12 @@
 package com.cout970.magneticraft.tileentity.heat
 
-import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import net.minecraft.item.ItemFood
 import net.minecraft.item.ItemStack
@@ -17,7 +19,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 04/07/2016.
  */
-class TileBrickFurnace : TileHeatBase() {
+class TileBrickFurnace : TileBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
             specificHeat = COPPER_HEAT_CAPACITY * 3,
@@ -26,8 +28,10 @@ class TileBrickFurnace : TileHeatBase() {
             worldGetter = { this.world },
             posGetter = { this.getPos() })
 
-    override val heatNodes: List<IHeatNode>
-        get() = listOf(heat)
+    val heatHandler: HeatHandler = HeatHandler(this, listOf(heat))
+
+    override val traits: List<ITileTrait> = listOf(heatHandler)
+
 
     val inventory = Inventory()
     var burningTime = 0f

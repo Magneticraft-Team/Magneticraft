@@ -11,9 +11,12 @@ import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
@@ -26,7 +29,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 04/07/2016.
  */
 
-class TileFirebox : TileHeatBase() {
+class TileFirebox : TileBase() {
 
     companion object {
         val FUEL_TO_HEAT = 0.5f
@@ -45,8 +48,10 @@ class TileFirebox : TileHeatBase() {
             worldGetter = { this.world },
             posGetter = { this.getPos() })
 
-    override val heatNodes: List<IHeatNode>
-        get() = listOf(heat)
+    val heatNodes: List<IHeatNode> = listOf(heat)
+    val heatHandler: HeatHandler = HeatHandler(this, heatNodes)
+
+    override val traits: List<ITileTrait> = listOf(heatHandler)
 
     override fun update() {
         if (worldObj.isServer) {

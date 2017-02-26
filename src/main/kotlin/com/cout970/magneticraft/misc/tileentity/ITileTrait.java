@@ -17,7 +17,7 @@ public interface ITileTrait extends ICapabilityProvider {
     BlockPos getPos();
     World getWorld();
 
-    default void update() {}
+    void update();
 
     void deserialize(@NotNull NBTTagCompound nbt);
     @Nullable NBTTagCompound serialize();

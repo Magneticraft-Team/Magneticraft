@@ -18,6 +18,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.render.AnimationTimer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
@@ -70,7 +71,7 @@ class TileIncendiaryGenerator(
 
     override fun update() {
 
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             //consumes fuel
             if (burningTime <= 0 && mainNode.voltage < 120) {
                 if (inventory[0] != null) {
@@ -125,13 +126,11 @@ class TileIncendiaryGenerator(
                 data.setFloat(DATA_ID_MACHINE_HEAT, heat)
                 sendSyncData(data, Side.CLIENT)
             }
+            if(shouldTick(200)) {
+                ambientTemperature = guessAmbientTemp(world, pos).toFloat()
+            }
         }
         super.update()
-    }
-
-    override fun onLoad() {
-        super.onLoad()
-        ambientTemperature = guessAmbientTemp(world, pos).toFloat()
     }
 
     override fun receiveSyncData(data: IBD, side: Side) {

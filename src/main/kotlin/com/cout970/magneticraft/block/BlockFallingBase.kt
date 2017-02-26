@@ -49,7 +49,8 @@ open class BlockFallingBase(
 
             if (!fallInstantly && worldIn.isAreaLoaded(pos.add(-i, -i, -i), pos.add(i, i, i))) {
                 if (!worldIn.isRemote) {
-                    val entityfallingblock = EntityFallingBlock(worldIn, pos.x.toDouble() + 0.5, pos.y.toDouble(), pos.z.toDouble() + 0.5, worldIn.getBlockState(pos))
+                    val entityfallingblock = EntityFallingBlock(worldIn, pos.x.toDouble() + 0.5, pos.y.toDouble(),
+                            pos.z.toDouble() + 0.5, worldIn.getBlockState(pos))
                     this.onStartFalling(entityfallingblock)
                     worldIn.spawnEntityInWorld(entityfallingblock)
                 }
@@ -58,7 +59,8 @@ open class BlockFallingBase(
                 var blockpos: BlockPos
 
                 blockpos = pos.down()
-                while ((worldIn.isAirBlock(blockpos) || canFallThrough(worldIn.getBlockState(blockpos))) && blockpos.y > 0) {
+                while ((worldIn.isAirBlock(blockpos) || canFallThrough(
+                        worldIn.getBlockState(blockpos))) && blockpos.y > 0) {
                     blockpos = blockpos.down()
                 }
 
