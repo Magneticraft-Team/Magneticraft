@@ -17,10 +17,10 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 2017/02/21.
  */
-class HeatHandler(
+class TraitHeat(
         tile: TileBase,
         val heatNodes: List<IHeatNode>,
-        val updateConnectionsImpl: (HeatHandler) -> Unit = HeatHandler.Companion::updateHeatConnections
+        val updateConnectionsImpl: (TraitHeat) -> Unit = TraitHeat.Companion::updateHeatConnections
 ) : TileTrait(tile), IHeatHandler {
 
     private val connections: MutableList<IHeatConnection> = mutableListOf()
@@ -133,8 +133,8 @@ class HeatHandler(
         val UPDATE_LIGHT_DELAY = 20
 
 
-        private fun updateHeatConnections(handler_: HeatHandler) {
-            handler_.apply {
+        private fun updateHeatConnections(_Trait_: TraitHeat) {
+            _Trait_.apply {
                 for (node in heatNodes) {
                     for (side in EnumFacing.values()) {
                         val tileOther = world.getTileEntity(pos.offset(side)) ?: continue

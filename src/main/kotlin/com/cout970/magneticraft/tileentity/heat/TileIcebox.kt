@@ -10,7 +10,7 @@ import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
@@ -42,9 +42,9 @@ class TileIcebox : TileBase() {
             worldGetter = { this.world },
             posGetter = { this.getPos() })
 
-    val heatHandler: HeatHandler = HeatHandler(this, listOf(heat))
+    val traitHeat: TraitHeat = TraitHeat(this, listOf(heat))
 
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     val inventory = ItemStackHandler(1)
     var maxMeltingTime = 0f

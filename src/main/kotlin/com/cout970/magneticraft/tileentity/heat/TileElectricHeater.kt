@@ -8,7 +8,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.DATA_ID_MACHINE_WORKING
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.electric.TileElectricBase
@@ -24,8 +24,8 @@ import net.minecraftforge.fml.relauncher.Side
 
 class TileElectricHeater : TileElectricBase() {
 
-    val heatHandler: HeatHandler = HeatHandler(this, heatNodes)
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    val traitHeat: TraitHeat = TraitHeat(this, heatNodes)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
     override val electricNodes: List<IElectricNode>

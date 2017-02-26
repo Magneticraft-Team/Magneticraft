@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
@@ -21,9 +21,9 @@ class TileRedstoneHeatPipe : TileBase() {
             posGetter = { this.getPos() })
 
 
-    val heatHandler: HeatHandler = HeatHandler(this, listOf(heat))
+    val traitHeat: TraitHeat = TraitHeat(this, listOf(heat))
 
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     override fun onLoad() {
         super.onLoad()

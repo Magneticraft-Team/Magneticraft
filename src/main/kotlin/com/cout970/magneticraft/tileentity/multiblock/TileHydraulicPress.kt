@@ -20,7 +20,7 @@ import com.cout970.magneticraft.misc.crafting.CraftingProcess
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.render.AnimationTimer
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
@@ -71,9 +71,9 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    val heatHandler: HeatHandler = HeatHandler(this, heatNodes, this::updateHeatConnections)
+    val traitHeat: TraitHeat = TraitHeat(this, heatNodes, this::updateHeatConnections)
 
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
@@ -150,8 +150,8 @@ class TileHydraulicPress : TileElectricBase(), IMultiblockCenter {
     val active: Boolean get() = if (PROPERTY_ACTIVE.isIn(getBlockState()))
         getBlockState()[PROPERTY_ACTIVE] else false
 
-    fun updateHeatConnections(heatHandler: HeatHandler) {
-        heatHandler.apply {
+    fun updateHeatConnections(traitHeat: TraitHeat) {
+        traitHeat.apply {
             for (j in POTENTIAL_CONNECTIONS) {
                 val relPos = direction.rotatePoint(BlockPos.ORIGIN, j) + pos
                 val tileOther = world.getTileEntity(relPos) ?: continue

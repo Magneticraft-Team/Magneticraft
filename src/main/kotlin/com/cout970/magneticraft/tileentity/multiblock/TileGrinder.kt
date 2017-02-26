@@ -21,7 +21,7 @@ import com.cout970.magneticraft.misc.inventory.ItemInputHelper
 import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
@@ -73,10 +73,10 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
 
     val heatNodes: List<IHeatNode> = listOf(heatNode)
 
-    val heatHandler: HeatHandler = HeatHandler(this, heatNodes, this::updateHeatConnections)
+    val traitHeat: TraitHeat = TraitHeat(this, heatNodes, this::updateHeatConnections)
 
-    fun updateHeatConnections(heatHandler: HeatHandler) {
-        heatHandler.apply {
+    fun updateHeatConnections(traitHeat: TraitHeat) {
+        traitHeat.apply {
             for (j in POTENTIAL_CONNECTIONS) {
                 val relPos = posTransform(j)
                 val tileOther = world.getTileEntity(relPos) ?: continue
@@ -89,7 +89,7 @@ class TileGrinder : TileElectricBase(), IMultiblockCenter {
         }
     }
 
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     override var multiblockFacing: EnumFacing? = null
 

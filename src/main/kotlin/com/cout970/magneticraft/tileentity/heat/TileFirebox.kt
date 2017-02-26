@@ -11,7 +11,7 @@ import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.inventory.consumeItem
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
@@ -49,9 +49,9 @@ class TileFirebox : TileBase() {
             posGetter = { this.getPos() })
 
     val heatNodes: List<IHeatNode> = listOf(heat)
-    val heatHandler: HeatHandler = HeatHandler(this, heatNodes)
+    val traitHeat: TraitHeat = TraitHeat(this, heatNodes)
 
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     override fun update() {
         if (worldObj.isServer) {

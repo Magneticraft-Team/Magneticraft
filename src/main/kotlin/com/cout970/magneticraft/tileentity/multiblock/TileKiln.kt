@@ -11,7 +11,7 @@ import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.damage.DamageSources
-import com.cout970.magneticraft.misc.tileentity.HeatHandler
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
@@ -60,9 +60,9 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             conductivity = DEFAULT_CONDUCTIVITY
     )
 
-    val heatHandler: HeatHandler = HeatHandler(this, heatNodes, this::updateHeatConnections)
+    val traitHeat: TraitHeat = TraitHeat(this, heatNodes, this::updateHeatConnections)
 
-    override val traits: List<ITileTrait> = listOf(heatHandler)
+    override val traits: List<ITileTrait> = listOf(traitHeat)
 
     val heatNodes: List<IHeatNode> get() = listOf(heatNode)
 
@@ -251,8 +251,8 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
             BlockPos.ORIGIN,
             multiblock!!.size)).offset(direction.rotatePoint(BlockPos.ORIGIN, -multiblock!!.center)).offset(pos)
 
-    fun updateHeatConnections(heatHandler: HeatHandler) {
-        heatHandler.apply {
+    fun updateHeatConnections(traitHeat: TraitHeat) {
+        traitHeat.apply {
             for (j in POTENTIAL_CONNECTIONS) {
                 val relPos = posTransform(j)
                 val tileOther = world.getTileEntity(relPos) ?: continue
