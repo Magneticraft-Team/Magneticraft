@@ -2,6 +2,7 @@ package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.electric.TileElectricFurnace
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -25,7 +26,7 @@ object BlockElectricFurnace : BlockMultiState(Material.IRON, "electric_furnace")
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (!playerIn.isSneaking) {
-            if(!worldIn.isRemote) {
+            if(worldIn.isServer) {
                 playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
             }
             return true

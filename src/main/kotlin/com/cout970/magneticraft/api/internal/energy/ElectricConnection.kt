@@ -3,6 +3,7 @@ package com.cout970.magneticraft.api.internal.energy
 
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.util.vector.length
 import com.cout970.magneticraft.util.vector.minus
 
@@ -19,7 +20,7 @@ open class ElectricConnection(
     override fun getSeparationDistance() = (firstNode.pos - secondNode.pos).length
 
     override fun iterate() {
-        if (firstNode.world.isRemote) return
+        if (firstNode.world.isClient) return
 
         //total resistance of the connection
         val R = (firstNode.resistance + secondNode.resistance) * separationDistance

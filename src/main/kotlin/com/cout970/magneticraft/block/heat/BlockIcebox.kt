@@ -5,6 +5,7 @@ import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.heat.TileIcebox
 import net.minecraft.block.ITileEntityProvider
@@ -55,7 +56,7 @@ object BlockIcebox : BlockHeatMultistate(Material.ROCK, "icebox"), ITileEntityPr
             }
         }
         if (!playerIn.isSneaking) {
-            if (!worldIn.isRemote) {
+            if (worldIn.isServer) {
                 playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
             }
             return true

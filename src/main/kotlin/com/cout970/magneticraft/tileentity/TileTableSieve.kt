@@ -6,6 +6,7 @@ import com.cout970.magneticraft.misc.inventory.ItemInputHelper
 import com.cout970.magneticraft.misc.inventory.ItemOutputHelper
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -86,7 +87,7 @@ class TileTableSieve : TileBase(), ITickable {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.misc.world.isServer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -38,7 +39,7 @@ open class BlockFallingBase(
     }
 
     override fun updateTick(worldIn: World, pos: BlockPos, state: IBlockState, rand: Random) {
-        if (!worldIn.isRemote) {
+        if (worldIn.isServer) {
             this.checkFallable(worldIn, pos)
         }
     }
@@ -48,7 +49,7 @@ open class BlockFallingBase(
             val i = 32
 
             if (!fallInstantly && worldIn.isAreaLoaded(pos.add(-i, -i, -i), pos.add(i, i, i))) {
-                if (!worldIn.isRemote) {
+                if (worldIn.isServer) {
                     val entityfallingblock = EntityFallingBlock(worldIn, pos.x.toDouble() + 0.5, pos.y.toDouble(),
                             pos.z.toDouble() + 0.5, worldIn.getBlockState(pos))
                     this.onStartFalling(entityfallingblock)

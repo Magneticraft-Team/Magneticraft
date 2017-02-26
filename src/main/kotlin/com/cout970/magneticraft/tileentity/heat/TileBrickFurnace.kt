@@ -111,7 +111,7 @@ class TileBrickFurnace : TileBase() {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             for (i in 0 until inventory.slots) {
                 val item = inventory[i]
                 if (item != null) {

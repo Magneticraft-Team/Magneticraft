@@ -6,6 +6,7 @@ package com.cout970.magneticraft.block
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import net.minecraft.block.ITileEntityProvider
@@ -57,7 +58,7 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
     }
 
     override fun onBlockActivated(worldIn: World, position: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (worldIn.isRemote) return true
+        if (worldIn.isClient) return true
         if (playerIn.isSneaking) return false
         val location = state[PROPERTY_LOCATION]
         var pos = position

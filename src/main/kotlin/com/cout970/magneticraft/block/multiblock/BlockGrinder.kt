@@ -9,6 +9,7 @@ import com.cout970.magneticraft.block.PROPERTY_CENTER
 import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockGrinder
@@ -110,7 +111,7 @@ object BlockGrinder : BlockMultiblockHeat(Material.IRON, "grinder"), ITileEntity
     }
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (worldIn.isRemote) return true
+        if (worldIn.isClient) return true
         if (playerIn.isSneaking) return true
         if (hand == EnumHand.MAIN_HAND && state[PROPERTY_CENTER]) {
             if (!state[PROPERTY_ACTIVE]) {

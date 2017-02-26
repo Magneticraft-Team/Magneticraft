@@ -7,6 +7,7 @@ package com.cout970.magneticraft.block
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
@@ -159,7 +160,7 @@ abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBa
                 if (!te.autoConnectWires) {
                     te.clearWireConnections()
                 }
-                if (!worldIn.isRemote) {
+                if (worldIn.isServer) {
                     if (te.autoConnectWires) {
                         playerIn.addChatComponentMessage(TextComponentTranslation("text.magneticraft.auto_connect.activate"))
                     } else {

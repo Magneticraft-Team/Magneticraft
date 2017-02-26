@@ -7,6 +7,7 @@ import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
@@ -45,7 +46,7 @@ abstract class BlockBase(
 
     // Called in server and client
     override fun removedByPlayer(state: IBlockState?, world: World?, pos: BlockPos?, player: EntityPlayer?, willHarvest: Boolean): Boolean {
-        if (world!!.isRemote) {
+        if (world!!.isClient) {
             val tile = world.getTile<TileBase>(pos!!)
             tile?.onBreak()
         }

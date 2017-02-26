@@ -10,6 +10,7 @@ import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.integration.tesla.TeslaNodeWrapper
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.isIn
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.TESLA_CONSUMER
 import com.cout970.magneticraft.registry.TESLA_PRODUCER
 import com.cout970.magneticraft.registry.TESLA_STORAGE
@@ -36,7 +37,7 @@ class TileElectricConnector : TileElectricBase() {
 
     override fun update() {
         super.update()
-        if (worldObj.isRemote) {
+        if (worldObj.isClient) {
             if (tickToNextUpdate > 0)
                 tickToNextUpdate--
 
@@ -63,7 +64,8 @@ class TileElectricConnector : TileElectricBase() {
         if (dir.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
             val tile = worldObj.getTileEntity(pos.offset(dir, 2))
             if (tile is TileElectricConnector) {
-                if (canConnect(mainNode, tile, tile.mainNode, dir) && tile.canConnect(tile.mainNode, this, mainNode, dir.opposite)) {
+                if (canConnect(mainNode, tile, tile.mainNode, dir) && tile.canConnect(tile.mainNode, this, mainNode,
+                        dir.opposite)) {
                     val connection = ElectricConnection(mainNode, tile.mainNode)
                     addConnection(connection, dir, true)
                     tile.addConnection(connection, dir.opposite, false)

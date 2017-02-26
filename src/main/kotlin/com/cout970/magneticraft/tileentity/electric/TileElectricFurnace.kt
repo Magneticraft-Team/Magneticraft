@@ -27,7 +27,7 @@ class TileElectricFurnace : TileElectricBase() {
     val production = ValueAverage()
 
     override fun update() {
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (mainNode.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && canSmelt()) {
                 val applied = mainNode.applyPower(-Config.electricFurnaceMaxConsumption * interpolate(mainNode.voltage, 60.0, 70.0), false)
                 burningTime += SPEED * applied.toFloat() / Config.electricFurnaceMaxConsumption.toFloat()
@@ -92,7 +92,7 @@ class TileElectricFurnace : TileElectricBase() {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             for (i in 0 until inventory.slots) {
                 val item = inventory[i]
                 if (item != null) {

@@ -5,6 +5,8 @@ import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingT
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.sounds
 import com.cout970.magneticraft.util.vector.*
@@ -45,7 +47,7 @@ class TileCrushingTable : TileBase(), ITickable {
     }
 
     override fun update() {
-        if (!worldObj.isRemote && shouldTick(100)) {
+        if (worldObj.isServer && shouldTick(100)) {
             sendUpdateToNearPlayers()
         }
     }
@@ -66,13 +68,13 @@ class TileCrushingTable : TileBase(), ITickable {
         damageTaken += amount
 
         if (damageTaken >= CRUSHING_DAMAGE) {
-            if (world.isRemote) {
+            if (world.isClient) {
                 world.playSound(Minecraft.getMinecraft().thePlayer, pos, sounds["crushing_final"], SoundCategory.BLOCKS, 1F, 1F)
                 spawnParticles()
             }
 
             inventory.setResult(getRecipe(getStack()!!)!!.output)
-        } else if (world.isRemote) {
+        } else if (world.isClient) {
             world.playSound(Minecraft.getMinecraft().thePlayer, pos, sounds["crushing_hit"], SoundCategory.BLOCKS, 1F, 1F)
             spawnParticles()
         }
@@ -137,7 +139,7 @@ class TileCrushingTable : TileBase(), ITickable {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

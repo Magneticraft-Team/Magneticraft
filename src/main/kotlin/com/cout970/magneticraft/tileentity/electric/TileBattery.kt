@@ -28,7 +28,7 @@ class TileBattery : TileElectricBase() {
     val itemChargeRate = ValueAverage(20)
 
     override fun update() {
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (mainNode.voltage > UPPER_LIMIT) {
                 val speed = interpolate(mainNode.voltage, UPPER_LIMIT, 120.0) * MAX_CHARGE_SPEED
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), Config.blockBatteryCapacity - storage)

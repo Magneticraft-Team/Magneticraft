@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -16,7 +17,7 @@ class TileKilnShelf : TileBase(), ITickable {
     val inventory: KilnShelfInventory = KilnShelfInventory()
 
     override fun update() {
-        if (!worldObj.isRemote && shouldTick(100)) {
+        if (worldObj.isServer && shouldTick(100)) {
             sendUpdateToNearPlayers()
         }
     }
@@ -55,7 +56,7 @@ class TileKilnShelf : TileBase(), ITickable {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

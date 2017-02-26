@@ -2,6 +2,7 @@ package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.electric.TileBattery
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -33,9 +34,8 @@ object BlockBattery : BlockMultiState(Material.IRON, "block_battery"), ITileEnti
 
     override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileBattery()
 
-    override fun onBlockActivated(worldIn: World?, pos: BlockPos?, state: IBlockState?, playerIn: EntityPlayer?, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        if (worldIn!!.isRemote) return true
-        pos!!
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer?, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+        if (worldIn.isClient) return true
         playerIn?.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
         return true
     }

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.misc.inventory
 
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.util.vector.plus
@@ -68,7 +69,7 @@ class ItemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
     }
 
     fun dropOutput(item: ItemStack) {
-        if (!world.isRemote) {
+        if (world.isServer) {
             val entityItem = EntityItem(world, outPos.x.toDouble() + 0.5, outPos.y.toDouble() + 0.5, outPos.z.toDouble() + 0.5, item)
             entityItem.motionX = 0.0
             entityItem.motionY = 0.0

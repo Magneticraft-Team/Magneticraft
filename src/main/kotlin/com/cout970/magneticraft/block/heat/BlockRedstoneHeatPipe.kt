@@ -6,6 +6,7 @@ package com.cout970.magneticraft.block.heat
 import com.cout970.magneticraft.block.PROPERTY_OPEN
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.heat.TileRedstoneHeatPipe
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
 import net.minecraft.block.Block
@@ -43,7 +44,7 @@ object BlockRedstoneHeatPipe : BlockHeatMultistate(Material.ROCK, "redstone_heat
     }
 
     override fun neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block) {
-        if (!worldIn.isRemote) {
+        if (worldIn.isServer) {
             val flag = worldIn.isBlockPowered(pos)
             if (flag || blockIn.defaultState.canProvidePower()) {
                 if (state.get(PROPERTY_OPEN) != flag) {

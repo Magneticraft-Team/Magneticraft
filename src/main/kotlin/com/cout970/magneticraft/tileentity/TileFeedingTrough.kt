@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.block.BlockFeedingTrough
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.toVec3d
@@ -31,7 +32,7 @@ class TileFeedingTrough : TileBase(), ITickable {
     val inventory = ItemStackHandler()
 
     override fun update() {
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (shouldTick(200)) {
                 sendUpdateToNearPlayers()
             }
@@ -87,7 +88,7 @@ class TileFeedingTrough : TileBase(), ITickable {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

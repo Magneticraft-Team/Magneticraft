@@ -161,7 +161,7 @@ class TileIncendiaryGenerator(
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

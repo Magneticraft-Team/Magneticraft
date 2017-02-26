@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.misc.energy.UnloadedElectricConnection
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
@@ -75,7 +76,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
                     iterator.remove()
                 }
             }
-            if (!world.isRemote) {
+            if (!world.isClient) {
                 firstTicks = 60
             } else {
                 wireRender.reset()
@@ -108,7 +109,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
     }
 
     open fun updateWiredConnections() {
-        if (world.isRemote) wireRender.reset()
+        if (world.isClient) wireRender.reset()
         //remove invalid nodes in wiredConnections
         val iterator = outputWiredConnections.iterator()
         while (iterator.hasNext()) {
@@ -169,7 +170,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
             } else {
                 inputWiredConnections.add(connection)
             }
-            if (world.isRemote) wireRender.reset()
+            if (world.isClient) wireRender.reset()
         } else {
             if (output) {
                 outputNormalConnections.add(connection)
@@ -184,7 +185,7 @@ abstract class TileElectricBase : TileBase(), IElectricNodeHandler, ITickable {
         outputNormalConnections.remove(connection)
         inputWiredConnections.remove(connection)
         outputWiredConnections.remove(connection)
-        if (world.isRemote) wireRender.reset()
+        if (world.isClient) wireRender.reset()
     }
 
     open fun connectWire(handler: INodeHandler, side: EnumFacing): Boolean = false

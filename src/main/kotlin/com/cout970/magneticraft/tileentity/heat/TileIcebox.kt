@@ -13,6 +13,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.tileentity.HeatHandler
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
@@ -54,7 +55,7 @@ class TileIcebox : TileBase() {
     private var lastOutput: FluidStack? = null
 
     override fun update() {
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             //consumes fuel
             if (meltingTime <= 0) {
                 if (inventory[0] != null) {
@@ -215,7 +216,7 @@ class TileIcebox : TileBase() {
 
     override fun onBreak() {
         super.onBreak()
-        if (!worldObj.isRemote) {
+        if (worldObj.isServer) {
             if (inventory[0] != null) {
                 dropItem(inventory[0]!!, pos)
             }

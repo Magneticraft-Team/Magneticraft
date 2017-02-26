@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.util.getList
@@ -128,7 +129,7 @@ abstract class TileBase : TileEntity() {
     //Sends to the client the nbt of the server TileEntity
     //NOTE: never send a packet every tick, instead use shouldTick(20) to send a packet only every second
     fun sendUpdateToNearPlayers() {
-        if (world.isRemote) return
+        if (world.isClient) return
         val packet = updatePacket
         worldObj.playerEntities
                 .map { it as EntityPlayerMP }
