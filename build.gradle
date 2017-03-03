@@ -98,8 +98,9 @@ repositories {
 
 dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "mezz.jei:jei_$mc_version:$jei_version"
-    shade files("./lib/ModelLibrary-${model_lib_version}.jar", "./lib/librarianlib-${lib_lib_version}.jar")
+    shade files("./lib/ModelLibrary-${model_lib_version}.jar", "./lib/librarianlib-${lib_lib_version}.jar", "./lib/Forgelin-1.3.1.jar")
     compile "net.darkhax.tesla:Tesla:$tesla_version"
 }
 
