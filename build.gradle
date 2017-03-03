@@ -1,4 +1,5 @@
 buildscript {
+    ext.kotlin_version = '1.1.0'
     repositories {
         jcenter()
 
@@ -6,14 +7,8 @@ buildscript {
             name = 'forge'
             url = 'http://files.minecraftforge.net/maven'
         }
-        maven{
-            name = "kotlin-eap"
-            url = "https://dl.bintray.com/kotlin/kotlin-eap-1.1/"
-        }
         mavenCentral()
     }
-    kotlin_version = "1.1.0-rc-91"
-
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -41,7 +36,7 @@ minecraft {
     runDir = 'run'
     useDepAts = true
 
-    replaceIn 'src/main/kotlin/com/cout970/magneticraft/util/Metadata.kt'
+    replaceIn 'src/main/kotlin/com/cout970/magneticraft/Metadata.kt'
     replace '@VERSION@', project.version
 
     mappings = 'snapshot_20161111'
@@ -98,17 +93,13 @@ repositories {
         name = 'Tesla Api'
         url 'http://maven.epoxide.xyz'
     }
-    maven{
-        name = "kotlin-eap"
-        url = "https://dl.bintray.com/kotlin/kotlin-eap-1.1/"
-    }
     mavenCentral()
 }
 
 dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "mezz.jei:jei_$mc_version:$jei_version"
-    shade files("./lib/ModelLibrary-${model_lib_version}.jar")
+    shade files("./lib/ModelLibrary-${model_lib_version}.jar", "./lib/librarianlib-${lib_lib_version}.jar")
     compile "net.darkhax.tesla:Tesla:$tesla_version"
 }
 

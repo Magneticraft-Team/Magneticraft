@@ -85,7 +85,7 @@ object Debug {
         val textures = JsonObject()
 
         json.addProperty("parent", "block/$parent")
-        for ((i, j) in tex) {
+        for ((i, j) in tex.entries) {
             textures.addProperty(i, "magneticraft:blocks/$j")
         }
         json.add("textures", textures)
