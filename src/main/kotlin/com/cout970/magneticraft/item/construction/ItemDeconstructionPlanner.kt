@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.item.construction
 
-import com.cout970.magneticraft.item.ItemBase
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotateBox
 import com.cout970.magneticraft.util.vector.toVec3d
+import com.teamwizardry.librarianlib.common.base.item.ItemMod
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -23,7 +23,7 @@ import net.minecraft.world.World
 
 //TODO add to game or remove
 @Suppress("unused")
-class ItemDeconstructionPlanner : ItemBase("deconstruction_planner") {
+class ItemDeconstructionPlanner : ItemMod("deconstruction_planner") {
     var designations: MutableSet<BlockPos> = mutableSetOf()
 
     var width = 1.0

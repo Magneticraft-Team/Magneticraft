@@ -1,13 +1,14 @@
 package com.cout970.magneticraft.item.hammers
 
-import com.cout970.magneticraft.item.ItemBase
+import com.teamwizardry.librarianlib.common.base.item.ItemMod
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.DamageSource
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
-abstract class ItemHammer(type: String, val material: ToolMaterial) : ItemBase("${type}_hammer") {
+abstract class ItemHammer(type: String, val material: Item.ToolMaterial) : ItemMod("${type}_hammer") {
     abstract val damage: Int
 
     fun onHit(stack: ItemStack, hitBy: EntityLivingBase) {

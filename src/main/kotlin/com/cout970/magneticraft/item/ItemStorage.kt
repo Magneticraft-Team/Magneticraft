@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.getDouble
 import com.cout970.magneticraft.util.setDouble
+import com.teamwizardry.librarianlib.common.base.item.ItemMod
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
@@ -17,7 +18,7 @@ import net.minecraft.util.text.TextComponentTranslation
  */
 abstract class ItemStorage(registryName: String,
                            unlocalizedName: String = registryName)
-: ItemBase(registryName, unlocalizedName) {
+: ItemMod(registryName, unlocalizedName) {
 
     companion object {
         val ENERGY_KEY = "energy"
@@ -36,9 +37,9 @@ abstract class ItemStorage(registryName: String,
         return getStoredEnergyInternal(stack) > 0
     }
 
-    override fun getSubItems(itemIn: Item?, tab: CreativeTabs?, subItems: MutableList<ItemStack>?) {
-        subItems?.add(ItemStack(itemIn, 1, 0))
-        subItems?.add(ItemStack(itemIn, 1, 0).apply { setDouble(ENERGY_KEY, Config.itemBatteryCapacity) })
+    override fun getSubItems(itemIn: Item, tab: CreativeTabs?, subItems: MutableList<ItemStack>) {
+        subItems.add(ItemStack(itemIn, 1, 0))
+        subItems.add(ItemStack(itemIn, 1, 0).apply { setDouble(ENERGY_KEY, Config.itemBatteryCapacity) })
     }
 
     override fun addInformation(stack: ItemStack?, playerIn: EntityPlayer?, tooltip: MutableList<String>?, advanced: Boolean) {

@@ -4,8 +4,6 @@ package com.cout970.magneticraft.proxy
 import com.cout970.loader.api.ModelRegistry
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.gui.client.TooltipHandler
-import com.cout970.magneticraft.item.ItemBase
-import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerColorHandlers
 import com.cout970.magneticraft.registry.registerSounds
 import com.cout970.magneticraft.tileentity.*
@@ -15,9 +13,7 @@ import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
 import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.tilerenderer.*
-import com.cout970.magneticraft.util.toModel
 import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.obj.OBJLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.ClientRegistry
@@ -44,9 +40,6 @@ class ClientProxy : CommonProxy() {
         OBJLoader.INSTANCE.addDomain(MOD_ID)
         //This is from other library
         ModelRegistry.registerDomain(MOD_ID)
-
-        //Item renders
-        items.forEach { it.registerInvRender() }
         //TileEntity renderers
         register(TileCrushingTable::class.java, TileRendererCrushingTable)
         register(TileFeedingTrough::class.java, TileRendererFeedingTrough)
@@ -68,11 +61,6 @@ class ClientProxy : CommonProxy() {
         MinecraftForge.EVENT_BUS.register(TooltipHandler())
     }
 
-    fun ItemBase.registerInvRender() {
-        variants.forEach {
-            ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
-        }
-    }
 
 
     override fun init() {

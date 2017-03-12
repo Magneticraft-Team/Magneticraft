@@ -9,6 +9,7 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.util.guessAmbientTemp
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.toFahrenheit
+import com.teamwizardry.librarianlib.common.base.item.ItemMod
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -21,7 +22,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 20/07/2016.
  */
-object ItemThermometer : ItemBase("thermometer") {
+object ItemThermometer : ItemMod("thermometer") {
 
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
 

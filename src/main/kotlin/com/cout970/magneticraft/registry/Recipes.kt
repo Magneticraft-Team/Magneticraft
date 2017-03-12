@@ -285,7 +285,7 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(Items.COAL, 1, 1), ItemStack(BlockWoodChip))
 
     //TABLE SIEVE RECIPES
-    for (i in ItemPebbles.variants.keys) {
+    for (i in ItemPebbles.variants.indices) {
         addTableSieveRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f)
     }
     addTableSieveRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f)
@@ -293,7 +293,7 @@ fun registerRecipes() {
     addTableSieveRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Items.FLINT), 0.15f)
 
     //SIFTER RECIPES
-    for (i in ItemPebbles.variants.keys) {
+    for (i in ItemPebbles.variants.indices) {
         addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(ItemPebbles, 1, ItemPebbles.secondaries[i]!!), 0.1f, ItemStack(GRAVEL), 0.15f, 20f)
     }
     addSifterRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f, ItemStack(COBBLESTONE), 0.1f, 20f)

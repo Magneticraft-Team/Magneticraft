@@ -7,6 +7,7 @@ import com.cout970.magneticraft.util.checkNBT
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.hasKey
 import com.cout970.magneticraft.util.setBlockPos
+import com.teamwizardry.librarianlib.common.base.item.ItemMod
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
@@ -21,7 +22,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 17/07/2016.
  */
-object ItemCoilOfWire : ItemBase("coil_of_wire") {
+object ItemCoilOfWire : ItemMod("coil_of_wire") {
 
     val POSITION_KEY = "Position"
 

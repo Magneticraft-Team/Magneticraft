@@ -6,6 +6,7 @@ import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
+import com.teamwizardry.librarianlib.common.base.item.ItemMod
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -19,7 +20,7 @@ import org.lwjgl.input.Keyboard
 /**
  * Created by cout970 on 20/07/2016.
  */
-object ItemVoltmeter : ItemBase("voltmeter") {
+object ItemVoltmeter : ItemMod("voltmeter") {
 
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
 

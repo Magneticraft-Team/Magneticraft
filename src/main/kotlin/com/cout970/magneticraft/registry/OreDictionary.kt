@@ -19,61 +19,74 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("plankWood", ItemStack(BlockFiberboard))
 
     //todo
-    /*for ((key, value) in BlockOre.variants) {
+    /*for (a in BlockOre.variants) {
         val parts = value.split("=")
         val name = parts[0] + parts[1].toLowerCase().capitalize()
-        if (key == 2) {
-            OreDictionary.registerOre("${name}_Mgc", ItemStack(BlockOre, 1, key))
+        if (index == 2) {
+            OreDictionary.registerOre("${name}_Mgc", ItemStack(BlockOre, 1, index))
         } else {
-            OreDictionary.registerOre(name, ItemStack(BlockOre, 1, key))
+            OreDictionary.registerOre(name, ItemStack(BlockOre, 1, index))
         }
     }*/
 
-    for ((key, value) in ItemIngot.variants) {
-        if (key == 4) {
-            OreDictionary.registerOre("ingot${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemIngot, 1, key))
+    //todo all the stuff i commented out
+    for (a in ItemIngot.variants.indices) {
+        val index = a
+        val a = ItemIngot.variants[a]
+        if (index == 4) {
+            OreDictionary.registerOre("ingot${a.capitalize()}_Mgc", ItemStack(ItemIngot, 1, index))
         } else {
-            OreDictionary.registerOre("ingot${value.replace("ore=", "").capitalize()}", ItemStack(ItemIngot, 1, key))
+            OreDictionary.registerOre("ingot${a.capitalize()}", ItemStack(ItemIngot, 1, index))
         }
     }
 
-    for ((key, value) in ItemCrushedOre.variants) {
-        if (key == 4) {
-            OreDictionary.registerOre("crushedOre${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemCrushedOre, 1, key))
-        } else {
-            OreDictionary.registerOre("crushedOre${value.replace("ore=", "").capitalize()}", ItemStack(ItemCrushedOre, 1, key))
+    for (a in ItemCrushedOre.variants.indices) {
+        val index = a
+        val a = ItemCrushedOre.variants[index]
+        if (index == 4) {
+          OreDictionary.registerOre("crushedOre${a.capitalize()}_Mgc", ItemStack(ItemCrushedOre, 1, index))
+       } else {
+            OreDictionary.registerOre("crushedOre${a.capitalize()}", ItemStack(ItemCrushedOre, 1, index))
         }
     }
 
-    for ((key, value) in ItemPebbles.variants) {
-        if (key == 4) {
-            OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemPebbles, 1, key))
+    for (a in ItemPebbles.variants.indices) {
+        val index = a
+        val a = ItemPebbles.variants[index]
+        if (index == 4) {
+            OreDictionary.registerOre("pebbles${a.capitalize()}_Mgc", ItemStack(ItemPebbles, 1, index))
         } else {
-            OreDictionary.registerOre("pebbles${value.replace("ore=", "").capitalize()}", ItemStack(ItemPebbles, 1, key))
+            OreDictionary.registerOre("pebbles${a.capitalize()}", ItemStack(ItemPebbles, 1, index))
         }
     }
 
-    for ((key, value) in ItemHeavyPlate.variants) {
-        if (key == 4) {
-            OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemHeavyPlate, 1, key))
+    for (a in ItemHeavyPlate.variants.indices) {
+        val index = a
+        val a = ItemHeavyPlate.variants[index]
+        if (index == 4) {
+            OreDictionary.registerOre("heavyPlate${a.capitalize()}_Mgc", ItemStack(ItemHeavyPlate, 1, index))
         } else {
-            OreDictionary.registerOre("heavyPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemHeavyPlate, 1, key))
+            OreDictionary.registerOre("heavyPlate${a.capitalize()}", ItemStack(ItemHeavyPlate, 1, index))
         }
     }
 
-    for ((key, value) in ItemLightPlate.variants) {
-        if (key == 4) {
-            OreDictionary.registerOre("lightPlate${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemLightPlate, 1, key))
+    for (a in ItemLightPlate.variants.indices) {
+        val index = a
+        val a = ItemLightPlate.variants[index]
+        if (index == 4) {
+            OreDictionary.registerOre("lightPlate${a.capitalize()}_Mgc", ItemStack(ItemLightPlate, 1, index))
         } else {
-            OreDictionary.registerOre("lightPlate${value.replace("ore=", "").capitalize()}", ItemStack(ItemLightPlate, 1, key))
+            OreDictionary.registerOre("lightPlate${a.capitalize()}", ItemStack(ItemLightPlate, 1, index))
         }
     }
 
-    for ((key, value) in ItemNugget.variants) {
-        if (key == 4) {
-            OreDictionary.registerOre("nugget${value.replace("ore=", "").capitalize()}_Mgc", ItemStack(ItemNugget, 1, key))
+    for (a in ItemNugget.variants.indices) {
+        val index = a
+        val a = ItemNugget.variants[index]
+        if (index == 4) {
+            OreDictionary.registerOre("nugget${a.capitalize()}_Mgc", ItemStack(ItemNugget, 1, index))
         } else {
-            OreDictionary.registerOre("nugget${value.replace("ore=", "").capitalize()}", ItemStack(ItemNugget, 1, key))
+            OreDictionary.registerOre("nugget${a.capitalize()}", ItemStack(ItemNugget, 1, index))
         }
     }
 }
