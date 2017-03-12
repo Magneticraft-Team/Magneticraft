@@ -15,13 +15,8 @@ import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-object BlockMachineBlockSupportColumn : BlockMultiState(Material.IRON, "machine_block_support_column") {
+object BlockMachineBlockSupportColumn : BlockMultiState(Material.IRON, "machine_block_support_column", *States.values().map { it.getName() }.toTypedArray()) {
 
-    override val inventoryVariants = mapOf(
-            0 to "axis=lines_y",
-            1 to "axis=lines_x",
-            2 to "axis=lines_z"
-    )
 
     override fun getSubBlocks(itemIn: Item?, tab: CreativeTabs?, list: MutableList<ItemStack>?) {
         if (list == null || itemIn == null) {

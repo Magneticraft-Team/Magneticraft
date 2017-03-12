@@ -5,7 +5,7 @@ import com.cout970.magneticraft.item.hammers.ItemHammer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.util.vector.toAABBWith
-import net.minecraft.block.ITileEntityProvider
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
@@ -18,10 +18,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
-object BlockCrushingTable : BlockBase(
-        material = Material.ROCK,
-        registryName = "crushing_table"
-), ITileEntityProvider {
+object BlockCrushingTable : BlockModContainer("crushing_table", Material.ROCK) {
 
     val boundingBox = Vec3d.ZERO toAABBWith  Vec3d(1.0, 0.875, 1.0)
 
@@ -32,7 +29,7 @@ object BlockCrushingTable : BlockBase(
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox
 
-    override fun createNewTileEntity(worldIn: World, meta: Int) = TileCrushingTable()
+    override fun createTileEntity(world: World, state: IBlockState) = TileCrushingTable()
 
     override fun onBlockActivated(
             world: World, pos: BlockPos, state: IBlockState,

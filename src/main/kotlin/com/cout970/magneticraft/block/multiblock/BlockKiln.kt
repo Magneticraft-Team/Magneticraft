@@ -13,10 +13,12 @@ import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileKiln
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
+import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMap
 import net.minecraft.entity.Entity
@@ -137,7 +139,9 @@ object BlockKiln : BlockMultiblockHeat(Material.IRON, "kiln"), ITileEntityProvid
         }
     }
 
-    override fun getCustomStateMapper(): IStateMapper {
-        return StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build()
-    }
+    override val stateMapper: ((Block) -> Map<IBlockState, ModelResourceLocation>)?
+        get() = {
+            block ->
+            StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build().putStateModelLocations(block)
+        }
 }

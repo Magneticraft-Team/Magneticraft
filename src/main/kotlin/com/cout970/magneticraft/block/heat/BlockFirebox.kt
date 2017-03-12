@@ -5,7 +5,6 @@ import com.cout970.magneticraft.block.PROPERTY_DIRECTION
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.heat.TileFirebox
-import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -21,9 +20,9 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockFirebox : BlockHeatMultistate(Material.ROCK, "firebox"), ITileEntityProvider {
+object BlockFirebox : BlockHeatMultistate(Material.ROCK, "firebox") {
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileFirebox()
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity = TileFirebox()
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (!playerIn.isSneaking) {

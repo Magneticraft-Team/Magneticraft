@@ -16,6 +16,7 @@ import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.vector.toAABBWith
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -37,7 +38,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
 /**
  * Created by cout970 on 05/07/2016.
  */
-abstract class BlockElectricPoleBase(material: Material, name: String) : BlockBase(material, name), IManualConnectionHandler, ICapabilityProvider {
+abstract class BlockElectricPoleBase(material: Material, name: String) : BlockMod(name, material), IManualConnectionHandler, ICapabilityProvider {
 
     val boundingBox by lazy {
         val size = 0.0625 * 3

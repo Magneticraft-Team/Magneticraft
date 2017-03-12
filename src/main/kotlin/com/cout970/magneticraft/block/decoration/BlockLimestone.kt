@@ -1,26 +1,20 @@
 package com.cout970.magneticraft.block.decoration
 
-import com.cout970.magneticraft.block.BlockBase
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemStack
 import net.minecraft.util.IStringSerializable
 
-object BlockLimestone : BlockBase(Material.ROCK, "limestone") {
+object BlockLimestone : BlockMod("limestone", Material.ROCK, *LimestoneStates.values().map { it.getName() }.toTypedArray()) {
 
     lateinit var LIMESTONE_STATES: PropertyEnum<LimestoneStates>
         private set
 
-    override val inventoryVariants = LimestoneStates.values().associate {
-        it.ordinal to "type=${it.name}"
-    }
 
     override fun damageDropped(state: IBlockState) = state.getValue(BlockBurntLimestone.LIMESTONE_STATES).ordinal
 
-    override fun getItemName(stack: ItemStack?) =
-            "${super.getItemName(stack)}_${LimestoneStates.values()[stack?.metadata ?: 0].name.toLowerCase()}"
 
     override fun createBlockState(): BlockStateContainer {
         LIMESTONE_STATES = PropertyEnum.create("type", LimestoneStates::class.java)!!

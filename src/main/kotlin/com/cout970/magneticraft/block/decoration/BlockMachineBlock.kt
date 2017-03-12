@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.block.decoration
 
-import com.cout970.magneticraft.block.BlockBase
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
 import net.minecraft.block.material.Material
 
-object BlockMachineBlock : BlockBase(Material.IRON, "machine_block")
+object BlockMachineBlock : BlockMod("machine_block", Material.IRON)

@@ -3,10 +3,8 @@ package com.cout970.magneticraft.proxy
 
 import com.cout970.loader.api.ModelRegistry
 import com.cout970.magneticraft.MOD_ID
-import com.cout970.magneticraft.block.itemblock.ItemBlockBase
 import com.cout970.magneticraft.gui.client.TooltipHandler
 import com.cout970.magneticraft.item.ItemBase
-import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerColorHandlers
 import com.cout970.magneticraft.registry.registerSounds
@@ -49,15 +47,6 @@ class ClientProxy : CommonProxy() {
 
         //Item renders
         items.forEach { it.registerInvRender() }
-        //ItemBlock renders
-        blocks.values.forEach {
-            it.registerInvRender()
-            val mapper = it.blockBase.getCustomStateMapper()
-            if (mapper != null) {
-                ModelLoader.setCustomStateMapper(it.block, mapper)
-            }
-        }
-
         //TileEntity renderers
         register(TileCrushingTable::class.java, TileRendererCrushingTable)
         register(TileFeedingTrough::class.java, TileRendererFeedingTrough)
@@ -85,11 +74,6 @@ class ClientProxy : CommonProxy() {
         }
     }
 
-    fun ItemBlockBase.registerInvRender() {
-        blockBase.inventoryVariants.forEach {
-            ModelLoader.setCustomModelResourceLocation(this, it.key, registryName.toModel(it.value))
-        }
-    }
 
     override fun init() {
         super.init()

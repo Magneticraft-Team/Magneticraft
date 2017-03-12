@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block.fuel
 
-import com.cout970.magneticraft.block.BlockSlabBase
-import net.minecraft.block.material.Material
+import com.teamwizardry.librarianlib.common.base.block.BlockModSlab
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Items
 import net.minecraft.item.Item
@@ -14,14 +13,11 @@ import java.util.*
  * Created by Yurgen on 08/11/2016.
  */
 
-object BlockCharcoalSlab : BlockSlabBase(
-        material = Material.ROCK,
-        registryName = "charcoal_slab") {
+object BlockCharcoalSlab : BlockModSlab("charcoal_slab", BlockCoke.defaultState) {
 
-    override fun getItemDropped(state: IBlockState?, rand: Random?, fortune: Int): Item? {
+    override fun getItemDropped(state: IBlockState, rand: Random, fortune: Int): Item? {
         return Items.COAL
     }
-
     override fun getFlammability(world: IBlockAccess?, pos: BlockPos?, face: EnumFacing?): Int = 5
     override fun getFireSpreadSpeed(world: IBlockAccess?, pos: BlockPos?, face: EnumFacing?): Int = 10
 

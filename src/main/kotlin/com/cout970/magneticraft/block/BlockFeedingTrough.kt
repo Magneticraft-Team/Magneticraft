@@ -3,12 +3,13 @@
 package com.cout970.magneticraft.block
 
 
+import com.cout970.magneticraft.block.itemblock.ItemBlockFeedingTrough
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import com.cout970.magneticraft.util.vector.isHorizontal
 import com.cout970.magneticraft.util.vector.toAABBWith
-import net.minecraft.block.ITileEntityProvider
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.properties.PropertyDirection
@@ -16,6 +17,7 @@ import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
@@ -28,7 +30,11 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 24/06/2016.
  */
-object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEntityProvider {
+object BlockFeedingTrough : BlockModContainer("feeding_trough", Material.WOOD) {
+
+    override fun createItemForm(): ItemBlock? {
+        return ItemBlockFeedingTrough(this)
+    }
 
     lateinit var FEEDING_TROUGH_IS_CENTER: PropertyBool
     lateinit var FEEDING_TROUGH_SIDE_POSITION: PropertyDirection
@@ -36,8 +42,8 @@ object BlockFeedingTrough : BlockBase(Material.WOOD, "feeding_trough"), ITileEnt
 
     override fun getBoundingBox(state: IBlockState?, source: IBlockAccess?, pos: BlockPos?) = boundingBox
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int) =
-        if (getStateFromMeta(meta)!!.get(FEEDING_TROUGH_IS_CENTER))
+    override fun createTileEntity(worldIn: World, meta: IBlockState) =
+        if (meta.get(FEEDING_TROUGH_IS_CENTER))
             TileFeedingTrough()
         else null
 

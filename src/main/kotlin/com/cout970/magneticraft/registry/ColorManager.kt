@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.registry
 
+//i'm pretty sure this needs a file:SideOnly
 
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.block.heat.BlockHeatPipe

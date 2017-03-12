@@ -10,6 +10,8 @@ import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.electric.TileElectricPole
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import com.cout970.magneticraft.util.with
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
+import com.teamwizardry.librarianlib.common.base.block.ItemModBlock
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumActionResult
@@ -21,7 +23,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 19/07/2016.
  */
-class ItemBlockElectricPoleAdapter : ItemBlockBase(BlockElectricPoleAdapter) {
+class ItemBlockElectricPoleAdapter(blockMod: BlockMod) : ItemModBlock(blockMod) {
 
     override fun onItemUse(stack: ItemStack, placer: EntityPlayer, worldIn: World, p: BlockPos, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
         val state = worldIn.getBlockState(p)

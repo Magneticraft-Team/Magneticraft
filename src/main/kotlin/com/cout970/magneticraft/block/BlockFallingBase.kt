@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.misc.world.isServer
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -17,9 +18,9 @@ import java.util.*
 open class BlockFallingBase(
         registryName: String,
         unlocalizedName: String = registryName) :
-        BlockBase(
-                Material.SAND,
+        BlockMod(
                 registryName,
+                Material.SAND,
                 unlocalizedName) {
 
     /**

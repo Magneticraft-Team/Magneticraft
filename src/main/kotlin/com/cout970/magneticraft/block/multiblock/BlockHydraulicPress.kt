@@ -15,11 +15,12 @@ import com.cout970.magneticraft.multiblock.MultiblockContext
 import com.cout970.magneticraft.multiblock.impl.MultiblockHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
+import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.block.statemap.IStateMapper
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.StateMap
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
@@ -143,5 +144,10 @@ object BlockHydraulicPress : BlockMultiblockHeat(Material.IRON, "hydraulic_press
         }
     }
 
-    override fun getCustomStateMapper(): IStateMapper = StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build()
+    override val stateMapper: ((Block) -> Map<IBlockState, ModelResourceLocation>)?
+        get() = {
+            block ->
+            StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build().putStateModelLocations(block)
+        }
+
 }

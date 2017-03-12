@@ -2,12 +2,14 @@
 
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.block.itemblock.ItemBlockElectricPoleAdapter
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.electric.TileElectricPoleAdapter
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
@@ -24,6 +26,10 @@ object BlockElectricPoleAdapter : BlockElectricPoleBase(Material.IRON, "electric
             return TileElectricPoleAdapter()
         }
         return null
+    }
+
+    override fun createItemForm(): ItemBlock? {
+        return ItemBlockElectricPoleAdapter(this)
     }
 
     override fun getDrops(world: IBlockAccess?, pos: BlockPos?, state: IBlockState?, fortune: Int): MutableList<ItemStack>? {

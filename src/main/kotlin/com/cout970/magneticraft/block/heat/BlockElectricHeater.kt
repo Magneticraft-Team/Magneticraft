@@ -1,10 +1,9 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.block.BlockWithStates
 import com.cout970.magneticraft.block.IStatesEnum
 import com.cout970.magneticraft.block.PROPERTY_ACTIVE
 import com.cout970.magneticraft.tileentity.heat.TileElectricHeater
-import net.minecraft.block.ITileEntityProvider
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.IBlockState
@@ -16,12 +15,12 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockElectricHeater : BlockWithStates(Material.IRON, "electric_heater"), ITileEntityProvider, IHeatBlock {
+object BlockElectricHeater : BlockModContainer("electric_heater", Material.IRON, *States.values().map { it.stateName }.toTypedArray()), IHeatBlock {
 
-    override lateinit var states: Array<IStatesEnum>
-        private set
-
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileElectricHeater()
+    init {
+        tickRandomly = true
+    }
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity = TileElectricHeater()
 
     override fun getLightValue(state: IBlockState?, world: IBlockAccess?, pos: BlockPos?): Int {
         return super.getHeatLightValue(state, world, pos)
@@ -34,10 +33,6 @@ object BlockElectricHeater : BlockWithStates(Material.IRON, "electric_heater"), 
     override fun onNeighborChange(world: IBlockAccess?, pos: BlockPos?, neighbor: BlockPos?) {
         super.heatNeighborCheck(world, pos, neighbor)
         super.onNeighborChange(world, pos, neighbor)
-    }
-
-    override fun initProperties() {
-        states = States.values().map { it as IStatesEnum }.toTypedArray()
     }
 
     enum class States(

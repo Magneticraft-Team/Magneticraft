@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.block.BlockMultiState
-import net.minecraft.block.ITileEntityProvider
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -12,8 +11,11 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-abstract class BlockHeatMultistate(material: Material, name: String) : BlockMultiState(material, name), ITileEntityProvider, IHeatBlock {
+abstract class BlockHeatMultistate(material: Material, name: String) : BlockModContainer(name, material), IHeatBlock {
 
+    init {
+        tickRandomly = true
+    }
     override fun getMetaFromState(state: IBlockState): Int = 0
 
     override fun getStateFromMeta(meta: Int): IBlockState = defaultState

@@ -1,21 +1,17 @@
 package com.cout970.magneticraft.block
 
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemStack
 import net.minecraft.util.IStringSerializable
 
 /**
  * Created by cout970 on 12/05/2016.
  */
-object BlockOre : BlockBase(Material.ROCK, "ore_block") {
-
-    override val inventoryVariants = OreStates.values().associate {
-        it.ordinal to "ore=${it.name}"
-    }
+object BlockOre : BlockMod("ore_block", Material.ROCK, *OreStates.values().map { it.getName() }.toTypedArray()) {
 
     lateinit var ORE_STATES: PropertyEnum<OreStates>
         private set
@@ -31,9 +27,6 @@ object BlockOre : BlockBase(Material.ROCK, "ore_block") {
     }
 
     override fun damageDropped(state: IBlockState) = state.getValue(ORE_STATES).ordinal
-
-    override fun getItemName(stack: ItemStack?) =
-            "${super.getItemName(stack)}_${OreStates.values()[stack?.metadata ?: 0].name.toLowerCase()}"
 
     override fun createBlockState(): BlockStateContainer {
         ORE_STATES = PropertyEnum.create("ore", OreStates::class.java)!!

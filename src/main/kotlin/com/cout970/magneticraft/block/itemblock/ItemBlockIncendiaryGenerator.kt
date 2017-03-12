@@ -1,17 +1,14 @@
 package com.cout970.magneticraft.block.itemblock
 
-import com.cout970.magneticraft.block.BlockIncendiaryGenerator
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
+import com.teamwizardry.librarianlib.common.base.block.ItemModBlock
 
 /**
  * Created by cout970 on 17/07/2016.
  */
-class ItemBlockIncendiaryGenerator  : ItemBlockBase(BlockIncendiaryGenerator) {
+class ItemBlockIncendiaryGenerator(a: BlockMod)  : ItemModBlock(a) {
 
-    override fun getBlocksToPlace(world: World, pos: BlockPos, facing: EnumFacing, player: EntityPlayer, stack: ItemStack): List<BlockPos>  =
-            listOf(pos, pos.up())
+    //todo
+    /*override fun getBlocksToPlace(world: World, pos: BlockPos, facing: EnumFacing, player: EntityPlayer, stack: ItemStack): List<BlockPos>  =
+            listOf(pos, pos.up())*/
 }

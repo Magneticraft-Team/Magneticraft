@@ -7,7 +7,6 @@ import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.heat.TileHeatPipe
-import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -22,7 +21,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEntityProvider {
+object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe") {
 
     override fun isVisuallyOpaque(): Boolean = false
 
@@ -67,6 +66,6 @@ object BlockHeatPipe : BlockHeatMultistate(Material.ROCK, "heat_pipe"), ITileEnt
 
     override fun createBlockState(): BlockStateContainer = BlockStateContainer(this, PROPERTY_NORTH, PROPERTY_SOUTH, PROPERTY_EAST, PROPERTY_WEST, PROPERTY_UP, PROPERTY_DOWN)
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileHeatPipe()
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity = TileHeatPipe()
 
 }

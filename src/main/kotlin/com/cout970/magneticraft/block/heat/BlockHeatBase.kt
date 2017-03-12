@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.block.heat
 
-import com.cout970.magneticraft.block.BlockBase
-import net.minecraft.block.ITileEntityProvider
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.math.BlockPos
@@ -11,8 +10,8 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-abstract class BlockHeatBase(material: Material, name: String) : BlockBase(material,
-        name), ITileEntityProvider, IHeatBlock {
+abstract class BlockHeatBase(material: Material, name: String) : BlockModContainer(name,
+        material), IHeatBlock {
 
 //  override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
 //      super.onBlockPlacedBy(worldIn, pos, state, placer, stack)

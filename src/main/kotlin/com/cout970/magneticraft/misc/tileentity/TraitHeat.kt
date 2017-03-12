@@ -43,7 +43,7 @@ class TraitHeat(
             if (this.lightLevel != lightLevel) {
                 this.lightLevel = lightLevel
                 //TODO  is this unfinished stuff or just Diogenes syndrome?
-                //world.getBlock<BlockBase>(pos)?.setLightLevel(lightLevel)
+                //world.getBlock<BlockMod>(pos)?.setLightLevel(lightLevel)
                 //sendUpdateToNearPlayers()
             }
         }

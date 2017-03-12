@@ -2,6 +2,8 @@ package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.electric.TileAirLock
+import com.teamwizardry.librarianlib.common.base.block.BlockMod
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -12,9 +14,9 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 18/08/2016.
  */
-object BlockAirLock : BlockBase(Material.IRON, "airlock"), ITileEntityProvider {
+object BlockAirLock : BlockModContainer("airlock", Material.IRON) {
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileAirLock()
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity = TileAirLock()
 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         val tile = worldIn.getTileEntity(pos)

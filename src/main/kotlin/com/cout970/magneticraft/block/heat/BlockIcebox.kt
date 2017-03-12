@@ -8,7 +8,6 @@ import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.heat.TileIcebox
-import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -25,9 +24,9 @@ import net.minecraftforge.fluids.FluidStack
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockIcebox : BlockHeatMultistate(Material.ROCK, "icebox"), ITileEntityProvider {
+object BlockIcebox : BlockHeatMultistate(Material.ROCK, "icebox") {
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileIcebox()
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity = TileIcebox()
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         val item = playerIn.getHeldItem(hand)

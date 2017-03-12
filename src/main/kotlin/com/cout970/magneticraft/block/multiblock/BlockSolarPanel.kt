@@ -15,11 +15,12 @@ import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.util.vector.rotateBox
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.vec3Of
+import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.block.statemap.IStateMapper
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.StateMap
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
@@ -134,5 +135,9 @@ object BlockSolarPanel : BlockMultiblock(Material.IRON, "solar_panel"), ITileEnt
         }
     }
 
-    override fun getCustomStateMapper(): IStateMapper = StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build()
+    override val stateMapper: ((Block) -> Map<IBlockState, ModelResourceLocation>)?
+        get() = {
+            block ->
+            StateMap.Builder().ignore(PROPERTY_ACTIVE, PROPERTY_CENTER).build().putStateModelLocations(block)
+        }
 }

@@ -9,8 +9,8 @@ import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.heat.TileRedstoneHeatPipe
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.Block
-import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -23,9 +23,12 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockRedstoneHeatPipe : BlockHeatMultistate(Material.ROCK, "redstone_heat_pipe"), ITileEntityProvider {
+object BlockRedstoneHeatPipe : BlockModContainer("redstone_heat_pipe", Material.ROCK) {
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity = TileRedstoneHeatPipe()
+    init {
+        tickRandomly = true
+    }
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity = TileRedstoneHeatPipe()
 
     override fun onBlockPlacedBy(worldIn: World?, pos: BlockPos, state: IBlockState?, placer: EntityLivingBase, stack: ItemStack?) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)

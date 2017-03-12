@@ -4,18 +4,20 @@ package com.cout970.magneticraft.block
 
 
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.block.itemblock.ItemBlockIncendiaryGenerator
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.electric.TileIncendiaryGenerator
-import net.minecraft.block.ITileEntityProvider
+import com.teamwizardry.librarianlib.common.base.block.BlockModContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumBlockRenderType
@@ -30,7 +32,11 @@ import net.minecraftforge.fluids.FluidStack
 /**
  * Created by cout970 on 04/07/2016.
  */
-object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_generator"), ITileEntityProvider {
+object BlockIncendiaryGenerator : BlockModContainer("incendiary_generator", Material.IRON) {
+
+    override fun createItemForm(): ItemBlock? {
+        return ItemBlockIncendiaryGenerator(this)
+    }
 
     lateinit var PROPERTY_LOCATION: PropertyEnum<BlockIncendiaryGenerator.Location>
         private set
@@ -41,8 +47,8 @@ object BlockIncendiaryGenerator : BlockMultiState(Material.IRON, "incendiary_gen
 
     override fun getRenderType(state: IBlockState): EnumBlockRenderType = EnumBlockRenderType.INVISIBLE
 
-    override fun createNewTileEntity(worldIn: World?, meta: Int): TileEntity? {
-        if (getStateFromMeta(meta)[PROPERTY_LOCATION] == Location.TOP) {
+    override fun createTileEntity(worldIn: World, meta: IBlockState): TileEntity? {
+        if (meta[PROPERTY_LOCATION] == Location.TOP) {
             return TileIncendiaryGenerator()
         }
         return TileIncendiaryGenerator.TileIncendiaryGeneratorBottom()

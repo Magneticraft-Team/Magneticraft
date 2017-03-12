@@ -21,7 +21,6 @@ abstract class CommonProxy {
 
     open fun preInit() {
         //Common preInit stuff
-        registerBlocks()
         registerItems()
         registerFuelHandler()
         registerTileEntities()
