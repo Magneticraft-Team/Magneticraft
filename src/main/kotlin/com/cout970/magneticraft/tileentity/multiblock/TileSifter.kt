@@ -24,8 +24,12 @@ import com.cout970.magneticraft.multiblock.impl.MultiblockSifter
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.getEnumFacing
+import com.cout970.magneticraft.util.interpolate
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -41,6 +45,7 @@ import java.util.*
 /**
  * Created by cout970 on 19/08/2016.
  */
+@TileRegister("sifter")
 class TileSifter : TileBase(), IMultiblockCenter {
 
     override var multiblock: Multiblock? get() = MultiblockSifter
@@ -123,8 +128,8 @@ class TileSifter : TileBase(), IMultiblockCenter {
         return node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE && consumeInput(stage, true)
     }
 
-    override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
-        return oldState?.block !== newSate?.block
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
+        return oldState.block !== newSate.block
     }
 
     fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
@@ -254,7 +259,7 @@ class TileSifter : TileBase(), IMultiblockCenter {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return InputInventory(inventory, 1) as T
         if (capability == ELECTRIC_NODE_HANDLER) return this as T
         return super.getCapability(capability, facing)

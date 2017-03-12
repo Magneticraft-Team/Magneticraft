@@ -10,12 +10,14 @@ import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.TileBase
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
 
 /**
  * Created by cout970 on 18/08/2016.
  */
+@TileRegister("airlock")
 class TileAirLock : TileBase() {
 
     val node = ElectricNode({ worldObj }, { pos }, capacity = 2.0)

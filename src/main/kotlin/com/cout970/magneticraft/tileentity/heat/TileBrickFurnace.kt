@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.item.ItemFood
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
@@ -19,6 +20,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 04/07/2016.
  */
+@TileRegister("brick_furnace")
 class TileBrickFurnace : TileBase() {
 
     val heat = HeatContainer(dissipation = 0.0,
@@ -101,7 +103,7 @@ class TileBrickFurnace : TileBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }

@@ -18,6 +18,7 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -29,6 +30,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 04/07/2016.
  */
 
+@TileRegister("firebox")
 class TileFirebox : TileBase() {
 
     companion object {
@@ -81,7 +83,7 @@ class TileFirebox : TileBase() {
                 val data = IBD()
                 data.setBoolean(DATA_ID_MACHINE_WORKING, heat.temperature > STANDARD_AMBIENT_TEMPERATURE + 1)
                 data.setDouble(DATA_ID_MACHINE_HEAT, heat.heat)
-                sendSyncData(data, Side.CLIENT)
+                //sendSyncData(data, Side.CLIENT)
             }
             super.update()
         }
@@ -122,7 +124,7 @@ class TileFirebox : TileBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }

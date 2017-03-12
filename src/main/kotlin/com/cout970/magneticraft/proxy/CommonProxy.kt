@@ -6,7 +6,10 @@ import com.cout970.magneticraft.multiblock.MultiblockManager
 import com.cout970.magneticraft.network.MessageContainerUpdate
 import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.network.MessageTileUpdate
-import com.cout970.magneticraft.registry.*
+import com.cout970.magneticraft.registry.registerCapabilities
+import com.cout970.magneticraft.registry.registerFuelHandler
+import com.cout970.magneticraft.registry.registerOreDictionaryEntries
+import com.cout970.magneticraft.registry.registerRecipes
 import com.cout970.magneticraft.world.WorldGenerator
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -22,7 +25,6 @@ abstract class CommonProxy {
     open fun preInit() {
         //Common preInit stuff
         registerFuelHandler()
-        registerTileEntities()
         registerOreDictionaryEntries()
         registerCapabilities()
         MultiblockManager.registerDefaults()

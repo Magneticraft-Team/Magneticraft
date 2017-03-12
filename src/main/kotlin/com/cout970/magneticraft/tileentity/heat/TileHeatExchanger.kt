@@ -2,8 +2,8 @@ package com.cout970.magneticraft.tileentity.heat
 
 import com.cout970.magneticraft.api.internal.heat.HeatContainer
 import com.cout970.magneticraft.misc.fluid.Tank
-import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
+import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
@@ -27,10 +27,10 @@ class TileHeatExchanger : TileBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) {
-            if (facing == EnumFacing.DOWN) return inputTank as T
-            else return outputTank as T
+            return if (facing == EnumFacing.DOWN)  inputTank as T
+            else outputTank as T
         }
         return super.getCapability(capability, facing)
     }

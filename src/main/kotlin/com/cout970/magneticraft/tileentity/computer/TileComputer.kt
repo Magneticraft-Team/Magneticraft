@@ -9,6 +9,7 @@ import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.resource
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ITickable
 import net.minecraftforge.items.ItemStackHandler
@@ -16,6 +17,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 2016/09/30.
  */
+@TileRegister("computer")
 class TileComputer : TileBase(), ITickable {
 
     val motherboard = Motherboard(CPU_MIPS(), RAM(0x10000, false), ROM(resource("bios.bin")), this)

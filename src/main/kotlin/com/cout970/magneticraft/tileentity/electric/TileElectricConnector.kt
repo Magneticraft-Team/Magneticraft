@@ -23,6 +23,7 @@ import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricConnector
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.toBlockPos
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.common.capabilities.Capability
@@ -30,6 +31,7 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 29/06/2016.
  */
+@TileRegister("electric_connector")
 class TileElectricConnector : TileBase(), IManualWireConnect {
 
     var mainNode = ElectricConnector(ElectricNode(worldGetter = { world }, posGetter = { pos }), this)
@@ -105,7 +107,7 @@ class TileElectricConnector : TileBase(), IManualWireConnect {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (facing == getFacing() && (capability == TESLA_CONSUMER || capability == TESLA_PRODUCER || capability == TESLA_STORAGE)) {
             return teslaWrapper as T
         }

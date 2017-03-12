@@ -5,10 +5,12 @@ import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.tileentity.ITileTrait
 import com.cout970.magneticraft.misc.tileentity.TraitElectricity
 import com.cout970.magneticraft.tileentity.TileBase
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 
 /**
  * Created by cout970 on 27/07/2016.
  */
+@TileRegister("infinite_energy")
 class TileInfiniteEnergy : TileBase() {
 
     var mainNode = object : ElectricNode({ world }, { pos }, capacity = 1.25) {

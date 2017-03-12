@@ -12,11 +12,13 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleAdapterConnector
 import com.cout970.magneticraft.tileentity.electric.connectors.ElectricPoleConnector
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 05/07/2016.
  */
+@TileRegister("electric_pole_adapter")
 class TileElectricPoleAdapter : TileBase(), IManualWireConnect {
 
     var mainNode = ElectricNode({ world }, { pos })

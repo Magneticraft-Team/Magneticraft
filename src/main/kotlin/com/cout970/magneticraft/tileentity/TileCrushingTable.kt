@@ -12,6 +12,7 @@ import com.cout970.magneticraft.registry.sounds
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.ParticleBreaking
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraftforge.items.ItemStackHandler
 import java.util.*
 
+@TileRegister("crushing_table")
 class TileCrushingTable : TileBase(), ITickable {
 
     val inventory: CrushingTableInventory = CrushingTableInventory()
@@ -135,7 +137,7 @@ class TileCrushingTable : TileBase(), ITickable {
             (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         return if (capability == ITEM_HANDLER) {
             inventory as T
         } else {

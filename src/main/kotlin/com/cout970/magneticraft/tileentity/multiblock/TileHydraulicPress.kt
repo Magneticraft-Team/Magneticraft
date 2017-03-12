@@ -36,6 +36,7 @@ import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotatePoint
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.unaryMinus
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -50,6 +51,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 19/08/2016.
  */
+@TileRegister("hydraulic_press")
 class TileHydraulicPress : TileBase(), IMultiblockCenter {
 
     override var multiblock: Multiblock? get() = MultiblockHydraulicPress
@@ -116,7 +118,7 @@ class TileHydraulicPress : TileBase(), IMultiblockCenter {
         })
     }
 
-    override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
         return oldState?.block !== newSate?.block
     }
 
@@ -237,7 +239,7 @@ class TileHydraulicPress : TileBase(), IMultiblockCenter {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return Inventory(inventory) as T
         if (capability == HEAT_NODE_HANDLER) return traitHeat as T
         if (capability == ELECTRIC_NODE_HANDLER) return traitElectricity as T

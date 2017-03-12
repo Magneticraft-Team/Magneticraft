@@ -24,6 +24,7 @@ import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.tileentity.TileKilnShelf
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
 import net.minecraft.item.Item
@@ -40,6 +41,7 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 19/08/2016.
  */
+@TileRegister("kiln")
 class TileKiln : TileBase(), IMultiblockCenter, ITickable {
 
     override var multiblock: Multiblock? get() = MultiblockKiln
@@ -116,7 +118,7 @@ class TileKiln : TileBase(), IMultiblockCenter, ITickable {
         }
     }
 
-    override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
         return oldState?.block !== newSate?.block
     }
 

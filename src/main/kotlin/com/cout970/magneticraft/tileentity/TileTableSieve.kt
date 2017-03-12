@@ -10,6 +10,7 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.vec3Of
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ITickable
@@ -20,6 +21,7 @@ import java.util.*
 /**
  * Created by cout970 on 16/06/2016.
  */
+@TileRegister("table_sieve")
 class TileTableSieve : TileBase(), ITickable {
 
     val inventory = ItemStackHandler(1)

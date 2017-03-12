@@ -34,6 +34,7 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLiving
 import net.minecraft.item.ItemStack
@@ -50,6 +51,7 @@ import java.util.*
 /**
  * Created by cout970 on 19/08/2016.
  */
+@TileRegister("grinder")
 class TileGrinder : TileBase(), IMultiblockCenter {
 
     override var multiblock: Multiblock? get() = MultiblockGrinder
@@ -124,8 +126,8 @@ class TileGrinder : TileBase(), IMultiblockCenter {
         })
     }
 
-    override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState?, newSate: IBlockState?): Boolean {
-        return oldState?.block !== newSate?.block
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newState: IBlockState): Boolean {
+        return oldState.block !== newState.block
     }
 
     fun posTransform(worldPos: BlockPos): BlockPos = direction.rotatePoint(BlockPos.ORIGIN, worldPos) + pos
@@ -274,7 +276,7 @@ class TileGrinder : TileBase(), IMultiblockCenter {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) {
             if (facing == null)
                 return inventory as T

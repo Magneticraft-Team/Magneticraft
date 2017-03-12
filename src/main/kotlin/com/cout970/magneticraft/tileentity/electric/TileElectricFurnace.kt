@@ -13,6 +13,7 @@ import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.interpolate
 import com.cout970.magneticraft.util.newNbt
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
@@ -23,6 +24,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 04/07/2016.
  */
+@TileRegister("electric_furnace")
 class TileElectricFurnace : TileBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)
@@ -93,7 +95,7 @@ class TileElectricFurnace : TileBase() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
     }

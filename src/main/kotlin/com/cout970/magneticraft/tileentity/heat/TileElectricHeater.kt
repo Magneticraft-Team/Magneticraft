@@ -12,12 +12,14 @@ import com.cout970.magneticraft.misc.tileentity.TraitHeat
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 04/07/2016.
  */
 
+@TileRegister("electric_heater")
 class TileElectricHeater : TileBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)

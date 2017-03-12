@@ -24,6 +24,7 @@ import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.*
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
@@ -37,6 +38,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 04/07/2016.
  */
 
+@TileRegister("incendiary_generator")
 class TileIncendiaryGenerator(
         val tank: Tank = object : Tank(4000) {
             override fun canFillFluidType(fluid: FluidStack?): Boolean = fluid?.fluid?.name == "water"
@@ -126,7 +128,7 @@ class TileIncendiaryGenerator(
                 val data = IBD()
                 data.setBoolean(DATA_ID_MACHINE_WORKING, heat > STANDARD_AMBIENT_TEMPERATURE + 1)
                 data.setFloat(DATA_ID_MACHINE_HEAT, heat)
-                sendSyncData(data, Side.CLIENT)
+                //sendSyncData(data, Side.CLIENT)
             }
             if (shouldTick(200)) {
                 ambientTemperature = guessAmbientTemp(world, pos).toFloat()
@@ -179,7 +181,7 @@ class TileIncendiaryGenerator(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (capability == FLUID_HANDLER) return this as T
         if (capability == ITEM_HANDLER) return inventory as T
         return super.getCapability(capability, facing)
@@ -199,10 +201,11 @@ class TileIncendiaryGenerator(
         return EnumFacing.NORTH
     }
 
+    @TileRegister("incendiary_generator_bottom")
     class TileIncendiaryGeneratorBottom : TileBase() {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+        override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
             val tile = worldObj.getTile<TileIncendiaryGenerator>(pos.up())
             if (tile != null) return tile.getCapability(capability, facing)
             return super.getCapability(capability, facing)

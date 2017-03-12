@@ -10,6 +10,7 @@ import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.toVec3d
 import com.mojang.authlib.GameProfile
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.entity.passive.EntityAnimal
 import net.minecraft.init.Items
 import net.minecraft.item.Item
@@ -25,6 +26,7 @@ import java.util.*
 /**
  * Created by cout970 on 24/06/2016.
  */
+@TileRegister("feeding_trough")
 class TileFeedingTrough : TileBase(), ITickable {
     val ACCEPTED_ITEMS: List<Item> = listOf(Items.WHEAT, Items.CARROT, Items.WHEAT_SEEDS)
     val MAX_ANIMALS = 30

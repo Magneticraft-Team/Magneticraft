@@ -14,6 +14,7 @@ import com.cout970.magneticraft.registry.ITEM_ENERGY_PROVIDER
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.interpolate
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.items.ItemStackHandler
@@ -21,6 +22,7 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * Created by cout970 on 11/07/2016.
  */
+@TileRegister("battery")
 class TileBattery : TileBase() {
 
     var mainNode = ElectricNode({ world }, { pos }, capacity = 1.25)

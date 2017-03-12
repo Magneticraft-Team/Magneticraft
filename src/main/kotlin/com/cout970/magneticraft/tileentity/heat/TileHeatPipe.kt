@@ -7,11 +7,13 @@ import com.cout970.magneticraft.tileentity.TileBase
 import com.cout970.magneticraft.util.COPPER_HEAT_CAPACITY
 import com.cout970.magneticraft.util.COPPER_MELTING_POINT
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 04/07/2016.
  */
+@TileRegister("heat_pipe")
 class TileHeatPipe : TileBase() {
 
     val activeSides: MutableSet<EnumFacing> = mutableSetOf()

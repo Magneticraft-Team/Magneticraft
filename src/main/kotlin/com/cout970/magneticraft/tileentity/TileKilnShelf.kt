@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -14,6 +15,7 @@ import net.minecraft.util.ITickable
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.ItemStackHandler
 
+@TileRegister("kiln_shelf")
 class TileKilnShelf : TileBase(), ITickable {
 
     val inventory: KilnShelfInventory = KilnShelfInventory()
@@ -52,7 +54,7 @@ class TileKilnShelf : TileBase(), ITickable {
             (capability == ITEM_HANDLER) || super.hasCapability(capability, facing)
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         return if (capability == ITEM_HANDLER) {
             inventory as T
         } else {

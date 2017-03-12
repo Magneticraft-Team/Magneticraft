@@ -20,6 +20,7 @@ import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotatePoint
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.unaryMinus
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -29,6 +30,7 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 2016/09/06.
  */
+@TileRegister("solar_panel")
 class TileSolarPanel : TileBase(), IMultiblockCenter {
 
     val node = ElectricNode({ worldObj }, { pos })

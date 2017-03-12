@@ -9,6 +9,7 @@ import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.getEnumFacing
 import com.cout970.magneticraft.util.setBlockPos
 import com.cout970.magneticraft.util.setEnumFacing
+import com.teamwizardry.librarianlib.common.util.autoregister.TileRegister
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -19,6 +20,7 @@ import net.minecraftforge.common.capabilities.Capability
  */
 // TilEntity to store multiblock data in every block that forms the multiblock,
 // this allows to destroy it breaking any block
+@TileRegister("tile_multiblock")
 open class TileMultiblock : TileBase(), ITileMultiblock {
 
     override var multiblock: Multiblock? = null
@@ -28,25 +30,23 @@ open class TileMultiblock : TileBase(), ITileMultiblock {
     override var centerPos: BlockPos? = null
     override var multiblockFacing: EnumFacing? = null
 
-    override fun readFromNBT(compound: NBTTagCompound?) {
+    override fun readCustomNBT(compound: NBTTagCompound) {
         if (compound!!.hasKey("Multiblock")) {
             val tag = compound.getCompoundTag("Multiblock")
             multiblock = MultiblockManager.getMultiblock(tag.getString("Name"))
             centerPos = tag.getBlockPos("CenterPos")
             multiblockFacing = tag.getEnumFacing("Facing")
         }
-        super.readFromNBT(compound)
     }
 
-    override fun writeToNBT(compound: NBTTagCompound?): NBTTagCompound? {
+    override fun writeCustomNBT(compound: NBTTagCompound, sync: Boolean) {
         multiblock?.let {
             val tag = NBTTagCompound()
-            tag.setString("Name", it.name)
-            tag.setBlockPos("CenterPos", centerPos!!)
-            tag.setEnumFacing("Facing", multiblockFacing!!)
-            compound!!.setTag("Multiblock", tag)
+            compound.setString("Name", it.name)
+            compound.setBlockPos("CenterPos", centerPos!!)
+            compound.setEnumFacing("Facing", multiblockFacing!!)
+            compound.setTag("Multiblock", tag)
         }
-        return super.writeToNBT(compound)
     }
 
     override fun onLoad() {
@@ -73,7 +73,7 @@ open class TileMultiblock : TileBase(), ITileMultiblock {
         return super.hasCapability(capability, facing)
     }
 
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         if (multiblock != null) {
             val tile = worldObj.getTileEntity(pos.subtract(centerPos!!))
             if (tile is IMultiblockCenter) {
