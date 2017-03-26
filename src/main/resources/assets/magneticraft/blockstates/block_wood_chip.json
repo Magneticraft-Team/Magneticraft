@@ -1,15 +1,7 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:block_wood_chip",
-    "transform": "forge:default-block"
-  },
-  "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ]
-  }
+	"variants": {
+		"normal": {
+			"model": "magneticraft:block_wood_chip"
+		}
+	}
 }

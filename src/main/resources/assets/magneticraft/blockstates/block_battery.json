@@ -1,33 +1,16 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:obj/block_battery.obj"
-    },
-    "variants": {
-        "direction=north": [
-            {
-                "y": 0
-            }
-        ],
-        "direction=south": [
-            {
-                "y": 180
-            }
-        ],
-        "direction=west": [
-            {
-                "y": -90
-            }
-        ],
-        "direction=east": [
-            {
-                "y": 90
-            }
-        ],
-        "inventory": [
-            {
-                "transform": "forge:default-block"
-            }
-        ]
-    }
+	"variants": {
+		"direction=south": {
+			"model": "magneticraft:block_battery"
+		},
+		"direction=west": {
+			"model": "magneticraft:block_battery"
+		},
+		"direction=north": {
+			"model": "magneticraft:block_battery"
+		},
+		"direction=east": {
+			"model": "magneticraft:block_battery"
+		}
+	}
 }

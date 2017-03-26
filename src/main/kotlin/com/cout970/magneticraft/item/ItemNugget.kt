@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack
 /**
  * Created by cout970 on 2016/09/06.
  */
-object ItemNugget  : ItemMod("nugget", "iron", "copper", "lead", "cobalt", "tungsten") {
+object ItemNugget  : ItemMod("nugget", "nugget_iron", "nugget_copper", "nugget_lead", "nugget_cobalt", "nugget_tungsten") {
 
     override fun getUnlocalizedName(stack: ItemStack): String =
-            "${unlocalizedName}_${variants[stack.metadata].removePrefix("ore=")}"
+            "${unlocalizedName}_${variants[stack.metadata].removePrefix("nugget_")}"
 }

@@ -1,17 +1,22 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:obj/electric_connector.obj",
-        "transform": "forge:default-block"
-    },
-    "variants": {
-        "normal": [{ }],
-		"facing=up": [{ }],
-		"facing=down": [{ }],
-		"facing=north": [{ }],
-		"facing=south": [{ }],
-		"facing=west": [{ }],
-		"facing=east": [{ }],
-        "inventory": [{ }]
-    }
+	"variants": {
+		"facing=down": {
+			"model": "magneticraft:electric_connector"
+		},
+		"facing=up": {
+			"model": "magneticraft:electric_connector"
+		},
+		"facing=north": {
+			"model": "magneticraft:electric_connector"
+		},
+		"facing=south": {
+			"model": "magneticraft:electric_connector"
+		},
+		"facing=west": {
+			"model": "magneticraft:electric_connector"
+		},
+		"facing=east": {
+			"model": "magneticraft:electric_connector"
+		}
+	}
 }

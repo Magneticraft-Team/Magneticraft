@@ -1,15 +1,10 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:charcoal_slab",
-    "transform": "forge:default-block"
-  },
-  "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ]
-  }
+	"variants": {
+		"half=top": {
+			"model": "magneticraft:charcoal_slab_top"
+		},
+		"half=bottom": {
+			"model": "magneticraft:charcoal_slab_bottom"
+		}
+	}
 }

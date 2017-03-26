@@ -1,66 +1,40 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:mcm/pole_adapter.mcm",
-        "transform": "forge:default-block"
-    },
-    "variants": {
-        "place=north": [
-            {
-                "transform": { "rotation": { "y": 270 } }
-            }
-        ],
-        "place=north_east": [
-            {
-                "transform": { "rotation": { "y": 225 } }
-            }
-        ],
-        "place=east": [
-            {
-                "transform": { "rotation": { "y": 180 } }
-            }
-        ],
-        "place=south_east": [
-            {
-                "transform": { "rotation": { "y": 135 } }
-            }
-        ],
-        "place=south": [
-            {
-                "transform": { "rotation": { "y": 90 } }
-            }
-        ],
-        "place=south_west": [
-            {
-                "transform": { "rotation": { "y": 45 } }
-            }
-        ],
-        "place=west": [
-            {
-                "transform": { "rotation": { "y": 0 } }
-            }
-        ],
-        "place=north_west": [
-            {
-                "transform": { "rotation": { "y": -45 } }
-            }
-        ],
-		"place=down_1": [{
-			"model": "magneticraft:empty_model"
-		}],
-		"place=down_2": [{
-			"model": "magneticraft:empty_model"
-		}],
-		"place=down_3": [{
-			"model": "magneticraft:empty_model"
-		}],
-		"place=down_4": [{
-			"model": "magneticraft:empty_model"
-		}],
-        "inventory": [
-            {
-                "model": "magneticraft:mcm/pole_adapter_tiny.mcm"
-            }
-        ]
-    }
+	"variants": {
+		"place=north": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=north_east": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=east": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=south_east": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=south": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=south_west": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=west": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=north_west": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=down_1": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=down_2": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=down_3": {
+			"model": "magneticraft:electric_pole_adapter"
+		},
+		"place=down_4": {
+			"model": "magneticraft:electric_pole_adapter"
+		}
+	}
 }

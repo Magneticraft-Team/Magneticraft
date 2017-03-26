@@ -1,33 +1,16 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:obj/computer.obj"
-    },
-    "variants": {
-        "direction=north": [
-            {
-                "y": 0
-            }
-        ],
-        "direction=south": [
-            {
-                "y": 180
-            }
-        ],
-        "direction=west": [
-            {
-                "y": -90
-            }
-        ],
-        "direction=east": [
-            {
-                "y": 90
-            }
-        ],
-        "inventory": [
-            {
-                "transform": "forge:default-block"
-            }
-        ]
-    }
+	"variants": {
+		"direction=south": {
+			"model": "magneticraft:computer"
+		},
+		"direction=west": {
+			"model": "magneticraft:computer"
+		},
+		"direction=north": {
+			"model": "magneticraft:computer"
+		},
+		"direction=east": {
+			"model": "magneticraft:computer"
+		}
+	}
 }

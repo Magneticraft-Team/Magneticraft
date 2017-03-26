@@ -1,33 +1,16 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:brick_furnace"
-  },
-  "variants": {
-    "direction=north": [
-      {
-        "y": 0
-      }
-    ],
-    "direction=south": [
-      {
-        "y": 180
-      }
-    ],
-    "direction=west": [
-      {
-        "y": -90
-      }
-    ],
-    "direction=east": [
-      {
-        "y": 90
-      }
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
-    ]
-  }
+	"variants": {
+		"direction=south": {
+			"model": "magneticraft:brick_furnace"
+		},
+		"direction=west": {
+			"model": "magneticraft:brick_furnace"
+		},
+		"direction=north": {
+			"model": "magneticraft:brick_furnace"
+		},
+		"direction=east": {
+			"model": "magneticraft:brick_furnace"
+		}
+	}
 }

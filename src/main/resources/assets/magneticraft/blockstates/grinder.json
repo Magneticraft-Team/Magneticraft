@@ -1,126 +1,16 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:obj/grinder_block.obj"
-    },
-    "variants": {
-        "direction=north": [
-            {
-                "y": 0
-            }
-        ],
-        "direction=south": [
-            {
-                "y": 180
-            }
-        ],
-        "direction=west": [
-            {
-                "y": 90
-            }
-        ],
-        "direction=east": [
-            {
-                "y": -90
-            }
-        ],
-        "inventory": [
-            {
-                "model": "magneticraft:obj/grinder.obj",
-                "transform": {
-                    "ground": {
-                        "translation": [ 0, 0, 0 ],
-                        "rotation": [
-                            {
-                                "x": 0
-                            }, {
-                                "y": 0
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.05, 0.05, 0.05 ]
-                    },
-                    "gui": {
-                        "translation": [ 0, -0.1875, 0 ],
-                        "rotation": [
-                            {
-                                "x": 30
-                            }, {
-                                "y": 315
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.16, 0.16, 0.16 ]
-                    },
-                    "fixed": {
-                        "translation": [ 0, 0, 0 ],
-                        "rotation": [
-                            {
-                                "x": 0
-                            }, {
-                                "y": 0
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.05, 0.05, 0.05 ]
-                    },
-                    "thirdperson_righthand": {
-                        "translation": [ 0, 0.15625, 0 ],
-                        "rotation": [
-                            {
-                                "x": 75
-                            }, {
-                                "y": 45
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.0375, 0.0375, 0.0375 ]
-                    },
-                    "thirdperson_lefthand": {
-                        "translation": [ 0, 0.15625, 0 ],
-                        "rotation": [
-                            {
-                                "x": 75
-                            }, {
-                                "y": 225
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.0375, 0.0375, 0.0375 ]
-                    },
-                    "firstperson_righthand": {
-                        "translation": [ 0, 0, 0 ],
-                        "rotation": [
-                            {
-                                "x": 0
-                            }, {
-                                "y": 45
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.01, 0.01, 0.01 ]
-                    },
-                    "firstperson_lefthand": {
-                        "translation": [ 0, 0, 0 ],
-                        "rotation": [
-                            {
-                                "x": 0
-                            }, {
-                                "y": 225
-                            }, {
-                                "z": 0
-                            }
-                        ],
-                        "scale": [ 0.01, 0.01, 0.01 ]
-                    }
-                }
-            }
-        ]
-    }
+	"variants": {
+		"direction=south": {
+			"model": "magneticraft:grinder"
+		},
+		"direction=west": {
+			"model": "magneticraft:grinder"
+		},
+		"direction=north": {
+			"model": "magneticraft:grinder"
+		},
+		"direction=east": {
+			"model": "magneticraft:grinder"
+		}
+	}
 }

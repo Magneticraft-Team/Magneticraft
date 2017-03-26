@@ -1,26 +1,13 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:limestone",
-        "transform": "forge:default-block"
-    },
-    "variants": {
-        "type": {
-            "normal": {
-                "textures": {
-                    "all": "magneticraft:blocks/limestone/normal"
-                }
-            },
-            "brick": {
-                "textures": {
-                    "all": "magneticraft:blocks/limestone/brick"
-                }
-            },
-            "cobble": {
-                "textures": {
-                    "all": "magneticraft:blocks/limestone/cobble"
-                }
-            }
-        }
-    }
+	"variants": {
+		"type=normal": {
+			"model": "magneticraft:limestone"
+		},
+		"type=brick": {
+			"model": "magneticraft:limestone"
+		},
+		"type=cobble": {
+			"model": "magneticraft:limestone"
+		}
+	}
 }

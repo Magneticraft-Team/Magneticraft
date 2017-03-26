@@ -1,15 +1,7 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:glazed_brick",
-    "transform": "forge:default-block"
-  },
-  "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ]
-  }
+	"variants": {
+		"normal": {
+			"model": "magneticraft:glazed_brick"
+		}
+	}
 }

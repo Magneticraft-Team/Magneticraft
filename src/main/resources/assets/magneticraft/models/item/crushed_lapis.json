@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "magneticraft:items/crushed_ore/lapis"
-  }
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "magneticraft:items/crushed_lapis"
+	}
 }

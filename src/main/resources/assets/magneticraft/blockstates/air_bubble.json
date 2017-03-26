@@ -1,11 +1,10 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:air_bubble"
-    },
-    "variants": {
-        "decay=true": [{}],
-        "decay=false": [{}],
-        "inventory": [{}]
-    }
+	"variants": {
+		"decay=true": {
+			"model": "magneticraft:air_bubble"
+		},
+		"decay=false": {
+			"model": "magneticraft:air_bubble"
+		}
+	}
 }

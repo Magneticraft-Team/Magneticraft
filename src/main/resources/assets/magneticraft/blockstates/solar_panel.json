@@ -1,33 +1,16 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "magneticraft:obj/solar_panel_base.obj"
-    },
-    "variants": {
-        "direction=north": [
-            {
-                "y": -90
-            }
-        ],
-        "direction=south": [
-            {
-                "y": 90
-            }
-        ],
-        "direction=west": [
-            {
-                "y": 180
-            }
-        ],
-        "direction=east": [
-            {
-                "y": 0
-            }
-        ],
-        "inventory": [
-            {
-                "transform": "forge:default-block"
-            }
-        ]
-    }
+	"variants": {
+		"direction=south": {
+			"model": "magneticraft:solar_panel"
+		},
+		"direction=west": {
+			"model": "magneticraft:solar_panel"
+		},
+		"direction=north": {
+			"model": "magneticraft:solar_panel"
+		},
+		"direction=east": {
+			"model": "magneticraft:solar_panel"
+		}
+	}
 }

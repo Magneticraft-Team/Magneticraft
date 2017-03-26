@@ -1,33 +1,16 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:firebox_off"
-  },
-  "variants": {
-    "direction=north": [
-      {
-        "y": 0
-      }
-    ],
-    "direction=south": [
-      {
-        "y": 180
-      }
-    ],
-    "direction=west": [
-      {
-        "y": -90
-      }
-    ],
-    "direction=east": [
-      {
-        "y": 90
-      }
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
-    ]
-  }
+	"variants": {
+		"direction=south": {
+			"model": "magneticraft:icebox"
+		},
+		"direction=west": {
+			"model": "magneticraft:icebox"
+		},
+		"direction=north": {
+			"model": "magneticraft:icebox"
+		},
+		"direction=east": {
+			"model": "magneticraft:icebox"
+		}
+	}
 }

@@ -1,15 +1,7 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "magneticraft:heat_reservoir",
-    "transform": "forge:default-block"
-  },
-  "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ]
-  }
+	"variants": {
+		"normal": {
+			"model": "magneticraft:heat_reservoir"
+		}
+	}
 }

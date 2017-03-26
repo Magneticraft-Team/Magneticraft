@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "magneticraft:items/pebbles/wood"
-  }
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "magneticraft:items/wood_chip"
+	}
 }

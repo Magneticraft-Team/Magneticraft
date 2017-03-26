@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "magneticraft:items/thermometer"
-  }
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "magneticraft:items/thermometer"
+	}
 }
