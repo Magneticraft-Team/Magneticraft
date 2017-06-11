@@ -29,7 +29,7 @@ class ItemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemS
             val item = i.entityItem
             for (j in 0 until inv.slots) {
                 val inserted = inv.insertItem(j, item, false)
-                if (inserted != null) {
+                if (inserted.isNotEmpty) {
                     i.setEntityItemStack(inserted)
                 } else {
                     i.setDead()
@@ -53,7 +53,7 @@ class ItemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
             if (inventory != null) {
                 for (slot in 0 until inventory.slots) {
                     val result = inventory.insertItem(slot, item.copy(), true)
-                    if (result == null) {
+                    if (result.isEmpty) {
                         if (!simulate) inventory.insertItem(slot, item.copy(), false)
                         return null
                     }
@@ -75,7 +75,7 @@ class ItemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
             entityItem.motionY = 0.0
             entityItem.motionZ = 0.0
             entityItem.setDefaultPickupDelay()
-            world.spawnEntityInWorld(entityItem)
+            world.spawnEntity(entityItem)
         }
     }
 }

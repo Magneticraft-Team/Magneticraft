@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.api.internal.registries.machines.sifter
 
-import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.SifterRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipeManager
 import net.minecraft.item.ItemStack

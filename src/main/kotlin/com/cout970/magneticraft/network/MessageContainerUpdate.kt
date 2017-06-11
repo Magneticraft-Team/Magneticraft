@@ -40,7 +40,7 @@ class MessageContainerUpdate() : IMessage {
 
         override fun onMessage(message: MessageContainerUpdate?, ctx: MessageContext?): IMessage? {
             if(ctx!!.side == Side.CLIENT) {
-                val container = Minecraft.getMinecraft().thePlayer.openContainer
+                val container = Minecraft.getMinecraft().player.openContainer
                 if (container is ContainerBase) {
                     container.receiveDataFromServer(message!!.ibd!!)
                 }

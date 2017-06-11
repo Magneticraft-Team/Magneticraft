@@ -97,8 +97,8 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
             if (!this.mergeItemStack(stack, slotRanges, playerSlot))
                 return null
 
-            if (stack.stackSize == 0) {
-                slot.putStack(null)
+            if (stack.count == 0) {
+                slot.putStack(ItemStack.EMPTY)
             } else {
                 slot.onSlotChanged()
             }

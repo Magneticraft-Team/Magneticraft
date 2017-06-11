@@ -85,7 +85,8 @@ object Magneticraft {
     }
 
     /**
-     * postInit event, called after all the initialization stuff, not used currently
+     * postInit event, called after all the initialization stuff
+     * not used currently, is meant for inter-mod stuff after all mods are loaded
      */
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {

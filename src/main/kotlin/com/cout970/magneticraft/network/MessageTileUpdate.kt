@@ -66,7 +66,7 @@ class MessageTileUpdate() : IMessage {
 
         fun handleClient(message: MessageTileUpdate) {
             Minecraft.getMinecraft().addScheduledTask {
-                val world = Minecraft.getMinecraft().theWorld
+                val world = Minecraft.getMinecraft().world
                 if (world.provider.dimension == message.dimension) {
                     // TODO TileBase
 //                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.SERVER)

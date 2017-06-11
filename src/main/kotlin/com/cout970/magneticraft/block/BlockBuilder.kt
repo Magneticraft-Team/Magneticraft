@@ -50,7 +50,7 @@ class BlockBuilder {
         block.apply {
             setHardness(hardness)
             setResistance(explosionResistance)
-            unlocalizedName = "${registryName.resourceDomain}.${registryName.resourcePath}"
+            unlocalizedName = "${registryName?.resourceDomain}.${registryName?.resourcePath}"
         }
 
         return block
@@ -93,14 +93,16 @@ data class BaseBlock(val material: Material, val states_: List<IStatesEnum>?) : 
         return aabb?.invoke(BoundingBoxArgs(state, source, pos)) ?: FULL_BLOCK_AABB
     }
 
-    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer?,
-                                  hand: EnumHand, heldItem: ItemStack?, side: EnumFacing, hitX: Float, hitY: Float,
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float,
                                   hitZ: Float): Boolean {
+        val heldItem = playerIn.getHeldItem(hand)
 
         return onActivated?.invoke(
                 OnActivatedArgs(worldIn, pos, state, playerIn, hand, heldItem, side, vec3Of(hitX, hitY, hitZ)))
-               ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
+               ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ)
     }
+
 
     fun getItemName(stack: ItemStack?) = "${unlocalizedName}_${states[stack!!.metadata].stateName}"
 
@@ -139,8 +141,8 @@ data class BaseBlock(val material: Material, val states_: List<IStatesEnum>?) : 
 
 data class BoundingBoxArgs(val state: IBlockState, val source: IBlockAccess, val pos: BlockPos)
 
-data class OnActivatedArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState, val playerIn: EntityPlayer?,
-                           val hand: EnumHand, val heldItem: ItemStack?, val side: EnumFacing, val hit: IVector3)
+data class OnActivatedArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState, val playerIn: EntityPlayer,
+                           val hand: EnumHand, val heldItem: ItemStack, val side: EnumFacing, val hit: IVector3)
 
 
 

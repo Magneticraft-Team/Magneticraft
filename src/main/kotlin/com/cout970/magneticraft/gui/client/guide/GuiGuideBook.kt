@@ -38,7 +38,7 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         drawBook()
 
-        val worldTime = mc.theWorld?.totalWorldTime?.toDouble() ?: 0.0
+        val worldTime = mc.world.totalWorldTime.toDouble()
         val totalTime = worldTime + partialTicks
 
         val mouse = Vec2d(mouseX, mouseY)

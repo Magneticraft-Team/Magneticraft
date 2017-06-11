@@ -11,18 +11,20 @@ import net.minecraftforge.items.IItemHandlerModifiable
 
 fun Item.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
 
-fun ItemStack.consumeItem(amount: Int = 1): ItemStack? {
-    if (stackSize > amount) {
-        stackSize -= amount
+fun ItemStack.consumeItem(amount: Int = 1): ItemStack {
+    if (count > amount) {
+        count -= amount
         return this
     } else {
         return item.getContainerItem(this)
     }
 }
 
-operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack?): Unit {
+operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack): Unit {
     setStackInSlot(slot, stack)
 }
 operator fun IItemHandler.get(slot: Int): ItemStack? {
     return getStackInSlot(slot)
 }
+
+val ItemStack.isNotEmpty get() = !isEmpty

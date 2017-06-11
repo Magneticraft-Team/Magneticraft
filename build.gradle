@@ -1,26 +1,13 @@
 buildscript {
-    ext.kotlin_version = '1.1.0'
     repositories {
         jcenter()
-
-        maven {
-            name = 'forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        mavenCentral()
+        maven { name = 'forge'; url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.6'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-}
-
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'kotlin'
 
@@ -28,30 +15,31 @@ archivesBaseName = name
 version project.version
 group project.groupId
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
-    version = '1.10.2-12.18.3.2185'
-    runDir = 'run'
-    useDepAts = true
-
-    replaceIn 'src/main/kotlin/com/cout970/magneticraft/Metadata.kt'
+    version = "1.12-14.21.0.2321"
+    runDir = "run"
+    
+	replaceIn 'src/main/kotlin/com/cout970/magneticraft/Metadata.kt'
     replace '@VERSION@', project.version
-
-    mappings = 'snapshot_20161111'
-    makeObfSourceJar = false
+	
+    mappings = "snapshot_20161220"
 }
 
 processResources {
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', project.minecraft.version
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+                
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
+	
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
@@ -59,11 +47,6 @@ processResources {
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
-}
-
-configurations {
-    shade
-    compile.extendsFrom shade
 }
 
 repositories {
@@ -97,73 +80,6 @@ repositories {
 }
 
 dependencies {
-    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile "mezz.jei:jei_$mc_version:$jei_version"
-    shade files("./lib/dummy-Forgelin-1.4.0.jar")
-    compile "net.darkhax.tesla:Tesla:$tesla_version"
 }
-
-task devJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'dev'
-}
-
-sourceJar {
-    classifier = 'src'
-}
-
-jar {
-    configurations.shade.each { dep ->
-        from(project.zipTree(dep)) {
-            exclude 'META-INF', 'META-INF/**'
-        }
-    }
-}
-
-shadowJar {
-    relocate 'kotlin', 'com.cout970.magneticraft.internal.shade.kotlin'
-    relocate 'org.jetbrains.annotations', 'com.cout970.magneticraft.internal.shade.annotations'
-    relocate 'com.cout970.loader', 'com.cout970.magneticraft.internal.shade.modellib'
-}
-
-reobf {
-    shadowJar { mappingType }
-}
-
-tasks.build.dependsOn reobfShadowJar
-
-artifacts {
-    archives shadowJar
-    archives devJar
-    archives sourceJar
-}
-
-curseforge {
-    apiKey = project.hasProperty('curseForgeApiKey') ? project.curseForgeApiKey : ''
-
-    project {
-        id = '224808'
-        mainArtifact(jar) {
-            displayName = 'Magneticraft ' + version
-        }
-        releaseType = 'release'
-        changelog = file('./changelogs/' + version + '.txt')
-        if (!changelog.exists()) {
-            changelog = 'No changelog provided'
-        }
-
-        if (version.contains('beta')) {
-            releaseType = 'beta'
-        }
-
-        if (version.contains('alpha')) {
-            releaseType = 'alpha'
-        }
-    }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.2.1'
-}
-

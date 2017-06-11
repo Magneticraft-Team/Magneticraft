@@ -27,7 +27,7 @@ data class GrinderRecipe(
 
     override fun getDuration(): Float = ticks
 
-    override fun matches(input: ItemStack?): Boolean {
+    override fun matches(input: ItemStack): Boolean {
         if (ApiUtils.equalsIgnoreSize(input, this.input)) return true
         if (oreDict) {
             val ids = OreDictionary.getOreIDs(this.input)

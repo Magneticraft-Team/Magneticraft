@@ -9,9 +9,9 @@ import net.minecraft.util.text.TextFormatting
  */
 
 fun EntityPlayer.sendMessage(str: String, vararg args: Any) {
-    addChatComponentMessage(TextComponentTranslation(str, *args))
+    sendStatusMessage(TextComponentTranslation(str, *args), true)
 }
 
 fun EntityPlayer.sendMessage(str: String, vararg args: Any, color: TextFormatting) {
-    addChatComponentMessage(TextComponentTranslation(str, *args).apply { style.color = color })
+    sendStatusMessage(TextComponentTranslation(str, *args).apply { style.color = color }, true)
 }

@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.world
 
 import net.minecraft.world.World
-import net.minecraft.world.chunk.IChunkGenerator
 import net.minecraft.world.chunk.IChunkProvider
+import net.minecraft.world.gen.IChunkGenerator
 import net.minecraftforge.fml.common.IWorldGenerator
 import java.util.*
 
@@ -22,8 +22,7 @@ object WorldGenerator : IWorldGenerator {
 //        generators.add(GaussianOreGenerator(BlockLimestone.defaultState.withProperty(BlockLimestone.LIMESTONE_STATES, BlockLimestone.LimestoneStates.NORMAL), Config.limestone))
     }
 
-    override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?, chunkProvider: IChunkProvider?) {
-        if (world == null || random == null) return
+    override fun generate(random: Random, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator, chunkProvider: IChunkProvider) {
         generators.forEach {
             it.generate(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider)
         }

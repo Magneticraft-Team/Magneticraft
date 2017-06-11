@@ -19,7 +19,7 @@ import java.lang.reflect.Type
 object JsonSerializer {
 
     val GSON = GsonBuilder().setPrettyPrinting()
-            .addSerializationExclusionStrategy(Estrategy)
+            .addSerializationExclusionStrategy(Strategy)
             .registerTypeAdapter(Vec2d::class.java, Vector2Serializer)
             .registerTypeAdapter(ResourceLocation::class.java, ResourceLocationSerializer)
             .registerTypeAdapter(PageComponent::class.java, PageComponentSerializer)
@@ -46,7 +46,7 @@ object JsonSerializer {
 @kotlin.annotation.Target(AnnotationTarget.FIELD)
 annotation class JsonIgnore
 
-object Estrategy : ExclusionStrategy {
+object Strategy : ExclusionStrategy {
 
     override fun shouldSkipClass(clazz: Class<*>?): Boolean = false
 
@@ -103,7 +103,7 @@ object ItemStackSerializer : JsonDeserializer<ItemStack>, com.google.gson.JsonSe
 
     override fun serialize(src: ItemStack, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val name = src.item.registryName
-        val amount = src.stackSize
+        val amount = src.count
         val damage = src.itemDamage
         val nbt = src.tagCompound
 

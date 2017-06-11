@@ -2,7 +2,7 @@ package com.cout970.magneticraft.misc
 
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Items
-import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 
 /**
  * Created by cout970 on 13/05/2016.
@@ -10,5 +10,5 @@ import net.minecraft.item.Item
  */
 object CreativeTabMg : CreativeTabs("magneticraft") {
 
-    override fun getTabIconItem(): Item? = Items.BOOK
+    override fun getTabIconItem(): ItemStack = ItemStack(Items.BOOK)
 }
