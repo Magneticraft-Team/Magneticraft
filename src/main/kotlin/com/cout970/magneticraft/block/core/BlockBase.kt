@@ -1,0 +1,93 @@
+package com.cout970.magneticraft.block.core
+
+import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.IVector3
+import com.cout970.magneticraft.util.vector.vec3Of
+import net.minecraft.block.Block
+import net.minecraft.block.material.Material
+import net.minecraft.block.state.BlockStateContainer
+import net.minecraft.block.state.IBlockState
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.statemap.IStateMapper
+import net.minecraft.client.renderer.block.statemap.StateMapperBase
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumHand
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
+import net.minecraft.world.World
+
+@Suppress("OverridingDeprecatedMember")
+class BlockBase(material: Material) : Block(material) {
+
+    companion object {
+        // Because mojang is stupid and createBlockState is called BEFORE the constructor
+        var states_: List<IStatesEnum>? = null
+    }
+
+    val states: List<IStatesEnum> = states_!!
+
+    var aabb: ((BoundingBoxArgs) -> AABB)? = null
+    var onActivated: ((OnActivatedArgs) -> Boolean)? = null
+    var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
+
+    // itemblock stuff
+    val inventoryVariants: Map<Int, String> = run {
+        val map = mutableMapOf<Int, String>()
+        states.filter { it.isVisible }.forEach { value ->
+            map += value.ordinal to value.stateName
+        }
+        map
+    }
+
+    fun getItemName(stack: ItemStack?) = "${unlocalizedName}_${states[stack!!.metadata].stateName}"
+
+    // metadata and block state stuff
+    override fun getMetaFromState(state: IBlockState): Int = states.find {
+        it.getBlockState(this) == state
+    }?.ordinal ?: 0
+
+    override fun getStateFromMeta(meta: Int): IBlockState = states[meta].getBlockState(this)
+
+    override fun createBlockState(): BlockStateContainer {
+        return BlockStateContainer(this, *states_!![0].properties.toTypedArray())
+    }
+
+    // event stuff
+    override fun getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AABB {
+        return aabb?.invoke(BoundingBoxArgs(state, source, pos)) ?: FULL_BLOCK_AABB
+    }
+
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float,
+                                  hitZ: Float): Boolean {
+        val heldItem = playerIn.getHeldItem(hand)
+
+        return onActivated?.invoke(
+                OnActivatedArgs(worldIn, pos, state, playerIn, hand, heldItem, side,
+                        vec3Of(hitX, hitY, hitZ)))
+               ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ)
+    }
+
+    override fun damageDropped(state: IBlockState): Int {
+        return getMetaFromState(state)
+    }
+
+    override fun toString(): String {
+        return "BlockBase($registryName)"
+    }
+
+    fun getCustomStateMapper(): IStateMapper? = object : StateMapperBase() {
+        override fun getModelResourceLocation(state: IBlockState): ModelResourceLocation {
+            stateMapper?.let { return it.invoke(state) }
+            val variant = states.find { it.getBlockState(this@BlockBase) == state}?.stateName ?: "normal"
+            return ModelResourceLocation(registryName, variant)
+        }
+    }
+}
+
+data class BoundingBoxArgs(val state: IBlockState, val source: IBlockAccess, val pos: BlockPos)
+
+data class OnActivatedArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState, val playerIn: EntityPlayer,
+                           val hand: EnumHand, val heldItem: ItemStack, val side: EnumFacing, val hit: IVector3)

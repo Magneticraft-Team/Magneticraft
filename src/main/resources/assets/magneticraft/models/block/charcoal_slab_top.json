@@ -1,8 +1,0 @@
-{
-	"parent": "block/upper_slab",
-	"textures": {
-		"bottom": "magneticraft:blocks/block_coal_coke",
-		"top": "magneticraft:blocks/block_coal_coke",
-		"side": "magneticraft:blocks/block_coal_coke"
-	}
-}

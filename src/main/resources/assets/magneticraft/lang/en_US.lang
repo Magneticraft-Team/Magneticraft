@@ -1,3 +1,4 @@
+itemGroup.magneticraft=Magneticraft
 item.magneticraft.guide_book.name=Magneticraft Instruction Manual
 item.magneticraft.iron_hammer.name=Iron Hammer
 item.magneticraft.stone_hammer.name=Stone Hammer
@@ -70,10 +71,10 @@ magneticraft.guide.link.text=%s, index %s
 tile.magneticraft.charcoal_slab.name=Charcoal Slab
 tile.magneticraft.block_coal_coke.name=Block of Coal Coke
 
-tile.magneticraft.ore_block_copper.name=Chalcopyrite Ore
-tile.magneticraft.ore_block_lead.name=Galena Ore
-tile.magneticraft.ore_block_cobalt.name=Cobaltite Ore
-tile.magneticraft.ore_block_tungsten.name=Wolframite Ore
+tile.magneticraft.ores_copper.name=Chalcopyrite Ore
+tile.magneticraft.ores_lead.name=Galena Ore
+tile.magneticraft.ores_cobalt.name=Cobaltite Ore
+tile.magneticraft.ores_tungsten.name=Wolframite Ore
 
 tile.magneticraft.crushing_table.name=Crushing Table
 tile.magneticraft.table_sieve.name=Table Sieve
@@ -86,7 +87,8 @@ tile.magneticraft.limestone_cobble.name=Limestone Cobble
 tile.magneticraft.burnt_limestone_normal.name=Burnt Limestone
 tile.magneticraft.burnt_limestone_brick.name=Burnt Limestone Brick
 tile.magneticraft.burnt_limestone_cobble.name=Burnt Limestone Cobble
-tile.magneticraft.tile_limestone.name=Limestone Tiles
+tile.magneticraft.tile_limestone_normal.name=Limestone Tiles
+tile.magneticraft.tile_limestone_inverted.name=Inverted Limestone Tiles
 
 tile.magneticraft.glazed_brick.name=Glazed Brick
 tile.magneticraft.fluxed_gravel.name=Fluxed Gravel

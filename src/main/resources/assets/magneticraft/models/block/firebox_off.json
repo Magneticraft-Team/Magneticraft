@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "magneticraft:blocks/firebox",
-    "front": "magneticraft:blocks/firebox_front",
-    "side": "magneticraft:blocks/firebox"
-  }
-}

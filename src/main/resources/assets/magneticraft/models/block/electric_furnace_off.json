@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "magneticraft:blocks/electric_furnace",
-        "front": "magneticraft:blocks/electric_furnace_front",
-        "side": "magneticraft:blocks/electric_furnace"
-    }
-}

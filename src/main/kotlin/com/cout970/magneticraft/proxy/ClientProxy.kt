@@ -2,8 +2,12 @@ package com.cout970.magneticraft.proxy
 
 
 import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.block.core.BlockBase
 import com.cout970.magneticraft.gui.client.TooltipHandler
+import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.registerSounds
+import com.cout970.magneticraft.util.toModel
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.obj.OBJLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.relauncher.Side
@@ -24,6 +28,22 @@ class ClientProxy : CommonProxy() {
 
         //Sounds
         registerSounds()
+
+        //Item renders
+//        items.forEach { it.registerInvRender() }
+        //ItemBlock renders
+        blocks.forEach { (block, itemBlock) ->
+            (block as? BlockBase)?.let {
+                it.inventoryVariants.forEach {
+                    ModelLoader.setCustomModelResourceLocation(itemBlock, it.key,
+                            itemBlock.registryName!!.toModel(it.value))
+                }
+                val mapper = it.getCustomStateMapper()
+                if (mapper != null) {
+                    ModelLoader.setCustomStateMapper(block, mapper)
+                }
+            }
+        }
 
         //Model loaders
         OBJLoader.INSTANCE.addDomain(MOD_ID)
@@ -48,7 +68,6 @@ class ClientProxy : CommonProxy() {
 
         MinecraftForge.EVENT_BUS.register(TooltipHandler())
     }
-
 
 
     override fun init() {

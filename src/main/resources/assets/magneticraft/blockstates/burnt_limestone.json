@@ -1,13 +1,23 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "cube_all"
+	},
 	"variants": {
-		"type=normal": {
-			"model": "magneticraft:burnt_limestone"
-		},
-		"type=brick": {
-			"model": "magneticraft:burnt_limestone"
-		},
-		"type=cobble": {
-			"model": "magneticraft:burnt_limestone"
-		}
+		"normal": [{
+			"textures": {
+				"all": "magneticraft:blocks/burnt_limestone/normal"
+			}
+		}],
+		"brick": [{
+			"textures": {
+				"all": "magneticraft:blocks/burnt_limestone/brick"
+			}
+		}],
+		"cobble": [{
+			"textures": {
+				"all": "magneticraft:blocks/burnt_limestone/cobble"
+			}
+		}]
 	}
 }
