@@ -26,7 +26,10 @@ minecraft {
     
 	replaceIn 'src/main/kotlin/com/cout970/magneticraft/Metadata.kt'
     replace '@VERSION@', project.version
-	
+
+	replaceIn 'src/main/resources/mcmod.info'
+    replace '@VERSION@', project.version
+
     mappings = "snapshot_20161220"
 }
 
