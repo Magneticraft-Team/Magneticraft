@@ -1,15 +1,6 @@
 package com.cout970.magneticraft.config
 
-import com.cout970.magneticraft.block.decoration.BlockWoodChip
-import com.cout970.magneticraft.block.fuel.BlockCoke
-import com.cout970.magneticraft.item.ItemCoke
-import com.cout970.magneticraft.item.ItemCrushedCoal
-import com.cout970.magneticraft.item.ItemPebblesCoal
-import com.cout970.magneticraft.item.ItemWoodChip
 import com.cout970.magneticraft.util.toKelvinFromCelsius
-import net.minecraft.init.Blocks
-import net.minecraft.init.Items
-import net.minecraft.item.ItemStack
 
 /**
  * Created by cout970 on 16/05/2016.
@@ -106,21 +97,6 @@ object Config {
 
     @ConfigValue(category = CATEGORY_FUEL, comment = "Default machine safe temperature in Kelvin")
     var defaultMachineSafeTemp: Double = 50.0.toKelvinFromCelsius()
-
-    @ConfigValue(category = CATEGORY_FUEL, comment = "List of fuels and associated maximum temperatures " +
-                                                     "which have higher maximum temperatures than the default.")
-    var fuelTemps: FuelConfig = FuelConfig(mapOf(
-            ItemStack(BlockWoodChip).item to 450.0.toKelvinFromCelsius(),
-            ItemWoodChip to 450.0.toKelvinFromCelsius(),
-            Items.COAL to 500.0.toKelvinFromCelsius(),
-            ItemStack(Blocks.COAL_BLOCK).item to 500.0.toKelvinFromCelsius(),
-            ItemCrushedCoal to 550.0.toKelvinFromCelsius(),
-            ItemPebblesCoal to 550.0.toKelvinFromCelsius(),
-            ItemCoke to 600.0.toKelvinFromCelsius(),
-            ItemStack(BlockCoke).item to 600.0.toKelvinFromCelsius(),
-            Items.LAVA_BUCKET to 800.0.toKelvinFromCelsius(),
-            Items.BLAZE_ROD to 1800.0.toKelvinFromCelsius()
-    ))
 
     @ConfigValue(category = CATEGORY_HEAT, comment = "Firebox Production")
     var fireboxMaxProduction = 40.0

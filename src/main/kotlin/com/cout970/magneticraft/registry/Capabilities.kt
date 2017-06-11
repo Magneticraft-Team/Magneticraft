@@ -7,7 +7,6 @@ import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
 import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
-import com.cout970.magneticraft.item.ItemFloppyDisk
 import net.darkhax.tesla.api.ITeslaConsumer
 import net.darkhax.tesla.api.ITeslaHolder
 import net.darkhax.tesla.api.ITeslaProducer
@@ -80,9 +79,9 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IEnergyProviderItem::class.java, EmptyStorage(), { DefaultItemEnergyProvider() })
     CapabilityManager.INSTANCE.register(IEnergyStorageItem::class.java, EmptyStorage(), { DefaultItemEnergyStorage() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
-    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
-        ItemFloppyDisk.FloppyDisk(ItemStack(ItemFloppyDisk, 1, 0, ItemFloppyDisk.createNBT("default", 128, true, true)))
-    })
+//    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
+//        ItemFloppyDisk.FloppyDisk(ItemStack(ItemFloppyDisk, 1, 0, ItemFloppyDisk.createNBT("default", 128, true, true)))
+//    })
 }
 
 /**

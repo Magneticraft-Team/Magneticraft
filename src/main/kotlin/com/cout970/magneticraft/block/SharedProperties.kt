@@ -2,7 +2,6 @@ package com.cout970.magneticraft.block
 
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.properties.PropertyDirection
-import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.util.EnumFacing
 
 /**
@@ -21,5 +20,4 @@ val PROPERTY_DIRECTION: PropertyDirection = PropertyDirection.create("direction"
 val PROPERTY_CENTER: PropertyBool = PropertyBool.create("center")
 val PROPERTY_ACTIVE: PropertyBool = PropertyBool.create("active")
 val PROPERTY_OPEN: PropertyBool = PropertyBool.create("open")
-val ELECTRIC_POLE_PLACE: PropertyEnum<BlockElectricPoleBase.ElectricPoleStates> = PropertyEnum.create("place",
-        BlockElectricPoleBase.ElectricPoleStates::class.java)
+//val ELECTRIC_POLE_PLACE: PropertyEnum<BlockElectricPoleBase.ElectricPoleStates> = PropertyEnum.create("place",BlockElectricPoleBase.ElectricPoleStates::class.java)

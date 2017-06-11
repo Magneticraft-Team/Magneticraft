@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.util.vector
 
-import com.cout970.loader.impl.util.rotateX
 import com.cout970.magneticraft.util.toRadians
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumFacing.*
@@ -15,9 +14,9 @@ fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
     val rel = point - origin
     val rot = when (this) {
         DOWN -> return BlockPos(
-                origin + BlockPos(Vec3d(rel).rotateX(-90.0)))
+                origin + BlockPos(Vec3d(rel).rotatePitch(-90.0f)))
         UP -> return BlockPos(
-                origin + BlockPos(Vec3d(rel).rotateX(90.0)))
+                origin + BlockPos(Vec3d(rel).rotatePitch(90.0f)))
         NORTH -> return point
         SOUTH -> 180.0f
         WEST -> 90.0f
@@ -32,8 +31,8 @@ fun EnumFacing.rotatePoint(origin: Vec3d,
                            point: Vec3d): Vec3d {
     val rel = point - origin
     val rot = when (this) {
-        DOWN -> return origin + rel.rotateX(-90.0)
-        UP -> return origin + rel.rotateX(90.0)
+        DOWN -> return origin + rel.rotatePitch(-90.0f)
+        UP -> return origin + rel.rotatePitch(90.0f)
         NORTH -> return point
         SOUTH -> 180.0f
         WEST -> 90.0f

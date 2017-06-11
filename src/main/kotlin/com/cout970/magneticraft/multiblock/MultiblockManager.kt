@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.multiblock
 
-import com.cout970.magneticraft.multiblock.impl.*
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.vector.rotatePoint
 import net.minecraft.util.math.BlockPos
@@ -24,11 +23,11 @@ object MultiblockManager {
     fun getMultiblock(name: String) = multiblocks[name]
 
     fun registerDefaults() {
-        registerMultiblock(MultiblockHydraulicPress)
-        registerMultiblock(MultiblockSolarPanel)
-        registerMultiblock(MultiblockKiln)
-        registerMultiblock(MultiblockGrinder)
-        registerMultiblock(MultiblockSifter)
+//        registerMultiblock(MultiblockHydraulicPress)
+//        registerMultiblock(MultiblockSolarPanel)
+//        registerMultiblock(MultiblockKiln)
+//        registerMultiblock(MultiblockGrinder)
+//        registerMultiblock(MultiblockSifter)
     }
 
     /**

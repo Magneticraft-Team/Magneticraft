@@ -15,6 +15,7 @@ out*
 .idea
 build
 .gradle
+ingore
 #
 
 # Mobile Tools for Java (J2ME)

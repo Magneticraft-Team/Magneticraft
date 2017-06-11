@@ -2,10 +2,7 @@
 
 package com.cout970.magneticraft.util
 
-import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.misc.render.CacheNode
 import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -103,7 +100,3 @@ fun testBiomeHeat(worldIn: World, pos: BlockPos): Double {
     val correction = if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f
     return (biome.getFloatTemperature(pos) - correction).toKelvinFromMinecraftUnits()
 }
-
-private fun lookupTemp(stack: ItemStack): Double = Config.fuelTemps.map[stack.item] ?: Config.defaultMaxTemp
-
-class FuelCache : CacheNode<ItemStack, Double>(ItemStack(Blocks.AIR), ::lookupTemp, ItemStack::isItemEqual)

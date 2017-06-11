@@ -100,7 +100,7 @@ dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "mezz.jei:jei_$mc_version:$jei_version"
-    shade files("./lib/ModelLibrary-${model_lib_version}.jar", "./lib/librarianlib-${lib_lib_version}.jar", "./lib/dummy-Forgelin-1.4.0.jar")
+    shade files("./lib/dummy-Forgelin-1.4.0.jar")
     compile "net.darkhax.tesla:Tesla:$tesla_version"
 }
 
