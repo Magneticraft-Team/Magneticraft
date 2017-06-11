@@ -1,12 +1,25 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.item.Metals
 import net.minecraft.item.Item
+import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
  * Created by cout970 on 2017/03/26.
  */
 
-fun initItems() = listOf<Item>(
+var items: List<Item> = emptyList()
+    private set
+
+fun initItems() {
+    val items_ = mutableListOf<Item>()
+
+    items_ += Metals.initItems()
+
+    items_.forEach { GameRegistry.register(it) }
+    items = items_
+}
+//listOf<Item>(
 //        ItemGuideBook,
 //        ItemIronHammer,
 //        ItemStoneHammer,
@@ -30,4 +43,4 @@ fun initItems() = listOf<Item>(
 //        ItemBattery,
 //        ItemFloppyDisk,
 //        ItemCoke
-)
+//)

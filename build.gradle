@@ -85,4 +85,5 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+	compile "mezz.jei:jei_1.12:4.6.0.60"
 }

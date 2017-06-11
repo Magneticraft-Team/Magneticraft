@@ -9,7 +9,7 @@ import net.minecraft.util.NonNullList
 /**
  * Created by cout970 on 2017/06/11.
  */
-class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase){
+class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
 
     init {
         registryName = blockBase.registryName
@@ -21,12 +21,14 @@ class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase){
     }
 
     override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
-        blockBase.inventoryVariants.forEach { meta, _ -> tab.add(ItemStack(this, 1, meta)) }
+        if (itemIn == this.creativeTab) {
+            blockBase.inventoryVariants.forEach { meta, _ -> tab.add(ItemStack(this, 1, meta)) }
+        }
     }
 
     override fun getMetadata(damage: Int): Int = damage
 }
 
-fun itemBlockListOf(vararg blocks: BlockBase): List<Pair<BlockBase, ItemBlockBase>>{
+fun itemBlockListOf(vararg blocks: BlockBase): List<Pair<BlockBase, ItemBlockBase>> {
     return blocks.map { it to ItemBlockBase(it) }
 }

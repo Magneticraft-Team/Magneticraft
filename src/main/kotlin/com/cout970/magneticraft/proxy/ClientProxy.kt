@@ -4,7 +4,9 @@ package com.cout970.magneticraft.proxy
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.block.core.BlockBase
 import com.cout970.magneticraft.gui.client.TooltipHandler
+import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.registry.blocks
+import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerSounds
 import com.cout970.magneticraft.util.toModel
 import net.minecraftforge.client.model.ModelLoader
@@ -30,7 +32,15 @@ class ClientProxy : CommonProxy() {
         registerSounds()
 
         //Item renders
-//        items.forEach { it.registerInvRender() }
+        items.forEach { item ->
+            (item as? ItemBase)?.let { item ->
+                item.variants.forEach { variant ->
+                    ModelLoader.setCustomModelResourceLocation(item, variant.key,
+                            item.registryName!!.toModel(variant.value))
+                }
+            }
+        }
+
         //ItemBlock renders
         blocks.forEach { (block, itemBlock) ->
             (block as? BlockBase)?.let {
