@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.api.energy;
 
+import com.cout970.magneticraft.api.core.INode;
+
 /**
  * Created by cout970 on 16/06/2016.
  */

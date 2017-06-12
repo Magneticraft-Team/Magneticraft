@@ -75,6 +75,7 @@ tile.magneticraft.ores_lead.name=Galena Ore
 tile.magneticraft.ores_cobalt.name=Cobaltite Ore
 tile.magneticraft.ores_tungsten.name=Wolframite Ore
 
+tile.magneticraft.box_normal.name=Wooden Box
 #tile.magneticraft.crushing_table.name=Crushing Table
 #tile.magneticraft.table_sieve.name=Table Sieve
 #tile.magneticraft.feeding_trough.name=Wooden Feeding Trough

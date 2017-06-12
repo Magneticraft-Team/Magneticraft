@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.api.internal.energy
 
+import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricNode
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
@@ -13,13 +14,16 @@ open class ElectricNode(
         private val worldGetter: () -> World,
         private val posGetter: () -> BlockPos,
         private val resistance: Double = 0.001,
-        private val capacity: Double = 1.0
+        private val capacity: Double = 1.0,
+        private val name: String = "electric_node_1"
 ) : IElectricNode {
 
     private var voltage = 0.0
     private var amperage = 0.0
     var amperageCount = 0.0
     var lastTick = 0L
+
+    override fun getId(): NodeID = NodeID(name, pos, world.provider.dimension)
 
     override fun getAmperage(): Double {
         updateAmperage()
@@ -89,7 +93,7 @@ open class ElectricNode(
     }
 
     override fun toString(): String {
-        return "ElectricNode(world=${worldGetter.invoke()}, pos=${posGetter.invoke()}, resistance=$resistance, capacity=$capacity, voltage=$voltage, amperage=$amperage"
+        return "ElectricNode(id=$id, resistance=$resistance, capacity=$capacity, voltage=$voltage, amperage=$amperage"
     }
 
     override fun equals(other: Any?): Boolean {

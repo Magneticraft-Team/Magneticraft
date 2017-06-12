@@ -1,7 +1,9 @@
-package com.cout970.magneticraft.api.energy;
+package com.cout970.magneticraft.api.core;
 
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -14,6 +16,16 @@ public interface INodeHandler {
      * @return all the nodes in this handler
      */
     List<INode> getNodes();
+
+    /**
+     * Gets a specific node from the handler
+     * Will return null if the node was not found
+     *
+     * @param id of the node
+     * @return the selected node
+     */
+    @Nullable
+    INode getNode(@Nonnull NodeID id);
 
     /**
      * The position in world of this handler

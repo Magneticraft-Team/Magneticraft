@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.api.heat;
 
-import com.cout970.magneticraft.api.energy.INode;
+import com.cout970.magneticraft.api.core.INode;
 
 /**
  * Created by Yurgen on 19/10/2016.

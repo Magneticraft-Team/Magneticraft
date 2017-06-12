@@ -23,8 +23,27 @@ fun ItemStack.consumeItem(amount: Int = 1): ItemStack {
 operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack): Unit {
     setStackInSlot(slot, stack)
 }
-operator fun IItemHandler.get(slot: Int): ItemStack? {
+
+operator fun IItemHandler.get(slot: Int): ItemStack {
     return getStackInSlot(slot)
+}
+
+@Suppress("LoopToCallChain")
+inline fun IItemHandler.forEach(func: (ItemStack) -> Unit) {
+    for(index in 0 until slots){
+        val stack = getStackInSlot(index)
+        if(stack.isNotEmpty){
+            func(stack)
+        }
+    }
+}
+inline fun IItemHandler.forEachIndexed(func: (Int, ItemStack) -> Unit) {
+    for(index in 0 until slots){
+        val stack = getStackInSlot(index)
+        if(stack.isNotEmpty){
+            func(index, stack)
+        }
+    }
 }
 
 val ItemStack.isNotEmpty get() = !isEmpty

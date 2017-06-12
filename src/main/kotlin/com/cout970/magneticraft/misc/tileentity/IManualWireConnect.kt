@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.misc.tileentity
 
-import com.cout970.magneticraft.api.energy.INodeHandler
+import com.cout970.magneticraft.api.core.INodeHandler
 import net.minecraft.util.EnumFacing
 
 /**

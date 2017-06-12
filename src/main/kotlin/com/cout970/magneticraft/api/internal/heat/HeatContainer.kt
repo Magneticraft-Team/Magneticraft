@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.api.internal.heat
 
+import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.util.DEFAULT_CONDUCTIVITY
 import com.cout970.magneticraft.util.add
@@ -21,6 +22,8 @@ open class HeatContainer(
         private val maxHeat: Double = 100.0,
         private var heat: Double = 0.0
 ) : IHeatNode {
+
+    override fun getId(): NodeID = NodeID("heat", pos, world.provider.dimension)
 
     override fun getHeat(): Double = heat
     override fun getMaxHeat(): Double = maxHeat

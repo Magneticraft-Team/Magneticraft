@@ -1,7 +1,13 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.computer.IFloppyDisk
-import com.cout970.magneticraft.api.energy.*
+import com.cout970.magneticraft.api.core.INode
+import com.cout970.magneticraft.api.core.INodeHandler
+import com.cout970.magneticraft.api.core.NodeID
+import com.cout970.magneticraft.api.energy.IElectricConnection
+import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.energy.IElectricNodeHandler
+import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
 import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
 import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
@@ -121,6 +127,7 @@ class EmptyStorage<T> : Capability.IStorage<T> {
  */
 class DefaultNodeProvider : INodeHandler, IElectricNodeHandler, IHeatNodeHandler {
 
+    override fun getNode(id: NodeID): INode? = null
     override fun getNodes(): List<INode> = listOf()
     override fun getPos(): BlockPos = BlockPos.ORIGIN
     override fun getInputConnections(): MutableList<IElectricConnection> = mutableListOf()

@@ -6,7 +6,9 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
+import net.minecraft.world.World
 
 
 /**
@@ -18,7 +20,12 @@ class BlockBuilder {
         BlockBase.states_ = b
         BlockBase(a)
     }
+    val tileConstructor: (Material, List<IStatesEnum>, (World, IBlockState) -> TileEntity?) -> BlockBase = { a, b, c ->
+        BlockBase.states_ = b
+        BlockTileBase(c, a)
+    }
 
+    var factory: ((World, IBlockState) -> TileEntity?)? = null
     var registryName: ResourceLocation? = null
     var material: Material? = null
     var creativeTab: CreativeTabs? = null
@@ -29,7 +36,7 @@ class BlockBuilder {
     var hardness = 1.5f
     var explosionResistance = 10.0f
 
-    fun withName(name: String): BlockBuilder{
+    fun withName(name: String): BlockBuilder {
         registryName = resource(name)
         return this
     }
@@ -37,7 +44,12 @@ class BlockBuilder {
     fun build(): BlockBase {
         requireNotNull(registryName) { "registryName was null" }
         requireNotNull(material) { "material was null" }
-        val block = constructor(material!!, states ?: listOf(IStatesEnum.default))
+
+        val block = if (factory != null)
+            tileConstructor(material!!, states ?: listOf(IStatesEnum.default), factory!!)
+        else
+            constructor(material!!, states ?: listOf(IStatesEnum.default))
+
         block.apply {
             registryName = this@BlockBuilder.registryName!!
             creativeTab?.let { setCreativeTab(it) }

@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.energy;
+package com.cout970.magneticraft.api.core;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -19,4 +19,9 @@ public interface INode extends INBTSerializable<NBTTagCompound> {
      * @return The position where this node is
      */
     BlockPos getPos();
+
+    /**
+     * Unique identifier of this node
+     */
+    NodeID getId();
 }

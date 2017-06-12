@@ -142,5 +142,4 @@ abstract class TileBase : TileMod(), ITickable {
      * @param side the side that sent the message
      */
     open fun receiveSyncData(data: IBD, side: Side) = Unit
-
 }
