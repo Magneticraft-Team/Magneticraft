@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.gui.client.guide
 
-import com.cout970.magneticraft.gui.client.GuiCommon
+import com.cout970.magneticraft.gui.client.core.GuiCommon
 import com.cout970.magneticraft.guide.BookEntry
 import com.cout970.magneticraft.guide.BookPage.Gui
 import com.cout970.magneticraft.guide.book

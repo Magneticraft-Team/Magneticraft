@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.gui.common
+package com.cout970.magneticraft.gui.common.core
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.inventory.getNonPlayerSlotRanges

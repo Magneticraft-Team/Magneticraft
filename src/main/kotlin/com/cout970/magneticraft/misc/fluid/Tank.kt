@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.misc.fluid
 
-import com.cout970.magneticraft.gui.common.DATA_ID_FLUID_AMOUNT
-import com.cout970.magneticraft.gui.common.DATA_ID_FLUID_NAME
+import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_AMOUNT
+import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_NAME
 import com.cout970.magneticraft.misc.network.IBD
 import net.minecraftforge.fluids.FluidTank
 

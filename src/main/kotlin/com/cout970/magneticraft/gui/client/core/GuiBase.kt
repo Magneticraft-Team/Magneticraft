@@ -1,6 +1,6 @@
-package com.cout970.magneticraft.gui.client
+package com.cout970.magneticraft.gui.client.core
 
-import com.cout970.magneticraft.gui.common.ContainerBase
+import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
 import net.minecraft.client.Minecraft
@@ -41,12 +41,8 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        var block = false
-        for (it in components) {
-            if (it.onMouseClick(Vec2d(mouseX, mouseY), mouseButton)) {
-                block = true
-                break
-            }
+        val block = components.any { it ->
+            it.onMouseClick(Vec2d(mouseX, mouseY), mouseButton)
         }
         if (!block) {
             super.mouseClicked(mouseX, mouseY, mouseButton)
@@ -54,12 +50,8 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
-        var block = false
-        for (it in components) {
-            if (it.onMouseClickMove(Vec2d(mouseX, mouseY), clickedMouseButton, timeSinceLastClick)) {
-                block = true
-                break
-            }
+        val block = components.any { it ->
+            it.onMouseClickMove(Vec2d(mouseX, mouseY), clickedMouseButton, timeSinceLastClick)
         }
         if (!block) {
             super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
@@ -73,13 +65,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     @Throws(IOException::class)
     override fun keyTyped(typedChar: Char, keyCode: Int) {
-        var block = false
-        for (it in components) {
-            if (it.onKeyTyped(typedChar, keyCode)) {
-                block = true
-                break
-            }
-        }
+        val block = components.any { it -> it.onKeyTyped(typedChar, keyCode) }
         if (!block) {
             super.keyTyped(typedChar, keyCode)
         }

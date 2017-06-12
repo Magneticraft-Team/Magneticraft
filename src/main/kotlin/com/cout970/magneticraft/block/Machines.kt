@@ -23,7 +23,10 @@ object Machines : IBlockMaker {
             creativeTab = CreativeTabMg
         }
 
-        box = builder.withName("box").apply { factory = { _, _ -> TileBox() } }.build()
+        box = builder.withName("box").apply {
+            factory = { _, _ -> TileBox() }
+            onActivated = BlockBuilder.openGui
+        }.build()
 
         return itemBlockListOf(box)
     }

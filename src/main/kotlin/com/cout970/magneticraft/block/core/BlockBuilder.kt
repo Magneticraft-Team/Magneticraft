@@ -1,7 +1,12 @@
 package com.cout970.magneticraft.block.core
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.xi
+import com.cout970.magneticraft.util.vector.yi
+import com.cout970.magneticraft.util.vector.zi
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
@@ -15,6 +20,15 @@ import net.minecraft.world.World
  * Created by cout970 on 2017/06/08.
  */
 class BlockBuilder {
+
+    companion object {
+        val openGui: (OnActivatedArgs) -> Boolean = {
+            if (it.worldIn.isServer && !it.playerIn.isSneaking) {
+                it.playerIn.openGui(Magneticraft, -1, it.worldIn, it.pos.xi, it.pos.yi, it.pos.zi)
+                true
+            } else false
+        }
+    }
 
     val constructor: (Material, List<IStatesEnum>) -> BlockBase = { a, b ->
         BlockBase.states_ = b

@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.network
 
-import com.cout970.magneticraft.gui.common.ContainerBase
+import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.network.IBD
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft

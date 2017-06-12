@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.gui.client
+package com.cout970.magneticraft.gui.client.core
 
 /**
  * Created by cout970 on 08/07/2016.

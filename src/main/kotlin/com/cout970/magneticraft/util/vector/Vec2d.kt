@@ -6,6 +6,9 @@ import com.cout970.magneticraft.misc.gui.Box
  * Created by cout970 on 14/05/2016.
  */
 
+fun vec2Of(x: Number, y: Number) = Vec2d(x.toDouble(), y.toDouble())
+
+
 @Suppress("unused")
 data class Vec2d(val x: Double, val y: Double) {
 

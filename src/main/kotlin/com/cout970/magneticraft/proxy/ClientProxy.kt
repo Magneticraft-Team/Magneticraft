@@ -3,7 +3,6 @@ package com.cout970.magneticraft.proxy
 
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.block.core.BlockBase
-import com.cout970.magneticraft.gui.client.TooltipHandler
 import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
@@ -76,7 +75,6 @@ class ClientProxy : CommonProxy() {
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
 
-        MinecraftForge.EVENT_BUS.register(TooltipHandler())
     }
 
 

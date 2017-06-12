@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.gui.client.components
 
-import com.cout970.magneticraft.gui.client.IComponent
-import com.cout970.magneticraft.gui.client.IGui
-import com.cout970.magneticraft.gui.client.isMouseButtonDown
+import com.cout970.magneticraft.gui.client.core.IComponent
+import com.cout970.magneticraft.gui.client.core.IGui
+import com.cout970.magneticraft.gui.client.core.isMouseButtonDown
 import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d

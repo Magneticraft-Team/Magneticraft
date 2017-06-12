@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity.core
 
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
 import com.cout970.magneticraft.util.getList
 import com.cout970.magneticraft.util.getTagCompound
 import com.cout970.magneticraft.util.list
@@ -11,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
@@ -19,15 +17,20 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 2017/06/12.
  */
-abstract class TileBase(modules: List<IModule>) : TileEntity() {
+abstract class TileBase() : TileEntity() {
+
+    private val modules = mutableListOf<IModule>()
     @Suppress("LeakingThis")
     val container = ModuleContainer(this, modules)
 
     private var blockState: IBlockState? = null
     private var lastTime: Long = -1
 
-    init {
-        container.modules.forEach { it.container = container; it.init() }
+    fun initModules(list: List<IModule>){
+        if(modules.isEmpty()) {
+            modules += list
+            container.modules.forEach { it.container = container; it.init() }
+        }
     }
 
     fun getBlockState(): IBlockState {
@@ -121,8 +124,3 @@ abstract class TileBase(modules: List<IModule>) : TileEntity() {
         override fun sendUpdateToNearPlayers() = tile.sendUpdateToNearPlayers()
     }
 }
-
-@Suppress("unused")
-class ExampleTile : TileBase(listOf(ModuleInventory(27))), ITickable
-
-

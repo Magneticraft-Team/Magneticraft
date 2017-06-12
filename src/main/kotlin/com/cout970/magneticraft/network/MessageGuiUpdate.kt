@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.network
 
-import com.cout970.magneticraft.gui.common.ContainerBase
+import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.network.readUUID
 import com.cout970.magneticraft.misc.network.writeUUID

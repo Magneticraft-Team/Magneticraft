@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.gui
 
-import com.cout970.magneticraft.gui.common.ContainerBase
+import com.cout970.magneticraft.gui.client.GuiTileBox
+import com.cout970.magneticraft.gui.common.ContainerBox
+import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.tileentity.TileBox
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -15,6 +18,7 @@ object GuiHandler : IGuiHandler {
         val tile = world.getTileEntity(BlockPos(x, y, z))
         val serverElement = getServerGuiElement(ID, player, world, x, y, z) as ContainerBase
         return when (tile) {
+            is TileBox -> GuiTileBox(serverElement)
 //            is TileIncendiaryGenerator -> GuiIncendiaryGenerator(serverElement)
 //            is TileBattery -> GuiBattery(serverElement)
 //            is TileElectricFurnace -> GuiElectricFurnace(serverElement)
@@ -28,8 +32,10 @@ object GuiHandler : IGuiHandler {
     }
 
     override fun getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
-        val tile = world.getTileEntity(BlockPos(x, y, z))
+        val pos = BlockPos(x, y, z)
+        val tile = world.getTileEntity(pos)
         return when (tile) {
+            is TileBox -> ContainerBox(player, world, pos)
 //            is TileIncendiaryGenerator -> ContainerIncendiaryGenerator(player, world, BlockPos(x, y, z))
 //            is TileBattery -> ContainerBattery(player, world, BlockPos(x, y, z))
 //            is TileElectricFurnace -> ContainerElectricFurnace(player, world, BlockPos(x, y, z))

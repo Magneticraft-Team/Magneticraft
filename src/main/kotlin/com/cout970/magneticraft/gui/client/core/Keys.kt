@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.cout970.magneticraft.gui.client
+package com.cout970.magneticraft.gui.client.core
 
 import net.minecraft.client.Minecraft
 import org.lwjgl.input.Keyboard
