@@ -19,7 +19,7 @@ import net.minecraftforge.items.ItemStackHandler
 open class ModuleInventory(
         size: Int,
         override val name: String = "module_inventory",
-        val capabilityFilter: (IItemHandler) -> IItemHandler = { it },
+        val capabilityFilter: (IItemHandler) -> IItemHandler? = { it },
         val onContentChange: (IItemHandler, Int) -> Unit = { inv, index -> Unit }
 ) : IModule {
 
@@ -38,7 +38,7 @@ open class ModuleInventory(
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
         if (cap == ITEM_HANDLER) {
-            return capabilityFilter(inventory) as T
+            return capabilityFilter(inventory) as? T
         }
         return null
     }

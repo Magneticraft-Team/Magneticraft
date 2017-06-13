@@ -1,0 +1,10 @@
+{
+    "forge_marker": 1,
+	"variants": {
+		"normal": [{
+			"model": "magneticraft:obj/crushing_table.obj",
+            "custom": { "flip-v": true },
+            "transform": "forge:default-block"
+		}]
+	}
+}

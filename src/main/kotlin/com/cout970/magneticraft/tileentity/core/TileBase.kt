@@ -26,8 +26,8 @@ abstract class TileBase() : TileEntity() {
     private var blockState: IBlockState? = null
     private var lastTime: Long = -1
 
-    fun initModules(list: List<IModule>){
-        if(modules.isEmpty()) {
+    fun initModules(list: List<IModule>) {
+        if (modules.isEmpty()) {
             modules += list
             container.modules.forEach { it.container = container; it.init() }
         }
@@ -41,7 +41,7 @@ abstract class TileBase() : TileEntity() {
         return blockState!!
     }
 
-    fun update(){
+    fun update() {
         container.modules.forEach(IModule::update)
     }
 
@@ -50,7 +50,7 @@ abstract class TileBase() : TileEntity() {
         blockState = null
     }
 
-    fun onBreak(){
+    fun onBreak() {
         container.modules.forEach(IModule::onBreak)
     }
 
@@ -108,10 +108,12 @@ abstract class TileBase() : TileEntity() {
     fun sendUpdateToNearPlayers() {
         if (world.isClient) return
         val packet = updatePacket
-        world.playerEntities
-                .map { it as EntityPlayerMP }
-                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
-                .forEach { it.connection.sendPacket(packet) }
+        if (packet != null) {
+            world.playerEntities
+                    .map { it as EntityPlayerMP }
+                    .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
+                    .forEach { it.connection.sendPacket(packet) }
+        }
     }
 
 

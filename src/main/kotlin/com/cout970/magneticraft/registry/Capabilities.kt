@@ -13,6 +13,7 @@ import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
 import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
+import com.cout970.magneticraft.api.tool.IHammer
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -72,6 +73,9 @@ var ITEM_ENERGY_STORAGE: Capability<IEnergyStorageItem>? = null
 @CapabilityInject(IFloppyDisk::class)
 var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
 
+@CapabilityInject(IHammer::class)
+var ITEM_HAMMER: Capability<IHammer>? = null
+
 /**
  * This is called on the server and the client at preInit
  */
@@ -82,6 +86,7 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IEnergyProviderItem::class.java, EmptyStorage(), { DefaultItemEnergyProvider() })
     CapabilityManager.INSTANCE.register(IEnergyStorageItem::class.java, EmptyStorage(), { DefaultItemEnergyStorage() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
+    CapabilityManager.INSTANCE.register(IHammer::class.java, EmptyStorage(), { DefaultHammer() })
 //    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
 //        ItemFloppyDisk.FloppyDisk(ItemStack(ItemFloppyDisk, 1, 0, ItemFloppyDisk.createNBT("default", 128, true, true)))
 //    })
@@ -169,4 +174,10 @@ class DefaultItemEnergyStorage : IEnergyStorageItem {
     override fun getStoredEnergy(): Double = 0.0
 
     override fun getCapacity(): Double = 0.0
+}
+
+class DefaultHammer : IHammer {
+
+    override fun getBreakingSpeed(): Int = 0
+    override fun applyDamage(item: ItemStack, player: EntityPlayer): ItemStack = item
 }

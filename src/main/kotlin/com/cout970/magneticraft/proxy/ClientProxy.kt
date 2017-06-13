@@ -7,10 +7,15 @@ import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerSounds
+import com.cout970.magneticraft.tileentity.TileCrushingTable
+import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.tilerenderer.TileRendererCrushingTable
 import com.cout970.magneticraft.util.toModel
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.obj.OBJLoader
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.relauncher.Side
 
 /**
@@ -58,7 +63,7 @@ class ClientProxy : CommonProxy() {
         OBJLoader.INSTANCE.addDomain(MOD_ID)
 
         //TileEntity renderers
-//        register(TileCrushingTable::class.java, TileRendererCrushingTable)
+        register(TileCrushingTable::class.java, TileRendererCrushingTable)
 //        register(TileFeedingTrough::class.java, TileRendererFeedingTrough)
 //        register(TileTableSieve::class.java, TileRendererTableSieve)
 //        register(TileElectricConnector::class.java, TileRendererElectricConnector)
@@ -96,13 +101,13 @@ class ClientProxy : CommonProxy() {
 //    fun onModelRegistryReload(event: ModelBakeEvent) {
 //        tileRenderers.forEach { it.onModelRegistryReload() }
 //    }
-//
-//    /**
-//     * Binds a TileEntity class with a TileEntityRenderer and
-//     * registers the TileEntityRenderer to update it when ModelBakeEvent is fired
-//     */
-//    private fun <T : TileBase> register(tileEntityClass: Class<T>, specialRenderer: TileEntityRenderer<T>) {
-//        ClientRegistry.bindTileEntitySpecialRenderer(tileEntityClass, specialRenderer)
+
+    /**
+     * Binds a TileEntity class with a TileEntityRenderer and
+     * registers the TileEntityRenderer to update it when ModelBakeEvent is fired
+     */
+    private fun <T : TileBase> register(tileEntityClass: Class<T>, specialRenderer: TileEntitySpecialRenderer<T>) {
+        ClientRegistry.bindTileEntitySpecialRenderer(tileEntityClass, specialRenderer)
 //        tileRenderers.add(specialRenderer)
-//    }
+    }
 }

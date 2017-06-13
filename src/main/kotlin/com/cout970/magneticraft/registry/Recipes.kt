@@ -1,5 +1,10 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.misc.inventory.stack
+import net.minecraft.init.Items
+import net.minecraft.item.ItemStack
+
 
 /**
  * Created by cout970 on 11/06/2016.
@@ -7,13 +12,13 @@ package com.cout970.magneticraft.registry
  * Called by CommonProxy to register all the recipes in the mod
  */
 fun registerRecipes() {
-//    //@formatter:off
-//
-//    //CRUSHING TABLE RECIPES
-//    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
-//    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(size = 8, meta = 15))
+    //@formatter:off
+
+    //CRUSHING TABLE RECIPES
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(size = 8, meta = 15))
 //    addCrushingTableRecipe(Items.SKULL.stack(meta = 1), ItemPebblesCoal.stack(size = 9))
-//    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(size = 4))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(size = 4))
 //    addCrushingTableRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0))
 //    addCrushingTableRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1))
 //    addCrushingTableRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2))
@@ -264,7 +269,7 @@ fun registerRecipes() {
 //    addSifterRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(Items.COAL), 0.1f, ItemStack(DIAMOND), 0.001f, 20f)
 //    addSifterRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Blocks.SAND), 0.1f, ItemStack(Items.FLINT), 0.2f, 20f)
 //
-//    //@formatter:on
+    //@formatter:on
 }
 //
 //private fun addRecipe(result: ItemStack, vararg craft: Any) {
@@ -301,9 +306,9 @@ fun registerRecipes() {
 //    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
 //}
 //
-//private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
-//    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
-//}
+private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
+    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
+}
 //
 //private fun addHeatExchangerRecipe(input: FluidStack, output: FluidStack, heat: Long, minTemp: Double, maxTemp: Double,
 //                                   reverseLow: Boolean, reverseHigh: Boolean) {

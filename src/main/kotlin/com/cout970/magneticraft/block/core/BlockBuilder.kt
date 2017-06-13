@@ -50,6 +50,9 @@ class BlockBuilder {
     var hardness = 1.5f
     var explosionResistance = 10.0f
 
+    var enableOcclusionOptimization = true
+    var translucent = false
+
     fun withName(name: String): BlockBuilder {
         registryName = resource(name)
         return this
@@ -73,6 +76,9 @@ class BlockBuilder {
             unlocalizedName = "${registryName?.resourceDomain}.${registryName?.resourcePath}"
             onActivated = this@BlockBuilder.onActivated
             stateMapper = this@BlockBuilder.stateMapper
+            enableOcclusionOptimization = this@BlockBuilder.enableOcclusionOptimization
+            translucent_ = this@BlockBuilder.translucent
+            setLightOpacity(if (translucent_) 0 else 255)
         }
         return block
     }

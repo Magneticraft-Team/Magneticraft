@@ -36,6 +36,8 @@ open class BlockBase(material: Material) : Block(material) {
     var aabb: ((BoundingBoxArgs) -> AABB)? = null
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
+    var enableOcclusionOptimization = true
+    var translucent_ = false
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -80,7 +82,8 @@ open class BlockBase(material: Material) : Block(material) {
     }
 
     // Called in server and client
-    override fun removedByPlayer(state: IBlockState, world: World, pos: BlockPos, player: EntityPlayer?, willHarvest: Boolean): Boolean {
+    override fun removedByPlayer(state: IBlockState, world: World, pos: BlockPos, player: EntityPlayer?,
+                                 willHarvest: Boolean): Boolean {
         if (world.isClient) {
             world.getTile<TileBase>(pos)?.onBreak()
         }
@@ -105,6 +108,11 @@ open class BlockBase(material: Material) : Block(material) {
             return ModelResourceLocation(registryName, variant)
         }
     }
+
+
+    override fun isFullBlock(state: IBlockState?): Boolean = !translucent_
+    override fun isOpaqueCube(state: IBlockState?) = enableOcclusionOptimization
+    override fun isFullCube(state: IBlockState?) = !translucent_
 }
 
 class BlockTileBase(val factory: (World, IBlockState) -> TileEntity?, material: Material)
