@@ -22,6 +22,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.RayTraceResult
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
@@ -35,13 +36,16 @@ open class BlockBase(material: Material) : Block(material) {
 
     val states: List<IStatesEnum> = states_!!
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
+    var enableOcclusionOptimization = true
+    var translucent_ = false
+    var overrideItemModel = true
 
+    // Methods
     var aabb: ((BoundingBoxArgs) -> AABB)? = null
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
     var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
-    var enableOcclusionOptimization = true
-    var translucent_ = false
+    var pickBlock: ((PickBlockArgs) -> ItemStack)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -52,7 +56,7 @@ open class BlockBase(material: Material) : Block(material) {
         map
     }
 
-    fun getItemName(stack: ItemStack?) = "${unlocalizedName}_${states[stack!!.metadata].stateName}"
+    fun getItemName(stack: ItemStack?) = "${unlocalizedName}_${states.getOrNull(stack!!.metadata)?.stateName}"
 
     // metadata and block state stuff
     override fun getMetaFromState(state: IBlockState): Int = states.find {
@@ -83,6 +87,12 @@ open class BlockBase(material: Material) : Block(material) {
 
     override fun damageDropped(state: IBlockState): Int {
         return getMetaFromState(state)
+    }
+
+    override fun getPickBlock(state: IBlockState, target: RayTraceResult, world: World, pos: BlockPos,
+                              player: EntityPlayer): ItemStack {
+        val default = super.getPickBlock(state, target, world, pos, player)
+        return pickBlock?.invoke(PickBlockArgs(state, target, world, pos, player, default)) ?: default
     }
 
     // Called in server and client
@@ -143,3 +153,6 @@ data class OnActivatedArgs(val worldIn: World, val pos: BlockPos, val state: IBl
 data class OnBlockPlacedArgs(val world: World, val pos: BlockPos, val facing: EnumFacing,
                              val hit: IVector3, val itemMetadata: Int,
                              val placer: EntityLivingBase?, val hand: EnumHand, val defaultValue: IBlockState)
+
+data class PickBlockArgs(val state: IBlockState, val target: RayTraceResult, val world: World, val pos: BlockPos,
+                            val player: EntityPlayer, val default: ItemStack)

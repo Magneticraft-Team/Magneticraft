@@ -1,3 +1,4 @@
 {
-
+    "parent": "block/block",
+    "elements": []
 }

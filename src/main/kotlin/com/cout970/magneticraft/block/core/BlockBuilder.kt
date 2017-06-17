@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
@@ -30,11 +31,11 @@ class BlockBuilder {
         }
     }
 
-    val constructor: (Material, List<IStatesEnum>) -> BlockBase = { a, b ->
+    var constructor: (Material, List<IStatesEnum>) -> BlockBase = { a, b ->
         BlockBase.states_ = b
         BlockBase(a)
     }
-    val tileConstructor: (Material, List<IStatesEnum>, (World, IBlockState) -> TileEntity?) -> BlockBase = { a, b, c ->
+    var tileConstructor: (Material, List<IStatesEnum>, (World, IBlockState) -> TileEntity?) -> BlockBase = { a, b, c ->
         BlockBase.states_ = b
         BlockTileBase(c, a)
     }
@@ -48,10 +49,11 @@ class BlockBuilder {
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
     var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
+    var pickBlock: ((PickBlockArgs) -> ItemStack)? = null
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
-
+    var overrideItemModel = true
     var enableOcclusionOptimization = true
     var translucent = false
 
@@ -83,12 +85,39 @@ class BlockBuilder {
             setLightOpacity(if (translucent_) 0 else 255)
             onBlockPlaced = this@BlockBuilder.onBlockPlaced
             customModels = this@BlockBuilder.customModels
+            pickBlock = this@BlockBuilder.pickBlock
+            overrideItemModel = this@BlockBuilder.overrideItemModel
         }
         return block
     }
 
     fun factoryOf(func: () -> TileEntity): ((World, IBlockState) -> TileEntity?) = { _, _ -> func() }
 
+    fun copy(func: BlockBuilder.() -> Unit): BlockBuilder {
+        val newBuilder = BlockBuilder()
+
+        newBuilder.constructor = constructor
+        newBuilder.tileConstructor = tileConstructor
+        newBuilder.customModels = customModels
+        newBuilder.factory = factory
+        newBuilder.registryName = registryName
+        newBuilder.material = material
+        newBuilder.creativeTab = creativeTab
+        newBuilder.boundingBox = boundingBox
+        newBuilder.onActivated = onActivated
+        newBuilder.stateMapper = stateMapper
+        newBuilder.onBlockPlaced = onBlockPlaced
+        newBuilder.pickBlock = pickBlock
+        newBuilder.states = states
+        newBuilder.hardness = hardness
+        newBuilder.explosionResistance = explosionResistance
+        newBuilder.enableOcclusionOptimization = enableOcclusionOptimization
+        newBuilder.translucent = translucent
+        newBuilder.overrideItemModel = overrideItemModel
+
+        func(newBuilder)
+        return newBuilder
+    }
 }
 
 

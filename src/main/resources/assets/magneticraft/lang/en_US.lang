@@ -96,6 +96,7 @@ tile.magneticraft.tile_limestone_inverted.name=Inverted Limestone Tiles
 #tile.magneticraft.glazed_brick.name=Glazed Brick
 #tile.magneticraft.fluxed_gravel.name=Fluxed Gravel
 
+tile.magneticraft.conveyor_belt_north.name=Conveyor Belt
 #tile.magneticraft.electric_pole.name=Electric Pole
 #tile.magneticraft.electric_connector.name=Electric Connector
 #tile.magneticraft.incendiary_generator.name=Incendiary Generator

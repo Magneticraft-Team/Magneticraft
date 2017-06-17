@@ -14,6 +14,7 @@ import com.cout970.magneticraft.tilerenderer.TileRendererConveyorBelt
 import com.cout970.magneticraft.tilerenderer.TileRendererCrushingTable
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.util.toModel
+import com.cout970.modelloader.api.DefaultBlockDecorator
 import com.cout970.modelloader.api.ModelLoaderApi
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraftforge.client.event.ModelBakeEvent
@@ -53,16 +54,22 @@ class ClientProxy : CommonProxy() {
         //ItemBlock renders
         blocks.forEach { (block, itemBlock) ->
             (block as? BlockBase)?.let {
-                it.inventoryVariants.forEach {
-                    ModelLoader.setCustomModelResourceLocation(itemBlock, it.key,
-                            itemBlock.registryName!!.toModel(it.value))
+                if (it.overrideItemModel) {
+                    it.inventoryVariants.forEach {
+                        ModelLoader.setCustomModelResourceLocation(itemBlock, it.key,
+                                itemBlock.registryName!!.toModel(it.value))
+                    }
+                } else {
+                    ModelLoader.setCustomModelResourceLocation(itemBlock, 0,
+                            itemBlock.registryName!!.toModel("inventory"))
                 }
                 val mapper = it.getCustomStateMapper()
                 if (mapper != null) {
                     ModelLoader.setCustomStateMapper(block, mapper)
                 }
                 it.customModels.forEach { (state, location) ->
-                    ModelLoaderApi.registerModel(ModelResourceLocation(it.registryName, state), location)
+                    ModelLoaderApi.registerModelWithDecorator(ModelResourceLocation(it.registryName, state),
+                            location, DefaultBlockDecorator)
                 }
             }
         }
