@@ -14,11 +14,13 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMapperBase
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
@@ -32,10 +34,12 @@ open class BlockBase(material: Material) : Block(material) {
     }
 
     val states: List<IStatesEnum> = states_!!
+    var customModels: List<Pair<String, ResourceLocation>> = emptyList()
 
     var aabb: ((BoundingBoxArgs) -> AABB)? = null
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
+    var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
     var enableOcclusionOptimization = true
     var translucent_ = false
 
@@ -96,7 +100,6 @@ open class BlockBase(material: Material) : Block(material) {
         super.breakBlock(worldIn, pos, state)
     }
 
-
     override fun toString(): String {
         return "BlockBase($registryName)"
     }
@@ -109,6 +112,18 @@ open class BlockBase(material: Material) : Block(material) {
         }
     }
 
+    override fun getStateForPlacement(world: World, pos: BlockPos, facing: EnumFacing,
+                                      hitX: Float, hitY: Float, hitZ: Float, meta: Int,
+                                      placer: EntityLivingBase?, hand: EnumHand): IBlockState {
+
+        val state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand)
+        onBlockPlaced?.let {
+            return it.invoke(
+                    OnBlockPlacedArgs(world, pos, facing, vec3Of(hitX, hitY, hitZ), meta, placer, hand, defaultState)
+            )
+        }
+        return state
+    }
 
     override fun isFullBlock(state: IBlockState?): Boolean = !translucent_
     override fun isOpaqueCube(state: IBlockState?) = enableOcclusionOptimization
@@ -124,3 +139,7 @@ data class BoundingBoxArgs(val state: IBlockState, val source: IBlockAccess, val
 
 data class OnActivatedArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState, val playerIn: EntityPlayer,
                            val hand: EnumHand, val heldItem: ItemStack, val side: EnumFacing, val hit: IVector3)
+
+data class OnBlockPlacedArgs(val world: World, val pos: BlockPos, val facing: EnumFacing,
+                             val hit: IVector3, val itemMetadata: Int,
+                             val placer: EntityLivingBase?, val hand: EnumHand, val defaultValue: IBlockState)

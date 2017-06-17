@@ -35,6 +35,7 @@ item.magneticraft.heavy_plates_copper.name=Heavy Copper Plate
 item.magneticraft.heavy_plates_lead.name=Heavy Lead Plate
 item.magneticraft.heavy_plates_cobalt.name=Heavy Cobalt Plate
 item.magneticraft.heavy_plates_tungsten.name=Heavy Tungsten Plate
+item.magneticraft.heavy_plates_steel.name=Heavy Steel Plate
 
 item.magneticraft.light_plates_iron.name=Light Iron Plate
 item.magneticraft.light_plates_gold.name=Light Gold Plate
@@ -42,18 +43,19 @@ item.magneticraft.light_plates_copper.name=Light Copper Plate
 item.magneticraft.light_plates_lead.name=Light Lead Plate
 item.magneticraft.light_plates_cobalt.name=Light Cobalt Plate
 item.magneticraft.light_plates_tungsten.name=Light Tungsten Plate
+item.magneticraft.light_plates_steel.name=Light Steel Plate
 
-item.magneticraft.nuggets_iron.name=Iron Nugget
-item.magneticraft.nuggets_gold.name=Gold Nugget
 item.magneticraft.nuggets_copper.name=Copper Nugget
 item.magneticraft.nuggets_lead.name=Lead Nugget
 item.magneticraft.nuggets_cobalt.name=Cobalt Nugget
 item.magneticraft.nuggets_tungsten.name=Tungsten Nugget
+item.magneticraft.nuggets_steel.name=Steel Nugget
 
 item.magneticraft.ingots_copper.name=Copper Ingot
 item.magneticraft.ingots_lead.name=Lead Ingot
 item.magneticraft.ingots_cobalt.name=Cobalt Ingot
 item.magneticraft.ingots_tungsten.name=Tungsten Ingot
+item.magneticraft.ingots_steel.name=Steel Ingot
 
 #item.magneticraft.hand_sieve.name=Hand Sieve
 #item.magneticraft.coil_of_wire.name=Coil of Wire
@@ -132,11 +134,13 @@ tile.magneticraft.tile_limestone_inverted.name=Inverted Limestone Tiles
 #tile.magneticraft.lead_block.name=Lead Block
 #tile.magneticraft.tungsten_block.name=Tungsten Block
 
-#tile.magneticraft.machine_block.name=Machine Block
-#tile.magneticraft.mesh_block.name=Filter Machine Block
-#tile.magneticraft.machine_block_support_column.name=Support Column
-#tile.magneticraft.striped_machine_block.name=Striped Machine Block
-#tile.magneticraft.electrical_machine_block.name=Electrical Machine Block
+tile.magneticraft.multiblock_parts_base.name=Machine Block
+tile.magneticraft.multiblock_parts_mesh.name=Filter Machine Block
+tile.magneticraft.multiblock_parts_electric.name=Electrical Machine Block
+tile.magneticraft.multiblock_parts_striped.name=Striped Machine Block
+tile.magneticraft.multiblock_column_axis_y.name=Support Column
+tile.magneticraft.multiblock_column_axis_x.name=Support Column
+tile.magneticraft.multiblock_column_axis_z.name=Support Column
 
 #tile.magneticraft.block_coal_coke.name=Block of Coal Coke
 #tile.magneticraft.block_wood_chip.name=Block of Wood Chips

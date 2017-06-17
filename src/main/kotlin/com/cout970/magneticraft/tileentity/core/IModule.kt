@@ -1,10 +1,12 @@
 package com.cout970.magneticraft.tileentity.core
 
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.INBTSerializable
+import net.minecraftforge.fml.relauncher.Side
 
 interface IModule : INBTSerializable<NBTTagCompound> {
 
@@ -21,4 +23,6 @@ interface IModule : INBTSerializable<NBTTagCompound> {
 
     override fun deserializeNBT(nbt: NBTTagCompound) = Unit
     override fun serializeNBT(): NBTTagCompound = newNbt {}
+
+    fun receiveSyncData(ibd: IBD, otherSide: Side) = Unit
 }

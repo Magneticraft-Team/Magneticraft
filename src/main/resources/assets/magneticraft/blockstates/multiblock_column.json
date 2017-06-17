@@ -1,0 +1,21 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cube_column",
+        "textures": {
+            "end": "magneticraft:blocks/multiblock_parts/column_end",
+            "side": "magneticraft:blocks/multiblock_parts/column_side"
+        }
+    },
+	"variants": {
+		"axis_y": [{
+		}],
+		"axis_x": [{
+            "x": 90,
+            "y": 90
+		}],
+        "axis_z": [{
+            "x": 90
+        }]
+	}
+}

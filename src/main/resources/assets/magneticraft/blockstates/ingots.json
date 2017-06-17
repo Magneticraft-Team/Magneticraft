@@ -24,6 +24,11 @@
             "textures": {
                 "layer0": "magneticraft:items/ingots/tungsten"
             }
+        }],
+        "steel": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/steel"
+            }
         }]
     }
 }

@@ -34,6 +34,11 @@
             "textures": {
                 "layer0": "magneticraft:items/light_plate/tungsten"
             }
+        }],
+        "steel": [{
+            "textures": {
+                "layer0": "magneticraft:items/light_plate/steel"
+            }
         }]
     }
 }

@@ -2,20 +2,17 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.tileentity.TileCrushingTable
+import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.item.ItemSkull
 
-object TileRendererCrushingTable : TileEntitySpecialRenderer<TileCrushingTable>() {
+object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
 
-    override fun func_192841_a(tile: TileCrushingTable, x: Double, y: Double, z: Double, tick: Float, destroyStage: Int, unknown: Float) {
-        renderTileEntityAt(tile, x, y, z, tick, destroyStage)
-    }
-
-    fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
+    override fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float,
+                                    destroyStage: Int) {
         val stack = te.crushingModule.storedItem
 
         if (stack.isNotEmpty) {

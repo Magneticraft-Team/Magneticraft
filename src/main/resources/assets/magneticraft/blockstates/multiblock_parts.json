@@ -1,0 +1,41 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "base": [{
+            "model": "cube",
+            "textures": {
+                "particle": "magneticraft:blocks/multiblock_parts/base_top",
+                "down": "magneticraft:blocks/multiblock_parts/base_bottom",
+                "up": "magneticraft:blocks/multiblock_parts/base_top",
+                "north": "magneticraft:blocks/multiblock_parts/base_side",
+                "east": "magneticraft:blocks/multiblock_parts/base_side",
+                "south": "magneticraft:blocks/multiblock_parts/base_side",
+                "west": "magneticraft:blocks/multiblock_parts/base_side"
+            }
+        }],
+        "electric": [{
+            "model": "cube_all",
+            "textures": {
+                "all": "magneticraft:blocks/multiblock_parts/electric"
+            }
+        }],
+        "mesh": [{
+            "model": "cube",
+            "textures": {
+                "particle": "magneticraft:blocks/multiblock_parts/mesh_top",
+                "down": "magneticraft:blocks/multiblock_parts/mesh_bottom",
+                "up": "magneticraft:blocks/multiblock_parts/mesh_top",
+                "north": "magneticraft:blocks/multiblock_parts/mesh_side",
+                "east": "magneticraft:blocks/multiblock_parts/mesh_side",
+                "south": "magneticraft:blocks/multiblock_parts/mesh_side",
+                "west": "magneticraft:blocks/multiblock_parts/mesh_side"
+            }
+        }],
+        "striped": [{
+            "model": "cube_all",
+            "textures": {
+                "all": "magneticraft:blocks/multiblock_parts/striped"
+            }
+        }]
+    }
+}

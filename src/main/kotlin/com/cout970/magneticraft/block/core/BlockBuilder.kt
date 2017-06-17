@@ -38,6 +38,7 @@ class BlockBuilder {
         BlockBase.states_ = b
         BlockTileBase(c, a)
     }
+    var customModels: List<Pair<String, ResourceLocation>> = emptyList()
 
     var factory: ((World, IBlockState) -> TileEntity?)? = null
     var registryName: ResourceLocation? = null
@@ -46,6 +47,7 @@ class BlockBuilder {
     var boundingBox: ((BoundingBoxArgs) -> AABB)? = null
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
+    var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
@@ -79,9 +81,14 @@ class BlockBuilder {
             enableOcclusionOptimization = this@BlockBuilder.enableOcclusionOptimization
             translucent_ = this@BlockBuilder.translucent
             setLightOpacity(if (translucent_) 0 else 255)
+            onBlockPlaced = this@BlockBuilder.onBlockPlaced
+            customModels = this@BlockBuilder.customModels
         }
         return block
     }
+
+    fun factoryOf(func: () -> TileEntity): ((World, IBlockState) -> TileEntity?) = { _, _ -> func() }
+
 }
 
 

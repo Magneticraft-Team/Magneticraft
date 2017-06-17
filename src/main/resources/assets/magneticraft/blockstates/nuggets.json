@@ -24,6 +24,11 @@
             "textures": {
                 "layer0": "magneticraft:items/nugget/tungsten"
             }
+        }],
+        "steel": [{
+            "textures": {
+                "layer0": "magneticraft:items/nugget/steel"
+            }
         }]
     }
 }

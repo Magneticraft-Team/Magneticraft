@@ -34,6 +34,11 @@
             "textures": {
                 "layer0": "magneticraft:items/heavy_plate/tungsten"
             }
+        }],
+        "steel": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/steel"
+            }
         }]
     }
 }

@@ -7,15 +7,21 @@ import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerSounds
+import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.tilerenderer.TileRendererConveyorBelt
 import com.cout970.magneticraft.tilerenderer.TileRendererCrushingTable
+import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.util.toModel
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
+import com.cout970.modelloader.api.ModelLoaderApi
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.obj.OBJLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.ClientRegistry
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.Side
 
 /**
@@ -25,9 +31,8 @@ import net.minecraftforge.fml.relauncher.Side
 @Suppress("unused")
 class ClientProxy : CommonProxy() {
 
-    // TODO
-    //List of registered TileEntityRenderers
-//    val tileRenderers = mutableListOf<TileEntityRenderer<out TileBase>>()
+    // List of registered TileEntityRenderers
+    val tileRenderers = mutableListOf<TileRenderer<out TileBase>>()
 
     override fun preInit() {
         super.preInit()
@@ -56,6 +61,9 @@ class ClientProxy : CommonProxy() {
                 if (mapper != null) {
                     ModelLoader.setCustomStateMapper(block, mapper)
                 }
+                it.customModels.forEach { (state, location) ->
+                    ModelLoaderApi.registerModel(ModelResourceLocation(it.registryName, state), location)
+                }
             }
         }
 
@@ -64,22 +72,10 @@ class ClientProxy : CommonProxy() {
 
         //TileEntity renderers
         register(TileCrushingTable::class.java, TileRendererCrushingTable)
-//        register(TileFeedingTrough::class.java, TileRendererFeedingTrough)
-//        register(TileTableSieve::class.java, TileRendererTableSieve)
-//        register(TileElectricConnector::class.java, TileRendererElectricConnector)
-//        register(TileElectricPole::class.java, TileRendererElectricPole)
-//        register(TileElectricPoleAdapter::class.java, TileRendererElectricPoleAdapter)
-//        register(TileIncendiaryGenerator::class.java, TileRendererIncendiaryGenerator)
-//        register(TileHydraulicPress::class.java, TileRendererHydraulicPress)
-//        register(TileKiln::class.java, TileRendererKiln)
-//        register(TileSifter::class.java, TileRendererSifter)
-//        register(TileGrinder::class.java, TileRendererGrinder)
-//        register(TileKilnShelf::class.java, TileRendererKilnShelf)
-//        register(TileSolarPanel::class.java, TileRendererSolarPanel)
+        register(TileConveyorBelt::class.java, TileRendererConveyorBelt)
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
-
     }
 
 
@@ -93,21 +89,21 @@ class ClientProxy : CommonProxy() {
 
     override fun getSide() = Side.CLIENT
 
-//    /**
-//     * Updates all the TileEntityRenderers to reload models
-//     */
-//    @Suppress("unused")
-//    @SubscribeEvent
-//    fun onModelRegistryReload(event: ModelBakeEvent) {
-//        tileRenderers.forEach { it.onModelRegistryReload() }
-//    }
+    /**
+     * Updates all the TileEntityRenderers to reload models
+     */
+    @Suppress("unused")
+    @SubscribeEvent
+    fun onModelRegistryReload(event: ModelBakeEvent) {
+        tileRenderers.forEach { it.onModelRegistryReload() }
+    }
 
     /**
      * Binds a TileEntity class with a TileEntityRenderer and
      * registers the TileEntityRenderer to update it when ModelBakeEvent is fired
      */
-    private fun <T : TileBase> register(tileEntityClass: Class<T>, specialRenderer: TileEntitySpecialRenderer<T>) {
+    private fun <T : TileBase> register(tileEntityClass: Class<T>, specialRenderer: TileRenderer<T>) {
         ClientRegistry.bindTileEntitySpecialRenderer(tileEntityClass, specialRenderer)
-//        tileRenderers.add(specialRenderer)
+        tileRenderers.add(specialRenderer)
     }
 }

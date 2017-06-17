@@ -22,16 +22,16 @@ object Metals : IItemMaker {
         }
 
         ingots = builder.withName("ingots").apply {
-            variants = mapOf(0 to "copper", 1 to "lead", 2 to "cobalt", 3 to "tungsten")
+            variants = mapOf(0 to "copper", 1 to "lead", 2 to "cobalt", 3 to "tungsten", 4 to "steel")
         }.build()
         lightPlates = builder.withName("light_plates").apply {
-            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten")
+            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 4 to "steel")
         }.build()
         heavyPlates = builder.withName("heavy_plates").apply {
-            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten")
+            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 4 to "steel")
         }.build()
         nuggets = builder.withName("nuggets").apply {
-            variants = mapOf(0 to "copper", 1 to "lead", 2 to "cobalt", 3 to "tungsten")
+            variants = mapOf(0 to "copper", 1 to "lead", 2 to "cobalt", 3 to "tungsten", 4 to "steel")
         }.build()
 
         return listOf(ingots, lightPlates, heavyPlates, nuggets)

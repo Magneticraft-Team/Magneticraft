@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.block.MultiblockParts
 import com.cout970.magneticraft.block.Ores
 import net.minecraft.block.Block
 import net.minecraft.item.ItemBlock
@@ -17,9 +18,11 @@ var blocks: List<Pair<Block, ItemBlock>> = emptyList()
 
 fun initBlocks() {
     val blocks_ = mutableListOf<Pair<Block, ItemBlock>>()
+
     blocks_ += Decoration.initBlocks()
     blocks_ += Ores.initBlocks()
     blocks_ += Machines.initBlocks()
+    blocks_ += MultiblockParts.initBlocks()
 
     blocks_.forEach { GameRegistry.register(it.first); GameRegistry.register(it.second) }
     blocks = blocks_

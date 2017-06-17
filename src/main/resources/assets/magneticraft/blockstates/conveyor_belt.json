@@ -1,0 +1,24 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "north": [{
+
+        }],
+        "south": [{
+
+        }],
+        "east": [{
+            "y": 90
+        }],
+        "west": [{
+            "y": -90
+        }],
+        "inventory": [{
+            "model": "magneticraft:obj/conveyor_belt.obj"
+        }]
+    }
+}

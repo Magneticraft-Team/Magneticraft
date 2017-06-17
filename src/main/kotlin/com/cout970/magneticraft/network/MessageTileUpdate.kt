@@ -2,6 +2,8 @@ package com.cout970.magneticraft.network
 
 
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.tileentity.core.TileBase
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos
@@ -68,8 +70,7 @@ class MessageTileUpdate() : IMessage {
             Minecraft.getMinecraft().addScheduledTask {
                 val world = Minecraft.getMinecraft().world
                 if (world.provider.dimension == message.dimension) {
-                    // TODO TileBase
-//                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.SERVER)
+                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.SERVER)
                 }
             }
         }
@@ -78,8 +79,7 @@ class MessageTileUpdate() : IMessage {
             FMLServerHandler.instance().server.addScheduledTask {
                 val world = DimensionManager.getWorld(message.dimension)
                 if (world != null) {
-                    // TODO TileBase
-//                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.CLIENT)
+                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.CLIENT)
                 }
             }
         }
