@@ -4,6 +4,8 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.fml.relauncher.Side
@@ -11,7 +13,11 @@ import net.minecraftforge.fml.relauncher.Side
 interface IModule : INBTSerializable<NBTTagCompound> {
 
     val name: String
+
     var container: IModuleContainer
+
+    val world : World get() = container.world
+    val pos : BlockPos get() = container.pos
 
     fun init() = Unit
     fun update() = Unit

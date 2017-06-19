@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf
  *
  * Indexed Binary Data
  * Encodes and decodes data from a ByteBuf using a index to identify the data
- * See gui.common.Constants.kt for ids
+ * See gui.common.core.Constants.kt for ids
  */
 class IBD {
 

@@ -144,12 +144,6 @@ fun NBTTagCompound.getList(key: String): NBTTagList {
     return getTagList(key, Constants.NBT.TAG_COMPOUND)
 }
 
-fun NBTTagList.forEach(func: (NBTTagCompound) -> Unit) {
-    for (i in 0 until tagCount()) {
-        func(getCompoundTagAt(i))
-    }
-}
-
 fun NBTTagCompound.readList(key: String, func: (NBTTagList) -> Unit) {
     if (hasKey(key)) {
         try {

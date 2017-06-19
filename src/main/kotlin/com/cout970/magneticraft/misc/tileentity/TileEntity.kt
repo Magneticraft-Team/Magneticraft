@@ -9,8 +9,8 @@ import net.minecraft.world.World
  * Created by cout970 on 2017/02/20.
  */
 
-fun TileEntity.shouldTick(time: Int): Boolean {
-    return (world.totalWorldTime + pos.hashCode()) % time == 0L
+fun World.shouldTick(pos: BlockPos, time: Int): Boolean {
+    return (totalWorldTime + pos.hashCode()) % time == 0L
 }
 
 inline fun <reified T : TileEntity> World.getTile(pos: BlockPos): T? {

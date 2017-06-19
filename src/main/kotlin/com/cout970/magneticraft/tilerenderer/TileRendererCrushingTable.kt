@@ -4,7 +4,6 @@ import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemSkull

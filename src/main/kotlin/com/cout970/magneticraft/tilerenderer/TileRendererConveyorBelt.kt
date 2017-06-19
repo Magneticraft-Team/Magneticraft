@@ -11,9 +11,14 @@ import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.times
 import com.cout970.magneticraft.util.vector.vec3Of
-import net.minecraft.client.renderer.GlStateManager
+import com.cout970.magneticraft.util.vector.xd
+import com.cout970.magneticraft.util.vector.zd
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import org.lwjgl.input.Keyboard
+import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.item.ItemSkull
+import net.minecraft.item.ItemStack
 
 /**
  * Created by cout970 on 2017/06/16.
@@ -31,41 +36,99 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
     override fun renderTileEntityAt(te: TileConveyorBelt, x: Double, y: Double, z: Double, partialTicks: Float,
                                     destroyStage: Int) {
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
-            onModelRegistryReload()
-        }
-        staticModel?.let { model ->
+        staticModel ?: return
 
-            GlStateManager.pushMatrix()
-            GlStateManager.translate(x, y, z)
+        stackMatrix {
+            translate(x, y, z)
             Utilities.rotateFromCenter(te.facing)
-            bindTexture(resource("textures/blocks/machines/conveyor_belt.png"))
-            model.render()
-            if (te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.rotateYCCW().directionVec)) != null) {
-                lateralLeft?.render()
-            } else {
-                panelLeft?.render()
-            }
-            if (te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.rotateY().directionVec)) != null) {
-                lateralRight?.render()
-            } else {
-                panelRight?.render()
-            }
-            rollers.forEach {
-                if (it.second != null) {
-                    val angle = te.rotation
-                    te.rotation += partialTicks
-                    val trans = it.first * Utilities.PIXEL
+            renderStaticParts(te, partialTicks)
+            renderDynamicParts(te, partialTicks)
+            translate(0f, 12.5 * Utilities.PIXEL, 0f)
+            //debug hitboxes
+//            te.conveyorModule.boxes.forEach {
+//                Utilities.renderBox(it.getHitBox())
+//            }
+        }
+        // debug bitmaps
+//        stackMatrix {
+//            translate(x, y + 1.2, z)
+//            Utilities.rotateFromCenter(te.facing)
+//
+//            Utilities.renderBox(
+//                    vec3Of(1, 0, 0) * Utilities.PIXEL toAABBWith vec3Of(2, 1, 1) * Utilities.PIXEL,
+//                    vec3Of(0, 1, 0))
+//            Utilities.renderBox(
+//                    vec3Of(0, 0, 1) * Utilities.PIXEL toAABBWith vec3Of(1, 1, 2) * Utilities.PIXEL,
+//                    vec3Of(0, 0, 1))
+//            for (i in 0 until 16) {
+//                for (j in 0 until 16) {
+//                    if (!te.conveyorModule.bitmap[i, j]) {
+//                        Utilities.renderBox(
+//                                vec3Of(i, 0, j) * Utilities.PIXEL toAABBWith vec3Of(i + 1, 0, j + 1) * Utilities.PIXEL,
+//                                vec3Of(1, 1, 1))
+//                    } else {
+//                        Utilities.renderBox(
+//                                vec3Of(i, 0, j) * Utilities.PIXEL toAABBWith vec3Of(i + 1, 1, j + 1) * Utilities.PIXEL,
+//                                vec3Of(1, 0, 0))
+//                    }
+//
+//                }
+//            }
+//        }
+    }
 
-                    GlStateManager.pushMatrix()
-                    GlStateManager.translate(trans.xCoord, trans.yCoord, trans.zCoord)
-                    GlStateManager.rotate(-angle, 1f, 0f, 0f)
-                    GlStateManager.translate(-trans.xCoord, -trans.yCoord, -trans.zCoord)
-                    it.second?.render()
-                    GlStateManager.popMatrix()
-                }
+    fun renderDynamicParts(te: TileConveyorBelt, partialTicks: Float) {
+
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+
+        te.conveyorModule.boxes.forEach { box ->
+            stackMatrix {
+                val pos = box.getPos(partialTicks)
+                translate(pos.xd, 13.5 * Utilities.PIXEL, pos.zd)
+                renderItem(box.item)
             }
-            GlStateManager.popMatrix()
+        }
+    }
+
+    fun renderItem(stack: ItemStack) {
+        translate(0.0, 0.0, -3 * Utilities.PIXEL)
+        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+            translate(0.0, -0.045, 0.125)
+            rotate(90f, 1f, 0f, 0f)
+        } else {
+            translate(0.0, -0.125, 0.0625 * 3)
+        }
+
+        Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
+    }
+
+    fun renderStaticParts(te: TileConveyorBelt, partialTicks: Float) {
+
+        bindTexture(resource("textures/blocks/machines/conveyor_belt.png"))
+        staticModel?.render()
+        if (te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.rotateYCCW().directionVec)) != null) {
+            lateralLeft?.render()
+        } else {
+            panelLeft?.render()
+        }
+        if (te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.rotateY().directionVec)) != null) {
+            lateralRight?.render()
+        } else {
+            panelRight?.render()
+        }
+        rollers.forEach {
+            if (it.second != null) {
+                val angle = te.rotation
+                te.rotation += partialTicks
+                val trans = it.first * Utilities.PIXEL
+
+                pushMatrix()
+                translate(trans.xCoord, trans.yCoord, trans.zCoord)
+                rotate(-angle, 1f, 0f, 0f)
+                translate(-trans.xCoord, -trans.yCoord, -trans.zCoord)
+                it.second?.render()
+                popMatrix()
+            }
         }
     }
 

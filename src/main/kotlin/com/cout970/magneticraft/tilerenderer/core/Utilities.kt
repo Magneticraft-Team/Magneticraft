@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tilerenderer.core
 
+import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.util.resource
@@ -89,12 +90,12 @@ object Utilities {
         translate(-pos.xd, -pos.yd, -pos.zd)
     }
 
-    fun renderBox(box: AxisAlignedBB) {
+    fun renderBox(box: AxisAlignedBB, color: IVector3 = vec3Of(1,1,1)) {
         val tes = Tessellator.getInstance()
         val t = tes.buffer
-        val r = 1f
-        val g = 1f
-        val b = 1f
+        val r = color.xf
+        val g = color.yf
+        val b = color.zf
         val a = 1f
 
         glDisable(GL_TEXTURE_2D)
@@ -284,5 +285,13 @@ object Utilities {
         val L1 = (x - a) / (b - a) * ((x - c) / (b - c))
         val L2 = (x - a) / (c - a) * ((x - b) / (c - b))
         return fa * L0 + fb * L1 + fc * L2
+    }
+
+    fun interpolate(fa: Double, fb: Double, x: Double): Double {
+        return fa + (fb - fa) * x
+    }
+
+    fun interpolate(fa: Float, fb: Float, x: Float): Float {
+        return fa + (fb - fa) * x
     }
 }

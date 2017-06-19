@@ -68,6 +68,7 @@ object Machines : IBlockMaker {
             }
             pickBlock = { ItemStack(it.default.item, 1, ConveyorBeltOrientation.NORTH.ordinal) }
             overrideItemModel = false
+            onActivated = { it.worldIn.getTile<TileConveyorBelt>(it.pos)?.conveyorModule?.onClick(it) ?: false }
         }.build()
 
         return itemBlockListOf(box, crushingTable, conveyorBelt)
