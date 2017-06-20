@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing
 /**
  * Created by cout970 on 2017/06/17.
  */
-class ConveyorBeltModule(
+class ModuleConveyorBelt(
         val facingGetter: () -> EnumFacing,
         override val name: String = "module_conveyor_belt"
 ) : IModule {

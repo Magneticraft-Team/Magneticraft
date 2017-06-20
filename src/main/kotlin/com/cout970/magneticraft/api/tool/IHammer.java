@@ -8,8 +8,9 @@ import net.minecraft.item.ItemStack;
  */
 public interface IHammer {
 
+    int getMiningLevel();
+
     int getBreakingSpeed();
 
     ItemStack applyDamage(ItemStack item, EntityPlayer player);
-
 }

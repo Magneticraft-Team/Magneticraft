@@ -97,11 +97,18 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule {
         if (hasWork() && heldItem.hasCapability(ITEM_HAMMER!!, null)) {
 
             val hammer = heldItem.getCapability(ITEM_HAMMER!!, null) as IHammer
+            val item = storedItem.item
+            if (item is ItemBlock) {
+                val blockState = item.block.getStateFromMeta(storedItem.metadata)
+                if (item.block.getHarvestLevel(blockState) > hammer.miningLevel) {
+                    return
+                }
+            }
             crushItem(world, pos, playerIn, hammer.breakingSpeed)
             if (storedItem.isItemEqual(ItemStack(Items.BLAZE_ROD))) {
                 playerIn.setFire(5)
             }
-            storedItem = hammer.applyDamage(storedItem, playerIn)
+            hammer.applyDamage(heldItem, playerIn)
         } else {
             if (playerIn.inventory.addItemStackToInventory(storedItem)) {
                 storedItem = ItemStack.EMPTY

@@ -2,7 +2,9 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.misc.inventory.stack
+import net.minecraft.init.Blocks
 import net.minecraft.init.Items
+import net.minecraft.init.Items.*
 import net.minecraft.item.ItemStack
 
 
@@ -34,22 +36,20 @@ fun registerRecipes() {
 //    addCrushingTableRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(ItemLightPlate, 1, 5))
 //
 //    //UTILITY CRUSHING TABLE RECIPES - ITEMS
-//    addCrushingTableRecipe(ItemStack(BLAZE_ROD), ItemStack(BLAZE_POWDER, 3))
-//    addCrushingTableRecipe(ItemStack(BONE), ItemStack(DYE, 4, 15))
-//    addCrushingTableRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemCrushedLapis.stack(size = 4))
-//    addCrushingTableRecipe(ItemStack(Blocks.COAL_ORE, 1), ItemCrushedCoal.stack(size = 2))
+    addCrushingTableRecipe(ItemStack(BLAZE_ROD), ItemStack(BLAZE_POWDER, 5))
+    addCrushingTableRecipe(ItemStack(BONE), ItemStack(DYE, 4, 15))
 //
 //    //UTILITY CRUSHING TABLE RECIPES - BLOCKS
-//    addCrushingTableRecipe(ItemStack(Blocks.STONE), ItemStack(Blocks.COBBLESTONE))
-//    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), ItemStack(Blocks.STONE, 1, 5))
-//    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), ItemStack(Blocks.STONE, 1, 3))
-//    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), ItemStack(Blocks.STONE, 1, 1))
-//    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), ItemStack(Blocks.STONEBRICK, 1, 2))
-//    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), ItemStack(Blocks.MOSSY_COBBLESTONE))
-//    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE))
-//    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE))
-//    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE))
-//    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), ItemStack(Blocks.END_STONE, 1))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE), ItemStack(Blocks.COBBLESTONE))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), ItemStack(Blocks.STONE, 1, 5))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), ItemStack(Blocks.STONE, 1, 3))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), ItemStack(Blocks.STONE, 1, 1))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), ItemStack(Blocks.STONEBRICK, 1, 2))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), ItemStack(Blocks.MOSSY_COBBLESTONE))
+    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE))
+    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE))
+    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE))
+    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), ItemStack(Blocks.END_STONE, 1))
 //
 //    //HYDRAULIC PRESS RECIPES
 //    addHydraulicPressRecipe(ItemStack(IRON_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 0), 120f)
@@ -271,6 +271,7 @@ fun registerRecipes() {
 //
     //@formatter:on
 }
+
 //
 //private fun addRecipe(result: ItemStack, vararg craft: Any) {
 //    GameRegistry.addRecipe(ShapedOreRecipe(result, *craft))

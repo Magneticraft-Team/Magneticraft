@@ -33,17 +33,17 @@ object Tools : IItemMaker {
 
         stoneHammer = builder.withName("stone_hammer").apply {
             onHitEntity = createHitEntity(2.0f)
-            capabilityProvider = { Hammer(8) }
+            capabilityProvider = { Hammer(1, 8) }
             maxDamage = 130
         }.build()
         ironHammer = builder.withName("iron_hammer").apply {
             onHitEntity = createHitEntity(3.5f)
-            capabilityProvider = { Hammer(10) }
+            capabilityProvider = { Hammer(2, 10) }
             maxDamage = 250
         }.build()
         steelHammer = builder.withName("steel_hammer").apply {
             onHitEntity = createHitEntity(5.0f)
-            capabilityProvider = { Hammer(15) }
+            capabilityProvider = { Hammer(3, 15) }
             maxDamage = 750
         }.build()
 
@@ -57,7 +57,10 @@ object Tools : IItemMaker {
         }
     }
 
-    class Hammer(val damage: Int) : IHammer, ICapabilityProvider {
+    class Hammer(val level: Int, val damage: Int) : IHammer, ICapabilityProvider {
+
+        //(3 = DIAMOND, 2 = IRON, 1 = STONE, 0 = WOOD/GOLD)
+        override fun getMiningLevel(): Int = level
 
         override fun getBreakingSpeed(): Int = damage
 

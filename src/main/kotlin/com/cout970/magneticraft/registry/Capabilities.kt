@@ -178,6 +178,7 @@ class DefaultItemEnergyStorage : IEnergyStorageItem {
 
 class DefaultHammer : IHammer {
 
+    override fun getMiningLevel(): Int = 0
     override fun getBreakingSpeed(): Int = 0
     override fun applyDamage(item: ItemStack, player: EntityPlayer): ItemStack = item
 }

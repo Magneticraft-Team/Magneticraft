@@ -3,7 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.block.Machines
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ConveyorBeltModule
+import com.cout970.magneticraft.tileentity.modules.ModuleConveyorBelt
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
 import com.cout970.magneticraft.tileentity.modules.ModuleInventory
 import net.minecraft.util.EnumFacing
@@ -39,7 +39,7 @@ class TileConveyorBelt : TileBase(), ITickable {
     val facing: EnumFacing
         get() = getBlockState()[Machines.PROPERTY_CONVEYOR_ORIENTATION]?.facing ?: EnumFacing.NORTH
 
-    val conveyorModule = ConveyorBeltModule({ facing })
+    val conveyorModule = ModuleConveyorBelt({ facing })
 
     init {
         initModules(conveyorModule)
