@@ -4,13 +4,13 @@
   "particleTexture": "magneticraft:blocks/machines/conveyor_belt",
   "parts": [
     {
-      "name": "leg1",
+      "name": "back_leg1",
       "from": 0,
       "to": 6,
       "texture": "magneticraft:blocks/machines/conveyor_belt"
     },
     {
-      "name": "leg2",
+      "name": "front_leg3",
       "from": 6,
       "to": 12,
       "texture": "magneticraft:blocks/machines/conveyor_belt"
@@ -22,13 +22,13 @@
       "texture": "magneticraft:blocks/machines/conveyor_belt"
     },
     {
-      "name": "leg3",
+      "name": "back_leg2",
       "from": 18,
       "to": 24,
       "texture": "magneticraft:blocks/machines/conveyor_belt"
     },
     {
-      "name": "leg4",
+      "name": "front_leg4",
       "from": 24,
       "to": 30,
       "texture": "magneticraft:blocks/machines/conveyor_belt"
@@ -40,13 +40,13 @@
       "texture": "magneticraft:blocks/machines/conveyor_belt"
     },
     {
-      "name": "beam1",
+      "name": "back_leg5",
       "from": 36,
       "to": 42,
       "texture": "magneticraft:blocks/machines/conveyor_belt"
     },
     {
-      "name": "beam2",
+      "name": "front_leg6",
       "from": 42,
       "to": 48,
       "texture": "magneticraft:blocks/machines/conveyor_belt"

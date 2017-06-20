@@ -157,6 +157,7 @@ fun NBTTagCompound.readList(key: String, func: (NBTTagList) -> Unit) {
 fun NBTTagList.getTagCompound(index: Int) = getCompoundTagAt(index)!!
 
 fun NBTTagCompound.add(key: String, value: Int) = setInteger(key, value)
+fun NBTTagCompound.add(key: String, value: Boolean) = setBoolean(key, value)
 fun NBTTagCompound.add(key: String, value: Float) = setFloat(key, value)
 fun NBTTagCompound.add(key: String, value: Double) = setDouble(key, value)
 fun NBTTagCompound.add(key: String, value: Byte) = setByte(key, value)

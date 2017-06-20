@@ -35,8 +35,9 @@ class TileCrushingTable : TileBase() {
 class TileConveyorBelt : TileBase(), ITickable {
 
     var rotation = 0f
+    var deltaTimer = System.currentTimeMillis()
     val facing: EnumFacing
-        get() = getBlockState()[Machines.PROPERTY_CONVEYOR_ORIENTATION].facing
+        get() = getBlockState()[Machines.PROPERTY_CONVEYOR_ORIENTATION]?.facing ?: EnumFacing.NORTH
 
     val conveyorModule = ConveyorBeltModule({ facing })
 
