@@ -9,16 +9,13 @@ import com.cout970.magneticraft.util.vector.*
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
-class Box(
+data class Box(
         val item: ItemStack,
-        position: Float,
+        var position: Float,
         val route: Route,
         var lastTick: Long,
         var locked: Boolean = false
 ) {
-
-    var position: Float = position
-        private set
 
     constructor(nbt: NBTTagCompound) : this(
             ItemStack(nbt.getCompoundTag("item")),
@@ -26,10 +23,6 @@ class Box(
             Route.values()[nbt.getInteger("route")],
             -1L
     )
-
-    fun getPosition(now: Long): Float {
-        return position
-    }
 
     fun move(amount: Float) {
         position += amount
@@ -111,7 +104,6 @@ class Box(
     fun serializeNBT() = newNbt {
         add("item", item.serializeNBT())
         add("position", position)
-        add("locked", locked)
         add("route", route.ordinal)
     }
 }

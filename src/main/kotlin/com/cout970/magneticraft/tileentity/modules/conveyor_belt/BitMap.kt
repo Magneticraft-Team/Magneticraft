@@ -24,8 +24,8 @@ open class BitMap(val map: BooleanArray = BooleanArray(16 * 16)) : IBitMap {
     }
 
     override fun mark(start: IVector2, end: IVector2) {
-        for (i in Math.floor(start.x).toInt() until Math.floor(end.x).toInt()) {
-            for (j in Math.floor(start.y).toInt() until Math.floor(end.y).toInt()) {
+        for (i in Math.floor(start.x).toInt() until Math.ceil(end.x).toInt()) {
+            for (j in Math.floor(start.y).toInt() until Math.ceil(end.y).toInt()) {
                 this[i, j] = true
             }
         }
@@ -37,8 +37,8 @@ open class BitMap(val map: BooleanArray = BooleanArray(16 * 16)) : IBitMap {
     }
 
     override fun unmark(start: IVector2, end: IVector2) {
-        for (i in Math.floor(start.x).toInt() until Math.floor(end.x).toInt()) {
-            for (j in Math.floor(start.y).toInt() until Math.floor(end.y).toInt()) {
+        for (i in Math.floor(start.x).toInt() until Math.ceil(end.x).toInt()) {
+            for (j in Math.floor(start.y).toInt() until Math.ceil(end.y).toInt()) {
                 this[i, j] = false
             }
         }
@@ -51,8 +51,8 @@ open class BitMap(val map: BooleanArray = BooleanArray(16 * 16)) : IBitMap {
     }
 
     override fun test(start: IVector2, end: IVector2): Boolean {
-        for (i in Math.floor(start.x).toInt() until Math.floor(end.x).toInt()) {
-            for (j in Math.floor(start.y).toInt() until Math.floor(end.y).toInt()) {
+        for (i in Math.floor(start.x).toInt() until Math.ceil(end.x).toInt()) {
+            for (j in Math.floor(start.y).toInt() until Math.ceil(end.y).toInt()) {
                 if (this[i, j]) return false
             }
         }

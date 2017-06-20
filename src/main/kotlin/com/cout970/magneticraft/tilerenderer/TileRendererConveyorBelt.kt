@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemSkull
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumFacing
 import org.lwjgl.input.Keyboard
 
 /**
@@ -50,10 +51,9 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
             renderDynamicParts(te, partialTicks)
             translate(0f, 12.5 * Utilities.PIXEL, 0f)
             //debug hitboxes
-            renderHitboxes(te)
+//            renderHitboxes(te)
         }
-
-        renderBitmap(te, x, y, z)
+//        renderBitmap(te, x, y, z)
     }
 
     fun renderHitboxes(te: TileConveyorBelt) {
@@ -86,7 +86,6 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
                                 vec3Of(i, 0, j) * Utilities.PIXEL toAABBWith vec3Of(i + 1, 1, j + 1) * Utilities.PIXEL,
                                 vec3Of(1, 0, 0))
                     }
-
                 }
             }
         }
@@ -100,20 +99,22 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
             stackMatrix {
                 val pos = box.getPos(partialTicks)
                 translate(pos.xd, 13.5 * Utilities.PIXEL, pos.zd)
-                renderItem(box.item)
+                renderItem(box.item, te.facing)
             }
         }
     }
 
-    fun renderItem(stack: ItemStack) {
-        translate(0.0, 0.0, -3 * Utilities.PIXEL)
+    fun renderItem(stack: ItemStack, facing: EnumFacing) {
         if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
-            translate(0.0, -0.045, 0.125)
+            translate(0.0, -0.9 * Utilities.PIXEL, 0.0)
             rotate(90f, 1f, 0f, 0f)
+            rotate(-facing.horizontalAngle, 0f, 0f, 1f)
+            translate(0.0, -1 * Utilities.PIXEL, 0.0)
             val s = 0.5
             GlStateManager.scale(s, s, s)
         } else {
-            translate(0.0, -0.125, 0.0625 * 3)
+            rotate(-facing.horizontalAngle, 0f, 1f, 0f)
+            translate(0.0, -1.9 * Utilities.PIXEL, 0.0)
             val s = 0.9
             GlStateManager.scale(s, s, s)
         }

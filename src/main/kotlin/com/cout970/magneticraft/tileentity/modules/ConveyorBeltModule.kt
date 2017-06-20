@@ -6,11 +6,13 @@ import com.cout970.magneticraft.item.ItemBlockBase
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
+import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.tileentity.modules.conveyor_belt.*
+import com.cout970.magneticraft.util.getList
 import com.cout970.magneticraft.util.list
 import com.cout970.magneticraft.util.newNbt
 import net.minecraft.item.ItemStack
@@ -28,6 +30,8 @@ class ConveyorBeltModule(
     override lateinit var container: IModuleContainer
     val facing get() = facingGetter()
     val boxes = mutableListOf<Box>()
+    var toUpdate = false
+    val newBoxes = mutableListOf<Box>()
     val bitmap = BitMap()
     var flip = true
 
@@ -40,31 +44,44 @@ class ConveyorBeltModule(
     }
 
     fun resetBitmap() {
-        // resets the bitmap to fix stuff like mining the front belt when there are items with part of the hitbox in this block
-//        val (map, tiles) = getSurroundMapAndTiles()
-//        bitmap.clear()
-//        val fullBitmap = FullBitMap(bitmap, map)
-//        val allboxes = boxes// + tiles.flatMap { it.conveyorModule.boxes }
-//        allboxes.forEach { fullBitmap.mark(it.getHitBox(world.totalWorldTime)) }
+        newBoxes.clear()
+        newBoxes.addAll(boxes)
+        toUpdate = true
     }
 
     fun advanceSimulation(surroundingMap: Map<BitmapLocation, IBitMap>) {
+
         val frontTile = world.getTile<TileConveyorBelt>(pos.offset(facing))
 
         //if there is no block in front don't go all the way
         val limit = if (frontTile == null) 13f else 15f
+        val bitmap = FullBitMap(bitmap, surroundingMap)
+
+        if (toUpdate) {
+            boxes.forEach {
+                bitmap.unmark(it.getHitBox())
+            }
+            boxes.clear()
+            boxes.addAll(newBoxes)
+            newBoxes.clear()
+            boxes.forEach {
+                bitmap.mark(it.getHitBox())
+            }
+            toUpdate = false
+        }
 
         boxes.sortedBy { -it.position }.forEach {
             if (it.lastTick != world.totalWorldTime) {
                 if (it.position <= limit) {
-                    val bitmap = FullBitMap(bitmap, surroundingMap)
 
-                    it.locked = checkCollision(bitmap, it)
+                    val speed = (if (it.route.isShort) 2f else 1f)
+
+                    it.locked = checkCollision(bitmap, it, speed)
                     if (!it.locked) {
                         var hitbox = it.getHitBox()
                         bitmap.unmark(hitbox)
 
-                        it.move(if (it.route.isShort) 2f else 1f)
+                        it.move(speed)
                         hitbox = it.getHitBox()
                         bitmap.mark(hitbox)
                     }
@@ -119,17 +136,17 @@ class ConveyorBeltModule(
         return map
     }
 
-    private fun checkCollision(thisBitMap: IBitMap, box: Box): Boolean {
+    private fun checkCollision(thisBitMap: IBitMap, box: Box, speed: Float): Boolean {
         val thisTemp = thisBitMap.copy()
         val hitbox = box.getHitBox()
 
         thisTemp.unmark(hitbox)
 
-        box.move(if (box.route.isShort) 2f else 1f)
+        box.move(speed)
         val newHitbox = box.getHitBox()
 
         val tempResult = !thisTemp.test(newHitbox)
-        box.move(if (box.route.isShort) -2f else -1f)
+        box.move(-speed)
         return tempResult
     }
 
@@ -142,10 +159,8 @@ class ConveyorBeltModule(
         flip = !flip
         val box = Box(stack.copy(), 2f, route, world.totalWorldTime)
         if (bitmap.test(box.getHitBox())) {
-//            if (world.isServer) {
             boxes += box
             container.sendUpdateToNearPlayers()
-//            }
             return true
         } else {
             return false
@@ -195,18 +210,11 @@ class ConveyorBeltModule(
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        // TODO fix de-sync problems
-//        val fullBitmap = FullBitMap(bitmap, getSurroundMap())
-//        boxes.forEach {
-//            fullBitmap.unmark(it.getHitBox(0L))
-//        }
-//        boxes.clear()
-//        boxes += nbt.getList("items")
-//                .map { it as NBTTagCompound }
-//                .map { Box(it) }
-//        boxes.forEach {
-//            fullBitmap.mark(it.getHitBox(0L))
-//        }
+        newBoxes.clear()
+        newBoxes += nbt.getList("items")
+                .map { it as NBTTagCompound }
+                .map { Box(it) }
+        toUpdate = true
     }
 
     override fun serializeNBT(): NBTTagCompound {
@@ -217,14 +225,23 @@ class ConveyorBeltModule(
         }
     }
 
+    override fun onBreak() {
+        val bitmap = FullBitMap(bitmap, getSurroundMap())
+        boxes.forEach {
+            bitmap.unmark(it.getHitBox())
+            world.dropItem(it.item, pos)
+        }
+        boxes.clear()
+    }
+
     fun onClick(it: OnActivatedArgs): Boolean {
         if (it.heldItem.isNotEmpty) {
             val item = it.heldItem.item
             if (item is ItemBlockBase && item.blockBase == Machines.conveyorBelt) {
                 return false
             }
-            addItem(it.heldItem)
-            if (world.isServer) {
+            val success = addItem(it.heldItem)
+            if (success && world.isServer) {
                 it.playerIn.setHeldItem(it.hand, ItemStack.EMPTY)
             }
             return true
