@@ -3,6 +3,7 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.core.INode
 import com.cout970.magneticraft.api.core.INodeHandler
+import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
@@ -116,6 +117,15 @@ fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
     return null
 }
 
+fun <T> TileEntity.getOrNull(cap: Capability<T>?, side: EnumFacing? = null): T? {
+    cap ?: return null
+    if (this is ICapabilityProvider && this.hasCapability(cap, side)) {
+        return this.getCapability(cap, side)
+    }
+    return null
+}
+
+
 /**
  * Empty implementation of IStorage
  * At some point this should be changed, or just ignored
@@ -134,7 +144,10 @@ class DefaultNodeProvider : INodeHandler, IElectricNodeHandler, IHeatNodeHandler
 
     override fun getNode(id: NodeID): INode? = null
     override fun getNodes(): List<INode> = listOf()
-    override fun getPos(): BlockPos = BlockPos.ORIGIN
+    override fun getRef(): ITileRef {
+        throw NotImplementedError("DefaultNodeProvider doesn't have a parent TileEntity")
+    }
+
     override fun getInputConnections(): MutableList<IElectricConnection> = mutableListOf()
     override fun getOutputConnections(): MutableList<IElectricConnection> = mutableListOf()
 

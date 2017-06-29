@@ -154,6 +154,10 @@ fun NBTTagCompound.readList(key: String, func: (NBTTagList) -> Unit) {
     }
 }
 
+inline fun NBTTagList.forEachTag(action: (NBTTagCompound) -> Unit): Unit {
+    for (i in 0 until this.tagCount()) action(getTagCompound(i))
+}
+
 fun NBTTagList.getTagCompound(index: Int) = getCompoundTagAt(index)!!
 
 fun NBTTagCompound.add(key: String, value: Int) = setInteger(key, value)

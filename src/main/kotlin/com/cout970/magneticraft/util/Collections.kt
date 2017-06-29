@@ -14,3 +14,8 @@ inline infix fun<reified T> List<T>.with(other: List<T>): MutableList<T> = mutab
 operator fun List<Multiblock.MultiblockLayer>.get(x: Int, y: Int, z: Int): IMultiblockComponent {
     return this[this.size - y - 1].components[z][x]
 }
+
+fun <T> MutableList<T>.setAll(it: Iterable<T>){
+    clear()
+    addAll(it)
+}

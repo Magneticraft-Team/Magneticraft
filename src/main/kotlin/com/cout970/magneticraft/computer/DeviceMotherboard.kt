@@ -1,18 +1,19 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
-import com.cout970.magneticraft.tileentity.computer.TileComputer
+import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2016/10/01.
  */
-class DeviceMotherboard(val tile: TileComputer, val mb: Motherboard) : IDevice {
+class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITileRef by tile {
+
+    override fun getId(): NodeID = NodeID("module_device_motherboard", pos, world.provider.dimension)
 
     override fun deserializeNBT(nbt: NBTTagCompound) = Unit
     override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
@@ -54,7 +55,7 @@ class DeviceMotherboard(val tile: TileComputer, val mb: Motherboard) : IDevice {
         //worldTime
             76, 77, 78, 79 -> return mb.clock.split(addr - 76)
         //run time
-            80, 81, 82, 83 -> return mb.tile.world.totalWorldTime.split(addr - 80)
+            80, 81, 82, 83 -> return world.totalWorldTime.split(addr - 80)
         }
         return 0
     }
@@ -86,8 +87,4 @@ class DeviceMotherboard(val tile: TileComputer, val mb: Motherboard) : IDevice {
             }
         }
     }
-
-    override fun getWorld(): World = tile.world
-
-    override fun getPos(): BlockPos = tile.pos
 }

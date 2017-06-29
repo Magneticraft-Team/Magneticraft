@@ -2,13 +2,12 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IFloppyDisk
+import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 import java.io.RandomAccessFile
 import java.nio.charset.Charset
 import java.util.*
@@ -16,7 +15,7 @@ import java.util.*
 /**
  * Created by cout970 on 2016/10/13.
  */
-class DeviceFloppyDrive(val parent: TileEntity, val getDisk: () -> IFloppyDisk?) : IDevice {
+class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) : IDevice, ITileRef by parent {
 
     private var buffer: ByteArray? = null
     var sleep = 0
@@ -24,7 +23,9 @@ class DeviceFloppyDrive(val parent: TileEntity, val getDisk: () -> IFloppyDisk?)
     var action = 0
     var currentSector = 0
 
-    val isActive: Boolean get() = !parent.isInvalid
+    val isActive: Boolean = true
+
+    override fun getId(): NodeID = NodeID("module_device_floppy_drive", pos, world)
 
     fun iterate() {
         if (sleep > 0) {
@@ -165,8 +166,4 @@ class DeviceFloppyDrive(val parent: TileEntity, val getDisk: () -> IFloppyDisk?)
             setByteArray("buffer", getBuffer())
         }
     }
-
-    override fun getWorld(): World = parent.world
-
-    override fun getPos(): BlockPos = parent.pos
 }

@@ -87,11 +87,11 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     override fun drawCenteredString(text: String, pos: Vec2d, color: Int) {
-        drawCenteredString(fontRendererObj, text, pos.xi, pos.yi, color)
+        drawCenteredString(fontRenderer, text, pos.xi, pos.yi, color)
     }
 
     override fun drawString(text: String, pos: Vec2d, color: Int) {
-        drawString(fontRendererObj, text, pos.xi, pos.yi, color)
+        drawString(fontRenderer, text, pos.xi, pos.yi, color)
     }
 
     override fun drawHorizontalLine(startX: Int, endX: Int, y: Int, color: Int) {
@@ -132,7 +132,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         RenderHelper.enableGUIStandardItemLighting()
 
         itemRender.renderItemAndEffectIntoGUI(stack, pos.xi, pos.yi)
-        itemRender.renderItemOverlayIntoGUI(fontRendererObj, stack, pos.xi, pos.yi, text)
+        itemRender.renderItemOverlayIntoGUI(fontRenderer, stack, pos.xi, pos.yi, text)
 
         RenderHelper.disableStandardItemLighting()
     }

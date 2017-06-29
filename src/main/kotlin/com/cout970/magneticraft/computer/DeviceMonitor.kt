@@ -1,19 +1,18 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 
 /**
  * Created by cout970 on 31/12/2015.
  */
-class DeviceMonitor(val parent: TileEntity) : IDevice {
+class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     private var screenBuffer: ByteArray? = null
 
@@ -45,7 +44,9 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
     val lines: Int = 35
     val columns: Int = 80
     val screenSize: Int = lines * columns
-    val isActive: Boolean get() = !parent.isInvalid
+    val isActive: Boolean = true
+
+    override fun getId(): NodeID = NodeID("module_device_monitor", pos, world)
 
     override fun readByte(pointer: Int): Byte {
         val byte = when (pointer) {
@@ -84,13 +85,13 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
             in 72.splitRange() -> cursorColumn = cursorColumn.splitSet(pointer - 72, data)
             76 -> {
                 if (data.toInt() == 1) {
-                    if (currentLine >= 0 && currentLine < lines) {
+                    if (currentLine in 0..(lines - 1)) {
                         for (i in 0 until columns) {
                             getBuffer()[i] = getScreenBuffer()[currentLine * columns + i]
                         }
                     }
                 } else if (data.toInt() == 2) {
-                    if (currentLine >= 0 && currentLine < lines) {
+                    if (currentLine in 0..(lines - 1)) {
                         for (i in 0 until columns) {
                             getScreenBuffer()[currentLine * columns + i] = getBuffer()[i]
                         }
@@ -178,10 +179,6 @@ class DeviceMonitor(val parent: TileEntity) : IDevice {
         main.setTag("OldMonitor", nbt)
         return main
     }
-
-    override fun getWorld(): World = parent.world
-
-    override fun getPos(): BlockPos = parent.pos
 
     //Client to Server sync
     fun saveToServer(ibd: IBD) {

@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.GlStateManager
 
 val BOOK_TEX = resource("textures/gui/guide/book.png")
 val ARROW_SIZE = Vec2d(18, 26)
-val FONT_HEIGHT = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT
+val FONT_HEIGHT = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT
 
 class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : GuiCommon() {
     val entry = target.first
@@ -95,12 +95,12 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
     }
 
     fun drawString(pos: Vec2d, text: String) {
-        fontRenderer.drawString(text, pos.xi, pos.yi, -16777216)
+        fontRendererObj.drawString(text, pos.xi, pos.yi, -16777216)
     }
 
-    fun getStringWidth(text: String) = fontRenderer.getStringWidth(text)
+    fun getStringWidth(text: String) = fontRendererObj.getStringWidth(text)
 
-    fun getCharWidth(char: Char) = fontRenderer.getCharWidth(char)
+    fun getCharWidth(char: Char) = fontRendererObj.getCharWidth(char)
 
     enum class Page(
         val start: Vec2d,

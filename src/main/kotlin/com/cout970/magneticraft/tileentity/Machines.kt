@@ -5,6 +5,7 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleConveyorBelt
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
+import com.cout970.magneticraft.tileentity.modules.ModuleInserter
 import com.cout970.magneticraft.tileentity.modules.ModuleInventory
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
@@ -34,15 +35,29 @@ class TileCrushingTable : TileBase() {
 
 class TileConveyorBelt : TileBase(), ITickable {
 
+    val facing: EnumFacing get() = getBlockState()[Machines.PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+    val conveyorModule = ModuleConveyorBelt({ facing })
+
+    // Client data
     var rotation = 0f
     var deltaTimer = System.currentTimeMillis()
-    val facing: EnumFacing
-        get() = getBlockState()[Machines.PROPERTY_CONVEYOR_ORIENTATION]?.facing ?: EnumFacing.NORTH
-
-    val conveyorModule = ModuleConveyorBelt({ facing })
 
     init {
         initModules(conveyorModule)
+    }
+
+    override fun update() {
+        super.update()
+    }
+}
+
+class TileInserter : TileBase(), ITickable {
+
+    val facing: EnumFacing get() = getBlockState()[Machines.PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+    val inserterModule = ModuleInserter({ facing })
+
+    init {
+        initModules(inserterModule)
     }
 
     override fun update() {

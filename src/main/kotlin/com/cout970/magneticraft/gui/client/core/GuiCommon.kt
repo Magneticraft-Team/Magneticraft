@@ -13,8 +13,8 @@ open class GuiCommon : GuiScreen() {
     val itemRenderer: RenderItem?
         get() = super.itemRender
 
-    val fontRenderer: FontRenderer
-        get() = super.fontRendererObj
+    val fontRendererObj: FontRenderer
+        get() = super.fontRenderer
 
     open val size = Vec2d(176, 166)
     var start = Vec2d(0, 0)
@@ -49,7 +49,7 @@ open class GuiCommon : GuiScreen() {
     }
 
     fun drawHoveringText(text: List<String>, pos: Vec2d) {
-        drawHoveringText(text, pos.xi, pos.yi, fontRenderer)
+        drawHoveringText(text, pos.xi, pos.yi, fontRendererObj)
     }
 
     fun drawStack(stack: ItemStack, pos: Vec2d, text: String? = null) {
@@ -57,7 +57,7 @@ open class GuiCommon : GuiScreen() {
         RenderHelper.enableGUIStandardItemLighting()
 
         itemRenderer?.renderItemAndEffectIntoGUI(stack, pos.xi, pos.yi)
-        itemRenderer?.renderItemOverlayIntoGUI(fontRenderer, stack, pos.xi, pos.yi, text)
+        itemRenderer?.renderItemOverlayIntoGUI(fontRendererObj, stack, pos.xi, pos.yi, text)
 
         RenderHelper.disableStandardItemLighting()
         GlStateManager.popMatrix()

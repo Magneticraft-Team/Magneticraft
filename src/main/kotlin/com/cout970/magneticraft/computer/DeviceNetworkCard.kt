@@ -1,12 +1,13 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.io.InputStream
@@ -17,10 +18,10 @@ import java.nio.charset.Charset
 /**
  * Created by cout970 on 2016/10/31.
  */
-class DeviceNetworkCard(val parent: TileEntity) : IDevice {
+class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     val status = 0
-    val isActive: Boolean get() = !parent.isInvalid
+    val isActive: Boolean = true
     val internetAllowed: Boolean get() = Config.allowTcpConnections
     val maxConnections: Int get() = Math.max(Math.min(Config.maxTcpConnections - totalConnections.count { it.status == 1 }, 2), 0)
 
@@ -35,6 +36,8 @@ class DeviceNetworkCard(val parent: TileEntity) : IDevice {
     companion object {
         var totalConnections = mutableSetOf<Connection>()
     }
+
+    override fun getId(): NodeID = NodeID("module_device_network_card", pos, world)
 
     /*
 struct driver_device_internet_card {
@@ -170,18 +173,18 @@ struct driver_internet_socket {
                         error = 2
                         return
                     }
-                    val ipstr: String
+                    val ipStr: String
                     try {
                         val tmp = ByteArray(80)
                         System.arraycopy(ip, 0, tmp, 0, ip.indexOf(0))
-                        ipstr = tmp.toString(Charset.forName("US-ASCII"))
+                        ipStr = tmp.toString(Charset.forName("US-ASCII"))
                     } catch (e: Exception) {
                         e.printStackTrace()
                         error = 3
                         return
                     }
                     try {
-                        socket = Socket(ipstr, port)
+                        socket = Socket(ipStr, port)
                         inputStream = socket!!.inputStream
                         outputStream = socket!!.outputStream
                         error = 0

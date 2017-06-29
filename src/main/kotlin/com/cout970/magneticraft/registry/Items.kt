@@ -18,13 +18,13 @@ fun initItems() {
     items_ += Metals.initItems()
     items_ += Tools.initItems()
 
-    items_.forEach { GameRegistry.register(it) }
+    val itemRegistry = GameRegistry.findRegistry(Item::class.java)
+    items_.forEach { itemRegistry.register(it) }
     items = items_
 }
+// TODO list
 //listOf<Item>(
 //        ItemGuideBook,
-//        ItemIronHammer,
-//        ItemStoneHammer,
 //        ItemCrushedOre,
 //        ItemCrushedCoal,
 //        ItemCrushedLapis,
@@ -35,13 +35,9 @@ fun initItems() {
 //        ItemPebblesCoal,
 //        ItemPebblesLapis,
 //        ItemMesh,
-//        ItemIngot,
 //        ItemCoilOfWire,
-//        ItemHeavyPlate,
-//        ItemLightPlate,
 //        ItemVoltmeter,
 //        ItemThermometer,
-//        ItemNugget,
 //        ItemBattery,
 //        ItemFloppyDisk,
 //        ItemCoke

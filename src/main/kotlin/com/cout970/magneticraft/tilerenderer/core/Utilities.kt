@@ -23,10 +23,13 @@ import org.lwjgl.opengl.GL14
 /**
  * Created by cout970 on 2017/06/16.
  */
+
+const val PIXEL = 0.0625
+
 object Utilities {
 
     val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
-    const val PIXEL = 0.0625
+
 
 //    fun renderMultiblockBlueprint(multiblock: Multiblock) {
 //        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
@@ -84,9 +87,9 @@ object Utilities {
 
     fun customRotate(rot: Vec3d, pos: Vec3d) {
         translate(pos.xd, pos.yd, pos.zd)
-        rotate(rot.xCoord.toFloat(), 1f, 0f, 0f)
-        rotate(rot.yCoord.toFloat(), 0f, 1f, 0f)
-        rotate(rot.zCoord.toFloat(), 0f, 0f, 1f)
+        rotate(rot.xf, 1f, 0f, 0f)
+        rotate(rot.yf, 0f, 1f, 0f)
+        rotate(rot.zf, 0f, 0f, 1f)
         translate(-pos.xd, -pos.yd, -pos.zd)
     }
 
@@ -137,6 +140,23 @@ object Utilities {
         t.pos(box.maxX, box.minY, box.maxZ).color(r, g, b, a).endVertex()
         t.pos(box.maxX, box.minY, box.minZ).color(r, g, b, a).endVertex()
 
+        tes.draw()
+        glEnable(GL_TEXTURE_2D)
+    }
+
+    fun renderLine(pos: IVector3, end: IVector3, color: IVector3 = vec3Of(1,1,1)) {
+        val tes = Tessellator.getInstance()
+        val t = tes.buffer
+        val r = color.xf
+        val g = color.yf
+        val b = color.zf
+        val a = 1.0f
+
+        glDisable(GL_TEXTURE_2D)
+        GlStateManager.glLineWidth(2f)
+        t.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR)
+        t.pos(pos.xd, pos.yd, pos.zd).color(r, g, b, a).endVertex()
+        t.pos(end.xd, end.yd, end.zd).color(r, g, b, a).endVertex()
         tes.draw()
         glEnable(GL_TEXTURE_2D)
     }
@@ -204,35 +224,35 @@ object Utilities {
 
     fun drawLine(t: BufferBuilder, a: Vec3d, b: Vec3d) {
         val w = 0.0625 / 2
-        t.pos(a.xCoord, a.yCoord - w, a.zCoord).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(a.xCoord, a.yCoord + w, a.zCoord).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord + w, b.zCoord).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord - w, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd - w, a.zd).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd + w, a.zd).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd + w, b.zd).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd - w, b.zd).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
 
-        t.pos(a.xCoord, a.yCoord, a.zCoord - w).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(a.xCoord, a.yCoord, a.zCoord + w).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord, b.zCoord + w).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord, b.zCoord - w).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd, a.zd - w).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd, a.zd + w).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd, b.zd + w).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd, b.zd - w).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
 
-        t.pos(a.xCoord - w, a.yCoord, a.zCoord).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(a.xCoord + w, a.yCoord, a.zCoord).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord + w, b.yCoord, b.zCoord).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord - w, b.yCoord, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd - w, a.yd, a.zd).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd + w, a.yd, a.zd).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd + w, b.yd, b.zd).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd - w, b.yd, b.zd).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
         //inverted
-        t.pos(a.xCoord, a.yCoord + w, a.zCoord).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(a.xCoord, a.yCoord - w, a.zCoord).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord - w, b.zCoord).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord + w, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd + w, a.zd).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd - w, a.zd).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd - w, b.zd).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd + w, b.zd).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
 
-        t.pos(a.xCoord, a.yCoord, a.zCoord + w).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(a.xCoord, a.yCoord, a.zCoord - w).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord, b.zCoord - w).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord, b.yCoord, b.zCoord + w).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd, a.zd + w).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd, a.yd, a.zd - w).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd, b.zd - w).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd, b.yd, b.zd + w).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
 
-        t.pos(a.xCoord + w, a.yCoord, a.zCoord).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(a.xCoord - w, a.yCoord, a.zCoord).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord - w, b.yCoord, b.zCoord).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
-        t.pos(b.xCoord + w, b.yCoord, b.zCoord).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd + w, a.yd, a.zd).tex(0.0, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(a.xd - w, a.yd, a.zd).tex(0.125, 0.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd - w, b.yd, b.zd).tex(0.125, 1.0).normal(0f, 1f, 0f).endVertex()
+        t.pos(b.xd + w, b.yd, b.zd).tex(0.0, 1.0).normal(0f, 1f, 0f).endVertex()
     }
 
     fun renderConnection(con: IElectricConnection, a: IWireConnector, b: IWireConnector, weight: Double = 0.05) {
@@ -263,15 +283,15 @@ object Utilities {
         val list = mutableListOf<Vec3d>()
         val distance = start.distanceTo(end)
         val middle = Vec3d(
-                (start.xCoord + end.xCoord) / 2,
-                (start.yCoord + end.yCoord) / 2 - distance * mass,
-                (start.zCoord + end.zCoord) / 2)
+                (start.xd + end.xd) / 2,
+                (start.yd + end.yd) / 2 - distance * mass,
+                (start.zd + end.zd) / 2)
 
         for (i in 0..10) {
             val p = i / 10.0
-            val x = interpolate(start.xCoord, middle.xCoord, end.xCoord, p)
-            val y = interpolate(start.yCoord, middle.yCoord, end.yCoord, p)
-            val z = interpolate(start.zCoord, middle.zCoord, end.zCoord, p)
+            val x = interpolate(start.xd, middle.xd, end.xd, p)
+            val y = interpolate(start.yd, middle.yd, end.yd, p)
+            val z = interpolate(start.zd, middle.zd, end.zd, p)
             list.add(Vec3d(x, y, z))
         }
         return list

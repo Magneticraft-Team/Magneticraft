@@ -16,7 +16,9 @@ val sounds = listOf(
  * Called by ClientProxy to register all the sounds
  */
 fun registerSounds() {
+    val soundRegistry = GameRegistry.findRegistry(SoundEvent::class.java)
     sounds.values.forEach {
-        GameRegistry.register(it, it.soundName)
+        it.registryName = it.soundName
+        soundRegistry.register(it)
     }
 }

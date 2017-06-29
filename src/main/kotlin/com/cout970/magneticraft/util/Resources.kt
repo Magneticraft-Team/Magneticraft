@@ -19,7 +19,7 @@ fun resource(path: String) = ResourceLocation(MOD_ID, path)
 
 fun String.i18n(vararg args: Any): ITextComponent = TextComponentTranslation(this, *args)
 
-val String.box: Vec2d get() = Minecraft.getMinecraft().fontRendererObj.run {
+val String.box: Vec2d get() = Minecraft.getMinecraft().fontRenderer.run {
     Vec2d(getStringWidth(this@box), FONT_HEIGHT)
 }
 

@@ -1,18 +1,16 @@
 package com.cout970.magneticraft.api.internal.energy
 
+import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricNode
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 
 /**
  * Created by cout970 on 11/06/2016.
  */
 @Suppress("unused")
 open class ElectricNode(
-        private val worldGetter: () -> World,
-        private val posGetter: () -> BlockPos,
+        val ref: ITileRef,
         private val resistance: Double = 0.001,
         private val capacity: Double = 1.0,
         private val name: String = "electric_node_1"
@@ -42,8 +40,8 @@ open class ElectricNode(
     override fun getResistance() = resistance
     override fun getCapacity() = capacity
 
-    override fun getWorld() = worldGetter()
-    override fun getPos() = posGetter()
+    override fun getWorld() = ref.world!!
+    override fun getPos() = ref.pos!!
 
     fun updateAmperage() {
         val tick = world.totalWorldTime
@@ -100,19 +98,23 @@ open class ElectricNode(
         if (this === other) return true
         if (other !is ElectricNode) return false
 
-        if (worldGetter.invoke() != other.worldGetter.invoke()) return false
-        if (posGetter.invoke() != other.posGetter.invoke()) return false
         if (resistance != other.resistance) return false
         if (capacity != other.capacity) return false
+        if (name != other.name) return false
+        if (voltage != other.voltage) return false
+        if (amperage != other.amperage) return false
+        if (lastTick != other.lastTick) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = worldGetter.invoke().hashCode()
-        result = 31 * result + posGetter.invoke().hashCode()
-        result = 31 * result + resistance.hashCode()
+        var result = resistance.hashCode()
         result = 31 * result + capacity.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + voltage.hashCode()
+        result = 31 * result + amperage.hashCode()
+        result = 31 * result + lastTick.hashCode()
         return result
     }
 }

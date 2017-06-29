@@ -29,6 +29,7 @@ class ModuleConveyorBelt(
 
     override lateinit var container: IModuleContainer
     val facing get() = facingGetter()
+
     val boxes = mutableListOf<Box>()
     var toUpdate = false
     val newBoxes = mutableListOf<Box>()

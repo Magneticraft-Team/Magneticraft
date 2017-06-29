@@ -9,6 +9,8 @@ import com.cout970.magneticraft.util.vector.yd
 import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.util.math.Vec3d
 
+fun Number.toRads() = Math.toRadians(this.toDouble())
+
 infix fun Int.roundTo(factor: Int) = (this / factor) * factor
 
 infix fun Long.roundTo(factor: Long) = (this / factor) * factor

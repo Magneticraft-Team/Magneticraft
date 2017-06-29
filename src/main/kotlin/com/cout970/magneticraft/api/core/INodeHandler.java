@@ -1,7 +1,5 @@
 package com.cout970.magneticraft.api.core;
 
-import net.minecraft.util.math.BlockPos;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,5 +29,5 @@ public interface INodeHandler {
      * The position in world of this handler
      * @return The position of this handler
      */
-    BlockPos getPos();
+    ITileRef getRef();
 }

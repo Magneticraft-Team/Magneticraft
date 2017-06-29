@@ -1,18 +1,18 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.*
-import com.cout970.magneticraft.tileentity.computer.TileComputer
 import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2016/09/30.
  */
-class Motherboard(private val cpu: ICPU, private val memory: IMemory, private val rom: IROM, val tile: TileComputer) : IMotherboard {
+class Motherboard(private val cpu: ICPU, private val memory: IMemory, private val rom: IROM,
+                  private val bus: Bus) : IMotherboard {
 
-    val CPU_CLOCK = 1000000 / 20
+    var CPU_CLOCK = 1000000 / 20
     private var cpuCycles = -1
     private var clock = 0
-    private var bus: Bus = Bus(memory, mutableMapOf(0xFF to DeviceMotherboard(tile, this)))
+//    private val bus: Bus = Bus(memory, mutableMapOf(0xFF to DeviceMotherboard(tile, this)))
     private var sleep = 0
 
     init {
@@ -78,16 +78,14 @@ class Motherboard(private val cpu: ICPU, private val memory: IMemory, private va
     }
 
     override fun reset() {
-        if (tile.world?.isServer ?: true) {
-            clock = 0
-            cpu.reset()
-            rom.bios.use {
-                var index = 0
-                while (true) {
-                    val r = it.read()
-                    if (r == -1) break
-                    memory.writeByte(index++, r.toByte())
-                }
+        clock = 0
+        cpu.reset()
+        rom.bios.use {
+            var index = 0
+            while (true) {
+                val r = it.read()
+                if (r == -1) break
+                memory.writeByte(index++, r.toByte())
             }
         }
     }

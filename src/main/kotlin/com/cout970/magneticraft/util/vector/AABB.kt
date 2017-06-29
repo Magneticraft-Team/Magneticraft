@@ -21,8 +21,6 @@ operator fun AxisAlignedBB.minus(offsetVector: Vec3d) = offset(-offsetVector)
 
 fun AxisAlignedBB.offset(offsetVector: Vec3i) = offset(offsetVector.toBlockPos())!!
 
-fun AxisAlignedBB.offset(offsetVector: Vec3d) = offset(offsetVector.xd, offsetVector.yd, offsetVector.zd)!!
-
 //Box construction
 
 infix fun Vec3i.toAABBWith(other: Vec3i) = AxisAlignedBB(this.toBlockPos(), other.toBlockPos())
@@ -37,7 +35,7 @@ operator fun AxisAlignedBB.component2() = Vec3d(maxX, maxY, maxZ)
 
 
 fun AxisAlignedBB.cut(other: AxisAlignedBB): AxisAlignedBB? {
-    if (!this.intersectsWith(other)) return null
+    if (!this.intersects(other)) return null
     return AxisAlignedBB(
             Math.max(minX, other.minX), Math.max(minY, other.minY), Math.max(minZ, other.minZ),
             Math.min(maxX, other.maxX), Math.min(maxY, other.maxY), Math.min(maxZ, other.maxZ))

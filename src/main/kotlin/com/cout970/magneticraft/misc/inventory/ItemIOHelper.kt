@@ -10,35 +10,33 @@ import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import net.minecraftforge.items.ItemStackHandler
 
 /**
  * Created by Yurgen on 13/12/2016.
  */
 
 //TODO remove
-class ItemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemStackHandler) {
-
-    fun suckItems() {
-        val items = world.getEntitiesWithinAABB(EntityItem::class.java, inBox)
-        for (i in items) {
-            val item = i.entityItem
-            for (j in 0 until inv.slots) {
-                val inserted = inv.insertItem(j, item, false)
-                if (inserted.isNotEmpty) {
-                    i.setEntityItemStack(inserted)
-                } else {
-                    i.setDead()
-                    break
-                }
-            }
-        }
-    }
-}
+//class ItemInputHelper(val world: World, val inBox: AxisAlignedBB, var inv: ItemStackHandler) {
+//
+//    fun suckItems() {
+//        val items = world.getEntitiesWithinAABB(EntityItem::class.java, inBox)
+//        for (i in items) {
+//            val item = i.entityItem
+//            for (j in 0 until inv.slots) {
+//                val inserted = inv.insertItem(j, item, false)
+//                if (inserted.isNotEmpty) {
+//                    i.setEntityItemStack(inserted)
+//                } else {
+//                    i.setDead()
+//                    break
+//                }
+//            }
+//        }
+//    }
+//}
 
 class ItemOutputHelper(val world: World, val outPos: BlockPos, val off: Vec3d) {
 

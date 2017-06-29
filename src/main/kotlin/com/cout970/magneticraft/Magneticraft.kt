@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import org.apache.logging.log4j.Logger
 import java.io.File
+import kotlin.system.measureTimeMillis
 
 @Suppress("UNUSED_PARAMETER", "unused")
 //Basic mod information for Forge
@@ -52,24 +53,29 @@ object Magneticraft {
         log = event.modLog
         configFile = event.suggestedConfigurationFile
 
-        CreativeTabMg
-        log.info("Starting pre-init")
-        ConfigHandler.apply {
-            load()
-            read()
-            save()
+        val time = measureTimeMillis {
+            //Enables the creative tab
+            CreativeTabMg
+
+            log.info("Starting pre-init")
+            ConfigHandler.apply {
+                load()
+                read()
+                save()
+            }
+
+            //Initialization of the Mod stuff
+            proxy.preInit()
+
+            //Detection of other mods installed for compatibility
+            IntegrationHandler.preInit()
+
+            if (Debug.DEBUG) {
+                Debug.preInit(event)
+            }
         }
 
-        //Initialization of the Mod stuff
-        proxy.preInit()
-        //Detection of other mods installed for compatibility
-        IntegrationHandler.preInit()
-
-        if (Debug.DEBUG) {
-            Debug.preInit(event)
-        }
-
-        log.info("Pre-init done")
+        log.info("Pre-init done in $time miliseconds")
     }
 
     /**
@@ -79,9 +85,11 @@ object Magneticraft {
     fun init(event: FMLInitializationEvent) {
         log.info("Starting init")
 
-        proxy.init()
+        val time = measureTimeMillis {
+            proxy.init()
+        }
 
-        log.info("Init done")
+        log.info("Init done in $time miliseconds")
     }
 
     /**
@@ -92,8 +100,10 @@ object Magneticraft {
     fun postInit(event: FMLPostInitializationEvent) {
         log.info("Starting post-init")
 
-        proxy.postInit()
+        val time = measureTimeMillis {
+            proxy.postInit()
+        }
 
-        log.info("Post-init done")
+        log.info("Post-init done in $time miliseconds")
     }
 }

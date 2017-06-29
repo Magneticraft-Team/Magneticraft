@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.core;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
@@ -17,6 +18,12 @@ public final class NodeID implements INBTSerializable<NBTTagCompound> {
         this.name = name;
         this.pos = pos;
         this.dimension = dimension;
+    }
+
+    public NodeID(String name, BlockPos pos, World world) {
+        this.name = name;
+        this.pos = pos;
+        this.dimension = world.provider.getDimension();
     }
 
     public String getName() {

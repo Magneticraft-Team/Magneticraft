@@ -2,8 +2,8 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.tileentity.TileCrushingTable
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
-import com.cout970.magneticraft.tilerenderer.core.Utilities
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
@@ -19,7 +19,7 @@ object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
             pushMatrix()
             translate(x + 0.5, y + 0.9375, z + 0.3125)
             if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
-                translate(0.0, -0.045, 1 * Utilities.PIXEL)
+                translate(0.0, -0.045, 1 * PIXEL)
                 rotate(90f, 1f, 0f, 0f)
             } else {
                 translate(0.0, -0.125, 0.0625 * 3)

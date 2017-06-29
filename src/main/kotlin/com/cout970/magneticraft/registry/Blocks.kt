@@ -1,10 +1,8 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.block.Decoration
-import com.cout970.magneticraft.block.Machines
-import com.cout970.magneticraft.block.MultiblockParts
-import com.cout970.magneticraft.block.Ores
+import com.cout970.magneticraft.block.*
 import net.minecraft.block.Block
+import net.minecraft.item.Item
 import net.minecraft.item.ItemBlock
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -23,8 +21,11 @@ fun initBlocks() {
     blocks_ += Ores.initBlocks()
     blocks_ += Machines.initBlocks()
     blocks_ += MultiblockParts.initBlocks()
+    blocks_ += ElectricMachines.initBlocks()
 
-    blocks_.forEach { GameRegistry.register(it.first); GameRegistry.register(it.second) }
+    val blockRegistry = GameRegistry.findRegistry(Block::class.java)
+    val itemRegistry = GameRegistry.findRegistry(Item::class.java)
+    blocks_.forEach { blockRegistry.register(it.first); itemRegistry .register(it.second) }
     blocks = blocks_
 }
 

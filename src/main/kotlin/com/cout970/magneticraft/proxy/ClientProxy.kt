@@ -7,11 +7,15 @@ import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerSounds
+import com.cout970.magneticraft.tileentity.TileConnector
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tileentity.TileCrushingTable
+import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.tilerenderer.TileRendererConnector
 import com.cout970.magneticraft.tilerenderer.TileRendererConveyorBelt
 import com.cout970.magneticraft.tilerenderer.TileRendererCrushingTable
+import com.cout970.magneticraft.tilerenderer.TileRendererInserter
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.util.toModel
 import com.cout970.modelloader.api.DefaultBlockDecorator
@@ -80,6 +84,8 @@ class ClientProxy : CommonProxy() {
         //TileEntity renderers
         register(TileCrushingTable::class.java, TileRendererCrushingTable)
         register(TileConveyorBelt::class.java, TileRendererConveyorBelt)
+        register(TileInserter::class.java, TileRendererInserter)
+        register(TileConnector::class.java, TileRendererConnector)
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
