@@ -20,13 +20,14 @@ import net.minecraftforge.fml.relauncher.Side
 abstract class CommonProxy {
 
     open fun preInit() {
+        registerCapabilities()
+
         initBlocks()
         initItems()
         initTileEntities()
         //Common preInit stuff
         registerFuelHandler()
         registerOreDictionaryEntries()
-        registerCapabilities()
         MultiblockManager.registerDefaults()
     }
 

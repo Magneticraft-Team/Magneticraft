@@ -33,13 +33,30 @@ class ItemBuilder {
             registryName = this@ItemBuilder.registryName
             this@ItemBuilder.creativeTab?.let { setCreativeTab(it) }
             this@ItemBuilder.variants?.let { variants = it }
-            if(isFull3d) setFull3D()
+            if (isFull3d) setFull3D()
             setMaxStackSize(this@ItemBuilder.maxStackSize)
-            if(this@ItemBuilder.maxDamage > 0) maxDamage = this@ItemBuilder.maxDamage
+            if (this@ItemBuilder.maxDamage > 0) maxDamage = this@ItemBuilder.maxDamage
             onHitEntity = this@ItemBuilder.onHitEntity
             capabilityProvider = this@ItemBuilder.capabilityProvider
         }
 
         return item
+    }
+
+    fun copy(func: ItemBuilder.() -> Unit): ItemBuilder {
+        val newBuilder = ItemBuilder()
+
+        newBuilder.constructor = constructor
+        newBuilder.registryName = registryName
+        newBuilder.creativeTab = creativeTab
+        newBuilder.variants = variants
+        newBuilder.isFull3d = isFull3d
+        newBuilder.maxStackSize = maxStackSize
+        newBuilder.maxDamage = maxDamage
+        newBuilder.onHitEntity = onHitEntity
+        newBuilder.capabilityProvider = capabilityProvider
+
+        func(newBuilder)
+        return newBuilder
     }
 }

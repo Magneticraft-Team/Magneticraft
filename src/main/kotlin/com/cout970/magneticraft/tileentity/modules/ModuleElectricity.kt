@@ -20,6 +20,7 @@ import com.cout970.magneticraft.util.vector.length
 import com.cout970.magneticraft.util.vector.minus
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3i
@@ -45,7 +46,7 @@ class ModuleElectricity(
 
     lateinit override var container: IModuleContainer
 
-    var autoConnectWires = true
+    var autoConnectWires = false
 
     val inputNormalConnections = mutableListOf<IElectricConnection>()
     val outputNormalConnections = mutableListOf<IElectricConnection>()
@@ -128,7 +129,8 @@ class ModuleElectricity(
     fun autoConnectWires(start: BlockPos, end: BlockPos) {
         val thisNode = electricNodes.find { it is IWireConnector } as? IWireConnector ?: return
 
-        val handlers = world.getTileEntitiesIn(start, end).mapNotNull {
+        val filter: (TileEntity) -> Boolean = { it != container.tile }
+        val handlers = world.getTileEntitiesIn(start, end, filter).mapNotNull {
             it.getOrNull(ELECTRIC_NODE_HANDLER)
         }
 
@@ -206,6 +208,7 @@ class ModuleElectricity(
             handler?.removeConnection(con)
             true
         }
+        onWireChange(null)
     }
 
     fun clearNormalConnections() {
@@ -222,6 +225,7 @@ class ModuleElectricity(
             handler?.removeConnection(con)
             true
         }
+        onWireChange(null)
     }
 
     fun getHandler(node: IElectricNode): IElectricNodeHandler? {

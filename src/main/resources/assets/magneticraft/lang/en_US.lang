@@ -40,7 +40,6 @@ item.magneticraft.heavy_plates_steel.name=Heavy Steel Plate
 item.magneticraft.light_plates_iron.name=Light Iron Plate
 item.magneticraft.light_plates_gold.name=Light Gold Plate
 item.magneticraft.light_plates_copper.name=Light Copper Plate
-item.magneticraft.light_plates_lead.name=Light Lead Plate
 item.magneticraft.light_plates_cobalt.name=Light Cobalt Plate
 item.magneticraft.light_plates_tungsten.name=Light Tungsten Plate
 item.magneticraft.light_plates_steel.name=Light Steel Plate
@@ -58,7 +57,7 @@ item.magneticraft.ingots_tungsten.name=Tungsten Ingot
 item.magneticraft.ingots_steel.name=Steel Ingot
 
 #item.magneticraft.hand_sieve.name=Hand Sieve
-#item.magneticraft.coil_of_wire.name=Coil of Wire
+item.magneticraft.copper_coil_normal.name=Copper coil
 #item.magneticraft.voltmeter.name=Voltmeter
 #item.magneticraft.thermometer.name=Thermometer
 #item.magneticraft.battery_item.name=Battery
@@ -97,8 +96,9 @@ tile.magneticraft.tile_limestone_inverted.name=Inverted Limestone Tiles
 #tile.magneticraft.fluxed_gravel.name=Fluxed Gravel
 
 tile.magneticraft.conveyor_belt_north.name=Conveyor Belt
+tile.magneticraft.inserter_north.name=Inserter
 #tile.magneticraft.electric_pole.name=Electric Pole
-#tile.magneticraft.electric_connector.name=Electric Connector
+tile.magneticraft.connector_down.name=Electric Connector
 #tile.magneticraft.incendiary_generator.name=Incendiary Generator
 #tile.magneticraft.block_battery.name=Battery Block
 #tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
@@ -149,12 +149,13 @@ tile.magneticraft.multiblock_column_axis_z.name=Support Column
 
 itemGroup.magneticraft=Magneticraft
 
-#text.magneticraft.wire_connect.success=Wire attached
-#text.magneticraft.wire_connect.fail=Unable to connect wire
-#text.magneticraft.wire_connect.same_block=Unable to connect wire to the same block
-#text.magneticraft.wire_connect.no_other_connector=No position set
-#text.magneticraft.auto_connect.activate=Auto connect wires activated
-#text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
+text.magneticraft.wire_connect.success=Wire attached
+text.magneticraft.wire_connect.fail=Unable to connect wire
+text.magneticraft.wire_connect.same_block=Unable to connect wire to the same block
+text.magneticraft.wire_connect.no_other_connector=No position set
+text.magneticraft.wire_connect.updated_position=Position updated %s
+text.magneticraft.auto_connect.activate=Auto connect wires activated
+text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
 #text.magneticraft.jei.crushing_table=Crushing Table
 #text.magneticraft.jei.table_sieve=Table Sieve

@@ -7,6 +7,8 @@ import net.minecraft.world.World
 
 interface IModuleContainer {
 
+    val tile: TileBase
+
     val world: World
     val pos: BlockPos
 

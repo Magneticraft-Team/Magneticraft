@@ -58,11 +58,15 @@ object Magneticraft {
             CreativeTabMg
 
             log.info("Starting pre-init")
-            ConfigHandler.apply {
-                load()
-                read()
-                save()
+            log.info("Loading config...")
+            val configTime = measureTimeMillis {
+                ConfigHandler.apply {
+                    load()
+                    read()
+                    save()
+                }
             }
+            log.info("Config loaded in $configTime miliseconds")
 
             //Initialization of the Mod stuff
             proxy.preInit()

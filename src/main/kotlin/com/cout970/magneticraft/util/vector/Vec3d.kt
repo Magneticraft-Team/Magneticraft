@@ -12,7 +12,7 @@ import javax.vecmath.Vector3f
  * Created by cout970 on 14/05/2016.
  */
 fun vec3Of(x: Number, y: Number, z: Number): IVector3 = net.minecraft.util.math.Vec3d(x.toDouble(), y.toDouble(), z.toDouble())
-fun vec3Of(x: Number): IVector3 = net.minecraft.util.math.Vec3d(x.toDouble(), x.toDouble(), x.toDouble())
+fun vec3Of(n: Number): IVector3 = net.minecraft.util.math.Vec3d(n.toDouble(), n.toDouble(), n.toDouble())
 
 // getters
 

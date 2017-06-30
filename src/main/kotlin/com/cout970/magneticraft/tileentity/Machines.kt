@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.tileentity
 
-import com.cout970.magneticraft.block.Machines
-import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleConveyorBelt
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
@@ -35,7 +34,7 @@ class TileCrushingTable : TileBase() {
 
 class TileConveyorBelt : TileBase(), ITickable {
 
-    val facing: EnumFacing get() = getBlockState()[Machines.PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+    val facing: EnumFacing get() = getBlockState().getOrientation()
     val conveyorModule = ModuleConveyorBelt({ facing })
 
     // Client data
@@ -53,7 +52,7 @@ class TileConveyorBelt : TileBase(), ITickable {
 
 class TileInserter : TileBase(), ITickable {
 
-    val facing: EnumFacing get() = getBlockState()[Machines.PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+    val facing: EnumFacing get() = getBlockState().getOrientation()
     val inserterModule = ModuleInserter({ facing })
 
     init {

@@ -32,9 +32,12 @@ object MultiblockParts : IBlockMaker {
             creativeTab = CreativeTabMg
         }
 
-        parts = builder.withName("multiblock_parts").apply { states = PartType.values().toList() }.build()
-        column = builder.withName("multiblock_column").apply {
+        parts = builder.withName("multiblock_parts").copy {
+            states = PartType.values().toList()
+        }.build()
+        column = builder.withName("multiblock_column").copy {
             states = ColumnOrientation.values().toList()
+            alwaysDropDefault = true
             onBlockPlaced = { it.defaultValue.withProperty(PROPERTY_COLUMN_AXIS, it.facing.axis.toColumnAxis())}
         }.build()
 

@@ -52,15 +52,6 @@ var MANUAL_CONNECTION_HANDLER: Capability<IManualConnectionHandler>? = null
 
 @CapabilityInject(IFluidHandler::class)
 var FLUID_HANDLER: Capability<IFluidHandler>? = null
-//
-//@CapabilityInject(ITeslaConsumer::class)
-//var TESLA_CONSUMER: Capability<ITeslaConsumer>? = null
-//
-//@CapabilityInject(ITeslaProducer::class)
-//var TESLA_PRODUCER: Capability<ITeslaProducer>? = null
-//
-//@CapabilityInject(ITeslaHolder::class)
-//var TESLA_STORAGE: Capability<ITeslaHolder>? = null
 
 @CapabilityInject(IEnergyConsumerItem::class)
 var ITEM_ENERGY_CONSUMER: Capability<IEnergyConsumerItem>? = null

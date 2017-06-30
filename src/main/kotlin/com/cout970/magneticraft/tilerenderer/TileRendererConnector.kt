@@ -4,7 +4,6 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.ElectricMachines
-import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileConnector
@@ -13,10 +12,7 @@ import com.cout970.magneticraft.tilerenderer.core.ModelCacheFactory
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.Vec3d
 
 /**
  * Created by cout970 on 2017/06/29.
@@ -30,6 +26,7 @@ object TileRendererConnector : TileRenderer<TileConnector>() {
     override fun renderTileEntityAt(te: TileConnector, x: Double, y: Double, z: Double, partialTicks: Float,
                                     destroyStage: Int) {
 
+        //updated the cache for rendering wires
         te.wireRender.update {
             te.electricModule.outputWiredConnections.forEach { i ->
                 Utilities.renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.035)
@@ -41,30 +38,8 @@ object TileRendererConnector : TileRenderer<TileConnector>() {
             bindTexture(Utilities.WIRE_TEXTURE)
             te.wireRender.render()
 
-            if (te.container.shouldTick(40)) {
-                te.hasBase = shouldHaveBase(te)
-            }
-
             bindTexture(texture)
-            when (te.facing.opposite) {
-                EnumFacing.UP -> {
-                    Utilities.customRotate(vec3Of(180, 0, 0), Vec3d(0.5, 0.5, 0.5))
-                }
-                EnumFacing.NORTH -> {
-                    Utilities.customRotate(vec3Of(90, 0, 0), Vec3d(0.5, 0.5, 0.5))
-                }
-                EnumFacing.SOUTH -> {
-                    Utilities.customRotate(vec3Of(-90, 0, 0), Vec3d(0.5, 0.5, 0.5))
-                }
-                EnumFacing.WEST -> {
-                    Utilities.customRotate(vec3Of(0, 0, -90), Vec3d(0.5, 0.5, 0.5))
-                }
-                EnumFacing.EAST -> {
-                    Utilities.customRotate(vec3Of(0, 0, 90), Vec3d(0.5, 0.5, 0.5))
-                }
-                else -> Unit
-            }
-
+            Utilities.rotateAroundCenter(te.facing)
             model?.render()
 
             if (te.hasBase) {

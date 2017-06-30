@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.tool.IHammer
+import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.world.isClient
@@ -31,7 +32,7 @@ import java.util.*
 /**
  * Created by cout970 on 2017/06/12.
  */
-class ModuleCrushingTable(val invModule: ModuleInventory) : IModule {
+class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivated {
 
     override val name: String = "module_crushing_table"
     override lateinit var container: IModuleContainer
@@ -46,7 +47,7 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule {
         get() = invModule.inventory.getStackInSlot(0)
         set(value) = invModule.inventory.setStackInSlot(0, value)
 
-    fun onActivated(it: OnActivatedArgs): Boolean = it.run {
+    override fun onActivated(args: OnActivatedArgs): Boolean = args.run {
         if (side != EnumFacing.UP || hand == EnumHand.OFF_HAND) return false
 
         if (storedItem.isNotEmpty) {

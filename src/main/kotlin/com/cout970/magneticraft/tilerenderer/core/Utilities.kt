@@ -59,6 +59,28 @@ object Utilities {
 //        }
 //    }
 
+
+    fun rotateAroundCenter(facing: EnumFacing){
+        when (facing.opposite) {
+            EnumFacing.UP -> {
+                Utilities.customRotate(vec3Of(180, 0, 0), Vec3d(0.5, 0.5, 0.5))
+            }
+            EnumFacing.NORTH -> {
+                Utilities.customRotate(vec3Of(90, 0, 0), Vec3d(0.5, 0.5, 0.5))
+            }
+            EnumFacing.SOUTH -> {
+                Utilities.customRotate(vec3Of(-90, 0, 0), Vec3d(0.5, 0.5, 0.5))
+            }
+            EnumFacing.WEST -> {
+                Utilities.customRotate(vec3Of(0, 0, -90), Vec3d(0.5, 0.5, 0.5))
+            }
+            EnumFacing.EAST -> {
+                Utilities.customRotate(vec3Of(0, 0, 90), Vec3d(0.5, 0.5, 0.5))
+            }
+            else -> Unit
+        }
+    }
+
     fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms.TransformType, alpha: Float) {
         var bakedmodel = Minecraft.getMinecraft().renderItem.getItemModelWithOverrides(stack, null, null)
         if (stack.item != null) {
@@ -259,6 +281,7 @@ object Utilities {
         val origins = a.connectors
         val destinations = b.connectors
         val direction = b.pos.subtract(a.pos)
+
         if (origins.size != destinations.size) return
         for (c in origins.indices) {
             val order = b.getConnectorIndex(c, a, con)

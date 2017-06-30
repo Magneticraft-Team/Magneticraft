@@ -8,9 +8,7 @@ import net.minecraft.world.World;
 
 /**
  * Created by cout970 on 17/07/2016.
- */
-
-/**
+ *
  * This interface is intended to be implemented by a block, to allow the player to manually connect wires between blocks
  */
 public interface IManualConnectionHandler {

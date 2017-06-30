@@ -4,9 +4,7 @@ import com.cout970.magneticraft.multiblock.IMultiblockComponent
 import com.cout970.magneticraft.multiblock.Multiblock
 import java.util.*
 
-fun<T> List<T>.shuffled() = toMutableList().apply(Collections::shuffle)
 
-inline infix fun<reified T> List<T>.with(other: List<T>): MutableList<T> = mutableListOf(*toTypedArray(), *other.toTypedArray())
 /**
  * Created by cout970 on 19/08/2016.
  */
@@ -19,3 +17,7 @@ fun <T> MutableList<T>.setAll(it: Iterable<T>){
     clear()
     addAll(it)
 }
+
+fun<T> List<T>.shuffled() = toMutableList().apply(Collections::shuffle)
+
+inline infix fun<reified T> List<T>.with(other: List<T>): MutableList<T> = mutableListOf(*toTypedArray(), *other.toTypedArray())

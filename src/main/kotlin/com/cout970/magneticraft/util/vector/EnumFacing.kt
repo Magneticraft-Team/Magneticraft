@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.util.vector
 
 import com.cout970.magneticraft.util.toRadians
+import com.cout970.magneticraft.util.toRads
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumFacing.*
 import net.minecraft.util.math.AxisAlignedBB
@@ -27,12 +28,15 @@ fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
     return BlockPos(origin + BlockPos(pos3))
 }
 
+/**
+ * The default value is associated to the NORTH direction
+ */
 fun EnumFacing.rotatePoint(origin: Vec3d,
                            point: Vec3d): Vec3d {
     val rel = point - origin
     val rot = when (this) {
-        DOWN -> return origin + rel.rotatePitch(-90.0f)
-        UP -> return origin + rel.rotatePitch(90.0f)
+        DOWN -> return origin + rel.rotatePitch(90.toRads().toFloat())
+        UP -> return origin + rel.rotatePitch(-90.toRads().toFloat())
         NORTH -> return point
         SOUTH -> 180.0f
         WEST -> 90.0f

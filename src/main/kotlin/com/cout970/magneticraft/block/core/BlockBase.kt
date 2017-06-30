@@ -25,12 +25,14 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.RayTraceResult
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.ICapabilityProvider
 
 @Suppress("OverridingDeprecatedMember")
-open class BlockBase(material: Material) : Block(material) {
+open class BlockBase(material: Material) : Block(material), ICapabilityProvider {
 
     companion object {
-        // Because mojang is stupid and createBlockState is called BEFORE the constructor
+        // Because Mojang is stupid and createBlockState is called BEFORE the constructor
         var states_: List<IStatesEnum>? = null
     }
 
@@ -39,6 +41,7 @@ open class BlockBase(material: Material) : Block(material) {
     var enableOcclusionOptimization = true
     var translucent_ = false
     var overrideItemModel = true
+    var alwaysDropDefault = false
 
     // Methods
     var aabb: ((BoundingBoxArgs) -> AABB)? = null
@@ -46,6 +49,9 @@ open class BlockBase(material: Material) : Block(material) {
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
     var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
     var pickBlock: ((PickBlockArgs) -> ItemStack)? = null
+    var canPlaceBlockOnSide: ((CanPlaceBlockOnSideArgs) -> Boolean)? = null
+    var capabilityProvider: ICapabilityProvider? = null
+    var onNeighborChanged: ((OnNeighborChangedArgs) -> Unit)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -86,7 +92,7 @@ open class BlockBase(material: Material) : Block(material) {
     }
 
     override fun damageDropped(state: IBlockState): Int {
-        return getMetaFromState(state)
+        return if(alwaysDropDefault) 0 else getMetaFromState(state)
     }
 
     override fun getPickBlock(state: IBlockState, target: RayTraceResult, world: World, pos: BlockPos,
@@ -135,9 +141,27 @@ open class BlockBase(material: Material) : Block(material) {
         return state
     }
 
+    override fun canPlaceBlockOnSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
+        val default = super.canPlaceBlockOnSide(worldIn, pos, side)
+        return canPlaceBlockOnSide?.invoke(CanPlaceBlockOnSideArgs(worldIn, pos, side, default)) ?: default
+    }
+
+    override fun neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block,
+                                 fromPos: BlockPos) {
+        onNeighborChanged?.invoke(OnNeighborChangedArgs(state, worldIn, pos, blockIn, fromPos))
+    }
+
     override fun isFullBlock(state: IBlockState?): Boolean = !translucent_
     override fun isOpaqueCube(state: IBlockState?) = enableOcclusionOptimization
     override fun isFullCube(state: IBlockState?) = !translucent_
+
+    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+        return capabilityProvider?.getCapability(capability, facing)
+    }
+
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
+        return capabilityProvider?.hasCapability(capability, facing) ?: false
+    }
 }
 
 class BlockTileBase(val factory: (World, IBlockState) -> TileEntity?, material: Material)
@@ -155,4 +179,9 @@ data class OnBlockPlacedArgs(val world: World, val pos: BlockPos, val facing: En
                              val placer: EntityLivingBase?, val hand: EnumHand, val defaultValue: IBlockState)
 
 data class PickBlockArgs(val state: IBlockState, val target: RayTraceResult, val world: World, val pos: BlockPos,
-                            val player: EntityPlayer, val default: ItemStack)
+                         val player: EntityPlayer, val default: ItemStack)
+
+data class CanPlaceBlockOnSideArgs(val worldIn: World, val pos: BlockPos, val side: EnumFacing, val default: Boolean)
+
+data class OnNeighborChangedArgs(val state: IBlockState, val worldIn: World, val pos: BlockPos, val blockIn: Block,
+                                 val fromPos: BlockPos)

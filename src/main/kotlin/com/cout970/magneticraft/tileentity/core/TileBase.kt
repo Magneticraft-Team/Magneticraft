@@ -41,9 +41,12 @@ abstract class TileBase : TileEntity() {
         if (blockState == null || blockState!!.block != getBlockType() || world.totalWorldTime > lastTime + 40) {
             lastTime = world.totalWorldTime
             blockState = world.getBlockState(pos)
+            onBlockStateUpdates()
         }
         return blockState!!
     }
+
+    open fun onBlockStateUpdates() = Unit
 
     /**
      * In order to this method to work the subclass must implement ITickeable
@@ -150,7 +153,7 @@ abstract class TileBase : TileEntity() {
         container.modules.forEach { it.receiveSyncData(ibd, otherSide) }
     }
 
-    class ModuleContainer(val tile: TileBase, override val modules: List<IModule>) : IModuleContainer {
+    class ModuleContainer(override val tile: TileBase, override val modules: List<IModule>) : IModuleContainer {
         override val world: World get() = tile.world
         override val pos: BlockPos get() = tile.pos
         override val blockState: IBlockState get() = tile.getBlockState()
