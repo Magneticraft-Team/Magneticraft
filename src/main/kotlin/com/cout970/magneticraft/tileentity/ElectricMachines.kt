@@ -18,6 +18,7 @@ import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.Vec3i
 
 /**
  * Created by cout970 on 2017/06/29.
@@ -32,7 +33,8 @@ class TileConnector : TileBase(), ITickable {
             electricNodes = listOf(wrapper),
             onWireChange = { if (world.isClient) wireRender.reset() },
             maxWireDistance = 10.0,
-            canConnectAtSide = this::canConnectAtSide
+            canConnectAtSide = this::canConnectAtSide,
+            connectableDirections = this::getConnectableDirections
     )
 
     val facing: EnumFacing get() = getBlockState().getFacing()
@@ -55,13 +57,19 @@ class TileConnector : TileBase(), ITickable {
         }
     }
 
+    fun getConnectableDirections(): List<Vec3i> {
+        return if (facing.opposite.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
+            listOf(facing.opposite.directionVec, facing.opposite.directionVec * 2)
+        } else emptyList()
+    }
+
     fun getConnectors(): List<IVector3> {
         val offset = facing.opposite.directionVec.toVec3d() * PIXEL * 3.0
         return listOf(vec3Of(0.5) + offset)
     }
 
     fun canConnectAtSide(facing: EnumFacing?): Boolean {
-        return facing == null || facing == this.facing
+        return facing == null || facing == this.facing.opposite
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
@@ -87,6 +95,6 @@ class TileBattery : TileBase(), ITickable {
     }
 
     fun canConnectAtSide(facing: EnumFacing?): Boolean {
-        return facing == this.facing
+        return facing == this.facing.opposite
     }
 }

@@ -19,6 +19,7 @@ import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.length
 import com.cout970.magneticraft.util.vector.minus
 import com.cout970.magneticraft.util.vector.plus
+import com.cout970.magneticraft.util.vector.toEnumFacing
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
@@ -36,6 +37,7 @@ class ModuleElectricity(
         val onWireChange: (EnumFacing?) -> Unit = {},
         val onUpdateConnections: (ModuleElectricity) -> Unit = {},
         val maxWireDistance: Double = 16.0,
+        val connectableDirections: () -> List<Vec3i> = { ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.directionVec } },
         override val name: String = "module_electricity"
 ) : IModule, IElectricNodeHandler {
 
@@ -94,8 +96,8 @@ class ModuleElectricity(
         clearNormalConnections()
         electricNodes.forEach { thisNode ->
 
-            NEGATIVE_DIRECTIONS.forEach directions@ { dir ->
-                val tile = world.getTileEntity(pos.offset(dir)) ?: return@directions
+            connectableDirections().forEach directions@ { dir ->
+                val tile = world.getTileEntity(pos.add(dir)) ?: return@directions
                 val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER) ?: return@directions
                 if (handler === this) return@directions
 
@@ -104,7 +106,7 @@ class ModuleElectricity(
                         .map { it as IElectricNode }
 
                 electricNodes.forEach { otherNode ->
-                    tryConnect(this, thisNode, handler, otherNode, dir)
+                    tryConnect(this, thisNode, handler, otherNode, dir.toEnumFacing())
                 }
             }
         }

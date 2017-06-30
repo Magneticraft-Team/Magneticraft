@@ -48,3 +48,20 @@ operator fun Vec3i.unaryMinus() = BlockPos(-xd, -yd, -zd)
 operator fun Vec3i.component1() = x
 operator fun Vec3i.component2() = y
 operator fun Vec3i.component3() = z
+
+private fun norm(n: Int) = when {
+    n < 0 -> -1
+    n == 0 -> 0
+    n > 0 -> 1
+    else -> 0
+}
+
+fun Vec3i.norm(): BlockPos = BlockPos(norm(x), norm(y), norm(z))
+
+fun Vec3i.toEnumFacing(): EnumFacing? {
+    val norm = this.norm()
+    EnumFacing.values().forEach {
+        if (it.directionVec == norm) return it
+    }
+    return null
+}

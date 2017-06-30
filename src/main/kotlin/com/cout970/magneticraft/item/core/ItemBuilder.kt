@@ -2,6 +2,7 @@ package com.cout970.magneticraft.item.core
 
 import com.cout970.magneticraft.util.resource
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.util.EnumActionResult
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 
@@ -18,6 +19,7 @@ class ItemBuilder {
     var maxStackSize = 64
     var maxDamage = 0
     var onHitEntity: ((HitEntityArgs) -> Boolean)? = null
+    var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
 
     fun withName(name: String): ItemBuilder {
@@ -38,6 +40,7 @@ class ItemBuilder {
             if (this@ItemBuilder.maxDamage > 0) maxDamage = this@ItemBuilder.maxDamage
             onHitEntity = this@ItemBuilder.onHitEntity
             capabilityProvider = this@ItemBuilder.capabilityProvider
+            onItemUse = this@ItemBuilder.onItemUse
         }
 
         return item

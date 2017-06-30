@@ -1,17 +1,14 @@
 package com.cout970.magneticraft.item
 
+import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.tool.IHammer
-import com.cout970.magneticraft.item.core.HitEntityArgs
-import com.cout970.magneticraft.item.core.IItemMaker
-import com.cout970.magneticraft.item.core.ItemBase
-import com.cout970.magneticraft.item.core.ItemBuilder
+import com.cout970.magneticraft.item.core.*
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.player.sendMessage
+import com.cout970.magneticraft.misc.player.sendUnlocalizedMessage
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.registry.ITEM_HAMMER
-import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
-import com.cout970.magneticraft.registry.fromBlock
+import com.cout970.magneticraft.registry.*
 import com.cout970.magneticraft.util.checkNBT
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.hasKey
@@ -35,6 +32,7 @@ object Tools : IItemMaker {
     lateinit var ironHammer: ItemBase private set
     lateinit var steelHammer: ItemBase private set
     lateinit var copperCoil: ItemBase private set
+    lateinit var voltmeter: ItemBase private set
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
@@ -66,7 +64,26 @@ object Tools : IItemMaker {
             isFull3d = false
         }.build()
 
-        return listOf(stoneHammer, ironHammer, steelHammer, copperCoil)
+        voltmeter = builder.withName("voltmeter").copy {
+            onItemUse = Tools::onUseVoltmeter
+        }.build()
+
+        return listOf(stoneHammer, ironHammer, steelHammer, copperCoil, voltmeter)
+    }
+
+    fun onUseVoltmeter(args: OnItemUseArgs): EnumActionResult {
+        if (args.worldIn.isServer) {
+            val tile = args.worldIn.getTileEntity(args.pos) ?: return EnumActionResult.PASS
+            val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER) ?: return EnumActionResult.PASS
+
+            val msg = handler.nodes
+                    .filterIsInstance<IElectricNode>()
+                    .map { "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage) }
+                    .joinToString("\n")
+
+            args.player.sendUnlocalizedMessage(msg)
+        }
+        return EnumActionResult.PASS
     }
 
     private fun createHitEntity(damage: Float): (HitEntityArgs) -> Boolean {
@@ -121,7 +138,7 @@ object Tools : IItemMaker {
         }
 
         override fun onItemUse(player: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand,
-                               facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
+                               facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
             val stack = player.getHeldItem(hand)
             if (stack.isEmpty) return EnumActionResult.PASS
 
