@@ -86,6 +86,7 @@ object ElectricMachines : IBlockMaker {
             //methods
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
         }.build()
 
         return itemBlockListOf(connector, battery)

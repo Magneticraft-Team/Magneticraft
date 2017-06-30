@@ -5,6 +5,7 @@ import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.ModelCacheFactory
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
+import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
@@ -24,6 +25,7 @@ object TileRendererInserter : TileRenderer<TileInserter>() {
 
         stackMatrix {
             translate(x, y, z)
+            Utilities.rotateFromCenter(te.facing)
             bindTexture(texture)
             model?.render()
         }
@@ -33,7 +35,6 @@ object TileRendererInserter : TileRenderer<TileInserter>() {
         val loc = ModelResourceLocation(Machines.inserter.registryName, "model")
         //cleaning
         model?.clear()
-
 
         model = ModelCacheFactory.createCache(loc)
     }

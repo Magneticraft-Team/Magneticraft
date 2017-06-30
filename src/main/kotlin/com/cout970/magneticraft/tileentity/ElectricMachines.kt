@@ -9,6 +9,7 @@ import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleElectricity
+import com.cout970.magneticraft.tileentity.modules.ModuleInternalStorage
 import com.cout970.magneticraft.tilerenderer.TileRendererConnector
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -80,14 +81,19 @@ class TileBattery : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
     val node = ElectricNode(container.ref)
+
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node),
             maxWireDistance = 10.0,
             canConnectAtSide = this::canConnectAtSide
     )
+    val storageModule = ModuleInternalStorage(
+            electricModule = electricModule,
+            mainNode = node
+    )
 
     init {
-        initModules(electricModule)
+        initModules(electricModule, storageModule)
     }
 
     override fun update() {

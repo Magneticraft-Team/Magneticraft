@@ -31,6 +31,12 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override fun getWindowSize(): Vec2d = Vec2d(width, height)
 
+    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        this.drawDefaultBackground()
+        super.drawScreen(mouseX, mouseY, partialTicks)
+        this.renderHoveredToolTip(mouseX, mouseY)
+    }
+
     override fun drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) {
         components.forEach { it.drawFirstLayer(Vec2d(mouseX, mouseY), partialTicks) }
     }

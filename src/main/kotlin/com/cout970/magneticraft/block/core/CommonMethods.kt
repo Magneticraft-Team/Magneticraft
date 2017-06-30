@@ -65,8 +65,10 @@ object CommonMethods {
     }
 
     fun openGui(args: OnActivatedArgs): Boolean {
-        return if (args.worldIn.isServer && !args.playerIn.isSneaking) {
-            args.playerIn.openGui(Magneticraft, -1, args.worldIn, args.pos.xi, args.pos.yi, args.pos.zi)
+        return if (!args.playerIn.isSneaking) {
+            if (args.worldIn.isServer) {
+                args.playerIn.openGui(Magneticraft, -1, args.worldIn, args.pos.xi, args.pos.yi, args.pos.zi)
+            }
             true
         } else false
     }

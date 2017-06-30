@@ -3,6 +3,7 @@ package com.cout970.magneticraft.gui.common
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileBox
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
@@ -31,5 +32,21 @@ class ContainerBox(player: EntityPlayer, world: World, blockPos: BlockPos)
 
     private fun getPosFromIndex(index: Int): IVector2 {
         return vec2Of(index % 9, index / 9) * 18 + vec2Of(8, 8)
+    }
+}
+
+class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    val tile = world.getTile<TileBattery>(blockPos)
+
+    init {
+//        tile?.invModule?.inventory?.let { inv ->
+//            for (index in 0 until inv.slots) {
+//                val pos = getPosFromIndex(index)
+//                addSlotToContainer(SlotItemHandler(inv, index, pos.xi, pos.yi))
+//            }
+//        }
+        bindPlayerInventory(player.inventory)
     }
 }
