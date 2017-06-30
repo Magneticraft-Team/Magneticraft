@@ -97,8 +97,9 @@ class ModuleElectricity(
         electricNodes.forEach { thisNode ->
 
             connectableDirections().forEach directions@ { dir ->
+                val side = dir.toEnumFacing()
                 val tile = world.getTileEntity(pos.add(dir)) ?: return@directions
-                val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER) ?: return@directions
+                val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return@directions
                 if (handler === this) return@directions
 
                 val electricNodes = handler.nodes
@@ -106,7 +107,7 @@ class ModuleElectricity(
                         .map { it as IElectricNode }
 
                 electricNodes.forEach { otherNode ->
-                    tryConnect(this, thisNode, handler, otherNode, dir.toEnumFacing())
+                    tryConnect(this, thisNode, handler, otherNode, side)
                 }
             }
         }

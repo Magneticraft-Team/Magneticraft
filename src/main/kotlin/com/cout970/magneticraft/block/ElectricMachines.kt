@@ -107,7 +107,7 @@ object ElectricMachines : IBlockMaker {
             if (tile == null || other == null) {
                 return false
             }
-            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER) ?: return false
+            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return false
             val otherNodes = handler.nodes.filterIsInstance(IWireConnector::class.java)
 
             val size = tile.electricModule.outputWiredConnections.size

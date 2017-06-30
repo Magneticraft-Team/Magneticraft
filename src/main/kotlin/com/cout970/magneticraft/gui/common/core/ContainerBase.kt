@@ -76,10 +76,8 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
             } else {
                 tryToMerge(playerIn, slot, true)
             }
-
         }
-
-        return null
+        return ItemStack.EMPTY
     }
 
     private fun tryToMerge(playerIn: EntityPlayer?, slot: Slot, playerSlot: Boolean): ItemStack? {
@@ -102,7 +100,6 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
             } else {
                 slot.onSlotChanged()
             }
-
         }
 
         // Avoid crash, Minecraft call the method 'transferSlot' recursively if 'returnedStack == inputStack'

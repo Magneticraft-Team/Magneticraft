@@ -25,7 +25,7 @@ object TileRendererInserter : TileRenderer<TileInserter>() {
 
         stackMatrix {
             translate(x, y, z)
-            Utilities.rotateFromCenter(te.facing)
+            Utilities.rotateFromCenter(te.facing, 180f)
             bindTexture(texture)
             model?.render()
         }

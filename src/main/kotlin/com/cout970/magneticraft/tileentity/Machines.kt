@@ -53,10 +53,11 @@ class TileConveyorBelt : TileBase(), ITickable {
 class TileInserter : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val inserterModule = ModuleInserter({ facing })
+    val invModule = ModuleInventory(1, capabilityFilter = { null })
+    val inserterModule = ModuleInserter({ facing }, invModule)
 
     init {
-        initModules(inserterModule)
+        initModules(inserterModule, invModule)
     }
 
     override fun update() {
