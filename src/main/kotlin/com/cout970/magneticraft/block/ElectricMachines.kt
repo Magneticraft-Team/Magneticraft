@@ -14,6 +14,7 @@ import com.cout970.magneticraft.misc.tileentity.tryConnect
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
+import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileConnector
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.resource
@@ -38,6 +39,7 @@ import net.minecraft.world.World
 object ElectricMachines : IBlockMaker {
 
     lateinit var connector: BlockBase private set
+    lateinit var battery: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -71,7 +73,22 @@ object ElectricMachines : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(connector)
+        battery = builder.withName("battery").copy {
+            states = CommonMethods.Orientation.values().toList()
+            factory = factoryOf(::TileBattery)
+            overrideItemModel = false
+            alwaysDropDefault = true
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/battery.mcx"),
+                    "inventory" to resource("models/block/mcx/battery.mcx")
+            )
+            //methods
+            onBlockPlaced = CommonMethods::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(connector, battery)
     }
 
     object ConnectorManualConnectionHandler : IManualConnectionHandler {

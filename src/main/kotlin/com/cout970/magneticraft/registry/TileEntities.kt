@@ -17,6 +17,7 @@ fun initTileEntities(){
     map += TileConveyorBelt::class.java to "conveyor_belt"
     map += TileInserter::class.java to "inserter"
     map += TileConnector::class.java to "connector"
+    map += TileBattery::class.java to "battery"
 
     map.forEach { clazz, name ->
         GameRegistry.registerTileEntity(clazz, "${MOD_ID}_$name")

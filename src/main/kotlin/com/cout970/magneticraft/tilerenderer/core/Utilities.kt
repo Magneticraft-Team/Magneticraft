@@ -59,7 +59,9 @@ object Utilities {
 //        }
 //    }
 
-
+    /**
+     * This uses DOWN as default facing
+     */
     fun rotateAroundCenter(facing: EnumFacing){
         when (facing.opposite) {
             EnumFacing.UP -> {

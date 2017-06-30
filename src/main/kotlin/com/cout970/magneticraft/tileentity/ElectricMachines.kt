@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
 import com.cout970.magneticraft.misc.block.getFacing
+import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.TileBase
@@ -49,7 +50,7 @@ class TileConnector : TileBase(), ITickable {
     }
 
     override fun onBlockStateUpdates() {
-        if(world.isClient) {
+        if (world.isClient) {
             hasBase = TileRendererConnector.shouldHaveBase(this)
         }
     }
@@ -64,4 +65,28 @@ class TileConnector : TileBase(), ITickable {
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
+}
+
+
+class TileBattery : TileBase(), ITickable {
+
+    val facing: EnumFacing get() = getBlockState().getOrientation()
+    val node = ElectricNode(container.ref)
+    val electricModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            maxWireDistance = 10.0,
+            canConnectAtSide = this::canConnectAtSide
+    )
+
+    init {
+        initModules(electricModule)
+    }
+
+    override fun update() {
+        super.update()
+    }
+
+    fun canConnectAtSide(facing: EnumFacing?): Boolean {
+        return facing == this.facing
+    }
 }
