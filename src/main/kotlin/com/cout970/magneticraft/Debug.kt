@@ -1,5 +1,6 @@
 package com.cout970.magneticraft
 
+import com.cout970.magneticraft.util.logError
 import net.minecraft.client.Minecraft
 import net.minecraft.launchwrapper.Launch
 import net.minecraft.util.Timer
@@ -20,7 +21,7 @@ object Debug {
     fun preInit(event: FMLPreInitializationEvent) {
         srcDir = searchSourceDir(event.modConfigurationDirectory)
         if (srcDir == null) {
-            com.cout970.magneticraft.util.error("Error trying to find the source directory")
+            logError("Error trying to find the source directory")
         }
     }
 

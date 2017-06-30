@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
  */
 object ModelCacheFactory {
 
-    fun createCache(loc: ModelResourceLocation, filter: (String) -> Boolean): ModelCache? {
+    fun createCache(loc: ModelResourceLocation, filter: (String) -> Boolean = { true }): ModelCache? {
         val model = ModelLoaderApi.getModel(loc) ?: return null
         return ModelCache {
             renderModelParts(model.modelData, model.modelData.parts.filter { filter(it.name) })
