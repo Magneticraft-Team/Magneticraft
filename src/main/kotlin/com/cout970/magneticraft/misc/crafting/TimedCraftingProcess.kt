@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.misc.crafting
 
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
@@ -7,10 +9,9 @@ import net.minecraftforge.common.util.INBTSerializable
 /**
  * Created by cout970 on 22/08/2016.
  */
-class CraftingProcess(
-        var craft: () -> Unit,
-        var canCraft: () -> Boolean,
-        var useEnergy: (Float) -> Unit,
+class TimedCraftingProcess(
+        var process: ICraftingProcess,
+        var onWorkingTick: (Float) -> Unit,
         var limit: () -> Float = { 100f }
 ) : INBTSerializable<NBTTagCompound> {
 
@@ -18,28 +19,28 @@ class CraftingProcess(
     var lastTick = 0L
 
     fun tick(world: World, speed: Float) {
-        if (canCraft()) {
+        if (process.canCraft()) {
             lastTick = world.totalWorldTime
             if (timer <= limit()) {
                 timer += speed
-                useEnergy(speed)
+                onWorkingTick(speed)
             }
-            while (timer >= limit() && canCraft()) {
+            while (timer >= limit() && process.canCraft()) {
                 timer -= limit()
-                craft()
+                process.craft()
             }
         }
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?): Unit = nbt!!.run {
+    override fun deserializeNBT(nbt: NBTTagCompound): Unit = nbt.run {
         timer = getFloat("timer")
         lastTick = getLong("lastTick")
     }
 
 
-    override fun serializeNBT(): NBTTagCompound = NBTTagCompound().apply {
-        setFloat("timer", timer)
-        setLong("lastTick", lastTick)
+    override fun serializeNBT(): NBTTagCompound = newNbt {
+        add("timer", timer)
+        add("lastTick", lastTick)
     }
 
     fun isWorking(world: World): Boolean = world.totalWorldTime - lastTick < 20

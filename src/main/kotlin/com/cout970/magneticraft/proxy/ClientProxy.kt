@@ -81,6 +81,7 @@ class ClientProxy : CommonProxy() {
         register(TileInserter::class.java, TileRendererInserter)
         register(TileConnector::class.java, TileRendererConnector)
         register(TileBattery::class.java, TileRendererBattery)
+        register(TileElectricFurnace::class.java, TileRendererElectricFurnace)
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)

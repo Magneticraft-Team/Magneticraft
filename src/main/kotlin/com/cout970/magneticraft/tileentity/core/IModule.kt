@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity.core
 
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -31,4 +32,6 @@ interface IModule : INBTSerializable<NBTTagCompound> {
     override fun serializeNBT(): NBTTagCompound = newNbt {}
 
     fun receiveSyncData(ibd: IBD, otherSide: Side) = Unit
+
+    fun getGuiSyncVariables() : List<SyncVariable> = emptyList()
 }

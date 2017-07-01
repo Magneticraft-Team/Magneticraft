@@ -1,17 +1,11 @@
 package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.gui.client.components.CompBackground
-import com.cout970.magneticraft.gui.client.components.CompElectricBar
-import com.cout970.magneticraft.gui.client.components.MISC_TEXTURES
-import com.cout970.magneticraft.gui.client.components.TransferBar
+import com.cout970.magneticraft.gui.client.components.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
-import com.cout970.magneticraft.gui.client.core.IComponent
-import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.tileentity.TileBattery
-import com.cout970.magneticraft.tileentity.modules.ModuleInternalStorage
+import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.util.vector.Vec2d
 
 /**
@@ -25,6 +19,31 @@ class GuiTileBox(container: ContainerBase) : GuiBase(container) {
     }
 }
 
+class GuiTileElectricFurnace(container: ContainerBase) : GuiBase(container) {
+
+    val tile = (container.tileEntity as TileElectricFurnace)
+
+    override fun initComponents() {
+        components.add(CompBackground("electric_furnace"))
+        components.add(CompElectricBar(tile.node, Vec2d(58, 64) + box.start))
+        val storageCallback = CallbackBarProvider(
+                callback = { tile.processModule.production.storage.toDouble() },
+                max = { Config.electricFurnaceMaxConsumption },
+                min = { 0.0 }
+        )
+        components.add(CompVerticalBar(storageCallback, 3, Vec2d(69, 64) + box.start,
+                { listOf(String.format("%.2fW", storageCallback.callback())) }))
+
+        val processCallback = CallbackBarProvider(
+                { tile.processModule.timedProcess.timer.toDouble() },
+                { tile.processModule.timedProcess.limit().toDouble() },
+                { 0.0 }
+        )
+        components.add(CompVerticalBar(processCallback, 2, Vec2d(80, 64) + box.start,
+                { listOf("Burning: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
+    }
+}
+
 class GuiTileBattery(container: ContainerBase) : GuiBase(container) {
 
     val tile = container.tileEntity as TileBattery
@@ -33,44 +52,21 @@ class GuiTileBattery(container: ContainerBase) : GuiBase(container) {
         components.add(CompBackground("battery"))
         components.add(CompElectricBar(tile.node, Vec2d(47, 64) + box.start))
 
-        components.add(BatteryBar())
+        components.add(StorageBar(this, tile.storageModule))
 
         components.add(TransferBar(
                 value = { tile.storageModule.chargeRate.storage.toDouble() },
-                min = { -ModuleInternalStorage.MAX_CHARGE_SPEED.toDouble() },
+                min = { -tile.storageModule.maxChargeSpeed },
                 base = { 0.0 },
-                max = { ModuleInternalStorage.MAX_CHARGE_SPEED.toDouble() }, pos = Vec2d(58, 64) + box.start)
+                max = { tile.storageModule.maxChargeSpeed }, pos = Vec2d(58, 64) + box.start)
         )
 
-        components.add(TransferBar(
-                { tile.storageModule.chargeRate.storage.toDouble() },
-                { -Config.blockBatteryTransferRate.toDouble() },
-                { 0.0 },
-                { Config.blockBatteryTransferRate.toDouble() }, Vec2d(58 + 33, 64) + box.start)
-        )
-    }
-
-    inner class BatteryBar : IComponent {
-
-        val parent = this@GuiTileBattery
-        override val box: Box = Box(Vec2d(69, 16) + parent.box.start, Vec2d(16, 48))
-        override lateinit var gui: IGui
-
-        override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-            gui.run {
-                bindTexture(MISC_TEXTURES)
-                val level = (parent.tile.storageModule.energy * 48 / Config.blockBatteryCapacity).toInt()
-                drawScaledTexture(this@BatteryBar.box.pos.copy(y = this@BatteryBar.box.pos.y + 48 - level.toDouble()),
-                        this@BatteryBar.box.size.copy(y = level.toDouble()), Vec2d.ZERO + Vec2d(0, 48 - level),
-                        Vec2d(64, 64))
-            }
-        }
-
-        override fun drawSecondLayer(mouse: Vec2d) {
-            if (mouse in box) {
-                gui.drawHoveringText(listOf("${parent.tile.storageModule.energy}J"), mouse)
-            }
-        }
+//        components.add(TransferBar(
+//                { tile.storageModule.chargeRate.storage.toDouble() },
+//                { -Config.blockBatteryTransferRate.toDouble() },
+//                { 0.0 },
+//                { Config.blockBatteryTransferRate.toDouble() }, Vec2d(58 + 33, 64) + box.start)
+//        )
     }
 }
 

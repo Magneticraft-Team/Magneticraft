@@ -40,6 +40,7 @@ item.magneticraft.heavy_plates_steel.name=Heavy Steel Plate
 item.magneticraft.light_plates_iron.name=Light Iron Plate
 item.magneticraft.light_plates_gold.name=Light Gold Plate
 item.magneticraft.light_plates_copper.name=Light Copper Plate
+item.magneticraft.light_plates_lead.name=Light Lead Plate
 item.magneticraft.light_plates_cobalt.name=Light Cobalt Plate
 item.magneticraft.light_plates_tungsten.name=Light Tungsten Plate
 item.magneticraft.light_plates_steel.name=Light Steel Plate
@@ -58,9 +59,9 @@ item.magneticraft.ingots_steel.name=Steel Ingot
 
 #item.magneticraft.hand_sieve.name=Hand Sieve
 item.magneticraft.copper_coil_normal.name=Copper coil
-#item.magneticraft.voltmeter.name=Voltmeter
+item.magneticraft.voltmeter_normal.name=Voltmeter
 #item.magneticraft.thermometer.name=Thermometer
-#item.magneticraft.battery_item.name=Battery
+item.magneticraft.battery_item_normal.name=Battery
 #item.magneticraft.floppy_disk.name=Floppy Disk
 #item.magneticraft.coal_coke.name=Coal Coke
 
@@ -100,9 +101,9 @@ tile.magneticraft.inserter_north.name=Inserter
 #tile.magneticraft.electric_pole.name=Electric Pole
 tile.magneticraft.connector_down.name=Electric Connector
 #tile.magneticraft.incendiary_generator.name=Incendiary Generator
-#tile.magneticraft.block_battery.name=Battery Block
+tile.magneticraft.battery_north.name=Battery Block
 #tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
-#tile.magneticraft.electric_furnace.name=Electric furnace
+tile.magneticraft.electric_furnace_north.name=Electric furnace
 
 #tile.magneticraft.electric_heater_off.name=Electric Heater
 #tile.magneticraft.electric_heater_on.name=Electric Heater
@@ -175,4 +176,4 @@ text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 #death.attack.kiln=%1$s fed themselves into a blender.
 #death.attack.kiln.player=%2$s pushed %1s$ into a blender.
 
-#tooltip.magneticraft.item_storage.energy=%.1f/%.1fJ
+tooltip.magneticraft.item_storage.energy=%.1f/%.1fJ

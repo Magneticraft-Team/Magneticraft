@@ -107,9 +107,9 @@ class ModuleConveyorBelt(
                 }
                 res
             }
-            if (removed) {
-                container.sendUpdateToNearPlayers()
-            }
+//            if (removed) {
+//                container.sendUpdateToNearPlayers()
+//            }
         }
     }
 
@@ -175,7 +175,7 @@ class ModuleConveyorBelt(
         if (bitmap.test(box.getHitBox())) {
             FullBitMap(bitmap, getSurroundMap()).mark(box.getHitBox())
             boxes += box
-            container.sendUpdateToNearPlayers()
+//            container.sendUpdateToNearPlayers()
             return true
         } else {
             return false
@@ -236,22 +236,22 @@ class ModuleConveyorBelt(
         boxes.clear()
     }
 
-    override fun onActivated(it: OnActivatedArgs): Boolean {
-        if (it.heldItem.isNotEmpty) {
-            val item = it.heldItem.item
+    override fun onActivated(args: OnActivatedArgs): Boolean {
+        if (args.heldItem.isNotEmpty) {
+            val item = args.heldItem.item
             if (item is ItemBlockBase && item.blockBase == Machines.conveyorBelt) {
                 return false
             }
-            val success = addItem(it.heldItem)
+            val success = addItem(args.heldItem)
             if (success && world.isServer) {
-                it.playerIn.setHeldItem(it.hand, ItemStack.EMPTY)
+                args.playerIn.setHeldItem(args.hand, ItemStack.EMPTY)
             }
             return true
         } else {
             val item = removeItem()
             if (item.isNotEmpty) {
                 if (world.isServer) {
-                    it.playerIn.inventory.addItemStackToInventory(item)
+                    args.playerIn.inventory.addItemStackToInventory(item)
                 }
                 return true
             }

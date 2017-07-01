@@ -86,6 +86,7 @@ class ModuleInserter(
     }
 
     fun tryPick(): Boolean {
+        if (invModule.inventory[0].isNotEmpty) return true
         val backTile = world.getTileEntity(pos.offset(facing.opposite))
         if (backTile != null) {
             if (tryPickFromInv(backTile, facing)) {
@@ -130,6 +131,7 @@ class ModuleInserter(
     }
 
     fun tryDrop(): Boolean {
+        if (invModule.inventory[0].isEmpty) return true
         val frontTile = world.getTileEntity(pos.offset(facing))
         if (frontTile != null) {
             if (tryDropToInv(frontTile, facing.opposite)) {

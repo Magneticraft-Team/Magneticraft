@@ -30,17 +30,16 @@ object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
 
-    // TODO implement this
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Set players on fire when processing blaze" +
                                                         " rods in the crushing table")
     var crushingTableCausesFire = true
 
-    @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat, Celsius or Fahrenheit")
+    @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat to display, Celsius or Fahrenheit")
     var heatUnitCelsius = true
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Tesla, " +
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
                                                        "NOTE: all the values in the config about energy are in Watts")
-    var wattsToTesla = 1.0
+    var wattsToFE = 1.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator Energy Production")
     var incendiaryGeneratorMaxProduction = 40.0

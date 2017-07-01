@@ -4,7 +4,7 @@ package com.cout970.magneticraft.gui.common.core
  * Created by cout970 on 08/07/2016.
  */
 
-val DATA_ID_VOLTAGE = 1
+val DATA_ID_VOLTAGE_0 = 1
 val DATA_ID_BURNING_TIME = 2
 val DATA_ID_MAX_BURNING_TIME = 3
 val DATA_ID_MACHINE_HEAT = 4
@@ -17,3 +17,14 @@ val DATA_ID_MACHINE_WORKING = 10
 val DATA_ID_ITEM_CHARGE_RATE = 11
 val DATA_ID_MAX_FREEZING_TIME = 12
 val DATA_ID_FREEZING_TIME = 13
+val DATA_ID_VOLTAGE_1 = 14
+val DATA_ID_VOLTAGE_2 = 14
+val DATA_ID_VOLTAGE_3 = 14
+
+
+val DATA_ID_VOLTAGE_LIST = listOf(
+        DATA_ID_VOLTAGE_0,
+        DATA_ID_VOLTAGE_1,
+        DATA_ID_VOLTAGE_2,
+        DATA_ID_VOLTAGE_3
+)

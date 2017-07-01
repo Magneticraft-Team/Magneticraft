@@ -7,6 +7,10 @@ import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.gui.common.core.DATA_ID_VOLTAGE_LIST
+import com.cout970.magneticraft.misc.network.FloatSyncVariable
+import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.getTileEntitiesIn
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.tileentity.tryConnect
@@ -70,7 +74,9 @@ class ModuleElectricity(
 
         if (container.shouldTick(40)) {
             updateNormalConnections()
-            updateWiredConnections()
+            if (electricNodes.any { it is IWireConnector }) {
+                updateWiredConnections()
+            }
             onUpdateConnections(this)
         }
 
@@ -288,5 +294,17 @@ class ModuleElectricity(
                 }
             }
         }
+    }
+
+    override fun getGuiSyncVariables(): List<SyncVariable> {
+        return electricNodes
+                .filterIsInstance<ElectricNode>()
+                .mapIndexed { index, node ->
+                    FloatSyncVariable(
+                            id = DATA_ID_VOLTAGE_LIST[index],
+                            getter = { node.voltage.toFloat() },
+                            setter = { node.voltage = it.toDouble() }
+                    )
+                }
     }
 }

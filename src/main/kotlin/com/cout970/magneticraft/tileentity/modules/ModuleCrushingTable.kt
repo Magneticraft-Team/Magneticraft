@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.tool.IHammer
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HAMMER
@@ -106,7 +107,7 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivate
                 }
             }
             crushItem(world, pos, playerIn, hammer.breakingSpeed)
-            if (storedItem.isItemEqual(ItemStack(Items.BLAZE_ROD))) {
+            if (Config.crushingTableCausesFire && storedItem.isItemEqual(ItemStack(Items.BLAZE_ROD))) {
                 playerIn.setFire(5)
             }
             hammer.applyDamage(heldItem, playerIn)

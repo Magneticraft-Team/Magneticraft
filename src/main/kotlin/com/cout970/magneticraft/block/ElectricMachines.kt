@@ -16,6 +16,7 @@ import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileConnector
+import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.plus
@@ -40,6 +41,7 @@ object ElectricMachines : IBlockMaker {
 
     lateinit var connector: BlockBase private set
     lateinit var battery: BlockBase private set
+    lateinit var electric_furnace: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -76,8 +78,8 @@ object ElectricMachines : IBlockMaker {
         battery = builder.withName("battery").copy {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileBattery)
-            overrideItemModel = false
             alwaysDropDefault = true
+            overrideItemModel = false
             hasCustomModel = true
             customModels = listOf(
                     "model" to resource("models/block/mcx/battery.mcx"),
@@ -89,7 +91,23 @@ object ElectricMachines : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        return itemBlockListOf(connector, battery)
+        electric_furnace = builder.withName("electric_furnace").copy {
+            states = CommonMethods.Orientation.values().toList()
+            factory = factoryOf(::TileElectricFurnace)
+            alwaysDropDefault = true
+            overrideItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/electric_furnace.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_furnace.mcx")
+            )
+            //methods
+            onBlockPlaced = CommonMethods::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(connector, battery, electric_furnace)
     }
 
     object ConnectorManualConnectionHandler : IManualConnectionHandler {
