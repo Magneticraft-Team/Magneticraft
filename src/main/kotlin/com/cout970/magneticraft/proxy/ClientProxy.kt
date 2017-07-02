@@ -54,7 +54,7 @@ class ClientProxy : CommonProxy() {
         //ItemBlock renders
         blocks.forEach { (block, itemBlock) ->
             (block as? BlockBase)?.let {
-                if (it.overrideItemModel) {
+                if (it.generateDefaultItemModel) {
                     it.inventoryVariants.forEach {
                         ModelLoader.setCustomModelResourceLocation(itemBlock, it.key,
                                 itemBlock.registryName!!.toModel(it.value))
@@ -96,7 +96,7 @@ class ClientProxy : CommonProxy() {
                 val renderer = clazz.objectInstance as TileRenderer<TileBase>
 
                 register(tile, renderer)
-                info("Registering TESR: Tile = ${it.className},\t Renderer = ${renderer.javaClass.canonicalName}")
+                info("Registering TESR: Tile = ${clazz.simpleName}, Renderer = ${renderer.javaClass.simpleName}")
             } catch (e: Exception) {
                 logError("Unable to register class with @RegisterRenderer: $it")
                 e.printStackTrace()

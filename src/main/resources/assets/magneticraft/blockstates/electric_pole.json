@@ -1,0 +1,24 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/electric_machines/electric_pole"
+        }
+    },
+    "variants": {
+        "north": [{}],
+        "north_east": [{}],
+        "east": [{}],
+        "south_east": [{}],
+        "south": [{}],
+        "south_west": [{}],
+        "west": [{}],
+        "north_west": [{}],
+        "down_1": [{}],
+        "down_2": [{}],
+        "down_3": [{}],
+        "down_4": [{}]
+    }
+}

@@ -59,7 +59,7 @@ object Machines : IBlockMaker {
                     "inventory" to resource("models/block/mcx/conveyor_belt.mcx")
             )
             hasCustomModel = true
-            overrideItemModel = false
+            generateDefaultItemModel = false
             alwaysDropDefault = true
             //methods
             boundingBox = { vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.8125, 1) }
@@ -76,7 +76,7 @@ object Machines : IBlockMaker {
                     "inventory" to resource("models/block/mcx/inserter.mcx")
             )
             hasCustomModel = true
-            overrideItemModel = false
+            generateDefaultItemModel = false
             alwaysDropDefault = true
             //methods
             onBlockPlaced = CommonMethods::placeWithOrientation

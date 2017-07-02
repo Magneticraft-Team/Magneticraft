@@ -38,13 +38,13 @@ open class ElectricConnection(
 
     override fun equals(other: Any?): Boolean {
         if (other is IElectricConnection) {
-            return firstNode == other.firstNode && secondNode == other.secondNode
+            return firstNode.id == other.firstNode.id && secondNode.id == other.secondNode.id
         }
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return (super.hashCode() * 31 + firstNode.hashCode()) * 31 + secondNode.hashCode()
+        return (super.hashCode() * 31 + firstNode.id.hashCode()) * 31 + secondNode.id.hashCode()
     }
 
     override fun toString(): String {

@@ -3,12 +3,15 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
+import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.render.RenderCache
+import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
@@ -21,12 +24,14 @@ import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3i
 
 /**
  * Created by cout970 on 2017/06/29.
  */
 
+@RegisterTileEntity("connector")
 class TileConnector : TileBase(), ITickable {
 
     val node = ElectricNode(container.ref)
@@ -78,7 +83,7 @@ class TileConnector : TileBase(), ITickable {
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
 }
 
-
+@RegisterTileEntity("battery")
 class TileBattery : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
@@ -118,6 +123,7 @@ class TileBattery : TileBase(), ITickable {
     }
 }
 
+@RegisterTileEntity("electric_furnace")
 class TileElectricFurnace : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
@@ -149,7 +155,75 @@ class TileElectricFurnace : TileBase(), ITickable {
     }
 }
 
+@RegisterTileEntity("coal_generator")
 class TileCoalGenerator : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
 }
+
+@RegisterTileEntity("electric_pole")
+class TileElectricPole : TileBase(), ITickable {
+    val node = ElectricNode(container.ref)
+    val wrapper = WireConnectorWrapper(node, this::getConnectors)
+
+    val electricModule = ModuleElectricity(
+            electricNodes = listOf(wrapper),
+            onWireChange = { if (world.isClient) wireRender.reset() },
+            canConnectAtSide = { it == null }
+    )
+
+    // client
+    val wireRender = RenderCache()
+
+    init {
+        electricModule.autoConnectWires = true
+        initModules(electricModule)
+    }
+
+    fun getConnectors(): List<IVector3> {
+        val offset = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
+        val first = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).add(offset)
+        val center = Vec3d(0.5, 1.0, 0.5)
+        val last = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).subtract(offset)
+        return listOf(first, center, last)
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
+}
+@RegisterTileEntity("electric_pole_transformer")
+class TileElectricPoleTransformer : TileBase(), ITickable {
+    val node = ElectricNode(container.ref)
+    val wrapper = WireConnectorWrapper(node, this::getConnectors)
+    val wrapper2 = WireConnectorWrapper(node, this::getConnectors2)
+
+    val electricModule = ModuleElectricity(
+            electricNodes = listOf(wrapper, wrapper2),
+            onWireChange = { if (world.isClient) wireRender.reset() },
+            canConnectAtSide = { it == null }
+    )
+
+    // client
+    val wireRender = RenderCache()
+
+    init {
+        electricModule.autoConnectWires = true
+        initModules(electricModule)
+    }
+
+    fun getConnectors(): List<IVector3> {
+        val offset = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
+        val first = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).add(offset)
+        val center = Vec3d(0.5, 1.0, 0.5)
+        val last = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).subtract(offset)
+        return listOf(first, center, last)
+    }
+
+    fun getConnectors2(): List<IVector3> {
+        val angle = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.angle ?: return emptyList()
+        val center = Vec3d(0.5, 1.0, 0.5)
+        return listOf(center)
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
+}
+

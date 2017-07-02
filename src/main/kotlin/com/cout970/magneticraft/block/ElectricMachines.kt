@@ -12,10 +12,7 @@ import com.cout970.magneticraft.misc.tileentity.tryConnect
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
-import com.cout970.magneticraft.tileentity.TileBattery
-import com.cout970.magneticraft.tileentity.TileCoalGenerator
-import com.cout970.magneticraft.tileentity.TileConnector
-import com.cout970.magneticraft.tileentity.TileElectricFurnace
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.plus
@@ -43,11 +40,14 @@ import net.minecraft.world.World
 object ElectricMachines : IBlockMaker {
 
     val PROPERTY_ORIENTATION_AND_LEVEL = PropertyEnum.create("orientation_and_level", OrientationAndLevel::class.java)!!
+    val PROPERTY_POLE_ORIENTATION = PropertyEnum.create("pole_orientation", PoleOrientation::class.java)!!
 
     lateinit var connector: BlockBase private set
     lateinit var battery: BlockBase private set
     lateinit var electric_furnace: BlockBase private set
     lateinit var coal_generator: BlockBase private set
+    lateinit var electric_pole: BlockBase private set
+    lateinit var electric_pole_transformer: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -58,7 +58,7 @@ object ElectricMachines : IBlockMaker {
         connector = builder.withName("connector").copy {
             states = CommonMethods.Facing.values().toList()
             factory = factoryOf(::TileConnector)
-            overrideItemModel = false
+            generateDefaultItemModel = false
             hasCustomModel = true
             alwaysDropDefault = true
             customModels = listOf(
@@ -85,7 +85,7 @@ object ElectricMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileBattery)
             alwaysDropDefault = true
-            overrideItemModel = false
+            generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
                     "model" to resource("models/block/mcx/battery.mcx"),
@@ -101,7 +101,7 @@ object ElectricMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileElectricFurnace)
             alwaysDropDefault = true
-            overrideItemModel = false
+            generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
                     "model" to resource("models/block/mcx/electric_furnace.mcx"),
@@ -115,9 +115,10 @@ object ElectricMachines : IBlockMaker {
 
         coal_generator = builder.withName("coal_generator").copy {
             states = OrientationAndLevel.values().toList()
-            factory = { _, state -> if(state[PROPERTY_ORIENTATION_AND_LEVEL] != OrientationAndLevel.UP) TileCoalGenerator() else null }
+            factoryFilter = { state -> state[PROPERTY_ORIENTATION_AND_LEVEL] != OrientationAndLevel.UP }
+            factory = factoryOf(::TileCoalGenerator)
             alwaysDropDefault = true
-            overrideItemModel = false
+            generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
                     "model" to resource("models/block/mcx/coal_generator.mcx"),
@@ -141,7 +142,135 @@ object ElectricMachines : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        return itemBlockListOf(connector, battery, electric_furnace, coal_generator)
+        electric_pole = builder.withName("electric_pole").copy {
+            states = PoleOrientation.values().toList()
+            factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
+            factory = factoryOf(::TileElectricPole)
+            alwaysDropDefault = true
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/electric_pole.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_pole_inv.mcx")
+            )
+            boundingBox = {
+                val size = 0.0625 * 3
+                Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size)
+            }
+            onBlockBreak = ElectricMachines::breakElectricPole
+            blockStatesToPlace = ElectricMachines::placeElectricPole
+        }.build()
+
+        electric_pole_transformer = builder.withName("electric_pole_transformer").copy {
+            states = PoleOrientation.values().toList()
+            factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
+            factory = factoryOf(::TileElectricPoleTransformer)
+            alwaysDropDefault = true
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/electric_pole_transformer.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_pole_transformer_inv.mcx")
+            )
+            boundingBox = {
+                val size = 0.0625 * 3
+                Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size)
+            }
+            onBlockBreak = ElectricMachines::breakElectricPole
+            blockStatesToPlace = ElectricMachines::placeElectricPole
+        }.build()
+
+        return itemBlockListOf(connector, battery, electric_furnace, coal_generator,
+                electric_pole, electric_pole_transformer)
+    }
+
+    fun breakElectricPole(args: BreakBlockArgs): Unit = args.run {
+        if (state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false) {
+            for (i in 1..4) {
+                worldIn.setBlockToAir(pos.offset(EnumFacing.DOWN, i))
+            }
+        } else {
+            val newPos = PoleOrientation.getMainPos(state, pos)
+            worldIn.setBlockToAir(newPos)
+        }
+    }
+
+    fun placeElectricPole(args: BlockStatesToPlaceArgs): List<Pair<BlockPos, IBlockState>> = args.run {
+        val yaw = if (player.rotationYaw >= 180) {
+            player.rotationYaw - 360
+        } else if (player.rotationYaw <= -180) {
+            player.rotationYaw + 360
+        } else {
+            player.rotationYaw
+        }
+        val a = 45
+        val b = 45 / 2
+        //@formatter:off
+        val dir = when {
+            yaw < -a * 3 + b && yaw >= -a * 4 + b -> PoleOrientation.NORTH_EAST
+            yaw < -a * 2 + b && yaw >= -a * 3 + b -> PoleOrientation.EAST
+            yaw < -a + b     && yaw >= -a * 2 + b -> PoleOrientation.SOUTH_EAST
+            yaw < 0 + b      && yaw >= -a + b     -> PoleOrientation.SOUTH
+            yaw < a + b      && yaw >= 0 + b      -> PoleOrientation.SOUTH_WEST
+            yaw < a * 2 + b  && yaw >= a + b      -> PoleOrientation.WEST
+            yaw < a * 3 + b  && yaw >= a * 2 + b  -> PoleOrientation.NORTH_WEST
+            yaw < a * 4 + b  && yaw >= a * 3 + b  -> PoleOrientation.NORTH
+            else -> PoleOrientation.NORTH
+        }
+        //@formatter:on
+
+        val pos = BlockPos.ORIGIN
+        listOf(
+                pos to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_4),
+                pos.offset(EnumFacing.UP, 1) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_3),
+                pos.offset(EnumFacing.UP, 2) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_2),
+                pos.offset(EnumFacing.UP, 3) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_1),
+                pos.offset(EnumFacing.UP, 4) to default.withProperty(PROPERTY_POLE_ORIENTATION, dir)
+        )
+    }
+
+    enum class PoleOrientation(
+            override val stateName: String,
+            override val isVisible: Boolean,
+            val offset: Vec3d,
+            val angle: Float = 0f,
+            val offsetY: Int = 0
+    ) : IStatesEnum, IStringSerializable {
+
+        NORTH("north", true, Vec3d(1.0, 0.0, 0.0), 0f),
+        NORTH_EAST("north_east", false, Vec3d(0.707106, 0.0, 0.707106), -45f),
+        EAST("east", false, Vec3d(0.0, 0.0, 1.0), 90f),
+        SOUTH_EAST("south_east", false, Vec3d(-0.707106, 0.0, 0.707106), 45f),
+        SOUTH("south", false, Vec3d(-1.0, 0.0, 0.0), 180f),
+        SOUTH_WEST("south_west", false, Vec3d(-0.707106, 0.0, -0.707106), -90f + 45),
+        WEST("west", false, Vec3d(0.0, 0.0, -1.0), -90f),
+        NORTH_WEST("north_west", false, Vec3d(0.707106, 0.0, -0.707106), 45f),
+        DOWN_1("down_1", false, Vec3d.ZERO, offsetY = 1),
+        DOWN_2("down_2", false, Vec3d.ZERO, offsetY = 2),
+        DOWN_3("down_3", false, Vec3d.ZERO, offsetY = 3),
+        DOWN_4("down_4", false, Vec3d.ZERO, offsetY = 4);
+
+        fun isMainBlock() = offsetY == 0
+
+        override fun getName() = name.toLowerCase()
+
+        override val properties: List<IProperty<*>> get() = listOf(PROPERTY_POLE_ORIENTATION)
+
+        override fun getBlockState(block: Block): IBlockState {
+            return block.defaultState.withProperty(PROPERTY_POLE_ORIENTATION, this)
+        }
+
+        companion object {
+            fun getMainPos(state: IBlockState, pos: BlockPos): BlockPos {
+                return when (state[PROPERTY_POLE_ORIENTATION]) {
+                    PoleOrientation.DOWN_1 -> pos.offset(EnumFacing.UP, 1)
+                    PoleOrientation.DOWN_2 -> pos.offset(EnumFacing.UP, 2)
+                    PoleOrientation.DOWN_3 -> pos.offset(EnumFacing.UP, 3)
+                    PoleOrientation.DOWN_4 -> pos.offset(EnumFacing.UP, 4)
+                    else -> pos
+                }
+            }
+        }
     }
 
     enum class OrientationAndLevel(

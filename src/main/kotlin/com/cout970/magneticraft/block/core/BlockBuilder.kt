@@ -23,13 +23,15 @@ class BlockBuilder {
         BlockBase.states_ = b
         BlockBase(a)
     }
-    var tileConstructor: (Material, List<IStatesEnum>, (World, IBlockState) -> TileEntity?) -> BlockBase = { a, b, c ->
+    var tileConstructor: (Material, List<IStatesEnum>, (World, IBlockState) -> TileEntity?,
+                          ((IBlockState) -> Boolean)?) -> BlockBase = { a, b, c, d ->
         BlockBase.states_ = b
-        BlockTileBase(c, a)
+        BlockTileBase(c, d, a)
     }
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
 
     var factory: ((World, IBlockState) -> TileEntity?)? = null
+    var factoryFilter: ((IBlockState) -> Boolean)? = null
     var registryName: ResourceLocation? = null
     var material: Material? = null
     var creativeTab: CreativeTabs? = null
@@ -46,7 +48,7 @@ class BlockBuilder {
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
-    var overrideItemModel = true
+    var generateDefaultItemModel = true
     var enableOcclusionOptimization = true
     var translucent = false
     var alwaysDropDefault = false
@@ -68,7 +70,7 @@ class BlockBuilder {
         requireNotNull(material) { "material was null" }
 
         val block = if (factory != null)
-            tileConstructor(material!!, states ?: listOf(IStatesEnum.default), factory!!)
+            tileConstructor(material!!, states ?: listOf(IStatesEnum.default), factory!!, factoryFilter)
         else
             constructor(material!!, states ?: listOf(IStatesEnum.default))
 
@@ -87,7 +89,7 @@ class BlockBuilder {
             onBlockPlaced = this@BlockBuilder.onBlockPlaced
             customModels = this@BlockBuilder.customModels
             pickBlock = this@BlockBuilder.pickBlock
-            overrideItemModel = this@BlockBuilder.overrideItemModel
+            generateDefaultItemModel = this@BlockBuilder.generateDefaultItemModel
             canPlaceBlockOnSide = this@BlockBuilder.canPlaceBlockOnSide
             capabilityProvider = this@BlockBuilder.capabilityProvider
             onNeighborChanged = this@BlockBuilder.onNeighborChanged
@@ -120,7 +122,7 @@ class BlockBuilder {
         newBuilder.explosionResistance = explosionResistance
         newBuilder.enableOcclusionOptimization = enableOcclusionOptimization
         newBuilder.translucent = translucent
-        newBuilder.overrideItemModel = overrideItemModel
+        newBuilder.generateDefaultItemModel = generateDefaultItemModel
         newBuilder.canPlaceBlockOnSide = canPlaceBlockOnSide
         newBuilder.capabilityProvider = capabilityProvider
         newBuilder.onNeighborChanged = onNeighborChanged

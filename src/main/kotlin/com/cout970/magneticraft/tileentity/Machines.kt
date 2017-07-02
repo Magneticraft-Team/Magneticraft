@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.misc.block.getOrientation
+import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleConveyorBelt
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
@@ -13,6 +14,7 @@ import net.minecraft.util.ITickable
  * Created by cout970 on 2017/06/12.
  */
 
+@RegisterTileEntity("box")
 class TileBox : TileBase() {
 
     val invModule = ModuleInventory(27)
@@ -22,6 +24,7 @@ class TileBox : TileBase() {
     }
 }
 
+@RegisterTileEntity("crushing_table")
 class TileCrushingTable : TileBase() {
 
     val invModule = ModuleInventory(1, capabilityFilter = { null })
@@ -32,6 +35,7 @@ class TileCrushingTable : TileBase() {
     }
 }
 
+@RegisterTileEntity("conveyor_belt")
 class TileConveyorBelt : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
@@ -50,6 +54,7 @@ class TileConveyorBelt : TileBase(), ITickable {
     }
 }
 
+@RegisterTileEntity("inserter")
 class TileInserter : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()

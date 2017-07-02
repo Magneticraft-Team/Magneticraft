@@ -4,6 +4,7 @@ import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
@@ -40,7 +41,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
     var enableOcclusionOptimization = true
     var translucent_ = false
-    var overrideItemModel = true
+    var generateDefaultItemModel = true
     var alwaysDropDefault = false
 
     // Methods
@@ -106,6 +107,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     // Called in server and client
     override fun removedByPlayer(state: IBlockState, world: World, pos: BlockPos, player: EntityPlayer?,
                                  willHarvest: Boolean): Boolean {
+        println("removedByPlayer server = ${world.isServer}")
         if (world.isClient) {
             world.getTile<TileBase>(pos)?.onBreak()
         }
@@ -115,6 +117,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     // Only called in the server
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         onBlockBreak?.invoke(BreakBlockArgs(worldIn, pos, state))
+        println("breakBlock server = ${worldIn.isServer}")
         worldIn.getTile<TileBase>(pos)?.onBreak()
         super.breakBlock(worldIn, pos, state)
     }
@@ -172,14 +175,30 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
         val default = getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, player, hand)
         return blockStatesToPlace?.invoke(
-                BlockStatesToPlaceArgs(worldIn, pos,facing, vec3Of(hitX, hitY, hitZ), meta, player, hand, default)
+                BlockStatesToPlaceArgs(worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), meta, player, hand, default)
         ) ?: listOf(BlockPos.ORIGIN to default)
     }
 }
 
-class BlockTileBase(val factory: (World, IBlockState) -> TileEntity?, material: Material)
-    : BlockBase(material), ITileEntityProvider {
-    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = factory(worldIn, getStateFromMeta(meta))
+class BlockTileBase(
+        val factory: (World, IBlockState) -> TileEntity?,
+        val filter: ((IBlockState) -> Boolean)?,
+        material: Material
+) : BlockBase(material), ITileEntityProvider {
+
+    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
+        val state = getStateFromMeta(meta)
+        filter?.let {
+            if (!it.invoke(state)) {
+                return null
+            }
+        }
+        return factory(worldIn, state)
+    }
+
+    override fun hasTileEntity(state: IBlockState): Boolean {
+        return filter?.invoke(state) ?: super.hasTileEntity(state)
+    }
 }
 
 data class BoundingBoxArgs(val state: IBlockState, val source: IBlockAccess, val pos: BlockPos)
