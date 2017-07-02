@@ -6,6 +6,7 @@ import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.proxy.CommonProxy
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
+import net.minecraftforge.fml.common.discovery.ASMDataTable
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -35,6 +36,9 @@ object Magneticraft {
     //The reference to the config file used by ConfigHandler
     lateinit var configFile: File
 
+    // Used to auto-register classes with an specific annotation
+    internal lateinit var asmData: ASMDataTable
+
     /**
      * The sided proxy, used to initialize the mod differently in the server than the client
      * See ClientProxy and ServerProxy
@@ -50,6 +54,7 @@ object Magneticraft {
      */
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
+        asmData = event.asmData
         log = event.modLog
         configFile = event.suggestedConfigurationFile
 

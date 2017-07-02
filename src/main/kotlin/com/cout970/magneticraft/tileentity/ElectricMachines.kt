@@ -142,3 +142,8 @@ class TileElectricFurnace : TileBase(), ITickable {
         super.update()
     }
 }
+
+class TileCoalGenerator : TileBase(), ITickable {
+
+    val facing: EnumFacing get() = getBlockState().getOrientation()
+}

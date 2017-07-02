@@ -48,10 +48,12 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
     var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
+    var onBlockBreak: ((BreakBlockArgs) -> Unit)? = null
     var pickBlock: ((PickBlockArgs) -> ItemStack)? = null
     var canPlaceBlockOnSide: ((CanPlaceBlockOnSideArgs) -> Boolean)? = null
     var capabilityProvider: ICapabilityProvider? = null
     var onNeighborChanged: ((OnNeighborChangedArgs) -> Unit)? = null
+    var blockStatesToPlace: ((BlockStatesToPlaceArgs) -> List<Pair<BlockPos, IBlockState>>)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -92,7 +94,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     }
 
     override fun damageDropped(state: IBlockState): Int {
-        return if(alwaysDropDefault) 0 else getMetaFromState(state)
+        return if (alwaysDropDefault) 0 else getMetaFromState(state)
     }
 
     override fun getPickBlock(state: IBlockState, target: RayTraceResult, world: World, pos: BlockPos,
@@ -112,6 +114,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
     // Only called in the server
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
+        onBlockBreak?.invoke(BreakBlockArgs(worldIn, pos, state))
         worldIn.getTile<TileBase>(pos)?.onBreak()
         super.breakBlock(worldIn, pos, state)
     }
@@ -162,6 +165,16 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         return capabilityProvider?.hasCapability(capability, facing) ?: false
     }
+
+    fun getBlockStatesToPlace(worldIn: World, pos: BlockPos,
+                              facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float,
+                              meta: Int, player: EntityPlayer, hand: EnumHand): List<Pair<BlockPos, IBlockState>> {
+
+        val default = getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, player, hand)
+        return blockStatesToPlace?.invoke(
+                BlockStatesToPlaceArgs(worldIn, pos,facing, vec3Of(hitX, hitY, hitZ), meta, player, hand, default)
+        ) ?: listOf(BlockPos.ORIGIN to default)
+    }
 }
 
 class BlockTileBase(val factory: (World, IBlockState) -> TileEntity?, material: Material)
@@ -185,3 +198,8 @@ data class CanPlaceBlockOnSideArgs(val worldIn: World, val pos: BlockPos, val si
 
 data class OnNeighborChangedArgs(val state: IBlockState, val worldIn: World, val pos: BlockPos, val blockIn: Block,
                                  val fromPos: BlockPos)
+
+data class BlockStatesToPlaceArgs(val worldIn: World, val pos: BlockPos, val facing: EnumFacing, val hit: IVector3,
+                                  val meta: Int, val player: EntityPlayer, val hand: EnumHand, val default: IBlockState)
+
+data class BreakBlockArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState)

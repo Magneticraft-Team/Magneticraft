@@ -1,7 +1,9 @@
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.block.ElectricMachines
+import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileBattery
+import com.cout970.magneticraft.tileentity.TileCoalGenerator
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.Utilities
@@ -12,6 +14,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
  * Created by cout970 on 2017/07/01.
  */
 
+@RegisterRenderer(TileBattery::class)
 object TileRendererBattery : TileRendererSimple<TileBattery>(
         modelLocation = { ModelResourceLocation(ElectricMachines.battery.registryName, "model") }
 ) {
@@ -24,6 +27,7 @@ object TileRendererBattery : TileRendererSimple<TileBattery>(
     }
 }
 
+@RegisterRenderer(TileElectricFurnace::class)
 object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
         modelLocation = { ModelResourceLocation(ElectricMachines.electric_furnace.registryName, "model") },
         filters = listOf({ name -> name == "Shape_0" }, { name -> name == "Shape_1" })
@@ -38,5 +42,19 @@ object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
         models[0].render()
         bindTexture(if (te.processModule.working) texture_on else texture_off)
         models[1].render()
+    }
+}
+
+@RegisterRenderer(TileCoalGenerator::class)
+object TileRendererCoalGenerator : TileRendererSimple<TileCoalGenerator>(
+        modelLocation = { ModelResourceLocation(ElectricMachines.coal_generator.registryName, "model") },
+        filters = listOf({ name -> name == "Shape_0" }, { name -> name != "Shape_0" })
+) {
+    val texture = resource("textures/blocks/electric_machines/coal_generator.png")
+
+    override fun renderModels(models: List<ModelCache>, te: TileCoalGenerator) {
+        bindTexture(texture)
+        Utilities.rotateFromCenter(te.facing, 180f)
+        models.forEach { it.render() }
     }
 }

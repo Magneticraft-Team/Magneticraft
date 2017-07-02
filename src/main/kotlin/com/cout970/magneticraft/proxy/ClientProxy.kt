@@ -2,15 +2,17 @@ package com.cout970.magneticraft.proxy
 
 
 import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.core.BlockBase
 import com.cout970.magneticraft.item.core.ItemBase
+import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerSounds
-import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tilerenderer.*
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
+import com.cout970.magneticraft.util.info
+import com.cout970.magneticraft.util.logError
 import com.cout970.magneticraft.util.toModel
 import com.cout970.modelloader.api.DefaultBlockDecorator
 import com.cout970.modelloader.api.ModelLoaderApi
@@ -76,17 +78,31 @@ class ClientProxy : CommonProxy() {
         OBJLoader.INSTANCE.addDomain(MOD_ID)
 
         //TileEntity renderers
-        register(TileCrushingTable::class.java, TileRendererCrushingTable)
-        register(TileConveyorBelt::class.java, TileRendererConveyorBelt)
-        register(TileInserter::class.java, TileRendererInserter)
-        register(TileConnector::class.java, TileRendererConnector)
-        register(TileBattery::class.java, TileRendererBattery)
-        register(TileElectricFurnace::class.java, TileRendererElectricFurnace)
+        processRegisterRenderer()
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun processRegisterRenderer() {
+        val data = Magneticraft.asmData.getAll(RegisterRenderer::class.java.canonicalName)
+        data.forEach {
+            try {
+                val clazz = Class.forName(it.className).kotlin
+                val annotation = clazz.annotations.find { it is RegisterRenderer } as RegisterRenderer
+
+                val tile = annotation.tileEntity.java as Class<TileBase>
+                val renderer = clazz.objectInstance as TileRenderer<TileBase>
+
+                register(tile, renderer)
+                info("Registering TESR: Tile = ${it.className},\t Renderer = ${renderer.javaClass.canonicalName}")
+            } catch (e: Exception) {
+                logError("Unable to register class with @RegisterRenderer: $it")
+                e.printStackTrace()
+            }
+        }
+    }
 
     override fun init() {
         super.init()

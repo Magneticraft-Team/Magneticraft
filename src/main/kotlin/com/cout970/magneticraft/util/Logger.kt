@@ -14,7 +14,7 @@ fun logError(str: String, vararg args: Any) {
 }
 
 fun info(str: String, vararg args: Any) {
-    Magneticraft.log.info("[$MOD_ID]$str", *args)
+    Magneticraft.log.info("$str", *args)
 }
 
 fun debug(vararg obj: Any?) {

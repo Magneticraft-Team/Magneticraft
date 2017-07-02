@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
@@ -9,6 +10,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemSkull
 
+@RegisterRenderer(TileCrushingTable::class)
 object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
 
     override fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float,

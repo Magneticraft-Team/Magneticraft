@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tilerenderer.core.*
@@ -19,6 +20,7 @@ import net.minecraft.util.EnumFacing
 /**
  * Created by cout970 on 2017/06/16.
  */
+@RegisterRenderer(TileConveyorBelt::class)
 object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
 
     val texture = resource("textures/blocks/machines/conveyor_belt.png")

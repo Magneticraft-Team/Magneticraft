@@ -9,6 +9,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 
@@ -40,6 +41,8 @@ class BlockBuilder {
     var canPlaceBlockOnSide: ((CanPlaceBlockOnSideArgs) -> Boolean)? = null
     var capabilityProvider: ICapabilityProvider? = null
     var onNeighborChanged: ((OnNeighborChangedArgs) -> Unit)? = null
+    var blockStatesToPlace: ((BlockStatesToPlaceArgs) -> List<Pair<BlockPos, IBlockState>>)? = null
+    var onBlockBreak: ((BreakBlockArgs) -> Unit)? = null
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
@@ -89,6 +92,8 @@ class BlockBuilder {
             capabilityProvider = this@BlockBuilder.capabilityProvider
             onNeighborChanged = this@BlockBuilder.onNeighborChanged
             alwaysDropDefault = this@BlockBuilder.alwaysDropDefault
+            blockStatesToPlace = this@BlockBuilder.blockStatesToPlace
+            onBlockBreak = this@BlockBuilder.onBlockBreak
         }
         return block
     }
@@ -120,6 +125,8 @@ class BlockBuilder {
         newBuilder.capabilityProvider = capabilityProvider
         newBuilder.onNeighborChanged = onNeighborChanged
         newBuilder.alwaysDropDefault = alwaysDropDefault
+        newBuilder.blockStatesToPlace = blockStatesToPlace
+        newBuilder.onBlockBreak = onBlockBreak
 
         func(newBuilder)
         return newBuilder

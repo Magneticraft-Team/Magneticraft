@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.ModelCacheFactory
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 /**
  * Created by cout970 on 2017/06/20.
  */
+@RegisterRenderer(TileInserter::class)
 object TileRendererInserter : TileRenderer<TileInserter>() {
 
     val texture = resource("textures/blocks/machines/inserter.png")

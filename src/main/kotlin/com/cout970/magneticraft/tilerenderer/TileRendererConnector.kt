@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.ElectricMachines
+import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileConnector
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 /**
  * Created by cout970 on 2017/06/29.
  */
+@RegisterRenderer(TileConnector::class)
 object TileRendererConnector : TileRenderer<TileConnector>() {
 
     val texture = resource("textures/models/electric_connector.png")

@@ -19,6 +19,7 @@ fun initTileEntities(){
     map += TileConnector::class.java to "connector"
     map += TileBattery::class.java to "battery"
     map += TileElectricFurnace::class.java to "electric_furnace"
+    map += TileCoalGenerator::class.java to "coal_generator"
 
     map.forEach { clazz, name ->
         GameRegistry.registerTileEntity(clazz, "${MOD_ID}_$name")

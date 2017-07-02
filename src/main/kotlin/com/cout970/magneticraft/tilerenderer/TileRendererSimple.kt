@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
  */
 abstract class TileRendererSimple<T : TileBase>(
         val modelLocation: () -> ModelResourceLocation,
-        val filters: List<(String) -> Boolean> = listOf({ it -> true })
+        val filters: List<(String) -> Boolean> = listOf({ _ -> true })
 ) : TileRenderer<T>() {
 
     var caches = listOf<ModelCache>()

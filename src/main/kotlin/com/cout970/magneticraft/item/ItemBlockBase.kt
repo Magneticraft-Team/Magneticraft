@@ -2,9 +2,12 @@ package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.block.core.BlockBase
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import net.minecraft.util.NonNullList
+import net.minecraft.util.*
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2017/06/11.
@@ -27,6 +30,51 @@ class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
     }
 
     override fun getMetadata(damage: Int): Int = damage
+
+    /**
+     * Called when a Block is right-clicked with this Item
+     */
+    override fun onItemUse(player: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing,
+                           hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
+        val itemstack = player.getHeldItem(hand)
+        if (itemstack.isEmpty) return EnumActionResult.FAIL
+
+        val otherBlock = worldIn.getBlockState(pos).block
+        val basePos = if (!otherBlock.isReplaceable(worldIn, pos)) pos.offset(facing) else pos
+        val meta = getMetadata(itemstack.metadata)
+
+        val posStatePair = blockBase.getBlockStatesToPlace(worldIn, basePos, facing, hitX, hitY, hitZ, meta, player,
+                hand)
+        val posList = posStatePair.map { it.first.add(basePos) }
+
+        val canEdit = posList.all { player.canPlayerEdit(it, facing, itemstack) }
+        val mayPlace = posList.all { worldIn.mayPlace(block, it, false, facing, null) }
+
+        if (canEdit && mayPlace) {
+
+            var success = false
+            posStatePair.forEach { (pos0, blockstate) ->
+                val toPlace = basePos.add(pos0)
+                if (placeBlockAt(itemstack, player, worldIn, toPlace, facing, hitX, hitY, hitZ, blockstate)) {
+                    val statePlaced = worldIn.getBlockState(toPlace)
+
+                    val soundType = statePlaced.block.getSoundType(statePlaced, worldIn, toPlace, player)
+                    worldIn.playSound(player, toPlace, soundType.placeSound,
+                            SoundCategory.BLOCKS,
+                            (soundType.getVolume() + 1.0f) / 2.0f,
+                            soundType.getPitch() * 0.8f
+                    )
+                    success = true
+                }
+            }
+            if (success) {
+                itemstack.shrink(1)
+            }
+            return EnumActionResult.SUCCESS
+        } else {
+            return EnumActionResult.FAIL
+        }
+    }
 }
 
 fun itemBlockListOf(vararg blocks: BlockBase): List<Pair<BlockBase, ItemBlockBase>> {
