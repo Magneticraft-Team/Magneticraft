@@ -70,3 +70,9 @@ class TileInserter : TileBase(), ITickable {
     }
 }
 
+@RegisterTileEntity("tube_light")
+class TileTubeLight : TileBase() {
+
+    val facing: EnumFacing get() = getBlockState().getOrientation()
+}
+

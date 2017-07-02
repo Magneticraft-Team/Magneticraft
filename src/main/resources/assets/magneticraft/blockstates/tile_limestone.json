@@ -6,12 +6,12 @@
     "variants": {
         "normal": [{
             "textures": {
-                "all": "magneticraft:blocks/tile_limestone/normal"
+                "all": "magneticraft:blocks/decoration/tile_limestone/normal"
             }
         }],
         "inverted": [{
             "textures": {
-                "all": "magneticraft:blocks/tile_limestone/flipped"
+                "all": "magneticraft:blocks/decoration/tile_limestone/flipped"
             }
         }]
     }

@@ -48,6 +48,7 @@ class BlockBuilder {
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
+    var lightEmission = 0.0f
     var generateDefaultItemModel = true
     var enableOcclusionOptimization = true
     var translucent = false
@@ -96,6 +97,7 @@ class BlockBuilder {
             alwaysDropDefault = this@BlockBuilder.alwaysDropDefault
             blockStatesToPlace = this@BlockBuilder.blockStatesToPlace
             onBlockBreak = this@BlockBuilder.onBlockBreak
+            setLightLevel(lightEmission)
         }
         return block
     }

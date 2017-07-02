@@ -1,11 +1,12 @@
 package com.cout970.magneticraft.block
 
-import com.cout970.magneticraft.block.core.BlockBase
-import com.cout970.magneticraft.block.core.BlockBuilder
-import com.cout970.magneticraft.block.core.IBlockMaker
-import com.cout970.magneticraft.block.core.IStatesEnum
+import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.item.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.tileentity.TileTubeLight
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.toAABBWith
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -13,6 +14,7 @@ import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemBlock
 import net.minecraft.util.IStringSerializable
+import net.minecraft.util.math.Vec3d
 
 /**
  * Created by cout970 on 2017/06/08.
@@ -26,6 +28,7 @@ object Decoration : IBlockMaker {
     lateinit var limestone: BlockBase private set
     lateinit var burnLimestone: BlockBase private set
     lateinit var tileLimestone: BlockBase private set
+    lateinit var tubeLight: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -36,9 +39,31 @@ object Decoration : IBlockMaker {
 
         limestone = builder.withName("limestone").build()
         burnLimestone = builder.withName("burnt_limestone").build()
-        tileLimestone = builder.withName("tile_limestone").apply { states = TileInverted.values().toList() }.build()
 
-        return itemBlockListOf(limestone, burnLimestone, tileLimestone)
+        tileLimestone = builder.withName("tile_limestone").copy {
+            states = TileInverted.values().toList()
+        }.build()
+
+        tubeLight = builder.withName("tube_light").copy {
+            states = CommonMethods.Orientation.values().toList()
+            factory = factoryOf(::TileTubeLight)
+            lightEmission = 1f
+            hasCustomModel = true
+            generateDefaultItemModel = false
+            alwaysDropDefault = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/tube_light.mcx"),
+                    "inventory" to resource("models/block/mcx/tube_light.mcx")
+            )
+            //methods
+            boundingBox = CommonMethods.updateBoundingBoxWithOrientation(
+                    Vec3d(PIXEL * 3, 1.0, 0.0) toAABBWith Vec3d(1.0 - PIXEL * 3, 1.0 - PIXEL * 4, 1.0)
+            )
+            onBlockPlaced = CommonMethods::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(limestone, burnLimestone, tileLimestone, tubeLight)
     }
 
     enum class LimestoneKind(override val stateName: String,

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
@@ -124,6 +125,19 @@ object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPole
         bindTexture(texture)
         val orientation = te.getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
+        models.forEach { it.render() }
+    }
+}
+
+@RegisterRenderer(TileTubeLight::class)
+object TileRendererTubeLight : TileRendererSimple<TileTubeLight>(
+        modelLocation = { ModelResourceLocation(Decoration.tubeLight.registryName, "model") }
+) {
+    val texture = resource("textures/blocks/decoration/tube_light.png")
+
+    override fun renderModels(models: List<ModelCache>, te: TileTubeLight) {
+        bindTexture(texture)
+        Utilities.rotateFromCenter(te.facing, 90f)
         models.forEach { it.render() }
     }
 }

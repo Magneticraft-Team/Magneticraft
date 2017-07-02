@@ -6,17 +6,17 @@
 	"variants": {
 		"normal": [{
 			"textures": {
-				"all": "magneticraft:blocks/limestone/normal"
+				"all": "magneticraft:blocks/decoration/limestone/normal"
 			}
 		}],
 		"brick": [{
             "textures": {
-                "all": "magneticraft:blocks/limestone/brick"
+                "all": "magneticraft:blocks/decoration/limestone/brick"
             }
 		}],
         "cobble": [{
             "textures": {
-                "all": "magneticraft:blocks/limestone/cobble"
+                "all": "magneticraft:blocks/decoration/limestone/cobble"
             }
         }]
 	}

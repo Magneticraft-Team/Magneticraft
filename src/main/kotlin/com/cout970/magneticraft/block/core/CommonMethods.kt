@@ -93,6 +93,16 @@ object CommonMethods {
             facing.rotateBox(center, base)
         }
     }
+    /**
+     * The base value is associated to the NORTH direction
+     */
+    fun updateBoundingBoxWithOrientation(base: AxisAlignedBB): (BoundingBoxArgs) -> AxisAlignedBB {
+        return { (state) ->
+            val facing = state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+            val center = vec3Of(0.5)
+            facing.rotateBox(center, base)
+        }
+    }
 
     // Common properties
     val PROPERTY_FACING = PropertyEnum.create("facing", Facing::class.java)!!
