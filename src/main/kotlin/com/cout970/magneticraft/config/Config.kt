@@ -70,7 +70,7 @@ object Config {
     var solarPanelMaxProduction = 10.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Battery Capacity")
-    var itemBatteryCapacity: Double = 250000.0
+    var itemBatteryCapacity: Int = 250000
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Capacity")
     var blockBatteryCapacity: Int = 1000000

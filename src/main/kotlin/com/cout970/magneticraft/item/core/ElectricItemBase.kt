@@ -1,13 +1,8 @@
 package com.cout970.magneticraft.item.core
 
-import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
-import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
-import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
-import com.cout970.magneticraft.registry.ITEM_ENERGY_CONSUMER
-import com.cout970.magneticraft.registry.ITEM_ENERGY_PROVIDER
-import com.cout970.magneticraft.registry.ITEM_ENERGY_STORAGE
-import com.cout970.magneticraft.util.getDouble
-import com.cout970.magneticraft.util.setDouble
+import com.cout970.magneticraft.registry.FORGE_ENERGY
+import com.cout970.magneticraft.util.getInteger
+import com.cout970.magneticraft.util.setInteger
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
@@ -17,6 +12,7 @@ import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
+import net.minecraftforge.energy.IEnergyStorage
 
 /**
  * Created by cout970 on 2017/07/02.
@@ -27,11 +23,11 @@ class ElectricItemBase : ItemBase() {
         val ENERGY_KEY = "energy"
     }
 
-    var capacity = 0.0
+    var capacity = 0
 
     override fun getDurabilityForDisplay(stack: ItemStack): Double {
         if (getCapacityInternal(stack) < 1.0) return 1.0
-        return 1 - (getStoredEnergyInternal(stack) / getCapacityInternal(stack))
+        return 1 - (getStoredEnergyInternal(stack).toDouble() / getCapacityInternal(stack))
     }
 
     override fun showDurabilityBar(stack: ItemStack): Boolean {
@@ -42,7 +38,7 @@ class ElectricItemBase : ItemBase() {
         if (itemIn == this.creativeTab) {
             tab.add(ItemStack(this, 1, 0))
             tab.add(ItemStack(this, 1, 0).apply {
-                setDouble(ENERGY_KEY, getCapacityInternal(this))
+                setInteger(ENERGY_KEY, getCapacityInternal(this))
             })
         }
     }
@@ -55,34 +51,35 @@ class ElectricItemBase : ItemBase() {
         super.addInformation(stack, worldIn, tooltip, flagIn)
     }
 
-    fun getStoredEnergyInternal(stack: ItemStack): Double = stack.getDouble(ENERGY_KEY)
+    fun getStoredEnergyInternal(stack: ItemStack): Int = stack.getInteger(ENERGY_KEY)
 
-    fun getCapacityInternal(stack: ItemStack): Double = capacity
+    @Suppress("UNUSED_PARAMETER")
+    fun getCapacityInternal(stack: ItemStack): Int = capacity
 
-    fun giveEnergyInternal(stack: ItemStack, power: Double, simulated: Boolean): Double {
-        if (power <= 0.0) return 0.0
+    fun giveEnergyInternal(stack: ItemStack, power: Int, simulated: Boolean): Int {
+        if (power <= 0.0) return 0
         val stored = getStoredEnergyInternal(stack)
         val space = getCapacityInternal(stack) - stored
         val min = Math.min(power, space)
         if (min > 0) {
             if (!simulated)
-                stack.setDouble(ENERGY_KEY, stored + min)
+                stack.setInteger(ENERGY_KEY, stored + min)
             return min
         } else {
-            return 0.0
+            return 0
         }
     }
 
-    fun takeEnergyInternal(stack: ItemStack, power: Double, simulated: Boolean): Double {
-        if (power <= 0.0) return 0.0
+    fun takeEnergyInternal(stack: ItemStack, power: Int, simulated: Boolean): Int {
+        if (power <= 0.0) return 0
         val stored = getStoredEnergyInternal(stack)
         val min = Math.min(power, stored)
         if (min > 0) {
             if (!simulated)
-                stack.setDouble(ENERGY_KEY, Math.max(0.0, stored - min))
+                stack.setInteger(ENERGY_KEY, Math.max(0, stored - min))
             return min
         } else {
-            return 0.0
+            return 0
         }
     }
 
@@ -90,35 +87,30 @@ class ElectricItemBase : ItemBase() {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-            if (capability == ITEM_ENERGY_STORAGE) return DefaultItemEnergyStorage(stack) as T
-            if (capability == ITEM_ENERGY_CONSUMER) return DefaultItemEnergyConsumer(stack) as T
-            if (capability == ITEM_ENERGY_PROVIDER) return DefaultItemEnergyProvider(stack) as T
+            if (capability == FORGE_ENERGY) return DefaultItemEnergyStorage(stack) as T
             return null
         }
 
         override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
-            return capability == ITEM_ENERGY_CONSUMER || capability == ITEM_ENERGY_STORAGE || capability == ITEM_ENERGY_PROVIDER
+            return capability == FORGE_ENERGY
         }
 
-        class DefaultItemEnergyConsumer(val stack: ItemStack) : IEnergyConsumerItem {
+        class DefaultItemEnergyStorage(val stack: ItemStack) : IEnergyStorage {
 
-            override fun giveEnergy(power: Double, simulated: Boolean): Double {
-                return (stack.item as ElectricItemBase).giveEnergyInternal(stack, power, simulated)
+            override fun canReceive(): Boolean = true
+            override fun canExtract(): Boolean = true
+
+            override fun getMaxEnergyStored(): Int = (stack.item as ElectricItemBase).getCapacityInternal(stack)
+
+            override fun getEnergyStored(): Int = (stack.item as ElectricItemBase).getStoredEnergyInternal(stack)
+
+            override fun extractEnergy(maxExtract: Int, simulate: Boolean): Int {
+                return (stack.item as ElectricItemBase).takeEnergyInternal(stack, maxExtract, simulate)
             }
-        }
 
-        class DefaultItemEnergyProvider(val stack: ItemStack) : IEnergyProviderItem {
-
-            override fun takeEnergy(power: Double, simulated: Boolean): Double {
-                return (stack.item as ElectricItemBase).takeEnergyInternal(stack, power, simulated)
+            override fun receiveEnergy(maxReceive: Int, simulate: Boolean): Int {
+                return (stack.item as ElectricItemBase).giveEnergyInternal(stack, maxReceive, simulate)
             }
-        }
-
-        class DefaultItemEnergyStorage(val stack: ItemStack) : IEnergyStorageItem {
-
-            override fun getStoredEnergy(): Double = (stack.item as ElectricItemBase).getStoredEnergyInternal(stack)
-
-            override fun getCapacity(): Double = (stack.item as ElectricItemBase).getCapacityInternal(stack)
         }
     }
 }

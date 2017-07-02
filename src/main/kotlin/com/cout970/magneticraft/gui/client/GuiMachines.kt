@@ -61,12 +61,12 @@ class GuiTileBattery(container: ContainerBase) : GuiBase(container) {
                 max = { tile.storageModule.maxChargeSpeed }, pos = Vec2d(58, 64) + box.start)
         )
 
-//        components.add(TransferBar(
-//                { tile.storageModule.chargeRate.storage.toDouble() },
-//                { -Config.blockBatteryTransferRate.toDouble() },
-//                { 0.0 },
-//                { Config.blockBatteryTransferRate.toDouble() }, Vec2d(58 + 33, 64) + box.start)
-//        )
+        components.add(TransferBar(
+                { tile.itemChargeModule.itemChargeRate.storage.toDouble() },
+                { -tile.itemChargeModule.transferRate.toDouble() },
+                { 0.0 },
+                { tile.itemChargeModule.transferRate.toDouble() }, Vec2d(58 + 33, 64) + box.start)
+        )
     }
 }
 

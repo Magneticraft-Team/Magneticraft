@@ -9,9 +9,6 @@ import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
-import com.cout970.magneticraft.api.energy.item.IEnergyConsumerItem
-import com.cout970.magneticraft.api.energy.item.IEnergyProviderItem
-import com.cout970.magneticraft.api.energy.item.IEnergyStorageItem
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.tool.IHammer
@@ -28,6 +25,7 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.CapabilityInject
 import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.common.capabilities.ICapabilityProvider
+import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.items.IItemHandler
 
@@ -53,14 +51,8 @@ var MANUAL_CONNECTION_HANDLER: Capability<IManualConnectionHandler>? = null
 @CapabilityInject(IFluidHandler::class)
 var FLUID_HANDLER: Capability<IFluidHandler>? = null
 
-@CapabilityInject(IEnergyConsumerItem::class)
-var ITEM_ENERGY_CONSUMER: Capability<IEnergyConsumerItem>? = null
-
-@CapabilityInject(IEnergyProviderItem::class)
-var ITEM_ENERGY_PROVIDER: Capability<IEnergyProviderItem>? = null
-
-@CapabilityInject(IEnergyStorageItem::class)
-var ITEM_ENERGY_STORAGE: Capability<IEnergyStorageItem>? = null
+@CapabilityInject(IEnergyStorage::class)
+var FORGE_ENERGY: Capability<IEnergyStorage>? = null
 
 @CapabilityInject(IFloppyDisk::class)
 var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
@@ -74,9 +66,6 @@ var ITEM_HAMMER: Capability<IHammer>? = null
 fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
-    CapabilityManager.INSTANCE.register(IEnergyConsumerItem::class.java, EmptyStorage(), { DefaultItemEnergyConsumer() })
-    CapabilityManager.INSTANCE.register(IEnergyProviderItem::class.java, EmptyStorage(), { DefaultItemEnergyProvider() })
-    CapabilityManager.INSTANCE.register(IEnergyStorageItem::class.java, EmptyStorage(), { DefaultItemEnergyStorage() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
     CapabilityManager.INSTANCE.register(IHammer::class.java, EmptyStorage(), { DefaultHammer() })
 //    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
@@ -162,24 +151,6 @@ class DefaultManualConnectionHandler : IManualConnectionHandler {
     override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?,
                              side: EnumFacing?, stack: ItemStack?): Boolean = false
 }
-
-class DefaultItemEnergyConsumer : IEnergyConsumerItem {
-
-    override fun giveEnergy(power: Double, simulated: Boolean): Double = 0.0
-}
-
-class DefaultItemEnergyProvider : IEnergyProviderItem {
-
-    override fun takeEnergy(power: Double, simulated: Boolean): Double = 0.0
-}
-
-class DefaultItemEnergyStorage : IEnergyStorageItem {
-
-    override fun getStoredEnergy(): Double = 0.0
-
-    override fun getCapacity(): Double = 0.0
-}
-
 class DefaultHammer : IHammer {
 
     override fun getMiningLevel(): Int = 0

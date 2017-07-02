@@ -6,6 +6,8 @@ import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.registry.FORGE_ENERGY
+import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileBox
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
@@ -47,6 +49,13 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos)
     val tile = world.getTile<TileBattery>(blockPos)!!
 
     init {
+        tile.invModule.inventory.let { inv ->
+            addSlotToContainer(SlotItemHandler(inv, 0, 102, 48))
+            addSlotToContainer(SlotItemHandler(inv, 1,  102, 16))
+
+            inventoryRegions += InventoryRegion(0..0, filter = { FORGE_ENERGY!!.fromItem(it)?.canReceive() ?: false })
+            inventoryRegions += InventoryRegion(1..1, filter = { FORGE_ENERGY!!.fromItem(it)?.canExtract() ?: false })
+        }
         bindPlayerInventory(player.inventory)
     }
 }

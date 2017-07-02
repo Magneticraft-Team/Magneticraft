@@ -11,10 +11,7 @@ import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleElectricProcessing
-import com.cout970.magneticraft.tileentity.modules.ModuleElectricity
-import com.cout970.magneticraft.tileentity.modules.ModuleInternalStorage
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
+import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.tilerenderer.TileRendererConnector
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -98,9 +95,18 @@ class TileBattery : TileBase(), ITickable {
             upperVoltageLimit = 100.0,
             lowerVoltageLimit = 90.0
     )
+    val invModule = ModuleInventory(2)
+
+    val itemChargeModule = ModuleChargeItems(
+            invModule = invModule,
+            storage = storageModule,
+            chargeSlot = 0,
+            dischargeSlot = 1,
+            transferRate = Config.blockBatteryTransferRate
+    )
 
     init {
-        initModules(electricModule, storageModule)
+        initModules(electricModule, storageModule, invModule, itemChargeModule)
     }
 
     override fun update() {
