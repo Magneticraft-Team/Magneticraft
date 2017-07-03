@@ -4,7 +4,6 @@ import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
@@ -21,6 +20,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
+import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.RayTraceResult
@@ -55,6 +55,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var capabilityProvider: ICapabilityProvider? = null
     var onNeighborChanged: ((OnNeighborChangedArgs) -> Unit)? = null
     var blockStatesToPlace: ((BlockStatesToPlaceArgs) -> List<Pair<BlockPos, IBlockState>>)? = null
+    var onDrop: ((DropsArgs) -> List<ItemStack>)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -107,7 +108,6 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     // Called in server and client
     override fun removedByPlayer(state: IBlockState, world: World, pos: BlockPos, player: EntityPlayer?,
                                  willHarvest: Boolean): Boolean {
-        println("removedByPlayer server = ${world.isServer}")
         if (world.isClient) {
             world.getTile<TileBase>(pos)?.onBreak()
         }
@@ -117,7 +117,6 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     // Only called in the server
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         onBlockBreak?.invoke(BreakBlockArgs(worldIn, pos, state))
-        println("breakBlock server = ${worldIn.isServer}")
         worldIn.getTile<TileBase>(pos)?.onBreak()
         super.breakBlock(worldIn, pos, state)
     }
@@ -178,6 +177,20 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
                 BlockStatesToPlaceArgs(worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), meta, player, hand, default)
         ) ?: listOf(BlockPos.ORIGIN to default)
     }
+
+    override fun getDrops(drops: NonNullList<ItemStack>, world: IBlockAccess, pos: BlockPos, state: IBlockState,
+                          fortune: Int) {
+        onDrop?.let {
+            val default = NonNullList.create<ItemStack>()
+            super.getDrops(default, world, pos, state, fortune)
+
+            val list = it.invoke(DropsArgs(world, pos, state, fortune, default))
+            drops.addAll(list)
+            return
+        }
+        super.getDrops(drops, world, pos, state, fortune)
+
+    }
 }
 
 class BlockTileBase(
@@ -222,3 +235,6 @@ data class BlockStatesToPlaceArgs(val worldIn: World, val pos: BlockPos, val fac
                                   val meta: Int, val player: EntityPlayer, val hand: EnumHand, val default: IBlockState)
 
 data class BreakBlockArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState)
+
+data class DropsArgs(val world: IBlockAccess, val pos: BlockPos, val state: IBlockState, val fortune: Int,
+                     val default: List<ItemStack>)

@@ -4,7 +4,7 @@ import com.cout970.magneticraft.block.core.BlockBase
 import com.cout970.magneticraft.block.core.BlockBuilder
 import com.cout970.magneticraft.block.core.IBlockMaker
 import com.cout970.magneticraft.block.core.IStatesEnum
-import com.cout970.magneticraft.item.itemBlockListOf
+import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material

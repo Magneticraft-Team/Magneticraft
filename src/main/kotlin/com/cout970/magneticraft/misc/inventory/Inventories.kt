@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.misc.inventory
 
+import net.minecraft.block.Block
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.IItemHandler
@@ -10,6 +11,7 @@ import net.minecraftforge.items.IItemHandlerModifiable
  */
 
 fun Item.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
+fun Block.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
 
 fun ItemStack.consumeItem(amount: Int = 1): ItemStack {
     if (count > amount) {

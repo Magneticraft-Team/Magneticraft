@@ -92,18 +92,19 @@ tile.magneticraft.burnt_limestone_brick.name=Burnt Limestone Brick
 tile.magneticraft.burnt_limestone_cobble.name=Burnt Limestone Cobble
 tile.magneticraft.tile_limestone_normal.name=Limestone Tiles
 tile.magneticraft.tile_limestone_inverted.name=Inverted Limestone Tiles
+tile.magneticraft.tube_light_north.name=Tube Light
 
 #tile.magneticraft.glazed_brick.name=Glazed Brick
 #tile.magneticraft.fluxed_gravel.name=Fluxed Gravel
 
 tile.magneticraft.conveyor_belt_north.name=Conveyor Belt
 tile.magneticraft.inserter_north.name=Inserter
-#tile.magneticraft.electric_pole.name=Electric Pole
 tile.magneticraft.connector_down.name=Electric Connector
-#tile.magneticraft.incendiary_generator.name=Incendiary Generator
 tile.magneticraft.battery_north.name=Battery Block
-#tile.magneticraft.electric_pole_adapter.name=Electric Pole with transformer
+tile.magneticraft.electric_pole_north.name=Electric Pole
+tile.magneticraft.electric_pole_transformer_north.name=Electric Pole Transformer
 tile.magneticraft.electric_furnace_north.name=Electric furnace
+#tile.magneticraft.coal_generator_north.name=Coal Generator
 
 #tile.magneticraft.electric_heater_off.name=Electric Heater
 #tile.magneticraft.electric_heater_on.name=Electric Heater

@@ -262,6 +262,7 @@ class ModuleElectricity(
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
+        autoConnectWires = nbt.getBoolean("auto_connect")
         nbt.readList("ElectricNodes") { nodeList ->
             nodes.forEachIndexed { index, node ->
                 node.deserializeNBT(nodeList.getTagCompound(index))
@@ -277,6 +278,7 @@ class ModuleElectricity(
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
+        add("auto_connect", autoConnectWires)
         list("ElectricNodes") {
             nodes.forEach { appendTag(it.serializeNBT()) }
         }

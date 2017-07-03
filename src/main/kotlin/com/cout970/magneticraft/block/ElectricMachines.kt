@@ -3,10 +3,12 @@ package com.cout970.magneticraft.block
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.core.*
-import com.cout970.magneticraft.item.itemBlockListOf
+import com.cout970.magneticraft.item.itemblock.ItemBlockElectricPoleTransformer
+import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
+import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.tryConnect
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
@@ -48,6 +50,9 @@ object ElectricMachines : IBlockMaker {
     lateinit var coal_generator: BlockBase private set
     lateinit var electric_pole: BlockBase private set
     lateinit var electric_pole_transformer: BlockBase private set
+
+    // hacky way to avoid power pole drops and break particles
+    var air = false
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -98,6 +103,7 @@ object ElectricMachines : IBlockMaker {
         }.build()
 
         electric_furnace = builder.withName("electric_furnace").copy {
+            material = Material.ROCK
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileElectricFurnace)
             alwaysDropDefault = true
@@ -133,9 +139,9 @@ object ElectricMachines : IBlockMaker {
             }
             onBlockBreak = {
                 if (it.state[PROPERTY_ORIENTATION_AND_LEVEL] == OrientationAndLevel.UP) {
-                    it.worldIn.destroyBlock(it.pos.down(), false)
+                    it.worldIn.destroyBlock(it.pos.down(), true)
                 } else {
-                    it.worldIn.destroyBlock(it.pos.up(), false)
+                    it.worldIn.destroyBlock(it.pos.up(), true)
                 }
             }
             pickBlock = CommonMethods::pickDefaultBlock
@@ -143,6 +149,7 @@ object ElectricMachines : IBlockMaker {
         }.build()
 
         electric_pole = builder.withName("electric_pole").copy {
+            material = Material.WOOD
             states = PoleOrientation.values().toList()
             factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
             factory = factoryOf(::TileElectricPole)
@@ -159,9 +166,16 @@ object ElectricMachines : IBlockMaker {
             }
             onBlockBreak = ElectricMachines::breakElectricPole
             blockStatesToPlace = ElectricMachines::placeElectricPole
+            onDrop = {
+                if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false)
+                    it.default
+                else
+                    emptyList()
+            }
         }.build()
 
         electric_pole_transformer = builder.withName("electric_pole_transformer").copy {
+            material = Material.WOOD
             states = PoleOrientation.values().toList()
             factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
             factory = factoryOf(::TileElectricPoleTransformer)
@@ -177,21 +191,32 @@ object ElectricMachines : IBlockMaker {
                 Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size)
             }
             onBlockBreak = ElectricMachines::breakElectricPole
-            blockStatesToPlace = ElectricMachines::placeElectricPole
+            onDrop = {
+                if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false) it.default + electric_pole.stack()
+                else emptyList()
+            }
         }.build()
 
-        return itemBlockListOf(connector, battery, electric_furnace, coal_generator,
-                electric_pole, electric_pole_transformer)
+        return itemBlockListOf(connector, battery, electric_furnace, coal_generator, electric_pole) +
+               (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
     }
 
     fun breakElectricPole(args: BreakBlockArgs): Unit = args.run {
         if (state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false) {
             for (i in 1..4) {
-                worldIn.setBlockToAir(pos.offset(EnumFacing.DOWN, i))
+                if (air) {
+                    worldIn.setBlockToAir(pos.offset(EnumFacing.DOWN, i))
+                } else {
+                    worldIn.destroyBlock(pos.offset(EnumFacing.DOWN, i), false)
+                }
             }
         } else {
             val newPos = PoleOrientation.getMainPos(state, pos)
-            worldIn.setBlockToAir(newPos)
+            if (air) {
+                worldIn.setBlockToAir(newPos)
+            } else {
+                worldIn.destroyBlock(newPos, true)
+            }
         }
     }
 
@@ -237,14 +262,14 @@ object ElectricMachines : IBlockMaker {
             val offsetY: Int = 0
     ) : IStatesEnum, IStringSerializable {
 
-        NORTH("north", true, Vec3d(1.0, 0.0, 0.0), 0f),
-        NORTH_EAST("north_east", false, Vec3d(0.707106, 0.0, 0.707106), -45f),
+        NORTH("north", true, Vec3d(1.0, 0.0, 0.0), 180f),
+        NORTH_EAST("north_east", false, Vec3d(0.707106, 0.0, 0.707106), -45f + 180f),
         EAST("east", false, Vec3d(0.0, 0.0, 1.0), 90f),
         SOUTH_EAST("south_east", false, Vec3d(-0.707106, 0.0, 0.707106), 45f),
-        SOUTH("south", false, Vec3d(-1.0, 0.0, 0.0), 180f),
+        SOUTH("south", false, Vec3d(-1.0, 0.0, 0.0), 0f),
         SOUTH_WEST("south_west", false, Vec3d(-0.707106, 0.0, -0.707106), -90f + 45),
         WEST("west", false, Vec3d(0.0, 0.0, -1.0), -90f),
-        NORTH_WEST("north_west", false, Vec3d(0.707106, 0.0, -0.707106), 45f),
+        NORTH_WEST("north_west", false, Vec3d(0.707106, 0.0, -0.707106), 45f + 180),
         DOWN_1("down_1", false, Vec3d.ZERO, offsetY = 1),
         DOWN_2("down_2", false, Vec3d.ZERO, offsetY = 2),
         DOWN_3("down_3", false, Vec3d.ZERO, offsetY = 3),

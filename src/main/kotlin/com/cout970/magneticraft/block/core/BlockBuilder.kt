@@ -45,6 +45,7 @@ class BlockBuilder {
     var onNeighborChanged: ((OnNeighborChangedArgs) -> Unit)? = null
     var blockStatesToPlace: ((BlockStatesToPlaceArgs) -> List<Pair<BlockPos, IBlockState>>)? = null
     var onBlockBreak: ((BreakBlockArgs) -> Unit)? = null
+    var onDrop: ((DropsArgs) -> List<ItemStack>)? = null
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
@@ -98,6 +99,7 @@ class BlockBuilder {
             blockStatesToPlace = this@BlockBuilder.blockStatesToPlace
             onBlockBreak = this@BlockBuilder.onBlockBreak
             setLightLevel(lightEmission)
+            onDrop = this@BlockBuilder.onDrop
         }
         return block
     }
@@ -131,6 +133,7 @@ class BlockBuilder {
         newBuilder.alwaysDropDefault = alwaysDropDefault
         newBuilder.blockStatesToPlace = blockStatesToPlace
         newBuilder.onBlockBreak = onBlockBreak
+        newBuilder.onDrop = onDrop
 
         func(newBuilder)
         return newBuilder

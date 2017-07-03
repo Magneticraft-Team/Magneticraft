@@ -289,19 +289,22 @@ object Utilities {
             val order = b.getConnectorIndex(c, a, con)
             val start = origins[c]
             val end = direction.toVec3d().add(destinations[order])
-
-            val tes = Tessellator.getInstance()
-            val buffer = tes.buffer
-
-            buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
-
-            val points = interpolateWire(start, end, weight)
-
-            for (p in 0..points.size - 2) {
-                drawLine(buffer, points[p], points[p + 1])
-            }
-            tes.draw()
+            drawWireBetween(start, end, weight)
         }
+    }
+
+    fun drawWireBetween(start: Vec3d, end: Vec3d, weight: Double) {
+        val tes = Tessellator.getInstance()
+        val buffer = tes.buffer
+
+        buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL)
+
+        val points = interpolateWire(start, end, weight)
+
+        for (p in 0..points.size - 2) {
+            drawLine(buffer, points[p], points[p + 1])
+        }
+        tes.draw()
     }
 
     fun interpolateWire(start: Vec3d, end: Vec3d, mass: Double): List<Vec3d> {

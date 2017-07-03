@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.block.core.*
-import com.cout970.magneticraft.item.itemBlockListOf
+import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.tileentity.TileTubeLight
 import com.cout970.magneticraft.tilerenderer.core.PIXEL

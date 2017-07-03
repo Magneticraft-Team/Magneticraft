@@ -104,6 +104,7 @@ object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPole
     override fun renderModels(models: List<ModelCache>, te: TileElectricPoleTransformer) {
 
         te.wireRender.update {
+
             for (i in te.electricModule.outputWiredConnections) {
                 Utilities.renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector)
             }

@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.item
+package com.cout970.magneticraft.item.itemblock
 
 import com.cout970.magneticraft.block.core.BlockBase
 import net.minecraft.creativetab.CreativeTabs
@@ -10,9 +10,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**
- * Created by cout970 on 2017/06/11.
+ * Created by cout970 on 2017/07/03.
  */
-class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
+open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
 
     init {
         registryName = blockBase.registryName

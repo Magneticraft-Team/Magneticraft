@@ -3,7 +3,7 @@ package com.cout970.magneticraft.tileentity.modules
 import com.cout970.magneticraft.block.Machines
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
-import com.cout970.magneticraft.item.ItemBlockBase
+import com.cout970.magneticraft.item.itemblock.ItemBlockBase
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick

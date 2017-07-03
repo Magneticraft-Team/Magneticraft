@@ -190,6 +190,7 @@ class TileElectricPole : TileBase(), ITickable {
 
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
 }
+
 @RegisterTileEntity("electric_pole_transformer")
 class TileElectricPoleTransformer : TileBase(), ITickable {
     val node = ElectricNode(container.ref)
@@ -219,9 +220,10 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     }
 
     fun getConnectors2(): List<IVector3> {
-        val angle = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.angle ?: return emptyList()
-        val center = Vec3d(0.5, 1.0, 0.5)
-        return listOf(center)
+        val angle = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
+        val offset = angle.rotateYaw(Math.toRadians(-90.0).toFloat())
+        val vec = Vec3d(0.5, 1.0 - PIXEL * 6.5, 0.5).add(offset * 0.5)
+        return listOf(vec)
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
