@@ -159,12 +159,12 @@ text.magneticraft.wire_connect.updated_position=Position updated %s
 text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
-#text.magneticraft.jei.crushing_table=Crushing Table
-#text.magneticraft.jei.table_sieve=Table Sieve
-#text.magneticraft.jei.hydraulic_press=Hydraulic Press
-#text.magneticraft.jei.kiln=Beehive Kiln
-#text.magneticraft.jei.grinder=Grinder
-#text.magneticraft.jei.sifter=Sifter
+text.magneticraft.jei.crushing_table=Crushing Table
+text.magneticraft.jei.table_sieve=Table Sieve
+text.magneticraft.jei.hydraulic_press=Hydraulic Press
+text.magneticraft.jei.kiln=Beehive Kiln
+text.magneticraft.jei.grinder=Grinder
+text.magneticraft.jei.sifter=Sifter
 
 #text.magneticraft.multiblock.error_count=Found %d errors trying to active the multiblock
 #text.magneticraft.multiblock.first_errors=Showing the %d first errors:
