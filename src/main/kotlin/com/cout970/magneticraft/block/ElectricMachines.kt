@@ -172,6 +172,9 @@ object ElectricMachines : IBlockMaker {
                 else
                     emptyList()
             }
+            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER,
+                    ElectricPoleManualConnectionHandler)
+            onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
         electric_pole_transformer = builder.withName("electric_pole_transformer").copy {
@@ -195,6 +198,9 @@ object ElectricMachines : IBlockMaker {
                 if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false) it.default + electric_pole.stack()
                 else emptyList()
             }
+            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER,
+                    ElectricPoleManualConnectionHandler)
+            onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
         return itemBlockListOf(connector, battery, electric_furnace, coal_generator, electric_pole) +
@@ -352,6 +358,42 @@ object ElectricMachines : IBlockMaker {
                 tryConnect(tile.electricModule, tile.wrapper, handler, otherNode, null)
             }
             return size != tile.electricModule.outputWiredConnections.size
+        }
+    }
+
+    object ElectricPoleManualConnectionHandler : IManualConnectionHandler {
+
+        override fun getBasePos(thisBlock: BlockPos, world: World, player: EntityPlayer, side: EnumFacing,
+                                stack: ItemStack): BlockPos {
+            val state = world.getBlockState(thisBlock)
+            val orientation = state[PROPERTY_POLE_ORIENTATION] ?: return thisBlock
+            return if (orientation.isMainBlock()) thisBlock else thisBlock.offset(EnumFacing.UP, orientation.offsetY)
+        }
+
+        override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
+                                 side: EnumFacing, stack: ItemStack): Boolean {
+
+            val pos = getBasePos(thisBlock, world, player, side, stack)
+            val tile = world.getTileEntity(pos)
+            val other = world.getTileEntity(otherBlock)
+            if (tile == null || other == null) {
+                return false
+            }
+            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return false
+            val otherNodes = handler.nodes.filterIsInstance(IWireConnector::class.java)
+
+            val module = when (tile) {
+                is TileElectricPole -> tile.electricModule
+                is TileElectricPoleTransformer -> tile.electricModule
+                else -> return false
+            }
+            val size = module.outputWiredConnections.size
+            module.electricNodes.forEach { thisNode ->
+                otherNodes.forEach { otherNode ->
+                    tryConnect(module, thisNode, handler, otherNode, null)
+                }
+            }
+            return size != module.outputWiredConnections.size
         }
     }
 

@@ -5,6 +5,8 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
+import com.cout970.magneticraft.registry.fromBlock
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleElectricity
 import com.cout970.magneticraft.util.vector.*
@@ -30,7 +32,11 @@ object CommonMethods {
 
     fun enableAutoConnectWires(args: OnActivatedArgs): Boolean {
         if (args.playerIn.isSneaking && args.playerIn.heldItemMainhand.isEmpty) {
-            val te = args.worldIn.getTile<TileBase>(args.pos) ?: return false
+
+            val handler = MANUAL_CONNECTION_HANDLER!!.fromBlock(args.state.block, args.side)
+            val pos = handler?.getBasePos(args.pos, args.worldIn, args.playerIn, args.side, args.heldItem) ?: args.pos
+
+            val te = args.worldIn.getTile<TileBase>(pos) ?: return false
             val electricModule = te.container.modules.find { it is ModuleElectricity } as? ModuleElectricity ?: return false
 
             electricModule.autoConnectWires = !electricModule.autoConnectWires
@@ -93,6 +99,7 @@ object CommonMethods {
             facing.rotateBox(center, base)
         }
     }
+
     /**
      * The base value is associated to the NORTH direction
      */
