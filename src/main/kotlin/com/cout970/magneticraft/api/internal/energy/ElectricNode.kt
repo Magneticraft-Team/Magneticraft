@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound
 @Suppress("unused")
 open class ElectricNode(
         val ref: ITileRef,
-        private val resistance: Double = 0.001,
+        private val resistance: Double = 0.0001,
         private val capacity: Double = 1.0,
         private val name: String = "electric_node_1"
 ) : IElectricNode {

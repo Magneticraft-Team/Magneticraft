@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.multiblock.core
 
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos
 /**
  * Created by cout970 on 21/08/2016.
  */
-interface ITileMultiblock {
+interface IMultiblockModule {
 
     //current multiblock
     var multiblock: Multiblock?

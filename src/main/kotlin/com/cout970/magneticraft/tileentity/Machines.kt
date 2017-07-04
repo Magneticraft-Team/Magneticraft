@@ -1,14 +1,18 @@
 package com.cout970.magneticraft.tileentity
 
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
+import com.cout970.magneticraft.registry.FLUID_HANDLER
+import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleConveyorBelt
-import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
-import com.cout970.magneticraft.tileentity.modules.ModuleInserter
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
+import com.cout970.magneticraft.tileentity.modules.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
+import net.minecraftforge.fluids.FluidRegistry
+import net.minecraftforge.fluids.FluidStack
 
 /**
  * Created by cout970 on 2017/06/12.
@@ -74,5 +78,43 @@ class TileInserter : TileBase(), ITickable {
 class TileTubeLight : TileBase() {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
+}
+
+@RegisterTileEntity("water_generator")
+class TileWaterGenerator : TileBase(), ITickable {
+
+    override fun update() {
+        super.update()
+        enumValues<EnumFacing>().forEach { dir ->
+            val tile = world.getTileEntity(pos.offset(dir))
+            val handler = tile?.getOrNull(FLUID_HANDLER) ?: return@forEach
+
+            val water = FluidStack(FluidRegistry.WATER, Config.waterGeneratorPerTickWater)
+            val amount = handler.fill(water, false)
+            if(amount > 0){
+                handler.fill(FluidStack(water, amount), true)
+            }
+        }
+    }
+}
+
+@RegisterTileEntity("infinite_energy")
+class TileInfiniteEnergy : TileBase(), ITickable {
+
+    val node = ElectricNode(container.ref)
+
+    val electricModule = ModuleElectricity(
+            listOf(node)
+    )
+
+    init {
+        initModules(electricModule)
+    }
+
+    override fun update() {
+        node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+        super.update()
+        node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+    }
 }
 

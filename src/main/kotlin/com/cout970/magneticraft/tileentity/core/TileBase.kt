@@ -69,11 +69,18 @@ abstract class TileBase : TileEntity() {
         container.modules.forEach(IModule::onLoad)
     }
 
+    override fun invalidate() {
+        if(world.isClient) {
+            onBreak()
+        }
+        super.invalidate()
+    }
+
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
         return container.modules.any { it.hasCapability(capability, facing) }
     }
 
-    override fun <T : Any> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         val list = container.modules.filter { it.hasCapability(capability, facing) }
         return list.first().getCapability(capability, facing)
     }

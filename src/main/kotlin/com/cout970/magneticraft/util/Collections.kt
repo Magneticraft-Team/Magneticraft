@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.util
 
-import com.cout970.magneticraft.multiblock.IMultiblockComponent
-import com.cout970.magneticraft.multiblock.Multiblock
+import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
+import com.cout970.magneticraft.multiblock.core.Multiblock
 import java.util.*
 
 

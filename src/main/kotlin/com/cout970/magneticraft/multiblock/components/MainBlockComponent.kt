@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.multiblock.components
 
-import com.cout970.magneticraft.multiblock.*
+import com.cout970.magneticraft.multiblock.core.BlockData
+import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
+import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.util.i18n
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.Block
@@ -12,7 +15,10 @@ import net.minecraft.util.text.ITextComponent
 /**
  * Created by cout970 on 20/08/2016.
  */
-class MainBlockComponent(val block: Block, val getter: (context: MultiblockContext, state: IBlockState, activate: Boolean) -> IBlockState) : IMultiblockComponent {
+class MainBlockComponent(
+        val block: Block,
+        val getter: (context: MultiblockContext, activate: Boolean) -> IBlockState
+) : IMultiblockComponent {
 
     override fun checkBlock(relativePos: BlockPos, context: MultiblockContext): List<ITextComponent> {
         val pos = context.center + relativePos
@@ -33,28 +39,14 @@ class MainBlockComponent(val block: Block, val getter: (context: MultiblockConte
 
     override fun activateBlock(relativePos: BlockPos, context: MultiblockContext) {
         val pos = context.center + relativePos
-        val state = context.world.getBlockState(pos)
-        context.world.setBlockState(pos, getter(context, state, true))
-        val tile = context.world.getTileEntity(pos)
-        if (tile is ITileMultiblock) {
-            tile.multiblock = context.multiblock
-            tile.multiblockFacing = context.facing
-            tile.centerPos = relativePos
-            tile.onActivate()
-        }
+        context.world.setBlockState(pos, getter(context, true))
+        super.activateBlock(relativePos, context)
     }
 
     override fun deactivateBlock(relativePos: BlockPos, context: MultiblockContext) {
+        super.deactivateBlock(relativePos, context)
         val pos = context.center + relativePos
-        val state = context.world.getBlockState(pos)
-        val tile = context.world.getTileEntity(pos)
-        if (tile is ITileMultiblock) {
-            tile.onDeactivate()
-            tile.multiblock = null
-            tile.multiblockFacing = null
-            tile.centerPos = null
-        }
-        context.world.setBlockState(pos, getter(context, state, false))
+        context.world.setBlockState(pos, getter(context, false))
     }
 
     override fun getBlueprintBlocks(multiblock: Multiblock, blockPos: BlockPos): List<ItemStack> = listOf()

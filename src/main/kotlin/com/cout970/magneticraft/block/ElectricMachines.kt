@@ -50,6 +50,7 @@ object ElectricMachines : IBlockMaker {
     lateinit var coal_generator: BlockBase private set
     lateinit var electric_pole: BlockBase private set
     lateinit var electric_pole_transformer: BlockBase private set
+    lateinit var infinite_energy: BlockBase private set
 
     // hacky way to avoid power pole drops and break particles
     var air = false
@@ -203,7 +204,11 @@ object ElectricMachines : IBlockMaker {
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
-        return itemBlockListOf(connector, battery, electric_furnace, coal_generator, electric_pole) +
+        infinite_energy = builder.withName("infinite_energy").copy {
+            factory = factoryOf(::TileInfiniteEnergy)
+        }.build()
+
+        return itemBlockListOf(connector, battery, electric_furnace, coal_generator, electric_pole, infinite_energy) +
                (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
     }
 

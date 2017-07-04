@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.multiblock.core
 
 
 import com.cout970.magneticraft.util.vector.*
@@ -22,7 +22,8 @@ abstract class Multiblock {
     abstract fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent>
 
     companion object {
-        fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> = args.map(::MultiblockLayer)
+        fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> = args.map(
+                Multiblock::MultiblockLayer)
         fun zLayers(vararg args: List<IMultiblockComponent>): List<List<IMultiblockComponent>> = listOf(*args)
     }
 

@@ -22,6 +22,7 @@ fun initBlocks() {
     blocks_ += Machines.initBlocks()
     blocks_ += MultiblockParts.initBlocks()
     blocks_ += ElectricMachines.initBlocks()
+    blocks_ += Multiblocks.initBlocks()
 
     val blockRegistry = GameRegistry.findRegistry(Block::class.java)
     val itemRegistry = GameRegistry.findRegistry(Item::class.java)

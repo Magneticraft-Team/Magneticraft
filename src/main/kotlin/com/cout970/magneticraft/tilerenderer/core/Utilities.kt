@@ -3,6 +3,9 @@ package com.cout970.magneticraft.tilerenderer.core
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.multiblock.core.IMultiblockModule
+import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.client.Minecraft
@@ -16,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL14
@@ -31,38 +35,38 @@ object Utilities {
     val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
 
-//    fun renderMultiblockBlueprint(multiblock: Multiblock) {
-//        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-//        for (j in 0 until multiblock.size.y) {
-//            for (i in 0 until multiblock.size.x) {
-//                for (k in 0 until multiblock.size.z) {
-//                    val component = multiblock.scheme[i, j, k]
-//                    val blocks = component.getBlueprintBlocks(multiblock, BlockPos(i, j, k))
-//                    for (stack in blocks) {
-//                        stack.item ?: continue
-//                        pushMatrix()
-//                        translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
-//                        val pos = vec3Of(i, j, k) - multiblock.center.toVec3d()
-//                        translate(pos.xd, pos.yd, pos.zd)
-//                        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
-//                            translate(0.0, -0.045, 0.125)
-//                            rotate(90f, 1f, 0f, 0f)
-//                        } else {
-//                            translate(0.0, -0.125, 0.0625 * 3)
-//                        }
-//                        scale(2.0, 2.0, 2.0)
-//                        renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.5f)
-//                        popMatrix()
-//                    }
-//                }
-//            }
-//        }
-//    }
+    fun renderMultiblockBlueprint(multiblock: Multiblock) {
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+        for (j in 0 until multiblock.size.y) {
+            for (i in 0 until multiblock.size.x) {
+                for (k in 0 until multiblock.size.z) {
+                    val component = multiblock.scheme[i, j, k]
+                    val blocks = component.getBlueprintBlocks(multiblock, BlockPos(i, j, k))
+                    for (stack in blocks) {
+                        stack.item ?: continue
+                        pushMatrix()
+                        translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
+                        val pos = vec3Of(i, j, k) - multiblock.center.toVec3d()
+                        translate(pos.xd, pos.yd, pos.zd)
+                        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
+                            translate(0.0, -0.045, 0.125)
+                            rotate(90f, 1f, 0f, 0f)
+                        } else {
+                            translate(0.0, -0.125, 0.0625 * 3)
+                        }
+                        scale(2.0, 2.0, 2.0)
+                        renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.5f)
+                        popMatrix()
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * This uses DOWN as default facing
      */
-    fun rotateAroundCenter(facing: EnumFacing){
+    fun rotateAroundCenter(facing: EnumFacing) {
         when (facing.opposite) {
             EnumFacing.UP -> {
                 Utilities.customRotate(vec3Of(180, 0, 0), Vec3d(0.5, 0.5, 0.5))
@@ -117,7 +121,7 @@ object Utilities {
         translate(-pos.xd, -pos.yd, -pos.zd)
     }
 
-    fun renderBox(box: AxisAlignedBB, color: IVector3 = vec3Of(1,1,1)) {
+    fun renderBox(box: AxisAlignedBB, color: IVector3 = vec3Of(1, 1, 1)) {
         val tes = Tessellator.getInstance()
         val t = tes.buffer
         val r = color.xf
@@ -168,7 +172,7 @@ object Utilities {
         glEnable(GL_TEXTURE_2D)
     }
 
-    fun renderLine(pos: IVector3, end: IVector3, color: IVector3 = vec3Of(1,1,1)) {
+    fun renderLine(pos: IVector3, end: IVector3, color: IVector3 = vec3Of(1, 1, 1)) {
         val tes = Tessellator.getInstance()
         val t = tes.buffer
         val r = color.xf
@@ -198,12 +202,13 @@ object Utilities {
         translate(-0.5, -0.5, -0.5)
     }
 
-//    fun renderMultiblockBoundingBoxes(te: TileMultiblock){
-//        val global = te.multiblock!!.getGlobalCollisionBox().map {
-//            te.multiblockFacing!!.rotateBox(vec3Of(0.5, 0.5, 0.5), it)
-//        }
-//        global.forEach(::renderBox)
-//    }
+    fun renderMultiblockBoundingBoxes(te: IMultiblockModule) {
+        te.multiblock ?: return
+        val global = te.multiblock!!.getGlobalCollisionBox().map {
+            te.multiblockFacing!!.rotateBox(vec3Of(0.5, 0.5, 0.5), it)
+        }
+        global.forEach { renderBox(it) }
+    }
 
     fun renderFloatingLabel(str: String, pos: Vec3d) {
 
@@ -341,5 +346,12 @@ object Utilities {
 
     fun interpolate(fa: Float, fb: Float, x: Float): Float {
         return fa + (fb - fa) * x
+    }
+
+    fun multiblockPreview(facing: EnumFacing, multiblock: Multiblock) {
+        pushMatrix()
+        Utilities.rotateFromCenter(facing.opposite, 0f)
+        Utilities.renderMultiblockBlueprint(multiblock)
+        popMatrix()
     }
 }

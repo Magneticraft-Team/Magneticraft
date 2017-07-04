@@ -7,7 +7,6 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
-import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -17,7 +16,6 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.NonNullList
@@ -190,27 +188,6 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         }
         super.getDrops(drops, world, pos, state, fortune)
 
-    }
-}
-
-class BlockTileBase(
-        val factory: (World, IBlockState) -> TileEntity?,
-        val filter: ((IBlockState) -> Boolean)?,
-        material: Material
-) : BlockBase(material), ITileEntityProvider {
-
-    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
-        val state = getStateFromMeta(meta)
-        filter?.let {
-            if (!it.invoke(state)) {
-                return null
-            }
-        }
-        return factory(worldIn, state)
-    }
-
-    override fun hasTileEntity(state: IBlockState): Boolean {
-        return filter?.invoke(state) ?: super.hasTileEntity(state)
     }
 }
 

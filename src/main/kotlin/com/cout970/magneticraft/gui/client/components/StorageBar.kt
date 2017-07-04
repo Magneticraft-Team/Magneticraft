@@ -6,6 +6,7 @@ import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.tileentity.modules.ModuleInternalStorage
 import com.cout970.magneticraft.util.vector.Vec2d
+import java.text.DecimalFormat
 
 /**
  * Created by cout970 on 2017/07/01.
@@ -27,7 +28,8 @@ class StorageBar(val parent: GuiBase, val storageModule: ModuleInternalStorage) 
 
     override fun drawSecondLayer(mouse: Vec2d) {
         if (mouse in box) {
-            gui.drawHoveringText(listOf("${storageModule.energy}J"), mouse)
+            val numberFormat = DecimalFormat("#,###")
+            gui.drawHoveringText(listOf("${numberFormat.format(storageModule.energy)}J"), mouse)
         }
     }
 }

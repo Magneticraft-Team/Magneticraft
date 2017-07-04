@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.multiblock.core
 
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumFacing

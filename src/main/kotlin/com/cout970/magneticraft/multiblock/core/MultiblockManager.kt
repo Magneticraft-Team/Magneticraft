@@ -1,7 +1,9 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.multiblock.core
 
+import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.vector.rotatePoint
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
 
@@ -23,8 +25,8 @@ object MultiblockManager {
     fun getMultiblock(name: String) = multiblocks[name]
 
     fun registerDefaults() {
+        registerMultiblock(MultiblockSolarPanel)
 //        registerMultiblock(MultiblockHydraulicPress)
-//        registerMultiblock(MultiblockSolarPanel)
 //        registerMultiblock(MultiblockKiln)
 //        registerMultiblock(MultiblockGrinder)
 //        registerMultiblock(MultiblockSifter)
@@ -40,8 +42,7 @@ object MultiblockManager {
         for (j in 0 until context.multiblock.size.y) {
             for (i in 0 until context.multiblock.size.x) {
                 for (k in 0 until context.multiblock.size.z) {
-                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(
-                            context.multiblock.center)
+                    val pos = applyFacing(context, BlockPos(i, j, k))
                     val comp = context.multiblock.scheme[i, j, k]
                     val res = comp.checkBlock(pos, context)
                     data.add(comp.getBlockData(pos, context))
@@ -65,8 +66,7 @@ object MultiblockManager {
             for (j in 0 until context.multiblock.size.y) {
                 for (i in 0 until context.multiblock.size.x) {
                     for (k in 0 until context.multiblock.size.z) {
-                        val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(
-                                context.multiblock.center)
+                        val pos = applyFacing(context, BlockPos(i, j, k))
                         val comp = context.multiblock.scheme[i, j, k]
                         comp.activateBlock(pos, context)
                         data.add(comp.getBlockData(pos, context))
@@ -89,8 +89,7 @@ object MultiblockManager {
         for (j in 0 until context.multiblock.size.y) {
             for (i in 0 until context.multiblock.size.x) {
                 for (k in 0 until context.multiblock.size.z) {
-                    val pos = context.facing.rotatePoint(context.multiblock.center, BlockPos(i, j, k)).subtract(
-                            context.multiblock.center)
+                    val pos = applyFacing(context, BlockPos(i, j, k))
                     val comp = context.multiblock.scheme[i, j, k]
                     comp.deactivateBlock(pos, context)
                     data.add(comp.getBlockData(pos, context))
@@ -98,5 +97,13 @@ object MultiblockManager {
             }
         }
         context.multiblock.onDeactivate(data, context)
+    }
+
+    fun applyFacing(context: MultiblockContext, pos: BlockPos): BlockPos {
+        val center = context.multiblock.center
+        val origin = pos.subtract(center)
+        val normalized = EnumFacing.SOUTH.rotatePoint(BlockPos.ORIGIN, origin)
+        val rotated = context.facing.rotatePoint(BlockPos.ORIGIN, normalized)
+        return rotated
     }
 }

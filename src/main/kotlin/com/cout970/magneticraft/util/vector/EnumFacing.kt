@@ -14,10 +14,8 @@ import net.minecraft.util.math.Vec3d
 fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
     val rel = point - origin
     val rot = when (this) {
-        DOWN -> return BlockPos(
-                origin + BlockPos(Vec3d(rel).rotatePitch(-90.0f)))
-        UP -> return BlockPos(
-                origin + BlockPos(Vec3d(rel).rotatePitch(90.0f)))
+        DOWN -> return BlockPos(origin + BlockPos(Vec3d(rel).rotatePitch(-90.0f)))
+        UP -> return BlockPos(origin + BlockPos(Vec3d(rel).rotatePitch(90.0f)))
         NORTH -> return point
         SOUTH -> 180.0f
         WEST -> 90.0f
@@ -27,7 +25,6 @@ fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
     val pos3 = pos2.transform { Math.round(it).toDouble() }
     return BlockPos(origin + BlockPos(pos3))
 }
-
 /**
  * The default value is associated to the NORTH direction
  */

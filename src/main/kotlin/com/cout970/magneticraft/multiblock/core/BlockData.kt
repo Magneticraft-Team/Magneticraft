@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.multiblock.core
 
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.math.BlockPos

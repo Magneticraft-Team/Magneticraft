@@ -2,7 +2,7 @@ package com.cout970.magneticraft.proxy
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.gui.GuiHandler
-import com.cout970.magneticraft.multiblock.MultiblockManager
+import com.cout970.magneticraft.multiblock.core.MultiblockManager
 import com.cout970.magneticraft.network.MessageContainerUpdate
 import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.network.MessageTileUpdate

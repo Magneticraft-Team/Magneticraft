@@ -1,7 +1,10 @@
 package com.cout970.magneticraft.multiblock.components
 
 import com.cout970.magneticraft.Debug
-import com.cout970.magneticraft.multiblock.*
+import com.cout970.magneticraft.multiblock.core.BlockData
+import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
+import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.util.i18n
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.state.IBlockState
@@ -22,7 +25,7 @@ class ContextBlockComponent(
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != getter(context)) {
-            if(Debug.DEBUG) {
+            if (Debug.DEBUG) {
                 context.world.setBlockState(pos, getter(context))
             }
             val keyStr = "text.magneticraft.multiblock.invalid_block"
@@ -42,24 +45,12 @@ class ContextBlockComponent(
     override fun activateBlock(relativePos: BlockPos, context: MultiblockContext) {
         val pos = context.center + relativePos
         context.world.setBlockState(pos, replacement)
-        val tile = context.world.getTileEntity(pos)
-        if (tile is ITileMultiblock) {
-            tile.multiblock = context.multiblock
-            tile.multiblockFacing = context.facing
-            tile.centerPos = relativePos
-            tile.onActivate()
-        }
+        super.activateBlock(relativePos, context)
     }
 
     override fun deactivateBlock(relativePos: BlockPos, context: MultiblockContext) {
         val pos = context.center + relativePos
-        val tile = context.world.getTileEntity(pos)
-        if (tile is ITileMultiblock) {
-            tile.onDeactivate()
-            tile.multiblock = null
-            tile.multiblockFacing = null
-            tile.centerPos = null
-        }
+        super.deactivateBlock(relativePos, context)
         context.world.setBlockState(pos, getter(context))
     }
 

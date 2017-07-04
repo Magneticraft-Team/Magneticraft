@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.multiblock
+package com.cout970.magneticraft.multiblock.core
 
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.Capability
 /**
  * Created by cout970 on 22/08/2016.
  */
-interface IMultiblockCenter : ITileMultiblock {
+interface IMultiblockCenter : IMultiblockModule {
 
     fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean
 

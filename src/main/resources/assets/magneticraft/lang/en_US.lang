@@ -117,10 +117,10 @@ tile.magneticraft.electric_furnace_north.name=Electric furnace
 #tile.magneticraft.thermometer_block.name=Thermocouple
 #tile.magneticraft.brick_furnace.name=Brick Furnace
 
-#tile.magneticraft.infinite_water.name=Infinite Water
+tile.magneticraft.water_generator_normal.name=Water Generator
 #tile.magneticraft.infinite_heat.name=Infinite Heat
 #tile.magneticraft.infinite_cold.name=Infinite Cold
-#tile.magneticraft.infinite_energy.name=Infinite Energy
+tile.magneticraft.infinite_energy_normal.name=Infinite Energy
 
 #tile.magneticraft.airlock.name=Airlock
 #tile.magneticraft.air_bubble.name=Air Bubble
@@ -129,7 +129,7 @@ tile.magneticraft.electric_furnace_north.name=Electric furnace
 #tile.magneticraft.hydraulic_press.name=Hydraulic Press
 #tile.magneticraft.kiln.name=Beehive Kiln
 #tile.magneticraft.sifter.name=Electric Sifter
-#tile.magneticraft.solar_panel.name=Solar Panel
+tile.magneticraft.solar_panel_inactive_north.name=Solar Panel
 #tile.magneticraft.grinder.name=Grinder
 
 #tile.magneticraft.copper_block.name=Copper Block
@@ -144,6 +144,7 @@ tile.magneticraft.multiblock_parts_striped.name=Striped Machine Block
 tile.magneticraft.multiblock_column_axis_y.name=Support Column
 tile.magneticraft.multiblock_column_axis_x.name=Support Column
 tile.magneticraft.multiblock_column_axis_z.name=Support Column
+tile.magneticraft.multiblock_gap_normal.name=Multiblock Gap
 
 #tile.magneticraft.block_coal_coke.name=Block of Coal Coke
 #tile.magneticraft.block_wood_chip.name=Block of Wood Chips
@@ -166,11 +167,11 @@ text.magneticraft.jei.kiln=Beehive Kiln
 text.magneticraft.jei.grinder=Grinder
 text.magneticraft.jei.sifter=Sifter
 
-#text.magneticraft.multiblock.error_count=Found %d errors trying to active the multiblock
-#text.magneticraft.multiblock.first_errors=Showing the %d first errors:
-#text.magneticraft.multiblock.all_errors=Showing all errors:
-#text.magneticraft.multiblock.invalid_block=Invalid block at %s, found: %s, expected: %s
-#text.magneticraft.multiblock.activate=Successfully activated
+text.magneticraft.multiblock.error_count=Found %d errors trying to active the multiblock
+text.magneticraft.multiblock.first_errors=Showing the %d first errors:
+text.magneticraft.multiblock.all_errors=Showing all errors:
+text.magneticraft.multiblock.invalid_block=Invalid block at %s, found: %s, expected: %s
+text.magneticraft.multiblock.activate=Successfully activated
 
 #death.attack.kiln=%1$s walked into an oven.
 #death.attack.kiln.player=%1$s walked into an oven trying to escape %2$s.

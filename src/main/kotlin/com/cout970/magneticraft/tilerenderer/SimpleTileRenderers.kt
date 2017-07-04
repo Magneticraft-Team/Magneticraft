@@ -3,8 +3,10 @@ package com.cout970.magneticraft.tilerenderer
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.ElectricMachines
+import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.Utilities
@@ -139,6 +141,25 @@ object TileRendererTubeLight : TileRendererSimple<TileTubeLight>(
     override fun renderModels(models: List<ModelCache>, te: TileTubeLight) {
         bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 90f)
+        models.forEach { it.render() }
+    }
+}
+
+@RegisterRenderer(TileSolarPanel::class)
+object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
+        modelLocation = { ModelResourceLocation(Multiblocks.solarPanel.registryName, "model") }
+) {
+    val texture = resource("textures/blocks/multiblocks/solar_panel.png")
+
+    override fun renderModels(models: List<ModelCache>, te: TileSolarPanel) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockSolarPanel)
+            return
+        }
+
+        bindTexture(texture)
+        Utilities.rotateFromCenter(te.facing, -90f)
+        translate(-1.0, 0.0, 0.0)
         models.forEach { it.render() }
     }
 }

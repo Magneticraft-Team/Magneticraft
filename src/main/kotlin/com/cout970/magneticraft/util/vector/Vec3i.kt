@@ -30,7 +30,7 @@ operator fun Vec3i.plus(dir: EnumFacing) = toBlockPos().offset(dir)!!
 operator fun Vec3i.minus(dir: EnumFacing) = toBlockPos().offset(dir.opposite)!!
 
 fun Vec3i.toBlockPos() = if (this is BlockPos) this else BlockPos(x, y, z)
-fun Vec3d.toBlockPos() = BlockPos(xi, yi, zi)
+fun Vec3d.toBlockPos() = BlockPos(Math.round(xd).toInt(), Math.round(yd).toInt(), Math.round(zd).toInt())
 fun Vec3i.toVec3d() = Vec3d(xd, yd, zd)
 
 operator fun Vec3i.minus(other: Vec3i) = BlockPos(x - other.x, y - other.y, z - other.z)

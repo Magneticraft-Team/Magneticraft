@@ -6,10 +6,7 @@ import com.cout970.magneticraft.block.core.CommonMethods
 import com.cout970.magneticraft.block.core.IBlockMaker
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.tileentity.TileBox
-import com.cout970.magneticraft.tileentity.TileConveyorBelt
-import com.cout970.magneticraft.tileentity.TileCrushingTable
-import com.cout970.magneticraft.tileentity.TileInserter
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.vec3Of
@@ -22,12 +19,11 @@ import net.minecraft.item.ItemBlock
  */
 object Machines : IBlockMaker {
 
-
-
     lateinit var box: BlockBase private set
     lateinit var crushingTable: BlockBase private set
     lateinit var conveyorBelt: BlockBase private set
     lateinit var inserter: BlockBase private set
+    lateinit var waterGenerator: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -84,6 +80,10 @@ object Machines : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        return itemBlockListOf(box, crushingTable, conveyorBelt, inserter)
+        waterGenerator = builder.withName("water_generator").copy {
+            factory = factoryOf(::TileWaterGenerator)
+        }.build()
+
+        return itemBlockListOf(box, crushingTable, conveyorBelt, inserter, waterGenerator)
     }
 }
