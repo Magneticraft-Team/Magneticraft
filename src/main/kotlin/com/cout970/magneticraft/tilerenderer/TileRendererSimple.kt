@@ -26,6 +26,12 @@ abstract class TileRendererSimple<T : TileBase>(
         }
     }
 
+    companion object {
+        fun filterOf(names: List<String>): List<(String) -> Boolean> {
+            return listOf({ name: String -> name !in names }) + names.map { name -> { it: String -> it == name } }
+        }
+    }
+
     abstract fun renderModels(models: List<ModelCache>, te: T)
 
     override fun onModelRegistryReload() {

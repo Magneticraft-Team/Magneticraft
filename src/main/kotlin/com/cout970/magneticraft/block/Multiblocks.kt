@@ -5,13 +5,18 @@ import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.player.sendMessage
+import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
 import com.cout970.magneticraft.tileentity.TileMultiblockGap
+import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSolarPanel
+import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -34,6 +39,7 @@ object Multiblocks : IBlockMaker {
 
     lateinit var gap: BlockBase private set
     lateinit var solarPanel: BlockBase private set
+    lateinit var shelvingUnit: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -50,6 +56,15 @@ object Multiblocks : IBlockMaker {
         gap = builder.withName("multiblock_gap").copy {
             states = null
             factory = factoryOf(::TileMultiblockGap)
+            onActivated = func@ {
+                val tile = it.worldIn.getTile<TileMultiblockGap>(it.pos) ?: return@func false
+                val module = tile.multiblockModule
+                val storedPos = module.centerPos ?: return@func false
+                val mainBlockPos = it.pos.subtract(storedPos)
+                val mainTile = it.worldIn.getTile<TileBase>(mainBlockPos) ?: return@func false
+                val actionable = mainTile.getModule<IOnActivated>() ?: return@func false
+                return@func actionable.onActivated(it)
+            }
         }.build()
 
         solarPanel = builder.withName("solar_panel").copy {
@@ -63,7 +78,19 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
-        return itemBlockListOf(gap, solarPanel)
+        shelvingUnit = builder.withName("shelving_unit").copy {
+            factory = factoryOf(::TileShelvingUnit)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/shelving_unit.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockShelvingUnit })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+
+        return itemBlockListOf(gap, solarPanel, shelvingUnit)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {
@@ -74,10 +101,14 @@ object Multiblocks : IBlockMaker {
 
     fun defaultOnActivated(multiblock: () -> Multiblock): (OnActivatedArgs) -> Boolean {
         return func@ {
-            if (it.hand != EnumHand.MAIN_HAND) return@func false
             val state = it.state[PROPERTY_MULTIBLOCK_ORIENTATION] ?: return@func false
-            if (it.worldIn.isServer) {
-                if (!state.active) {
+            if (state.active) {
+                val tile = it.worldIn.getTile<TileBase>(it.pos) ?: return@func false
+                val actionable = tile.getModule<IOnActivated>() ?: return@func false
+                return@func actionable.onActivated(it)
+            } else {
+                if (it.hand != EnumHand.MAIN_HAND) return@func false
+                if (it.worldIn.isServer) {
                     val context = MultiblockContext(
                             multiblock = multiblock(),
                             world = it.worldIn,
@@ -87,8 +118,8 @@ object Multiblocks : IBlockMaker {
                     )
                     activateMultiblock(context)
                 }
+                return@func true
             }
-            !state.active
         }
     }
 

@@ -7,11 +7,11 @@ import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
+import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleElectricity
-import com.cout970.magneticraft.tileentity.modules.ModuleMultiblock
-import com.cout970.magneticraft.tileentity.modules.ModuleMultiblockCenter
+import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.interpolate
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
@@ -34,9 +34,7 @@ class TileMultiblockGap : TileBase() {
     }
 }
 
-
-@RegisterTileEntity("solar_panel")
-class TileSolarPanel : TileBase(), ITickable {
+abstract class TileMultiblock : TileBase(){
 
     val facing: EnumFacing
         get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: EnumFacing.NORTH
@@ -44,9 +42,32 @@ class TileSolarPanel : TileBase(), ITickable {
         get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.active ?: false
 
     val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = MultiblockSolarPanel,
+            multiblockStructure = getMultiblock(),
             facingGetter = { facing }
     )
+
+    abstract fun getMultiblock(): Multiblock
+
+    override fun shouldRenderInPass(pass: Int): Boolean {
+        return if (active) super.shouldRenderInPass(pass) else pass == 1
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB {
+        val size = getMultiblock().size.toVec3d()
+        val center = getMultiblock().center.toVec3d()
+        val box = Vec3d.ZERO toAABBWith size
+        val boxWithOffset = box.offset(-center)
+        val normalizedBox = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), boxWithOffset)
+        val alignedBox = facing.rotateBox(vec3Of(0.5), normalizedBox)
+        return alignedBox.offset(pos)
+    }
+}
+
+
+@RegisterTileEntity("solar_panel")
+class TileSolarPanel : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockSolarPanel
 
     val node = ElectricNode(container.ref)
 
@@ -81,17 +102,20 @@ class TileSolarPanel : TileBase(), ITickable {
         }
     }
 
-
     fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
+}
 
-    override fun getRenderBoundingBox(): AxisAlignedBB {
-        val size = MultiblockSolarPanel.size.toVec3d()
-        val center = MultiblockSolarPanel.center.toVec3d()
-        val box = Vec3d.ZERO toAABBWith size
-        val boxWithOffset = box.offset(-center)
-        val normalizedBox = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), boxWithOffset)
-        val alignedBox = facing.rotateBox(vec3Of(0.5), normalizedBox)
-        return alignedBox.offset(pos)
+@RegisterTileEntity("shelving_unit")
+class TileShelvingUnit : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockShelvingUnit
+
+    val invModule = ModuleInventory(ModuleShelvingUnit.MAX_CHESTS * 27)
+
+    val shelvingUnitModule = ModuleShelvingUnit()
+
+    init {
+        initModules(multiblockModule, shelvingUnitModule, invModule)
     }
 }
 

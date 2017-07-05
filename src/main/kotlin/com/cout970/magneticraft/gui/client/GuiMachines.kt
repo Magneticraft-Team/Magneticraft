@@ -6,20 +6,22 @@ import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
+import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.vec2Of
 
 /**
  * Created by cout970 on 2017/06/12.
  */
 
-class GuiTileBox(container: ContainerBase) : GuiBase(container) {
+class GuiBox(container: ContainerBase) : GuiBase(container) {
 
     override fun initComponents() {
         components.add(CompBackground("box"))
     }
 }
 
-class GuiTileElectricFurnace(container: ContainerBase) : GuiBase(container) {
+class GuiElectricFurnace(container: ContainerBase) : GuiBase(container) {
 
     val tile = (container.tileEntity as TileElectricFurnace)
 
@@ -44,7 +46,7 @@ class GuiTileElectricFurnace(container: ContainerBase) : GuiBase(container) {
     }
 }
 
-class GuiTileBattery(container: ContainerBase) : GuiBase(container) {
+class GuiBattery(container: ContainerBase) : GuiBase(container) {
 
     val tile = container.tileEntity as TileBattery
 
@@ -67,6 +69,17 @@ class GuiTileBattery(container: ContainerBase) : GuiBase(container) {
                 { 0.0 },
                 { tile.itemChargeModule.transferRate.toDouble() }, Vec2d(58 + 33, 64) + box.start)
         )
+    }
+}
+
+class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
+
+    val tile = container.tileEntity as TileShelvingUnit
+
+    override fun initComponents() {
+        xSize = 194
+        ySize = 207
+        components.add(CompBackground("shelving_unit", size = vec2Of(194, 207)))
     }
 }
 

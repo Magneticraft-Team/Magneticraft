@@ -25,6 +25,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         components.clear()
         initComponents()
         components.forEach { it.gui = this }
+        super.initGui()
     }
 
     abstract fun initComponents()

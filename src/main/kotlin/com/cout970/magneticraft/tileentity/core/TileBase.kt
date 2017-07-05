@@ -70,7 +70,7 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun invalidate() {
-        if(world.isClient) {
+        if (world.isClient) {
             onBreak()
         }
         super.invalidate()

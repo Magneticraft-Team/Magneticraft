@@ -31,7 +31,6 @@ class BlockMultiblock(
         material: Material
 ) : BlockTileBase(factory, filter, material) {
 
-
     @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB,
                                        collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?,

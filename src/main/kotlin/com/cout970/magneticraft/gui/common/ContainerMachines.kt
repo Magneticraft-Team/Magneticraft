@@ -11,6 +11,8 @@ import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileBox
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
+import com.cout970.magneticraft.tileentity.TileShelvingUnit
+import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.crafting.FurnaceRecipes
@@ -51,7 +53,7 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos)
     init {
         tile.invModule.inventory.let { inv ->
             addSlotToContainer(SlotItemHandler(inv, 0, 102, 48))
-            addSlotToContainer(SlotItemHandler(inv, 1,  102, 16))
+            addSlotToContainer(SlotItemHandler(inv, 1, 102, 16))
 
             inventoryRegions += InventoryRegion(0..0, filter = { FORGE_ENERGY!!.fromItem(it)?.canReceive() ?: false })
             inventoryRegions += InventoryRegion(1..1, filter = { FORGE_ENERGY!!.fromItem(it)?.canExtract() ?: false })
@@ -75,5 +77,25 @@ class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: Blo
             inventoryRegions += InventoryRegion(1..1, filter = { false })
         }
         bindPlayerInventory(player.inventory)
+    }
+}
+
+
+class ContainerShelvingUnit(player: EntityPlayer, world: World, blockPos: BlockPos, val level: ModuleShelvingUnit.Level)
+    : ContainerBase(player, world, blockPos) {
+
+    val tile = world.getTile<TileShelvingUnit>(blockPos)!!
+
+    init {
+        tile.invModule.inventory.let { inv ->
+            val slots = tile.shelvingUnitModule.getAvaliableSlots(level)
+            slots.take(5 * 9).forEach {
+                val index = it - slots.start
+                val x = index % 9 * 18 + 8
+                val y = index / 9 * 18 + 21
+                addSlotToContainer(SlotItemHandler(inv, it, x, y))
+            }
+        }
+        bindPlayerInventory(player.inventory, offset = vec2Of(0, 41))
     }
 }

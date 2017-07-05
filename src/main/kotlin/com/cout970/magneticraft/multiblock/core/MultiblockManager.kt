@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.multiblock.core
 
+import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.vector.rotatePoint
@@ -26,6 +27,7 @@ object MultiblockManager {
 
     fun registerDefaults() {
         registerMultiblock(MultiblockSolarPanel)
+        registerMultiblock(MultiblockShelvingUnit)
 //        registerMultiblock(MultiblockHydraulicPress)
 //        registerMultiblock(MultiblockKiln)
 //        registerMultiblock(MultiblockGrinder)

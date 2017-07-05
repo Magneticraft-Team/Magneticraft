@@ -6,8 +6,10 @@ import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.*
+import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
@@ -157,9 +159,34 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
             return
         }
 
+
         bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, -90f)
         translate(-1.0, 0.0, 0.0)
         models.forEach { it.render() }
+    }
+}
+
+@RegisterRenderer(TileShelvingUnit::class)
+object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
+        modelLocation = { ModelResourceLocation(Multiblocks.shelvingUnit.registryName, "model") },
+        filters = filterOf((1..24).map { "Crate$it" })
+) {
+    val texture = resource("textures/blocks/multiblocks/shelving_unit.png")
+
+    override fun renderModels(models: List<ModelCache>, te: TileShelvingUnit) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockShelvingUnit)
+            return
+        }
+
+        bindTexture(texture)
+        Utilities.rotateFromCenter(te.facing, 0f)
+        models[0].render()
+        te.shelvingUnitModule.chestCount.forEachIndexed { level, count ->
+            (0 until count).forEach {
+                models[1 + level * ModuleShelvingUnit.CHESTS_PER_LEVEL + it].render()
+            }
+        }
     }
 }

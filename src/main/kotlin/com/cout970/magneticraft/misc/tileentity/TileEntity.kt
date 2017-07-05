@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.tileentity.core.TileBase
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -69,3 +70,5 @@ fun tryConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
         otherHandler.addConnection(connection, side?.opposite, false)
     }
 }
+
+inline fun <reified T> TileBase.getModule(): T? = container.modules.find { it is T } as? T
