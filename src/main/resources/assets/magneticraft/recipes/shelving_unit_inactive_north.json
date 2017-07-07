@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "B B",
+    "B B"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    },
+    "B": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "magneticraft:shelving_unit",
+    "data": 0
+  }
+}

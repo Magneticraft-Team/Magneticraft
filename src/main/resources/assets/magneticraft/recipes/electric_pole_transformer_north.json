@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A ",
+    "BCB",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:connector",
+      "data": 0
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateLead"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    }
+  },
+  "result": {
+    "item": "magneticraft:electric_pole_transformer",
+    "data": 0
+  }
+}

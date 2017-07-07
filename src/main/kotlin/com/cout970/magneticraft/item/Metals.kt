@@ -15,6 +15,8 @@ object Metals : IItemMaker {
     lateinit var lightPlates: ItemBase private set
     lateinit var heavyPlates: ItemBase private set
     lateinit var nuggets: ItemBase private set
+    lateinit var chunks: ItemBase private set
+    lateinit var dusts: ItemBase private set
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
@@ -25,15 +27,21 @@ object Metals : IItemMaker {
             variants = mapOf(0 to "copper", 1 to "lead", 2 to "cobalt", 3 to "tungsten", 4 to "steel")
         }.build()
         lightPlates = builder.withName("light_plates").apply {
-            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 4 to "steel")
+            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 6 to "steel")
         }.build()
         heavyPlates = builder.withName("heavy_plates").apply {
-            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 4 to "steel")
+            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 6 to "steel")
         }.build()
         nuggets = builder.withName("nuggets").apply {
             variants = mapOf(0 to "copper", 1 to "lead", 2 to "cobalt", 3 to "tungsten", 4 to "steel")
         }.build()
+        chunks = builder.withName("chunks").apply {
+            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten")
+        }.build()
+        dusts = builder.withName("dusts").apply {
+            variants = mapOf(0 to "iron", 1 to "gold", 2 to "copper", 3 to "lead", 4 to "cobalt", 5 to "tungsten", 6 to "steel")
+        }.build()
 
-        return listOf(ingots, lightPlates, heavyPlates, nuggets)
+        return listOf(ingots, lightPlates, heavyPlates, nuggets, chunks, dusts)
     }
 }

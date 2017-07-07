@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "dustGlowstone"
+    }
+  },
+  "result": {
+    "item": "magneticraft:tube_light",
+    "data": 0
+  }
+}

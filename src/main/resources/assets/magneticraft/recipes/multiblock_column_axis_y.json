@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "ACA",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateLead"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    }
+  },
+  "result": {
+    "item": "magneticraft:multiblock_column",
+    "data": 0,
+    "count": 8
+  }
+}

@@ -6,6 +6,7 @@ import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.*
@@ -136,14 +137,28 @@ object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPole
 
 @RegisterRenderer(TileTubeLight::class)
 object TileRendererTubeLight : TileRendererSimple<TileTubeLight>(
-        modelLocation = { ModelResourceLocation(Decoration.tubeLight.registryName, "model") }
+        modelLocation = { ModelResourceLocation(Decoration.tubeLight.registryName, "model") },
+        filters = listOf(
+                { it: String -> !it.matches("Right\\d".toRegex()) && !it.matches("Left\\d".toRegex()) },
+                { it: String -> it.matches("Left\\d".toRegex()) },
+                { it: String -> it.matches("Right\\d".toRegex()) }
+        )
 ) {
     val texture = resource("textures/blocks/decoration/tube_light.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileTubeLight) {
         bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 90f)
-        models.forEach { it.render() }
+        val front = te.world.getTile<TileTubeLight>(te.pos.offset(te.facing, 1))
+        val back = te.world.getTile<TileTubeLight>(te.pos.offset(te.facing, -1))
+
+        models[0].render()
+        if (front == null || front.facing.axis != te.facing.axis) {
+            models[1].render()
+        }
+        if (back == null || back.facing.axis != te.facing.axis) {
+            models[2].render()
+        }
     }
 }
 

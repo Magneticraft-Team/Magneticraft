@@ -57,6 +57,18 @@ item.magneticraft.ingots_cobalt.name=Cobalt Ingot
 item.magneticraft.ingots_tungsten.name=Tungsten Ingot
 item.magneticraft.ingots_steel.name=Steel Ingot
 
+item.magneticraft.chunks_copper.name=Copper Chunk
+item.magneticraft.chunks_lead.name=Lead Chunk
+item.magneticraft.chunks_cobalt.name=Cobalt Chunk
+item.magneticraft.chunks_tungsten.name=Tungsten Chunk
+item.magneticraft.chunks_steel.name=Steel Chunk
+
+item.magneticraft.dusts_copper.name=Copper Dust
+item.magneticraft.dusts_lead.name=Lead Dust
+item.magneticraft.dusts_cobalt.name=Cobalt Dust
+item.magneticraft.dusts_tungsten.name=Tungsten Dust
+item.magneticraft.dusts_steel.name=Steel Dust
+
 #item.magneticraft.hand_sieve.name=Hand Sieve
 item.magneticraft.copper_coil_normal.name=Copper coil
 item.magneticraft.voltmeter_normal.name=Voltmeter
@@ -126,11 +138,14 @@ tile.magneticraft.infinite_energy_normal.name=Infinite Energy
 #tile.magneticraft.air_bubble.name=Air Bubble
 #tile.magneticraft.computer.name=Computer
 
+#multiblocks
 #tile.magneticraft.hydraulic_press.name=Hydraulic Press
 #tile.magneticraft.kiln.name=Beehive Kiln
 #tile.magneticraft.sifter.name=Electric Sifter
 tile.magneticraft.solar_panel_inactive_north.name=Solar Panel
 #tile.magneticraft.grinder.name=Grinder
+tile.magneticraft.shelving_unit_inactive_north.name=Shelving Unit
+
 
 #tile.magneticraft.copper_block.name=Copper Block
 #tile.magneticraft.cobalt_block.name=Cobalt Block

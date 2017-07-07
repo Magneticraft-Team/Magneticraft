@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "C": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "result": {
+    "item": "magneticraft:water_generator",
+    "data": 0
+  }
+}

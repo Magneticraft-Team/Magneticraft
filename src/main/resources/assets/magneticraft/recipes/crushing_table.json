@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    " B ",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    }
+  },
+  "result": {
+    "item": "magneticraft:crushing_table",
+    "data": 0
+  }
+}

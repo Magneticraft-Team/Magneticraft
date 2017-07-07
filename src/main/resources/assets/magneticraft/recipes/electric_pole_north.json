@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    " B ",
+    " B "
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:connector",
+      "data": 0
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    }
+  },
+  "result": {
+    "item": "magneticraft:electric_pole",
+    "data": 0,
+    "count": 3
+  }
+}

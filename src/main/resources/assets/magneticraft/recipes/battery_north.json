@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "BCB",
+    "BDB"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetCobalt"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    },
+    "C": {
+      "item": "magneticraft:battery_item"
+    },
+    "D": {
+      "item": "magneticraft:multiblock_parts",
+      "data": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:battery",
+    "data": 0
+  }
+}

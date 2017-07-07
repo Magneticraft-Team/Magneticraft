@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "A"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:ingots",
+      "data": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:nuggets",
+    "data": 1
+  }
+}

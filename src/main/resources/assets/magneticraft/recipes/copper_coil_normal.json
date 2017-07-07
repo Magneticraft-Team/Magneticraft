@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A ",
+    "ABA",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    }
+  },
+  "result": {
+    "item": "magneticraft:copper_coil"
+  }
+}

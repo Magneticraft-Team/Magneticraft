@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "ACA",
+    "ADA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    }
+  },
+  "result": {
+    "item": "magneticraft:voltmeter",
+    "data": 0
+  }
+}

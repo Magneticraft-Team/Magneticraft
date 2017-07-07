@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "BBB",
+    "CCC"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetCobalt"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    }
+  },
+  "result": {
+    "item": "magneticraft:solar_panel",
+    "data": 0
+  }
+}

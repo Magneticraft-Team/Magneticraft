@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AA",
+    "AA"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:limestone",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:limestone",
+    "data": 1
+  }
+}

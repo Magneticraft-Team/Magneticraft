@@ -39,8 +39,8 @@ object Ores : IBlockMaker{
                              override val isVisible: Boolean) : IStatesEnum, IStringSerializable {
 
         COPPER("copper", true),
-        COBALT("cobalt", true),
         LEAD("lead", true),
+        COBALT("cobalt", true),
         TUNGSTEN("tungsten", true);
 
         override fun getName() = name.toLowerCase()

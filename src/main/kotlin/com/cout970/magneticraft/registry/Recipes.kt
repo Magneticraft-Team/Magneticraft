@@ -1,11 +1,15 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.block.Decoration
+import com.cout970.magneticraft.block.Ores
+import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.GameRegistry
 
 
 /**
@@ -14,43 +18,47 @@ import net.minecraft.item.ItemStack
  * Called by CommonProxy to register all the recipes in the mod
  */
 fun registerRecipes() {
-    //@formatter:off
+
 
     //CRUSHING TABLE RECIPES
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(size = 8))
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(size = 8, meta = 15))
-//    addCrushingTableRecipe(Items.SKULL.stack(meta = 1), ItemPebblesCoal.stack(size = 9))
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(size = 4))
-//    addCrushingTableRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0))
-//    addCrushingTableRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1))
-//    addCrushingTableRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2))
-//    addCrushingTableRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3))
-//    addCrushingTableRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4))
-//    addCrushingTableRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5))
-//    addCrushingTableRecipe(ItemStack(BlockLimestone, 1, 2), ItemStack(BlockBurntLimestone, 1, 2))
-//    addCrushingTableRecipe(ItemStack(IRON_INGOT, 1), ItemStack(ItemLightPlate, 1, 0))
-//    addCrushingTableRecipe(ItemStack(GOLD_INGOT, 1), ItemStack(ItemLightPlate, 1, 1))
-//    addCrushingTableRecipe(ItemStack(ItemIngot, 1, 2), ItemStack(ItemLightPlate, 1, 2))
-//    addCrushingTableRecipe(ItemStack(ItemIngot, 1, 3), ItemStack(ItemLightPlate, 1, 3))
-//    addCrushingTableRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(ItemLightPlate, 1, 4))
-//    addCrushingTableRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(ItemLightPlate, 1, 5))
-//
-//    //UTILITY CRUSHING TABLE RECIPES - ITEMS
-    addCrushingTableRecipe(ItemStack(BLAZE_ROD), ItemStack(BLAZE_POWDER, 5))
-    addCrushingTableRecipe(ItemStack(BONE), ItemStack(DYE, 4, 15))
-//
-//    //UTILITY CRUSHING TABLE RECIPES - BLOCKS
-    addCrushingTableRecipe(ItemStack(Blocks.STONE), ItemStack(Blocks.COBBLESTONE))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), ItemStack(Blocks.STONE, 1, 5))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), ItemStack(Blocks.STONE, 1, 3))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), ItemStack(Blocks.STONE, 1, 1))
-    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), ItemStack(Blocks.STONEBRICK, 1, 2))
-    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), ItemStack(Blocks.MOSSY_COBBLESTONE))
-    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE))
-    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE))
-    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE))
-    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), ItemStack(Blocks.END_STONE, 1))
-//
+    // skulls
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4))
+    // ores
+    addCrushingTableRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), Metals.chunks.stack(1, 0))
+    addCrushingTableRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), Metals.chunks.stack(1, 1))
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 0), Metals.chunks.stack(1, 2))
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 1), Metals.chunks.stack(1, 3))
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 2), Metals.chunks.stack(1, 4))
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 3), Metals.chunks.stack(1, 5))
+    // limestone
+    addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
+    addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))
+    // light plates
+    addCrushingTableRecipe(ItemStack(IRON_INGOT, 1), Metals.lightPlates.stack(1, 0))
+    addCrushingTableRecipe(ItemStack(GOLD_INGOT, 1), Metals.lightPlates.stack(1, 1))
+    addCrushingTableRecipe(ItemStack(Metals.ingots, 1, 0), Metals.lightPlates.stack(1, 2))
+    addCrushingTableRecipe(ItemStack(Metals.ingots, 1, 1), Metals.lightPlates.stack(1, 3))
+    addCrushingTableRecipe(ItemStack(Metals.ingots, 1, 2), Metals.lightPlates.stack(1, 4))
+    addCrushingTableRecipe(ItemStack(Metals.ingots, 1, 3), Metals.lightPlates.stack(1, 5))
+    addCrushingTableRecipe(ItemStack(Metals.ingots, 1, 4), Metals.lightPlates.stack(1, 6))
+    // rods
+    addCrushingTableRecipe(ItemStack(BLAZE_ROD), BLAZE_POWDER.stack(5))
+    addCrushingTableRecipe(ItemStack(BONE), DYE.stack(4, 15))
+    // blocks
+    addCrushingTableRecipe(ItemStack(Blocks.STONE), Blocks.COBBLESTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), Blocks.STONE.stack(1, 5))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), Blocks.STONE.stack(1, 3))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), Blocks.STONE.stack(1, 1))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), Blocks.STONEBRICK.stack(1, 2))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), Blocks.MOSSY_COBBLESTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), Blocks.RED_SANDSTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), Blocks.SANDSTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), Blocks.PRISMARINE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), Blocks.END_STONE.stack(1))
+
+    //@formatter:off
 //    //HYDRAULIC PRESS RECIPES
 //    addHydraulicPressRecipe(ItemStack(IRON_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 0), 120f)
 //    addHydraulicPressRecipe(ItemStack(GOLD_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 1), 50f)
@@ -227,31 +235,22 @@ fun registerRecipes() {
 //    addIceboxRecipeWater(ItemStack(Blocks.SNOW), 500, false)
 //    addIceboxRecipeWater(ItemStack(Blocks.ICE), 900, true)
 //    addIceboxRecipeWater(ItemStack(Blocks.PACKED_ICE), 1000, false)
-//
-//    //SMELTING RECIPES
-//    addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 0), ItemStack(BlockLimestone, 1, 0))
-//    addSmeltingRecipe(ItemStack(BlockBurntLimestone, 1, 2), ItemStack(BlockLimestone, 1, 2))
-//    //ores
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 2), ItemStack(BlockOre, 1, 0))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 3), ItemStack(BlockOre, 1, 1))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(BlockOre, 1, 2))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(BlockOre, 1, 3))
-//    //pebbles
-//    addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 0))
-//    addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 2, 0), ItemStack(ItemPebbles, 1, 1))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(ItemPebbles, 1, 2))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(ItemPebbles, 1, 3))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(ItemPebbles, 1, 4))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(ItemPebbles, 1, 5))
-//    //crushed ores
-//    addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 1, 0), ItemStack(ItemCrushedOre, 1, 0))
-//    addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 1, 0), ItemStack(ItemCrushedOre, 1, 1))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 2), ItemStack(ItemCrushedOre, 1, 2))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 3), ItemStack(ItemCrushedOre, 1, 3))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 4), ItemStack(ItemCrushedOre, 1, 4))
-//    addSmeltingRecipe(ItemStack(ItemIngot, 1, 5), ItemStack(ItemCrushedOre, 1, 5))
-//    //charcoal
-//    addSmeltingRecipe(ItemStack(Items.COAL, 1, 1), ItemStack(BlockWoodChip))
+
+    //SMELTING RECIPES
+    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 0), ItemStack(Decoration.limestone, 1, 0))
+    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 2), ItemStack(Decoration.limestone, 1, 2))
+    //ores
+    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 0), ItemStack(Ores.ores, 1, 0))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 1), ItemStack(Ores.ores, 1, 1))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 2), ItemStack(Ores.ores, 1, 2))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 3), ItemStack(Ores.ores, 1, 3))
+    //crushed ores
+    addSmeltingRecipe(ItemStack(Items.IRON_INGOT, 2, 0), ItemStack(Metals.chunks, 1, 0))
+    addSmeltingRecipe(ItemStack(Items.GOLD_INGOT, 2, 0), ItemStack(Metals.chunks, 1, 1))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 2, 0), ItemStack(Metals.chunks, 1, 2))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 2, 1), ItemStack(Metals.chunks, 1, 3))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 2, 2), ItemStack(Metals.chunks, 1, 4))
+    addSmeltingRecipe(ItemStack(Metals.ingots, 2, 3), ItemStack(Metals.chunks, 1, 5))
 //
 //    //TABLE SIEVE RECIPES
 //    for (i in ItemPebbles.variants.indices) {
@@ -272,41 +271,11 @@ fun registerRecipes() {
     //@formatter:on
 }
 
-//
-//private fun addRecipe(result: ItemStack, vararg craft: Any) {
-//    GameRegistry.addRecipe(ShapedOreRecipe(result, *craft))
-//}
-//
-//private fun addEnchantRecipe(result: ItemStack, enchants: List<Pair<Enchantment, Int>>, vararg craft: Any) {
-//    enchants.forEach {
-//        result.addEnchantment(it.first, it.second)
-//    }
-//    addRecipe(result, *craft)
-//}
-//
-//private fun addLoreRecipe(result: ItemStack, lore: String, enchants: List<Pair<Enchantment, Int>>, vararg craft: Any) {
-//    result.setLore(listOf(lore))
-//    addEnchantRecipe(result, enchants, *craft)
-//}
-//
-//private fun addEnchantRecipe(result: ItemStack, lore: String, enchants: List<Pair<Enchantment, Int>>,
-//                             vararg craft: Any) {
-//    addLoreRecipe(result, lore, enchants, *craft)
-//}
-//
-//private fun addLoreRecipe(result: ItemStack, lore: String, vararg craft: Any) {
-//    result.setLore(listOf(lore))
-//    addRecipe(result, *craft)
-//}
-//
-//private fun addShapelessRecipe(result: ItemStack, vararg craft: Any) {
-//    GameRegistry.addRecipe(ShapelessOreRecipe(result, *craft))
-//}
-//
-//private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
-//    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
-//}
-//
+
+private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
+    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
+}
+
 private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
     CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
 }
