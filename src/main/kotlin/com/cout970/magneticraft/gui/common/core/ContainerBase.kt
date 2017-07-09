@@ -126,4 +126,9 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     //called when client data is received
     open fun receiveDataFromClient(ibd: IBD) = Unit
+
+
+    fun sendUpdate(ibd: IBD) {
+        Magneticraft.network.sendToServer(MessageGuiUpdate(ibd, player.persistentID))
+    }
 }

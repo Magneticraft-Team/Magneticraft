@@ -12,20 +12,20 @@ import net.minecraft.world.World
 
 fun main(args: Array<String>) {
 
+    val monitor = DeviceMonitor(FakeRef)
+
     val cpu = CPU_MIPS()
     val memory = RAM(0xFFFF + 1, false)
     val rom = ROM("assets/$MOD_ID/cpu/bios.bin")
-    val bus = Bus(memory, mutableMapOf())
-    val monitor = DeviceMonitor(FakeRef)
+    val bus = Bus(memory, mapOf(0xFF to monitor))
     val motherboard = Motherboard(cpu, memory, rom, bus)
 
-    bus.devices.put(0xFF, monitor)
 //    println(rom.bios.reader(Charsets.US_ASCII).readText())
 
     println("Start")
     motherboard.reset()
     cpu.debugLevel = 2
-    motherboard.CPU_CLOCK = 200000
+    motherboard.cyclesPerTick = 200000
     motherboard.start()
     while (motherboard.isOnline()) {
         motherboard.iterate()

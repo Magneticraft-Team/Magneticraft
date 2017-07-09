@@ -5,16 +5,15 @@ import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromItem
-import com.cout970.magneticraft.tileentity.TileBattery
-import com.cout970.magneticraft.tileentity.TileBox
-import com.cout970.magneticraft.tileentity.TileElectricFurnace
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -80,7 +79,6 @@ class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: Blo
     }
 }
 
-
 class ContainerShelvingUnit(player: EntityPlayer, world: World, blockPos: BlockPos, val level: ModuleShelvingUnit.Level)
     : ContainerBase(player, world, blockPos) {
 
@@ -97,5 +95,48 @@ class ContainerShelvingUnit(player: EntityPlayer, world: World, blockPos: BlockP
             }
         }
         bindPlayerInventory(player.inventory, offset = vec2Of(0, 41))
+    }
+}
+
+class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: World, blockPos: BlockPos) : ContainerBase(player, world, blockPos) {
+
+    val motherboard = tile.computerModule.motherboard
+    val monitor = tile.monitorModule.monitor
+
+    init {
+        addSlotToContainer(SlotTakeOnly(tile.invModule.inventory, 0, 64, 233))
+    }
+
+    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
+
+    override fun sendDataToClient(): IBD {
+        val ibd = super.sendDataToClient() ?: IBD()
+        monitor.saveToClient(ibd)
+        ibd.setBoolean(3, motherboard.isOnline())
+        return ibd
+    }
+
+    override fun sendDataToServer(): IBD {
+        val ibd = IBD()
+        monitor.saveToServer(ibd)
+        return ibd
+    }
+
+    override fun receiveDataFromServer(ibd: IBD) {
+        monitor.loadFromServer(ibd)
+        ibd.getBoolean(3) { if (it) motherboard.start() else motherboard.halt() }
+        super.receiveDataFromServer(ibd)
+    }
+
+    override fun receiveDataFromClient(ibd: IBD) {
+        ibd.getInteger(50) {
+            when (it) {
+                0 -> motherboard.start()
+                1 -> motherboard.halt()
+                2 -> motherboard.reset()
+            }
+        }
+        monitor.loadFromClient(ibd)
+        super.receiveDataFromClient(ibd)
     }
 }

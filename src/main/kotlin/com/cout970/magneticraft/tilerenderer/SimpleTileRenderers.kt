@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.block.Computers
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.block.Multiblocks
@@ -203,5 +204,19 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
                 models[1 + level * ModuleShelvingUnit.CHESTS_PER_LEVEL + it].render()
             }
         }
+    }
+}
+
+
+@RegisterRenderer(TileComputer::class)
+object TileRendererComputer : TileRendererSimple<TileComputer>(
+        modelLocation = { ModelResourceLocation(Computers.computer.registryName, "model") }
+) {
+    val texture = resource("textures/blocks/computers/computer.png")
+
+    override fun renderModels(models: List<ModelCache>, te: TileComputer) {
+        bindTexture(texture)
+        Utilities.rotateFromCenter(te.facing, 180f)
+        models.forEach { it.render() }
     }
 }

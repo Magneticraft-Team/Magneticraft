@@ -4,6 +4,7 @@ import com.cout970.magneticraft.item.ElectricItems
 import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.item.Tools
 import net.minecraft.item.Item
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
@@ -20,8 +21,7 @@ fun initItems() {
     items_ += Tools.initItems()
     items_ += ElectricItems.initItems()
 
-    val itemRegistry = GameRegistry.findRegistry(Item::class.java)
-    items_.forEach { itemRegistry.register(it) }
+    items_.forEach { ForgeRegistries.ITEMS.register(it) }
     items = items_
 }
 // TODO list

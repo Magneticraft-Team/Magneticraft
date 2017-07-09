@@ -1,18 +1,9 @@
 package com.cout970.magneticraft.gui
 
-import com.cout970.magneticraft.gui.client.GuiBattery
-import com.cout970.magneticraft.gui.client.GuiBox
-import com.cout970.magneticraft.gui.client.GuiElectricFurnace
-import com.cout970.magneticraft.gui.client.GuiShelvingUnit
-import com.cout970.magneticraft.gui.common.ContainerBattery
-import com.cout970.magneticraft.gui.common.ContainerBox
-import com.cout970.magneticraft.gui.common.ContainerElectricFurnace
-import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
+import com.cout970.magneticraft.gui.client.*
+import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.tileentity.TileBattery
-import com.cout970.magneticraft.tileentity.TileBox
-import com.cout970.magneticraft.tileentity.TileElectricFurnace
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
@@ -32,7 +23,7 @@ object GuiHandler : IGuiHandler {
             is TileShelvingUnit -> GuiShelvingUnit(serverElement)
             is TileBattery -> GuiBattery(serverElement)
             is TileElectricFurnace -> GuiElectricFurnace(serverElement)
-//            is TileComputer -> GuiComputer(tile, serverElement as ContainerMonitor)
+            is TileComputer -> GuiComputer(serverElement)
 //            is TileFirebox -> GuiFirebox(serverElement)
 //            is TileIcebox -> GuiIcebox(serverElement)
 //            is TileBrickFurnace -> GuiBrickFurnace(serverElement)
@@ -49,11 +40,11 @@ object GuiHandler : IGuiHandler {
             is TileShelvingUnit -> ContainerShelvingUnit(player, world, pos, ModuleShelvingUnit.Level.values()[ID])
             is TileBattery -> ContainerBattery(player, world, pos)
             is TileElectricFurnace -> ContainerElectricFurnace(player, world, pos)
+            is TileComputer -> ContainerComputer(tile, player, world, pos)
 //            is TileGrinder -> ContainerGrinder(player, world, BlockPos(x, y, z))
 //            is TileBrickFurnace -> ContainerBrickFurnace(player, world, BlockPos(x, y, z))
 //            is TileFirebox -> ContainerFirebox(player, world, BlockPos(x, y, z))
 //            is TileIcebox -> ContainerIcebox(player, world, BlockPos(x, y, z))
-//            is TileComputer -> ContainerMonitor(tile, player, world, BlockPos(x, y, z))
             else -> null
         }
     }

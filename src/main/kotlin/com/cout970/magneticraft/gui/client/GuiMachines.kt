@@ -1,9 +1,13 @@
 package com.cout970.magneticraft.gui.client
 
+import com.cout970.magneticraft.computer.DeviceMonitor
+import com.cout970.magneticraft.computer.Motherboard
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
+import com.cout970.magneticraft.gui.common.ContainerComputer
 import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
@@ -80,6 +84,33 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
         xSize = 194
         ySize = 207
         components.add(CompBackground("shelving_unit", size = vec2Of(194, 207)))
+    }
+}
+
+class GuiComputer(container: ContainerBase) : GuiBase(container) {
+
+    val monitor: DeviceMonitor = (container as ContainerComputer).monitor
+    val motherboard: Motherboard = (container as ContainerComputer).motherboard
+
+    init {
+        xSize = 350
+        ySize = 255
+    }
+
+    override fun initComponents() {
+        val listener = object : IButtonListener {
+            override fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
+                val ibd = IBD().apply { setInteger(50, button.ID) }
+                container.sendUpdate(ibd)
+                return true
+            }
+        }
+        components.add(CompBackground("old_monitor", textureSize = Vec2d(512, 512), size = Vec2d(350, 255)))
+        components.add(MonitorComponent(monitor))
+        components.add(SimpleButton(0, Vec2d(23, 220), listener, Vec2d(0, 49)))
+        components.add(SimpleButton(1, Vec2d(33, 220), listener, Vec2d(0, 49)))
+        components.add(SimpleButton(2, Vec2d(43, 220), listener, Vec2d(0, 49)))
+        components.add(CompGreenLight(box.start + Vec2d(14, 221), { motherboard.isOnline() }))
     }
 }
 
