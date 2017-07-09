@@ -50,7 +50,10 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
             //debug hitboxes
 //            renderHitboxes(te)
         }
+
+//        if (te.pos.xi == -261 && te.pos.zi == 322) {
 //        renderBitmap(te, x, y, z)
+//        }
     }
 
     fun renderHitboxes(te: TileConveyorBelt) {
@@ -66,22 +69,23 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
             translate(x, y + 1f, z)
             Utilities.rotateFromCenter(te.facing)
 
-            Utilities.renderBox(
-                    vec3Of(1, 0, 0) * PIXEL toAABBWith vec3Of(2, 1, 1) * PIXEL,
+            Utilities.renderBox(vec3Of(1, 0, 0) * PIXEL toAABBWith vec3Of(2, 1, 1) * PIXEL,
                     vec3Of(0, 1, 0))
-            Utilities.renderBox(
-                    vec3Of(0, 0, 1) * PIXEL toAABBWith vec3Of(1, 1, 2) * PIXEL,
+            Utilities.renderBox(vec3Of(0, 0, 1) * PIXEL toAABBWith vec3Of(1, 1, 2) * PIXEL,
                     vec3Of(0, 0, 1))
+
+            val bitmap2 = te.conveyorModule.generateGlobalBitMap()
+
             for (i in 0 until 16) {
                 for (j in 0 until 16) {
-                    if (!te.conveyorModule.bitmap[i, j]) {
+                    if (!bitmap2[i, j]) {
                         Utilities.renderBox(
                                 vec3Of(i, 0, j) * PIXEL toAABBWith vec3Of(i + 1, 0, j + 1) * PIXEL,
                                 vec3Of(1, 1, 1))
                     } else {
                         Utilities.renderBox(
                                 vec3Of(i, 0, j) * PIXEL toAABBWith vec3Of(i + 1, 1, j + 1) * PIXEL,
-                                vec3Of(1, 0, 0))
+                                vec3Of(0, 0, 1))
                     }
                 }
             }

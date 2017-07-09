@@ -97,9 +97,7 @@ data class Box(
 
     fun getHitBox(): AABB {
         val pos = getPos(0f)
-        return (pos - vec3Of(2, 0,
-                2) * PIXEL) toAABBWith (pos + vec3Of(
-                2, 4, 2) * PIXEL)
+        return (pos - vec3Of(2, 0, 2) * PIXEL) toAABBWith (pos + vec3Of(2, 4, 2) * PIXEL)
     }
 
     fun serializeNBT() = newNbt {

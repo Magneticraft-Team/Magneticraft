@@ -10,7 +10,7 @@ class FullBitMap(val current: IBitMap, val others: Map<BitmapLocation, IBitMap>)
         if (x in 0..15 && y in 0..15) return current[x, y]
         for ((loc, map) in others) {
             if (loc.isInside(x, y)) {
-                val pos = loc.transform(x, y)
+                val pos = loc.fromLocalToExternal(x, y)
                 return map[pos.xi, pos.yi]
             }
         }
@@ -24,7 +24,7 @@ class FullBitMap(val current: IBitMap, val others: Map<BitmapLocation, IBitMap>)
         }
         for ((loc, map) in others) {
             if (loc.isInside(x, y)) {
-                val pos = loc.transform(x, y)
+                val pos = loc.fromLocalToExternal(x, y)
                 map[pos.xi, pos.yi] = value
                 return
             }
