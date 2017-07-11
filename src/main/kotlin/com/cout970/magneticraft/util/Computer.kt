@@ -6,6 +6,8 @@ package com.cout970.magneticraft.util
  * Created by cout970 on 2016/10/01.
  */
 
+fun Int.toHex(): String = Integer.toHexString(this)
+
 fun Int.splitRange() = this..(this + 3)
 
 fun Int.split(index: Int): Byte {

@@ -50,30 +50,28 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     override fun readByte(pointer: Int): Byte {
         val byte = when (pointer) {
-            0 -> (if (isActive) 1 else 0).toByte()               //00, byte online
-            1 -> 1.toByte()                                      //01, byte type
-            2, 3 -> 0.toByte()                                   //02,03, short status
-            4 -> regKeyBufferPtr.toByte()                        //04, byte keyBufferPtr
-            5 -> regKeyBufferSize.toByte()                       //05, byte keyBufferSize
-            in 6..19 -> getKeyBuffer()[pointer - 6]              //06, byte[14] keyBuffer
-            20 -> regMouseBufferPtr.toByte()                     //20, mouseBufferPtr
-            21 -> regKeyBufferSize.toByte()                      //21, mouseBufferSize
-            in 22..58 -> getMouseBuffer()[pointer - 22]          //22, struct mouse[6]
-            in 60.splitRange() -> lines.split(pointer - 60)      //60, int lines
-            in 64.splitRange() -> columns.split(pointer - 64)    //64, int columns
-            in 68.splitRange() -> cursorLine.split(pointer - 68) //68, short cursorLine
-            in 72.splitRange() -> cursorColumn.split(pointer - 72)//72, short cursorColumn
-            76, 77 -> 0                                          //76, order
-            78, 79 -> currentLine.split(pointer - 78)            //78, currentLine
-            in 80..159 -> getBuffer()[pointer - 80]              //80, buffer
+            0 -> (if (isActive) 1 else 0).toByte()                        //00, byte online
+            1 -> 1.toByte()                                               //01, byte type
+            2, 3 -> 0.toByte()                                            //02,03, short status
+            4 -> regKeyBufferPtr.toByte()                                 //04, byte keyBufferPtr
+            5 -> regKeyBufferSize.toByte()                                //05, byte keyBufferSize
+            in 6..19 -> getKeyBuffer()[pointer - 6]                       //06, byte[14] keyBuffer
+            20 -> regMouseBufferPtr.toByte()                              //20, mouseBufferPtr
+            21 -> regKeyBufferSize.toByte()                               //21, mouseBufferSize
+            in 22..58 -> getMouseBuffer()[pointer - 22]                   //22, struct mouse[6]
+            in 60.splitRange() -> lines.split(pointer - 60)         //60, int lines
+            in 64.splitRange() -> columns.split(pointer - 64)       //64, int columns
+            in 68.splitRange() -> cursorLine.split(pointer - 68)    //68, short cursorLine
+            in 72.splitRange() -> cursorColumn.split(pointer - 72)  //72, short cursorColumn
+            76, 77 -> 0                                                   //76, order
+            78, 79 -> currentLine.split(pointer - 78)               //78, currentLine
+            in 80..159 -> getBuffer()[pointer - 80]                       //80, buffer
             else -> 0
         }
-//        println("Read: pointer: $pointer, byte: $byte")
         return byte
     }
 
     override fun writeByte(pointer: Int, data: Byte) {
-//        println("Write: pointer: $pointer, byte: $data")
         when (pointer) {
             4 -> regKeyBufferPtr = data.toInt()
             5 -> regKeyBufferSize = data.toInt()
@@ -209,10 +207,14 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
 
             if (regMouseBufferSize != getMouseBuffer().size) {
                 getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5) % keyBuffer!!.size] = mouseButton.toByte()
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 1) % keyBuffer!!.size] = mouseX.split(0)
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 2) % keyBuffer!!.size] = mouseX.split(1)
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 3) % keyBuffer!!.size] = mouseY.split(0)
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 4) % keyBuffer!!.size] = mouseY.split(1)
+                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 1) % keyBuffer!!.size] = mouseX.split(
+                        0)
+                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 2) % keyBuffer!!.size] = mouseX.split(
+                        1)
+                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 3) % keyBuffer!!.size] = mouseY.split(
+                        0)
+                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 4) % keyBuffer!!.size] = mouseY.split(
+                        1)
                 regMouseBufferSize++
             }
         }

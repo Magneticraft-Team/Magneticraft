@@ -207,7 +207,6 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
     }
 }
 
-
 @RegisterRenderer(TileComputer::class)
 object TileRendererComputer : TileRendererSimple<TileComputer>(
         modelLocation = { ModelResourceLocation(Computers.computer.registryName, "model") }
@@ -216,7 +215,7 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
 
     override fun renderModels(models: List<ModelCache>, te: TileComputer) {
         bindTexture(texture)
-        Utilities.rotateFromCenter(te.facing, 180f)
+        Utilities.rotateFromCenter(te.facing, 0f)
         models.forEach { it.render() }
     }
 }

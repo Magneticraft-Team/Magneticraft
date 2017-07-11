@@ -98,7 +98,8 @@ class ContainerShelvingUnit(player: EntityPlayer, world: World, blockPos: BlockP
     }
 }
 
-class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: World, blockPos: BlockPos) : ContainerBase(player, world, blockPos) {
+class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: World, blockPos: BlockPos) : ContainerBase(
+        player, world, blockPos) {
 
     val motherboard = tile.computerModule.motherboard
     val monitor = tile.monitorModule.monitor
@@ -124,7 +125,9 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
 
     override fun receiveDataFromServer(ibd: IBD) {
         monitor.loadFromServer(ibd)
-        ibd.getBoolean(3) { if (it) motherboard.start() else motherboard.halt() }
+        ibd.getBoolean(3) {
+            if (it) motherboard.start() else motherboard.halt()
+        }
         super.receiveDataFromServer(ibd)
     }
 

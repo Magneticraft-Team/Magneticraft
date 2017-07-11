@@ -26,13 +26,11 @@ class CPU_MIPS : ICPU {
     var regStatus = 0
     var regCause = 0
     var regEPC = 0
-    //PC used to read the current instruction
+    //prefetch PC, used to read the current instruction
     var pfPC = 0
     //used to implement delayed branch, if the value is -1 no jump should be performed,
     //otherwise the value should be the effective jump address
     var jump = -1
-    //counts the number of instructions to run this tick
-    var cpuCycles = -1
 
     fun getRegister(t: Int): Int {
         return registers[t]
@@ -44,7 +42,8 @@ class CPU_MIPS : ICPU {
             return
         }
         if (debugLevel > 3) {
-            log("Reg: %s, change from 0x%08x (%d) to 0x%08x (%d)", registerNames[s], registers[s], registers[s], value, value)
+            log("Reg: %s, change from 0x%08x (%d) to 0x%08x (%d)", registerNames[s], registers[s], registers[s], value,
+                    value)
         }
         registers[s] = value
     }
@@ -340,7 +339,7 @@ class CPU_MIPS : ICPU {
                 0x23//lw
                 -> {
                     if (getRegister(rs) + inmed and 0x3 != 0) {
-                        interrupt(WordBoundaryException())
+                        interrupt(WordBoundaryException(getRegister(rs) + inmed))
                     } else {
                         setRegister(rt, motherboard?.bus!!.readWord(getRegister(rs) + inmed))
                     }
@@ -359,7 +358,7 @@ class CPU_MIPS : ICPU {
                 0x2b//sw
                 -> {
                     if (getRegister(rs) + inmed and 0x3 != 0) {
-                        interrupt(WordBoundaryException())
+                        interrupt(WordBoundaryException(getRegister(rs) + inmed))
                     } else {
                         motherboard?.bus!!.writeWord(getRegister(rs) + inmed, getRegister(rt))
                     }
@@ -408,9 +407,23 @@ class CPU_MIPS : ICPU {
 
     companion object {
 
-        val registerNames = arrayOf("z0", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp", "sp", "fp", "ra")
-        val TYPE_R = arrayOf("SLL  ", "UNKNOW", "SRL  ", "SRA  ", "SLLV ", "UNKNOW", "SRLV ", "SRAV ", "JR   ", "JALR ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "ADD  ", "ADDU ", "SUB  ", "SUBU ", "AND  ", "OR   ", "XOR  ", "NOR  ", "UNKNOW", "UNKNOW", "SLT  ", "SLTU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW")
-        val TYPE_I = arrayOf("UNKNOW", "BGEZ ", "UNKNOW", "UNKNOW", "BEQ  ", "BNE  ", "BLEZ ", "BGTZ ", "ADDI ", "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LLO  ", "LHI  ", "TRAP ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LB   ", "LH   ", "UNKNOW", "LW   ", "LBU  ", "LHU  ", "UNKNOW", "UNKNOW", "SB   ", "SH   ", "UNKNOW", "SW   ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW")
+        val registerNames = arrayOf("z0", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5",
+                "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp", "sp", "fp",
+                "ra")
+        val TYPE_R = arrayOf("SLL  ", "UNKNOW", "SRL  ", "SRA  ", "SLLV ", "UNKNOW", "SRLV ", "SRAV ", "JR   ", "JALR ",
+                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ",
+                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "ADD  ", "ADDU ", "SUB  ", "SUBU ", "AND  ", "OR   ", "XOR  ", "NOR  ", "UNKNOW",
+                "UNKNOW", "SLT  ", "SLTU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "UNKNOW")
+        val TYPE_I = arrayOf("UNKNOW", "BGEZ ", "UNKNOW", "UNKNOW", "BEQ  ", "BNE  ", "BLEZ ", "BGTZ ", "ADDI ",
+                "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LLO  ", "LHI  ", "TRAP ", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "LB   ", "LH   ", "UNKNOW", "LW   ", "LBU  ", "LHU  ", "UNKNOW", "UNKNOW", "SB   ",
+                "SH   ", "UNKNOW", "SW   ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "UNKNOW")
 
         private fun log(s: String, vararg objs: Any) {
             debug(String.format(s, *objs))
@@ -438,57 +451,55 @@ class CPU_MIPS : ICPU {
             }
             return inst.ushr(start)
         }
+
+        fun decompileInst(instruct: Int): String {
+            if (instruct == 0) {
+                return "NOP"
+            }
+
+            val opcode = getBitsFromInt(instruct, 26, 31, false)
+
+            if (instruct == 0x0000000c || opcode == 0x10) {
+                return "Exception inst: 0x%08x, inst: %d".format(instruct, instruct)
+            } else if (opcode == 0) {//type R
+
+                val rs: Int = getBitsFromInt(instruct, 21, 25, false)
+                val rt: Int = getBitsFromInt(instruct, 16, 20, false)
+                val rd: Int = getBitsFromInt(instruct, 11, 15, false)
+                val shamt: Int = getBitsFromInt(instruct, 6, 10, false)
+                val func: Int = getBitsFromInt(instruct, 0, 5, false)
+                return "%s $%s, $%s, $%s (%05d) \t Type R: inst: 0x%08x"
+                        .format(TYPE_R[func], registerNames[rd], registerNames[rs], registerNames[rt], shamt,
+                                instruct)
+
+            } else if (opcode == 0x2 || opcode == 0x3) {//type J
+
+                val names = arrayOf("UNKNOW", "UNKNOW", "J    ", "JAL  ")
+                val dir = getBitsFromInt(instruct, 0, 25, false)
+                return "%s 0x%08x (0x%08x) \t Type J: inst: 0x%08x"
+                        .format(names[opcode], dir, dir and 0xF0000000.toInt() or (dir shl 2), instruct)
+
+            } else {//type I
+
+                val rs: Int = getBitsFromInt(instruct, 21, 25, false)
+                val rt: Int = getBitsFromInt(instruct, 16, 20, false)
+                val inmed: Int = getBitsFromInt(instruct, 0, 15, true)
+                val inmedU: Int = getBitsFromInt(instruct, 0, 15, false)
+                return "%s $%s, $%s, %05d (%05d) \t Type I: inst: 0x%08x"
+                        .format(TYPE_I[opcode], registerNames[rs], registerNames[rt], inmed, inmedU, instruct)
+            }
+        }
     }
 
     private fun debugInst(instruct: Int) {
-        if (instruct == 0) {
-            log("PC: 0x%08x \t NOP", pfPC)
-            return
-        }
-
-        val opcode = getBitsFromInt(instruct, 26, 31, false)
-
-        if (instruct == 0x0000000c || opcode == 0x10) {
-            log("Exception: inst: 0x%08x, inst: %d", instruct, instruct)
-
-        } else if (opcode == 0) {//type R
-
-            val rs: Int
-            val rt: Int
-            val rd: Int
-            val shamt: Int
-            val func: Int
-            func = getBitsFromInt(instruct, 0, 5, false)
-            shamt = getBitsFromInt(instruct, 6, 10, false)
-            rd = getBitsFromInt(instruct, 11, 15, false)
-            rt = getBitsFromInt(instruct, 16, 20, false)
-            rs = getBitsFromInt(instruct, 21, 25, false)
-            log("PC: 0x%08x \t %s $%s, $%s, $%s (%05d) \t Type R: inst: 0x%08x", pfPC, TYPE_R[func], registerNames[rd], registerNames[rs], registerNames[rt], shamt, instruct)
-
-        } else if (opcode == 0x2 || opcode == 0x3) {//type J
-
-            val names = arrayOf("UNKNOW", "UNKNOW", "J    ", "JAL  ")
-            val dir = getBitsFromInt(instruct, 0, 25, false)
-            log("PC: 0x%08x \t %s 0x%08x (0x%08x) \t Type J: inst: 0x%08x", pfPC, names[opcode], dir, regPC and 0xF0000000.toInt() or (dir shl 2), instruct)
-
-        } else {//type I
-
-            val rs: Int
-            val rt: Int
-            val inmed: Int
-            val inmedU: Int
-            rs = getBitsFromInt(instruct, 21, 25, false)
-            rt = getBitsFromInt(instruct, 16, 20, false)
-            inmed = getBitsFromInt(instruct, 0, 15, true)
-            inmedU = getBitsFromInt(instruct, 0, 15, false)
-            log("PC: 0x%08x \t %s $%s, $%s, %05d (%05d) \t Type I: inst: 0x%08x", pfPC, TYPE_I[opcode], registerNames[rs], registerNames[rt], inmed, inmedU, instruct)
-        }
+        log("PC: 0x%08x \t ${decompileInst(instruct)}", pfPC)
     }
 
     override fun interrupt(exception: ICPU.IInterruption) {
         motherboard?.halt()
         if (debugLevel > 0) {
-            log("Exception: %d (%s), regPC: 0x%08x, pfPC: 0x%08x, Description: %s", exception.code, exception.name, regPC, pfPC, exception.description)
+            log("Exception: %d (%s), regPC: 0x%08x, pfPC: 0x%08x, Description: %s", exception.code, exception.name,
+                    regPC, pfPC, exception.description)
             val inst = motherboard?.bus!!.readWord(pfPC)
             debugInst(inst)
 
@@ -500,11 +511,13 @@ class CPU_MIPS : ICPU {
             println("Code before error: ")
             for (j in 0..15) {
                 val i = 15 - j
-                println("(PC - $i * 4) 0x%08x".format(motherboard?.bus!!.readWord(pfPC - i * 4)))
+                val word = motherboard?.bus!!.readWord(pfPC - i * 4)
+                println("(PC - $i * 4) 0x%08x            %s".format(word, decompileInst(word)))
             }
             println("Code after error: ")
             for (i in 0..15) {
-                println("(PC + $i * 4) 0x%08x".format(motherboard?.bus!!.readWord(pfPC + i * 4)))
+                val word = motherboard?.bus!!.readWord(pfPC + i * 4)
+                println("(PC + $i * 4) 0x%08x            %s".format(word, decompileInst(word)))
             }
 
             println("Stacktrace:")
@@ -529,13 +542,12 @@ class CPU_MIPS : ICPU {
         motherboard = mb
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) {
+    override fun deserializeNBT(nbt: NBTTagCompound) {
         if (nbt!!.hasKey("PC")) {
             registers = nbt.getIntArray("Regs")
             if (registers.size != 32) {
                 registers = IntArray(32)
             }
-            cpuCycles = nbt.getInteger("Cycles")
             regPC = nbt.getInteger("PC")
             regHI = nbt.getInteger("regHI")
             regLO = nbt.getInteger("regLO")
@@ -549,7 +561,6 @@ class CPU_MIPS : ICPU {
     override fun serializeNBT(): NBTTagCompound {
         val nbt = NBTTagCompound()
         nbt.setIntArray("Regs", registers)
-        nbt.setInteger("Cycles", cpuCycles)
         nbt.setInteger("PC", regPC)
         nbt.setInteger("regHI", regHI)
         nbt.setInteger("regLO", regLO)

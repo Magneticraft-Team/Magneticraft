@@ -7,7 +7,7 @@ import com.cout970.magneticraft.api.computer.IRW
 /**
  * Created by cout970 on 2016/09/30.
  */
-class Bus(var ram: IRW, val devices: Map<Int, IDevice>) : IBus {
+class Bus(var ram: IRW, val devices: MutableMap<Int, IDevice>) : IBus {
 
     override fun readByte(addr: Int): Byte {
         if ((addr and 0xFF000000.toInt()) == 0xFF000000.toInt()) {

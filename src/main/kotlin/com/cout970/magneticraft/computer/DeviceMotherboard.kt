@@ -7,6 +7,7 @@ import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.splitRange
 import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.math.BlockPos
 
 /**
  * Created by cout970 on 2016/10/01.
@@ -19,6 +20,7 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
     override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
 
     var logInt = 0
+    var logType = 0
 
     override fun readByte(addr: Int): Byte {
         when (addr) {
@@ -55,9 +57,19 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
         //worldTime
             76, 77, 78, 79 -> return mb.clock.split(addr - 76)
         //run time
-            80, 81, 82, 83 -> return world.totalWorldTime.split(addr - 80)
+            80, 81, 82, 83 -> return getWorldTime().split(addr - 80)
         }
         return 0
+    }
+
+    fun getWorldTime(): Long {
+        if (tile is FakeRef) return 0L
+        return world.totalWorldTime
+    }
+
+    fun getComputerPos(): BlockPos {
+        if (tile is FakeRef) return BlockPos.ORIGIN
+        return pos
     }
 
     override fun writeByte(addr: Int, data: Byte) {
@@ -70,19 +82,33 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
                 }
             }
             84 -> {
-                println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-                println("               Computer at $pos: " + "0x%02x, %02d".format(data.toInt() and 0xFF, data.toInt() and 0xFF))
-                println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+                when (logType) {
+                    1 -> print(data.toInt() and 0xFF)
+                    2 -> print("0x%02x".format(data.toInt() and 0xFF))
+                    3 -> print(data.toChar())
+                    else -> {
+                        println("${getComputerPos()}: 0x%02x, %03d, ".format(data.toInt() and 0xFF,
+                                data.toInt() and 0xFF) + data.toChar())
+                    }
+                }
             }
             85 -> {
                 mb.sleep(data.toInt())
             }
+            86 -> {
+                logType = data.toInt()
+            }
             in 88.splitRange() -> {
                 logInt = logInt.splitSet(addr - 88, data)
                 if (addr == 88) {
-                    println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-                    println("               Computer at $pos: " + "0x%08x, %08d".format(logInt, logInt))
-                    println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+                    when (logType) {
+                        1 -> print(logInt)
+                        2 -> print("0x%08x".format(logInt))
+                        3 -> print(logInt.toChar())
+                        else -> {
+                            println("${getComputerPos()}: 0x%08x, %08d".format(logInt, logInt))
+                        }
+                    }
                 }
             }
         }

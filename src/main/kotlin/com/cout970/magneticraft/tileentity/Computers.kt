@@ -21,12 +21,11 @@ class TileComputer : TileBase(), ITickable {
     val invModule = ModuleInventory(1)
     val monitorModule = ModuleMonitor(container.ref)
     val computerModule = ModuleComputer(
-            devices = mapOf(0xFF to monitorModule.monitor)
+            devices = mapOf(0x00 to monitorModule.monitor)
     )
 
     init {
-        initModules(computerModule, invModule, monitorModule )
-        computerModule.motherboard.start()
+        initModules(computerModule, invModule, monitorModule)
     }
 
     override fun update() {

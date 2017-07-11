@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IMemory
 import com.cout970.magneticraft.api.computer.IROM
 import com.cout970.magneticraft.computer.*
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import net.minecraft.nbt.NBTTagCompound
@@ -19,12 +20,17 @@ class ModuleComputer(
 ) : IModule {
 
     override lateinit var container: IModuleContainer
-    val bus: Bus = Bus(ram, devices)
+    val bus: Bus = Bus(ram, devices.toMutableMap())
 
     val motherboard = Motherboard(cpu, ram, rom, bus)
 
+    override fun init() {
+        bus.devices.put(0xFF, DeviceMotherboard(container.ref, motherboard))
+    }
+
     override fun update() {
-        motherboard.iterate()
+        if (world.isServer)
+            motherboard.iterate()
     }
 
     override fun serializeNBT(): NBTTagCompound = motherboard.serializeNBT()
