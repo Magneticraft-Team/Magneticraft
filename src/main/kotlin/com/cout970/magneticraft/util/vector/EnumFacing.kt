@@ -49,3 +49,5 @@ fun EnumFacing.rotateBox(origin: Vec3d, box: AxisAlignedBB): AxisAlignedBB {
 }
 
 fun EnumFacing.isHorizontal() = this != UP && this != DOWN
+
+fun EnumFacing.toBlockPos() = directionVec.toBlockPos()

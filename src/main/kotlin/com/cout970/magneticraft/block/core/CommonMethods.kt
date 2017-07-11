@@ -64,6 +64,24 @@ object CommonMethods {
         return it.defaultValue.withProperty(PROPERTY_ORIENTATION, Orientation.of(placer.horizontalFacing))
     }
 
+    fun placeWithOppositeOrientation(it: OnBlockPlacedArgs): IBlockState {
+        val placer = it.placer ?: return it.defaultValue
+        val orientation = Orientation.of(placer.horizontalFacing.opposite)
+        return it.defaultValue.withProperty(PROPERTY_ORIENTATION, orientation)
+    }
+
+    fun placeCenterWithOppositeOrientation(it: OnBlockPlacedArgs): IBlockState {
+        val placer = it.placer ?: return it.defaultValue
+        val orientation = CenterOrientation.of(placer.horizontalFacing.opposite, true)
+        return it.defaultValue.withProperty(PROPERTY_CENTER_ORIENTATION, orientation)
+    }
+
+    fun placeCenterWithOrientation(it: OnBlockPlacedArgs): IBlockState {
+        val placer = it.placer ?: return it.defaultValue
+        val orientation = CenterOrientation.of(placer.horizontalFacing, true)
+        return it.defaultValue.withProperty(PROPERTY_CENTER_ORIENTATION, orientation)
+    }
+
     fun delegateToModule(args: OnActivatedArgs): Boolean {
         val tile = args.worldIn.getTile<TileBase>(args.pos) ?: return false
         val method = tile.container.modules.find { it is IOnActivated } as? IOnActivated ?: return false
@@ -114,6 +132,7 @@ object CommonMethods {
     // Common properties
     val PROPERTY_FACING = PropertyEnum.create("facing", Facing::class.java)!!
     val PROPERTY_ORIENTATION = PropertyEnum.create("orientation", Orientation::class.java)!!
+    val PROPERTY_CENTER_ORIENTATION = PropertyEnum.create("center_orientation", CenterOrientation::class.java)!!
 
     enum class Facing(override val stateName: String,
                       val facing: EnumFacing,
@@ -168,6 +187,43 @@ object CommonMethods {
                 EnumFacing.WEST -> Orientation.WEST
                 EnumFacing.EAST -> Orientation.EAST
                 else -> Orientation.NORTH
+            }
+        }
+    }
+
+    enum class CenterOrientation(
+            override val stateName: String,
+            override val isVisible: Boolean,
+            val center: Boolean,
+            val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+
+        CENTER_NORTH("center_north", true, false, EnumFacing.NORTH),
+        CENTER_SOUTH("center_south", false, false, EnumFacing.SOUTH),
+        CENTER_WEST("center_west", false, false, EnumFacing.WEST),
+        CENTER_EAST("center_east", false, false, EnumFacing.EAST),
+        NO_CENTER_NORTH("no_center_north", false, true, EnumFacing.NORTH),
+        NO_CENTER_SOUTH("no_center_south", false, true, EnumFacing.SOUTH),
+        NO_CENTER_WEST("no_center_west", false, true, EnumFacing.WEST),
+        NO_CENTER_EAST("no_center_east", false, true, EnumFacing.EAST);
+
+        override fun getName() = name.toLowerCase()
+        override val properties: List<IProperty<*>> get() = listOf(PROPERTY_CENTER_ORIENTATION)
+
+        override fun getBlockState(block: Block): IBlockState {
+            return block.defaultState.withProperty(PROPERTY_CENTER_ORIENTATION, this)
+        }
+
+        companion object {
+            fun of(facing: EnumFacing, center: Boolean) = when {
+                facing == EnumFacing.NORTH && !center -> CENTER_NORTH
+                facing == EnumFacing.SOUTH && !center -> CENTER_SOUTH
+                facing == EnumFacing.WEST && !center -> CENTER_WEST
+                facing == EnumFacing.EAST && !center -> CENTER_EAST
+                facing == EnumFacing.NORTH && center -> NO_CENTER_NORTH
+                facing == EnumFacing.SOUTH && center -> NO_CENTER_SOUTH
+                facing == EnumFacing.WEST && center -> NO_CENTER_WEST
+                facing == EnumFacing.EAST && center -> NO_CENTER_EAST
+                else -> CENTER_NORTH
             }
         }
     }

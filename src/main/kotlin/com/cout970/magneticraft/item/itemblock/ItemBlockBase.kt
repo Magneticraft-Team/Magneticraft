@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.item.itemblock
 
 import com.cout970.magneticraft.block.core.BlockBase
+import com.cout970.magneticraft.block.core.OnBlockPostPlacedArgs
+import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
@@ -43,8 +45,8 @@ open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
         val basePos = if (!otherBlock.isReplaceable(worldIn, pos)) pos.offset(facing) else pos
         val meta = getMetadata(itemstack.metadata)
 
-        val posStatePair = blockBase.getBlockStatesToPlace(worldIn, basePos, facing, hitX, hitY, hitZ, meta, player,
-                hand)
+        val posStatePair = blockBase.getBlockStatesToPlace(worldIn, basePos, facing,
+                hitX, hitY, hitZ, meta, player, hand)
         val posList = posStatePair.map { it.first.add(basePos) }
 
         val canEdit = posList.all { player.canPlayerEdit(it, facing, itemstack) }
@@ -64,6 +66,9 @@ open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
                             (soundType.getVolume() + 1.0f) / 2.0f,
                             soundType.getPitch() * 0.8f
                     )
+                    blockBase.onBlockPostPlaced?.invoke(OnBlockPostPlacedArgs(
+                            worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), player, hand, pos0
+                    ))
                     success = true
                 }
             }

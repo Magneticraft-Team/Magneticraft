@@ -47,6 +47,7 @@ class BlockBuilder {
     var blockStatesToPlace: ((BlockStatesToPlaceArgs) -> List<Pair<BlockPos, IBlockState>>)? = null
     var onBlockBreak: ((BreakBlockArgs) -> Unit)? = null
     var onDrop: ((DropsArgs) -> List<ItemStack>)? = null
+    var onBlockPostPlaced: ((OnBlockPostPlacedArgs) -> Unit)? = null
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
@@ -101,6 +102,7 @@ class BlockBuilder {
             onBlockBreak = this@BlockBuilder.onBlockBreak
             setLightLevel(lightEmission)
             onDrop = this@BlockBuilder.onDrop
+            onBlockPostPlaced = this@BlockBuilder.onBlockPostPlaced
         }
         return block
     }
@@ -135,6 +137,7 @@ class BlockBuilder {
         newBuilder.blockStatesToPlace = blockStatesToPlace
         newBuilder.onBlockBreak = onBlockBreak
         newBuilder.onDrop = onDrop
+        newBuilder.onBlockPostPlaced = onBlockPostPlaced
 
         func(newBuilder)
         return newBuilder

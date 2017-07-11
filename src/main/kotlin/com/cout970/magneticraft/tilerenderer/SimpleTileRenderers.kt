@@ -1,10 +1,8 @@
 package com.cout970.magneticraft.tilerenderer
 
+import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.block.Computers
-import com.cout970.magneticraft.block.Decoration
-import com.cout970.magneticraft.block.ElectricMachines
-import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
@@ -16,8 +14,18 @@ import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.minus
+import com.cout970.modelloader.ModelData
+import com.cout970.modelloader.QuadProvider
+import com.cout970.modelloader.QuadStorage
+import com.cout970.modelloader.api.ModelLoaderApi
+import com.cout970.modelloader.api.ModelUtilties
+import com.cout970.vector.api.IVector2
+import com.cout970.vector.extensions.vec2Of
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.util.EnumFacing
+import net.minecraftforge.client.MinecraftForgeClient
 
 /**
  * Created by cout970 on 2017/07/01.
@@ -27,12 +35,10 @@ import net.minecraft.util.EnumFacing
 object TileRendererBattery : TileRendererSimple<TileBattery>(
         modelLocation = { ModelResourceLocation(ElectricMachines.battery.registryName, "model") }
 ) {
-    val texture = resource("textures/blocks/electric_machines/battery.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileBattery) {
-        bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 180f)
-        models.forEach { it.render() }
+        models.forEach { it.renderTextured() }
     }
 }
 
@@ -59,12 +65,10 @@ object TileRendererCoalGenerator : TileRendererSimple<TileCoalGenerator>(
         modelLocation = { ModelResourceLocation(ElectricMachines.coal_generator.registryName, "model") },
         filters = listOf({ name -> name == "Shape_0" }, { name -> name != "Shape_0" }) //TODO add rotation animation
 ) {
-    val texture = resource("textures/blocks/electric_machines/coal_generator.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileCoalGenerator) {
-        bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 180f)
-        models.forEach { it.render() }
+        models.forEach { it.renderTextured() }
     }
 }
 
@@ -72,7 +76,6 @@ object TileRendererCoalGenerator : TileRendererSimple<TileCoalGenerator>(
 object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
         modelLocation = { ModelResourceLocation(ElectricMachines.electric_pole.registryName, "model") }
 ) {
-    val texture = resource("textures/blocks/electric_machines/electric_pole.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileElectricPole) {
 
@@ -94,10 +97,9 @@ object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
         bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
-        bindTexture(texture)
         val orientation = te.getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
-        models.forEach { it.render() }
+        models.forEach { it.renderTextured() }
     }
 }
 
@@ -105,7 +107,6 @@ object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
 object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPoleTransformer>(
         modelLocation = { ModelResourceLocation(ElectricMachines.electric_pole_transformer.registryName, "model") }
 ) {
-    val texture = resource("textures/blocks/electric_machines/electric_pole_transformer.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileElectricPoleTransformer) {
 
@@ -129,10 +130,9 @@ object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPole
         bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
-        bindTexture(texture)
         val orientation = te.getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
-        models.forEach { it.render() }
+        models.forEach { it.renderTextured() }
     }
 }
 
@@ -145,20 +145,18 @@ object TileRendererTubeLight : TileRendererSimple<TileTubeLight>(
                 { it: String -> it.matches("Right\\d".toRegex()) }
         )
 ) {
-    val texture = resource("textures/blocks/decoration/tube_light.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileTubeLight) {
-        bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 90f)
         val front = te.world.getTile<TileTubeLight>(te.pos.offset(te.facing, 1))
         val back = te.world.getTile<TileTubeLight>(te.pos.offset(te.facing, -1))
 
-        models[0].render()
+        models[0].renderTextured()
         if (front == null || front.facing.axis != te.facing.axis) {
-            models[1].render()
+            models[1].renderTextured()
         }
         if (back == null || back.facing.axis != te.facing.axis) {
-            models[2].render()
+            models[2].renderTextured()
         }
     }
 }
@@ -167,7 +165,6 @@ object TileRendererTubeLight : TileRendererSimple<TileTubeLight>(
 object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
         modelLocation = { ModelResourceLocation(Multiblocks.solarPanel.registryName, "model") }
 ) {
-    val texture = resource("textures/blocks/multiblocks/solar_panel.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarPanel) {
         if (!te.active) {
@@ -175,11 +172,9 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
             return
         }
 
-
-        bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, -90f)
         translate(-1.0, 0.0, 0.0)
-        models.forEach { it.render() }
+        models.forEach { it.renderTextured() }
     }
 }
 
@@ -188,7 +183,6 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
         modelLocation = { ModelResourceLocation(Multiblocks.shelvingUnit.registryName, "model") },
         filters = filterOf((1..24).map { "Crate$it" })
 ) {
-    val texture = resource("textures/blocks/multiblocks/shelving_unit.png")
 
     override fun renderModels(models: List<ModelCache>, te: TileShelvingUnit) {
         if (!te.active) {
@@ -196,12 +190,11 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
             return
         }
 
-        bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 0f)
-        models[0].render()
+        models[0].renderTextured()
         te.shelvingUnitModule.chestCount.forEachIndexed { level, count ->
             (0 until count).forEach {
-                models[1 + level * ModuleShelvingUnit.CHESTS_PER_LEVEL + it].render()
+                models[1 + level * ModuleShelvingUnit.CHESTS_PER_LEVEL + it].renderTextured()
             }
         }
     }
@@ -211,11 +204,66 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
 object TileRendererComputer : TileRendererSimple<TileComputer>(
         modelLocation = { ModelResourceLocation(Computers.computer.registryName, "model") }
 ) {
-    val texture = resource("textures/blocks/computers/computer.png")
-
     override fun renderModels(models: List<ModelCache>, te: TileComputer) {
-        bindTexture(texture)
         Utilities.rotateFromCenter(te.facing, 0f)
-        models.forEach { it.render() }
+        models.forEach { it.renderTextured() }
+    }
+}
+
+@RegisterRenderer(TileWaterSieve::class)
+object TileRendererWaterSieve : TileRendererSimple<TileWaterSieve>(
+        modelLocation = { ModelResourceLocation(Machines.waterSieve.registryName, "model") }
+) {
+
+    var waterModel: ModelCache? = null
+
+    override fun renderModels(models: List<ModelCache>, te: TileWaterSieve) {
+        Utilities.rotateFromCenter(te.facing, 180f)
+        if (MinecraftForgeClient.getRenderPass() == 1) {
+            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            waterModel?.render()
+        } else {
+            models.forEach { it.renderTextured() }
+        }
+    }
+
+    override fun onModelRegistryReload() {
+        super.onModelRegistryReload()
+        waterModel?.clear()
+        val loc = ModelResourceLocation(Machines.waterSieve.registryName, "water")
+        val model = ModelLoaderApi.getModel(loc) ?: return
+        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+        val waterFlow = textureMap.getAtlasSprite("minecraft:blocks/water_flow")
+        val finalModel = updateModelUvs(model, waterFlow)
+        waterModel = ModelCache {
+            ModelUtilties.renderModelParts(finalModel.modelData, finalModel.modelData.parts)
+        }
+    }
+
+    fun updateModelUvs(provider: QuadProvider, sprite: Sprite): QuadProvider {
+        val quads = QuadStorage(
+                provider.modelData.quads.pos,
+                provider.modelData.quads.tex.map { sprite.mapUv(it) },
+                provider.modelData.quads.indices
+        )
+        val modelData = ModelData(
+                provider.modelData.useAmbientOcclusion,
+                provider.modelData.use3dInGui,
+                provider.modelData.particleTexture,
+                provider.modelData.parts,
+                quads
+        )
+        return QuadProvider(
+                modelData,
+                provider.particles,
+                provider.bakedQuads.flatMap { it.value }
+        )
+    }
+
+    fun Sprite.mapUv(uv: IVector2): IVector2 {
+        return vec2Of(
+                getInterpolatedU(uv.xd * 16),
+                getInterpolatedV(uv.yd * 16)
+        )
     }
 }

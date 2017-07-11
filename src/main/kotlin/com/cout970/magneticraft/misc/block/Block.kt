@@ -16,4 +16,7 @@ operator fun <T : Comparable<T>> IBlockState.get(property: IProperty<T>): T? = i
 fun <T : Comparable<T>> IProperty<T>.isIn(state: IBlockState): Boolean = this in state.properties
 
 fun IBlockState.getFacing() = this[CommonMethods.PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
+
 fun IBlockState.getOrientation() = this[CommonMethods.PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+
+fun IBlockState.getOrientationCentered() = this[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: EnumFacing.NORTH

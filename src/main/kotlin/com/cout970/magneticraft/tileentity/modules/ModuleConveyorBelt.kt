@@ -191,9 +191,10 @@ class ModuleConveyorBelt(
 
     fun removeItem(): ItemStack {
         if (boxes.isNotEmpty()) {
-            val box = boxes.removeAt(boxes.lastIndex)
+            val lastBox = boxes.maxBy { it.position } ?: return ItemStack.EMPTY
+            boxes.remove(lastBox)
             container.sendUpdateToNearPlayers()
-            return box.item
+            return lastBox.item
         }
         return ItemStack.EMPTY
     }
@@ -204,11 +205,9 @@ class ModuleConveyorBelt(
                 .map { it as NBTTagCompound }
                 .map { Box(it) }
         toUpdate = true
-        println("receive: ${world.totalWorldTime}")
     }
 
     override fun serializeNBT(): NBTTagCompound {
-        println("send: ${world.totalWorldTime}")
         return newNbt {
             list("items") {
                 boxes.map { it.serializeNBT() }.forEach { appendTag(it) }

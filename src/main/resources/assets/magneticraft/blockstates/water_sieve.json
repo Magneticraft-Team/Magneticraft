@@ -1,0 +1,20 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/machines/table_sieve_bottom"
+        }
+    },
+    "variants": {
+        "center_north": [{}],
+        "center_south": [{}],
+        "center_east": [{}],
+        "center_west": [{}],
+        "no_center_north": [{}],
+        "no_center_south": [{}],
+        "no_center_east": [{}],
+        "no_center_west": [{}]
+    }
+}

@@ -31,3 +31,10 @@ fun ResourceLocation.toResource(): IResource {
     val resourceManager = Minecraft.getMinecraft().resourceManager
     return resourceManager.getResource(this)
 }
+
+fun ResourceLocation.addPrefix(str: String): ResourceLocation{
+    return ResourceLocation(resourceDomain, str + resourcePath)
+}
+fun ResourceLocation.addPostfix(str: String): ResourceLocation{
+    return ResourceLocation(resourceDomain, resourcePath + str)
+}

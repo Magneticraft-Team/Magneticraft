@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tilerenderer.core
 
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
 
 /**
@@ -8,6 +9,7 @@ import org.lwjgl.opengl.GL11
  */
 class ModelCache(val func: () -> Unit) {
     private var id: Int = -1
+    var texture: ResourceLocation? = null
 
     fun render() {
         if(id == -1){

@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity.modules
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.set
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
@@ -28,6 +29,7 @@ class ModuleInserter(
     var limit = 0
 
     override fun update() {
+        if (world.isClient) return
         state = when (state) {
             State.IDLE -> {
                 limit = 20

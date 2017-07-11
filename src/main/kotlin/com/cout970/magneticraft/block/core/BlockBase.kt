@@ -47,6 +47,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
     var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
+    var onBlockPostPlaced: ((OnBlockPostPlacedArgs) -> Unit)? = null
     var onBlockBreak: ((BreakBlockArgs) -> Unit)? = null
     var pickBlock: ((PickBlockArgs) -> ItemStack)? = null
     var canPlaceBlockOnSide: ((CanPlaceBlockOnSideArgs) -> Boolean)? = null
@@ -215,3 +216,7 @@ data class BreakBlockArgs(val worldIn: World, val pos: BlockPos, val state: IBlo
 
 data class DropsArgs(val world: IBlockAccess, val pos: BlockPos, val state: IBlockState, val fortune: Int,
                      val default: List<ItemStack>)
+
+data class OnBlockPostPlacedArgs(val world: World, val pos: BlockPos, val facing: EnumFacing,
+                                 val hit: IVector3, val placer: EntityLivingBase?, val hand: EnumHand,
+                                 val relPos: BlockPos)

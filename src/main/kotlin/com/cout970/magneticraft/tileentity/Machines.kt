@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.getOrientation
+import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
@@ -115,6 +116,23 @@ class TileInfiniteEnergy : TileBase(), ITickable {
         node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
         super.update()
         node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+    }
+}
+
+@RegisterTileEntity("water_sieve")
+class TileWaterSieve : TileBase() {
+
+    val facing: EnumFacing get() = getBlockState().getOrientationCentered()
+
+    val invModule = ModuleInventory(1, capabilityFilter = { null })
+    val waterSieveModule = ModuleWaterSieve(invModule)
+
+    init {
+        initModules(waterSieveModule)
+    }
+
+    override fun shouldRenderInPass(pass: Int): Boolean {
+        return pass == 0 || pass == 1
     }
 }
 

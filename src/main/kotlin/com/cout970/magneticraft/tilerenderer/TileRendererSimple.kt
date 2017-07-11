@@ -34,10 +34,15 @@ abstract class TileRendererSimple<T : TileBase>(
 
     abstract fun renderModels(models: List<ModelCache>, te: T)
 
+    fun ModelCache.renderTextured(){
+        bindTexture(texture)
+        render()
+    }
+
     override fun onModelRegistryReload() {
         val loc = modelLocation()
         //cleaning
         caches.forEach { it.clear() }
-        caches = filters.mapNotNull { ModelCacheFactory.createCache(loc, it) }
+        caches = filters.flatMap { ModelCacheFactory.createMultiTextureCache(loc, it) }
     }
 }

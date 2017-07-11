@@ -17,7 +17,9 @@ import com.cout970.magneticraft.tileentity.TileMultiblockGap
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSolarPanel
 import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.tileentity.modules.ModuleMultiblock
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -64,6 +66,14 @@ object Multiblocks : IBlockMaker {
                 val mainTile = it.worldIn.getTile<TileBase>(mainBlockPos) ?: return@func false
                 val actionable = mainTile.getModule<IOnActivated>() ?: return@func false
                 return@func actionable.onActivated(it)
+            }
+            onBlockBreak = func@ {
+                val mod = it.worldIn.getTile<TileMultiblockGap>(it.pos)?.getModule<ModuleMultiblock>() ?: return@func
+                if(mod.multiblock == null){
+                    val relPos = mod.centerPos ?: return@func
+                    val absPos = it.pos + relPos
+                    it.worldIn.setBlockToAir(absPos)
+                }
             }
         }.build()
 
