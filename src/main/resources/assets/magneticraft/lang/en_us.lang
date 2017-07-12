@@ -57,12 +57,16 @@ item.magneticraft.ingots_cobalt.name=Cobalt Ingot
 item.magneticraft.ingots_tungsten.name=Tungsten Ingot
 item.magneticraft.ingots_steel.name=Steel Ingot
 
+item.magneticraft.chunks_iron.name=Iron Chunk
+item.magneticraft.chunks_gold.name=Gold Chunk
 item.magneticraft.chunks_copper.name=Copper Chunk
 item.magneticraft.chunks_lead.name=Lead Chunk
 item.magneticraft.chunks_cobalt.name=Cobalt Chunk
 item.magneticraft.chunks_tungsten.name=Tungsten Chunk
 item.magneticraft.chunks_steel.name=Steel Chunk
 
+item.magneticraft.dusts_iron.name=Iron Dust
+item.magneticraft.dusts_gold.name=Gold Dust
 item.magneticraft.dusts_copper.name=Copper Dust
 item.magneticraft.dusts_lead.name=Lead Dust
 item.magneticraft.dusts_cobalt.name=Cobalt Dust
@@ -92,7 +96,7 @@ tile.magneticraft.ores_tungsten.name=Wolframite Ore
 
 tile.magneticraft.box_normal.name=Wooden Box
 tile.magneticraft.crushing_table_normal.name=Crushing Table
-#tile.magneticraft.table_sieve.name=Table Sieve
+tile.magneticraft.sluice_box_center_north.name=Sluice Box
 #tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
 #tile.magneticraft.kiln_shelf.name=Kiln Shelf
 
@@ -136,7 +140,7 @@ tile.magneticraft.infinite_energy_normal.name=Infinite Energy
 
 #tile.magneticraft.airlock.name=Airlock
 #tile.magneticraft.air_bubble.name=Air Bubble
-#tile.magneticraft.computer.name=Computer
+tile.magneticraft.computer_north.name=Computer
 
 #multiblocks
 #tile.magneticraft.hydraulic_press.name=Hydraulic Press

@@ -12,13 +12,13 @@ import java.util.*
  * Created by cout970 on 11/06/2016.
  */
 class GaussianOreGenerator(
-    blockstate: IBlockState,
-    val conf: GaussOreConfig
-) : OreGenerator(
-    blockstate,
-    conf) {
+        blockstate: IBlockState,
+        val conf: GaussOreConfig
+) : OreGenerator(blockstate, conf) {
 
-    override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?, chunkProvider: IChunkProvider?) {
+    override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?,
+                          chunkProvider: IChunkProvider?) {
+
         if (world == null || random == null) return
         if (world.provider.dimension in listOf(1, -1)) return
 
@@ -26,7 +26,7 @@ class GaussianOreGenerator(
             val randGaussian = random.nextGaussian() * conf.deviation + conf.chunkAmount
 
             val veins = Math.floor(randGaussian).toInt().coerceAtLeast(0)
-                .coerceIn(conf.minAmountPerChunk, conf.maxAmountPerChunk)
+                    .coerceIn(conf.minAmountPerChunk, conf.maxAmountPerChunk)
 
             generateChunkOres(world, Vec2d(chunkX, chunkZ), random, veins)
         }

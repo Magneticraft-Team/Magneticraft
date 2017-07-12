@@ -1,28 +1,27 @@
-package com.cout970.magneticraft.api.internal.registries.machines.tablesieve
+package com.cout970.magneticraft.api.internal.registries.machines.sluicebox
 
 import com.cout970.magneticraft.api.internal.ApiUtils
-import com.cout970.magneticraft.api.registries.machines.tablesieve.ITableSieveRecipe
+import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
 /**
  * Created by cout970 on 16/06/2016.
  */
-data class TableSieveRecipe(
+data class SluiceBoxRecipe(
         private val input: ItemStack,
         private val primaryOutput: ItemStack,
-        private val secondaryOutput: ItemStack,
-        private val probability: Float,
+        private val secondaryOutput: List<Pair<ItemStack, Float>>,
         val oreDict: Boolean
-) : ITableSieveRecipe {
+) : ISluiceBoxRecipe {
 
     override fun getInput(): ItemStack = input.copy()
 
     override fun getPrimaryOutput(): ItemStack = primaryOutput.copy()
 
-    override fun getSecondaryOutput(): ItemStack = secondaryOutput.copy()
-
-    override fun getProbability(): Float = probability
+    override fun getSecondaryOutput(): MutableList<Pair<ItemStack, Float>> {
+        return secondaryOutput.map { it.first.copy() to it.second }.toMutableList()
+    }
 
     override fun matches(input: ItemStack): Boolean {
         if (ApiUtils.equalsIgnoreSize(input, this.input)) return true

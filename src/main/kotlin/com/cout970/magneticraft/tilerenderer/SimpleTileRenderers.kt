@@ -210,16 +210,16 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
     }
 }
 
-@RegisterRenderer(TileWaterSieve::class)
-object TileRendererWaterSieve : TileRendererSimple<TileWaterSieve>(
-        modelLocation = { ModelResourceLocation(Machines.waterSieve.registryName, "model") }
+@RegisterRenderer(TileSluiceBox::class)
+object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
+        modelLocation = { ModelResourceLocation(Machines.sluiceBox.registryName, "model") }
 ) {
 
     var waterModel: ModelCache? = null
 
-    override fun renderModels(models: List<ModelCache>, te: TileWaterSieve) {
+    override fun renderModels(models: List<ModelCache>, te: TileSluiceBox) {
         Utilities.rotateFromCenter(te.facing, 180f)
-        if (MinecraftForgeClient.getRenderPass() == 1) {
+        if (te.sluiceBoxModule.progressLeft > 0 && MinecraftForgeClient.getRenderPass() == 1) {
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             waterModel?.render()
         } else {
@@ -230,7 +230,7 @@ object TileRendererWaterSieve : TileRendererSimple<TileWaterSieve>(
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         waterModel?.clear()
-        val loc = ModelResourceLocation(Machines.waterSieve.registryName, "water")
+        val loc = ModelResourceLocation(Machines.sluiceBox.registryName, "water")
         val model = ModelLoaderApi.getModel(loc) ?: return
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val waterFlow = textureMap.getAtlasSprite("minecraft:blocks/water_flow")

@@ -1,11 +1,13 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraft.init.Blocks
+import net.minecraft.init.Blocks.COBBLESTONE
 import net.minecraft.init.Items
 import net.minecraft.init.Items.*
 import net.minecraft.item.ItemStack
@@ -205,7 +207,6 @@ fun registerRecipes() {
 //    addRecipe(ItemStack(BlockElectricConnector, 8), "#C#", "WLW", "SSS", 'C', "ingotCopper", 'W', of(WOOL), 'S', of(STONE_SLAB), 'L', "ingotLead")
 //    addRecipe(ItemStack(BlockAirLock), "TCT", "PSP", "TCT", 'C', "heavyPlateCobalt", 'T', "ingotTungsten", 'P', ItemCoilOfWire, 'S', of(SPONGE))
 //
-//    addRecipe(ItemStack(BlockTableSieve), "SPS", "I#I", "WWW", 'W', "plankWood", 'I', "ingotIron", 'P', of(PAPER), 'S', "slabWood")
 //    addRecipe(ItemStack(BlockCrushingTable), "SSS", "WWW", "W#W", 'S', of(STONE_SLAB), 'W', "logWood")
 //    addRecipe(ItemStack(BlockKiln), "BDB", "BPB", 'B', BlockBurntLimestone, 'P', "lightPlateCopper", 'D', Items.IRON_DOOR)
 //    addRecipe(ItemStack(BlockKilnShelf), "BPB", "B#B", 'B', of(IRON_BARS), 'P', "lightPlateIron")
@@ -251,23 +252,25 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(Metals.ingots, 2, 1), ItemStack(Metals.chunks, 1, 3))
     addSmeltingRecipe(ItemStack(Metals.ingots, 2, 2), ItemStack(Metals.chunks, 1, 4))
     addSmeltingRecipe(ItemStack(Metals.ingots, 2, 3), ItemStack(Metals.chunks, 1, 5))
-//
-//    //TABLE SIEVE RECIPES
-//    for (i in ItemPebbles.variants.indices) {
-//        addTableSieveRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(COBBLESTONE), 0.15f)
-//    }
-//    addTableSieveRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f)
-//    addTableSieveRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(DIAMOND), 0.001f)
-//    addTableSieveRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Items.FLINT), 0.15f)
-//
-//    //SIFTER RECIPES
-//    for (i in ItemPebbles.variants.indices) {
-//        addSifterRecipe(ItemStack(ItemCrushedOre, 1, i), ItemStack(ItemPebbles, 1, i), ItemStack(ItemPebbles, 1, ItemPebbles.secondaries[i]!!), 0.1f, ItemStack(GRAVEL), 0.15f, 20f)
-//    }
-//    addSifterRecipe(ItemStack(ItemCrushedLapis), ItemStack(ItemPebblesLapis), ItemStack(DYE, 1, 4), 0.1f, ItemStack(COBBLESTONE), 0.1f, 20f)
-//    addSifterRecipe(ItemStack(ItemCrushedCoal), ItemStack(ItemPebblesCoal), ItemStack(Items.COAL), 0.1f, ItemStack(DIAMOND), 0.001f, 20f)
-//    addSifterRecipe(ItemStack(Blocks.GRAVEL), ItemStack(Items.FLINT), ItemStack(Blocks.SAND), 0.1f, ItemStack(Items.FLINT), 0.2f, 20f)
-//
+
+    //SLUICE BOX RECIPES
+    Metals.chunks.variants.keys.forEach { meta ->
+        addSluiceBoxRecipe(Metals.chunks.stack(meta = meta), Metals.dusts.stack(meta = meta), listOf(COBBLESTONE.stack() to 0.15f))
+    }
+
+    addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))
+    addSluiceBoxRecipe(Blocks.SAND.stack(), ItemStack.EMPTY,
+            listOf(
+                    Items.GOLD_NUGGET.stack() to 0.01f,
+                    Items.GOLD_NUGGET.stack() to 0.005f,
+                    Items.GOLD_NUGGET.stack() to 0.0025f,
+                    Items.GOLD_NUGGET.stack() to 0.00125f,
+                    Items.GOLD_NUGGET.stack() to 0.000625f,
+                    Items.GOLD_NUGGET.stack() to 0.0003125f,
+                    Items.GOLD_NUGGET.stack() to 0.00015625f,
+                    Items.GOLD_NUGGET.stack() to 0.000078125f,
+                    Items.GOLD_NUGGET.stack() to 0.0000390625f
+            ))
     //@formatter:on
 }
 
@@ -279,20 +282,17 @@ private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
 private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
     CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
 }
+
 //
 //private fun addHeatExchangerRecipe(input: FluidStack, output: FluidStack, heat: Long, minTemp: Double, maxTemp: Double,
 //                                   reverseLow: Boolean, reverseHigh: Boolean) {
 //    HeatExchangerRecipeManager.registerRecipe(
 //            HeatExchangerRecipeManager.createRecipe(input, output, heat, minTemp, maxTemp, reverseLow, reverseHigh))
 //}
-//
-//private fun addTableSieveRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float) {
-//    TableSieveRecipeManager.registerRecipe(TableSieveRecipeManager.createRecipe(input, output0, output1, prob, true))
-//}
-//
-//private fun addTableSieveRecipe(input: ItemStack, output: ItemStack) {
-//    TableSieveRecipeManager.registerRecipe(TableSieveRecipeManager.createRecipe(input, output, output, 0f, true))
-//}
+private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
+                               otherOutput: List<Pair<ItemStack, Float>> = emptyList()) {
+    SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, output, otherOutput, true))
+}
 //
 //private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack,
 //                            prob2: Float, duration: Float) {

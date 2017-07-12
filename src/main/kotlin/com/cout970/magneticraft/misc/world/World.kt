@@ -14,12 +14,21 @@ import net.minecraft.world.World
 inline val World.isServer: Boolean get() = !isRemote
 inline val World.isClient: Boolean get() = isRemote
 
-fun World.dropItem(item: ItemStack, pos: BlockPos) {
+fun World.dropItem(item: ItemStack, pos: BlockPos, jump: Boolean = true) {
     if (isServer) {
-        val f = 0.05f
-        val d0 = (rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
-        val d1 = (rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
-        val d2 = (rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
+        val d0: Double
+        val d1: Double
+        val d2: Double
+        if (jump) {
+            val f = 0.05f
+            d0 = (rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
+            d1 = (rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
+            d2 = (rand.nextFloat() * f).toDouble() + (1.0f - f).toDouble() * 0.5
+        } else {
+            d0 = 0.5
+            d1 = 0.5
+            d2 = 0.5
+        }
         val entityItem = EntityItem(this, pos.x.toDouble() + d0, pos.y.toDouble() + d1, pos.z.toDouble() + d2, item)
         entityItem.setDefaultPickupDelay()
         spawnEntity(entityItem)

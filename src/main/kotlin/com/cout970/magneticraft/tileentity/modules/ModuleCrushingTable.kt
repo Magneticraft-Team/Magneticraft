@@ -126,14 +126,14 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivate
 
         if (damageTaken >= CRUSHING_DAMAGE) {
             if (world.isClient) {
-                world.playSound(playerIn, pos, sounds["crushing_final"], SoundCategory.BLOCKS, 0.5F, 1F)
+                world.playSound(null, pos, sounds["crushing_final"], SoundCategory.BLOCKS, 0.5F, 1F)
                 spawnParticles(world, pos)
             }
 
             storedItem = recipe.output
             damageTaken = 0
         } else if (world.isClient) {
-            world.playSound(playerIn, pos, sounds["crushing_hit"], SoundCategory.BLOCKS, 1F, 1F)
+            world.playSound(null, pos, sounds["crushing_hit"], SoundCategory.BLOCKS, 1F, 1F)
             spawnParticles(world, pos)
         }
         container.sendUpdateToNearPlayers()

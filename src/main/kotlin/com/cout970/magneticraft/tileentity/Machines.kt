@@ -10,8 +10,13 @@ import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
+import com.cout970.magneticraft.util.vector.toBlockPos
+import com.cout970.magneticraft.util.vector.xd
+import com.cout970.magneticraft.util.vector.yd
+import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 
@@ -119,20 +124,29 @@ class TileInfiniteEnergy : TileBase(), ITickable {
     }
 }
 
-@RegisterTileEntity("water_sieve")
-class TileWaterSieve : TileBase() {
+@RegisterTileEntity("sluice_box")
+class TileSluiceBox : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientationCentered()
 
     val invModule = ModuleInventory(1, capabilityFilter = { null })
-    val waterSieveModule = ModuleWaterSieve(invModule)
+    val sluiceBoxModule = ModuleSluiceBox({facing}, invModule)
 
     init {
-        initModules(waterSieveModule)
+        initModules(sluiceBoxModule)
+    }
+
+    override fun update() {
+        super.update()
     }
 
     override fun shouldRenderInPass(pass: Int): Boolean {
         return pass == 0 || pass == 1
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB {
+        val dir = facing.toBlockPos()
+        return super.getRenderBoundingBox().expand(dir.xd, dir.yd, dir.zd)
     }
 }
 

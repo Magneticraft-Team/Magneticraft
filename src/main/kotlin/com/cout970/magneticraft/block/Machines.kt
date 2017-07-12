@@ -29,7 +29,7 @@ object Machines : IBlockMaker {
     lateinit var conveyorBelt: BlockBase private set
     lateinit var inserter: BlockBase private set
     lateinit var waterGenerator: BlockBase private set
-    lateinit var waterSieve: BlockBase private set
+    lateinit var sluiceBox: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -90,14 +90,14 @@ object Machines : IBlockMaker {
             factory = factoryOf(::TileWaterGenerator)
         }.build()
 
-        waterSieve = builder.withName("water_sieve").copy {
+        sluiceBox = builder.withName("sluice_box").copy {
             states = CommonMethods.CenterOrientation.values().toList()
-            factory = factoryOf(::TileWaterSieve)
+            factory = factoryOf(::TileSluiceBox)
             factoryFilter = { it[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false }
             customModels = listOf(
-                    "model" to resource("models/block/mcx/water_sieve.mcx"),
-                    "water" to resource("models/block/mcx/water_sieve_water.mcx"),
-                    "inventory" to resource("models/block/mcx/water_sieve.mcx")
+                    "model" to resource("models/block/mcx/sluice_box.mcx"),
+                    "inventory" to resource("models/block/mcx/sluice_box_inv.mcx"),
+                    "water" to resource("models/block/mcx/sluice_box_water.mcx")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
@@ -129,6 +129,6 @@ object Machines : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(box, crushingTable, conveyorBelt, inserter, waterGenerator, waterSieve)
+        return itemBlockListOf(box, crushingTable, conveyorBelt, inserter, waterGenerator, sluiceBox)
     }
 }

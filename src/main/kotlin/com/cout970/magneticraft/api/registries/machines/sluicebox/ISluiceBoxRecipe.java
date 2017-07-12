@@ -1,11 +1,14 @@
-package com.cout970.magneticraft.api.registries.machines.tablesieve;
+package com.cout970.magneticraft.api.registries.machines.sluicebox;
 
+import kotlin.Pair;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 /**
  * Created by cout970 on 24/08/2016.
  */
-public interface ITableSieveRecipe {
+public interface ISluiceBoxRecipe {
 
     /**
      * The input stack of this recipe
@@ -31,14 +34,9 @@ public interface ITableSieveRecipe {
      * that the probability of this recipe
      * WARNING: this should return a COPY of the output not the original instance of the output
      *
-     * @return The secondary output of this recipe
+     * @return The secondary outputs of this recipe
      */
-    ItemStack getSecondaryOutput();
-
-    /**
-     * @return The probability to get the secondary output
-     */
-    float getProbability();
+    List<Pair<ItemStack, Float>> getSecondaryOutput();
 
     /**
      * Checks if this recipes has the same input as the given argument

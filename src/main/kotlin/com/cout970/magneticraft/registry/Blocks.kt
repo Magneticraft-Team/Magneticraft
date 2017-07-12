@@ -29,7 +29,6 @@ fun initBlocks() {
 }
 
 //listOf<Block>(
-//        BlockTableSieve,
 //        BlockWoodChip,
 //        BlockFiberboard,
 //        BlockFeedingTrough,

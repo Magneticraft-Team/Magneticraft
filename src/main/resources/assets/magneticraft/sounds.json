@@ -13,5 +13,17 @@
             "magneticraft:crushing_final1",
             "magneticraft:crushing_final2"
         ]
+    },
+    "water_flow": {
+        "category": "block",
+        "sounds": [
+            "magneticraft:water_flow"
+        ]
+    },
+    "water_flow_end": {
+        "category": "block",
+        "sounds": [
+            "magneticraft:water_flow_end"
+        ]
     }
 }

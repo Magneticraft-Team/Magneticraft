@@ -5,7 +5,6 @@ import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.item.Tools
 import net.minecraft.item.Item
 import net.minecraftforge.fml.common.registry.ForgeRegistries
-import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
  * Created by cout970 on 2017/03/26.
@@ -31,7 +30,6 @@ fun initItems() {
 //        ItemCrushedCoal,
 //        ItemCrushedLapis,
 //        ItemWoodChip,
-//        ItemHandSieve,
 //        ItemPulpWood,
 //        ItemPebbles,
 //        ItemPebblesCoal,
