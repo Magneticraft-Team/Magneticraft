@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.IVector3
+import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
 import com.cout970.magneticraft.block.ElectricMachines
@@ -13,9 +15,10 @@ import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
-import com.cout970.magneticraft.tilerenderer.TileRendererConnector
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.times
@@ -61,8 +64,23 @@ class TileConnector : TileBase(), ITickable {
 
     override fun onBlockStateUpdates() {
         if (world.isClient) {
-            hasBase = TileRendererConnector.shouldHaveBase(this)
+            hasBase = shouldHaveBase(this)
         }
+    }
+
+    fun shouldHaveBase(te: TileConnector): Boolean {
+        val tile = te.world.getTileEntity(te.pos.offset(te.facing.opposite))
+        if (tile != null) {
+            val handler = ELECTRIC_NODE_HANDLER!!.fromTile(tile, te.facing)
+            if (handler is IElectricNodeHandler) {
+                val node = handler.nodes.firstOrNull { it is IElectricNode }
+                if (node != null && handler.canConnect(node as IElectricNode, te.electricModule, te.wrapper,
+                        te.facing)) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     fun getConnectableDirections(): List<Vec3i> {

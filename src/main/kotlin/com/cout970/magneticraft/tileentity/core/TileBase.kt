@@ -82,7 +82,7 @@ abstract class TileBase : TileEntity() {
 
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         val list = container.modules.filter { it.hasCapability(capability, facing) }
-        return list.first().getCapability(capability, facing)
+        return list.firstOrNull()?.getCapability(capability, facing)
     }
 
     override fun readFromNBT(compound: NBTTagCompound) {

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
  * Created by cout970 on 2017/07/01.
  */
 abstract class TileRendererSimple<T : TileBase>(
-        val modelLocation: () -> ModelResourceLocation,
+        val modelLocation: (() -> ModelResourceLocation)?,
         val filters: List<(String) -> Boolean> = listOf({ _ -> true })
 ) : TileRenderer<T>() {
 
@@ -34,13 +34,13 @@ abstract class TileRendererSimple<T : TileBase>(
 
     abstract fun renderModels(models: List<ModelCache>, te: T)
 
-    fun ModelCache.renderTextured(){
+    fun ModelCache.renderTextured() {
         bindTexture(texture)
         render()
     }
 
     override fun onModelRegistryReload() {
-        val loc = modelLocation()
+        val loc = modelLocation?.invoke() ?: return
         //cleaning
         caches.forEach { it.clear() }
         caches = filters.flatMap { ModelCacheFactory.createMultiTextureCache(loc, it) }

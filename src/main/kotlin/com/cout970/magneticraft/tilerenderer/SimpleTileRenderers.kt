@@ -4,6 +4,7 @@ import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
@@ -11,6 +12,8 @@ import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.minus
@@ -22,14 +25,63 @@ import com.cout970.modelloader.api.ModelUtilties
 import com.cout970.vector.api.IVector2
 import com.cout970.vector.extensions.vec2Of
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.item.ItemSkull
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.MinecraftForgeClient
 
 /**
  * Created by cout970 on 2017/07/01.
  */
+
+@RegisterRenderer(TileCrushingTable::class)
+object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
+
+    override fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float,
+                                    destroyStage: Int) {
+        val stack = te.crushingModule.storedItem
+
+        if (stack.isNotEmpty) {
+            pushMatrix()
+            translate(x + 0.5, y + 0.9375, z + 0.3125)
+            if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+                translate(0.0, -0.045, 1 * PIXEL)
+                rotate(90f, 1f, 0f, 0f)
+            } else {
+                translate(0.0, -0.125, 0.0625 * 3)
+            }
+            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
+            popMatrix()
+        }
+    }
+}
+
+@RegisterRenderer(TileConnector::class)
+object TileRendererConnector : TileRendererSimple<TileConnector>(
+        modelLocation = { ModelResourceLocation(ElectricMachines.connector.registryName, "model") },
+        filters = listOf<(String) -> Boolean>({ !it.startsWith("Base") }, { it.startsWith("Base") })
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileConnector) {
+        //updated the cache for rendering wires
+        te.wireRender.update {
+            te.electricModule.outputWiredConnections.forEach { i ->
+                Utilities.renderConnection(i, i.firstNode as IWireConnector, i.secondNode as IWireConnector, 0.035)
+            }
+        }
+
+        bindTexture(Utilities.WIRE_TEXTURE)
+        te.wireRender.render()
+        Utilities.rotateAroundCenter(te.facing)
+        models[0].renderTextured()
+        if (te.hasBase) {
+            models[1].renderTextured()
+        }
+    }
+}
 
 @RegisterRenderer(TileBattery::class)
 object TileRendererBattery : TileRendererSimple<TileBattery>(
