@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/machines/combustion_gen_side1"
+        }
+    },
+    "variants": {
+        "north": [{}],
+        "south": [{}],
+        "east": [{}],
+        "west": [{}]
+    }
+}

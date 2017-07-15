@@ -9,11 +9,9 @@ import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.*
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.toAABBWith
-import com.cout970.magneticraft.util.vector.toBlockPos
-import com.cout970.magneticraft.util.vector.vec3Of
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.ItemBlock
@@ -30,6 +28,8 @@ object Machines : IBlockMaker {
     lateinit var inserter: BlockBase private set
     lateinit var waterGenerator: BlockBase private set
     lateinit var sluiceBox: BlockBase private set
+    lateinit var combustionChamber: BlockBase private set
+    lateinit var steamBoiler: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -125,10 +125,40 @@ object Machines : IBlockMaker {
             }
             boundingBox = {
                 val center = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false
-                if(center) Block.FULL_BLOCK_AABB else AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
+                if (center) Block.FULL_BLOCK_AABB else AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
             }
         }.build()
 
-        return itemBlockListOf(box, crushingTable, conveyorBelt, inserter, waterGenerator, sluiceBox)
+        combustionChamber = builder.withName("combustion_chamber").copy {
+            states = CommonMethods.Orientation.values().toList()
+            factory = factoryOf(::TileCombustionChamber)
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/combustion_chamber.mcx"),
+                    "inventory" to resource("models/block/mcx/combustion_chamber.mcx")
+            )
+            hasCustomModel = true
+            generateDefaultItemModel = false
+            alwaysDropDefault = true
+            //methods
+            onBlockPlaced = CommonMethods::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        steamBoiler = builder.withName("steam_boiler").copy {
+            factory = factoryOf(::TileSteamBoiler)
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/steam_boiler.mcx"),
+                    "inventory" to resource("models/block/mcx/steam_boiler.mcx")
+            )
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            //methods
+            boundingBox = { (vec3Of(1, 0, 1) toAABBWith vec3Of(15, 16, 15)).scale(PIXEL) }
+            onActivated = CommonMethods::delegateToModule
+        }.build()
+
+        return itemBlockListOf(box, crushingTable, conveyorBelt, inserter, waterGenerator, sluiceBox, combustionChamber,
+                steamBoiler)
     }
 }

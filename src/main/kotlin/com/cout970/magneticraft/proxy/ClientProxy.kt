@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.proxy
 
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.core.BlockBase
@@ -96,7 +97,9 @@ class ClientProxy : CommonProxy() {
                 val renderer = clazz.objectInstance as TileRenderer<TileBase>
 
                 register(tile, renderer)
-                info("Registering TESR: Tile = ${clazz.simpleName}, Renderer = ${renderer.javaClass.simpleName}")
+                if(Debug.DEBUG) {
+                    info("Registering TESR: Tile = ${clazz.simpleName}, Renderer = ${renderer.javaClass.simpleName}")
+                }
             } catch (e: Exception) {
                 logError("Unable to register class with @RegisterRenderer: $it")
                 e.printStackTrace()

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
@@ -22,7 +23,9 @@ fun initTileEntities() {
             @Suppress("UNCHECKED_CAST")
             val clazz = Class.forName(it.className) as Class<TileBase>
             map += clazz to (it.annotationInfo["name"] as String)
-            info("Registering TileEntity: ${clazz.simpleName}")
+            if(Debug.DEBUG) {
+                info("Registering TileEntity: ${clazz.simpleName}")
+            }
         } catch (e: Exception) {
             logError("Error auto-registering tileEntity: $it")
             e.printStackTrace()

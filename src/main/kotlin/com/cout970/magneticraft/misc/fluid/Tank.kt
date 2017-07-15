@@ -3,15 +3,34 @@ package com.cout970.magneticraft.misc.fluid
 import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_AMOUNT
 import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_NAME
 import com.cout970.magneticraft.misc.network.IBD
+import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.FluidTank
 
 /**
  * Created by cout970 on 10/07/2016.
  */
-open class Tank(capacity:Int) : FluidTank(capacity) {
+open class Tank(
+        capacity: Int,
+        var fluidFilter: (FluidStack) -> Boolean = { true },
+        allowInput: Boolean = true,
+        allowOutput: Boolean = true
+) : FluidTank(capacity) {
 
     var clientFluidAmount = 0
     var clientFluidName = ""
+
+    init {
+        canDrain = allowOutput
+        canFill = allowInput
+    }
+
+    override fun canDrainFluidType(fluid: FluidStack?): Boolean {
+        return fluid != null && canDrain && fluidFilter(fluid)
+    }
+
+    override fun canFillFluidType(fluid: FluidStack?): Boolean {
+        return fluid != null && canFill && fluidFilter(fluid)
+    }
 
     //server only
     fun getData(): IBD {
@@ -22,7 +41,7 @@ open class Tank(capacity:Int) : FluidTank(capacity) {
     }
 
     //client only
-    fun setData(ibd: IBD){
+    fun setData(ibd: IBD) {
         ibd.getInteger(DATA_ID_FLUID_AMOUNT, { clientFluidAmount = it })
         ibd.getString(DATA_ID_FLUID_NAME, { clientFluidName = it })
     }

@@ -253,7 +253,7 @@ class CPU_MIPS : ICPU {
                 }
                 0x3//jal
                 -> {
-                    setRegister(31, regPC)
+                    setRegister(31, regPC + 4)
                     jump = regPC
                     jump = jump and 0xF0000000.toInt()
                     jump = jump or (dir shl 2)

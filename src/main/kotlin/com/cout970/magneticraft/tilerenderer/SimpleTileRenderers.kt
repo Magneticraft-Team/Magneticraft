@@ -267,3 +267,22 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
         )
     }
 }
+
+@RegisterRenderer(TileCombustionChamber::class)
+object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>(
+        modelLocation = { ModelResourceLocation(Machines.combustionChamber.registryName, "model") }
+) {
+    override fun renderModels(models: List<ModelCache>, te: TileCombustionChamber) {
+        Utilities.rotateFromCenter(te.facing, 180f)
+        models.forEach { it.renderTextured() }
+    }
+}
+
+@RegisterRenderer(TileSteamBoiler::class)
+object TileRendererSteamBoiler : TileRendererSimple<TileSteamBoiler>(
+        modelLocation = { ModelResourceLocation(Machines.steamBoiler.registryName, "model") }
+) {
+    override fun renderModels(models: List<ModelCache>, te: TileSteamBoiler) {
+        models.forEach { it.renderTextured() }
+    }
+}

@@ -6,13 +6,13 @@ import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.math.BlockPos
@@ -23,10 +23,8 @@ import net.minecraftforge.items.SlotItemHandler
  * Created by cout970 on 2017/06/12.
  */
 
-class ContainerBox(player: EntityPlayer, world: World, blockPos: BlockPos)
+class ContainerBox(val tile: TileBox, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
-
-    val tile = world.getTile<TileBox>(blockPos)!!
 
     init {
         tile.invModule.inventory.let { inv ->
@@ -44,10 +42,8 @@ class ContainerBox(player: EntityPlayer, world: World, blockPos: BlockPos)
     }
 }
 
-class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos)
+class ContainerBattery(val tile: TileBattery, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
-
-    val tile = world.getTile<TileBattery>(blockPos)!!
 
     init {
         tile.invModule.inventory.let { inv ->
@@ -61,10 +57,8 @@ class ContainerBattery(player: EntityPlayer, world: World, blockPos: BlockPos)
     }
 }
 
-class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: BlockPos)
+class ContainerElectricFurnace(tile: TileElectricFurnace, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
-
-    val tile = world.getTile<TileElectricFurnace>(blockPos)!!
 
     init {
         tile.invModule.inventory.let { inv ->
@@ -79,10 +73,9 @@ class ContainerElectricFurnace(player: EntityPlayer, world: World, blockPos: Blo
     }
 }
 
-class ContainerShelvingUnit(player: EntityPlayer, world: World, blockPos: BlockPos, val level: ModuleShelvingUnit.Level)
+class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, world: World, blockPos: BlockPos,
+                            val level: ModuleShelvingUnit.Level)
     : ContainerBase(player, world, blockPos) {
-
-    val tile = world.getTile<TileShelvingUnit>(blockPos)!!
 
     init {
         tile.invModule.inventory.let { inv ->
@@ -141,5 +134,18 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
         }
         monitor.loadFromClient(ibd)
         super.receiveDataFromClient(ibd)
+    }
+}
+
+class ContainerCombustionChamber(val tile: TileCombustionChamber, player: EntityPlayer, world: World,
+                                 blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        tile.invModule.inventory.let { inv ->
+            addSlotToContainer(SlotItemHandler(inv, 0, 91, 32))
+            inventoryRegions += InventoryRegion(0..0, filter = { it.isNotEmpty && it.item == Items.COAL })
+        }
+        bindPlayerInventory(player.inventory)
     }
 }

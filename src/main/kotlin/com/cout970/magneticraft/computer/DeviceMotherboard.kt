@@ -83,8 +83,8 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
             }
             84 -> {
                 when (logType) {
-                    1 -> print(data.toInt() and 0xFF)
-                    2 -> print("0x%02x".format(data.toInt() and 0xFF))
+                    1 -> print("${data.toInt() and 0xFF} ")
+                    2 -> print("0x%02x ".format(data.toInt() and 0xFF))
                     3 -> print(data.toChar())
                     else -> {
                         println("${getComputerPos()}: 0x%02x, %03d, ".format(data.toInt() and 0xFF,
@@ -102,8 +102,8 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
                 logInt = logInt.splitSet(addr - 88, data)
                 if (addr == 88) {
                     when (logType) {
-                        1 -> print(logInt)
-                        2 -> print("0x%08x".format(logInt))
+                        1 -> print("$logInt ")
+                        2 -> print("0x%08x ".format(logInt))
                         3 -> print(logInt.toChar())
                         else -> {
                             println("${getComputerPos()}: 0x%08x, %08d".format(logInt, logInt))

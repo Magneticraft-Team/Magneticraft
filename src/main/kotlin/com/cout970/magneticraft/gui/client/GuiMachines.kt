@@ -7,10 +7,13 @@ import com.cout970.magneticraft.gui.client.components.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerComputer
 import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.misc.gui.formatHeat
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.TileBattery
+import com.cout970.magneticraft.tileentity.TileCombustionChamber
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
+import com.cout970.magneticraft.util.toKelvinFromCelsius
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
 
@@ -32,13 +35,13 @@ class GuiElectricFurnace(container: ContainerBase) : GuiBase(container) {
     override fun initComponents() {
         components.add(CompBackground("electric_furnace"))
         components.add(CompElectricBar(tile.node, Vec2d(58, 64) + box.start))
-        val storageCallback = CallbackBarProvider(
+        val consumptionCallback = CallbackBarProvider(
                 callback = { tile.processModule.production.storage.toDouble() },
                 max = { Config.electricFurnaceMaxConsumption },
                 min = { 0.0 }
         )
-        components.add(CompVerticalBar(storageCallback, 3, Vec2d(69, 64) + box.start,
-                { listOf(String.format("%.2fW", storageCallback.callback())) }))
+        components.add(CompVerticalBar(consumptionCallback, 3, Vec2d(69, 64) + box.start,
+                { listOf(String.format("%.2fW", consumptionCallback.callback())) }))
 
         val processCallback = CallbackBarProvider(
                 { tile.processModule.timedProcess.timer.toDouble() },
@@ -113,4 +116,29 @@ class GuiComputer(container: ContainerBase) : GuiBase(container) {
         components.add(CompGreenLight(box.start + Vec2d(14, 221), { motherboard.isOnline() }))
     }
 }
+
+class GuiCombustionChamber(container: ContainerBase) : GuiBase(container) {
+
+    val tile = (container.tileEntity as TileCombustionChamber)
+
+    override fun initComponents() {
+        components.add(CompBackground("combustion_chamber"))
+        val burningCallback = CallbackBarProvider(
+                { tile.combustionChamberModule.maxBurningTime.toDouble() - tile.combustionChamberModule.burningTime.toDouble() },
+                { tile.combustionChamberModule.maxBurningTime.toDouble() },
+                { 0.0 }
+        )
+        components.add(CompVerticalBar(burningCallback, 1, Vec2d(69, 64) + box.start,
+                { listOf(String.format("Fuel: %.1f%%", burningCallback.getLevel() * 100)) }))
+
+        val heatCallback = CallbackBarProvider(
+                { tile.combustionChamberModule.heat.toDouble() },
+                { 100.0.toKelvinFromCelsius() },
+                { 24.0.toKelvinFromCelsius() }
+        )
+        components.add(CompVerticalBar(heatCallback, 2, Vec2d(80, 64) + box.start,
+                { listOf("Heat: " + formatHeat(heatCallback.callback())) }))
+    }
+}
+
 

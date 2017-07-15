@@ -13,7 +13,8 @@ import com.cout970.magneticraft.util.vector.Vec2d
 
 val BAR_TEXTURES = resource("textures/gui/bar_textures.png")
 
-open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: Vec2d, val tooltip: () -> List<String> = { listOf<String>() }) : IComponent {
+open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: Vec2d,
+                           val tooltip: () -> List<String> = { listOf<String>() }) : IComponent {
 
     val size = Vec2d(5, 48)
     override val box: Box = Box(pos.copy(y = pos.y - size.y), size)
@@ -23,7 +24,8 @@ open class CompVerticalBar(val provider: IBarProvider, val index: Int, val pos: 
         gui.run {
             bindTexture(BAR_TEXTURES)
             val level = (provider.getLevel() * 48).toInt()
-            drawScaledTexture(Vec2d(pos.x, pos.yi - level), Vec2d(5, level), Vec2d(index * 5, 48 - level), Vec2d(64, 64))
+            drawScaledTexture(Vec2d(pos.x, pos.yi - level), Vec2d(5, level), Vec2d(index * 5, 48 - level),
+                    Vec2d(64, 64))
         }
     }
 
@@ -41,7 +43,11 @@ interface IBarProvider {
     fun getLevel(): Float
 }
 
-open class CallbackBarProvider(val callback: () -> Double, val max: () -> Double, val min: () -> Double) : IBarProvider {
+open class CallbackBarProvider(val callback: () -> Double, val max: () -> Double,
+                               val min: () -> Double) : IBarProvider {
 
-    override fun getLevel(): Float = clamp((callback.invoke() - min.invoke()) / (max.invoke() - min.invoke()), 1.0, 0.0).toFloat()
+    override fun getLevel(): Float = clamp((callback.invoke() - min.invoke()) / ensureNonZero(max.invoke() - min.invoke()), 1.0,
+            0.0).toFloat()
+
+    private fun ensureNonZero(x: Double): Double = if (x == 0.0) 1.0 else x
 }

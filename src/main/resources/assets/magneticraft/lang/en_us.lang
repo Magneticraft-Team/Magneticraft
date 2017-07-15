@@ -180,7 +180,7 @@ text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
 text.magneticraft.jei.crushing_table=Crushing Table
-text.magneticraft.jei.table_sieve=Table Sieve
+text.magneticraft.jei.sluice_Box=Sluice Box
 text.magneticraft.jei.hydraulic_press=Hydraulic Press
 text.magneticraft.jei.kiln=Beehive Kiln
 text.magneticraft.jei.grinder=Grinder

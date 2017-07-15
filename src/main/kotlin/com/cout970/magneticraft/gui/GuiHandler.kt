@@ -24,7 +24,7 @@ object GuiHandler : IGuiHandler {
             is TileBattery -> GuiBattery(serverElement)
             is TileElectricFurnace -> GuiElectricFurnace(serverElement)
             is TileComputer -> GuiComputer(serverElement)
-//            is TileFirebox -> GuiFirebox(serverElement)
+            is TileCombustionChamber -> GuiCombustionChamber(serverElement)
 //            is TileIcebox -> GuiIcebox(serverElement)
 //            is TileBrickFurnace -> GuiBrickFurnace(serverElement)
 //            is TileGrinder -> GuiGrinder(serverElement)
@@ -36,14 +36,14 @@ object GuiHandler : IGuiHandler {
         val pos = BlockPos(x, y, z)
         val tile = world.getTileEntity(pos)
         return when (tile) {
-            is TileBox -> ContainerBox(player, world, pos)
-            is TileShelvingUnit -> ContainerShelvingUnit(player, world, pos, ModuleShelvingUnit.Level.values()[ID])
-            is TileBattery -> ContainerBattery(player, world, pos)
-            is TileElectricFurnace -> ContainerElectricFurnace(player, world, pos)
+            is TileBox -> ContainerBox(tile, player, world, pos)
+            is TileShelvingUnit -> ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnit.Level.values()[ID])
+            is TileBattery -> ContainerBattery(tile, player, world, pos)
+            is TileElectricFurnace -> ContainerElectricFurnace(tile, player, world, pos)
             is TileComputer -> ContainerComputer(tile, player, world, pos)
+            is TileCombustionChamber -> ContainerCombustionChamber(tile, player, world, pos)
 //            is TileGrinder -> ContainerGrinder(player, world, BlockPos(x, y, z))
 //            is TileBrickFurnace -> ContainerBrickFurnace(player, world, BlockPos(x, y, z))
-//            is TileFirebox -> ContainerFirebox(player, world, BlockPos(x, y, z))
 //            is TileIcebox -> ContainerIcebox(player, world, BlockPos(x, y, z))
             else -> null
         }

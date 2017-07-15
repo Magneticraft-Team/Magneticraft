@@ -5,7 +5,7 @@ package com.cout970.magneticraft.gui.common.core
  */
 
 val DATA_ID_VOLTAGE_0 = 1
-val DATA_ID_BURNING_TIME = 2
+val DATA_ID_BURNING_TIME = 2 // used in furnaces and generators, don't mix
 val DATA_ID_MAX_BURNING_TIME = 3
 val DATA_ID_MACHINE_HEAT = 4
 val DATA_ID_MACHINE_PRODUCTION = 5

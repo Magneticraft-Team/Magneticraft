@@ -73,10 +73,10 @@ class MagneticraftPlugin : IModPlugin {
                     val outputs = (listOf(recipe.primaryOutput to 1f) + recipe.secondaryOutput)
                             .filter { it.first.isNotEmpty }
 
-                    recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
+                    recipeLayout.itemStacks.init(0, true, 41, 12)
                     val columns = Math.min(outputs.size, 9)
                     repeat(outputs.size) { index ->
-                        val x = 48 + 18 * (index % 9) - 18 * (columns / 2)
+                        val x = 48 + 18 * (index % 9) - 18 * Math.round(columns / 2.0 - 1).toInt()
                         val y = 51 + 18 * (index / 9) - 5
                         recipeLayout.itemStacks.init(index + 1, false, x, y)
                     }
