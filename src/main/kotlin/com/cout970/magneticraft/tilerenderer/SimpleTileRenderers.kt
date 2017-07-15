@@ -60,18 +60,6 @@ object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
     }
 }
 
-@RegisterRenderer(TileCoalGenerator::class)
-object TileRendererCoalGenerator : TileRendererSimple<TileCoalGenerator>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.coal_generator.registryName, "model") },
-        filters = listOf({ name -> name == "Shape_0" }, { name -> name != "Shape_0" }) //TODO add rotation animation
-) {
-
-    override fun renderModels(models: List<ModelCache>, te: TileCoalGenerator) {
-        Utilities.rotateFromCenter(te.facing, 180f)
-        models.forEach { it.renderTextured() }
-    }
-}
-
 @RegisterRenderer(TileElectricPole::class)
 object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
         modelLocation = { ModelResourceLocation(ElectricMachines.electric_pole.registryName, "model") }

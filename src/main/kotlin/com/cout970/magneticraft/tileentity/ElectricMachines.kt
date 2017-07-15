@@ -155,12 +155,6 @@ class TileElectricFurnace : TileBase(), ITickable {
     }
 }
 
-@RegisterTileEntity("coal_generator")
-class TileCoalGenerator : TileBase(), ITickable {
-
-    val facing: EnumFacing get() = getBlockState().getOrientation()
-}
-
 @RegisterTileEntity("electric_pole")
 class TileElectricPole : TileBase(), ITickable {
     val node = ElectricNode(container.ref)

@@ -41,13 +41,11 @@ import net.minecraft.world.World
  */
 object ElectricMachines : IBlockMaker {
 
-    val PROPERTY_ORIENTATION_AND_LEVEL = PropertyEnum.create("orientation_and_level", OrientationAndLevel::class.java)!!
     val PROPERTY_POLE_ORIENTATION = PropertyEnum.create("pole_orientation", PoleOrientation::class.java)!!
 
     lateinit var connector: BlockBase private set
     lateinit var battery: BlockBase private set
     lateinit var electric_furnace: BlockBase private set
-    lateinit var coal_generator: BlockBase private set
     lateinit var electric_pole: BlockBase private set
     lateinit var electric_pole_transformer: BlockBase private set
     lateinit var infinite_energy: BlockBase private set
@@ -120,35 +118,6 @@ object ElectricMachines : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        coal_generator = builder.withName("coal_generator").copy {
-            states = OrientationAndLevel.values().toList()
-            factoryFilter = { state -> state[PROPERTY_ORIENTATION_AND_LEVEL] != OrientationAndLevel.UP }
-            factory = factoryOf(::TileCoalGenerator)
-            alwaysDropDefault = true
-            generateDefaultItemModel = false
-            hasCustomModel = true
-            customModels = listOf(
-                    "model" to resource("models/block/mcx/coal_generator.mcx"),
-                    "inventory" to resource("models/block/mcx/coal_generator_inv.mcx")
-            )
-            //methods
-            blockStatesToPlace = {
-                val orientation = OrientationAndLevel.of(it.player.horizontalFacing)
-                val base = it.default.withProperty(PROPERTY_ORIENTATION_AND_LEVEL, orientation)
-                val up = it.default.withProperty(PROPERTY_ORIENTATION_AND_LEVEL, OrientationAndLevel.UP)
-                listOf(BlockPos.ORIGIN to base, BlockPos.ORIGIN.up() to up)
-            }
-            onBlockBreak = {
-                if (it.state[PROPERTY_ORIENTATION_AND_LEVEL] == OrientationAndLevel.UP) {
-                    it.worldIn.destroyBlock(it.pos.down(), true)
-                } else {
-                    it.worldIn.destroyBlock(it.pos.up(), true)
-                }
-            }
-            pickBlock = CommonMethods::pickDefaultBlock
-            onActivated = CommonMethods::openGui
-        }.build()
-
         electric_pole = builder.withName("electric_pole").copy {
             material = Material.WOOD
             states = PoleOrientation.values().toList()
@@ -208,7 +177,7 @@ object ElectricMachines : IBlockMaker {
             factory = factoryOf(::TileInfiniteEnergy)
         }.build()
 
-        return itemBlockListOf(connector, battery, electric_furnace, coal_generator, electric_pole, infinite_energy) +
+        return itemBlockListOf(connector, battery, electric_furnace, electric_pole, infinite_energy) +
                (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
     }
 
@@ -305,37 +274,6 @@ object ElectricMachines : IBlockMaker {
                     PoleOrientation.DOWN_4 -> pos.offset(EnumFacing.UP, 4)
                     else -> pos
                 }
-            }
-        }
-    }
-
-    enum class OrientationAndLevel(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val facing: EnumFacing,
-            val down: Boolean
-    ) : IStatesEnum, IStringSerializable {
-
-        NORTH("north", true, EnumFacing.NORTH, true),
-        SOUTH("south", false, EnumFacing.SOUTH, true),
-        EAST("east", false, EnumFacing.EAST, true),
-        WEST("west", false, EnumFacing.WEST, true),
-        UP("up", false, EnumFacing.UP, false);
-
-        override fun getName() = name.toLowerCase()
-        override val properties: List<IProperty<*>> get() = listOf(PROPERTY_ORIENTATION_AND_LEVEL)
-
-        override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_ORIENTATION_AND_LEVEL, this)
-        }
-
-        companion object {
-            fun of(facing: EnumFacing): OrientationAndLevel = when (facing) {
-                EnumFacing.NORTH -> OrientationAndLevel.NORTH
-                EnumFacing.SOUTH -> OrientationAndLevel.SOUTH
-                EnumFacing.WEST -> OrientationAndLevel.WEST
-                EnumFacing.EAST -> OrientationAndLevel.EAST
-                else -> OrientationAndLevel.UP
             }
         }
     }

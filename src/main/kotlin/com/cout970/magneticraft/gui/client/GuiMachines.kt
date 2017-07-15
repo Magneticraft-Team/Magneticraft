@@ -133,7 +133,7 @@ class GuiCombustionChamber(container: ContainerBase) : GuiBase(container) {
 
         val heatCallback = CallbackBarProvider(
                 { tile.combustionChamberModule.heat.toDouble() },
-                { 100.0.toKelvinFromCelsius() },
+                { 99.5.toKelvinFromCelsius() },
                 { 24.0.toKelvinFromCelsius() }
         )
         components.add(CompVerticalBar(heatCallback, 2, Vec2d(80, 64) + box.start,

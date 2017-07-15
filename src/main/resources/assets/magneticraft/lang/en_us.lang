@@ -120,7 +120,8 @@ tile.magneticraft.battery_north.name=Battery Block
 tile.magneticraft.electric_pole_north.name=Electric Pole
 tile.magneticraft.electric_pole_transformer_north.name=Electric Pole Transformer
 tile.magneticraft.electric_furnace_north.name=Electric furnace
-#tile.magneticraft.coal_generator_north.name=Coal Generator
+tile.magneticraft.combustion_chamber_north.name=Combustion Chamber
+tile.magneticraft.steam_boiler_normal.name=Combustion Chamber
 
 #tile.magneticraft.electric_heater_off.name=Electric Heater
 #tile.magneticraft.electric_heater_on.name=Electric Heater
@@ -198,3 +199,5 @@ text.magneticraft.multiblock.activate=Successfully activated
 #death.attack.kiln.player=%2$s pushed %1s$ into a blender.
 
 tooltip.magneticraft.item_storage.energy=%f/%fJ
+
+fluid.magneticraft.steam=Steam
