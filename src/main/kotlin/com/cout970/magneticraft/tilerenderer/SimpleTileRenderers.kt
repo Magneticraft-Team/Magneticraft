@@ -9,6 +9,7 @@ import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
+import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
@@ -324,5 +325,21 @@ object TileRendererSteamBoiler : TileRendererSimple<TileSteamBoiler>(
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileSteamBoiler) {
         models.forEach { it.renderTextured() }
+    }
+}
+
+@RegisterRenderer(TileSteamEngine::class)
+object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
+        modelLocation = { ModelResourceLocation(Multiblocks.steamEngine.registryName, "model") }
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileSteamEngine) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockSteamEngine)
+            return
+        }
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(-1, 0, -1)
+        models[0].renderTextured()
     }
 }

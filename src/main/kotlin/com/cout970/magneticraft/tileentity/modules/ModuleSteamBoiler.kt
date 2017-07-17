@@ -7,6 +7,7 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.ConversionTable
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 
@@ -52,7 +53,7 @@ class ModuleSteamBoiler(
         val stack = outputTank.fluid ?: return
         if (stack.amount <= 0) return
         val tile = world.getTileEntity(pos.up()) ?: return
-        val handler = tile.getOrNull(FLUID_HANDLER) ?: return
+        val handler = tile.getOrNull(FLUID_HANDLER, EnumFacing.DOWN) ?: return
 
         val amount = handler.fill(stack, false)
         if (amount <= 0) return

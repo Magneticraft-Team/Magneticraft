@@ -94,7 +94,7 @@ class TileWaterGenerator : TileBase(), ITickable {
         super.update()
         enumValues<EnumFacing>().forEach { dir ->
             val tile = world.getTileEntity(pos.offset(dir))
-            val handler = tile?.getOrNull(FLUID_HANDLER) ?: return@forEach
+            val handler = tile?.getOrNull(FLUID_HANDLER, dir.opposite) ?: return@forEach
 
             val water = FluidStack(FluidRegistry.WATER, Config.waterGeneratorPerTickWater)
             val amount = handler.fill(water, false)

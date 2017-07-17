@@ -11,7 +11,7 @@ import net.minecraftforge.common.capabilities.Capability
 class ModuleMultiblockCenter(
         val multiblockStructure: Multiblock,
         val facingGetter: () -> EnumFacing,
-        val filter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Boolean = { cap, side, pos -> false },
+        val capabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any?,
         override val name: String = "module_multiblock"
 ) : IModule, IMultiblockCenter {
 
@@ -29,10 +29,11 @@ class ModuleMultiblockCenter(
         set(value) {}
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
-        return container.tile.hasCapability(capability, facing) && (filter?.invoke(capability, facing, relPos) ?: true)
+        return capabilityGetter.invoke(capability, facing, relPos) != null
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
-        return container.tile.getCapability(capability, facing)
+        return capabilityGetter.invoke(capability, facing, relPos) as? T?
     }
 }

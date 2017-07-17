@@ -20,15 +20,12 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.times
-import com.cout970.magneticraft.util.vector.toVec3d
-import com.cout970.magneticraft.util.vector.vec3Of
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.math.Vec3i
 
 /**
  * Created by cout970 on 2017/06/29.
@@ -83,9 +80,11 @@ class TileConnector : TileBase(), ITickable {
         return true
     }
 
-    fun getConnectableDirections(): List<Vec3i> {
+    fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
         return if (facing.opposite.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
-            listOf(facing.opposite.directionVec, facing.opposite.directionVec * 2)
+            listOf(
+                    facing.opposite.toBlockPos() to facing,
+                    facing.opposite.toBlockPos() * 2 to facing)
         } else emptyList()
     }
 

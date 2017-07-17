@@ -23,7 +23,7 @@ import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.length
 import com.cout970.magneticraft.util.vector.minus
 import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.toEnumFacing
+import com.cout970.magneticraft.util.vector.toBlockPos
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
@@ -41,7 +41,8 @@ class ModuleElectricity(
         val onWireChange: (EnumFacing?) -> Unit = {},
         val onUpdateConnections: (ModuleElectricity) -> Unit = {},
         val maxWireDistance: Double = 16.0,
-        val connectableDirections: () -> List<Vec3i> = { ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.directionVec } },
+        val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
+        val capabilityFilter: (EnumFacing?) -> Boolean = { true },
         override val name: String = "module_electricity"
 ) : IModule, IElectricNodeHandler {
 
@@ -90,7 +91,7 @@ class ModuleElectricity(
             val thisNode = electricNodes.find { it.id.name == localName } ?: return@forEach
 
             val otherTile = world.getTileEntity(nodeID.pos) ?: return@forEach
-            val other = otherTile.getOrNull(ELECTRIC_NODE_HANDLER) ?: return@forEach
+            val other = otherTile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: return@forEach
             val otherNode = (other.getNode(nodeID) as? IElectricNode) ?: return@forEach
 
             tryConnect(this, thisNode, other, otherNode, null)
@@ -102,9 +103,8 @@ class ModuleElectricity(
         clearNormalConnections()
         electricNodes.forEach { thisNode ->
 
-            connectableDirections().forEach directions@ { dir ->
-                val side = dir.toEnumFacing()
-                val tile = world.getTileEntity(pos.add(dir)) ?: return@directions
+            connectableDirections().forEach directions@ { (vec, side) ->
+                val tile = world.getTileEntity(pos.add(vec)) ?: return@directions
                 val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return@directions
                 if (handler === this) return@directions
 
@@ -113,7 +113,7 @@ class ModuleElectricity(
                         .map { it as IElectricNode }
 
                 electricNodes.forEach { otherNode ->
-                    tryConnect(this, thisNode, handler, otherNode, side)
+                    tryConnect(this, thisNode, handler, otherNode, side.opposite)
                 }
             }
         }
@@ -140,7 +140,7 @@ class ModuleElectricity(
 
         val filter: (TileEntity) -> Boolean = { it != container.tile }
         val handlers = world.getTileEntitiesIn(start, end, filter).mapNotNull {
-            it.getOrNull(ELECTRIC_NODE_HANDLER)
+            it.getOrNull(ELECTRIC_NODE_HANDLER, null)
         }
 
         handlers.forEach { handler ->
@@ -239,7 +239,7 @@ class ModuleElectricity(
 
     fun getHandler(node: IElectricNode): IElectricNodeHandler? {
         val tile = node.world.getTileEntity(node.pos) ?: return null
-        return tile.getOrNull(ELECTRIC_NODE_HANDLER) ?: return null
+        return tile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: return null
     }
 
     override fun getNodes(): MutableList<INode> = electricNodes.toMutableList()
@@ -253,11 +253,12 @@ class ModuleElectricity(
     override fun getOutputConnections(): MutableList<IElectricConnection> = outputNormalConnections with outputWiredConnections
 
     override fun hasCapability(cap: Capability<*>, facing: EnumFacing?): Boolean {
-        return cap == ELECTRIC_NODE_HANDLER
+        return cap == ELECTRIC_NODE_HANDLER && capabilityFilter.invoke(facing)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
+        if (!capabilityFilter.invoke(facing)) return null
         return this as T
     }
 

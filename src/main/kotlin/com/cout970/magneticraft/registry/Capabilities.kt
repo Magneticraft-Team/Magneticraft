@@ -97,7 +97,7 @@ fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
     return null
 }
 
-fun <T> TileEntity.getOrNull(cap: Capability<T>?, side: EnumFacing? = null): T? {
+fun <T> TileEntity.getOrNull(cap: Capability<T>?, side: EnumFacing?): T? {
     cap ?: return null
     if (this is ICapabilityProvider && this.hasCapability(cap, side)) {
         return this.getCapability(cap, side)

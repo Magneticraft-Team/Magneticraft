@@ -5,11 +5,14 @@ import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
+import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.interpolate
@@ -19,6 +22,7 @@ import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/07/03.
@@ -34,17 +38,21 @@ class TileMultiblockGap : TileBase() {
     }
 }
 
-abstract class TileMultiblock : TileBase(){
+abstract class TileMultiblock : TileBase() {
 
     val facing: EnumFacing
         get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: EnumFacing.NORTH
     val active: Boolean
         get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.active ?: false
 
+    @Suppress("LeakingThis")
     val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
-            facingGetter = { facing }
+            facingGetter = { facing },
+            capabilityGetter = this::getCapability
     )
+
+    open fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? = null
 
     abstract fun getMultiblock(): Multiblock
 
@@ -119,3 +127,41 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
     }
 }
 
+@RegisterTileEntity("steam_engine")
+class TileSteamEngine : TileMultiblock(), ITickable {
+    override fun getMultiblock(): Multiblock = MultiblockSteamEngine
+
+    val tank = Tank(16000)
+    val fluidModule = ModuleFluidHandler(tank)
+    val node = ElectricNode(container.ref)
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            connectableDirections = { emptyList() },
+            capabilityFilter = { false }
+    )
+    val storageModule = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10_000,
+            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE,
+            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+    )
+    val steamEngineModule = ModuleSteamEngine(tank, storageModule)
+
+    init {
+        initModules(multiblockModule, fluidModule, energyModule, storageModule, steamEngineModule)
+    }
+
+    override fun update() {
+        super.update()
+    }
+
+    override fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
+        if (cap == ELECTRIC_NODE_HANDLER && side == EnumFacing.UP) {
+            val rel = facing.opposite.rotatePoint(BlockPos.ORIGIN, BlockPos(2, 0, 2))
+            if (relPos == rel) {
+                return energyModule
+            }
+        }
+        return null
+    }
+}

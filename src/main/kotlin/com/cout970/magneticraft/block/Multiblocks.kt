@@ -10,12 +10,14 @@ import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
+import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
 import com.cout970.magneticraft.tileentity.TileMultiblockGap
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSolarPanel
+import com.cout970.magneticraft.tileentity.TileSteamEngine
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleMultiblock
 import com.cout970.magneticraft.util.resource
@@ -42,6 +44,7 @@ object Multiblocks : IBlockMaker {
     lateinit var gap: BlockBase private set
     lateinit var solarPanel: BlockBase private set
     lateinit var shelvingUnit: BlockBase private set
+    lateinit var steamEngine: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -99,8 +102,19 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        steamEngine = builder.withName("steam_engine").copy {
+            factory = factoryOf(::TileSteamEngine)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/steam_engine.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockSteamEngine })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
 
-        return itemBlockListOf(gap, solarPanel, shelvingUnit)
+
+        return itemBlockListOf(gap, solarPanel, shelvingUnit, steamEngine)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

@@ -1,17 +1,23 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.getEnumFacing
 import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.util.vector.minus
+import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/07/03.
@@ -28,6 +34,17 @@ class ModuleMultiblock(
     override var centerPos: BlockPos? = null
     //orientation of the multiblock
     override var multiblockFacing: EnumFacing? = null
+
+    override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
+        centerPos?.let { relPos ->
+            world.setBlockState(pos.up(5) - relPos, Blocks.BEDROCK.defaultState)
+
+            val main = world.getTile<TileBase>(pos - relPos) ?: return null
+            val center = main.getModule<ModuleMultiblockCenter>() ?: return null
+            return center.getCapability(cap, facing, relPos)
+        }
+        return super.getCapability(cap, facing)
+    }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
         if (multiblock != null) {
