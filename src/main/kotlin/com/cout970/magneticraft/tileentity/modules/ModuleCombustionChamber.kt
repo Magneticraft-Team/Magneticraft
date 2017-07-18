@@ -47,8 +47,8 @@ class ModuleCombustionChamber(
                 burningTime = 0
             } else {
                 if (heat >= 99.toKelvinFromCelsius()) {
-                    burningTime++
-                    getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK)
+                    burningTime += 4
+                    getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * 4)
                 } else {
                     heat += HEAT_RISING_SPEED
                 }

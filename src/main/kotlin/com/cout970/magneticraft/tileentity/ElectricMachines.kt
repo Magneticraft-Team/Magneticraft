@@ -25,6 +25,7 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.util.interpolate
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
@@ -67,7 +68,8 @@ class TileConnector : TileBase(), ITickable {
                 val tile = world.getTileEntity(pos.offset(facing.opposite))
                 val handler = tile?.getOrNull(FORGE_ENERGY, facing)
                 if (handler != null) {
-                    val amount = 400
+                    val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+                            ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
                     val accepted = Math.min(
                             handler.receiveEnergy(amount, false),
                             node.applyPower(-amount.toDouble(), false).toInt()
