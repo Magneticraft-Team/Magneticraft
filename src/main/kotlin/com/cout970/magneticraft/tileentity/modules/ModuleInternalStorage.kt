@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity.modules
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.gui.common.core.DATA_ID_CHARGE_RATE
 import com.cout970.magneticraft.gui.common.core.DATA_ID_STORAGE
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
@@ -22,12 +23,15 @@ class ModuleInternalStorage(
         val mainNode: IElectricNode,
         val capacity: Int,
         val maxChargeSpeed: Double = 200.0,
-        val upperVoltageLimit: Double = 60.0,
-        val lowerVoltageLimit: Double = 60.0,
+        val upperVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+        val lowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
         override val name: String = "module_electric_storage"
 ) : IModule {
     lateinit override var container: IModuleContainer
 
+    companion object {
+        @JvmStatic val INTERVAL = 5
+    }
 
     var energy: Int = 0
     val chargeRate = ValueAverage(20)
@@ -35,17 +39,25 @@ class ModuleInternalStorage(
     override fun update() {
         if (world.isServer) {
             if (mainNode.voltage > upperVoltageLimit) {
-                val speed = interpolate(mainNode.voltage, upperVoltageLimit, 120.0) * maxChargeSpeed
+                val speed = interpolate(mainNode.voltage, upperVoltageLimit,
+                        upperVoltageLimit + INTERVAL) * maxChargeSpeed
+
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), capacity - energy)
-                mainNode.applyPower(-finalSpeed.toDouble(), false)
-                energy += finalSpeed
-                chargeRate += finalSpeed
+                if (finalSpeed != 0) {
+                    mainNode.applyPower(-finalSpeed.toDouble() * ElectricConstants.SCALE, false)
+                    energy += finalSpeed
+                    chargeRate += finalSpeed
+                }
             } else if (mainNode.voltage < lowerVoltageLimit) {
-                val speed = (1 - interpolate(mainNode.voltage, 60.0, lowerVoltageLimit)) * maxChargeSpeed
+                val speed = (1 - interpolate(mainNode.voltage, lowerVoltageLimit,
+                        lowerVoltageLimit + INTERVAL)) * maxChargeSpeed
+
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), energy)
-                mainNode.applyPower(finalSpeed.toDouble(), false)
-                energy -= finalSpeed
-                chargeRate -= finalSpeed
+                if (finalSpeed != 0) {
+                    mainNode.applyPower(finalSpeed.toDouble() * ElectricConstants.SCALE, false)
+                    energy -= finalSpeed
+                    chargeRate -= finalSpeed
+                }
             }
             chargeRate.tick()
         }

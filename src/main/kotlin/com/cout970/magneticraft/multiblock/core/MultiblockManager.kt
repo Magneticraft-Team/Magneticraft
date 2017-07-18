@@ -1,7 +1,9 @@
 package com.cout970.magneticraft.multiblock.core
 
+import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
+import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.vector.rotatePoint
 import net.minecraft.util.EnumFacing
@@ -23,11 +25,12 @@ object MultiblockManager {
         multiblocks.put(mb.name, mb)
     }
 
-    fun getMultiblock(name: String) = multiblocks[name]
+    fun getMultiblock(name: String) = multiblocks[name] ?: throw IllegalStateException("Unregistered $MOD_ID Multiblock: $name, Please contact with the author")
 
     fun registerDefaults() {
         registerMultiblock(MultiblockSolarPanel)
         registerMultiblock(MultiblockShelvingUnit)
+        registerMultiblock(MultiblockSteamEngine)
 //        registerMultiblock(MultiblockHydraulicPress)
 //        registerMultiblock(MultiblockKiln)
 //        registerMultiblock(MultiblockGrinder)

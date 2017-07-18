@@ -22,6 +22,7 @@ open class ElectricConnection(
     override fun iterate() {
         if (firstNode.world.isClient) return
 
+
         //total resistance of the connection
         val R = (firstNode.resistance + secondNode.resistance) * separationDistance
         //capacity in the connection

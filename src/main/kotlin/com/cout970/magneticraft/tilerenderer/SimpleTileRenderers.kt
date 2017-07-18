@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tilerenderer
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.*
@@ -18,6 +19,7 @@ import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.minus
+import com.cout970.magneticraft.util.vector.vec3Of
 import com.cout970.modelloader.ModelData
 import com.cout970.modelloader.QuadProvider
 import com.cout970.modelloader.QuadStorage
@@ -76,6 +78,14 @@ object TileRendererConnector : TileRendererSimple<TileConnector>(
 
         bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
+
+        if (Debug.DEBUG) {
+            Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
+            Utilities.renderFloatingLabel("I: %.2f".format(te.node.amperage), vec3Of(0, 1.25, 0))
+            Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
+            Utilities.renderFloatingLabel("R: %.2f".format(te.node.resistance), vec3Of(0, 1.75, 0))
+        }
+
         Utilities.rotateAroundCenter(te.facing)
         models[0].renderTextured()
         if (te.hasBase) {

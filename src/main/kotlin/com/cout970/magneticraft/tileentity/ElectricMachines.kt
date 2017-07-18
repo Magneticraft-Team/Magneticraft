@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
@@ -7,6 +8,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
 import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
@@ -15,8 +17,11 @@ import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
@@ -34,7 +39,7 @@ import net.minecraft.util.math.Vec3d
 @RegisterTileEntity("connector")
 class TileConnector : TileBase(), ITickable {
 
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(container.ref, capacity = 1.0)
     val wrapper = WireConnectorWrapper(node, this::getConnectors)
 
     val electricModule = ModuleElectricity(
@@ -57,6 +62,26 @@ class TileConnector : TileBase(), ITickable {
 
     override fun update() {
         super.update()
+        if (world.isServer) {
+            if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
+                val tile = world.getTileEntity(pos.offset(facing.opposite))
+                val handler = tile?.getOrNull(FORGE_ENERGY, facing)
+                if (handler != null) {
+                    val amount = 400
+                    val accepted = Math.min(
+                            handler.receiveEnergy(amount, false),
+                            node.applyPower(-amount.toDouble(), false).toInt()
+                    )
+                    if (accepted > 0) {
+                        handler.receiveEnergy(accepted, true)
+                        node.applyPower(-accepted.toDouble(), false)
+                    }
+                }
+            }
+        }
+        if (Debug.DEBUG) {
+            sendUpdateToNearPlayers()
+        }
     }
 
     override fun onBlockStateUpdates() {
@@ -104,7 +129,7 @@ class TileConnector : TileBase(), ITickable {
 class TileBattery : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(container.ref, capacity = 8.0)
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node),
@@ -113,9 +138,9 @@ class TileBattery : TileBase(), ITickable {
     val storageModule = ModuleInternalStorage(
             capacity = Config.blockBatteryCapacity,
             mainNode = node,
-            maxChargeSpeed = 400.0,
-            upperVoltageLimit = 100.0,
-            lowerVoltageLimit = 90.0
+            maxChargeSpeed = 640.0,
+            upperVoltageLimit = ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE,
+            lowerVoltageLimit = ElectricConstants.TIER_1_BATTERY_DISCHARGE_VOLTAGE
     )
     val invModule = ModuleInventory(2)
 
@@ -174,7 +199,7 @@ class TileElectricFurnace : TileBase(), ITickable {
 
 @RegisterTileEntity("electric_pole")
 class TileElectricPole : TileBase(), ITickable {
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(container.ref, capacity = 1.0)
     val wrapper = WireConnectorWrapper(node, this::getConnectors)
 
     val electricModule = ModuleElectricity(
@@ -204,7 +229,7 @@ class TileElectricPole : TileBase(), ITickable {
 
 @RegisterTileEntity("electric_pole_transformer")
 class TileElectricPoleTransformer : TileBase(), ITickable {
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(container.ref, capacity = 1.0)
     val wrapper = WireConnectorWrapper(node, this::getConnectors)
     val wrapper2 = WireConnectorWrapper(node, this::getConnectors2)
 

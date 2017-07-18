@@ -74,7 +74,7 @@ object Tools : IItemMaker {
     fun onUseVoltmeter(args: OnItemUseArgs): EnumActionResult {
         if (args.worldIn.isServer) {
             val tile = args.worldIn.getTileEntity(args.pos) ?: return EnumActionResult.PASS
-            val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: return EnumActionResult.PASS
+            val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, args.facing) ?: return EnumActionResult.PASS
 
             val msg = handler.nodes
                     .filterIsInstance<IElectricNode>()

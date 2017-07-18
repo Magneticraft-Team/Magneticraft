@@ -3,7 +3,9 @@ package com.cout970.magneticraft.api.internal.energy
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.misc.world.isClient
 import net.minecraft.nbt.NBTTagCompound
+
 
 /**
  * Created by cout970 on 11/06/2016.
@@ -12,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound
 open class ElectricNode(
         val ref: ITileRef,
         private val resistance: Double = 0.0001,
-        private val capacity: Double = 1.0,
+        private val capacity: Double = 4.0,
         private val name: String = "electric_node_1"
 ) : IElectricNode {
 
@@ -52,6 +54,7 @@ open class ElectricNode(
             amperage = amperageCount * 0.5
             amperageCount = 0.0
         } else {
+            if (world.isClient) return
             amperage = 0.0
             amperageCount = 0.0
             lastTick = tick
@@ -65,6 +68,31 @@ open class ElectricNode(
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {
+//        if (power > 0) {
+////            val squared = voltage * voltage + Math.abs(power) * 2
+//            val diff: Double
+//            if (voltage < 60) {
+//                val squared = voltage * voltage + Math.abs(power) * 2
+//                diff = Math.sqrt(squared) - Math.abs(voltage)
+//            } else {
+//                diff = power / 60
+//            }
+//            if (!simulated) applyCurrent(diff)
+//            return power
+//        } else {
+//            if (voltage < 60) {
+//                val squared = voltage * voltage - Math.abs(power) * 2
+//                val powerUsed = if (squared > 0) -power else (voltage * voltage) / 2
+//                val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
+//                if (!simulated) applyCurrent(diff)
+//                return powerUsed
+//            } else {
+//                val diff = power / 60
+//                if (!simulated) applyCurrent(diff)
+//                return -power
+//            }
+//        }
+
         if (power > 0) {
             val squared = voltage * voltage + Math.abs(power) * 2
             val diff = Math.sqrt(squared) - Math.abs(voltage)

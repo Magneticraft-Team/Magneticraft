@@ -18,15 +18,21 @@ class ModuleSteamEngine(
     override lateinit var container: IModuleContainer
 
     companion object {
-        val STEAM_PER_TICK = 10
-        val ENERGY_PER_TICK = (STEAM_PER_TICK * ConversionTable.STEAM_TO_J).toInt()
+        val MAX_ENERGY_PER_TICK = 160
+        val STEAM_PER_OPERATION = 10
+        val ENERGY_PER_TICK = (STEAM_PER_OPERATION * ConversionTable.STEAM_TO_J).toInt()
+        val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_TICK
     }
 
     override fun update() {
         if (world.isClient) return
-        if (steamTank.fluidAmount > STEAM_PER_TICK && (storage.capacity - storage.energy) > ENERGY_PER_TICK) {
-            steamTank.drain(STEAM_PER_TICK, true)
-            storage.energy += ENERGY_PER_TICK
+        if (steamTank.fluidAmount < STEAM_PER_OPERATION) return
+        val fluidLimit = steamTank.fluidAmount / STEAM_PER_OPERATION
+        val energyLimit = (storage.capacity - storage.energy) / ENERGY_PER_TICK
+        val operations = Math.min(Math.min(fluidLimit, energyLimit), MAX_OPERATIONS_PER_TICK)
+        if (operations > 0) {
+            steamTank.drain(STEAM_PER_OPERATION * operations, true)
+            storage.energy += ENERGY_PER_TICK * operations
         }
     }
 }

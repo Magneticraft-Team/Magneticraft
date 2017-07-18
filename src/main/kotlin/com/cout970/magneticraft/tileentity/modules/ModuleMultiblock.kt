@@ -13,7 +13,6 @@ import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.getEnumFacing
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.minus
-import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -35,10 +34,16 @@ class ModuleMultiblock(
     //orientation of the multiblock
     override var multiblockFacing: EnumFacing? = null
 
+    override fun onActivate() {
+        container.markDirty()
+    }
+
+    override fun onDeactivate() {
+        container.markDirty()
+    }
+
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
         centerPos?.let { relPos ->
-            world.setBlockState(pos.up(5) - relPos, Blocks.BEDROCK.defaultState)
-
             val main = world.getTile<TileBase>(pos - relPos) ?: return null
             val center = main.getModule<ModuleMultiblockCenter>() ?: return null
             return center.getCapability(cap, facing, relPos)

@@ -38,12 +38,12 @@ object MultiblockSteamEngine : Multiblock() {
                 zLayers(listOf(P, I, I), // y = 0
                         listOf(P, I, I),
                         listOf(P, I, I),
-                        listOf(P, I, I)),
+                        listOf(I, I, I)),
 
                 zLayers(listOf(P, I, I), // y = 0
                         listOf(P, I, I),
                         listOf(P, P, I),
-                        listOf(P, P, I)),
+                        listOf(I, P, I)),
 
                 zLayers(listOf(M, I, I), // y = 0
                         listOf(P, I, I),

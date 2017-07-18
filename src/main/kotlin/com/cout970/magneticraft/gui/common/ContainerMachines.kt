@@ -47,8 +47,8 @@ class ContainerBattery(val tile: TileBattery, player: EntityPlayer, world: World
 
     init {
         tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 102, 48))
-            addSlotToContainer(SlotItemHandler(inv, 1, 102, 16))
+            addSlotToContainer(SlotItemHandler(inv, 0, 102, 16))
+            addSlotToContainer(SlotItemHandler(inv, 1, 102, 48))
 
             inventoryRegions += InventoryRegion(0..0, filter = { FORGE_ENERGY!!.fromItem(it)?.canReceive() ?: false })
             inventoryRegions += InventoryRegion(1..1, filter = { FORGE_ENERGY!!.fromItem(it)?.canExtract() ?: false })

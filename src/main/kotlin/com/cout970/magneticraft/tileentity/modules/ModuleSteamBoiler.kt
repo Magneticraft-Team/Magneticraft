@@ -22,8 +22,13 @@ class ModuleSteamBoiler(
 ) : IModule {
 
     override lateinit var container: IModuleContainer
-    val MAX_HEAT_UNITS = 100f
     var heatUnits = 0f
+
+    companion object {
+        val MAX_HEAT_UNITS = 100f
+        val MAX_STEAM_PER_TICK = 40
+        val MAX_WATER_PER_TICK = (MAX_STEAM_PER_TICK / ConversionTable.WATER_TO_STEAM).toInt()
+    }
 
     fun applyHeat(heat: Float) {
         if (heat + heatUnits > MAX_HEAT_UNITS) return
@@ -35,18 +40,20 @@ class ModuleSteamBoiler(
         fillTopTank()
         // has heat
         if (heatUnits <= 0) return
-        // has water
-        inputTank.drainInternal(1, false) ?: return
-        // steam FluidStack
-        val fluid = FluidRegistry.getFluid("steam") ?: return
-        val fluidStack = FluidStack(fluid, ConversionTable.WATER_TO_STEAM.toInt())
-        //has space for steam
-        if (outputTank.fillInternal(fluidStack, false) != fluidStack.amount) return
+        val waterLimit = inputTank.fluidAmount
+        if (waterLimit <= 0) return
 
+        val spaceLimit = (outputTank.capacity - outputTank.fluidAmount) / ConversionTable.WATER_TO_STEAM.toInt()
+        if (spaceLimit <= 0) return
+
+        val operations = listOf(waterLimit, spaceLimit, MAX_WATER_PER_TICK, heatUnits.toInt()).min()!!
+        if (operations <= 0) return
+
+        val fluid = FluidRegistry.getFluid("steam") ?: return
         // boil water
-        inputTank.drainInternal(1, true)
-        outputTank.fillInternal(fluidStack, true)
-        heatUnits--
+        inputTank.drainInternal(operations, true)
+        outputTank.fillInternal(FluidStack(fluid, operations * ConversionTable.WATER_TO_STEAM.toInt()), true)
+        heatUnits -= operations
     }
 
     fun fillTopTank() {

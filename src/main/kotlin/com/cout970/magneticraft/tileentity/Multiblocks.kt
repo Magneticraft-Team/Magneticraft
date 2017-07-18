@@ -77,7 +77,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarPanel
 
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(container.ref, capacity = 8.0)
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node),
@@ -133,7 +133,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     val tank = Tank(16000)
     val fluidModule = ModuleFluidHandler(tank)
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(container.ref, capacity = 8.0)
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             connectableDirections = { emptyList() },
