@@ -1,7 +1,9 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.item.Crafting
 import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.item.core.ItemBase
+import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -19,6 +21,7 @@ fun registerOreDictionaryEntries() {
     register(Metals.lightPlates, "lightPlate")
     register(Metals.heavyPlates, "heavyPlate")
     register(Metals.chunks, "chunk")
+    OreDictionary.registerOre("dustSulfur", Crafting.crafting.stack(1, Crafting.meta["sulfur"]!!))
 }
 
 private fun register(item: ItemBase, prefix: String){

@@ -2,28 +2,24 @@
   "type": "forge:ore_shaped",
   "pattern": [
     " A ",
-    "BCD",
-    "BCD"
+    "BCB",
+    "BCB"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper"
-    },
-    "B": {
-      "type": "forge:ore_dict",
-      "ore": "lightPlateCobalt"
-    },
-    "C": {
-      "type": "forge:ore_dict",
       "ore": "nuggetCopper"
     },
-    "D": {
+    "B": {
+      "item": "magneticraft:battery_item_low",
+      "nbt": "{}"
+    },
+    "C": {
       "type": "forge:ore_dict",
       "ore": "lightPlateLead"
     }
   },
   "result": {
-    "item": "magneticraft:battery_item"
+    "item": "magneticraft:battery_item_medium"
   }
 }

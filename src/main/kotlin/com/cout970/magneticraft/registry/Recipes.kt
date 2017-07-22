@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
+import com.cout970.magneticraft.item.Crafting
 import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraft.init.Blocks
@@ -34,6 +35,7 @@ fun registerRecipes() {
     addCrushingTableRecipe(ItemStack(Ores.ores, 1, 1), Metals.chunks.stack(1, 3))
     addCrushingTableRecipe(ItemStack(Ores.ores, 1, 2), Metals.chunks.stack(1, 4))
     addCrushingTableRecipe(ItemStack(Ores.ores, 1, 3), Metals.chunks.stack(1, 5))
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 4), Crafting.crafting.stack(1, Crafting.meta["sulfur"]!!))
     // limestone
     addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
     addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))

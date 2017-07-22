@@ -13,16 +13,16 @@ const val CATEGORY_MACHINES = CATEGORY_GENERAL + ".machines"
 object Config {
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Copper ore")
-    var copperOre = OreConfig(10, 8, 80, 30)
+    var copperOre = OreConfig(11, 8, 70, 10)
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Lead ore")
-    var leadOre = OreConfig(9, 8, 80, 30)
-
-    @ConfigValue(category = CATEGORY_ORES, comment = "Cobalt ore")
-    var cobaltOre = OreConfig(8, 8, 80, 30)
+    var leadOre = OreConfig(10, 8, 80, 2)
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Tungsten ore")
-    var tungstenOre = OreConfig(7, 8, 80, 30)
+    var tungstenOre = OreConfig(8, 8, 60, 20)
+
+    @ConfigValue(category = CATEGORY_ORES, comment = "Tungsten ore")
+    var pyriteOre = OreConfig(9, 9, 100, 30)
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)

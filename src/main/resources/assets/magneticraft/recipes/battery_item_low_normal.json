@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A ",
+    "BCB",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetCopper"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateLead"
+    },
+    "C": {
+      "item": "magneticraft:crafting",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:battery_item_low"
+  }
+}
