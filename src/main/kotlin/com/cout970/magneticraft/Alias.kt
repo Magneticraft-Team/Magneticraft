@@ -10,8 +10,6 @@ import net.minecraft.util.math.Vec3d
  * Created by cout970 on 15/08/2016.
  */
 
-// Ignore this, it requires kotlin 1.1.0
-
 typealias AABB = AxisAlignedBB
 typealias Coords = BlockPos
 typealias IVector3 = Vec3d

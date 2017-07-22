@@ -134,7 +134,7 @@ class TileSluiceBox : TileBase(), ITickable {
     val sluiceBoxModule = ModuleSluiceBox({facing}, invModule)
 
     init {
-        initModules(sluiceBoxModule)
+        initModules(sluiceBoxModule, invModule)
     }
 
     override fun update() {

@@ -42,7 +42,7 @@ object MultiblockSolarPanel : Multiblock() {
         )
     }
 
-    override fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf(
+    val hitbox = listOf(
             Vec3d(-13.0, 12.0, 1.0) * PIXEL to Vec3d(5.0, 14.0, 15.0) * PIXEL,
             Vec3d(-12.0, 11.0, 2.0) * PIXEL to Vec3d(4.0, 12.0, 14.0) * PIXEL,
             Vec3d(-6.0, 10.0, 6.0) * PIXEL to Vec3d(-2.0, 11.0, 10.0) * PIXEL,
@@ -78,6 +78,7 @@ object MultiblockSolarPanel : Multiblock() {
             Vec3d(6.0, 6.0, 0.0) * PIXEL to Vec3d(10.0, 10.0, 1.0) * PIXEL
     )
 
+    override fun getGlobalCollisionBox(): List<AxisAlignedBB> = hitbox
 
     override fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent> = listOf()
 }

@@ -1,0 +1,44 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "sulfur": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/sulfur"
+            }
+        }],
+        "alternator": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/alternator"
+            }
+        }],
+        "motor": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/motor"
+            }
+        }],
+        "coil": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/coil"
+            }
+        }],
+        "magnet": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/magnet"
+            }
+        }],
+        "mesh": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/mesh"
+            }
+        }],
+        "string_fabric": [{
+            "textures": {
+                "layer0": "magneticraft:items/crafting/string_fabric"
+            }
+        }]
+    }
+}

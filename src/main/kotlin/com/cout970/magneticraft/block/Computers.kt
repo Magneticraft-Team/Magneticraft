@@ -23,6 +23,7 @@ object Computers : IBlockMaker {
         val builder = BlockBuilder().apply {
             material = Material.IRON
             creativeTab = CreativeTabMg
+            alwaysDropDefault = true
         }
 
         computer = builder.withName("computer").copy {

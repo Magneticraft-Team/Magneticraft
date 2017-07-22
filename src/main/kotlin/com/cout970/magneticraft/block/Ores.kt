@@ -41,7 +41,8 @@ object Ores : IBlockMaker{
         COPPER("copper", true),
         LEAD("lead", true),
         COBALT("cobalt", true),
-        TUNGSTEN("tungsten", true);
+        TUNGSTEN("tungsten", true),
+        PYRITE("pyrite", true);
 
         override fun getName() = name.toLowerCase()
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_ORE_TYPE)

@@ -11,11 +11,11 @@
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "lightPlateIron"
     }
   },
   "result": {
-    "item": "magneticraft:solar_panel",
+    "item": "magneticraft:steam_engine",
     "data": 0
   }
 }

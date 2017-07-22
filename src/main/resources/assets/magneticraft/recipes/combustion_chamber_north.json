@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "A C",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBrick"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "magneticraft:combustion_chamber",
+    "data": 0
+  }
+}

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.item.Crafting
 import com.cout970.magneticraft.item.ElectricItems
 import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.item.Tools
@@ -19,6 +20,7 @@ fun initItems() {
     items_ += Metals.initItems()
     items_ += Tools.initItems()
     items_ += ElectricItems.initItems()
+    items_ += Crafting.initItems()
 
     items_.forEach { ForgeRegistries.ITEMS.register(it) }
     items = items_

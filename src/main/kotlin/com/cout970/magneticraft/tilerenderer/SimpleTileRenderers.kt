@@ -5,6 +5,7 @@ import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.*
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
@@ -13,6 +14,7 @@ import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
+import com.cout970.magneticraft.tileentity.modules.ModuleSluiceBox
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
@@ -263,13 +265,26 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
 
 @RegisterRenderer(TileSluiceBox::class)
 object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
-        modelLocation = { ModelResourceLocation(Machines.sluiceBox.registryName, "model") }
+        modelLocation = { ModelResourceLocation(Machines.sluiceBox.registryName, "model") },
+        filters = listOf<(String) -> Boolean>({ it != "Shape17" }, { it == "Shape17" })
 ) {
 
+    val gravelTexture = resource("textures/blocks/machines/sluice_box_gravel.png")
     var waterModel: ModelCache? = null
 
     override fun renderModels(models: List<ModelCache>, te: TileSluiceBox) {
         Utilities.rotateFromCenter(te.facing, 180f)
+        if (te.invModule.inventory[0].isNotEmpty) {
+            val p = te.sluiceBoxModule.progressLeft
+            val progress = if (p == 0) 1.0 else p / ModuleSluiceBox.MAX_PROGRESS.toDouble()
+            val y = (PIXEL * 4.0) * progress * te.sluiceBoxModule.level / ModuleSluiceBox.MAX_ITEMS.toDouble()
+
+            stackMatrix {
+                translate(0, y, 0)
+                bindTexture(gravelTexture)
+                models.last().render()
+            }
+        }
         if (te.sluiceBoxModule.progressLeft > 0 && MinecraftForgeClient.getRenderPass() == 1) {
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             waterModel?.render()

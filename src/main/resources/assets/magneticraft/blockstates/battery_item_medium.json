@@ -7,7 +7,7 @@
     "variants": {
         "normal": [{
             "textures": {
-                "layer0": "magneticraft:items/electric_items/battery_item"
+                "layer0": "magneticraft:items/electric_items/battery_item_medium"
             }
         }]
     }

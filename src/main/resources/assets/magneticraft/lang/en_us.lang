@@ -73,11 +73,18 @@ item.magneticraft.dusts_cobalt.name=Cobalt Dust
 item.magneticraft.dusts_tungsten.name=Tungsten Dust
 item.magneticraft.dusts_steel.name=Steel Dust
 
-#item.magneticraft.hand_sieve.name=Hand Sieve
-item.magneticraft.copper_coil_normal.name=Copper coil
+item.magneticraft.copper_coil_normal.name=Copper Coil
+item.magneticraft.crafting_sulfur.name=Sulfur Crystal
+item.magneticraft.crafting_coil.name=Small Copper Coil
+item.magneticraft.crafting_alternator.name=Alternator
+item.magneticraft.crafting_motor.name=Motor
+item.magneticraft.crafting_magnet.name=Magnet
+item.magneticraft.crafting_mesh.name=Iron Mesh
+item.magneticraft.crafting_string_fabric.name=Fabric Mesh
 item.magneticraft.voltmeter_normal.name=Voltmeter
 #item.magneticraft.thermometer.name=Thermometer
-item.magneticraft.battery_item_normal.name=Battery
+item.magneticraft.battery_item_low_normal.name=Small Battery
+item.magneticraft.battery_item_medium_normal.name=Medium Battery
 #item.magneticraft.floppy_disk.name=Floppy Disk
 #item.magneticraft.coal_coke.name=Coal Coke
 
@@ -93,6 +100,7 @@ tile.magneticraft.ores_copper.name=Chalcopyrite Ore
 tile.magneticraft.ores_lead.name=Galena Ore
 tile.magneticraft.ores_cobalt.name=Cobaltite Ore
 tile.magneticraft.ores_tungsten.name=Wolframite Ore
+tile.magneticraft.ores_pyrite.name=Pyrite Ore
 
 tile.magneticraft.box_normal.name=Wooden Box
 tile.magneticraft.crushing_table_normal.name=Crushing Table
@@ -150,6 +158,7 @@ tile.magneticraft.computer_north.name=Computer
 tile.magneticraft.solar_panel_inactive_north.name=Solar Panel
 #tile.magneticraft.grinder.name=Grinder
 tile.magneticraft.shelving_unit_inactive_north.name=Shelving Unit
+tile.magneticraft.steam_engine_inactive_north.name=Steam Engine
 
 
 #tile.magneticraft.copper_block.name=Copper Block

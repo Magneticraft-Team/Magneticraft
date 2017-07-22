@@ -23,6 +23,11 @@
             "textures": {
                 "all": "magneticraft:blocks/ore_block/tungsten"
             }
+        }],
+        "pyrite": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/pyrite"
+            }
         }]
 	}
 }

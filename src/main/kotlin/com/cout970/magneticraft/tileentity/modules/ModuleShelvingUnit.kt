@@ -44,8 +44,9 @@ class ModuleShelvingUnit(
             val item = stack.item
             if (item is ItemBlock && item.block is BlockChest) {
                 if (world.isServer) {
-                    return placeChest(args.pos, args.hit, stack)
+                    placeChest(args.pos, args.hit, stack)
                 }
+                return true
             }
         }
         if (!args.playerIn.isSneaking) {

@@ -117,6 +117,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
         onBlockBreak?.invoke(BreakBlockArgs(worldIn, pos, state))
         worldIn.getTile<TileBase>(pos)?.onBreak()
+        worldIn.removeTileEntity(pos)
         super.breakBlock(worldIn, pos, state)
     }
 

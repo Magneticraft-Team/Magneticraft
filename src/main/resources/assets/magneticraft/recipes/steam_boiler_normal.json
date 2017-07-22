@@ -1,21 +1,22 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "  ",
-    "AB"
+    "ABA",
+    "A A",
+    "ABA"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "paper"
+      "ore": "ingotIron"
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "lightPlateIron"
     }
   },
   "result": {
-    "item": "magneticraft:solar_panel",
+    "item": "magneticraft:steam_boiler",
     "data": 0
   }
 }

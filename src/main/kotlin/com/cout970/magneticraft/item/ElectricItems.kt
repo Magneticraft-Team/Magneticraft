@@ -13,7 +13,8 @@ import net.minecraft.item.Item
  */
 object ElectricItems : IItemMaker {
 
-    lateinit var battery_item: ItemBase private set
+    lateinit var battery_item_low: ItemBase private set
+    lateinit var battery_item_medium: ItemBase private set
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
@@ -21,11 +22,16 @@ object ElectricItems : IItemMaker {
             maxStackSize = 1
         }
 
-        battery_item = builder.withName("battery_item").copy {
-            constructor = { ElectricItemBase().apply { capacity = Config.itemBatteryCapacity } }
+        battery_item_low = builder.withName("battery_item_low").copy {
+            constructor = { ElectricItemBase().apply { capacity = Config.batteryItemLowCapacity } }
             capabilityProvider = { ElectricItemBase.ItemEnergyCapabilityProvider(it.stack) }
         }.build()
 
-        return listOf(battery_item)
+        battery_item_medium = builder.withName("battery_item_medium").copy {
+            constructor = { ElectricItemBase().apply { capacity = Config.batteryItemMediumCapacity } }
+            capabilityProvider = { ElectricItemBase.ItemEnergyCapabilityProvider(it.stack) }
+        }.build()
+
+        return listOf(battery_item_low, battery_item_medium)
     }
 }

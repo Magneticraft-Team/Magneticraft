@@ -56,11 +56,13 @@ object Multiblocks : IBlockMaker {
                 BlockMultiblock(c, d, a)
             }
             states = MultiblockOrientation.values().toList()
+            alwaysDropDefault = true
         }
 
         gap = builder.withName("multiblock_gap").copy {
             states = null
             factory = factoryOf(::TileMultiblockGap)
+            onDrop = { emptyList() }
             onActivated = func@ {
                 val tile = it.worldIn.getTile<TileMultiblockGap>(it.pos) ?: return@func false
                 val module = tile.multiblockModule

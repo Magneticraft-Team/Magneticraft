@@ -63,6 +63,13 @@ object Utilities {
         }
     }
 
+    fun renderMultiblockHitboxes(facing: EnumFacing, multiblock: Multiblock) {
+        multiblock.getGlobalCollisionBox().map {
+            val origin = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it)
+            facing.rotateBox(vec3Of(0.5), origin)
+        }.forEach { Utilities.renderBox(it) }
+    }
+
     /**
      * This uses DOWN as default facing
      */

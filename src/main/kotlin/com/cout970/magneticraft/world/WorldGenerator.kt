@@ -21,7 +21,7 @@ object WorldGenerator : IWorldGenerator {
         Ores.OreType.COPPER.getBlockState(Ores.ores)
         generators.add(OreGenerator(Ores.OreType.COPPER.getBlockState(Ores.ores), Config.copperOre))
         generators.add(OreGenerator(Ores.OreType.LEAD.getBlockState(Ores.ores), Config.leadOre))
-        generators.add(OreGenerator(Ores.OreType.COBALT.getBlockState(Ores.ores), Config.cobaltOre))
+//        generators.add(OreGenerator(Ores.OreType.COBALT.getBlockState(Ores.ores), Config.cobaltOre))
         generators.add(OreGenerator(Ores.OreType.TUNGSTEN.getBlockState(Ores.ores), Config.tungstenOre))
         generators.add(GaussianOreGenerator(Decoration.LimestoneKind.NORMAL.getBlockState(Decoration.limestone), Config.limestone))
     }

@@ -1,20 +1,25 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "  ",
-    "AB"
+    "A  ",
+    "BAA",
+    "CCC"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "paper"
+      "ore": "plankWood"
     },
     "B": {
       "item": "minecraft:iron_bars"
+    },
+    "C": {
+      "item": "minecraft:stone_slab",
+      "data": 0
     }
   },
   "result": {
-    "item": "magneticraft:shelving_unit",
+    "item": "magneticraft:sluice_box",
     "data": 0
   }
 }

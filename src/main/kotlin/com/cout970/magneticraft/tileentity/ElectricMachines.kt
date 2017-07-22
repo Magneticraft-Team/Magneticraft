@@ -71,11 +71,11 @@ class TileConnector : TileBase(), ITickable {
                     val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
                             ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
                     val accepted = Math.min(
-                            handler.receiveEnergy(amount, false),
-                            node.applyPower(-amount.toDouble(), false).toInt()
+                            handler.receiveEnergy(amount, true),
+                            node.applyPower(-amount.toDouble(), true).toInt()
                     )
                     if (accepted > 0) {
-                        handler.receiveEnergy(accepted, true)
+                        handler.receiveEnergy(accepted, false)
                         node.applyPower(-accepted.toDouble(), false)
                     }
                 }
