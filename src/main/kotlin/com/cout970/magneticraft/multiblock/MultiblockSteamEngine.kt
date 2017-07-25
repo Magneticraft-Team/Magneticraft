@@ -14,6 +14,7 @@ import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotateBox
 import com.cout970.vector.extensions.times
 import com.cout970.vector.extensions.vec3Of
+import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -34,34 +35,41 @@ object MultiblockSteamEngine : Multiblock() {
         val replacement = Multiblocks.gap.defaultState
 
         val I = IgnoreBlockComponent
-
-        val pBlock = MultiblockParts.PartType.ELECTRIC.getBlockState(MultiblockParts.parts)
-        val P: IMultiblockComponent = SingleBlockComponent(pBlock, replacement)
+        val C = SingleBlockComponent(MultiblockParts.column.defaultState, replacement)
+        val B = SingleBlockComponent(Blocks.BRICK_BLOCK.defaultState, replacement)
+        val vBlock = MultiblockParts.PartType.COPPER_COIL.getBlockState(MultiblockParts.parts)
+        val V = SingleBlockComponent(vBlock, replacement)
+        val gBlock = MultiblockParts.PartType.GRATE.getBlockState(MultiblockParts.parts)
+        val G = SingleBlockComponent(gBlock, replacement)
+        val nBlock = MultiblockParts.PartType.BASE.getBlockState(MultiblockParts.parts)
+        val N = SingleBlockComponent(nBlock, replacement)
+        val oBlock = MultiblockParts.PartType.CORRUGATED_IRON.getBlockState(MultiblockParts.parts)
+        val O = SingleBlockComponent(oBlock, replacement)
 
         val M: IMultiblockComponent = MainBlockComponent(Multiblocks.steamEngine) { context, activate ->
             Multiblocks.MultiblockOrientation.of(context.facing, activate).getBlockState(Multiblocks.steamEngine)
         }
 
         scheme = yLayers(
-                zLayers(listOf(P, I, I), // y = 0
-                        listOf(P, I, I),
-                        listOf(P, I, I),
+                zLayers(listOf(N, I, I), // y = 2
+                        listOf(N, I, I),
+                        listOf(N, I, I),
                         listOf(I, I, I)),
 
-                zLayers(listOf(P, I, I), // y = 0
-                        listOf(P, I, I),
-                        listOf(P, P, I),
-                        listOf(I, P, I)),
+                zLayers(listOf(O, I, I), // y = 1
+                        listOf(C, I, I),
+                        listOf(G, G, I),
+                        listOf(I, G, I)),
 
                 zLayers(listOf(M, I, I), // y = 0
-                        listOf(P, I, I),
-                        listOf(P, P, P),
-                        listOf(P, P, P)),
+                        listOf(B, I, I),
+                        listOf(B, G, V),
+                        listOf(B, G, C)),
 
                 zLayers(listOf(I, I, I), // y = -1
                         listOf(I, I, I),
-                        listOf(I, P, I),
-                        listOf(I, P, I))
+                        listOf(I, G, I),
+                        listOf(I, G, I))
         )
     }
 

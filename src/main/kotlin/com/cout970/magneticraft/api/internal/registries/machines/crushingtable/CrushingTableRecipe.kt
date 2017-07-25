@@ -14,6 +14,8 @@ data class CrushingTableRecipe(
         private val oreDict: Boolean
 ) : ICrushingTableRecipe {
 
+    override fun useOreDictionaryEquivalencies(): Boolean = oreDict
+
     override fun getInput(): ItemStack = input.copy()
 
     override fun getOutput(): ItemStack = output.copy()

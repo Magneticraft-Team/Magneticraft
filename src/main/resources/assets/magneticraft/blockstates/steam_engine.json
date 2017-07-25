@@ -12,6 +12,10 @@
         "inactive_south": [{}],
         "inactive_east": [{}],
         "inactive_west": [{}],
+        "active_north": [{ "model": "magneticraft:empty" }],
+        "active_south": [{ "model": "magneticraft:empty" }],
+        "active_east": [{ "model": "magneticraft:empty" }],
+        "active_west": [{ "model": "magneticraft:empty" }],
         "inventory": [{
             "model": "builtin/generated",
             "transform": "forge:default-item",

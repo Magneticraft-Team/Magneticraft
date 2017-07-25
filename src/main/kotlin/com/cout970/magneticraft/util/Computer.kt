@@ -36,10 +36,10 @@ fun Long.split(index: Int): Byte {
 
 fun Int.splitSet(index: Int, byte: Byte): Int {
     return when (index) {
-        0 -> (0xFFFFFF00.toInt() and this) or byte.toInt()
-        1 -> (0xFFFF00FF.toInt() and this) or (byte.toInt() shl 8)
-        2 -> (0xFF00FFFF.toInt() and this) or (byte.toInt() shl 16)
-        3 -> (0x00FFFFFF.toInt() and this) or (byte.toInt() shl 24)
+        0 -> (0xFFFFFF00.toInt() and this) or (byte.toInt() and 0xFF)
+        1 -> (0xFFFF00FF.toInt() and this) or (byte.toInt() and 0xFF shl 8)
+        2 -> (0xFF00FFFF.toInt() and this) or (byte.toInt() and 0xFF shl 16)
+        3 -> (0x00FFFFFF.toInt() and this) or (byte.toInt() and 0xFF shl 24)
         else -> this
     }
 }

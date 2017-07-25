@@ -4,9 +4,6 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
-import com.cout970.magneticraft.util.split
-import com.cout970.magneticraft.util.splitRange
-import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
 import java.io.RandomAccessFile
 import java.nio.charset.Charset
@@ -58,7 +55,7 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
                     } else if (read != 1024) {
                         getBuffer().fill(0, read, 1024)
                     }
-                    val checksum = getBuffer().sumBy { it.toInt() and 0xFF }
+//                    val checksum = getBuffer().sumBy { it.toInt() and 0xFF }
                     map.close()
                 } else {
                     Arrays.fill(getBuffer(), 0)
@@ -116,31 +113,31 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
         }
     }
 
+    val memStruct = ReadWriteStruct("disk_drive_header",
+            ReadOnlyByte("online", { if (isActive) 1 else 0 }),
+            ReadOnlyByte("type", { 0 }),
+            ReadOnlyShort("status", { status.toShort() }),
+
+            ReadWriteByte("signal", { action = it.toInt() }, { action.toByte() }),
+            ReadOnlyByte("hasDisk", { if (getDisk() == null) 0 else 1 }),
+            ReadOnlyByte("accessTime", { getDisk()?.accessTime?.toByte() ?: 0 }),
+            ReadOnlyByte("padding", { 0 }),
+
+            ReadOnlyInt("numSectors", { getDisk()?.sectorCount ?: 0 }),
+            ReadWriteInt("currentSector", { currentSector = it }, { currentSector }),
+            ReadWriteByteArray("buffer", getBuffer())
+    )
+
+    init {
+        println(memStruct)
+    }
+
     override fun readByte(addr: Int): Byte {
-
-        return when (addr) {
-            0 -> (if (isActive) 1 else 0).toByte()                              //00, byte online
-            1 -> 0.toByte()                                                     //01, byte type
-            2, 3 -> status.split(addr - 2)                                      //02,03, short status
-
-            4 -> action.toByte()                                                //04, byte signal
-            5 -> if (getDisk() == null) 0 else 1.toByte()                       //05, byte hasDisk
-            6 -> getDisk()?.accessTime?.toByte() ?: 0                           //06, byte accessTime
-            7 -> 0                                                              //07, byte unused
-
-            in 8.splitRange() -> getDisk()?.sectorCount?.split(addr - 8) ?: 0   //08, int numSectors
-            in 12.splitRange() -> currentSector.split(addr - 12)                //12, int currentSector
-            in 16..(1024 + 15) -> getBuffer()[addr - 16]                        //16, byte[] buffer
-            else -> 0
-        }
+        return memStruct.read(addr)
     }
 
     override fun writeByte(addr: Int, data: Byte) {
-        when (addr) {
-            4 -> action = data.toInt()
-            in 12.splitRange() -> currentSector = currentSector.splitSet(addr - 12, data)
-            in 16..(1024 + 15) -> getBuffer()[addr - 16] = data
-        }
+        memStruct.write(addr, data)
     }
 
     fun getBuffer(): ByteArray {
@@ -153,8 +150,7 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
         status = nbt.getInteger("status")
         action = nbt.getInteger("action")
         currentSector = nbt.getInteger("sector")
-        buffer = nbt.getByteArray("buffer").clone()
-        getBuffer()
+        System.arraycopy(nbt.getByteArray("buffer"), 0, getBuffer(), 0, getBuffer().size)
     }
 
     override fun serializeNBT(): NBTTagCompound {

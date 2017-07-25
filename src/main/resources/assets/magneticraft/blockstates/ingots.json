@@ -29,6 +29,46 @@
             "textures": {
                 "layer0": "magneticraft:items/ingots/steel"
             }
+        }],
+        "aluminium": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/aluminium"
+            }
+        }],
+        "galena": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/galena"
+            }
+        }],
+        "mithril": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/mithril"
+            }
+        }],
+        "nickel": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/nickel"
+            }
+        }],
+        "osmium": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/osmium"
+            }
+        }],
+        "silver": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/silver"
+            }
+        }],
+        "tin": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/tin"
+            }
+        }],
+        "zinc": [{
+            "textures": {
+                "layer0": "magneticraft:items/ingots/zinc"
+            }
         }]
     }
 }

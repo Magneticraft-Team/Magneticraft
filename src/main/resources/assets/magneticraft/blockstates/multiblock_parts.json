@@ -19,22 +19,40 @@
                 "all": "magneticraft:blocks/multiblock_parts/electric"
             }
         }],
-        "mesh": [{
-            "model": "cube",
+        "grate": [{
+            "model": "cube_all",
             "textures": {
-                "particle": "magneticraft:blocks/multiblock_parts/mesh_top",
-                "down": "magneticraft:blocks/multiblock_parts/mesh_bottom",
-                "up": "magneticraft:blocks/multiblock_parts/mesh_top",
-                "north": "magneticraft:blocks/multiblock_parts/mesh_side",
-                "east": "magneticraft:blocks/multiblock_parts/mesh_side",
-                "south": "magneticraft:blocks/multiblock_parts/mesh_side",
-                "west": "magneticraft:blocks/multiblock_parts/mesh_side"
+                "all": "magneticraft:blocks/multiblock_parts/iron_grate"
             }
         }],
         "striped": [{
             "model": "cube_all",
             "textures": {
                 "all": "magneticraft:blocks/multiblock_parts/striped"
+            }
+        }],
+        "copper_coil": [{
+            "model": "cube",
+            "textures": {
+                "particle": "magneticraft:blocks/multiblock_parts/copper_coil",
+                "down": "magneticraft:blocks/multiblock_parts/copper_coil",
+                "up": "magneticraft:blocks/multiblock_parts/copper_coil",
+                "north": "magneticraft:blocks/multiblock_parts/copper_coil_side",
+                "east": "magneticraft:blocks/multiblock_parts/copper_coil_side",
+                "south": "magneticraft:blocks/multiblock_parts/copper_coil_side",
+                "west": "magneticraft:blocks/multiblock_parts/copper_coil_side"
+            }
+        }],
+        "corrugated_iron": [{
+            "model": "cube",
+            "textures": {
+                "particle": "magneticraft:blocks/multiblock_parts/corrugated_iron",
+                "down": "magneticraft:blocks/multiblock_parts/corrugated_iron",
+                "up": "magneticraft:blocks/multiblock_parts/corrugated_iron",
+                "north": "magneticraft:blocks/multiblock_parts/corrugated_iron_side",
+                "east": "magneticraft:blocks/multiblock_parts/corrugated_iron_side",
+                "south": "magneticraft:blocks/multiblock_parts/corrugated_iron_side",
+                "west": "magneticraft:blocks/multiblock_parts/corrugated_iron_side"
             }
         }]
     }

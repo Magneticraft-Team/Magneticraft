@@ -3,21 +3,17 @@
   "pattern": [
     "AAA",
     "BCB",
-    "BDB"
+    "BBB"
   ],
   "key": {
     "A": {
-      "type": "forge:ore_dict",
-      "ore": "nuggetCobalt"
+      "item": "magneticraft:battery_item_low"
     },
     "B": {
       "type": "forge:ore_dict",
       "ore": "lightPlateIron"
     },
     "C": {
-      "item": "magneticraft:battery_item"
-    },
-    "D": {
       "item": "magneticraft:multiblock_parts",
       "data": 1
     }

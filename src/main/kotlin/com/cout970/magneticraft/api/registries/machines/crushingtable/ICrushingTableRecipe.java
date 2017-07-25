@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
  */
 public interface ICrushingTableRecipe {
 
+    boolean useOreDictionaryEquivalencies();
+
     /**
      * The stack used to determine if an item can be used for this recipe or not
      * WARNING: this should return a COPY of the input not the original instance of the input

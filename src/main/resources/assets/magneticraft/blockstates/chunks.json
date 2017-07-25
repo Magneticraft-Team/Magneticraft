@@ -39,6 +39,46 @@
             "textures": {
                 "layer0": "magneticraft:items/chunk/steel"
             }
+        }],
+        "aluminium": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/aluminium"
+            }
+        }],
+        "galena": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/galena"
+            }
+        }],
+        "mithril": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/mithril"
+            }
+        }],
+        "nickel": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/nickel"
+            }
+        }],
+        "osmium": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/osmium"
+            }
+        }],
+        "silver": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/silver"
+            }
+        }],
+        "tin": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/tin"
+            }
+        }],
+        "zinc": [{
+            "textures": {
+                "layer0": "magneticraft:items/chunk/zinc"
+            }
         }]
     }
 }

@@ -12,7 +12,7 @@
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "nuggetCobalt"
+      "ore": "ingotCopper"
     },
     "C": {
       "type": "forge:ore_dict",

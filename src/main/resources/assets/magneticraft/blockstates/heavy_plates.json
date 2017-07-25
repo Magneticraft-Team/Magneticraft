@@ -39,6 +39,46 @@
             "textures": {
                 "layer0": "magneticraft:items/heavy_plate/steel"
             }
+        }],
+        "aluminium": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/aluminium"
+            }
+        }],
+        "galena": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/galena"
+            }
+        }],
+        "mithril": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/mithril"
+            }
+        }],
+        "nickel": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/nickel"
+            }
+        }],
+        "osmium": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/osmium"
+            }
+        }],
+        "silver": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/silver"
+            }
+        }],
+        "tin": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/tin"
+            }
+        }],
+        "zinc": [{
+            "textures": {
+                "layer0": "magneticraft:items/heavy_plate/zinc"
+            }
         }]
     }
 }

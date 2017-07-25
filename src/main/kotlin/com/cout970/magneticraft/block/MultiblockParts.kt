@@ -49,8 +49,10 @@ object MultiblockParts : IBlockMaker {
 
         BASE("base", true),
         ELECTRIC("electric", true),
-        MESH("mesh", true),
-        STRIPED("striped", true);
+        GRATE("grate", true),
+        STRIPED("striped", true),
+        COPPER_COIL("copper_coil", true),
+        CORRUGATED_IRON("corrugated_iron", true);
 
         override fun getName() = name.toLowerCase()
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_PART_TYPE)
@@ -73,8 +75,6 @@ object MultiblockParts : IBlockMaker {
         override fun getBlockState(block: Block): IBlockState {
             return block.defaultState.withProperty(PROPERTY_COLUMN_AXIS, this)
         }
-
-
     }
 
     fun EnumFacing.Axis.toColumnAxis(): MultiblockParts.ColumnOrientation = when(this){

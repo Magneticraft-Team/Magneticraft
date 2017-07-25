@@ -1,0 +1,84 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "iron": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/iron"
+            }
+        }],
+        "gold": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/gold"
+            }
+        }],
+        "copper": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/copper"
+            }
+        }],
+        "lead": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/lead"
+            }
+        }],
+        "cobalt": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/cobalt"
+            }
+        }],
+        "tungsten": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/tungsten"
+            }
+        }],
+        "steel": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/steel"
+            }
+        }],
+        "aluminium": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/aluminium"
+            }
+        }],
+        "galena": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/galena"
+            }
+        }],
+        "mithril": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/mithril"
+            }
+        }],
+        "nickel": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/nickel"
+            }
+        }],
+        "osmium": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/osmium"
+            }
+        }],
+        "silver": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/silver"
+            }
+        }],
+        "tin": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/tin"
+            }
+        }],
+        "zinc": [{
+            "textures": {
+                "layer0": "magneticraft:items/rocky_chunk/zinc"
+            }
+        }]
+    }
+}

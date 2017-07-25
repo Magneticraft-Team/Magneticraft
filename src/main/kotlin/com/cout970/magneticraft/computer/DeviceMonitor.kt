@@ -5,8 +5,6 @@ import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.split
-import com.cout970.magneticraft.util.splitRange
-import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -48,59 +46,50 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     override fun getId(): NodeID = NodeID("module_device_monitor", pos, world)
 
-    override fun readByte(pointer: Int): Byte {
-        val byte = when (pointer) {
-            0 -> (if (isActive) 1 else 0).toByte()                        //00, byte online
-            1 -> 1.toByte()                                               //01, byte type
-            2, 3 -> 0.toByte()                                            //02,03, short status
-            4 -> regKeyBufferPtr.toByte()                                 //04, byte keyBufferPtr
-            5 -> regKeyBufferSize.toByte()                                //05, byte keyBufferSize
-            in 6..19 -> getKeyBuffer()[pointer - 6]                       //06, byte[14] keyBuffer
-            20 -> regMouseBufferPtr.toByte()                              //20, mouseBufferPtr
-            21 -> regKeyBufferSize.toByte()                               //21, mouseBufferSize
-            in 22..58 -> getMouseBuffer()[pointer - 22]                   //22, struct mouse[6]
-            in 60.splitRange() -> lines.split(pointer - 60)         //60, int lines
-            in 64.splitRange() -> columns.split(pointer - 64)       //64, int columns
-            in 68.splitRange() -> cursorLine.split(pointer - 68)    //68, short cursorLine
-            in 72.splitRange() -> cursorColumn.split(pointer - 72)  //72, short cursorColumn
-            76, 77 -> 0                                                   //76, order
-            78, 79 -> currentLine.split(pointer - 78)               //78, currentLine
-            in 80..159 -> getBuffer()[pointer - 80]                       //80, buffer
-            else -> 0
+    //@formatter:off
+    val memStruct = ReadWriteStruct("monitor_header",
+            ReadWriteStruct("device_header",
+                    ReadOnlyByte("online", { if (isActive) 1 else 0 }),
+                    ReadOnlyByte("type", { 1 }),
+                    ReadOnlyShort("status", { 0 })
+            ),
+            ReadWriteByte("keyBufferPtr", { regKeyBufferPtr = it.toInt() and 0xFF }, { regKeyBufferPtr.toByte() }),
+            ReadWriteByte("keyBufferSize", { regKeyBufferSize = it.toInt() and 0xFF }, { regKeyBufferSize.toByte() }),
+            ReadWriteByteArray("keyBuffer", getKeyBuffer()),
+            ReadWriteByte("mouseBufferPtr", { regMouseBufferPtr = it.toInt() and 0xFF }, { regMouseBufferPtr.toByte() }),
+            ReadWriteByte("mouseBufferSize", { regMouseBufferSize = it.toInt() and 0xFF }, { regMouseBufferSize.toByte() }),
+            ReadWriteByteArray("mouseBuffer", getMouseBuffer()),
+            ReadOnlyInt("lines", { lines }),
+            ReadOnlyInt("columns", { columns }),
+            ReadWriteInt("cursorLine", { cursorLine = it }, { cursorLine }),
+            ReadWriteInt("cursorColumn", { cursorColumn = it }, { cursorColumn }),
+            ReadWriteShort("signal", { signal(it.toInt()) }, { 0 }),
+            ReadWriteShort("currentLine", { currentLine = it.toInt() }, { currentLine.toShort() }),
+            ReadWriteByteArray("buffer", getBuffer())
+    )
+    //@formatter:on
+
+    fun signal(id: Int) {
+        when (id) {
+            1 -> if (currentLine in 0..(lines - 1)) {
+                for (i in 0 until columns) {
+                    getBuffer()[i] = getScreenBuffer()[currentLine * columns + i]
+                }
+            }
+            2 -> if (currentLine in 0..(lines - 1)) {
+                for (i in 0 until columns) {
+                    getScreenBuffer()[currentLine * columns + i] = getBuffer()[i]
+                }
+            }
         }
-        return byte
+    }
+
+    override fun readByte(pointer: Int): Byte {
+        return memStruct.read(pointer)
     }
 
     override fun writeByte(pointer: Int, data: Byte) {
-        when (pointer) {
-            4 -> regKeyBufferPtr = data.toInt()
-            5 -> regKeyBufferSize = data.toInt()
-            in 6..19 -> getKeyBuffer()[pointer - 6] = data
-            20 -> regMouseBufferPtr = data.toInt()
-            21 -> regMouseBufferSize = data.toInt()
-            in 22..57 -> getMouseBuffer()[pointer - 22] = data
-            in 68.splitRange() -> cursorLine = cursorLine.splitSet(pointer - 68, data)
-            in 72.splitRange() -> cursorColumn = cursorColumn.splitSet(pointer - 72, data)
-            76 -> {
-                if (data.toInt() == 1) {
-                    if (currentLine in 0..(lines - 1)) {
-                        for (i in 0 until columns) {
-                            getBuffer()[i] = getScreenBuffer()[currentLine * columns + i]
-                        }
-                    }
-                } else if (data.toInt() == 2) {
-                    if (currentLine in 0..(lines - 1)) {
-                        for (i in 0 until columns) {
-                            getScreenBuffer()[currentLine * columns + i] = getBuffer()[i]
-                        }
-                    }
-                }
-            }
-            78, 79 -> {
-                currentLine = currentLine.splitSet(pointer - 78, data)
-            }
-            in 80..159 -> getBuffer()[pointer - 80] = data
-        }
+        memStruct.write(pointer, data)
     }
 
     fun getBuffer(): ByteArray {
@@ -114,7 +103,7 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     }
 
     fun getKeyBuffer(): ByteArray {
-        if (keyBuffer == null || keyBuffer!!.size != 14) keyBuffer = ByteArray(14)
+        if (keyBuffer == null || keyBuffer!!.size != 28) keyBuffer = ByteArray(28)
         return keyBuffer!!
     }
 
@@ -145,14 +134,11 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
         val nbt = main.getCompoundTag("OldMonitor")
         regKeyBufferPtr = nbt.getInteger("KeyBufferPtr")
         regKeyBufferSize = nbt.getInteger("KeyBufferSize")
-        keyBuffer = nbt.getByteArray("KeyBuffer").clone()
-        getKeyBuffer()
+        System.arraycopy(nbt.getByteArray("KeyBuffer"), 0, getKeyBuffer(), 0, getKeyBuffer().size)
         regMouseBufferPtr = nbt.getInteger("MouseBufferPtr")
         regMouseBufferSize = nbt.getInteger("MouseBufferSize")
-        mouseBuffer = nbt.getByteArray("MouseBuffer").clone()
-        getMouseBuffer()
-        buffer = nbt.getByteArray("Buffer").clone()
-        getBuffer()
+        System.arraycopy(nbt.getByteArray("MouseBuffer"), 0, getMouseBuffer(), 0, getMouseBuffer().size)
+        System.arraycopy(nbt.getByteArray("Buffer"), 0, getBuffer(), 0, getBuffer().size)
         screenBuffer = nbt.getByteArray("ScreenBuffer").clone()
         currentLine = nbt.getInteger("CurrentLine")
         cursorLine = nbt.getInteger("CursorLine")
@@ -182,11 +168,13 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     fun saveToServer(ibd: IBD) {
         ibd.setInteger(0, if (isKeyPressed) 1 else 0)
         ibd.setInteger(1, keyPressed)
+        isKeyPressed = false
 
         ibd.setInteger(2, if (isMousePressed) 1 else 0)
         ibd.setInteger(3, mousePressed)
         ibd.setInteger(4, mouseX)
         ibd.setInteger(5, mouseY)
+        isMousePressed = false
     }
 
     fun loadFromClient(ibd: IBD) {
@@ -194,8 +182,10 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
         ibd.getInteger(0) {
             val key = ibd.getInteger(1)
 
-            if (regKeyBufferSize != getKeyBuffer().size) {
-                getKeyBuffer()[(regKeyBufferPtr + regKeyBufferSize) % keyBuffer!!.size] = key.toByte()
+            if (regKeyBufferSize != getKeyBuffer().size / 2) {
+                val pos = (regKeyBufferPtr + regKeyBufferSize) % keyBuffer!!.size
+                getKeyBuffer()[2 * pos] = 1
+                getKeyBuffer()[2 * pos + 1] = key.toByte()
                 regKeyBufferSize++
             }
         }
@@ -205,16 +195,14 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
             val mouseX = ibd.getInteger(4)
             val mouseY = ibd.getInteger(5)
 
-            if (regMouseBufferSize != getMouseBuffer().size) {
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5) % keyBuffer!!.size] = mouseButton.toByte()
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 1) % keyBuffer!!.size] = mouseX.split(
-                        0)
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 2) % keyBuffer!!.size] = mouseX.split(
-                        1)
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 3) % keyBuffer!!.size] = mouseY.split(
-                        0)
-                getMouseBuffer()[((regMouseBufferPtr + regMouseBufferSize) * 5 + 4) % keyBuffer!!.size] = mouseY.split(
-                        1)
+            if (regMouseBufferSize != getMouseBuffer().size / 6) {
+                val pos = ((regMouseBufferPtr + regMouseBufferSize) * 6) % keyBuffer!!.size
+                getMouseBuffer()[pos] = mouseButton.toByte()
+                getMouseBuffer()[pos + 1] = 1
+                getMouseBuffer()[pos + 2] = mouseX.split(0)
+                getMouseBuffer()[pos + 3] = mouseX.split(1)
+                getMouseBuffer()[pos + 4] = mouseY.split(0)
+                getMouseBuffer()[pos + 5] = mouseY.split(1)
                 regMouseBufferSize++
             }
         }

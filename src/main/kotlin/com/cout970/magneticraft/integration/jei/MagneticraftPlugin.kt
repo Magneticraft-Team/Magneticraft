@@ -24,6 +24,7 @@ import mezz.jei.gui.elements.DrawableResource
 import mezz.jei.util.Translator
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagString
+import net.minecraftforge.oredict.OreDictionary
 
 /**
  * Created by cout970 on 23/07/2016.
@@ -34,10 +35,6 @@ class MagneticraftPlugin : IModPlugin {
     companion object {
         val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
         val SLUICE_BOX_ID = "magneticraft.sluice_box"
-//        val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
-//        val KILN_ID = "magneticraft.kiln"
-//        val GRINDER_ID = "magneticraft.grinder"
-//        val SIFTER_ID = "magneticraft.softer"
     }
 
     override fun register(registry: IModRegistry) {
@@ -125,7 +122,12 @@ class RecipeCategory<T : IRecipeWrapper>(
 class CrushingTableRecipeWrapper(val recipe: ICrushingTableRecipe) : IRecipeWrapper {
 
     override fun getIngredients(ingredients: IIngredients) {
-        ingredients.setInput(ItemStack::class.java, recipe.input)
+
+        if (recipe.useOreDictionaryEquivalencies()) {
+            ingredients.setInputs(ItemStack::class.java, listOf(getOreDictEquivalents(recipe.input)))
+        } else {
+            ingredients.setInput(ItemStack::class.java, recipe.input)
+        }
         ingredients.setOutput(ItemStack::class.java, recipe.output)
     }
 }
@@ -137,5 +139,11 @@ class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
         ingredients.setOutputs(ItemStack::class.java,
                 listOf(recipe.primaryOutput) + recipe.secondaryOutput.map { it.first }
         )
+    }
+}
+
+private fun getOreDictEquivalents(stack: ItemStack): List<ItemStack> {
+    return OreDictionary.getOreIDs(stack).flatMap { id ->
+        OreDictionary.getOres(OreDictionary.getOreName(id)).toList()
     }
 }

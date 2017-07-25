@@ -200,11 +200,11 @@ struct driver_internet_socket {
     }
 }
 
-fun main(args: Array<String>) {
-    val socket = Socket("pastebin.com", 80)
-    socket.outputStream.write("GET /raw/wRpPhckZ HTTP/1.0\nHost: pastebin.com\n\n".toByteArray())
-    val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)
-    println(str)
-    println(str.replace('\r', 'n'))
-    socket.close()
-}
+//fun main(args: Array<String>) {
+//    val socket = Socket("pastebin.com", 80)
+//    socket.outputStream.write("GET /raw/wRpPhckZ HTTP/1.0\nHost: pastebin.com\n\n".toByteArray())
+//    val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)
+//    println(str)
+//    println(str.replace('\r', 'n'))
+//    socket.close()
+//}

@@ -24,7 +24,7 @@ object MultiblockShelvingUnit : Multiblock() {
     init {
         val replacement = Multiblocks.gap.defaultState
 
-        val pBlock = MultiblockParts.PartType.ELECTRIC.getBlockState(MultiblockParts.parts)
+        val pBlock = MultiblockParts.PartType.GRATE.getBlockState(MultiblockParts.parts)
         val P: IMultiblockComponent = SingleBlockComponent(pBlock, replacement)
 
         val M: IMultiblockComponent = MainBlockComponent(Multiblocks.shelvingUnit) { context, activate ->

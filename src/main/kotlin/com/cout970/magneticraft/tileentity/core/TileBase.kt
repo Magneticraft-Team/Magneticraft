@@ -89,6 +89,8 @@ abstract class TileBase : TileEntity() {
         super.readFromNBT(compound)
         if (compound.hasKey("TileData")) {
             load(compound.getCompoundTag("TileData"))
+        } else {
+            println(compound)
         }
     }
 
@@ -133,11 +135,11 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun getUpdatePacket(): SPacketUpdateTileEntity? {
-        return SPacketUpdateTileEntity(pos, 0, save())
+        return SPacketUpdateTileEntity(pos, 0, writeToNBT(NBTTagCompound()))
     }
 
     override fun onDataPacket(net: NetworkManager?, pkt: SPacketUpdateTileEntity) {
-        load(pkt.nbtCompound)
+        readFromNBT(pkt.nbtCompound)
     }
 
     override fun setWorldCreate(worldIn: World) {

@@ -49,3 +49,5 @@ inline fun IItemHandler.forEachIndexed(func: (Int, ItemStack) -> Unit) {
 }
 
 val ItemStack.isNotEmpty get() = !isEmpty
+
+fun ItemStack.withSize(size: Int) = ItemStack(item, size, itemDamage, tagCompound)

@@ -1,16 +1,20 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraftforge.fml.common.FMLCommonHandler
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
+import java.io.File
+import java.util.regex.Pattern
 import javax.swing.*
 
 
@@ -24,6 +28,7 @@ private var lastTick = 0
 fun main(args: Array<String>) {
 
     val monitor = DeviceMonitor(FakeRef)
+    val floppyDrive = DeviceFloppyDrive(FakeRef) { FakeFloppyDisk }
 
     val cpu = CPU_MIPS()
     val memory = RAM(0xFFFF + 1, false)
@@ -34,6 +39,8 @@ fun main(args: Array<String>) {
 
     bus.devices.put(0xFF, mbDevice)
     bus.devices.put(0x00, monitor)
+    bus.devices.put(0x01, floppyDrive)
+
 
 //     bios string print
 //    print("\n\n\n\n\n")
@@ -115,8 +122,8 @@ fun main(args: Array<String>) {
         display.repaint()
         timer = System.currentTimeMillis()
         val tick = (timer.and(0xFFFFFF) / 50L).toInt()
-        if(tick != lastTick){
-           lastTick = tick
+        if (tick != lastTick) {
+            lastTick = tick
         }
     }
     println("End")
@@ -172,4 +179,29 @@ class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
 object FakeRef : ITileRef {
     override fun getWorld(): World = error("Not available in emulation mode")
     override fun getPos(): BlockPos = error("Not available in emulation mode")
+}
+
+object FakeFloppyDisk : IFloppyDisk {
+
+    val namePattern = Pattern.compile("""[^(\w|\d)]+""").toRegex()
+
+    override fun getStorageFile(): File {
+        val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
+        if (!parent.exists()) parent.mkdir()
+        val file = File(parent, "floppy_${label.replace(namePattern, "_")}.img")
+        return file
+
+    }
+
+    override fun getLabel(): String = "fake_floppy_disk"
+
+    override fun setLabel(str: String) = Unit
+
+    override fun getSectorCount(): Int = 1000
+
+    override fun getAccessTime(): Int = 5
+
+    override fun canRead(): Boolean = true
+
+    override fun canWrite(): Boolean = true
 }
