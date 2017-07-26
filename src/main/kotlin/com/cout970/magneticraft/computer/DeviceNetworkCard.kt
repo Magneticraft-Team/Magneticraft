@@ -4,115 +4,180 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.util.split
-import com.cout970.magneticraft.util.splitRange
-import com.cout970.magneticraft.util.splitSet
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.io.InputStream
-import java.io.OutputStream
 import java.net.Socket
 import java.nio.charset.Charset
 
 /**
  * Created by cout970 on 2016/10/31.
  */
-class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
+class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by parent {
 
     val status = 0
     val isActive: Boolean = true
     val internetAllowed: Boolean get() = Config.allowTcpConnections
-    val maxConnections: Int get() = Math.max(Math.min(Config.maxTcpConnections - totalConnections.count { it.status == 1 }, 2), 0)
+    val maxSockets get() = Config.maxTcpConnections
 
-    var connection0 = Connection()
-    var connection1 = Connection()
+    val targetIp = ByteArray(80)
+    var targetPort = 0
 
-    init {
-        totalConnections.add(connection0)
-        totalConnections.add(connection1)
-    }
+    var targetMac = 0
+
+    val inputBuffer = ByteArray(1024)
+    var inputBufferPtr = 0
+    val outputBuffer = ByteArray(1024)
+    var outputBufferPtr = 0
+
+    var connectionError = 0
+
+    var socket: Socket? = null
 
     companion object {
-        var totalConnections = mutableSetOf<Connection>()
+        var activeSockets = 0
+
+        const val NO_ERROR = 0
+        const val INVALID_PORT = 1
+        const val INVALID_IP_SIZE = 2
+        const val EXCEPTION_PARSING_IP = 3
+        const val EXCEPTION_OPEN_SOCKET = 4
+        const val INTERNET_NOT_ALLOWED = 5
+        const val MAX_SOCKET_REACH = 6
+        const val SOCKET_CLOSED = 7
+        const val UNABLE_TO_READ_PACKET = 8
+        const val UNABLE_TO_SEND_PACKET = 9
+        const val INVALID_OUTPUT_BUFFER_POINTER = 10
+        const val INVALID_INPUT_BUFFER_POINTER = 11
     }
 
     override fun getId(): NodeID = NodeID("module_device_network_card", pos, world)
 
-    /*
-struct driver_device_internet_card {
-/* 00 */        struct driver_device_header header;
-/*    */
-/* 04 */        byte internetAllowed; // 1 if the server config allow to use tcp sockets
-/* 05 */        byte maxSockets;      //max amount of sockets that the server allow and the card supports
-/* 06 */        byte none0; // unused
-/* 07 */        byte none1; // unused
-/* 08 */        struct driver_internet_socket sockets[0];
-/*  */
-};
+    val memStruct = ReadWriteStruct("network_header",
+            ReadWriteStruct("device_header",
+                    ReadOnlyByte("online", { if (isActive) 1 else 0 }),
+                    ReadOnlyByte("type", { 2 }),
+                    ReadOnlyShort("status", { status.toShort() })
+            ),
+            ReadOnlyByte("internetAllowed", { if (internetAllowed) 1 else 0 }),
+            ReadOnlyByte("maxSockets", { maxSockets.toByte() }),
+            ReadOnlyByte("activeSockets", { activeSockets.toByte() }),
+            ReadWriteByte("signal", { signal(it.toInt()) }, { 0 }),
+            ReadOnlyInt("macAddress", { getMacAddress() }),
+            ReadWriteInt("targetMac", { targetMac = it }, { targetMac }),
+            ReadWriteInt("targetPort", { targetPort = it }, { targetPort }),
+            ReadWriteByteArray("targetIp", targetIp),
+            ReadOnlyInt("connectionOpen", { if (socket?.isClosed ?: true) 0 else 1 }),
+            ReadOnlyInt("connectionError", { connectionError }),
+            ReadWriteInt("inputBufferPtr", { inputBufferPtr = it }, { inputBufferPtr }),
+            ReadWriteInt("outputBufferPtr", { outputBufferPtr = it }, { outputBufferPtr }),
+            ReadWriteByteArray("inputBuffer", inputBuffer),
+            ReadWriteByteArray("outputBuffer ", outputBuffer)
+    )
 
-sizeof = 96
-struct driver_internet_socket {
-/* 00 */    byte signal;          // byte used to send commands to the card
-/* 01 */    byte status;          // current status, 1 if connected, 0 otherwise
-/* 02 */    byte error;           // error code of the last connection
-/* 03 */    byte flags;           // flags
-/* 04 */    char ip[80];          // pointer to a string buffer used to start the connection, this can be an ip (255.255.255.255) or a url in format (http://www.example.com)
-/* 84 */    int port;             // port used to access, for example 80 for http
-/* 88 */    int inputStream;      // every time this value is read, java will call read() to the inputStream of the socket
-/* 92 */   int outputStream;     // every time this value is write, java will call write() to the outputStream of the socket
-};
-     */
+    fun getMacAddress(): Int {
+        if(parent is FakeRef){
+            return 0xABCDEF01.toInt()
+        }
+        return parent.pos.hashCode()
+    }
+
+    override fun update() {
+        socket?.let {
+            if (it.isClosed) {
+                connectionError = SOCKET_CLOSED
+                closeTcpConnection()
+            } else {
+                try {
+                    if (outputBufferPtr > outputBuffer.size || outputBufferPtr < 0) {
+                        connectionError = INVALID_OUTPUT_BUFFER_POINTER
+                    } else if (outputBufferPtr > 0) {
+                        it.getOutputStream().write(outputBuffer, 0, outputBufferPtr)
+                        outputBufferPtr = 0
+                    }
+                } catch (e: Exception) {
+                    connectionError = UNABLE_TO_SEND_PACKET
+                    e.printStackTrace()
+                }
+                try {
+                    if (inputBufferPtr > inputBuffer.size || inputBufferPtr < 0) {
+                        connectionError = INVALID_INPUT_BUFFER_POINTER
+                    } else {
+                        val stream = it.getInputStream()
+                        if (stream.available() > 0) {
+                            val read = stream.read(inputBuffer, inputBufferPtr, inputBuffer.size - inputBufferPtr)
+                            inputBufferPtr += read
+                        }
+                    }
+                } catch (e: Exception) {
+                    connectionError = UNABLE_TO_READ_PACKET
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    fun signal(signal: Int) {
+        when (signal) {
+            1 -> openTcpConnection()
+            2 -> closeTcpConnection()
+        }
+    }
+
+    fun closeTcpConnection(){
+        socket?.let {
+            activeSockets--
+            it.close()
+        }
+        socket = null
+    }
+
+    fun openTcpConnection() {
+        if (!internetAllowed) {
+            connectionError = INTERNET_NOT_ALLOWED
+            return
+        }
+        if (activeSockets >= maxSockets) {
+            connectionError = MAX_SOCKET_REACH
+            return
+        }
+        if (targetPort <= 0 || targetPort > 0xFFFF) {
+            connectionError = INVALID_PORT
+            return
+        }
+        val ipStr: String
+        try {
+            val size = targetIp.indexOf(0)
+            if (size == -1 || size >= 80) {
+                connectionError = INVALID_IP_SIZE
+                return
+            }
+            val tmp = ByteArray(size)
+            System.arraycopy(targetIp, 0, tmp, 0, size)
+            ipStr = tmp.toString(Charset.forName("US-ASCII"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            connectionError = EXCEPTION_PARSING_IP
+            return
+        }
+        try {
+            socket = Socket(ipStr, targetPort)
+            connectionError = NO_ERROR
+            activeSockets++
+        } catch (e: Exception) {
+            e.printStackTrace()
+            connectionError = EXCEPTION_OPEN_SOCKET
+            closeTcpConnection()
+        }
+    }
 
     override fun readByte(addr: Int): Byte {
-
-        val a: Byte = when (addr) {
-            0 -> (if (isActive) 1 else 0).toByte()                              //00, byte online
-            1 -> 2.toByte()                                                     //01, byte type
-            2, 3 -> status.split(addr - 2)                                      //02,03, short status
-            4 -> if (internetAllowed) 1 else 0                                  //04 internet allowed
-            5 -> maxConnections.toByte()                                        //05 maxConnections
-
-            in 8..103 -> when (addr - 8) {
-                1 -> connection0.status.toByte()
-                2 -> connection0.error.toByte()
-                3 -> connection0.flags.toByte()
-                in 4..83 -> connection0.ip[addr - 8 - 4]
-                in 84.splitRange() -> connection0.port.split(addr - 8 - 84)
-                in 88.splitRange() -> connection0.read(addr - 8 - 88)
-                else -> 0
-            }
-            in 104..199 -> when (addr - 104) {
-                1 -> connection1.status.toByte()
-                2 -> connection1.error.toByte()
-                3 -> connection1.flags.toByte()
-                in 4..83 -> connection1.ip[addr - 104 - 4]
-                in 84.splitRange() -> connection1.port.split(addr - 104 - 84)
-                in 88.splitRange() -> connection1.read(addr - 8 - 88)
-                else -> 0
-            }
-            else -> 0
-        }
-        return a
+        return memStruct.read(addr)
     }
 
     override fun writeByte(addr: Int, data: Byte) {
-        when (addr) {
-            in 8..103 -> when (addr - 8) {
-                0 -> connection0.signal(data)
-                3 -> connection0.flags = data.toInt() and 0xFF
-                in 4..83 -> connection0.ip[addr - 8 - 4] = data
-                in 84.splitRange() -> connection0.port = connection0.port.splitSet(addr - 8 - 84, data)
-                92 -> connection0.write(data)
-            }
-            in 104..199 -> when (addr - 104) {
-                0 -> connection1.signal(data)
-                3 -> connection1.flags = data.toInt() and 0xFF
-                in 4..83 -> connection1.ip[addr - 104 - 4] = data
-                in 84.splitRange() -> connection1.port = connection1.port.splitSet(addr - 104 - 84, data)
-                92 -> connection1.write(data)
-            }
-        }
+        memStruct.write(addr, data)
     }
 
     override fun getWorld(): World = parent.world
@@ -122,89 +187,4 @@ struct driver_internet_socket {
     override fun deserializeNBT(nbt: NBTTagCompound?) = Unit
 
     override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
-
-    class Connection {
-        var socket: Socket? = null
-        val status: Int get() = if (socket != null && socket!!.isConnected) 1 else 0
-        var error: Int = 0
-        var flags: Int = 0
-        var ip: ByteArray = ByteArray(80)
-        var port: Int = 0
-
-        var inputStream: InputStream? = null
-        var outputStream: OutputStream? = null
-        var readCache: Int = -1
-
-        fun read(index: Int): Byte {
-            if (index == 3) {
-                if (inputStream != null) {
-                    readCache = inputStream!!.read()
-                } else {
-                    readCache = -1
-                }
-
-            }
-            return readCache.split(index)
-        }
-
-        fun write(data: Byte) {
-            if (outputStream != null) {
-                outputStream!!.write(data.toInt() and 255)
-            }
-        }
-
-        fun signal(data: Byte) {
-            if (data == 0.toByte()) {
-                if (socket != null) {
-                    socket!!.close()
-                    socket = null
-                    inputStream = null
-                    outputStream = null
-                }
-            } else if (data == 1.toByte()) {
-                if (socket != null && !socket!!.isConnected) {
-                    socket!!.close()
-                    socket = null
-                    inputStream = null
-                    outputStream = null
-                }
-                if (socket == null) {
-                    if (port <= 0 || port > 0xFFFF) {
-                        error = 2
-                        return
-                    }
-                    val ipStr: String
-                    try {
-                        val tmp = ByteArray(80)
-                        System.arraycopy(ip, 0, tmp, 0, ip.indexOf(0))
-                        ipStr = tmp.toString(Charset.forName("US-ASCII"))
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        error = 3
-                        return
-                    }
-                    try {
-                        socket = Socket(ipStr, port)
-                        inputStream = socket!!.inputStream
-                        outputStream = socket!!.outputStream
-                        error = 0
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        error = 4
-                    }
-                } else {
-                    error = 1
-                }
-            }
-        }
-    }
 }
-
-//fun main(args: Array<String>) {
-//    val socket = Socket("pastebin.com", 80)
-//    socket.outputStream.write("GET /raw/wRpPhckZ HTTP/1.0\nHost: pastebin.com\n\n".toByteArray())
-//    val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)
-//    println(str)
-//    println(str.replace('\r', 'n'))
-//    socket.close()
-//}

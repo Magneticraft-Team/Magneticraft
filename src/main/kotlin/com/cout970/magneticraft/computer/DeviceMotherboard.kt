@@ -42,7 +42,7 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
         val buffer = IntArray(16)
         repeat(16){
             if(it in mb.bus.devices){
-                buffer[it] = 0xFF000000.toInt() and (it shl 16)
+                buffer[it] = 0xFF000000.toInt() or (it shl 16)
             }
         }
         return buffer

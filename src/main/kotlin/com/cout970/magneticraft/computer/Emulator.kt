@@ -7,15 +7,14 @@ import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.common.FMLCommonHandler
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.Graphics
-import java.awt.Graphics2D
+import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.io.File
 import java.util.regex.Pattern
 import javax.swing.*
+
+
 
 
 /**
@@ -29,6 +28,7 @@ fun main(args: Array<String>) {
 
     val monitor = DeviceMonitor(FakeRef)
     val floppyDrive = DeviceFloppyDrive(FakeRef) { FakeFloppyDisk }
+    val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
     val memory = RAM(0xFFFF + 1, false)
@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
     bus.devices.put(0xFF, mbDevice)
     bus.devices.put(0x00, monitor)
     bus.devices.put(0x01, floppyDrive)
-
+    bus.devices.put(0x02, networkCard)
 
 //     bios string print
 //    print("\n\n\n\n\n")
@@ -82,6 +82,43 @@ fun main(args: Array<String>) {
 //    }
 //    print("\n\n\n\n\n")
 
+    val display = createDisplay(monitor)
+
+    println("Start")
+
+    //start pc
+    motherboard.reset()
+    cpu.debugLevel = 2
+    motherboard.cyclesPerTick = 200000
+    motherboard.start()
+
+    timer = System.currentTimeMillis()
+    while (motherboard.isOnline()) {
+        networkCard.update()
+        //run CPU
+        motherboard.iterate()
+
+        //update display
+        display.revalidate()
+        display.repaint()
+
+        //update world time
+        timer = System.currentTimeMillis()
+        val tick = (timer.and(0xFFFFFF) / 50L).toInt()
+        if (tick != lastTick) {
+            lastTick = tick
+        }
+        Thread.sleep(50)
+    }
+    println("End")
+
+    // This is used to avoid: 'Disconnected from the target VM' in the middle of the CPU output
+    System.out.flush()
+    Thread.sleep(10)
+
+}
+
+private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     val display = MonitorWindow(monitor)
     val window = JFrame("Emulator")
 
@@ -90,10 +127,12 @@ fun main(args: Array<String>) {
     box.add(Box.createVerticalGlue())
     box.add(display)
     box.add(Box.createVerticalGlue())
+
     window.contentPane.apply { background = Color.DARK_GRAY.darker().darker() }
     window.add(box)
     window.pack()
-    window.setSize(811 + 16, 498 + 39)
+
+    window.setSize(8 * 80 + 10 + 16, 16 * 35 + 3 + 39)
     window.isVisible = true
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     window.addKeyListener(object : KeyListener {
@@ -108,39 +147,18 @@ fun main(args: Array<String>) {
 
         override fun keyReleased(e: KeyEvent?) = Unit
     })
-
-    println("Start")
-
-    motherboard.reset()
-    cpu.debugLevel = 2
-    motherboard.cyclesPerTick = 200000
-    motherboard.start()
-    timer = System.currentTimeMillis()
-    while (motherboard.isOnline()) {
-        motherboard.iterate()
-        display.revalidate()
-        display.repaint()
-        timer = System.currentTimeMillis()
-        val tick = (timer.and(0xFFFFFF) / 50L).toInt()
-        if (tick != lastTick) {
-            lastTick = tick
-        }
-    }
-    println("End")
-
-    // This is used to avoid: 'Disconnected from the target VM' in the middle of the CPU output
-    System.out.flush()
-    Thread.sleep(10)
-
+    return display
 }
 
 class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
     init {
-        setSize(811, 498)
-        maximumSize = Dimension(811, 498)
-        minimumSize = Dimension(811, 498)
-        preferredSize = Dimension(811, 498)
+        val y = 16 * 35 + 3
+        val x = 8 * 80 + 10
+        maximumSize = Dimension(x, y)
+        minimumSize = Dimension(x, y)
+        preferredSize = Dimension(x, y)
         background = Color.BLACK
+        font = Font("monospaced", Font.PLAIN, 12)
     }
 
     override fun paint(g: Graphics?) {
@@ -158,8 +176,8 @@ class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
                     selected = true
                 }
                 if (character != 0x20 || selected) {
-                    val x = 10 * column + 5
-                    val y = 14 * line + 15
+                    val x = 8 * column + 4
+                    val y = 16 * line + 15
                     if (selected) {
                         graphics.color = Color.GREEN
                         graphics.fillRect(x, y - 13, 10, 14)

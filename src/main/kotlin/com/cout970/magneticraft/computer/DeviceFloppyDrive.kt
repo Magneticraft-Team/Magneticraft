@@ -128,10 +128,6 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
             ReadWriteByteArray("buffer", getBuffer())
     )
 
-    init {
-        println(memStruct)
-    }
-
     override fun readByte(addr: Int): Byte {
         return memStruct.read(addr)
     }
