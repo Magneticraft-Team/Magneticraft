@@ -56,9 +56,9 @@ object Decoration : IBlockMaker {
                     "inventory" to resource("models/block/mcx/tube_light.mcx")
             )
             //methods
-            boundingBox = CommonMethods.updateBoundingBoxWithOrientation(
-                    Vec3d(PIXEL * 3, 1.0, 0.0) toAABBWith Vec3d(1.0 - PIXEL * 3, 1.0 - PIXEL * 4, 1.0)
-            )
+            boundingBox = CommonMethods.updateBoundingBoxWithOrientation {
+                listOf(Vec3d(PIXEL * 3, 1.0, 0.0) toAABBWith Vec3d(1.0 - PIXEL * 3, 1.0 - PIXEL * 4, 1.0))
+            }
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()

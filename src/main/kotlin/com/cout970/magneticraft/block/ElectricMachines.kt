@@ -70,9 +70,9 @@ object ElectricMachines : IBlockMaker {
                     "inventory" to resource("models/block/mcx/connector.mcx")
             )
             //methods
-            boundingBox = CommonMethods.updateBoundingBoxWithFacing(
-                    Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0)
-            )
+            boundingBox = CommonMethods.updateBoundingBoxWithFacing {
+                listOf(Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0))
+            }
             onBlockPlaced = CommonMethods::placeWithFacing
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::enableAutoConnectWires
@@ -132,7 +132,7 @@ object ElectricMachines : IBlockMaker {
             )
             boundingBox = {
                 val size = 0.0625 * 3
-                Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size)
+                listOf(Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size))
             }
             onBlockBreak = ElectricMachines::breakElectricPole
             blockStatesToPlace = ElectricMachines::placeElectricPole
@@ -161,7 +161,7 @@ object ElectricMachines : IBlockMaker {
             )
             boundingBox = {
                 val size = 0.0625 * 3
-                Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size)
+                listOf(Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size))
             }
             onBlockBreak = ElectricMachines::breakElectricPole
             onDrop = {

@@ -35,7 +35,7 @@ class BlockBuilder {
     var registryName: ResourceLocation? = null
     var material: Material? = null
     var creativeTab: CreativeTabs? = null
-    var boundingBox: ((BoundingBoxArgs) -> AABB)? = null
+    var boundingBox: ((BoundingBoxArgs) -> List<AABB>)? = null
     // default value if false
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null

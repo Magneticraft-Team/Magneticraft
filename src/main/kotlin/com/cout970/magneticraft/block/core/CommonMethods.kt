@@ -110,22 +110,24 @@ object CommonMethods {
     /**
      * The base value is associated to the NORTH direction
      */
-    fun updateBoundingBoxWithFacing(base: AxisAlignedBB): (BoundingBoxArgs) -> AxisAlignedBB {
-        return { (state) ->
-            val facing = state[PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
+    fun updateBoundingBoxWithFacing(base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+        return { args ->
+            val boxes = base(args)
+            val facing = args.state[PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
             val center = vec3Of(0.5)
-            facing.rotateBox(center, base)
+            boxes.map { facing.rotateBox(center, it) }
         }
     }
 
     /**
      * The base value is associated to the NORTH direction
      */
-    fun updateBoundingBoxWithOrientation(base: AxisAlignedBB): (BoundingBoxArgs) -> AxisAlignedBB {
-        return { (state) ->
-            val facing = state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+      fun updateBoundingBoxWithOrientation(base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+        return { args ->
+            val boxes = base(args)
+            val facing = args.state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
             val center = vec3Of(0.5)
-            facing.rotateBox(center, base)
+            boxes.map { facing.rotateBox(center, it) }
         }
     }
 

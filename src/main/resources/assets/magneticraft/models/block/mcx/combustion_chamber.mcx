@@ -178,7 +178,7 @@
       "texture": "magneticraft:blocks/machines/combustion_gen_black_bottom"
     },
     {
-      "name": "Shape_29",
+      "name": "Door",
       "from": 57,
       "to": 63,
       "texture": "magneticraft:blocks/machines/combustion_gen_metal1"

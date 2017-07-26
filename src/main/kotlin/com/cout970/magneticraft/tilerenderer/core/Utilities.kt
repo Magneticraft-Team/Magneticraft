@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.tilerenderer.TileRendererConveyorBelt
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.item.ItemSkull
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -92,6 +94,24 @@ object Utilities {
             }
             else -> Unit
         }
+    }
+
+    fun renderItem(stack: ItemStack, facing: EnumFacing) {
+        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+            TileRendererConveyorBelt.translate(0.0, -0.9 * PIXEL, 0.0)
+            TileRendererConveyorBelt.rotate(90f, 1f, 0f, 0f)
+            TileRendererConveyorBelt.rotate(-facing.horizontalAngle, 0f, 0f, 1f)
+            TileRendererConveyorBelt.translate(0.0, -1 * PIXEL, 0.0)
+            val s = 0.5
+            GlStateManager.scale(s, s, s)
+        } else {
+            TileRendererConveyorBelt.rotate(-facing.horizontalAngle, 0f, 1f, 0f)
+            TileRendererConveyorBelt.translate(0.0, -1.9 * PIXEL, 0.0)
+            val s = 0.9
+            GlStateManager.scale(s, s, s)
+        }
+
+        Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
     }
 
     fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms.TransformType, alpha: Float) {

@@ -7,6 +7,7 @@ package com.cout970.magneticraft.config
 const val CATEGORY_GENERAL = "general"
 const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
 const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
+const val CATEGORY_GUI = CATEGORY_GENERAL + ".gui"
 const val CATEGORY_PC = CATEGORY_GENERAL + ".pc"
 const val CATEGORY_MACHINES = CATEGORY_GENERAL + ".machines"
 
@@ -33,6 +34,9 @@ object Config {
 
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat to display, Celsius or Fahrenheit")
     var heatUnitCelsius = true
+
+    @ConfigValue(category = CATEGORY_GUI, comment = "Allow players to use the gui of the combustion generator")
+    var allowCombustionChamberGui = true
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
                                                        "NOTE: all the values in the config about energy are in Watts")

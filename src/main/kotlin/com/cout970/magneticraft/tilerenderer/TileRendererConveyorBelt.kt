@@ -8,14 +8,8 @@ import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.item.ItemSkull
-import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 2017/06/16.
@@ -100,27 +94,9 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
             stackMatrix {
                 val pos = box.getPos(partialTicks)
                 translate(pos.xd, 13.5 * PIXEL, pos.zd)
-                renderItem(box.item, te.facing)
+                Utilities.renderItem(box.item, te.facing)
             }
         }
-    }
-
-    fun renderItem(stack: ItemStack, facing: EnumFacing) {
-        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
-            translate(0.0, -0.9 * PIXEL, 0.0)
-            rotate(90f, 1f, 0f, 0f)
-            rotate(-facing.horizontalAngle, 0f, 0f, 1f)
-            translate(0.0, -1 * PIXEL, 0.0)
-            val s = 0.5
-            GlStateManager.scale(s, s, s)
-        } else {
-            rotate(-facing.horizontalAngle, 0f, 1f, 0f)
-            translate(0.0, -1.9 * PIXEL, 0.0)
-            val s = 0.9
-            GlStateManager.scale(s, s, s)
-        }
-
-        Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
     }
 
     fun renderStaticParts(te: TileConveyorBelt, partialTicks: Float) {

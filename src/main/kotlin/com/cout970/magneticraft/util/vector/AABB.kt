@@ -1,9 +1,12 @@
 package com.cout970.magneticraft.util.vector
 
+import com.cout970.magneticraft.IVector3
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3i
+
+
 
 /**
  * Created by cout970 on 2017/02/20.
@@ -43,5 +46,30 @@ fun AxisAlignedBB.scale(scale: Double) = AxisAlignedBB(
         minX * scale, minY * scale, minZ * scale,
         maxX * scale, maxY * scale, maxZ * scale
 )
+
+fun AxisAlignedBB.isHitBy(v: IVector3): Boolean {
+    if (maxY == v.y || minY == v.y) {
+        if (v.x in minX..maxX) {
+            if (v.z in minZ..maxZ) {
+                return true
+            }
+        }
+    }
+    if (maxX == v.x || minX == v.x) {
+        if (v.y in minY..maxY) {
+            if (v.z in minZ..maxZ) {
+                return true
+            }
+        }
+    }
+    if (maxZ == v.z || minZ == v.z) {
+        if (v.x in minX..maxX) {
+            if (v.y in minY..maxY) {
+                return true
+            }
+        }
+    }
+    return false
+}
 
 val EMPTY_AABB = AxisAlignedBB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)

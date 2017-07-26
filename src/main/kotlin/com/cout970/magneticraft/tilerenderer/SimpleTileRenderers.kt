@@ -336,11 +336,16 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
 
 @RegisterRenderer(TileCombustionChamber::class)
 object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>(
-        modelLocation = { ModelResourceLocation(Machines.combustionChamber.registryName, "model") }
+        modelLocation = { ModelResourceLocation(Machines.combustionChamber.registryName, "model") },
+        filters = listOf<(String) -> Boolean>({ it != "Door" }, { it == "Door" })
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileCombustionChamber) {
         Utilities.rotateFromCenter(te.facing, 180f)
-        models.forEach { it.renderTextured() }
+        models.take(models.size - 1).forEach { it.renderTextured() }
+        if (te.combustionChamberModule.doorOpen) {
+            Utilities.customRotate(vec3Of(0, -135, 0), vec3Of(13.5 * PIXEL, 0.0, 0.5 * PIXEL))
+        }
+        models.last().renderTextured()
     }
 }
 

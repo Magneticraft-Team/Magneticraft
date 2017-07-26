@@ -5,14 +5,18 @@ import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.util.vector.EMPTY_AABB
+import com.cout970.magneticraft.util.vector.cut
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMapperBase
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -20,8 +24,10 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.RayTraceResult
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
@@ -43,7 +49,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var alwaysDropDefault = false
 
     // Methods
-    var aabb: ((BoundingBoxArgs) -> AABB)? = null
+    var aabb: ((BoundingBoxArgs) -> List<AABB>)? = null
     var onActivated: ((OnActivatedArgs) -> Boolean)? = null
     var stateMapper: ((IBlockState) -> ModelResourceLocation)? = null
     var onBlockPlaced: ((OnBlockPlacedArgs) -> IBlockState)? = null
@@ -80,7 +86,69 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
     // event stuff
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AABB {
-        return aabb?.invoke(BoundingBoxArgs(state, source, pos)) ?: FULL_BLOCK_AABB
+        return aabb?.invoke(BoundingBoxArgs(state, source, pos))?.reduce { acc, aabb ->
+            acc.union(aabb)
+        } ?: FULL_BLOCK_AABB
+    }
+
+    @Suppress("OverridingDeprecatedMember", "DEPRECATION")
+    override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB,
+                                       collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?,
+                                       p_185477_7_: Boolean) {
+        aabb?.let {
+            val list = it.invoke(BoundingBoxArgs(state, worldIn, pos))
+            val boxes = list.mapNotNull { it.cut(FULL_BLOCK_AABB)?.offset(pos) }
+            boxes.filterTo(collidingBoxes) { entityBox.intersects(it) }
+            return
+        }
+        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_)
+    }
+
+    @Suppress("OverridingDeprecatedMember", "DEPRECATION")
+    override fun getSelectedBoundingBox(state: IBlockState, worldIn: World, pos: BlockPos): AxisAlignedBB {
+        aabb?.let {
+            val rel = it.invoke(BoundingBoxArgs(state, worldIn, pos))
+
+            val player = Minecraft.getMinecraft().player
+            val start = player.getPositionEyes(0f)
+            val look = player.getLook(0f)
+            val blockReachDistance = Minecraft.getMinecraft().playerController!!.blockReachDistance
+            val end = start.addVector(
+                    look.x * blockReachDistance,
+                    look.y * blockReachDistance,
+                    look.z * blockReachDistance
+            )
+
+            val res = rel
+                    .mapNotNull { it.cut(FULL_BLOCK_AABB) }
+                    .associate { it to rayTrace(pos, start, end, it) }
+                    .filter { it.value != null }
+                    .map { it.key to it.value }
+                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                    .firstOrNull()?.first
+
+            return res?.offset(pos) ?: EMPTY_AABB
+        }
+        return super.getSelectedBoundingBox(state, worldIn, pos)
+    }
+
+    @Suppress("OverridingDeprecatedMember")
+    override fun collisionRayTrace(blockState: IBlockState, worldIn: World, pos: BlockPos, start: Vec3d,
+                                   end: Vec3d): RayTraceResult? {
+
+        aabb?.let {
+            val rel = it.invoke(BoundingBoxArgs(blockState, worldIn, pos))
+            val res = rel
+                    .mapNotNull { it.cut(FULL_BLOCK_AABB) }
+                    .associate { it to rayTrace(pos, start, end, it) }
+                    .filter { it.value != null }
+                    .map { it.key to it.value }
+                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                    .firstOrNull()?.second
+
+            return res
+        }
+        return this.rayTrace(pos, start, end, blockState.getBoundingBox(worldIn, pos))
     }
 
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,

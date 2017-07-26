@@ -49,7 +49,7 @@ object Machines : IBlockMaker {
             customModels = listOf("normal" to resource("models/block/mcx/crushing_table.mcx"))
             hasCustomModel = true
             //methods
-            boundingBox = { vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.875, 1) }
+            boundingBox = { listOf(vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.875, 1)) }
             onActivated = CommonMethods::delegateToModule
         }.build()
 
@@ -64,7 +64,7 @@ object Machines : IBlockMaker {
             generateDefaultItemModel = false
             alwaysDropDefault = true
             //methods
-            boundingBox = { vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.8125, 1) }
+            boundingBox = { listOf(vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.8125, 1)) }
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::delegateToModule
@@ -125,7 +125,7 @@ object Machines : IBlockMaker {
             }
             boundingBox = {
                 val center = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false
-                if (center) Block.FULL_BLOCK_AABB else AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
+                if (center) listOf(Block.FULL_BLOCK_AABB) else listOf(AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0))
             }
         }.build()
 
@@ -140,9 +140,16 @@ object Machines : IBlockMaker {
             generateDefaultItemModel = false
             alwaysDropDefault = true
             //methods
+            boundingBox = CommonMethods.updateBoundingBoxWithOrientation {
+                listOf(
+                        (vec3Of(0, 0, 0) toAABBWith vec3Of(16, 12, 15)).scale(PIXEL),
+                        (vec3Of(0, 12, 0) toAABBWith vec3Of(16, 16, 16)).scale(PIXEL),
+                        (vec3Of(3, 2, 15) toAABBWith vec3Of(13, 10, 16)).scale(PIXEL)
+                )
+            }
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
-            onActivated = CommonMethods::openGui
+            onActivated = CommonMethods::delegateToModule
         }.build()
 
         steamBoiler = builder.withName("steam_boiler").copy {
@@ -154,7 +161,7 @@ object Machines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             //methods
-            boundingBox = { (vec3Of(1, 0, 1) toAABBWith vec3Of(15, 16, 15)).scale(PIXEL) }
+            boundingBox = { listOf((vec3Of(1, 0, 1) toAABBWith vec3Of(15, 16, 15)).scale(PIXEL)) }
             onActivated = CommonMethods::delegateToModule
         }.build()
 
