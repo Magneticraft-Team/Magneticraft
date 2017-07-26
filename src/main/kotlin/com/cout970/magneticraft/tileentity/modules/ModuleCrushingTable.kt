@@ -95,6 +95,7 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivate
         return CrushingTableRecipeManager.findRecipe(storedItem) != null
     }
 
+    @Suppress("DEPRECATION")
     fun useHammer(world: World, pos: BlockPos, playerIn: EntityPlayer, heldItem: ItemStack) {
         if (hasWork() && heldItem.hasCapability(ITEM_HAMMER!!, null)) {
 

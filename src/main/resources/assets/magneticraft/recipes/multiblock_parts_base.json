@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "ABA",
+    "AAA",
     "BCB",
-    "ABA"
+    "DDD"
   ],
   "key": {
     "A": {
@@ -15,13 +15,17 @@
       "ore": "ingotIron"
     },
     "C": {
+      "item": "magneticraft:crafting",
+      "data": 2
+    },
+    "D": {
       "type": "forge:ore_dict",
-      "ore": "stone"
+      "ore": "lightPlateLead"
     }
   },
   "result": {
     "item": "magneticraft:multiblock_parts",
     "data": 0,
-    "count": 4
+    "count": 2
   }
 }

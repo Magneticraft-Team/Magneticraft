@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AA ",
     "ABA",
-    " B "
+    "CBC",
+    "ABA"
   ],
   "key": {
     "A": {
@@ -11,11 +11,16 @@
       "ore": "ingotIron"
     },
     "B": {
+      "item": "magneticraft:copper_coil",
+      "nbt": "{}"
+    },
+    "C": {
       "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "ore": "lightPlateLead"
     }
   },
   "result": {
-    "item": "magneticraft:iron_hammer"
+    "item": "magneticraft:multiblock_parts",
+    "data": 4
   }
 }

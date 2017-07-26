@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AA ",
-    " A ",
-    "BCB"
+    "ABA",
+    "BAB",
+    "ABA"
   ],
   "key": {
     "A": {
@@ -12,15 +12,11 @@
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron"
-    },
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "ingotCopper"
+      "ore": "string"
     }
   },
   "result": {
-    "item": "magneticraft:inserter",
-    "data": 0
+    "item": "magneticraft:crafting",
+    "data": 5
   }
 }

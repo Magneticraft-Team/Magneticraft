@@ -2,22 +2,17 @@
   "type": "forge:ore_shaped",
   "pattern": [
     "AAA",
-    "B B",
-    "B B"
+    "A A",
+    "AAA"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
       "ore": "lightPlateIron"
-    },
-    "B": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
     }
   },
   "result": {
-    "item": "magneticraft:conveyor_belt",
-    "data": 0,
-    "count": 12
+    "item": "magneticraft:multiblock_parts",
+    "data": 5
   }
 }

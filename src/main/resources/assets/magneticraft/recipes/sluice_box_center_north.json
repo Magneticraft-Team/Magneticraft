@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "A  ",
-    "BAA",
-    "CCC"
+    "AB ",
+    "CAB",
+    "DDD"
   ],
   "key": {
     "A": {
@@ -11,9 +11,14 @@
       "ore": "plankWood"
     },
     "B": {
-      "item": "minecraft:iron_bars"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     },
     "C": {
+      "item": "magneticraft:crafting",
+      "data": 5
+    },
+    "D": {
       "item": "minecraft:stone_slab",
       "data": 0
     }

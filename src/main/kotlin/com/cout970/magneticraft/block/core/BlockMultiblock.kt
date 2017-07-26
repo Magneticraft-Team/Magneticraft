@@ -133,7 +133,7 @@ class BlockMultiblock(
 
     //removedByPlayer
 
-    @Suppress("OverridingDeprecatedMember")
+    @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override fun getRenderType(state: IBlockState): EnumBlockRenderType {
         val active = state[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.active ?: true
         return if (active) EnumBlockRenderType.INVISIBLE else super.getRenderType(state)

@@ -2,19 +2,23 @@
   "type": "forge:ore_shaped",
   "pattern": [
     "AAA",
-    " B ",
-    "BCB"
+    "BCB",
+    "CDC"
   ],
   "key": {
     "A": {
-      "type": "forge:ore_dict",
-      "ore": "stone"
+      "item": "minecraft:stone_slab",
+      "data": 0
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "ore": "stickWood"
     },
     "C": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "D": {
       "type": "forge:ore_dict",
       "ore": "logWood"
     }

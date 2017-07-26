@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    " AA",
-    " BA",
-    "B A"
+    "AA ",
+    "ABA",
+    " B "
   ],
   "key": {
     "A": {
@@ -16,7 +16,6 @@
     }
   },
   "result": {
-    "item": "magneticraft:stone_hammer",
-    "data": 0
+    "item": "magneticraft:stone_hammer"
   }
 }

@@ -1,29 +1,34 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "ABA",
-    "CDC",
-    "CDC"
+    "AB ",
+    "BCB",
+    "DED"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "nuggetIron"
+      "ore": "ingotIron"
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "nuggetCopper"
+      "ore": "nuggetIron"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateLead"
+      "ore": "ingotLead"
     },
     "D": {
       "type": "forge:ore_dict",
-      "ore": "dustSulfur"
+      "ore": "lightPlateIron"
+    },
+    "E": {
+      "item": "magneticraft:crafting",
+      "data": 2
     }
   },
   "result": {
-    "item": "magneticraft:battery_item_low"
+    "item": "magneticraft:inserter",
+    "data": 0
   }
 }
