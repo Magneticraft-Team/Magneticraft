@@ -54,10 +54,10 @@ class MagneticraftPlugin : IModPlugin {
                 id = CRUSHING_TABLE_ID,
                 backgroundTexture = "crushing_table",
                 unlocalizedTitle = "text.magneticraft.jei.crushing_table",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
+                initFunc = { recipeLayout, recipeWrapper, ing ->
                     recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
                     recipeLayout.itemStacks.init(1, false, 48, 51 - 5)
-                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                    recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
                 }
         ))
@@ -65,8 +65,9 @@ class MagneticraftPlugin : IModPlugin {
                 id = SLUICE_BOX_ID,
                 backgroundTexture = "sluice_box",
                 unlocalizedTitle = "text.magneticraft.jei.sluice_box",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
+                initFunc = { recipeLayout, recipeWrapper, ing ->
                     val recipe = recipeWrapper.recipe
+
                     val outputs = (listOf(recipe.primaryOutput to 1f) + recipe.secondaryOutput)
                             .filter { it.first.isNotEmpty }
 
@@ -78,7 +79,7 @@ class MagneticraftPlugin : IModPlugin {
                         recipeLayout.itemStacks.init(index + 1, false, x, y)
                     }
 
-                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                    recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
                     repeat(outputs.size) { index ->
                         val stack = outputs[index].first
                         val percent = outputs[index].second * 100f
@@ -135,7 +136,11 @@ class CrushingTableRecipeWrapper(val recipe: ICrushingTableRecipe) : IRecipeWrap
 class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
 
     override fun getIngredients(ingredients: IIngredients) {
-        ingredients.setInput(ItemStack::class.java, recipe.input)
+        if (recipe.useOreDictionaryEquivalencies()) {
+            ingredients.setInputs(ItemStack::class.java, listOf(getOreDictEquivalents(recipe.input)))
+        } else {
+            ingredients.setInput(ItemStack::class.java, recipe.input)
+        }
         ingredients.setOutputs(ItemStack::class.java,
                 listOf(recipe.primaryOutput) + recipe.secondaryOutput.map { it.first }
         )
@@ -143,7 +148,11 @@ class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
 }
 
 private fun getOreDictEquivalents(stack: ItemStack): List<ItemStack> {
-    return OreDictionary.getOreIDs(stack).flatMap { id ->
+    val ids = OreDictionary.getOreIDs(stack)
+    if (ids.isEmpty()) return listOf(stack)
+    val ores = ids.flatMap { id ->
         OreDictionary.getOres(OreDictionary.getOreName(id)).toList()
     }
+    if (ores.isEmpty()) return listOf(stack)
+    return ores
 }

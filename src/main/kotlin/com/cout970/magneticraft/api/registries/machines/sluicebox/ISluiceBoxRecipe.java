@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface ISluiceBoxRecipe {
 
+    boolean useOreDictionaryEquivalencies();
+
     /**
      * The input stack of this recipe
      * The stacksize is ignored

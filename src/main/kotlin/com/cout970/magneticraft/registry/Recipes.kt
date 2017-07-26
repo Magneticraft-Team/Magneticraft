@@ -123,7 +123,6 @@ fun registerRecipes() {
     addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), Blocks.PRISMARINE.stack())
     addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), Blocks.END_STONE.stack(1))
 
-
     //SMELTING RECIPES
     addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 0), ItemStack(Decoration.limestone, 1, 0))
     addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 2), ItemStack(Decoration.limestone, 1, 2))
@@ -135,17 +134,28 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(Metals.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
 
     Metals.Metal.values().forEach {
-        if(!it.isComposite){
+        if(it.isComposite) {
+            addSmeltingRecipe(it.subComponents[0]().getIngot().withSize(2), it.getRockyChunk())
+            addSmeltingRecipe(it.subComponents[1]().getIngot().withSize(2), it.getChunk())
+        } else {
             addSmeltingRecipe(it.getIngot(), it.getDust())
+            if(it.isOre){
+                addSmeltingRecipe(it.getIngot(), it.getRockyChunk())
+                addSmeltingRecipe(it.getIngot().withSize(2), it.getChunk())
+            }
         }
-        addSmeltingRecipe(it.getIngot(), it.getRockyChunk())
-        addSmeltingRecipe(it.getIngot().withSize(2), it.getChunk())
     }
 
     //SLUICE BOX RECIPES
 
     Metals.Metal.values().forEach {
-        addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), listOf(COBBLESTONE.stack() to 0.15f))
+        if(it.isComposite){
+            addSluiceBoxRecipe(it.getRockyChunk(), ItemStack.EMPTY,
+                    it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f } + listOf(COBBLESTONE.stack() to 0.15f)
+            )
+        } else {
+            addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), listOf(COBBLESTONE.stack() to 0.15f))
+        }
     }
 
     addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))

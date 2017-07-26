@@ -20,7 +20,7 @@ open class ModuleInventory(
         size: Int,
         override val name: String = "module_inventory",
         val capabilityFilter: (IItemHandler) -> IItemHandler? = { it },
-        val onContentChange: (IItemHandler, Int) -> Unit = { inv, index -> Unit }
+        val onContentChange: (IItemHandler, Int) -> Unit = { _, _ -> Unit }
 ) : IModule {
 
     lateinit override var container: IModuleContainer

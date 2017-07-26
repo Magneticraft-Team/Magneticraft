@@ -27,7 +27,6 @@ abstract class CommonProxy {
         initTileEntities()
         initFluids()
         //Common preInit stuff
-        registerFuelHandler()
         registerOreDictionaryEntries()
         MultiblockManager.registerDefaults()
     }

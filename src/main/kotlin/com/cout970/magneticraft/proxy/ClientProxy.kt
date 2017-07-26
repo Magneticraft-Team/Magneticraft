@@ -120,7 +120,7 @@ class ClientProxy : CommonProxy() {
     /**
      * Updates all the TileEntityRenderers to reload models
      */
-    @Suppress("unused")
+    @Suppress("unused", "UNUSED_PARAMETER")
     @SubscribeEvent
     fun onModelRegistryReload(event: ModelBakeEvent) {
         tileRenderers.forEach { it.onModelRegistryReload() }

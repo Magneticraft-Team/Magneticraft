@@ -218,6 +218,10 @@ class TileElectricPole : TileBase(), ITickable {
         initModules(electricModule)
     }
 
+    override fun update() {
+        super.update()
+    }
+
     fun getConnectors(): List<IVector3> {
         val offset = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
         val first = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).add(offset)
@@ -247,6 +251,10 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     init {
         electricModule.autoConnectWires = true
         initModules(electricModule)
+    }
+
+    override fun update() {
+        super.update()
     }
 
     fun getConnectors(): List<IVector3> {

@@ -15,6 +15,8 @@ data class SluiceBoxRecipe(
         val oreDict: Boolean
 ) : ISluiceBoxRecipe {
 
+    override fun useOreDictionaryEquivalencies(): Boolean = oreDict
+
     override fun getInput(): ItemStack = input.copy()
 
     override fun getPrimaryOutput(): ItemStack = primaryOutput.copy()

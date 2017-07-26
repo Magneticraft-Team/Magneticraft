@@ -543,7 +543,7 @@ class CPU_MIPS : ICPU {
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        if (nbt!!.hasKey("PC")) {
+        if (nbt.hasKey("PC")) {
             registers = nbt.getIntArray("Regs")
             if (registers.size != 32) {
                 registers = IntArray(32)

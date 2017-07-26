@@ -12,6 +12,7 @@ open class BlockTileBase(
         material: Material
 ) : BlockBase(material), ITileEntityProvider {
 
+    @Suppress("DEPRECATION")
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
         val state = getStateFromMeta(meta)
         filter?.let {

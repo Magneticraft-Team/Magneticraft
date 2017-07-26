@@ -7,7 +7,7 @@ open class CacheNode<K, V>(
         key: K,
         var compute: (K) -> V,
         var equals: (K, K) -> Boolean = { a, b -> a == b },
-        var reset: (K, V) -> Unit = { k, v -> Unit }
+        var reset: (K, V) -> Unit = { _, _ -> Unit }
 ) {
 
     private var value: V? = null

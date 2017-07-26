@@ -18,11 +18,13 @@ import kotlin.system.measureTimeMillis
 @Suppress("UNUSED_PARAMETER", "unused")
 //Basic mod information for Forge
 @Mod(
-    modid = MOD_ID,
-    name = MOD_NAME,
-    version = MOD_VERSION,
-    modLanguage = "kotlin",
-    modLanguageAdapter = LANG_ADAPTER
+        modid = MOD_ID,
+        name = MOD_NAME,
+        version = MOD_VERSION,
+        modLanguage = "kotlin",
+        modLanguageAdapter = LANG_ADAPTER,
+        acceptedMinecraftVersions = "[1.12]"
+//        , dependencies = "required-after:modelloader@[1.0.0,1.1.0)"
 )
 //Singleton, see KotlinAdapter to know how it's loaded by forge
 object Magneticraft {
@@ -44,8 +46,8 @@ object Magneticraft {
      * See ClientProxy and ServerProxy
      */
     @SidedProxy(
-        clientSide = "com.cout970.magneticraft.proxy.ClientProxy",
-        serverSide = "com.cout970.magneticraft.proxy.ServerProxy"
+            clientSide = "com.cout970.magneticraft.proxy.ClientProxy",
+            serverSide = "com.cout970.magneticraft.proxy.ServerProxy"
     )
     lateinit var proxy: CommonProxy
 

@@ -4,30 +4,11 @@ item.magneticraft.iron_hammer_normal.name=Iron Hammer
 item.magneticraft.stone_hammer_normal.name=Stone Hammer
 item.magneticraft.steel_hammer_normal.name=Steel Hammer
 
-#item.magneticraft.crushed_ore_iron.name=Iron Chunk
-#item.magneticraft.crushed_ore_gold.name=Gold Chunk
-#item.magneticraft.crushed_ore_copper.name=Copper Chunk
-#item.magneticraft.crushed_ore_lead.name=Lead Chunk
-#item.magneticraft.crushed_ore_cobalt.name=Cobalt Chunk
-#item.magneticraft.crushed_ore_tungsten.name=Tungsten Chunk
-
-#item.magneticraft.crushed_lapis.name=Lapis Lazuli Chunk
-
 #item.magneticraft.crushed_coal.name=Crushed Coal
 #item.magneticraft.wood_chip.name=Wood Chips
 #item.magneticraft.pulp_wood.name=Wood Pulp
 #item.magneticraft.item_mesh.name=Iron Mesh
 
-#item.magneticraft.pebbles_iron.name=Iron Pebbles
-#item.magneticraft.pebbles_gold.name=Gold Pebbles
-#item.magneticraft.pebbles_copper.name=Copper Pebbles
-#item.magneticraft.pebbles_lead.name=Lead Pebbles
-#item.magneticraft.pebbles_cobalt.name=Cobalt Pebbles
-#item.magneticraft.pebbles_tungsten.name=Tungsten Pebbles
-
-#item.magneticraft.coal_pebbles.name=Coal Pebbles
-
-#item.magneticraft.lapis_pebbles.name=Lapis Lazuli Pebbles
 
 item.magneticraft.heavy_plates_iron.name=Heavy Iron Plate
 item.magneticraft.heavy_plates_gold.name=Heavy Gold Plate
@@ -50,12 +31,27 @@ item.magneticraft.nuggets_lead.name=Lead Nugget
 item.magneticraft.nuggets_cobalt.name=Cobalt Nugget
 item.magneticraft.nuggets_tungsten.name=Tungsten Nugget
 item.magneticraft.nuggets_steel.name=Steel Nugget
+item.magneticraft.nuggets_aluminium.name=Aluminium Nugget
+item.magneticraft.nuggets_silver.name=Silver Nugget
+item.magneticraft.nuggets_mithril.name=Mithril Nugget
+item.magneticraft.nuggets_tin.name=Tin Nugget
+item.magneticraft.nuggets_zinc.name=Zinc Nugget
+item.magneticraft.nuggets_galena.name=Galena Nugget
+item.magneticraft.nuggets_osmium.name=Osmium Nugget
+item.magneticraft.nuggets_nickel.name=Nickel Nugget
 
 item.magneticraft.ingots_copper.name=Copper Ingot
 item.magneticraft.ingots_lead.name=Lead Ingot
 item.magneticraft.ingots_cobalt.name=Cobalt Ingot
 item.magneticraft.ingots_tungsten.name=Tungsten Ingot
 item.magneticraft.ingots_steel.name=Steel Ingot
+item.magneticraft.ingots_aluminium.name=Aluminium Ingot
+item.magneticraft.ingots_silver.name=Silver Ingot
+item.magneticraft.ingots_mithril.name=Mithril Ingot
+item.magneticraft.ingots_tin.name=Tin Ingot
+item.magneticraft.ingots_zinc.name=Zinc Ingot
+item.magneticraft.ingots_osmium.name=Osmium Ingot
+item.magneticraft.ingots_nickel.name=Nickel Ingot
 
 item.magneticraft.chunks_iron.name=Iron Chunk
 item.magneticraft.chunks_gold.name=Gold Chunk
@@ -63,7 +59,29 @@ item.magneticraft.chunks_copper.name=Copper Chunk
 item.magneticraft.chunks_lead.name=Lead Chunk
 item.magneticraft.chunks_cobalt.name=Cobalt Chunk
 item.magneticraft.chunks_tungsten.name=Tungsten Chunk
-item.magneticraft.chunks_steel.name=Steel Chunk
+item.magneticraft.chunks_aluminium.name=Aluminium Chunk
+item.magneticraft.chunks_silver.name=Silver Chunk
+item.magneticraft.chunks_mithril.name=Mithril Chunk
+item.magneticraft.chunks_tin.name=Tin Chunk
+item.magneticraft.chunks_zinc.name=Zinc Chunk
+item.magneticraft.chunks_galena.name=Galena Chunk
+item.magneticraft.chunks_osmium.name=Osmium Chunk
+item.magneticraft.chunks_nickel.name=Nickel Chunk
+
+item.magneticraft.rocky_chunks_iron.name=Iron Rocky Chunk
+item.magneticraft.rocky_chunks_gold.name=Gold Rocky Chunk
+item.magneticraft.rocky_chunks_copper.name=Copper Rocky Chunk
+item.magneticraft.rocky_chunks_lead.name=Lead Rocky Chunk
+item.magneticraft.rocky_chunks_cobalt.name=Cobalt Rocky Chunk
+item.magneticraft.rocky_chunks_tungsten.name=Tungsten Rocky Chunk
+item.magneticraft.rocky_chunks_aluminium.name=Aluminium Rocky Chunk
+item.magneticraft.rocky_chunks_silver.name=Silver Rocky Chunk
+item.magneticraft.rocky_chunks_mithril.name=Mithril Rocky Chunk
+item.magneticraft.rocky_chunks_tin.name=Tin Rocky Chunk
+item.magneticraft.rocky_chunks_zinc.name=Zinc Rocky Chunk
+item.magneticraft.rocky_chunks_galena.name=Galena Rocky Chunk
+item.magneticraft.rocky_chunks_osmium.name=Osmium Rocky Chunk
+item.magneticraft.rocky_chunks_nickel.name=Nickel Rocky Chunk
 
 item.magneticraft.dusts_iron.name=Iron Dust
 item.magneticraft.dusts_gold.name=Gold Dust
@@ -72,6 +90,13 @@ item.magneticraft.dusts_lead.name=Lead Dust
 item.magneticraft.dusts_cobalt.name=Cobalt Dust
 item.magneticraft.dusts_tungsten.name=Tungsten Dust
 item.magneticraft.dusts_steel.name=Steel Dust
+item.magneticraft.dusts_aluminium.name=Aluminium Dust
+item.magneticraft.dusts_silver.name=Silver Dust
+item.magneticraft.dusts_mithril.name=Mithril Dust
+item.magneticraft.dusts_tin.name=Tin Dust
+item.magneticraft.dusts_zinc.name=Zinc Dust
+item.magneticraft.dusts_osmium.name=Osmium Dust
+item.magneticraft.dusts_nickel.name=Nickel Dust
 
 item.magneticraft.copper_coil_normal.name=Copper Coil
 item.magneticraft.crafting_sulfur.name=Sulfur Crystal
@@ -129,7 +154,7 @@ tile.magneticraft.electric_pole_north.name=Electric Pole
 tile.magneticraft.electric_pole_transformer_north.name=Electric Pole Transformer
 tile.magneticraft.electric_furnace_north.name=Electric furnace
 tile.magneticraft.combustion_chamber_north.name=Combustion Chamber
-tile.magneticraft.steam_boiler_normal.name=Combustion Chamber
+tile.magneticraft.steam_boiler_normal.name=Boiler
 
 #tile.magneticraft.electric_heater_off.name=Electric Heater
 #tile.magneticraft.electric_heater_on.name=Electric Heater
@@ -170,6 +195,9 @@ tile.magneticraft.multiblock_parts_base.name=Machine Block
 tile.magneticraft.multiblock_parts_mesh.name=Filter Machine Block
 tile.magneticraft.multiblock_parts_electric.name=Electrical Machine Block
 tile.magneticraft.multiblock_parts_striped.name=Striped Machine Block
+tile.magneticraft.multiblock_parts_grate.name=Iron Grate Machine Block
+tile.magneticraft.multiblock_parts_copper_coil.name=Copper Coil Machine Block
+tile.magneticraft.multiblock_parts_corrugated_iron.name=Corrugate Iron Machine Block
 tile.magneticraft.multiblock_column_axis_y.name=Support Column
 tile.magneticraft.multiblock_column_axis_x.name=Support Column
 tile.magneticraft.multiblock_column_axis_z.name=Support Column
@@ -190,11 +218,11 @@ text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
 text.magneticraft.jei.crushing_table=Crushing Table
-text.magneticraft.jei.sluice_Box=Sluice Box
-text.magneticraft.jei.hydraulic_press=Hydraulic Press
-text.magneticraft.jei.kiln=Beehive Kiln
-text.magneticraft.jei.grinder=Grinder
-text.magneticraft.jei.sifter=Sifter
+text.magneticraft.jei.sluice_box=Sluice Box
+#text.magneticraft.jei.hydraulic_press=Hydraulic Press
+#text.magneticraft.jei.kiln=Beehive Kiln
+#text.magneticraft.jei.grinder=Grinder
+#text.magneticraft.jei.sifter=Sifter
 
 text.magneticraft.multiblock.error_count=Found %d errors trying to active the multiblock
 text.magneticraft.multiblock.first_errors=Showing the %d first errors:

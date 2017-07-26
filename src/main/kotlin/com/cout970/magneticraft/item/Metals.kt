@@ -65,6 +65,7 @@ object Metals : IItemMaker {
         chunks = builder.withName("chunks").apply {
             variants = Metal.values()
                     .filter(Metal::isOre)
+                    .filterNot(Metal::isComposite)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
@@ -86,8 +87,8 @@ object Metals : IItemMaker {
         return listOf(ingots, lightPlates, heavyPlates, nuggets, chunks, dusts, rockyChunks)
     }
 
-    enum class Metal(val vanilla: Boolean, val isOre: Boolean = true, val isComposite: Boolean = false,
-                     val useful: Boolean = false) {
+    enum class Metal(val vanilla: Boolean, val isOre: Boolean = true, val useful: Boolean = false,
+                     val subComponents: List<() -> Metal> = emptyList()) {
         IRON(true, useful = true),
         GOLD(true, useful = true),
         COPPER(false, useful = true),
@@ -96,13 +97,15 @@ object Metals : IItemMaker {
         TUNGSTEN(false, useful = true),
         STEEL(false, isOre = false, useful = true),
         ALUMINIUM(false),
-        GALENA(false, isComposite = true),
+        GALENA(false, subComponents = listOf({LEAD}, {SILVER})),
         MITHRIL(false),
         NICKEL(false),
         OSMIUM(false),
         SILVER(false),
         TIN(false),
         ZINC(false);
+
+        val isComposite: Boolean = subComponents.isNotEmpty()
 
         fun getOres(): List<ItemStack> {
             if (vanilla) {

@@ -125,6 +125,10 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
     init {
         initModules(multiblockModule, shelvingUnitModule, invModule)
     }
+
+    override fun update() {
+        super.update()
+    }
 }
 
 @RegisterTileEntity("steam_engine")

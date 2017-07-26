@@ -99,8 +99,9 @@ class ModuleCombustionChamber(
                 burningTime = 0
             } else {
                 if (heat >= 99.toKelvinFromCelsius()) {
-                    burningTime += 4
-                    getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * 4)
+                    val speed = if(doorOpen) 2 else 4
+                    burningTime += speed
+                    getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * speed)
                 } else {
                     heat += HEAT_RISING_SPEED
                 }

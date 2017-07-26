@@ -38,7 +38,7 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
         stackMatrix {
             translate(x, y, z)
             Utilities.rotateFromCenter(te.facing)
-            renderStaticParts(te, partialTicks)
+            renderStaticParts(te)
             renderDynamicParts(te, partialTicks)
             translate(0f, 12.5 * PIXEL, 0f)
             //debug hitboxes
@@ -99,7 +99,7 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
         }
     }
 
-    fun renderStaticParts(te: TileConveyorBelt, partialTicks: Float) {
+    fun renderStaticParts(te: TileConveyorBelt) {
 
         bindTexture(texture)
         axisBars?.render()

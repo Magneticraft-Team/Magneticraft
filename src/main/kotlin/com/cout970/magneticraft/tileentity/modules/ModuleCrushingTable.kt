@@ -119,6 +119,7 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivate
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun crushItem(world: World, pos: BlockPos, playerIn: EntityPlayer, damage: Int) {
 
         val recipe = CrushingTableRecipeManager.findRecipe(storedItem) ?: return
