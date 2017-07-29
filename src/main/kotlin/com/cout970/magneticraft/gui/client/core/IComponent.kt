@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.gui.client.core
 
-import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
 
@@ -28,6 +27,8 @@ interface IComponent {
 
     //returns true if this should block the event in others components
     fun onKeyTyped(typedChar: Char, keyCode: Int): Boolean = false
+
+    fun onWheel(amount: Int) = Unit
 
     fun isMouseInside(mouse: Vec2d): Boolean = mouse in box
 

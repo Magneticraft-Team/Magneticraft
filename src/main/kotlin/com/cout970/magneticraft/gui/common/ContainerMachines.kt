@@ -2,6 +2,7 @@ package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -74,20 +75,75 @@ class ContainerElectricFurnace(tile: TileElectricFurnace, player: EntityPlayer, 
 }
 
 class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, world: World, blockPos: BlockPos,
-                            val level: ModuleShelvingUnit.Level)
-    : ContainerBase(player, world, blockPos) {
+                            val level: ModuleShelvingUnit.Level) : ContainerBase(player, world, blockPos) {
+
+    val allSlots: List<SlotShelvingUnit>
+    var currentSlots = emptyList<SlotShelvingUnit>()
+    var scroll = 0f
+    var currentLevel = level
 
     init {
-        tile.invModule.inventory.let { inv ->
-            val slots = tile.shelvingUnitModule.getAvaliableSlots(level)
-            slots.take(5 * 9).forEach {
-                val index = it - slots.start
-                val x = index % 9 * 18 + 8
-                val y = index / 9 * 18 + 21
-                addSlotToContainer(SlotItemHandler(inv, it, x, y))
-            }
+        val inv = tile.invModule.inventory
+
+        allSlots = (0 until inv.slots).map {
+            val x = it % 9 * 18 + 8
+            val y = it / 9 * 18 + 21
+            SlotShelvingUnit(inv, it, x, y)
         }
+
+        allSlots.forEach { addSlotToContainer(it) }
         bindPlayerInventory(player.inventory, offset = vec2Of(0, 41))
+        switchLevel(level)
+    }
+
+    fun switchLevel(newLevel: ModuleShelvingUnit.Level) {
+        currentLevel = newLevel
+        val available = tile.shelvingUnitModule.getAvailableSlots(currentLevel)
+        updateCurrentSlots(allSlots.filterIndexed { index, _ -> index in available })
+    }
+
+    fun updateCurrentSlots(list: List<SlotShelvingUnit>) {
+        allSlots.forEach { it.hide(); it.lock() }
+        currentSlots = list
+        withScroll(0f)
+    }
+
+    fun withScroll(scrollLevel: Float) {
+        scroll = scrollLevel
+        currentSlots.forEach { it.hide(); it.lock() }
+        val column = Math.round(scroll * ((currentSlots.size / 9f) - 5))
+        var min = Int.MAX_VALUE
+        var max = Int.MIN_VALUE
+        currentSlots.forEachIndexed { index, it ->
+            val pos = index - column * 9
+            it.unlock()
+            if ((pos) >= 0 && (pos) < 5 * 9) {
+                it.show()
+                it.xPos = pos % 9 * 18 + 8
+                it.yPos = pos / 9 * 18 + 21
+            }
+            if (it.slotIndex > max) max = it.slotIndex
+            if (it.slotIndex < min) min = it.slotIndex
+        }
+        inventoryRegions.clear()
+        inventoryRegions += InventoryRegion(min..max)
+        inventoryRegions += InventoryRegion(648..674)
+        inventoryRegions += InventoryRegion(675..683)
+    }
+
+    fun filterSlots(filter: String) {
+        updateCurrentSlots(allSlots.filter {
+            it.stack.isNotEmpty && it.stack.displayName.contains(filter)
+        })
+    }
+
+    override fun sendDataToServer(): IBD? {
+        return IBD().apply { setFloat(0, scroll) }
+    }
+
+    override fun receiveDataFromClient(ibd: IBD) {
+        ibd.getFloat(0) { withScroll(it) }
+        super.receiveDataFromClient(ibd)
     }
 }
 

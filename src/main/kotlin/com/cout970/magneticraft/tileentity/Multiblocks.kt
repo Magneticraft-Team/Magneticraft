@@ -6,6 +6,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
@@ -13,6 +14,7 @@ import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.interpolate
@@ -118,7 +120,7 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockShelvingUnit
 
-    val invModule = ModuleInventory(ModuleShelvingUnit.MAX_CHESTS * 27)
+    val invModule = ModuleInventory(ModuleShelvingUnit.MAX_CHESTS * 27, capabilityFilter = { null })
 
     val shelvingUnitModule = ModuleShelvingUnit()
 
@@ -128,6 +130,23 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
 
     override fun update() {
         super.update()
+    }
+
+    override fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
+        if (cap == ITEM_HANDLER) {
+            val level: ModuleShelvingUnit.Level = when (side) {
+                EnumFacing.UP -> ModuleShelvingUnit.Level.TOP
+                EnumFacing.DOWN -> ModuleShelvingUnit.Level.BOTTOM
+                else -> when (relPos.yi) {
+                    0 -> ModuleShelvingUnit.Level.BOTTOM
+                    1 -> ModuleShelvingUnit.Level.MIDDLE
+                    else -> ModuleShelvingUnit.Level.TOP
+                }
+            }
+            val slots = shelvingUnitModule.getAvailableSlots(level)
+            return InventoryCapabilityFilter(invModule.inventory, slots.toList(), slots.toList())
+        }
+        return null
     }
 }
 

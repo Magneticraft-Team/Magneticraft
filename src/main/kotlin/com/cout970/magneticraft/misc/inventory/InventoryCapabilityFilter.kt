@@ -13,7 +13,7 @@ class InventoryCapabilityFilter(
 ) : IItemHandler {
 
     override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-        if(slot in inputSlots){
+        if (toRealSlot(slot) in inputSlots) {
             return inventory.insertItem(toRealSlot(slot), stack, simulate)
         }
         return stack
@@ -34,7 +34,7 @@ class InventoryCapabilityFilter(
     }
 
     override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack {
-        if(slot in outputSlots){
+        if (toRealSlot(slot) in outputSlots) {
             return inventory.extractItem(toRealSlot(slot), amount, simulate)
         }
         return ItemStack.EMPTY

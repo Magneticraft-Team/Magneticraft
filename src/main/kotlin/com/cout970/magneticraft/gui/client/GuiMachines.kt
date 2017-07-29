@@ -6,13 +6,14 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerComputer
+import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.gui.formatHeat
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileCombustionChamber
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
+import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -81,12 +82,19 @@ class GuiBattery(container: ContainerBase) : GuiBase(container) {
 
 class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
 
-    val tile = container.tileEntity as TileShelvingUnit
+    companion object {
+        @JvmStatic
+        val TEXTURE = resource("textures/gui/shelving_unit.png")
+    }
 
     override fun initComponents() {
         xSize = 194
         ySize = 207
         components.add(CompBackground("shelving_unit", size = vec2Of(194, 207)))
+        val scrollBar = CompScrollBar(vec2Of(174, 21), TEXTURE)
+        components.add(scrollBar)
+//        components.add(CompButton())
+        components.add(CompShelvingUnit(container as ContainerShelvingUnit, scrollBar))
     }
 }
 

@@ -9,7 +9,10 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
+import org.lwjgl.input.Mouse
 import java.io.IOException
+
+
 
 /**
  * Created by cout970 on 20/05/2016.
@@ -75,6 +78,14 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         val block = components.any { it -> it.onKeyTyped(typedChar, keyCode) }
         if (!block) {
             super.keyTyped(typedChar, keyCode)
+        }
+    }
+
+    override fun handleMouseInput() {
+        super.handleMouseInput()
+        val dw = Mouse.getEventDWheel()
+        if (dw != 0) {
+            components.forEach { it.onWheel(dw / Math.abs(dw)) }
         }
     }
 

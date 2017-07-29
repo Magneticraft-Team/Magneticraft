@@ -28,6 +28,10 @@ class ModuleMultiblockCenter(
         get() = facingGetter()
         set(value) {}
 
+    override fun onDeactivate() {
+        container.tile.onBreak()
+    }
+
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean {
         return capabilityGetter.invoke(capability, facing, relPos) != null
     }

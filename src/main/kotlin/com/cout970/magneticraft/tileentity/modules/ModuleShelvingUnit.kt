@@ -5,7 +5,9 @@ import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.tileentity.TileMultiblockGap
@@ -17,6 +19,7 @@ import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.BlockChest
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -128,11 +131,11 @@ class ModuleShelvingUnit(
             in (11 * PIXEL)..(27 * PIXEL) -> Level.BOTTOM
             in (27 * PIXEL)..(43 * PIXEL) -> Level.MIDDLE
             in (43 * PIXEL)..(48 * PIXEL) -> Level.TOP
-            else -> Level.BOTTOM
+            else -> Level.TOP
         }
     }
 
-    fun getAvaliableSlots(level: Level): IntRange {
+    fun getAvailableSlots(level: Level): IntRange {
         if (level == Level.OTHER_SHELF) return IntRange.EMPTY
         val levelNum = level.levelIndex
         if (chestCount[levelNum] == 0) return IntRange.EMPTY
@@ -141,6 +144,14 @@ class ModuleShelvingUnit(
         val chestsInThisLevel = chestCount[levelNum]
         val end = start + chestsInThisLevel * SLOTS_PER_CHEST
         return start until end
+    }
+
+    override fun onBreak() {
+        chestCount.forEach { count ->
+            repeat(count) {
+                world.dropItem(Blocks.CHEST.stack(1), pos)
+            }
+        }
     }
 
     enum class Level(val levelIndex: Int) {

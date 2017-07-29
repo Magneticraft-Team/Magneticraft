@@ -1,7 +1,13 @@
 package com.cout970.magneticraft
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.tilerenderer.core.ModelCache
+import com.cout970.magneticraft.util.addPostfix
+import com.cout970.magneticraft.util.addPrefix
 import com.cout970.magneticraft.util.logError
+import com.cout970.magneticraft.util.resource
+import com.cout970.modelloader.ModelSerializer
+import com.cout970.modelloader.api.ModelUtilties
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -11,6 +17,7 @@ import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.ItemStack
 import net.minecraft.launchwrapper.Launch
 import net.minecraft.util.EnumHand
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.Timer
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.oredict.OreDictionary
@@ -44,6 +51,43 @@ object Debug {
             temp = temp.parentFile
         }
         return temp
+    }
+
+    var cache = emptyList<ModelCache>()
+    var last = -1L
+
+    fun getOrLoad(loc: ResourceLocation = resource("models/block/mcx/test.mcx")): List<ModelCache> {
+        val locLasModified = lastModified(loc)
+        if (last != locLasModified) {
+            try {
+                cache = loadModel(loc)
+                last = locLasModified
+            } catch (e: Exception) {
+            }
+        }
+        return cache
+    }
+
+    fun lastModified(loc: ResourceLocation): Long {
+        val path = "assets/${loc.resourceDomain}/${loc.resourcePath}"
+
+        val url = Thread.currentThread().contextClassLoader.getResource(path)
+        return File(url.file).lastModified()
+    }
+
+    fun loadModel(loc: ResourceLocation): List<ModelCache> {
+        val resourceManager = Minecraft.getMinecraft().resourceManager
+        val res = resourceManager.getResource(loc)
+//        Thread.sleep(100)
+        val data = ModelSerializer.load(res.inputStream)
+        println("loading")
+
+        val textureGrouped = data.parts.groupBy { it.texture }
+        return textureGrouped.map {
+            ModelCache {
+                ModelUtilties.renderModelParts(data, it.value)
+            }.apply { texture = it.key.addPrefix("textures/").addPostfix(".png") }
+        }
     }
 
     // To use this, add breakpoint in
@@ -92,8 +136,6 @@ object Debug {
                     end = end.first to end.second - 1
                 }
 
-                println(start)
-                println(end)
                 for (y in start.second..end.second) {
                     var thisLine = ""
                     for (x in start.first..end.first) {
@@ -119,10 +161,10 @@ object Debug {
 
             val gson = GsonBuilder().setPrettyPrinting().create()
             val jsonStr = gson.toJson(obj)
-            print((1..20).forEach { print('\n') })
-
-            print(jsonStr as Any?)
-            println()
+//            print((1..20).forEach { print('\n') })
+//
+//            print(jsonStr as Any?)
+//            println()
             if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
                 val folder = File(srcDir, "src/main/resources/assets/magneticraft/recipes")
                 val fileName = handItem.unlocalizedName.replace(".name", "").replaceBeforeLast(".", "").substring(1)
