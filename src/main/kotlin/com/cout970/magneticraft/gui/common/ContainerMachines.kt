@@ -111,7 +111,7 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     fun withScroll(scrollLevel: Float) {
         scroll = scrollLevel
         currentSlots.forEach { it.hide(); it.lock() }
-        val column = Math.round(scroll * ((currentSlots.size / 9f) - 5))
+        val column = Math.max(0, Math.round(scroll * ((currentSlots.size / 9f) - 5)))
         var min = Int.MAX_VALUE
         var max = Int.MIN_VALUE
         currentSlots.forEachIndexed { index, it ->
@@ -132,18 +132,25 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     }
 
     fun filterSlots(filter: String) {
+        if (filter.isEmpty() || filter.isBlank()) {
+            switchLevel(currentLevel)
+            return
+        }
         updateCurrentSlots(allSlots.filter {
-            it.stack.isNotEmpty && it.stack.displayName.contains(filter)
+            it.stack.isNotEmpty && it.stack.displayName.contains(filter, ignoreCase = true)
         })
-    }
-
-    override fun sendDataToServer(): IBD? {
-        return IBD().apply { setFloat(0, scroll) }
     }
 
     override fun receiveDataFromClient(ibd: IBD) {
         ibd.getFloat(0) { withScroll(it) }
+        ibd.getString(1) { filterSlots(it) }
+        ibd.getInteger(2) { switchLevel(ModuleShelvingUnit.Level.values()[it]) }
         super.receiveDataFromClient(ibd)
+    }
+
+    fun setFilter(text: String) {
+        filterSlots(text)
+        sendUpdate(IBD().apply { setString(1, text) })
     }
 }
 

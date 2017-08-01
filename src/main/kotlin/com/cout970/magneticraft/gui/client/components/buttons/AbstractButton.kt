@@ -27,11 +27,11 @@ open class AbstractButton(
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(texture)
-        gui.drawTexture(DrawableBox(box, uvGetter(state), textureSize))
+        gui.drawTexture(DrawableBox(gui.pos + box.pos to box.size, uvGetter(state), textureSize))
     }
 
     override fun onMouseClick(mouse: Vec2d, mouseButton: Int): Boolean {
-        if (mouse in box) {
+        if (mouse in (gui.pos + box.pos to box.size)) {
             val press: Boolean = listener?.invoke(this, mouse, mouseButton) ?: false
             if (press) {
                 playSound()

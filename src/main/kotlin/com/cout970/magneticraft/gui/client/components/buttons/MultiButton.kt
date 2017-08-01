@@ -3,6 +3,8 @@ package com.cout970.magneticraft.gui.client.components.buttons
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
+import com.cout970.magneticraft.util.vector.pos
+import com.cout970.magneticraft.util.vector.size
 import net.minecraft.util.ResourceLocation
 
 class MultiButton(
@@ -16,7 +18,7 @@ class MultiButton(
     lateinit var allButtons: List<MultiButton>
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        if (mouse in box) when {
+        if (mouse in (gui.pos + box.pos to box.size)) when {
             state.getBase() == ButtonState.PRESSED -> state = ButtonState.HOVER_PRESSED
             else -> state = ButtonState.HOVER_UNPRESSED
         } else when {
@@ -31,7 +33,7 @@ class MultiButton(
         if (press) {
             if (state.getBase() == ButtonState.UNPRESSED) {
                 state = ButtonState.HOVER_PRESSED
-                allButtons.filter { it != this }.forEach { state = ButtonState.UNPRESSED }
+                allButtons.filter { it != this }.forEach { it.state = ButtonState.UNPRESSED }
             }
         }
         return press
