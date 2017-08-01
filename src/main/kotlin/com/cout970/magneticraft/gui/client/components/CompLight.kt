@@ -5,23 +5,30 @@ import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.pos
+import com.cout970.magneticraft.util.vector.size
 import net.minecraft.util.ResourceLocation
 
 /**
- * Created by cout970 on 08/07/2016.
+ * Created by cout970 on 10/07/2016.
  */
-class CompBackground(
-        val texture: ResourceLocation,
-        val textureSize: Vec2d = Vec2d(256, 256),
-        override val size: Vec2d = Vec2d(176, 166)
-) : IComponent {
 
-    override val pos: IVector2 = Vec2d.ZERO
+class CompLight(
+        val on: DrawableBox,
+        val off: DrawableBox,
+        val texture: ResourceLocation,
+        val condition: () -> Boolean) : IComponent {
 
     override lateinit var gui: IGui
+    override val pos: IVector2 = on.screen.pos
+    override val size: IVector2 = on.screen.size
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(texture)
-        gui.drawTexture(DrawableBox(gui.pos to size, pos to size, textureSize))
+        if (condition()) {
+            gui.drawTexture(on)
+        } else {
+            gui.drawTexture(off)
+        }
     }
 }

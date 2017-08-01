@@ -1,13 +1,21 @@
 package com.cout970.magneticraft.util.vector
 
-import com.cout970.magneticraft.misc.gui.Box
 
 /**
  * Created by cout970 on 14/05/2016.
  */
 
 fun vec2Of(x: Number, y: Number) = Vec2d(x.toDouble(), y.toDouble())
+fun vec2Of(n: Number) = Vec2d(n.toDouble(), n.toDouble())
 
+inline val Pair<Vec2d, Vec2d>.start get() = first
+inline val Pair<Vec2d, Vec2d>.end get() = first + second
+inline val Pair<Vec2d, Vec2d>.pos get() = first
+inline val Pair<Vec2d, Vec2d>.size get() = second
+
+operator fun Pair<Vec2d, Vec2d>.contains(point: Vec2d): Boolean {
+    return (point.x in (start.x..end.x)) && (point.y in (start.y..end.y))
+}
 
 @Suppress("unused")
 data class Vec2d(val x: Double, val y: Double) {
@@ -61,7 +69,7 @@ data class Vec2d(val x: Double, val y: Double) {
 
     fun centeredAt(x: Number, y: Number) = Vec2d(x, y) - center()
 
-    infix fun to(other: Vec2d): Box = Box(this, other - this)
+    infix fun toPoint(other: Vec2d) = Pair(this, other - this)
 
     fun floor() = Vec2d(x.toInt(), y.toInt())
 

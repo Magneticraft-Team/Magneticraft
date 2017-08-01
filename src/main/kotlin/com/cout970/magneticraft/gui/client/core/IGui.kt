@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.gui.client.core
 
+import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
 
 /**
@@ -12,11 +12,11 @@ interface IGui : IGuiRenderer {
 
     val components: MutableList<IComponent>
 
-    val box: Box
+    val pos: IVector2
+    val size: IVector2
 
     val container: ContainerBase
 
     fun getWindowSize(): Vec2d
-
 }
 

@@ -183,7 +183,7 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
             val key = ibd.getInteger(1)
 
             if (regKeyBufferSize != getKeyBuffer().size / 2) {
-                val pos = (regKeyBufferPtr + regKeyBufferSize) % keyBuffer!!.size
+                val pos = (regKeyBufferPtr + regKeyBufferSize) % (keyBuffer!!.size / 2)
                 getKeyBuffer()[2 * pos] = 1
                 getKeyBuffer()[2 * pos + 1] = key.toByte()
                 regKeyBufferSize++

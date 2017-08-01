@@ -1,29 +1,39 @@
-package com.cout970.magneticraft.gui.client.components
+package com.cout970.magneticraft.gui.client.components.bars
 
+import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
+import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.util.text.TextFormatting
 
 /**
  * Created by cout970 on 11/07/2016.
  */
-class TransferBar(val value: () -> Double, val min: () -> Double, val base: () -> Double, val max: () -> Double, pos: Vec2d) :
+class TransferRateBar(val value: () -> Double, val min: () -> Double, val base: () -> Double, val max: () -> Double,
+                      pos: Vec2d) :
         CompVerticalBar(EmptyBarProvider, 4, pos), IBarProvider {
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        gui.run {
-            bindTexture(BAR_TEXTURES)
-            var level = Math.round(getLevel() * 24).toInt()
-            if (level > 0) {
-                drawScaledTexture(Vec2d(pos.x, pos.yi - level - 24), Vec2d(5, level), Vec2d(index * 5, 24 - level), Vec2d(64, 64))
-            } else if (level < 0) {
-                level = -level
-                drawScaledTexture(Vec2d(pos.x, pos.yi - 23), Vec2d(5, level - 1), Vec2d(index * 5, 49 - level), Vec2d(64, 64))
-            }
+        gui.bindTexture(BAR_TEXTURES)
+        var level = Math.round(getLevel() * 24)
+        if (level > 0) {
+            gui.drawTexture(DrawableBox(
+                    screen = Pair(gui.pos + pos + vec2Of(0, 48 - level - 24), vec2Of(5, level)),
+                    texture = Pair(vec2Of(index * 5, 24 - level), vec2Of(5, level)),
+                    textureSize = vec2Of(64, 64)
+            ))
+        } else if (level < 0) {
+            level = -level
+            gui.drawTexture(DrawableBox(
+                    screen = Pair(gui.pos + pos + vec2Of(0, 48 - 23), vec2Of(5, level - 1)),
+                    texture = Pair(vec2Of(index * 5, 49 - level), vec2Of(5, level - 1)),
+                    textureSize = vec2Of(64, 64)
+            ))
         }
     }
 
     override fun drawSecondLayer(mouse: Vec2d) {
-        if (mouse in box) {
+        if (mouse in (gui.pos + pos to size)) {
             val color = if (value.invoke() > 0) {
                 TextFormatting.DARK_GREEN.toString() + "+"
             } else if (value.invoke() < 0) {
@@ -47,6 +57,3 @@ class TransferBar(val value: () -> Double, val min: () -> Double, val base: () -
     }
 }
 
-private object EmptyBarProvider : IBarProvider {
-    override fun getLevel(): Float = 0f
-}

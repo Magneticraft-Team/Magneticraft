@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
     val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
-    val memory = RAM(0xFFFF + 1, false)
+    val memory = RAM(0x10_0000, false)
     val rom = ROM("assets/$MOD_ID/cpu/bios.bin")
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)

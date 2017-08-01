@@ -5,6 +5,7 @@ import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.shuffled
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.item.ItemStack
 
@@ -65,7 +66,7 @@ class Recipe(
         override fun postDraw(mouse: Vec2d, time: Double) {
             val mouseRelative = mouse - drawPos
 
-            if (mouseRelative in RESULT_OFFSET to (RESULT_OFFSET + STACK_SIZE)) {
+            if (mouseRelative in RESULT_OFFSET toPoint  (RESULT_OFFSET + STACK_SIZE)) {
                 parent.gui.renderToolTip(result, mouse)
                 return
             }
@@ -74,7 +75,7 @@ class Recipe(
                 for (column in (0..2)) {
                     val offset = STACK_OFFSET[row][column]
 
-                    if (mouseRelative in offset to (offset + STACK_SIZE) && slots[row][column].isNotEmpty()) {
+                    if (mouseRelative in offset toPoint (offset + STACK_SIZE) && slots[row][column].isNotEmpty()) {
                         val displayIndex = ((time / DISPLAY_TIME) % slots[row][column].size).toInt()
 
                         parent.gui.renderToolTip(slots[row][column][displayIndex], mouse)

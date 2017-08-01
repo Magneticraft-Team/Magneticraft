@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.gui.client.components
 
+import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.gui.client.GuiShelvingUnit
+import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
-import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
 import org.lwjgl.opengl.GL11
@@ -18,7 +19,8 @@ class CompShelvingUnit(
         val scrollBar: CompScrollBar
 ) : IComponent {
 
-    override val box: Box = Vec2d.ZERO to Vec2d.ZERO
+    override val pos: IVector2 = Vec2d.ZERO
+    override val size: IVector2 = Vec2d.ZERO
     override lateinit var gui: IGui
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
@@ -39,7 +41,11 @@ class CompShelvingUnit(
                 val x = it % 9 * 18 + 8
                 val y = it / 9 * 18 + 21
 
-                gui.drawScaledTexture(gui.box.pos + vec2Of(x, y), vec2Of(16, 16), vec2Of(240, 15), vec2Of(256, 256))
+                gui.drawTexture(DrawableBox(
+                        screen = Pair(gui.pos + vec2Of(x, y), vec2Of(16, 16)),
+                        texture = Pair(vec2Of(240, 15), vec2Of(16, 16)),
+                        textureSize = vec2Of(256, 256)
+                ))
             }
         }
     }

@@ -1,17 +1,18 @@
 package com.cout970.magneticraft.gui.client.core
 
+import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.size
+import com.cout970.magneticraft.util.vector.start
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.renderer.RenderHelper
-import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.input.Mouse
 import java.io.IOException
-
 
 
 /**
@@ -21,7 +22,8 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override val components = mutableListOf<IComponent>()
 
-    override val box: Box get() = Box(Vec2d(guiLeft, guiTop), Vec2d(xSize, ySize))
+    override val pos: IVector2 get() = Vec2d(guiLeft, guiTop)
+    override val size: IVector2 get() = Vec2d(xSize, ySize)
 
     override fun initGui() {
         super.initGui()
@@ -101,7 +103,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     override fun drawHoveringText(textLines: List<String>, pos: Vec2d) {
-        super.drawHoveringText(textLines, pos.xi - box.pos.xi, pos.yi - box.pos.yi)
+        super.drawHoveringText(textLines, pos.xi - this.pos.xi, pos.yi - this.pos.yi)
     }
 
     override fun drawCenteredString(text: String, pos: Vec2d, color: Int) {
@@ -120,30 +122,26 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         super.drawVerticalLine(x, startY, endY, color)
     }
 
-    override fun drawBox(box: Box, color: Int) {
-        drawRect(box.start.xi, box.start.yi, box.end.xi, box.end.yi, color)
+    override fun drawColor(start: IVector2, end: IVector2, color: Int) {
+        drawRect(start.xi, start.yi, end.xi, end.yi, color)
     }
 
-    override fun drawGradientBox(box: Box, startColor: Int, endColor: Int) {
-        drawGradientRect(box.start.xi, box.start.yi, box.end.xi, box.end.yi, startColor, endColor)
+    override fun drawColorGradient(start: IVector2, end: IVector2, startColor: Int, endColor: Int) {
+        drawGradientRect(start.xi, start.yi, end.xi, end.yi, startColor, endColor)
     }
 
-    override fun drawTexture(box: Box, textureOffset: Vec2d) {
-        drawTexturedModalRect(box.pos.xi, box.pos.yi, textureOffset.xi, textureOffset.yi, box.size.xi, box.size.yi)
+    override fun drawSprite(start: IVector2, end: IVector2, sprite: Sprite) {
+        drawTexturedModalRect(pos.xi, pos.yi, sprite, size.xi, size.yi)
     }
 
-    override fun drawTexture(box: Box, textureSprite: TextureAtlasSprite) {
-        drawTexturedModalRect(box.pos.xi, box.pos.yi, textureSprite, box.size.xi, box.size.yi)
-    }
-
-    override fun drawScaledTexture(box: Box, uv: Vec2d, textureSize: Vec2d) {
-        drawModalRectWithCustomSizedTexture(box.pos.xi, box.pos.yi, uv.xf, uv.yf, box.size.xi,
-                box.size.yi, textureSize.xf, textureSize.yf)
-    }
-
-    override fun drawScaledTexture(box: Box, uvMin: Vec2d, uvMax: Vec2d, textureSize: Vec2d) {
-        drawScaledCustomSizeModalRect(box.pos.xi, box.pos.yi, uvMin.xf, uvMin.yf, uvMax.xi,
-                uvMax.yi, box.size.xi, box.size.yi, textureSize.xf, textureSize.yf)
+    override fun drawTexture(box: DrawableBox) {
+        drawScaledCustomSizeModalRect(
+                box.screen.start.xi, box.screen.start.yi,
+                box.texture.start.xf, box.texture.start.yf,
+                box.texture.size.xi, box.texture.size.yi,
+                box.screen.size.xi, box.screen.size.yi,
+                box.textureSize.xf, box.textureSize.yf
+        )
     }
 
     override fun drawStack(stack: ItemStack, pos: Vec2d, text: String?) {

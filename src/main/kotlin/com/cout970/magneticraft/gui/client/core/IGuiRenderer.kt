@@ -1,8 +1,7 @@
 package com.cout970.magneticraft.gui.client.core
 
-import com.cout970.magneticraft.misc.gui.Box
-import com.cout970.magneticraft.util.vector.Vec2d
-import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import com.cout970.magneticraft.Sprite
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 
@@ -27,35 +26,21 @@ interface IGuiRenderer {
     fun drawVerticalLine(x: Int, startY: Int, endY: Int, color: Int)
 
     //box render
-    fun drawBox(start: Vec2d, end: Vec2d, color: Int) = drawBox(Box(start, end - start), color)
+    fun drawColor(start: Vec2d, end: Vec2d, color: Int)
 
-    fun drawBox(box: Box, color: Int)
+    fun drawColor(rect: Pair<Vec2d, Vec2d>, color: Int) = drawColor(rect.start, rect.end, color)
 
-    fun drawGradientBox(start: Vec2d, end: Vec2d, startColor: Int, endColor: Int) =
-            drawGradientBox(Box(start, end - start), startColor, endColor)
+    fun drawColorGradient(start: Vec2d, end: Vec2d, startColor: Int, endColor: Int)
 
-    fun drawGradientBox(box: Box, startColor: Int, endColor: Int)
+    fun drawColorGradient(rect: Pair<Vec2d, Vec2d>, startColor: Int, endColor: Int) {
+        drawColorGradient(rect.start, rect.end, startColor, endColor)
+    }
+
+    fun drawSprite(rect: Pair<Vec2d, Vec2d>, sprite: Sprite) = drawSprite(rect.pos, rect.size, sprite)
+    fun drawSprite(start: Vec2d, end: Vec2d, sprite: Sprite)
 
     //texture render
-    fun drawTexture(pos: Vec2d, size: Vec2d, textureOffset: Vec2d) =
-            drawTexture(Box(pos, size), textureOffset)
-
-    fun drawTexture(box: Box, textureOffset: Vec2d)
-
-    fun drawTexture(pos: Vec2d, size: Vec2d, textureSprite: TextureAtlasSprite) =
-            drawTexture(Box(pos, size), textureSprite)
-
-    fun drawTexture(box: Box, textureSprite: TextureAtlasSprite)
-
-    fun drawScaledTexture(pos: Vec2d, size: Vec2d, uv: Vec2d, textureSize: Vec2d) =
-            drawScaledTexture(Box(pos, size), uv, textureSize)
-
-    fun drawScaledTexture(box: Box, uv: Vec2d, textureSize: Vec2d)
-
-    fun drawScaledTexture(pos: Vec2d, size: Vec2d, uvMin: Vec2d, uvMax: Vec2d, textureSize: Vec2d) =
-            drawScaledTexture(Box(pos, size), uvMin, uvMax, textureSize)
-
-    fun drawScaledTexture(box: Box, uvMin: Vec2d, uvMax: Vec2d, textureSize: Vec2d)
+    fun drawTexture(box: DrawableBox)
 
     //itemstack render
     fun drawStack(stack: ItemStack, pos: Vec2d, text: String? = null)

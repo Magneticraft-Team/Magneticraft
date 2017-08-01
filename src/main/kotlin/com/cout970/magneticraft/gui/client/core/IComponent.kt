@@ -1,14 +1,16 @@
 package com.cout970.magneticraft.gui.client.core
 
-import com.cout970.magneticraft.misc.gui.Box
+import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 
 /**
  * Created by cout970 on 20/05/2016.
  */
 interface IComponent {
 
-    val box: Box
+    val pos: IVector2
+    val size: IVector2
 
     var gui: IGui
 
@@ -30,7 +32,7 @@ interface IComponent {
 
     fun onWheel(amount: Int) = Unit
 
-    fun isMouseInside(mouse: Vec2d): Boolean = mouse in box
+    fun isMouseInside(mouse: Vec2d): Boolean = mouse in (pos to size)
 
     fun onGuiClosed() = Unit
 }

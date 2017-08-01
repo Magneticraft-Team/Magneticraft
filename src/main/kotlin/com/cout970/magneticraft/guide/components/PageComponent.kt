@@ -3,6 +3,7 @@ package com.cout970.magneticraft.guide.components
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
 import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 
 abstract class PageComponent(val position: Vec2d) {
 
@@ -29,12 +30,10 @@ abstract class PageComponent(val position: Vec2d) {
             drawPos = parent.start + position
         }
 
-        override fun isMouseInside(mouse: Vec2d) = mouse in drawPos to (drawPos + size)
+        override fun isMouseInside(mouse: Vec2d) = mouse in drawPos toPoint (drawPos + size)
 
         override fun onLeftClick(mouse: Vec2d) = false
 
         override fun postDraw(mouse: Vec2d, time: Double) = Unit
     }
-
-
 }

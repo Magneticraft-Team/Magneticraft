@@ -6,6 +6,7 @@ import com.cout970.magneticraft.guide.BookPage.Gui
 import com.cout970.magneticraft.guide.book
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 
@@ -75,11 +76,11 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
             return
         }
 
-        if (mouseRelative in Page.LEFT.start to Page.LEFT.end) {
+        if (mouseRelative in Page.LEFT.start toPoint Page.LEFT.end) {
             pages.first.onLeftClick(mouse)
             return
         }
-        if (mouseRelative in Page.RIGHT.start to Page.RIGHT.end) {
+        if (mouseRelative in Page.RIGHT.start toPoint Page.RIGHT.end) {
             pages.second?.onLeftClick(mouse)
             return
         }
@@ -115,7 +116,7 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
             end = Vec2d(127, 160),
             arrowUV = Vec2d(4, 188),
             arrowUVHover = Vec2d(4, 218),
-            isInsideArrow = { this in (LEFT.arrowPos to (LEFT.arrowPos + ARROW_SIZE))},
+            isInsideArrow = { this in (LEFT.arrowPos toPoint (LEFT.arrowPos + ARROW_SIZE))},
             arrowPos = Vec2d(30, 164)
         ),
         RIGHT(
@@ -123,7 +124,7 @@ class GuiGuideBook(target: Pair<BookEntry, Int> = book.entries.first() to 0) : G
             end = Vec2d(251, 160),
             arrowUV = Vec2d(26, 188),
             arrowUVHover = Vec2d(26, 218),
-            isInsideArrow = { this in (RIGHT.arrowPos to ( RIGHT.arrowPos + ARROW_SIZE))},
+            isInsideArrow = { this in (RIGHT.arrowPos toPoint ( RIGHT.arrowPos + ARROW_SIZE))},
             arrowPos = Vec2d(232, 164)
         );
 

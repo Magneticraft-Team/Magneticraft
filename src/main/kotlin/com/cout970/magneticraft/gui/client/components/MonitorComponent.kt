@@ -1,11 +1,8 @@
 package com.cout970.magneticraft.gui.client.components
 
+import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.computer.DeviceMonitor
-import com.cout970.magneticraft.gui.client.core.IComponent
-import com.cout970.magneticraft.gui.client.core.IGui
-import com.cout970.magneticraft.gui.client.core.isCtrlKeyDown
-import com.cout970.magneticraft.gui.client.core.isShiftKeyDown
-import com.cout970.magneticraft.misc.gui.Box
+import com.cout970.magneticraft.gui.client.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
 import org.lwjgl.opengl.GL11
@@ -20,7 +17,8 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
     var pressedKeyNum = -1
     var pressedKeyCode: Int = 0
 
-    override val box: Box = Box(Vec2d(0, 0), Vec2d(350, 230))
+    override val pos: IVector2 = Vec2d.ZERO
+    override val size: IVector2 = Vec2d(350, 230)
     override lateinit var gui: IGui
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
@@ -39,12 +37,14 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
                     character = character xor 128
                 }
                 if (character != 32 && character != 0) {
-                    val pos = gui.box.start + Vec2d(15 + column * scale, 15 + line * (scale + 2))
+                    val pos = gui.pos + Vec2d(15 + column * scale, 15 + line * (scale + 2))
                     val x = character and 15
                     val y = character shr 4
-                    gui.drawScaledTexture(Box(pos, size), Vec2d(x, y) * 16, Vec2d(16, 16), Vec2d(256, 256))
-//                    gui.drawScaledTexture(gui.box.start + Vec2d(15 + column * 3, 15 + line * 5.4), Vec2d(4, 4),
-//                            Vec2d((character and 15) * 4, (character shr 4) * 4), Vec2d(64, 64))
+                    gui.drawTexture(DrawableBox(
+                            screen = pos to size,
+                            texture = Pair(Vec2d(x, y) * 16, Vec2d(16, 16)),
+                            textureSize = Vec2d(256, 256)
+                    ))
                 }
             }
         }
@@ -68,8 +68,8 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
             208 -> sendKey(129 or shift, keyCode)
             210 -> sendKey(134 or shift, keyCode)
             0 -> if (keyCode != 54 && keyCode != 42 && keyCode != 56 && keyCode != 184 && keyCode != 29 &&
-                    keyCode != 221 && keyCode != 157 && (keyCode < 59 || keyCode > 70) && keyCode != 87 &&
-                    keyCode != 88 && keyCode != 197 && keyCode != 183 && keyCode != 0) {
+                     keyCode != 221 && keyCode != 157 && (keyCode < 59 || keyCode > 70) && keyCode != 87 &&
+                     keyCode != 88 && keyCode != 197 && keyCode != 183 && keyCode != 0) {
                 sendKey(keyCode, keyCode)
             }
             else -> if (typedChar.toInt() in 1..127) {

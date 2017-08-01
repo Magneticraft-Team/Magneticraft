@@ -3,6 +3,7 @@ package com.cout970.magneticraft.guide.components
 import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
 import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 import net.minecraft.item.ItemStack
 
 class StackIcon(
@@ -22,7 +23,7 @@ class StackIcon(
         }
 
         override fun postDraw(mouse: Vec2d, time: Double) {
-            if (mouse in drawPos to (drawPos + size)) {
+            if (mouse in drawPos toPoint (drawPos + size)) {
                 parent.gui.renderToolTip(stack, mouse)
             }
         }

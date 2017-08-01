@@ -10,7 +10,7 @@ import com.cout970.magneticraft.util.vector.*
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
-data class Box(
+data class BoxedItem(
         val item: ItemStack,
         var position: Float,
         val route: Route,

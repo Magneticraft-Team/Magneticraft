@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.gui.client.components
 
 import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
-import com.cout970.magneticraft.misc.gui.Box
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.input.Mouse
@@ -14,9 +15,11 @@ import org.lwjgl.opengl.GL11
 /**
  * Created by cout970 on 2017/07/29.
  */
-class CompScrollBar(val pos: IVector2, val texture: ResourceLocation) : IComponent {
+class CompScrollBar(
+        override val pos: IVector2,
+        override val size: IVector2 = vec2Of(12, 88),
+        val texture: ResourceLocation) : IComponent {
 
-    override val box: Box = Box(pos, vec2Of(12, 88))
     override lateinit var gui: IGui
 
     companion object {
@@ -37,20 +40,18 @@ class CompScrollBar(val pos: IVector2, val texture: ResourceLocation) : ICompone
     }
 
     fun recalculateSections() {
-        section = ((box.size.yi - sliderSize.yf) / maxScroll).toDouble()
+        section = ((size.yi - sliderSize.yf) / maxScroll).toDouble()
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(texture)
         GL11.glColor4f(1f, 1f, 1f, 1f)
 
-        gui.drawScaledTexture(
-                pos = gui.box.pos + box.pos + vec2Of(0, currentScroll),
-                size = vec2Of(12, 15),
-                uvMin = vec2Of(232, 0),
-                uvMax = sliderSize,
+        gui.drawTexture(DrawableBox(
+                screen = Pair(gui.pos + pos + vec2Of(0, currentScroll), sliderSize),
+                texture = Pair(vec2Of(232, 0), sliderSize),
                 textureSize = vec2Of(256, 256)
-        )
+        ))
 
         if (Mouse.isButtonDown(0)) {
             onMouseClick(mouse, 0)
@@ -61,11 +62,11 @@ class CompScrollBar(val pos: IVector2, val texture: ResourceLocation) : ICompone
 
     override fun onMouseClick(mouse: Vec2d, mouseButton: Int): Boolean {
         if (mouseButton == 0) {
-            if (mouse in Box(gui.box.pos + box.pos, box.size)) {
+            if (mouse in Pair(gui.pos + pos, size)) {
                 tracking = true
             }
             if (tracking) {
-                currentScroll = mouse.yi - box.pos.yi - gui.box.pos.yi - 8
+                currentScroll = mouse.yi - pos.yi - gui.pos.yi - 8
                 clampScroll()
             }
         }
@@ -81,6 +82,6 @@ class CompScrollBar(val pos: IVector2, val texture: ResourceLocation) : ICompone
     }
 
     fun clampScroll() {
-        currentScroll = Math.min(Math.max(0, currentScroll), box.size.yi - sliderSize.yi)
+        currentScroll = Math.min(Math.max(0, currentScroll), size.yi - sliderSize.yi)
     }
 }

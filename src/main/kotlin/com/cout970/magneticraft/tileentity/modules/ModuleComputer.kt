@@ -29,8 +29,11 @@ class ModuleComputer(
     }
 
     override fun update() {
-        if (world.isServer)
+        if (world.isServer) {
+            world.profiler.startSection("Magneticraft Computers")
             motherboard.iterate()
+            world.profiler.endSection()
+        }
     }
 
     override fun serializeNBT(): NBTTagCompound = motherboard.serializeNBT()

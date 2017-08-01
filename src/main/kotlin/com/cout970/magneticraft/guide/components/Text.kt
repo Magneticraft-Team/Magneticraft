@@ -10,6 +10,7 @@ import com.cout970.magneticraft.guide.JsonIgnore
 import com.cout970.magneticraft.guide.LinkInfo
 import com.cout970.magneticraft.util.i18n
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.contains
 import net.minecraft.client.resources.I18n
 
 class Text(
@@ -112,7 +113,7 @@ class Text(
         val drawPos: Vec2d
             get() = parent.drawPos + position
 
-        fun isInside(pos: Vec2d) = pos in drawPos to (drawPos + size)
+        fun isInside(pos: Vec2d) = pos in drawPos toPoint (drawPos + size)
 
         fun draw(mouse: Vec2d) {
             val prefix = if (link == null) {

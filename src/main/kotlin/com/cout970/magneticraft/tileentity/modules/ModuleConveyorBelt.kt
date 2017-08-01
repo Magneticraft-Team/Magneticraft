@@ -30,9 +30,9 @@ class ModuleConveyorBelt(
     override lateinit var container: IModuleContainer
     val facing get() = facingGetter()
 
-    val boxes = mutableListOf<Box>()
+    val boxes = mutableListOf<BoxedItem>()
     var toUpdate = false
-    val newBoxes = mutableListOf<Box>()
+    val newBoxes = mutableListOf<BoxedItem>()
     var flip = true
 
     fun generateGlobalBitMap(): IBitMap {
@@ -124,17 +124,17 @@ class ModuleConveyorBelt(
         return map
     }
 
-    private fun checkCollision(thisBitMap: IBitMap, box: Box, speed: Float): Boolean {
+    private fun checkCollision(thisBitMap: IBitMap, boxedItem: BoxedItem, speed: Float): Boolean {
         val thisTemp = thisBitMap.copy()
-        val hitbox = box.getHitBox()
+        val hitbox = boxedItem.getHitBox()
 
         thisTemp.unmark(hitbox)
 
-        box.move(speed)
-        val newHitbox = box.getHitBox()
+        boxedItem.move(speed)
+        val newHitbox = boxedItem.getHitBox()
 
         val tempResult = !thisTemp.test(newHitbox)
-        box.move(-speed)
+        boxedItem.move(-speed)
         return tempResult
     }
 
@@ -145,7 +145,7 @@ class ModuleConveyorBelt(
             Route.RIGHT_FORWARD
         }
         flip = !flip
-        val box = Box(stack.copy(), 2f, route, world.totalWorldTime)
+        val box = BoxedItem(stack.copy(), 2f, route, world.totalWorldTime)
         val bitmap = BitMap().apply { boxes.forEach { mark(it.getHitBox()) } }
 
         if (bitmap.test(box.getHitBox())) {
@@ -159,7 +159,7 @@ class ModuleConveyorBelt(
 
     fun addItem(stack: ItemStack, side: EnumFacing, oldRoute: Route): Boolean {
         val newRoute = getRoute(facing, side, oldRoute)
-        val box = Box(stack.copy(), 0f, newRoute, world.totalWorldTime)
+        val box = BoxedItem(stack.copy(), 0f, newRoute, world.totalWorldTime)
         val bitmap = BitMap().apply { boxes.forEach { mark(it.getHitBox()) } }
 
         if (bitmap.test(box.getHitBox())) {
@@ -203,7 +203,7 @@ class ModuleConveyorBelt(
         newBoxes.clear()
         newBoxes += nbt.getList("items")
                 .map { it as NBTTagCompound }
-                .map { Box(it) }
+                .map { BoxedItem(it) }
         toUpdate = true
     }
 

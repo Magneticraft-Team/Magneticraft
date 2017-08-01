@@ -16,6 +16,7 @@ import net.minecraft.util.text.TextComponentTranslation
  */
 
 fun resource(path: String) = ResourceLocation(MOD_ID, path)
+fun guiTexture(path: String) = ResourceLocation(MOD_ID, "textures/gui/$path.png")
 
 fun String.i18n(vararg args: Any): ITextComponent = TextComponentTranslation(this, *args)
 
