@@ -2,7 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.item.Crafting
-import com.cout970.magneticraft.item.Metals
+import com.cout970.magneticraft.item.Metal
 import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -15,7 +15,7 @@ import net.minecraftforge.oredict.OreDictionary
  */
 fun registerOreDictionaryEntries() {
 
-    Metals.Metal.values().forEach {
+    Metal.values().forEach {
         if(!it.vanilla && !it.isComposite){
             OreDictionary.registerOre("ingot${it.name.toLowerCase().capitalize()}", it.getIngot())
             OreDictionary.registerOre("nugget${it.name.toLowerCase().capitalize()}", it.getNugget())

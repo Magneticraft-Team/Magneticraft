@@ -15,9 +15,7 @@ import net.minecraft.util.text.ITextComponent
 
 object IgnoreBlockComponent : IMultiblockComponent {
 
-    override fun checkBlock(relativePos: BlockPos, context: MultiblockContext): List<ITextComponent> {
-        return emptyList()
-    }
+    override fun checkBlock(relativePos: BlockPos, context: MultiblockContext): List<ITextComponent> = emptyList()
 
     override fun getBlockData(relativePos: BlockPos, context: MultiblockContext): BlockData {
         val pos = context.center + relativePos

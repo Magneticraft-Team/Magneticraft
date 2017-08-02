@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.Sluic
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.item.Crafting
+import com.cout970.magneticraft.item.Metal
 import com.cout970.magneticraft.item.Metals
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.withSize
@@ -94,7 +95,7 @@ fun registerRecipes() {
     addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15))
     addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4))
     // ores
-    Metals.Metal.values().forEach { metal ->
+    Metal.values().forEach { metal ->
         metal.getOres().firstOrNull()?.let {
             addCrushingTableRecipe(it, metal.getRockyChunk())
         }
@@ -105,7 +106,7 @@ fun registerRecipes() {
     addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
     addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))
     // light plates
-    Metals.Metal.values().filter { it.useful }.forEach {
+    Metal.values().filter { it.useful }.forEach {
         addCrushingTableRecipe(it.getIngot(), it.getLightPlate())
     }
     // rods
@@ -133,7 +134,7 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(Metals.ingots, 1, 4), ItemStack(Ores.ores, 1, 2))
     addSmeltingRecipe(ItemStack(Metals.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
 
-    Metals.Metal.values().forEach {
+    Metal.values().forEach {
         if(it.isComposite) {
             addSmeltingRecipe(it.subComponents[0]().getIngot().withSize(2), it.getRockyChunk())
             addSmeltingRecipe(it.subComponents[1]().getIngot().withSize(2), it.getChunk())
@@ -148,14 +149,13 @@ fun registerRecipes() {
 
     //SLUICE BOX RECIPES
 
-    Metals.Metal.values().forEach {
-        if(it.isComposite){
-            addSluiceBoxRecipe(it.getRockyChunk(), ItemStack.EMPTY,
-                    it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f } + listOf(COBBLESTONE.stack() to 0.15f)
-            )
+    Metal.values().filter { it.isOre }.forEach {
+        val subComponents = if(it.isComposite) {
+            it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
         } else {
-            addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), listOf(COBBLESTONE.stack() to 0.15f))
+            Metal.subProducts[it]?.map { it.getDust() to 0.15f } ?: emptyList()
         }
+        addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), subComponents + listOf(COBBLESTONE.stack() to 0.15f))
     }
 
     addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))

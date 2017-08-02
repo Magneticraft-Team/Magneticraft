@@ -74,7 +74,7 @@ object Multiblocks : IBlockMaker {
             }
             onBlockBreak = func@ {
                 val mod = it.worldIn.getTile<TileMultiblockGap>(it.pos)?.getModule<ModuleMultiblock>() ?: return@func
-                if(mod.multiblock == null){
+                if (mod.multiblock == null) {
                     val relPos = mod.centerPos ?: return@func
                     val absPos = it.pos + relPos
                     it.worldIn.setBlockToAir(absPos)
@@ -153,21 +153,7 @@ object Multiblocks : IBlockMaker {
         val errors = MultiblockManager.checkMultiblockStructure(context)
         val playerIn = context.player!!
         if (errors.isNotEmpty()) {
-            playerIn.sendMessage("text.magneticraft.multiblock.error_count", errors.size, color = TextFormatting.AQUA)
-            if (errors.size > 2) {
-                playerIn.sendMessage("text.magneticraft.multiblock.first_errors", 2, color = TextFormatting.AQUA)
-                var count = 0
-                errors.forEach {
-                    if (count >= 2) return@forEach
-                    playerIn.sendMessage(it.apply { style.color = TextFormatting.DARK_RED })
-                    count++
-                }
-            } else {
-                playerIn.sendMessage("text.magneticraft.multiblock.all_errors", color = TextFormatting.DARK_AQUA)
-                errors.forEach {
-                    playerIn.sendMessage(it.apply { style.color = TextFormatting.DARK_RED })
-                }
-            }
+            playerIn.sendStatusMessage(errors.first(), true)
         } else {
             MultiblockManager.activateMultiblockStructure(context)
             playerIn.sendMessage("text.magneticraft.multiblock.activate", color = TextFormatting.GREEN)
@@ -192,9 +178,8 @@ object Multiblocks : IBlockMaker {
         override fun getName() = name.toLowerCase()
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_MULTIBLOCK_ORIENTATION)
 
-        override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_MULTIBLOCK_ORIENTATION, this)
-        }
+        override fun getBlockState(block: Block): IBlockState =
+                block.defaultState.withProperty(PROPERTY_MULTIBLOCK_ORIENTATION, this)
 
         companion object {
             fun of(facing: EnumFacing, active: Boolean) = when {

@@ -31,10 +31,6 @@ object MultiblockManager {
         registerMultiblock(MultiblockSolarPanel)
         registerMultiblock(MultiblockShelvingUnit)
         registerMultiblock(MultiblockSteamEngine)
-//        registerMultiblock(MultiblockHydraulicPress)
-//        registerMultiblock(MultiblockKiln)
-//        registerMultiblock(MultiblockGrinder)
-//        registerMultiblock(MultiblockSifter)
     }
 
     /**
@@ -108,7 +104,7 @@ object MultiblockManager {
         val center = context.multiblock.center
         val origin = pos.subtract(center)
         val normalized = EnumFacing.SOUTH.rotatePoint(BlockPos.ORIGIN, origin)
-        val rotated = context.facing.rotatePoint(BlockPos.ORIGIN, normalized)
-        return rotated
+
+        return context.facing.rotatePoint(BlockPos.ORIGIN, normalized)
     }
 }

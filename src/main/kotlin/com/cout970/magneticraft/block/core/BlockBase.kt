@@ -80,9 +80,8 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
     override fun getStateFromMeta(meta: Int): IBlockState = states[meta].getBlockState(this)
 
-    override fun createBlockState(): BlockStateContainer {
-        return BlockStateContainer(this, *states_!![0].properties.toTypedArray())
-    }
+    override fun createBlockState(): BlockStateContainer =
+            BlockStateContainer(this, *states_!![0].properties.toTypedArray())
 
     // event stuff
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AABB {
@@ -189,9 +188,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         super.breakBlock(worldIn, pos, state)
     }
 
-    override fun toString(): String {
-        return "BlockBase($registryName)"
-    }
+    override fun toString(): String = "BlockBase($registryName)"
 
     fun getCustomStateMapper(): IStateMapper? = object : StateMapperBase() {
         override fun getModelResourceLocation(state: IBlockState): ModelResourceLocation {
@@ -228,13 +225,11 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun isOpaqueCube(state: IBlockState?) = enableOcclusionOptimization
     override fun isFullCube(state: IBlockState?) = !translucent_
 
-    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        return capabilityProvider?.getCapability(capability, facing)
-    }
+    override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? =
+            capabilityProvider?.getCapability(capability, facing)
 
-    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
-        return capabilityProvider?.hasCapability(capability, facing) ?: false
-    }
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean =
+            capabilityProvider?.hasCapability(capability, facing) ?: false
 
     fun getBlockStatesToPlace(worldIn: World, pos: BlockPos,
                               facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float,

@@ -6,6 +6,7 @@ import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.util.i18n
+import com.cout970.magneticraft.util.prettyFormat
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
@@ -28,7 +29,7 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
             }
             val keyStr = "text.magneticraft.multiblock.invalid_block"
             val vecStr = "[%d, %d, %d]".format(pos.x, pos.y, pos.z)
-            return listOf(keyStr.i18n(vecStr, state.toString(), origin.toString()))
+            return listOf(keyStr.i18n(vecStr, state.prettyFormat(), origin.prettyFormat()))
         }
         return emptyList()
     }

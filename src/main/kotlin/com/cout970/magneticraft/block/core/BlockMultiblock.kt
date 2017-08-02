@@ -40,7 +40,7 @@ class BlockMultiblock(
             val tile = worldIn.getTile<TileBase>(pos)
             val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
 
-            if (module != null && module.multiblock != null) {
+            if (module?.multiblock != null) {
 
                 val relPos = -module.centerPos!!
                 val global = module.multiblock!!.getGlobalCollisionBox().map {
@@ -63,7 +63,7 @@ class BlockMultiblock(
         if (active) {
             val tile = worldIn.getTile<TileBase>(pos)
             val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
-            if (module != null && module.multiblock != null) {
+            if (module?.multiblock != null) {
 
                 val relPos = -module.centerPos!!
                 val global = module.multiblock!!.getGlobalCollisionBox().map {
@@ -106,7 +106,7 @@ class BlockMultiblock(
         if (active) {
             val tile = worldIn.getTile<TileBase>(pos)
             val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
-            if (module != null && module.multiblock != null) {
+            if (module?.multiblock != null) {
 
                 val relPos = -module.centerPos!!
                 val global = module.multiblock!!.getGlobalCollisionBox().map {
@@ -145,7 +145,7 @@ class BlockMultiblock(
             if (active) {
                 val tile = worldIn.getTile<TileBase>(pos)
                 val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
-                if (module != null && module.multiblock != null) {
+                if (module?.multiblock != null) {
                     if (module.multiblock != null && module.multiblockFacing != null) {
                         MultiblockManager.deactivateMultiblockStructure(
                                 MultiblockContext(
