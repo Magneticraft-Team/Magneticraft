@@ -7,6 +7,7 @@ import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.size
 import com.cout970.magneticraft.util.vector.start
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.item.ItemStack
@@ -24,6 +25,8 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override val pos: IVector2 get() = Vec2d(guiLeft, guiTop)
     override val size: IVector2 get() = Vec2d(xSize, ySize)
+
+    override val fontHelper: FontRenderer get() = super.fontRenderer
 
     override fun initGui() {
         super.initGui()
@@ -112,6 +115,10 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override fun drawString(text: String, pos: Vec2d, color: Int) {
         drawString(fontRenderer, text, pos.xi, pos.yi, color)
+    }
+
+    override fun drawShadelessString(text: String, pos: Vec2d, color: Int) {
+        fontRenderer.drawString(text, pos.xf, pos.yf, color, false)
     }
 
     override fun drawHorizontalLine(startX: Int, endX: Int, y: Int, color: Int) {

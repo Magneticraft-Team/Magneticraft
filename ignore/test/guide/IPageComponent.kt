@@ -1,10 +1,11 @@
-package com.cout970.magneticraft.gui.client.guide
+package com.cout970.magneticraft.guide
 
 import com.cout970.magneticraft.util.vector.Vec2d
 
-interface GuiPageComponent {
-    val position: Vec2d
+interface IPageComponent {
+    val pos: Vec2d
     val size: Vec2d
+
     fun initGui()
     fun isMouseInside(mouse: Vec2d): Boolean
     fun onLeftClick(mouse: Vec2d): Boolean

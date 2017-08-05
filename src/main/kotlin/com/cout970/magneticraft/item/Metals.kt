@@ -25,55 +25,55 @@ object Metals : IItemMaker {
         }
 
         ingots = builder.withName("ingots").apply {
-            variants = Metal.values()
-                    .filterNot(Metal::isComposite)
-                    .filterNot(Metal::vanilla)
+            variants = EnumMetal.values()
+                    .filterNot(EnumMetal::isComposite)
+                    .filterNot(EnumMetal::vanilla)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
 
         lightPlates = builder.withName("light_plates").apply {
-            variants = Metal.values()
-                    .filter(Metal::useful)
-                    .filterNot(Metal::isComposite)
+            variants = EnumMetal.values()
+                    .filter(EnumMetal::useful)
+                    .filterNot(EnumMetal::isComposite)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
 
         heavyPlates = builder.withName("heavy_plates").apply {
-            variants = Metal.values()
-                    .filter(Metal::useful)
-                    .filterNot(Metal::isComposite)
+            variants = EnumMetal.values()
+                    .filter(EnumMetal::useful)
+                    .filterNot(EnumMetal::isComposite)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
 
         nuggets = builder.withName("nuggets").apply {
-            variants = Metal.values()
-                    .filterNot(Metal::isComposite)
-                    .filterNot(Metal::vanilla)
+            variants = EnumMetal.values()
+                    .filterNot(EnumMetal::isComposite)
+                    .filterNot(EnumMetal::vanilla)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
 
         chunks = builder.withName("chunks").apply {
-            variants = Metal.values()
-                    .filter(Metal::isOre)
-                    .filterNot(Metal::isComposite)
+            variants = EnumMetal.values()
+                    .filter(EnumMetal::isOre)
+                    .filterNot(EnumMetal::isComposite)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
 
         dusts = builder.withName("dusts").apply {
-            variants = Metal.values()
-                    .filterNot(Metal::isComposite)
+            variants = EnumMetal.values()
+                    .filterNot(EnumMetal::isComposite)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()
 
         rockyChunks = builder.withName("rocky_chunks").apply {
-            variants = Metal.values()
-                    .filter(Metal::isOre)
+            variants = EnumMetal.values()
+                    .filter(EnumMetal::isOre)
                     .map { it.ordinal to it.name.toLowerCase() }
                     .toMap()
         }.build()

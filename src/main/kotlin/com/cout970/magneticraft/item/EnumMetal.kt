@@ -11,8 +11,8 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 2017/08/02.
  */
 
-enum class Metal(val vanilla: Boolean, val isOre: Boolean = true, val useful: Boolean = false,
-                 val subComponents: List<() -> Metal> = emptyList()) {
+enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful: Boolean = false,
+                     val subComponents: List<() -> EnumMetal> = emptyList()) {
 
     IRON(true, useful = true),
     GOLD(true, useful = true),

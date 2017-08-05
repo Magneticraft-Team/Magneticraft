@@ -12,6 +12,8 @@ interface IComponent {
     val pos: IVector2
     val size: IVector2
 
+    val collisionBox get() = pos to size
+
     var gui: IGui
 
     fun drawFirstLayer(mouse: Vec2d, partialTicks: Float)

@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.guide.components
 
-import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
+import com.cout970.magneticraft.guide.IPageComponent
 import com.cout970.magneticraft.guide.BookPage
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
@@ -15,7 +15,7 @@ class StackIcon(
 
     override val size = Vec2d(16, 16)
 
-    override fun toGuiComponent(parent: BookPage.Gui): GuiPageComponent = Gui(parent)
+    override fun toGuiComponent(parent: BookPage.Gui): IPageComponent = Gui(parent)
 
     private inner class Gui(parent: BookPage.Gui) : PageComponent.Gui(parent) {
         override fun draw(mouse: Vec2d, time: Double) {

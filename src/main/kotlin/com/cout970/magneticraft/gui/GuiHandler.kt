@@ -16,8 +16,12 @@ import net.minecraftforge.fml.common.network.IGuiHandler
 object GuiHandler : IGuiHandler {
 
     override fun getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
-        val tile = world.getTileEntity(BlockPos(x, y, z))
         val serverElement = getServerGuiElement(ID, player, world, x, y, z) as ContainerBase
+        if (ID == -2) {
+            return GuiGuideBook(serverElement)
+        }
+
+        val tile = world.getTileEntity(BlockPos(x, y, z))
         return when (tile) {
             is TileBox -> GuiBox(serverElement)
             is TileShelvingUnit -> GuiShelvingUnit(serverElement)
@@ -25,26 +29,25 @@ object GuiHandler : IGuiHandler {
             is TileElectricFurnace -> GuiElectricFurnace(serverElement)
             is TileComputer -> GuiComputer(serverElement)
             is TileCombustionChamber -> GuiCombustionChamber(serverElement)
-//            is TileIcebox -> GuiIcebox(serverElement)
-//            is TileBrickFurnace -> GuiBrickFurnace(serverElement)
-//            is TileGrinder -> GuiGrinder(serverElement)
             else -> null
         }
     }
 
     override fun getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
         val pos = BlockPos(x, y, z)
+        if (ID == -2) {
+            return ContainerGuideBook(player, world, pos)
+        }
+
         val tile = world.getTileEntity(pos)
         return when (tile) {
             is TileBox -> ContainerBox(tile, player, world, pos)
-            is TileShelvingUnit -> ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnit.Level.values()[ID])
+            is TileShelvingUnit -> ContainerShelvingUnit(tile, player, world, pos,
+                    ModuleShelvingUnit.Level.values()[ID])
             is TileBattery -> ContainerBattery(tile, player, world, pos)
             is TileElectricFurnace -> ContainerElectricFurnace(tile, player, world, pos)
             is TileComputer -> ContainerComputer(tile, player, world, pos)
             is TileCombustionChamber -> ContainerCombustionChamber(tile, player, world, pos)
-//            is TileGrinder -> ContainerGrinder(player, world, BlockPos(x, y, z))
-//            is TileBrickFurnace -> ContainerBrickFurnace(player, world, BlockPos(x, y, z))
-//            is TileIcebox -> ContainerIcebox(player, world, BlockPos(x, y, z))
             else -> null
         }
     }

@@ -20,6 +20,8 @@ interface IGuiRenderer {
 
     fun drawString(text: String, pos: Vec2d, color: Int)
 
+    fun drawShadelessString(text: String, pos: Vec2d, color: Int)
+
     //line render
     fun drawHorizontalLine(startX: Int, endX: Int, y: Int, color: Int)
 

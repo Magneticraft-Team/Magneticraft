@@ -9,10 +9,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumActionResult
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumHand
-import net.minecraft.util.NonNullList
+import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.ICapabilityProvider
@@ -24,6 +21,7 @@ open class ItemBase : Item() {
 
     var onHitEntity: ((HitEntityArgs) -> Boolean)? = null
     var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
+    var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var variants: Map<Int, String> = mapOf(0 to "normal")
 
@@ -57,9 +55,12 @@ open class ItemBase : Item() {
                 vec3Of(hitX, hitY, hitZ))) ?: super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
     }
 
-    override fun toString(): String {
-        return "ItemBase($registryName)"
+    override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: EnumHand): ActionResult<ItemStack> {
+        val default = super.onItemRightClick(worldIn, playerIn, handIn)
+        return onItemRightClick?.invoke(OnItemRightClickArgs(worldIn, playerIn, handIn, default)) ?: default
     }
+
+    override fun toString(): String = "ItemBase($registryName)"
 }
 
 data class HitEntityArgs(val stack: ItemStack, val target: EntityLivingBase, val attacker: EntityLivingBase)
@@ -67,3 +68,6 @@ data class InitCapabilitiesArgs(val stack: ItemStack, val nbt: NBTTagCompound?)
 data class OnItemUseArgs(val item: ItemBase, val player: EntityPlayer, val worldIn: World, val pos: BlockPos,
                          val hand: EnumHand,
                          val facing: EnumFacing, val hit: IVector3)
+
+data class OnItemRightClickArgs(val worldIn: World, val playerIn: EntityPlayer, val handIn: EnumHand,
+                                val default: ActionResult<ItemStack>)

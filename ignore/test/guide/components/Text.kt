@@ -1,11 +1,10 @@
 package com.cout970.magneticraft.guide.components
 
-
+import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.gui.client.guide.FONT_HEIGHT
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
-import com.cout970.magneticraft.gui.client.guide.GuiPageComponent
 import com.cout970.magneticraft.guide.BookPage
-import com.cout970.magneticraft.guide.GUIDE_LANG
+import com.cout970.magneticraft.guide.IPageComponent
 import com.cout970.magneticraft.guide.JsonIgnore
 import com.cout970.magneticraft.guide.LinkInfo
 import com.cout970.magneticraft.util.i18n
@@ -24,7 +23,7 @@ class Text(
     @JsonIgnore
     var words: List<Pair<String, LinkInfo?>>? = parseText(text)
 
-    override fun toGuiComponent(parent: BookPage.Gui): GuiPageComponent = TextComponentGui(parent)
+    override fun toGuiComponent(parent: BookPage.Gui): IPageComponent = TextComponentGui(parent)
 
     private inner class TextComponentGui(parent: BookPage.Gui) : Gui(parent) {
         lateinit var boxes: List<TextBox>
@@ -140,7 +139,7 @@ class Text(
 
         fun postDraw(mouse: Vec2d) {
             if (link != null && isInside(mouse)) {
-                page.gui.drawHoveringText(listOf(I18n.format("$GUIDE_LANG.link.text", link.entry.i18n(), link.page + 1)), mouse)
+                page.gui.drawHoveringText(listOf(I18n.format("$MOD_ID.guide.link.text", link.entry.i18n(), link.page + 1)), mouse)
             }
         }
     }

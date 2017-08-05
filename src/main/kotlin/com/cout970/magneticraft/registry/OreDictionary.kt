@@ -2,7 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.item.Crafting
-import com.cout970.magneticraft.item.Metal
+import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -15,7 +15,7 @@ import net.minecraftforge.oredict.OreDictionary
  */
 fun registerOreDictionaryEntries() {
 
-    Metal.values().forEach {
+    EnumMetal.values().forEach {
         if(!it.vanilla && !it.isComposite){
             OreDictionary.registerOre("ingot${it.name.toLowerCase().capitalize()}", it.getIngot())
             OreDictionary.registerOre("nugget${it.name.toLowerCase().capitalize()}", it.getNugget())
@@ -24,7 +24,9 @@ fun registerOreDictionaryEntries() {
             OreDictionary.registerOre("lightPlate${it.name.toLowerCase().capitalize()}", it.getLightPlate())
             OreDictionary.registerOre("heavyPlate${it.name.toLowerCase().capitalize()}", it.getHeavyPlate())
         }
-        OreDictionary.registerOre("chunk${it.name.toLowerCase().capitalize()}", it.getChunk())
+        if(!it.isComposite) {
+            OreDictionary.registerOre("chunk${it.name.toLowerCase().capitalize()}", it.getChunk())
+        }
         OreDictionary.registerOre("rockyChunk${it.name.toLowerCase().capitalize()}", it.getRockyChunk())
     }
     OreDictionary.registerOre("dustSulfur", Crafting.crafting.stack(1, Crafting.meta["sulfur"]!!))

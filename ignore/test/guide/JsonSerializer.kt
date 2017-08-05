@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.guide
 
 
+import com.cout970.magneticraft.gui.client.guide.Book
 import com.cout970.magneticraft.guide.components.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.toResource

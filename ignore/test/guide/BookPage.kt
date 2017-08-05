@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.guide
 
+import com.cout970.magneticraft.gui.client.guide.Book
 import com.cout970.magneticraft.gui.client.guide.GuiGuideBook
 import com.cout970.magneticraft.guide.components.PageComponent
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -10,7 +11,7 @@ data class BookPage(private val components: List<PageComponent>) {
 
     inner class Gui(val gui: GuiGuideBook, val page: GuiGuideBook.Page) {
         lateinit var start: Vec2d
-        val size = PAGE_SIZE
+        val size = Book.PAGE_SIZE
         val components = this@BookPage.components.map { it.toGuiComponent(this) }
 
         fun initGui() {

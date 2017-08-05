@@ -5,8 +5,10 @@ package com.cout970.magneticraft.util.vector
  * Created by cout970 on 14/05/2016.
  */
 
-fun vec2Of(x: Number, y: Number) = Vec2d(x.toDouble(), y.toDouble())
-fun vec2Of(n: Number) = Vec2d(n.toDouble(), n.toDouble())
+@Suppress("NOTHING_TO_INLINE")
+inline fun vec2Of(x: Number, y: Number) = Vec2d(x.toDouble(), y.toDouble())
+@Suppress("NOTHING_TO_INLINE")
+inline fun vec2Of(n: Number) = Vec2d(n.toDouble(), n.toDouble())
 
 inline val Pair<Vec2d, Vec2d>.start get() = first
 inline val Pair<Vec2d, Vec2d>.end get() = first + second
@@ -15,6 +17,10 @@ inline val Pair<Vec2d, Vec2d>.size get() = second
 
 operator fun Pair<Vec2d, Vec2d>.contains(point: Vec2d): Boolean {
     return (point.x in (start.x..end.x)) && (point.y in (start.y..end.y))
+}
+
+fun Pair<Vec2d, Vec2d>.offset(offset: Vec2d): Pair<Vec2d, Vec2d> {
+    return first + offset to second
 }
 
 @Suppress("unused")
