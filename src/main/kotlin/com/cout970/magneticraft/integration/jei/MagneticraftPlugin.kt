@@ -4,7 +4,7 @@ import com.cout970.magneticraft.MOD_NAME
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
-import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.block.ManualMachines
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.util.add
@@ -40,11 +40,11 @@ class MagneticraftPlugin : IModPlugin {
     override fun register(registry: IModRegistry) {
 
         registry.handleRecipes(ICrushingTableRecipe::class.java, ::CrushingTableRecipeWrapper, CRUSHING_TABLE_ID)
-        registry.addRecipeCatalyst(Machines.crushingTable.stack(), CRUSHING_TABLE_ID)
+        registry.addRecipeCatalyst(ManualMachines.crushingTable.stack(), CRUSHING_TABLE_ID)
         registry.addRecipes(MagneticraftApi.getCrushingTableRecipeManager().recipes, CRUSHING_TABLE_ID)
 
         registry.handleRecipes(ISluiceBoxRecipe::class.java, ::SluiceBoxRecipeWrapper, SLUICE_BOX_ID)
-        registry.addRecipeCatalyst(Machines.sluiceBox.stack(), SLUICE_BOX_ID)
+        registry.addRecipeCatalyst(ManualMachines.sluiceBox.stack(), SLUICE_BOX_ID)
         registry.addRecipes(MagneticraftApi.getSluiceBoxRecipeManager().recipes, SLUICE_BOX_ID)
 
     }

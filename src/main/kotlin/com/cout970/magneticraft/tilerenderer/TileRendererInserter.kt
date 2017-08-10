@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tilerenderer
 
-import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
@@ -34,7 +34,7 @@ object TileRendererInserter : TileRenderer<TileInserter>() {
     }
 
     override fun onModelRegistryReload() {
-        val loc = ModelResourceLocation(Machines.inserter.registryName, "model")
+        val loc = ModelResourceLocation(AutomaticMachines.inserter.registryName, "model")
         //cleaning
         model?.clear()
 

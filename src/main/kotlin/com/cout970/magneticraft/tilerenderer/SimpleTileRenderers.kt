@@ -267,7 +267,7 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
 
 @RegisterRenderer(TileSluiceBox::class)
 object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
-        modelLocation = { ModelResourceLocation(Machines.sluiceBox.registryName, "model") },
+        modelLocation = { ModelResourceLocation(ManualMachines.sluiceBox.registryName, "model") },
         filters = listOf<(String) -> Boolean>({ it != "Shape17" }, { it == "Shape17" })
 ) {
 
@@ -298,7 +298,7 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         waterModel?.clear()
-        val loc = ModelResourceLocation(Machines.sluiceBox.registryName, "water")
+        val loc = ModelResourceLocation(ManualMachines.sluiceBox.registryName, "water")
         val model = ModelLoaderApi.getModel(loc) ?: return
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val waterFlow = textureMap.getAtlasSprite("minecraft:blocks/water_flow")
@@ -338,7 +338,7 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
 
 @RegisterRenderer(TileCombustionChamber::class)
 object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>(
-        modelLocation = { ModelResourceLocation(Machines.combustionChamber.registryName, "model") },
+        modelLocation = { ModelResourceLocation(HeatMachines.combustionChamber.registryName, "model") },
         filters = listOf<(String) -> Boolean>({ it != "Door" }, { it == "Door" })
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileCombustionChamber) {
@@ -353,7 +353,7 @@ object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>
 
 @RegisterRenderer(TileSteamBoiler::class)
 object TileRendererSteamBoiler : TileRendererSimple<TileSteamBoiler>(
-        modelLocation = { ModelResourceLocation(Machines.steamBoiler.registryName, "model") }
+        modelLocation = { ModelResourceLocation(HeatMachines.steamBoiler.registryName, "model") }
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileSteamBoiler) {
         models.forEach { it.renderTextured() }
@@ -378,7 +378,7 @@ object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
 
 @RegisterRenderer(TileFeedingTrough::class)
 object TileRendererFeedingTrough : TileRendererSimple<TileFeedingTrough>(
-        modelLocation = { ModelResourceLocation(Machines.feedingTrough.registryName, "model") }
+        modelLocation = { ModelResourceLocation(AutomaticMachines.feedingTrough.registryName, "model") }
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileFeedingTrough) {

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.IVector3
-import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
@@ -155,7 +155,7 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
     }
 
     override fun onModelRegistryReload() {
-        val loc = ModelResourceLocation(Machines.conveyorBelt.registryName, "model")
+        val loc = ModelResourceLocation(AutomaticMachines.conveyorBelt.registryName, "model")
         //cleaning
         axisBars?.clear()
         backLegs?.clear()

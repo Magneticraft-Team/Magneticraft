@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.tileentity.modules
 
-import com.cout970.magneticraft.block.Machines
+import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.item.itemblock.ItemBlockBase
@@ -225,7 +225,7 @@ class ModuleConveyorBelt(
     override fun onActivated(args: OnActivatedArgs): Boolean {
         if (args.heldItem.isNotEmpty) {
             val item = args.heldItem.item
-            if (item is ItemBlockBase && item.blockBase == Machines.conveyorBelt) {
+            if (item is ItemBlockBase && item.blockBase == AutomaticMachines.conveyorBelt) {
                 return false
             }
             val success = addItem(args.heldItem)

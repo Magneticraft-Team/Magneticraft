@@ -18,11 +18,13 @@ fun initBlocks() {
 
     blocks_ += Decoration.initBlocks()
     blocks_ += Ores.initBlocks()
-    blocks_ += Machines.initBlocks()
+    blocks_ += ManualMachines.initBlocks()
     blocks_ += MultiblockParts.initBlocks()
     blocks_ += ElectricMachines.initBlocks()
     blocks_ += Multiblocks.initBlocks()
     blocks_ += Computers.initBlocks()
+    blocks_ += HeatMachines.initBlocks()
+    blocks_ += AutomaticMachines.initBlocks()
 
     blocks_.forEach { ForgeRegistries.BLOCKS.register(it.first); ForgeRegistries.ITEMS.register(it.second) }
     blocks = blocks_
