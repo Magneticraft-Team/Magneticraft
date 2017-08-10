@@ -96,7 +96,7 @@ object Utilities {
         }
     }
 
-    fun renderItem(stack: ItemStack, facing: EnumFacing) {
+    fun renderItem(stack: ItemStack, facing: EnumFacing = EnumFacing.NORTH) {
         if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
             TileRendererConveyorBelt.translate(0.0, -0.9 * PIXEL, 0.0)
             TileRendererConveyorBelt.rotate(90f, 1f, 0f, 0f)

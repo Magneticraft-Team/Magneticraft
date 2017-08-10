@@ -2,6 +2,7 @@ package com.cout970.magneticraft.block.core
 
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
@@ -83,7 +84,12 @@ object CommonMethods {
     }
 
     fun delegateToModule(args: OnActivatedArgs): Boolean {
-        val tile = args.worldIn.getTile<TileBase>(args.pos) ?: return false
+        val pos = if (PROPERTY_CENTER_ORIENTATION.isIn(args.state)) {
+            val prop = args.state.getValue(PROPERTY_CENTER_ORIENTATION)
+            if (prop.center) args.pos else args.pos.offset(prop.facing)
+        } else args.pos
+
+        val tile = args.worldIn.getTile<TileBase>(pos) ?: return false
         val method = tile.container.modules.find { it is IOnActivated } as? IOnActivated ?: return false
         return method.onActivated(args)
     }
@@ -110,7 +116,8 @@ object CommonMethods {
     /**
      * The base value is associated to the NORTH direction
      */
-    fun updateBoundingBoxWithFacing(base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+    fun updateBoundingBoxWithFacing(
+            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
@@ -122,7 +129,8 @@ object CommonMethods {
     /**
      * The base value is associated to the NORTH direction
      */
-      fun updateBoundingBoxWithOrientation(base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+    fun updateBoundingBoxWithOrientation(
+            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH

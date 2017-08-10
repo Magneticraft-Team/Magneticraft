@@ -116,7 +116,7 @@ tile.magneticraft.ores_pyrite.name=Pyrite Ore
 tile.magneticraft.box_normal.name=Wooden Box
 tile.magneticraft.crushing_table_normal.name=Crushing Table
 tile.magneticraft.sluice_box_center_north.name=Sluice Box
-tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
+tile.magneticraft.feeding_trough_center_north.name=Wooden Feeding Trough
 #tile.magneticraft.kiln_shelf.name=Kiln Shelf
 
 tile.magneticraft.limestone_normal.name=Limestone

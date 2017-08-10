@@ -191,3 +191,21 @@ class TileSteamBoiler : TileBase(), ITickable {
         super.update()
     }
 }
+
+@RegisterTileEntity("feeding_trough")
+class TileFeedingTrough : TileBase(), ITickable {
+
+    val facing: EnumFacing get() = getBlockState().getOrientationCentered()
+
+    val invModule = ModuleInventory(1, capabilityFilter = {null})
+    val moduleFeedingTrough = ModuleFeedingTrough(invModule)
+
+    init {
+        initModules(moduleFeedingTrough, invModule)
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB {
+        val dir = facing.toBlockPos()
+        return super.getRenderBoundingBox().expand(dir.xd, dir.yd, dir.zd)
+    }
+}

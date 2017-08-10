@@ -30,6 +30,7 @@ object Machines : IBlockMaker {
     lateinit var sluiceBox: BlockBase private set
     lateinit var combustionChamber: BlockBase private set
     lateinit var steamBoiler: BlockBase private set
+    lateinit var feedingTrough: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -165,7 +166,43 @@ object Machines : IBlockMaker {
             onActivated = CommonMethods::delegateToModule
         }.build()
 
+
+        feedingTrough = builder.withName("feeding_trough").copy {
+            states = CommonMethods.CenterOrientation.values().toList()
+            factory = factoryOf(::TileFeedingTrough)
+            factoryFilter = { it[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false }
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/feeding_trough.mcx"),
+                    "inventory" to resource("models/block/mcx/feeding_trough_inv.mcx")
+            )
+            hasCustomModel = true
+            generateDefaultItemModel = false
+            alwaysDropDefault = true
+            //methods
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::delegateToModule
+            blockStatesToPlace = {
+                val facing = it.player.horizontalFacing
+                val center = CommonMethods.CenterOrientation.of(facing, true)
+                val noCenter = CommonMethods.CenterOrientation.of(facing.opposite, false)
+
+                val thisState = it.default.withProperty(CommonMethods.PROPERTY_CENTER_ORIENTATION, center)
+                val otherState = it.default.withProperty(CommonMethods.PROPERTY_CENTER_ORIENTATION, noCenter)
+
+                listOf(BlockPos.ORIGIN to thisState, facing.toBlockPos() to otherState)
+            }
+            onBlockBreak = func@ {
+                val facing = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: return@func
+                it.worldIn.destroyBlock(it.pos + facing.toBlockPos(), true)
+            }
+            onDrop = {
+                val center = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false
+                if (center) it.default else emptyList()
+            }
+            boundingBox = { listOf((vec3Of(0, 0, 0) toAABBWith vec3Of(16, 12, 16)).scale(PIXEL)) }
+        }.build()
+
         return itemBlockListOf(box, crushingTable, conveyorBelt, inserter, waterGenerator, sluiceBox, combustionChamber,
-                steamBoiler)
+                steamBoiler, feedingTrough)
     }
 }
