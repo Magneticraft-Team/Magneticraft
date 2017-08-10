@@ -94,6 +94,10 @@ class MarkdownHorizontalRule : MarkdownTag() {
     override val childs: List<MarkdownTag> = emptyList()
 }
 
+class MarkdownNewLine : MarkdownTag(){
+    override val childs: List<MarkdownTag> = emptyList()
+}
+
 data class MarkdownText(val txt: String) : MarkdownTag() {
     override val childs: List<MarkdownTag> = emptyList()
 

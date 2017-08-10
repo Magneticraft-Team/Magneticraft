@@ -16,6 +16,8 @@ interface IComponent {
 
     var gui: IGui
 
+    fun init() = Unit
+
     fun drawFirstLayer(mouse: Vec2d, partialTicks: Float)
 
     fun drawSecondLayer(mouse: Vec2d) = Unit

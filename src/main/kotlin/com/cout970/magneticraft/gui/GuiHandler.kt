@@ -18,7 +18,7 @@ object GuiHandler : IGuiHandler {
     override fun getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
         val serverElement = getServerGuiElement(ID, player, world, x, y, z) as ContainerBase
         if (ID == -2) {
-            return GuiGuideBook(serverElement)
+            return GuiGuideBook(serverElement as ContainerGuideBook)
         }
 
         val tile = world.getTileEntity(BlockPos(x, y, z))

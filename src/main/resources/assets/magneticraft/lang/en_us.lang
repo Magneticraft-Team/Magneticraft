@@ -1,13 +1,9 @@
 itemGroup.magneticraft=Magneticraft
-#item.magneticraft.guide_book.name=Magneticraft Instruction Manual
+item.magneticraft.guide_book_normal.name=Magneticraft Guide Book
+
 item.magneticraft.iron_hammer_normal.name=Iron Hammer
 item.magneticraft.stone_hammer_normal.name=Stone Hammer
 item.magneticraft.steel_hammer_normal.name=Steel Hammer
-
-#item.magneticraft.crushed_coal.name=Crushed Coal
-#item.magneticraft.wood_chip.name=Wood Chips
-#item.magneticraft.pulp_wood.name=Wood Pulp
-#item.magneticraft.item_mesh.name=Iron Mesh
 
 
 item.magneticraft.heavy_plates_iron.name=Heavy Iron Plate
@@ -107,19 +103,9 @@ item.magneticraft.crafting_magnet.name=Magnet
 item.magneticraft.crafting_mesh.name=Iron Mesh
 item.magneticraft.crafting_string_fabric.name=Fabric Mesh
 item.magneticraft.voltmeter_normal.name=Voltmeter
-#item.magneticraft.thermometer.name=Thermometer
 item.magneticraft.battery_item_low_normal.name=Small Battery
 item.magneticraft.battery_item_medium_normal.name=Medium Battery
-#item.magneticraft.floppy_disk.name=Floppy Disk
-#item.magneticraft.coal_coke.name=Coal Coke
-
-#magneticraft.guide.contents=Content Table
-#magneticraft.guide.basics=Basics
-#magneticraft.guide.getting.started=Getting Started
-#magneticraft.guide.link.text=%s, index %s
-
-#tile.magneticraft.charcoal_slab.name=Charcoal Slab
-#tile.magneticraft.block_coal_coke.name=Block of Coal Coke
+item.magneticraft.floppy_disk_normal.name=Floppy Disk
 
 tile.magneticraft.ores_copper.name=Chalcopyrite Ore
 tile.magneticraft.ores_lead.name=Galena Ore
@@ -130,7 +116,7 @@ tile.magneticraft.ores_pyrite.name=Pyrite Ore
 tile.magneticraft.box_normal.name=Wooden Box
 tile.magneticraft.crushing_table_normal.name=Crushing Table
 tile.magneticraft.sluice_box_center_north.name=Sluice Box
-#tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
+tile.magneticraft.feeding_trough.name=Wooden Feeding Trough
 #tile.magneticraft.kiln_shelf.name=Kiln Shelf
 
 tile.magneticraft.limestone_normal.name=Limestone
@@ -142,9 +128,6 @@ tile.magneticraft.burnt_limestone_cobble.name=Burnt Limestone Cobble
 tile.magneticraft.tile_limestone_normal.name=Limestone Tiles
 tile.magneticraft.tile_limestone_inverted.name=Inverted Limestone Tiles
 tile.magneticraft.tube_light_north.name=Tube Light
-
-#tile.magneticraft.glazed_brick.name=Glazed Brick
-#tile.magneticraft.fluxed_gravel.name=Fluxed Gravel
 
 tile.magneticraft.conveyor_belt_north.name=Conveyor Belt
 tile.magneticraft.inserter_north.name=Inserter
@@ -168,8 +151,6 @@ tile.magneticraft.steam_boiler_normal.name=Boiler
 #tile.magneticraft.brick_furnace.name=Brick Furnace
 
 tile.magneticraft.water_generator_normal.name=Water Generator
-#tile.magneticraft.infinite_heat.name=Infinite Heat
-#tile.magneticraft.infinite_cold.name=Infinite Cold
 tile.magneticraft.infinite_energy_normal.name=Infinite Energy
 
 #tile.magneticraft.airlock.name=Airlock

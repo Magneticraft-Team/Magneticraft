@@ -138,7 +138,7 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     window.addKeyListener(object : KeyListener {
         override fun keyTyped(e: KeyEvent) {
             val ibd = IBD()
-            monitor.onKeyPressed(e.keyChar.toInt())
+            monitor.onKeyPressed(mapKey(e.keyChar.toInt()))
             monitor.saveToServer(ibd)
             monitor.loadFromClient(ibd)
         }
@@ -148,6 +148,11 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
         override fun keyReleased(e: KeyEvent?) = Unit
     })
     return display
+}
+
+fun mapKey(code: Int): Int = when(code){
+    10 -> 13
+    else -> code
 }
 
 class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
@@ -169,8 +174,8 @@ class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
         var selected = false
 
         graphics.color = Color.GREEN
-        for (line in 0..lines - 1) {
-            for (column in 0..columns - 1) {
+        for (line in 0 until lines) {
+            for (column in 0 until columns) {
                 val character = monitor.getChar(line * columns + column) and 0xFF
                 if (line == monitor.cursorLine && column == monitor.cursorColumn && lastTick % 20 >= 10) {
                     selected = true
