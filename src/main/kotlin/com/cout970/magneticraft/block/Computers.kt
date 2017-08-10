@@ -39,49 +39,9 @@ object Computers : IBlockMaker {
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
-//            onActivated = ::onComputerActivated
+            onActivated = CommonMethods::delegateToModule
         }.build()
 
         return itemBlockListOf(computer)
     }
-
-//    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState?, playerIn: EntityPlayer, hand: EnumHand?, heldItem: ItemStack?, side: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-//        if (!playerIn.isSneaking) {
-//
-//            if (worldIn.isServer) {
-//                var block = true
-//                if (heldItem != null) {
-//                    val cap = ITEM_FLOPPY_DISK!!.fromItem(heldItem)
-//                    if (cap != null) {
-//                        val tile = worldIn.getTile<TileComputer>(pos)
-//                        if (tile != null && tile.inv[0] == null) {
-//                            val index = playerIn.inventory.currentItem
-//                            if (index in 0..8) {
-//                                tile.inv[0] = playerIn.inventory.removeStackFromSlot(index)
-//                            }
-//                        } else {
-//                            block = false
-//                        }
-//                    } else {
-//                        block = false
-//                    }
-//                } else {
-//                    block = false
-//                }
-//
-//                if (!block) {
-//                    playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
-//                }
-//            }
-//            return true
-//        } else {
-//            if (worldIn.isServer && hand == EnumHand.MAIN_HAND && heldItem == null) {
-//                val tile = worldIn.getTile<TileComputer>(pos)
-//                if (tile != null && tile.inv[0] != null) {
-//                    playerIn.inventory.addItemStackToInventory(tile.inv.extractItem(0, 64, false))
-//                }
-//            }
-//        }
-//        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ)
-//    }
 }

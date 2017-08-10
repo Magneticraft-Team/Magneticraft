@@ -4,9 +4,9 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
-import com.cout970.magneticraft.item.Crafting
+import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
-import com.cout970.magneticraft.item.Metals
+import com.cout970.magneticraft.item.MetallicItems
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.withSize
 import net.minecraft.init.Blocks
@@ -101,7 +101,7 @@ fun registerRecipes() {
         }
     }
 
-    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 4), Crafting.crafting.stack(1, Crafting.meta["sulfur"]!!))
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 4), CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
     // limestone
     addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
     addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))
@@ -129,10 +129,10 @@ fun registerRecipes() {
     addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 2), ItemStack(Decoration.limestone, 1, 2))
 
     //ores
-    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 2), ItemStack(Ores.ores, 1, 0))
-    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 3), ItemStack(Ores.ores, 1, 1))
-    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 4), ItemStack(Ores.ores, 1, 2))
-    addSmeltingRecipe(ItemStack(Metals.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 2), ItemStack(Ores.ores, 1, 0))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 3), ItemStack(Ores.ores, 1, 1))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 4), ItemStack(Ores.ores, 1, 2))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
 
     EnumMetal.values().forEach {
         if(it.isComposite) {

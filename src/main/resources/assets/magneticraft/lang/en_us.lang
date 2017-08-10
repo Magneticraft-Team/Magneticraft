@@ -105,7 +105,14 @@ item.magneticraft.crafting_string_fabric.name=Fabric Mesh
 item.magneticraft.voltmeter_normal.name=Voltmeter
 item.magneticraft.battery_item_low_normal.name=Small Battery
 item.magneticraft.battery_item_medium_normal.name=Medium Battery
-item.magneticraft.floppy_disk_normal.name=Floppy Disk
+
+item.magneticraft.floppy_disk_user.name=Floppy Disk
+item.magneticraft.floppy_disk_lisp.name=Floppy Disk (Lisp)
+item.magneticraft.floppy_disk_forth.name=Floppy Disk (FORTH)
+item.magneticraft.floppy_disk_js.name=Floppy Disk (JS)
+item.magneticraft.floppy_disk_basic.name=Floppy Disk (BASIC)
+item.magneticraft.floppy_disk_vim.name=Floppy Disk (VI?)
+item.magneticraft.floppy_disk_asm.name=Floppy Disk (ASM)
 
 tile.magneticraft.ores_copper.name=Chalcopyrite Ore
 tile.magneticraft.ores_lead.name=Galena Ore

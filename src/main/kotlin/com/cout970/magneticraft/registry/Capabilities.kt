@@ -12,6 +12,7 @@ import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.tool.IHammer
+import com.cout970.magneticraft.item.ComputerItems
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -68,16 +69,20 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
     CapabilityManager.INSTANCE.register(IHammer::class.java, EmptyStorage(), { DefaultHammer() })
-//    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
-//        ItemFloppyDisk.FloppyDisk(ItemStack(ItemFloppyDisk, 1, 0, ItemFloppyDisk.createNBT("default", 128, true, true)))
-//    })
+    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
+        ComputerItems.FloppyDisk(
+                ItemStack(ComputerItems.floppyDisk, 1, 0,
+                        ComputerItems.createNBT("default", 128, true, true)
+                )
+        )
+    })
 }
 
 /**
  * Extension functions to get capabilities from TileEntities, Blocks and Items
  */
 fun <T> Capability<T>.fromTile(tile: TileEntity, side: EnumFacing? = null): T? {
-    if (tile is ICapabilityProvider && tile.hasCapability(this, side)) {
+    if (tile.hasCapability(this, side)) {
         return tile.getCapability(this, side)
     }
     return null
@@ -91,7 +96,7 @@ fun <T> Capability<T>.fromBlock(block: Block, side: EnumFacing? = null): T? {
 }
 
 fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
-    if (tile is ICapabilityProvider && tile.hasCapability(this, null)) {
+    if (tile.hasCapability(this, null)) {
         return tile.getCapability(this, null)
     }
     return null
@@ -99,7 +104,7 @@ fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
 
 fun <T> TileEntity.getOrNull(cap: Capability<T>?, side: EnumFacing?): T? {
     cap ?: return null
-    if (this is ICapabilityProvider && this.hasCapability(cap, side)) {
+    if (this.hasCapability(cap, side)) {
         return this.getCapability(cap, side)
     }
     return null

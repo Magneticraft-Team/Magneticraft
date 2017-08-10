@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.block.Ores
-import com.cout970.magneticraft.item.Crafting
+import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.inventory.stack
 import net.minecraftforge.oredict.OreDictionary
@@ -29,7 +29,7 @@ fun registerOreDictionaryEntries() {
         }
         OreDictionary.registerOre("rockyChunk${it.name.toLowerCase().capitalize()}", it.getRockyChunk())
     }
-    OreDictionary.registerOre("dustSulfur", Crafting.crafting.stack(1, Crafting.meta["sulfur"]!!))
+    OreDictionary.registerOre("dustSulfur", CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
     OreDictionary.registerOre("oreCopper", Ores.ores.stack(1, 0))
     OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))
     OreDictionary.registerOre("oreCobalt", Ores.ores.stack(1, 2))

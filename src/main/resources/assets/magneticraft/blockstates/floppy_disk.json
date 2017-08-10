@@ -1,0 +1,44 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "user": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_0"
+            }
+        }],
+        "lisp": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_1"
+            }
+        }],
+        "forth": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_2"
+            }
+        }],
+        "js": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_3"
+            }
+        }],
+        "basic": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_4"
+            }
+        }],
+        "vim": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_5"
+            }
+        }],
+        "asm": [{
+            "textures": {
+                "layer0": "magneticraft:items/computer/floppy_disk_6"
+            }
+        }]
+    }
+}

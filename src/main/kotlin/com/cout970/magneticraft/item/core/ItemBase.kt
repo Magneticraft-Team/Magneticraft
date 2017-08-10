@@ -3,6 +3,7 @@ package com.cout970.magneticraft.item.core
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.util.vector.vec3Of
+import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -23,6 +24,8 @@ open class ItemBase : Item() {
     var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
+    var addInformation: ((AddInformationArgs) -> Unit)? = null
+    var createStack: ((Item, Int, Int) -> ItemStack)? = null
     var variants: Map<Int, String> = mapOf(0 to "normal")
 
     override fun getUnlocalizedName(): String = "item.$MOD_ID.${registryName?.resourcePath}"
@@ -34,7 +37,7 @@ open class ItemBase : Item() {
     override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
         if (itemIn == this.creativeTab) {
             variants.keys.forEach {
-                tab.add(ItemStack(this, 1, it))
+                tab.add(createStack?.invoke(this, 1, it) ?: ItemStack(this, 1, it))
             }
         }
     }
@@ -60,6 +63,12 @@ open class ItemBase : Item() {
         return onItemRightClick?.invoke(OnItemRightClickArgs(worldIn, playerIn, handIn, default)) ?: default
     }
 
+    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
+
+        addInformation?.invoke(AddInformationArgs(stack, worldIn, tooltip, flagIn))
+        super.addInformation(stack, worldIn, tooltip, flagIn)
+    }
+
     override fun toString(): String = "ItemBase($registryName)"
 }
 
@@ -71,3 +80,6 @@ data class OnItemUseArgs(val item: ItemBase, val player: EntityPlayer, val world
 
 data class OnItemRightClickArgs(val worldIn: World, val playerIn: EntityPlayer, val handIn: EnumHand,
                                 val default: ActionResult<ItemStack>)
+
+data class AddInformationArgs(val stack: ItemStack, val worldIn: World?, val tooltip: MutableList<String>,
+                              val flagIn: ITooltipFlag)

@@ -8,7 +8,7 @@ import net.minecraftforge.items.SlotItemHandler
 /**
  * Created by cout970 on 2017/07/01.
  */
-class SlotTakeOnly(inv: IItemHandler, index: Int, x: Int, y: Int) : SlotItemHandler(inv, index, x, y) {
+open class SlotTakeOnly(inv: IItemHandler, index: Int, x: Int, y: Int) : SlotItemHandler(inv, index, x, y) {
     override fun isItemValid(stack: ItemStack): Boolean {
         return false
     }

@@ -20,7 +20,11 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
     val monitor = tile.monitorModule.monitor
 
     init {
-        addSlotToContainer(SlotTakeOnly(tile.invModule.inventory, 0, 64, 233))
+        addSlotToContainer(object : SlotTakeOnly(tile.invModule.inventory, 0, 64, 233){
+            override fun canTakeStack(playerIn: EntityPlayer?): Boolean {
+                return false
+            }
+        })
     }
 
     override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null

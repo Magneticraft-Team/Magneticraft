@@ -26,7 +26,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
 /**
  * Created by cout970 on 2017/06/12.
  */
-object Tools : IItemMaker {
+object ToolItems : IItemMaker {
 
     lateinit var stoneHammer: ItemBase private set
     lateinit var ironHammer: ItemBase private set
@@ -65,7 +65,7 @@ object Tools : IItemMaker {
         }.build()
 
         voltmeter = builder.withName("voltmeter").copy {
-            onItemUse = Tools::onUseVoltmeter
+            onItemUse = ToolItems::onUseVoltmeter
         }.build()
 
         return listOf(stoneHammer, ironHammer, steelHammer, copperCoil, voltmeter)

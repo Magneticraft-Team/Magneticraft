@@ -72,7 +72,7 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
             IRON -> Items.IRON_INGOT.stack(1)
             else -> Items.GOLD_INGOT.stack(1)
         }
-        return Metals.ingots.stack(1, ordinal)
+        return MetallicItems.ingots.stack(1, ordinal)
     }
 
     fun getNugget(): ItemStack {
@@ -80,19 +80,19 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
             IRON -> Items.IRON_NUGGET.stack(1)
             else -> Items.GOLD_NUGGET.stack(1)
         }
-        return Metals.nuggets.stack(1, ordinal)
+        return MetallicItems.nuggets.stack(1, ordinal)
     }
 
-    fun getDust(): ItemStack = Metals.dusts.stack(1, ordinal)
+    fun getDust(): ItemStack = MetallicItems.dusts.stack(1, ordinal)
 
-    fun getLightPlate(): ItemStack = Metals.lightPlates.stack(1, ordinal)
+    fun getLightPlate(): ItemStack = MetallicItems.lightPlates.stack(1, ordinal)
 
-    fun getHeavyPlate(): ItemStack = Metals.heavyPlates.stack(1, ordinal)
+    fun getHeavyPlate(): ItemStack = MetallicItems.heavyPlates.stack(1, ordinal)
 
     fun getChunk(): ItemStack {
         if(this.isComposite) return ItemStack.EMPTY
-        return Metals.chunks.stack(1, ordinal)
+        return MetallicItems.chunks.stack(1, ordinal)
     }
 
-    fun getRockyChunk(): ItemStack = Metals.rockyChunks.stack(1, ordinal)
+    fun getRockyChunk(): ItemStack = MetallicItems.rockyChunks.stack(1, ordinal)
 }

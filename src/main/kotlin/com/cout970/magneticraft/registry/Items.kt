@@ -1,9 +1,6 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.item.Crafting
-import com.cout970.magneticraft.item.ElectricItems
-import com.cout970.magneticraft.item.Metals
-import com.cout970.magneticraft.item.Tools
+import com.cout970.magneticraft.item.*
 import net.minecraft.item.Item
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 
@@ -17,10 +14,11 @@ var items: List<Item> = emptyList()
 fun initItems() {
     val items_ = mutableListOf<Item>()
 
-    items_ += Metals.initItems()
-    items_ += Tools.initItems()
+    items_ += MetallicItems.initItems()
+    items_ += ToolItems.initItems()
     items_ += ElectricItems.initItems()
-    items_ += Crafting.initItems()
+    items_ += CraftingItems.initItems()
+    items_ += ComputerItems.initItems()
 
     items_.forEach { ForgeRegistries.ITEMS.register(it) }
     items = items_

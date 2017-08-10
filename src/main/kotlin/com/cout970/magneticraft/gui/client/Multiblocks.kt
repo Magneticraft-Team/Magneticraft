@@ -49,9 +49,9 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
                 ButtonState.HOVER_PRESSED to (vec2Of(194, 50) to vec2Of(23, 24))
         )
         val buttons = listOf(
-                MultiButton(2, texture, vec2Of(176, 129) to vec2Of(23, 24), vec2Of(256), { button1Map[it]!! }),
+                MultiButton(0, texture, vec2Of(176, 129) to vec2Of(23, 24), vec2Of(256), { button1Map[it]!! }),
                 MultiButton(1, texture, vec2Of(176, 154) to vec2Of(23, 24), vec2Of(256), { button2Map[it]!! }),
-                MultiButton(0, texture, vec2Of(176, 179) to vec2Of(23, 24), vec2Of(256), { button3Map[it]!! })
+                MultiButton(2, texture, vec2Of(176, 179) to vec2Of(23, 24), vec2Of(256), { button3Map[it]!! })
         )
         components.add(scrollBar)
         components.add(textInput)

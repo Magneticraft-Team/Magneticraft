@@ -9,7 +9,7 @@ import net.minecraft.item.Item
 /**
  * Created by cout970 on 2017/06/11.
  */
-object Metals : IItemMaker {
+object MetallicItems : IItemMaker {
 
     lateinit var ingots: ItemBase private set
     lateinit var lightPlates: ItemBase private set

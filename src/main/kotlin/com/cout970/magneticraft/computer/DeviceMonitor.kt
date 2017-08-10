@@ -39,7 +39,7 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     var mouseX = 0
     var mouseY = 0
 
-    val lines: Int = 35
+    val lines: Int = 34
     val columns: Int = 80
     val screenSize: Int = lines * columns
     val isActive: Boolean = true

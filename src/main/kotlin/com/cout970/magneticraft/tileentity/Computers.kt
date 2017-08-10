@@ -3,9 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleComputer
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
-import com.cout970.magneticraft.tileentity.modules.ModuleMonitor
+import com.cout970.magneticraft.tileentity.modules.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 
@@ -20,12 +18,19 @@ class TileComputer : TileBase(), ITickable {
 
     val invModule = ModuleInventory(1)
     val monitorModule = ModuleMonitor(container.ref)
+    val floppyDriveModule = ModuleFloppyDrive(container.ref, invModule)
+    val networkCardModule = ModuleNetworkCard(container.ref)
+
     val computerModule = ModuleComputer(
-            devices = mapOf(0x00 to monitorModule.monitor)
+            devices = mapOf(
+                    0x00 to monitorModule.monitor,
+                    0x01 to floppyDriveModule.drive,
+                    0x02 to networkCardModule.networkCard
+            )
     )
 
     init {
-        initModules(computerModule, invModule, monitorModule)
+        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule)
     }
 
     override fun update() {

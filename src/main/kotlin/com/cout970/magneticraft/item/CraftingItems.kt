@@ -13,7 +13,7 @@ import net.minecraft.util.EnumActionResult
 /**
  * Created by cout970 on 2017/07/22.
  */
-object Crafting : IItemMaker {
+object CraftingItems : IItemMaker {
 
     lateinit var guideBook: ItemBase private set
     lateinit var crafting: ItemBase private set
