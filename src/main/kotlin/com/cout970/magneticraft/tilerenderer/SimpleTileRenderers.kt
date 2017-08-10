@@ -519,7 +519,6 @@ object TileRendererFeedingTrough : TileRendererSimple<TileFeedingTrough>(
     }
 
     private fun renderItem(stack: ItemStack) {
-        Utilities.renderBox(vec3Of(-0.025) toAABBWith vec3Of(0.025))
         Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
     }
 }
