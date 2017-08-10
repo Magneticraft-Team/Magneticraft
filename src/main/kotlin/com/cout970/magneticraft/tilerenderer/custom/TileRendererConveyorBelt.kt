@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tilerenderer
+package com.cout970.magneticraft.tilerenderer.custom
 
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.block.AutomaticMachines

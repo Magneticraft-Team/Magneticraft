@@ -1,9 +1,6 @@
-package com.cout970.magneticraft.tilerenderer
+package com.cout970.magneticraft.tilerenderer.core
 
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.ModelCacheFactory
-import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 /**
