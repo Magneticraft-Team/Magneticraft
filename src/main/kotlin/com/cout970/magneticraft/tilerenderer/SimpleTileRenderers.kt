@@ -68,7 +68,7 @@ object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
 
 @RegisterRenderer(TileConnector::class)
 object TileRendererConnector : TileRendererSimple<TileConnector>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.connector.registryName, "model") },
+        modelLocation = { ModelResourceLocation(ElectricConductors.connector.registryName, "model") },
         filters = listOf<(String) -> Boolean>({ !it.startsWith("Base") }, { it.startsWith("Base") })
 ) {
 
@@ -129,7 +129,7 @@ object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
 
 @RegisterRenderer(TileElectricPole::class)
 object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.electric_pole.registryName, "model") }
+        modelLocation = { ModelResourceLocation(ElectricConductors.electric_pole.registryName, "model") }
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileElectricPole) {
@@ -152,7 +152,7 @@ object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
         bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
-        val orientation = te.getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]
+        val orientation = te.getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
         models.forEach { it.renderTextured() }
     }
@@ -160,7 +160,7 @@ object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
 
 @RegisterRenderer(TileElectricPoleTransformer::class)
 object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPoleTransformer>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.electric_pole_transformer.registryName, "model") }
+        modelLocation = { ModelResourceLocation(ElectricConductors.electric_pole_transformer.registryName, "model") }
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileElectricPoleTransformer) {
@@ -185,7 +185,7 @@ object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPole
         bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
-        val orientation = te.getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]
+        val orientation = te.getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
         models.forEach { it.renderTextured() }
     }

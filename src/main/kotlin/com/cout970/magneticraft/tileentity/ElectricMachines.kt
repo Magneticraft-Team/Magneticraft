@@ -6,7 +6,7 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
-import com.cout970.magneticraft.block.ElectricMachines
+import com.cout970.magneticraft.block.ElectricConductors
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
@@ -223,7 +223,7 @@ class TileElectricPole : TileBase(), ITickable {
     }
 
     fun getConnectors(): List<IVector3> {
-        val offset = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
+        val offset = getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
         val first = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).add(offset)
         val center = Vec3d(0.5, 1.0, 0.5)
         val last = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).subtract(offset)
@@ -258,7 +258,7 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     }
 
     fun getConnectors(): List<IVector3> {
-        val offset = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
+        val offset = getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
         val first = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).add(offset)
         val center = Vec3d(0.5, 1.0, 0.5)
         val last = Vec3d(0.5, 1.0 - 0.0625 * 4, 0.5).subtract(offset)
@@ -266,7 +266,7 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     }
 
     fun getConnectors2(): List<IVector3> {
-        val angle = getBlockState()[ElectricMachines.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
+        val angle = getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]?.offset ?: return emptyList()
         val offset = angle.rotateYaw(Math.toRadians(-90.0).toFloat())
         val vec = Vec3d(0.5, 1.0 - PIXEL * 6.5, 0.5).add(offset * 0.5)
         return listOf(vec)
@@ -275,3 +275,22 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
 }
 
+@RegisterTileEntity("infinite_energy")
+class TileInfiniteEnergy : TileBase(), ITickable {
+
+    val node = ElectricNode(container.ref)
+
+    val electricModule = ModuleElectricity(
+            listOf(node)
+    )
+
+    init {
+        initModules(electricModule)
+    }
+
+    override fun update() {
+        node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+        super.update()
+        node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+    }
+}
