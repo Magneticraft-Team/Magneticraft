@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockRenderLayer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -48,6 +49,10 @@ class BlockBuilder {
     var onBlockBreak: ((BreakBlockArgs) -> Unit)? = null
     var onDrop: ((DropsArgs) -> List<ItemStack>)? = null
     var onBlockPostPlaced: ((OnBlockPostPlacedArgs) -> Unit)? = null
+    var onUpdateTick: ((OnUpdateTickArgs) -> Unit)? = null
+    var collisionBox: ((CollisionBoxArgs) -> AABB?)? = null
+    var shouldSideBeRendered: ((ShouldSideBeRendererArgs) -> Boolean)? = null
+
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
     var explosionResistance = 10.0f
@@ -55,7 +60,10 @@ class BlockBuilder {
     var generateDefaultItemModel = true
     var enableOcclusionOptimization = true
     var translucent = false
+    var tickRandomly = false
     var alwaysDropDefault = false
+    var blockLayer: BlockRenderLayer? = null
+    var tickRate = 10
 
     var hasCustomModel: Boolean = false
         set(value) {
@@ -103,6 +111,12 @@ class BlockBuilder {
             setLightLevel(lightEmission)
             onDrop = this@BlockBuilder.onDrop
             onBlockPostPlaced = this@BlockBuilder.onBlockPostPlaced
+            tickRandomly = this@BlockBuilder.tickRandomly
+            this@BlockBuilder.blockLayer?.let { blockLayer_ = it }
+            onUpdateTick = this@BlockBuilder.onUpdateTick
+            collisionBox = this@BlockBuilder.collisionBox
+            shouldSideBeRendered_ = this@BlockBuilder.shouldSideBeRendered
+            tickRate_ = this@BlockBuilder.tickRate
         }
         return block
     }
@@ -138,6 +152,11 @@ class BlockBuilder {
         newBuilder.onBlockBreak = onBlockBreak
         newBuilder.onDrop = onDrop
         newBuilder.onBlockPostPlaced = onBlockPostPlaced
+        newBuilder.tickRandomly = tickRandomly
+        newBuilder.blockLayer = blockLayer
+        newBuilder.onUpdateTick = onUpdateTick
+        newBuilder.shouldSideBeRendered = shouldSideBeRendered
+        newBuilder.tickRate = tickRate
 
         func(newBuilder)
         return newBuilder

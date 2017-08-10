@@ -27,7 +27,7 @@ object TileRendererBattery : TileRendererSimple<TileBattery>(
 
 @RegisterRenderer(TileElectricFurnace::class)
 object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.electric_furnace.registryName, "model") },
+        modelLocation = { ModelResourceLocation(ElectricMachines.electricFurnace.registryName, "model") },
         filters = listOf({ name -> name == "Shape_0" }, { name -> name == "Shape_1" })
 ) {
     val texture_normal = resource("textures/blocks/electric_machines/electric_furnace.png")

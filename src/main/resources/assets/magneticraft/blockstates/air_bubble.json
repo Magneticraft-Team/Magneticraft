@@ -1,0 +1,17 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"off": [{
+			"model": "cube_all",
+			"textures": {
+				"all": "magneticraft:blocks/machines/air_bubble"
+			}
+		}],
+		"on": [{
+			"model": "cube_all",
+			"textures": {
+				"all": "magneticraft:blocks/machines/air_bubble"
+			}
+		}]
+	}
+}

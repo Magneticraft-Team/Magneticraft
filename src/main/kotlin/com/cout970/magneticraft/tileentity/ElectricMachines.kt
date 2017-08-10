@@ -107,3 +107,24 @@ class TileInfiniteEnergy : TileBase(), ITickable {
         node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
     }
 }
+
+
+@RegisterTileEntity("airlock")
+class TileAirLock : TileBase(), ITickable {
+
+    val node = ElectricNode(container.ref)
+
+    val electricModule = ModuleElectricity(
+            electricNodes = listOf(node)
+    )
+
+    val airlockModule = ModuleAirlock(node)
+
+    init {
+        initModules(airlockModule, electricModule)
+    }
+
+    override fun update() {
+        super.update()
+    }
+}

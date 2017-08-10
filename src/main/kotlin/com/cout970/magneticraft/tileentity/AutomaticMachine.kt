@@ -37,6 +37,10 @@ class TileFeedingTrough : TileBase(), ITickable {
         initModules(moduleFeedingTrough, invModule)
     }
 
+    override fun update() {
+        super.update()
+    }
+
     override fun getRenderBoundingBox(): AxisAlignedBB {
         val dir = facing.toBlockPos()
         return super.getRenderBoundingBox().expand(dir.xd, dir.yd, dir.zd)

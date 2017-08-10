@@ -160,8 +160,9 @@ tile.magneticraft.steam_boiler_normal.name=Boiler
 tile.magneticraft.water_generator_normal.name=Water Generator
 tile.magneticraft.infinite_energy_normal.name=Infinite Energy
 
-#tile.magneticraft.airlock.name=Airlock
-#tile.magneticraft.air_bubble.name=Air Bubble
+tile.magneticraft.airlock_normal.name=Airlock
+tile.magneticraft.air_bubble_on.name=Air Bubble
+tile.magneticraft.air_bubble_off.name=Air Bubble
 tile.magneticraft.computer_north.name=Computer
 
 #multiblocks
@@ -190,10 +191,6 @@ tile.magneticraft.multiblock_column_axis_y.name=Support Column
 tile.magneticraft.multiblock_column_axis_x.name=Support Column
 tile.magneticraft.multiblock_column_axis_z.name=Support Column
 tile.magneticraft.multiblock_gap_normal.name=Multiblock Gap
-
-#tile.magneticraft.block_coal_coke.name=Block of Coal Coke
-#tile.magneticraft.block_wood_chip.name=Block of Wood Chips
-#tile.magneticraft.fiberboard_block.name=Fiberboard Planks
 
 itemGroup.magneticraft=Magneticraft
 

@@ -20,10 +20,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumHand
-import net.minecraft.util.NonNullList
-import net.minecraft.util.ResourceLocation
+import net.minecraft.util.*
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.RayTraceResult
@@ -32,6 +29,7 @@ import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
+import java.util.*
 
 @Suppress("OverridingDeprecatedMember")
 open class BlockBase(material: Material) : Block(material), ICapabilityProvider {
@@ -47,6 +45,8 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var translucent_ = false
     var generateDefaultItemModel = true
     var alwaysDropDefault = false
+    var blockLayer_ = BlockRenderLayer.SOLID
+    var tickRate_ = 10
 
     // Methods
     var aabb: ((BoundingBoxArgs) -> List<AABB>)? = null
@@ -61,6 +61,9 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var onNeighborChanged: ((OnNeighborChangedArgs) -> Unit)? = null
     var blockStatesToPlace: ((BlockStatesToPlaceArgs) -> List<Pair<BlockPos, IBlockState>>)? = null
     var onDrop: ((DropsArgs) -> List<ItemStack>)? = null
+    var onUpdateTick: ((OnUpdateTickArgs) -> Unit)? = null
+    var collisionBox: ((CollisionBoxArgs) -> AABB?)? = null
+    var shouldSideBeRendered_: ((ShouldSideBeRendererArgs) -> Boolean)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -252,7 +255,35 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
             return
         }
         super.getDrops(drops, world, pos, state, fortune)
+    }
 
+    override fun getBlockLayer(): BlockRenderLayer {
+        return blockLayer_
+    }
+
+    override fun updateTick(worldIn: World, pos: BlockPos, state: IBlockState, rand: Random) {
+        onUpdateTick?.invoke(OnUpdateTickArgs(worldIn, pos, state, rand))
+    }
+
+    override fun getCollisionBoundingBox(blockState: IBlockState, worldIn: IBlockAccess,
+                                         pos: BlockPos): AxisAlignedBB? {
+
+        val default = super.getCollisionBoundingBox(blockState, worldIn, pos)
+        collisionBox?.let {
+            return it(CollisionBoxArgs(blockState, worldIn, pos, default))
+        }
+        return default
+    }
+
+    override fun shouldSideBeRendered(state: IBlockState, blockAccess: IBlockAccess, pos: BlockPos,
+                                      side: EnumFacing): Boolean {
+
+        return shouldSideBeRendered_?.invoke(ShouldSideBeRendererArgs(state, blockAccess, pos, side))
+               ?: super.shouldSideBeRendered(state, blockAccess, pos, side)
+    }
+
+    override fun tickRate(worldIn: World?): Int {
+        return tickRate_
     }
 }
 
@@ -284,3 +315,10 @@ data class DropsArgs(val world: IBlockAccess, val pos: BlockPos, val state: IBlo
 data class OnBlockPostPlacedArgs(val world: World, val pos: BlockPos, val facing: EnumFacing,
                                  val hit: IVector3, val placer: EntityLivingBase?, val hand: EnumHand,
                                  val relPos: BlockPos)
+
+data class OnUpdateTickArgs(val world: World, val pos: BlockPos, val state: IBlockState, val rand: Random)
+
+data class CollisionBoxArgs(val state: IBlockState, val world: IBlockAccess, val pos: BlockPos, val default: AABB?)
+
+data class ShouldSideBeRendererArgs(val state: IBlockState, val blockAccess: IBlockAccess, val pos: BlockPos,
+                                    val side: EnumFacing)
