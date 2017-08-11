@@ -30,6 +30,13 @@ public interface ISluiceBoxRecipeManager {
     boolean registerRecipe(ISluiceBoxRecipe recipe);
 
     /**
+     * Removes a recipe from the registry
+     * @param recipe The recipe to remove
+     * @return true if the recipe has been removed, false if the recipe was not registered
+     */
+    boolean removeRecipe(ISluiceBoxRecipe recipe);
+
+    /**
      * Creates a default recipe
      * @param input the input stack
      * @param primaryOutput the output stack that is always returned by the recipe

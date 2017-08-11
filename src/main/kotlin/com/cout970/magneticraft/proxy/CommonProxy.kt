@@ -28,6 +28,7 @@ abstract class CommonProxy {
         initFluids()
         //Common preInit stuff
         registerOreDictionaryEntries()
+        registerOreGenerations()
         MultiblockManager.registerDefaults()
     }
 

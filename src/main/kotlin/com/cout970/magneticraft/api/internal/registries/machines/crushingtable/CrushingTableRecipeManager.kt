@@ -16,7 +16,7 @@ object CrushingTableRecipeManager : ICrushingTableRecipeManager {
     private val recipes = mutableListOf<ICrushingTableRecipe>()
 
     override fun findRecipe(input: ItemStack): ICrushingTableRecipe? {
-        return recipes.filter { it.matches(input) }.firstOrNull()
+        return recipes.firstOrNull { it.matches(input) }
     }
 
     override fun getRecipes(): MutableList<ICrushingTableRecipe> = Collections.synchronizedList(recipes)
@@ -25,6 +25,13 @@ object CrushingTableRecipeManager : ICrushingTableRecipeManager {
         if (findRecipe(recipe.input) != null) return false
         recipes.add(recipe)
         return true
+    }
+
+    override fun removeRecipe(recipe: ICrushingTableRecipe): Boolean {
+        if (findRecipe(recipe.input) != null){
+            return recipes.remove(recipe)
+        }
+        return false
     }
 
     override fun createRecipe(input: ItemStack, output: ItemStack, oreDict: Boolean): ICrushingTableRecipe {

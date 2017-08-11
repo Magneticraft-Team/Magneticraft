@@ -8,10 +8,13 @@ import net.minecraftforge.fml.common.Loader
  */
 object IntegrationHandler {
 
-    var JEI = false
+    var jei = false
+    var craftTweaker = false
 
     fun preInit(){
         // jei automatically loads MagneticraftPlugin because has @JEIPlugin
-        JEI = Loader.isModLoaded("jei")
+        jei = Loader.isModLoaded("jei")
+        // also auto-loads classes with @ZenRegister
+        craftTweaker = Loader.isModLoaded("crafttweaker")
     }
 }

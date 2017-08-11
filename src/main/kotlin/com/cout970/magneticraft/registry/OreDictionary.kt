@@ -1,6 +1,11 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry
+import com.cout970.magneticraft.api.registries.generation.OreGeneration
+import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
+import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.config.OreConfig
 import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.inventory.stack
@@ -34,4 +39,26 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))
     OreDictionary.registerOre("oreCobalt", Ores.ores.stack(1, 2))
     OreDictionary.registerOre("oreTungsten", Ores.ores.stack(1, 3))
+
+    OreDictionary.registerOre("blockLimestone", Decoration.limestone.stack(1, 0))
+    OreDictionary.registerOre("brickLimestone", Decoration.limestone.stack(1, 1))
+    OreDictionary.registerOre("cobbleLimestone", Decoration.limestone.stack(1, 2))
+
+    OreDictionary.registerOre("blockBurnLimestone", Decoration.burnLimestone.stack(1, 0))
+    OreDictionary.registerOre("brickBurnLimestone", Decoration.burnLimestone.stack(1, 1))
+    OreDictionary.registerOre("cobbleBurnLimestone", Decoration.burnLimestone.stack(1, 2))
+
+    OreDictionary.registerOre("blockTileLimestone", Decoration.tileLimestone.stack(1, 0))
+    OreDictionary.registerOre("blockTileLimestone", Decoration.tileLimestone.stack(1, 1))
+}
+
+fun registerOreGenerations(){
+    OreGenerationRegistry.registerOreGeneration(Config.copperOre.toOG("oreCopper"))
+    OreGenerationRegistry.registerOreGeneration(Config.leadOre.toOG("oreGalena"))
+    OreGenerationRegistry.registerOreGeneration(Config.pyriteOre.toOG("orePyrite"))
+    OreGenerationRegistry.registerOreGeneration(Config.tungstenOre.toOG("oreTungsten"))
+}
+
+fun OreConfig.toOG(name: String): OreGeneration {
+    return OreGeneration(name, active, chunkAmount, veinAmount, maxLevel, minLevel)
 }

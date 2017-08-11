@@ -29,6 +29,13 @@ public interface ICrushingTableRecipeManager {
     boolean registerRecipe(ICrushingTableRecipe recipe);
 
     /**
+     * Removes a recipe from the registry
+     * @param recipe The recipe to remove
+     * @return true if the recipe has been removed, false if the recipe was not registered
+     */
+    boolean removeRecipe(ICrushingTableRecipe recipe);
+
+    /**
      * Creates a default recipe
      * @param input the input item and required stackSize
      * @param output the output stack

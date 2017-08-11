@@ -79,12 +79,18 @@ repositories {
         name = 'Tesla Api'
         url 'http://maven.epoxide.xyz'
     }
+    maven {
+        name = "Crraft Tweaker"
+        url "http://maven.blamejared.com"
+    }
     mavenCentral()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-	compile "mezz.jei:jei_1.12:4.7.0.68"
+	compile "mezz.jei:jei_1.12:4.7.5.85"
+	compile "CraftTweaker2:CraftTweaker2-API:4.0.3.242"
+    compile "com.blamejared:MTLib:3.0.0.1"
 	compile files("lib/modelloader-1.0.2.jar")
 }

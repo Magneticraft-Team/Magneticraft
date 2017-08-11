@@ -8,7 +8,7 @@ import com.cout970.magneticraft.api.registries.generation.OreGeneration
  */
 object OreGenerationRegistry : IOreGenerationRegistry {
 
-    val registered = mutableMapOf<String, OreGeneration>()
+    private val registered = mutableMapOf<String, OreGeneration>()
 
     override fun isRegistered(oreDictName: String): Boolean = oreDictName in registered
 
