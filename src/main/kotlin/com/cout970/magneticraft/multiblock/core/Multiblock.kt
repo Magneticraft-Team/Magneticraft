@@ -22,15 +22,17 @@ abstract class Multiblock {
     abstract fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent>
 
     companion object {
-        fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> = args.map(
-                Multiblock::MultiblockLayer)
+
+        fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> =
+                args.map(Multiblock::MultiblockLayer)
+
         fun zLayers(vararg args: List<IMultiblockComponent>): List<List<IMultiblockComponent>> = listOf(*args)
     }
 
     open fun onActivate(data: List<BlockData>, context: MultiblockContext) = Unit
     open fun onDeactivate(data: List<BlockData>, context: MultiblockContext) = Unit
 
-    open fun getGlobalCollisionBox(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN toAABBWith size).offset(-center))
+    open fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN toAABBWith size).offset(-center))
 
     infix fun Vec3d.to(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
 }

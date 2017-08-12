@@ -8,13 +8,11 @@ import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.tileentity.getModule
-import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.sounds
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.plus
@@ -89,7 +87,7 @@ class ModuleSluiceBox(
 
     fun getNextSluice(): ModuleSluiceBox? {
         val otherPos = pos.offset(facingGetter(), 2).down()
-        return world.getTile<TileBase>(otherPos)?.getModule<ModuleSluiceBox>()
+        return world.getModule<ModuleSluiceBox>(otherPos)
     }
 
     override fun update() {

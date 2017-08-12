@@ -6,7 +6,7 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
-import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
+import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
@@ -18,7 +18,7 @@ import net.minecraft.world.World
 
 
 class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, world: World, blockPos: BlockPos,
-                            val level: ModuleShelvingUnit.Level) : ContainerBase(player, world, blockPos) {
+                            val level: ModuleShelvingUnitMb.Level) : ContainerBase(player, world, blockPos) {
 
     val allSlots: List<SlotShelvingUnit>
     var currentSlots = emptyList<SlotShelvingUnit>()
@@ -39,7 +39,7 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
         switchLevel(level)
     }
 
-    fun switchLevel(newLevel: ModuleShelvingUnit.Level) {
+    fun switchLevel(newLevel: ModuleShelvingUnitMb.Level) {
         currentLevel = newLevel
         val available = tile.shelvingUnitModule.getAvailableSlots(currentLevel)
         updateCurrentSlots(allSlots.filterIndexed { index, _ -> index in available })
@@ -87,7 +87,7 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     override fun receiveDataFromClient(ibd: IBD) {
         ibd.getFloat(0) { withScroll(it) }
         ibd.getString(1) { filterSlots(it) }
-        ibd.getInteger(2) { switchLevel(ModuleShelvingUnit.Level.values()[it]) }
+        ibd.getInteger(2) { switchLevel(ModuleShelvingUnitMb.Level.values()[it]) }
         super.receiveDataFromClient(ibd)
     }
 

@@ -12,6 +12,7 @@ abstract class TileRendererSimple<T : TileBase>(
 ) : TileRenderer<T>() {
 
     var caches = listOf<ModelCache>()
+    var ticks: Float = 0.0f
 
     override fun renderTileEntityAt(te: T, x: Double, y: Double, z: Double, partialTicks: Float,
                                     destroyStage: Int) {
@@ -19,6 +20,7 @@ abstract class TileRendererSimple<T : TileBase>(
         if (caches.isEmpty()) return
         stackMatrix {
             translate(x, y, z)
+            ticks = partialTicks
             renderModels(caches, te)
         }
     }

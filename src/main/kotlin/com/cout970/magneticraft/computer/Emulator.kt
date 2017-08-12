@@ -2,19 +2,18 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.computer.IFloppyDisk
+import com.cout970.magneticraft.api.computer.IROM
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.network.IBD
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fml.common.FMLCommonHandler
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.io.File
+import java.io.InputStream
 import java.util.regex.Pattern
 import javax.swing.*
-
-
 
 
 /**
@@ -32,7 +31,7 @@ fun main(args: Array<String>) {
 
     val cpu = CPU_MIPS()
     val memory = RAM(0x10_0000, false)
-    val rom = ROM("assets/$MOD_ID/cpu/bios.bin")
+    val rom = if(args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)
     val mbDevice = DeviceMotherboard(FakeRef, motherboard)
@@ -150,7 +149,7 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     return display
 }
 
-fun mapKey(code: Int): Int = when(code){
+fun mapKey(code: Int): Int = when (code) {
     10 -> 13
     else -> code
 }
@@ -204,12 +203,16 @@ object FakeRef : ITileRef {
     override fun getPos(): BlockPos = error("Not available in emulation mode")
 }
 
+class CustomRom(val str: String) : IROM {
+    override fun getBIOS(): InputStream = File(str).inputStream()
+}
+
 object FakeFloppyDisk : IFloppyDisk {
 
     val namePattern = Pattern.compile("""[^(\w|\d)]+""").toRegex()
 
     override fun getStorageFile(): File {
-        val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
+        val parent = File("./")
         if (!parent.exists()) parent.mkdir()
         val file = File(parent, "floppy_${label.replace(namePattern, "_")}.img")
         return file

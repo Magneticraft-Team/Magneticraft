@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.multiblock.core
 
+import com.cout970.magneticraft.AABB
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
@@ -12,4 +13,6 @@ interface IMultiblockCenter : IMultiblockModule {
     fun hasCapability(capability: Capability<*>, facing: EnumFacing?, relPos: BlockPos): Boolean
 
     fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T?
+
+    fun getDynamicCollisionBoxes(otherPos: BlockPos): List<AABB>
 }

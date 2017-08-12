@@ -1,9 +1,12 @@
 package com.cout970.magneticraft.block.core
 
+import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.multiblock.core.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
@@ -31,6 +34,35 @@ class BlockMultiblock(
         material: Material
 ) : BlockTileBase(factory, filter, material) {
 
+    companion object {
+
+        fun getBoxes(world: World, pos: BlockPos, module: IMultiblockModule): List<AABB> {
+            val multiblock = module.multiblock ?: return emptyList()
+            val facing = module.multiblockFacing ?: return emptyList()
+            val center = module.centerPos ?: return emptyList()
+
+            val main = world.getModule<IMultiblockCenter>(pos - center)
+            val extra = main?.getDynamicCollisionBoxes(pos) ?: emptyList()
+
+            return (multiblock.getGlobalCollisionBoxes() + extra).map {
+                val origin = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it)
+                facing.rotateBox(vec3Of(0.5), origin)
+            }
+        }
+
+        fun getBoxesInBlock(world: World, pos: BlockPos, module: IMultiblockModule): List<AABB> {
+            val center = module.centerPos ?: return emptyList()
+            val boxes = getBoxes(world, pos, module)
+            val thisBox = FULL_BLOCK_AABB + center
+            return boxes.mapNotNull { it.cut(thisBox) }
+        }
+
+        fun getRelativeBoxesInBlock(world: World, pos: BlockPos, module: IMultiblockModule): List<AABB> {
+            val relPos = module.centerPos?.unaryMinus() ?: return emptyList()
+            return getBoxesInBlock(world, pos, module).map { it.offset(relPos) }
+        }
+    }
+
     @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override fun addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, entityBox: AxisAlignedBB,
                                        collidingBoxes: MutableList<AxisAlignedBB>, entityIn: Entity?,
@@ -42,14 +74,7 @@ class BlockMultiblock(
 
             if (module?.multiblock != null) {
 
-                val relPos = -module.centerPos!!
-                val global = module.multiblock!!.getGlobalCollisionBox().map {
-                    val origin = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it)
-                    module.multiblockFacing!!.rotateBox(vec3Of(0.5), origin)
-                }
-
-                val thisBox = FULL_BLOCK_AABB + module.centerPos!!
-                val boxes = global.mapNotNull { it.cut(thisBox)?.offset(relPos)?.offset(pos) }
+                val boxes = getRelativeBoxesInBlock(worldIn, pos, module).map { it.offset(pos) }
                 boxes.filterTo(collidingBoxes) { entityBox.intersects(it) }
                 return
             }
@@ -65,15 +90,6 @@ class BlockMultiblock(
             val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
             if (module?.multiblock != null) {
 
-                val relPos = -module.centerPos!!
-                val global = module.multiblock!!.getGlobalCollisionBox().map {
-                    val origin = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it)
-                    module.multiblockFacing!!.rotateBox(vec3Of(0.5), origin)
-                }
-
-                val thisBox = FULL_BLOCK_AABB + module.centerPos!!
-                val boxes = global.mapNotNull { it.cut(thisBox) }
-                val list = mutableListOf<AxisAlignedBB>()
                 val player = Minecraft.getMinecraft().player
 
                 val start = player.getPositionEyes(0f)
@@ -85,8 +101,7 @@ class BlockMultiblock(
                         look.z * blockReachDistance
                 )
 
-                boxes.forEach { list.add(it.offset(relPos)) }
-                val res = list
+                val res = getRelativeBoxesInBlock(worldIn, pos, module)
                         .associate { it to rayTrace(pos, start, end, it) }
                         .filter { it.value != null }
                         .map { it.key to it.value }
@@ -108,24 +123,12 @@ class BlockMultiblock(
             val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
             if (module?.multiblock != null) {
 
-                val relPos = -module.centerPos!!
-                val global = module.multiblock!!.getGlobalCollisionBox().map {
-                    val origin = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it)
-                    module.multiblockFacing!!.rotateBox(vec3Of(0.5), origin)
-                }
-
-                val thisBox = FULL_BLOCK_AABB + module.centerPos!!
-                val boxes = global.mapNotNull { it.cut(thisBox) }
-                val list = mutableListOf<AxisAlignedBB>()
-
-                boxes.forEach { list.add(it.offset(relPos)) }
-                val res = list
+                return getRelativeBoxesInBlock(worldIn, pos, module)
                         .associate { it to rayTrace(pos, start, end, it) }
                         .filter { it.value != null }
                         .map { it.key to it.value }
                         .sortedBy { it.second!!.hitVec.distanceTo(start) }
                         .firstOrNull()?.second
-                return res
             }
         }
         return this.rayTrace(pos, start, end, blockState.getBoundingBox(worldIn, pos))

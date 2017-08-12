@@ -56,7 +56,7 @@ object MultiblockShelvingUnit : Multiblock() {
             (vec3Of(0, 3 - 5 * PIXEL, 0) toAABBWith vec3Of(5, 3, 2))
     ).map { it.offset(-center) }
 
-    override fun getGlobalCollisionBox(): List<AxisAlignedBB> = hitbox
+    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
 
 
     override fun checkExtraRequirements(data: MutableList<BlockData>,

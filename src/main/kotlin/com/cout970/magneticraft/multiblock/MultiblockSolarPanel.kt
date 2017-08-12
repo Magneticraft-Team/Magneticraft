@@ -78,7 +78,7 @@ object MultiblockSolarPanel : Multiblock() {
             Vec3d(6.0, 6.0, 0.0) * PIXEL to Vec3d(10.0, 10.0, 1.0) * PIXEL
     )
 
-    override fun getGlobalCollisionBox(): List<AxisAlignedBB> = hitbox
+    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
 
     override fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent> = listOf()
 }

@@ -4,12 +4,14 @@ import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
+import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileMultiblockGap
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -23,12 +25,15 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/07/05.
  */
-class ModuleShelvingUnit(
+class ModuleShelvingUnitMb(
+        val invModule: ModuleInventory,
         override val name: String = "module_shelving_unit"
 ) : IModule, IOnActivated {
 
@@ -92,7 +97,7 @@ class ModuleShelvingUnit(
         return false
     }
 
-    fun findWhereToPlace(level: Level): Pair<ModuleShelvingUnit, Int> {
+    fun findWhereToPlace(level: Level): Pair<ModuleShelvingUnitMb, Int> {
         if (level == Level.OTHER_SHELF) {
             val other = getOtherShelf()
             if (other != null) {
@@ -152,6 +157,23 @@ class ModuleShelvingUnit(
                 world.dropItem(Blocks.CHEST.stack(1), pos)
             }
         }
+    }
+
+    fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
+        if (cap == ITEM_HANDLER) {
+            val level: ModuleShelvingUnitMb.Level = when (side) {
+                EnumFacing.UP -> ModuleShelvingUnitMb.Level.TOP
+                EnumFacing.DOWN -> ModuleShelvingUnitMb.Level.BOTTOM
+                else -> when (relPos.yi) {
+                    0 -> ModuleShelvingUnitMb.Level.BOTTOM
+                    1 -> ModuleShelvingUnitMb.Level.MIDDLE
+                    else -> ModuleShelvingUnitMb.Level.TOP
+                }
+            }
+            val slots = getAvailableSlots(level)
+            return InventoryCapabilityFilter(invModule.inventory, slots.toList(), slots.toList())
+        }
+        return null
     }
 
     enum class Level(val levelIndex: Int) {

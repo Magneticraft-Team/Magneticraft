@@ -7,7 +7,6 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3i
 
 
-
 /**
  * Created by cout970 on 2017/02/20.
  */
@@ -47,22 +46,26 @@ fun AxisAlignedBB.scale(scale: Double) = AxisAlignedBB(
         maxX * scale, maxY * scale, maxZ * scale
 )
 
+infix fun Double.doubleEquals(other: Double): Boolean {
+    return Math.abs(this - other) < 1e-6
+}
+
 fun AxisAlignedBB.isHitBy(v: IVector3): Boolean {
-    if (maxY == v.y || minY == v.y) {
+    if (maxY doubleEquals v.y || minY doubleEquals v.y) {
         if (v.x in minX..maxX) {
             if (v.z in minZ..maxZ) {
                 return true
             }
         }
     }
-    if (maxX == v.x || minX == v.x) {
+    if (maxX doubleEquals v.x || minX doubleEquals v.x) {
         if (v.y in minY..maxY) {
             if (v.z in minZ..maxZ) {
                 return true
             }
         }
     }
-    if (maxZ == v.z || minZ == v.z) {
+    if (maxZ doubleEquals v.z || minZ doubleEquals v.z) {
         if (v.x in minX..maxX) {
             if (v.y in minY..maxY) {
                 return true

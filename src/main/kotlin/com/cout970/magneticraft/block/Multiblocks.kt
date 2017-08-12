@@ -18,8 +18,7 @@ import com.cout970.magneticraft.tileentity.TileMultiblockGap
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSolarPanel
 import com.cout970.magneticraft.tileentity.TileSteamEngine
-import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleMultiblock
+import com.cout970.magneticraft.tileentity.modules.ModuleMultiblockGap
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.Block
@@ -68,12 +67,11 @@ object Multiblocks : IBlockMaker {
                 val module = tile.multiblockModule
                 val storedPos = module.centerPos ?: return@func false
                 val mainBlockPos = it.pos.subtract(storedPos)
-                val mainTile = it.worldIn.getTile<TileBase>(mainBlockPos) ?: return@func false
-                val actionable = mainTile.getModule<IOnActivated>() ?: return@func false
+                val actionable = it.worldIn.getModule<IOnActivated>(mainBlockPos) ?: return@func false
                 return@func actionable.onActivated(it)
             }
             onBlockBreak = func@ {
-                val mod = it.worldIn.getTile<TileMultiblockGap>(it.pos)?.getModule<ModuleMultiblock>() ?: return@func
+                val mod = it.worldIn.getModule<ModuleMultiblockGap>(it.pos) ?: return@func
                 if (mod.multiblock == null) {
                     val relPos = mod.centerPos ?: return@func
                     val absPos = it.pos + relPos
@@ -129,8 +127,7 @@ object Multiblocks : IBlockMaker {
         return func@ {
             val state = it.state[PROPERTY_MULTIBLOCK_ORIENTATION] ?: return@func false
             if (state.active) {
-                val tile = it.worldIn.getTile<TileBase>(it.pos) ?: return@func false
-                val actionable = tile.getModule<IOnActivated>() ?: return@func false
+                val actionable = it.worldIn.getModule<IOnActivated>(it.pos) ?: return@func false
                 return@func actionable.onActivated(it)
             } else {
                 if (it.hand != EnumHand.MAIN_HAND) return@func false

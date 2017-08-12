@@ -12,11 +12,9 @@ import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.getModule
-import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.toKelvinFromCelsius
@@ -116,8 +114,7 @@ class ModuleCombustionChamber(
     }
 
     fun getBoiler(): ModuleSteamBoiler? {
-        val tile = world.getTile<TileBase>(pos.up()) ?: return null
-        return tile.getModule<ModuleSteamBoiler>()
+        return world.getModule<ModuleSteamBoiler>(pos.up())
     }
 
     fun consumeFuel(): Boolean {

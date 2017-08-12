@@ -4,7 +4,7 @@ import com.cout970.magneticraft.gui.client.*
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.tileentity.*
-import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnit
+import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -43,7 +43,7 @@ object GuiHandler : IGuiHandler {
         return when (tile) {
             is TileBox -> ContainerBox(tile, player, world, pos)
             is TileShelvingUnit -> ContainerShelvingUnit(tile, player, world, pos,
-                    ModuleShelvingUnit.Level.values()[ID])
+                    ModuleShelvingUnitMb.Level.values()[ID])
             is TileBattery -> ContainerBattery(tile, player, world, pos)
             is TileElectricFurnace -> ContainerElectricFurnace(tile, player, world, pos)
             is TileComputer -> ContainerComputer(tile, player, world, pos)

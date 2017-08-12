@@ -65,7 +65,7 @@ object Utilities {
     }
 
     fun renderMultiblockHitboxes(facing: EnumFacing, multiblock: Multiblock) {
-        multiblock.getGlobalCollisionBox().map {
+        multiblock.getGlobalCollisionBoxes().map {
             val origin = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it)
             facing.rotateBox(vec3Of(0.5), origin)
         }.forEach { Utilities.renderBox(it) }
@@ -230,7 +230,7 @@ object Utilities {
 
     fun renderMultiblockBoundingBoxes(te: IMultiblockModule) {
         te.multiblock ?: return
-        val global = te.multiblock!!.getGlobalCollisionBox().map {
+        val global = te.multiblock!!.getGlobalCollisionBoxes().map {
             te.multiblockFacing!!.rotateBox(vec3Of(0.5, 0.5, 0.5), it)
         }
         global.forEach { renderBox(it) }

@@ -28,6 +28,13 @@ inline fun <reified T : TileEntity> World.getTile(pos: BlockPos): T? {
     return tile as? T
 }
 
+inline fun <reified T> TileBase.getModule(): T? = container.modules.find { it is T } as? T
+
+inline fun <reified T> World.getModule(pos: BlockPos): T? {
+    val tile = getTile<TileBase>(pos)
+    return tile?.getModule<T>()
+}
+
 inline fun <reified T : TileEntity> IBlockAccess.getTile(pos: BlockPos): T? {
     val tile = getTileEntity(pos)
     return tile as? T
@@ -70,5 +77,3 @@ fun tryConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
         otherHandler.addConnection(connection, side?.opposite, false)
     }
 }
-
-inline fun <reified T> TileBase.getModule(): T? = container.modules.find { it is T } as? T

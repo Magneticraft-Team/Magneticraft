@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.net.Socket
 import java.nio.charset.Charset
+import javax.net.ssl.SSLSocketFactory
 
 /**
  * Created by cout970 on 2016/10/31.
@@ -17,7 +18,7 @@ import java.nio.charset.Charset
 class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by parent {
 
     val status = 0
-    val isActive: Boolean = true
+    var isActive: Boolean = true
     val internetAllowed: Boolean get() = Config.allowTcpConnections
     val maxSockets get() = Config.maxTcpConnections
 
@@ -68,7 +69,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
             ReadWriteInt("targetMac", { targetMac = it }, { targetMac }),
             ReadWriteInt("targetPort", { targetPort = it }, { targetPort }),
             ReadWriteByteArray("targetIp", targetIp),
-            ReadOnlyInt("connectionOpen", { if (socket?.isClosed ?: true) 0 else 1 }),
+            ReadOnlyInt("connectionOpen", { if (socket?.isClosed != false) 0 else 1 }),
             ReadOnlyInt("connectionError", { connectionError }),
             ReadWriteInt("inputBufferPtr", { inputBufferPtr = it }, { inputBufferPtr }),
             ReadWriteInt("outputBufferPtr", { outputBufferPtr = it }, { outputBufferPtr }),
@@ -77,7 +78,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     )
 
     fun getMacAddress(): Int {
-        if(parent is FakeRef){
+        if (parent is FakeRef) {
             return 0xABCDEF01.toInt()
         }
         return parent.pos.hashCode()
@@ -94,6 +95,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
                         connectionError = INVALID_OUTPUT_BUFFER_POINTER
                     } else if (outputBufferPtr > 0) {
                         it.getOutputStream().write(outputBuffer, 0, outputBufferPtr)
+                        println(String(outputBuffer, 0, outputBufferPtr))
                         outputBufferPtr = 0
                     }
                 } catch (e: Exception) {
@@ -105,7 +107,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
                         connectionError = INVALID_INPUT_BUFFER_POINTER
                     } else {
                         val stream = it.getInputStream()
-                        if (stream.available() > 0) {
+                        if (inputBuffer.size - inputBufferPtr > 0) {
                             val read = stream.read(inputBuffer, inputBufferPtr, inputBuffer.size - inputBufferPtr)
                             inputBufferPtr += read
                         }
@@ -122,10 +124,11 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
         when (signal) {
             1 -> openTcpConnection()
             2 -> closeTcpConnection()
+            3 -> openTcpSslConnection()
         }
     }
 
-    fun closeTcpConnection(){
+    fun closeTcpConnection() {
         socket?.let {
             activeSockets--
             it.close()
@@ -134,6 +137,17 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     }
 
     fun openTcpConnection() {
+        openConnection { ip, port -> Socket(ip, port) }
+    }
+
+    fun openTcpSslConnection() {
+        openConnection { ip, port ->
+            val socketFactory = SSLSocketFactory.getDefault()
+            socketFactory.createSocket(ip, port)
+        }
+    }
+
+    fun openConnection(factory: (String, Int) -> Socket) {
         if (!internetAllowed) {
             connectionError = INTERNET_NOT_ALLOWED
             return
@@ -162,7 +176,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
             return
         }
         try {
-            socket = Socket(ipStr, targetPort)
+            socket = factory(ipStr, targetPort)
             connectionError = NO_ERROR
             activeSockets++
         } catch (e: Exception) {
@@ -187,4 +201,21 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     override fun deserializeNBT(nbt: NBTTagCompound?) = Unit
 
     override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
+}
+
+fun main(args: Array<String>) {
+    val socketFactory = SSLSocketFactory.getDefault()
+    val socket = socketFactory.createSocket("raw.githubusercontent.com", 443)
+
+    socket.outputStream.apply {
+        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/blockstates/battery.json HTTP/1.1\r\n" +
+                "Host: raw.githubusercontent.com\r\n" +
+                "Connection: close\r\n" +
+                "\r\n").toByteArray())
+    }
+
+    val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)
+
+    println(str)
+    socket.close()
 }

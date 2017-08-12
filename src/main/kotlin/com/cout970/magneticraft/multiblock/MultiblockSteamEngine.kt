@@ -98,7 +98,6 @@ object MultiblockSteamEngine : Multiblock() {
             Vec3d(20.000, 8.000, -17.000) * PIXEL to Vec3d(21.000, 14.000, -15.000) * PIXEL,
             Vec3d(20.000, 4.000, 29.000) * PIXEL to Vec3d(28.000, 12.000, 32.000) * PIXEL,
             Vec3d(-16.000, 1.000, -32.000) * PIXEL to Vec3d(0.000, 5.000, -6.000) * PIXEL,
-            Vec3d(-5.000, 5.000, -30.000) * PIXEL to Vec3d(-1.000, 16.000, -8.000) * PIXEL,
             Vec3d(-10.000, 12.000, -10.000) * PIXEL to Vec3d(-6.000, 17.000, -6.000) * PIXEL,
             Vec3d(-14.000, 1.000, -8.000) * PIXEL to Vec3d(-2.000, 13.000, 0.000) * PIXEL,
             Vec3d(21.000, 4.000, 26.000) * PIXEL to Vec3d(27.000, 11.000, 29.000) * PIXEL,
@@ -116,10 +115,6 @@ object MultiblockSteamEngine : Multiblock() {
             Vec3d(18.000, 6.000, -14.070) * PIXEL to Vec3d(19.000, 9.325, 23.977) * PIXEL,
             Vec3d(18.500, 5.000, 23.000) * PIXEL to Vec3d(19.500, 9.000, 25.000) * PIXEL,
             Vec3d(27.000, 4.000, 27.000) * PIXEL to Vec3d(28.000, 18.000, 28.000) * PIXEL,
-            Vec3d(-15.000, 5.000, -12.000) * PIXEL to Vec3d(-5.000, 16.000, -8.000) * PIXEL,
-            Vec3d(-15.000, 5.000, -30.000) * PIXEL to Vec3d(-5.000, 16.000, -24.000) * PIXEL,
-            Vec3d(-9.000, 10.000, -24.000) * PIXEL to Vec3d(-8.000, 11.000, -12.000) * PIXEL,
-            Vec3d(-15.000, 5.000, -24.000) * PIXEL to Vec3d(-13.000, 8.000, -12.000) * PIXEL,
             Vec3d(-13.000, 5.000, -24.000) * PIXEL to Vec3d(-5.000, 6.000, -12.000) * PIXEL,
             Vec3d(11.500, 2.000, -5.000) * PIXEL to Vec3d(14.500, 14.000, -2.000) * PIXEL,
             Vec3d(11.500, 19.000, -22.000) * PIXEL to Vec3d(14.500, 22.000, -10.000) * PIXEL,
@@ -135,9 +130,6 @@ object MultiblockSteamEngine : Multiblock() {
             Vec3d(12.000, 2.484, -27.469) * PIXEL to Vec3d(14.000, 13.516, -4.531) * PIXEL,
             Vec3d(21.000, 10.000, 1.000) * PIXEL to Vec3d(27.000, 32.000, 7.000) * PIXEL,
             Vec3d(20.000, 4.000, 0.000) * PIXEL to Vec3d(28.000, 10.000, 8.000) * PIXEL,
-            Vec3d(-15.000, 8.000, -24.000) * PIXEL to Vec3d(-13.000, 14.000, -12.000) * PIXEL,
-            Vec3d(-15.000, 14.000, -24.000) * PIXEL to Vec3d(-5.000, 16.000, -12.000) * PIXEL,
-            Vec3d(-15.500, 6.000, -19.000) * PIXEL to Vec3d(-14.500, 9.000, -17.000) * PIXEL,
             Vec3d(-10.621, 8.379, -15.000) * PIXEL to Vec3d(-6.379, 12.621, -13.000) * PIXEL,
             Vec3d(-10.621, 8.379, -15.000) * PIXEL to Vec3d(-6.379, 12.621, -13.000) * PIXEL,
             Vec3d(-11.000, 10.000, -15.000) * PIXEL to Vec3d(-6.000, 11.000, -13.000) * PIXEL,
@@ -156,5 +148,5 @@ object MultiblockSteamEngine : Multiblock() {
             Vec3d(-9.000, 8.000, -21.000) * PIXEL to Vec3d(-8.000, 13.000, -19.000) * PIXEL
     ).map { EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it) + vec3Of(1, 0, 1) }
 
-    override fun getGlobalCollisionBox(): List<AxisAlignedBB> = hitbox
+    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
 }

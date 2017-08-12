@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.multiblock.core.IMultiblockCenter
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -12,6 +13,7 @@ class ModuleMultiblockCenter(
         val multiblockStructure: Multiblock,
         val facingGetter: () -> EnumFacing,
         val capabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any?,
+        val dynamicCollisionBoxes: (BlockPos) -> List<AABB> = { emptyList()},
         override val name: String = "module_multiblock"
 ) : IModule, IMultiblockCenter {
 
@@ -40,4 +42,6 @@ class ModuleMultiblockCenter(
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?, relPos: BlockPos): T? {
         return capabilityGetter.invoke(capability, facing, relPos) as? T?
     }
+
+    override fun getDynamicCollisionBoxes(otherPos: BlockPos): List<AABB> = dynamicCollisionBoxes(otherPos)
 }

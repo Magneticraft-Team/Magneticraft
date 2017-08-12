@@ -41,3 +41,21 @@ fun interpolate(v: Double, min: Double, max: Double): Double {
     if (v > max) return 1.0
     return (v - min) / (max - min)
 }
+
+inline fun iterateArea(rangeX: IntRange, rangeY: IntRange, func: (x: Int, y: Int) -> Unit) {
+    for (i in rangeX) {
+        for (j in rangeY) {
+            func(i, j)
+        }
+    }
+}
+
+inline fun iterateVolume(rangeX: IntRange, rangeY: IntRange, rangeZ: IntRange, func: (x: Int, y: Int, z: Int) -> Unit) {
+    for (i in rangeX) {
+        for (j in rangeY) {
+            for (z in rangeZ) {
+                func(i, j, z)
+            }
+        }
+    }
+}
