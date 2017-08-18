@@ -112,14 +112,17 @@ class ModuleSluiceBox(
         val recipe = getRecipe(stack) ?: return
         val pos = this.pos + facingGetter().toBlockPos()
 
-        if (recipe.primaryOutput.isNotEmpty) {
-            world.dropItem(recipe.primaryOutput, pos, false)
-        }
-        recipe.secondaryOutput.forEach { (item, prob) ->
-            if (world.rand.nextFloat() < prob) {
-                world.dropItem(item, pos, false)
+        (0 until stack.count).forEach {
+            if (recipe.primaryOutput.isNotEmpty) {
+                world.dropItem(recipe.primaryOutput, pos, false)
+            }
+            recipe.secondaryOutput.forEach { (item, prob) ->
+                if (world.rand.nextFloat() < prob) {
+                    world.dropItem(item, pos, false)
+                }
             }
         }
+
         invModuleInventory.inventory[0] = ItemStack.EMPTY
         container.sendUpdateToNearPlayers()
     }

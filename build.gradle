@@ -21,7 +21,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12-14.21.1.2413"
+    version = "1.12-14.21.1.2443"
     runDir = "run"
     
 	replaceIn 'src/main/kotlin/com/cout970/magneticraft/Metadata.kt'

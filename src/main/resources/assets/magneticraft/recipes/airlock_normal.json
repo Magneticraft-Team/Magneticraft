@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
+      "item": "magneticraft:multiblock_parts",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:airlock",
+    "data": 0
+  }
+}

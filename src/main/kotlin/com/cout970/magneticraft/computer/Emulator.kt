@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
     val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
-    val memory = RAM(0x10_0000, false)
+    val memory = RAM(0xFFFF + 1, false)
     val rom = if(args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)
@@ -214,9 +214,7 @@ object FakeFloppyDisk : IFloppyDisk {
     override fun getStorageFile(): File {
         val parent = File("./")
         if (!parent.exists()) parent.mkdir()
-        val file = File(parent, "floppy_${label.replace(namePattern, "_")}.img")
-        return file
-
+        return File(parent, "floppy_${label.replace(namePattern, "_")}.img")
     }
 
     override fun getLabel(): String = "fake_floppy_disk"

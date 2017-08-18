@@ -46,23 +46,30 @@ object ComputerItems : IItemMaker {
 
         floppyDisk = builder.withName("floppy_disk").copy {
             variants = defaultDisks.map { it.value to it.key }.toMap()
-            capabilityProvider = { FloppyDiskCapabilityProvider(it.stack) }
-            addInformation = { it.tooltip.add(ITEM_FLOPPY_DISK!!.fromItem(it.stack)?.label ?: "Unnamed") }
-            maxStackSize = 1
-            createStack = { item, amount, meta ->
-                val name = Random().ints(8).toArray().map { "0123456789ABCDEF"[it and 0xF] }.joinToString("")
-                ItemStack(item, amount, meta).also {
-                    it.tagCompound = createNBT(name, 128, true, true)
-                }
+            capabilityProvider = {
+                if (it.stack.tagCompound == null) fillNBT(it.stack)
+                FloppyDiskCapabilityProvider(it.stack)
             }
+            addInformation = {
+                val name = when (it.stack.tagCompound?.hasKey("label")) {
+                    true -> ITEM_FLOPPY_DISK!!.fromItem(it.stack)?.label
+                    else -> null
+                }
+                it.tooltip.add(name ?: "Unnamed")
+            }
+            maxStackSize = 1
+            createStack = { item, amount, meta -> ItemStack(item, amount, meta).also { fillNBT(it) } }
         }.build()
 
         return listOf(floppyDisk)
     }
 
-    fun createNBT(label: String, sectors: Int, read: Boolean, write: Boolean): NBTTagCompound {
+    fun fillNBT(stack: ItemStack) {
+        stack.tagCompound = createNBT(128, true, true)
+    }
+
+    fun createNBT(sectors: Int, read: Boolean, write: Boolean): NBTTagCompound {
         return newNbt {
-            add("label", label)
             add("sectorCount", sectors)
             add("accessTime", 1)
             add("canRead", read)
@@ -89,6 +96,7 @@ object ComputerItems : IItemMaker {
     class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
         override fun getStorageFile(): File {
+
             if (stack.itemDamage == 0) { // user created disks
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
                 if (!parent.exists()) parent.mkdir()
@@ -117,7 +125,14 @@ object ComputerItems : IItemMaker {
             }
         }
 
-        override fun getLabel(): String = stack.getString("label")
+        override fun getLabel(): String {
+            val nbt = stack.checkNBT()
+            if (!nbt.hasKey("label")) {
+                val name = Random().ints(8).toArray().map { "0123456789ABCDEF"[it and 0xF] }.joinToString("")
+                nbt.add("label", name)
+            }
+            return stack.getString("label")
+        }
 
         override fun setLabel(str: String) = stack.setString("label", label)
 

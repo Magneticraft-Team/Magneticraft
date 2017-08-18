@@ -16,10 +16,11 @@ import java.util.*
 /**
  * Created by cout970 on 17/07/2016.
  */
-fun ItemStack.checkNBT() {
+fun ItemStack.checkNBT(): NBTTagCompound {
     if (this.tagCompound == null) {
         this.tagCompound = NBTTagCompound()
     }
+    return this.tagCompound!!
 }
 
 fun ItemStack.hasKey(key: String): Boolean {

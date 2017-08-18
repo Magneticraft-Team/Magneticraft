@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    " B ",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "B": {
+      "item": "magneticraft:copper_coil",
+      "nbt": "{}"
+    }
+  },
+  "result": {
+    "item": "magneticraft:crafting",
+    "data": 3
+  }
+}

@@ -72,7 +72,7 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
         ComputerItems.FloppyDisk(
                 ItemStack(ComputerItems.floppyDisk, 1, 0,
-                        ComputerItems.createNBT("default", 128, true, true)
+                        ComputerItems.createNBT( 128, true, true)
                 )
         )
     })

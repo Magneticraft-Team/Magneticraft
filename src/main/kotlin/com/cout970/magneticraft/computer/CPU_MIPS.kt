@@ -139,7 +139,11 @@ class CPU_MIPS : ICPU {
                     if (getRegister(rs) == -1 || getRegister(rs) == 0) {
                         interrupt(NullPointerException())
                     }
-                    setRegister(rt, regPC)
+                    if (rt == 0) {
+                        setRegister(31, regPC)
+                    } else {
+                        setRegister(rt, regPC)
+                    }
                     jump = getRegister(rs)
                 }
 
