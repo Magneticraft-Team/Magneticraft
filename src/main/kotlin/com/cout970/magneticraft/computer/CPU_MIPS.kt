@@ -53,7 +53,7 @@ class CPU_MIPS : ICPU {
         Arrays.fill(registers, 0)
         regHI = 0
         regLO = 0
-        regPC = 0x00000
+        regPC = 0x08000
         regStatus = 0x0000FFFF
         regCause = 0
         regEPC = 0

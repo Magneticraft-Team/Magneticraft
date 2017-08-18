@@ -47,7 +47,15 @@ class TileConnector : TileBase(), ITickable {
             connectableDirections = this::getConnectableDirections
     )
 
-    val facing: EnumFacing get() = getBlockState().getFacing()
+    var ignoreBlockStateUpdate = false
+
+    val facing: EnumFacing
+        get() {
+            ignoreBlockStateUpdate = true
+            val facing = getBlockState().getFacing()
+            ignoreBlockStateUpdate = false
+            return facing
+        }
 
     // client
     val wireRender = RenderCache()
@@ -83,7 +91,7 @@ class TileConnector : TileBase(), ITickable {
     }
 
     override fun onBlockStateUpdates() {
-        if (world.isClient) {
+        if (world.isClient && !ignoreBlockStateUpdate) {
             hasBase = shouldHaveBase(this)
         }
     }

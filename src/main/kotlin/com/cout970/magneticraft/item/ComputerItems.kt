@@ -107,7 +107,7 @@ object ComputerItems : IItemMaker {
                     parent.mkdir()
                 }
                 val file: File
-                val source = defaultDisks.toList().find { it.second == stack.itemDamage }?.first ?: "bios" + ".bin"
+                val source = (defaultDisks.toList().find { it.second == stack.itemDamage }?.first ?: "bios") + ".bin"
 
                 val bytes = ComputerItems::class.java.getResourceAsStream("/assets/$MOD_ID/cpu/$source")
                                     ?.readBytes() ?: ByteArray(0)

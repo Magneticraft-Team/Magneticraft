@@ -17,6 +17,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
+import org.lwjgl.input.Keyboard
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -48,6 +49,12 @@ class GuiComputer(container: ContainerBase) : GuiBase(container) {
                 texture = texture, condition = { motherboard.isOnline() }
         ))
         components.filterIsInstance<SimpleButton>().forEach { it.listener = this::onPress }
+        Keyboard.enableRepeatEvents(true)
+    }
+
+    override fun onGuiClosed() {
+        super.onGuiClosed()
+        Keyboard.enableRepeatEvents(false)
     }
 
     fun getUV(state: ButtonState): Pair<IVector2, IVector2> {
@@ -59,6 +66,7 @@ class GuiComputer(container: ContainerBase) : GuiBase(container) {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
         val ibd = IBD().apply { setInteger(50, button.id) }
         container.sendUpdate(ibd)

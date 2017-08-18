@@ -12,9 +12,7 @@ import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.io.File
 import java.io.InputStream
-import java.util.regex.Pattern
 import javax.swing.*
-
 
 /**
  * Created by cout970 on 2017/06/23.
@@ -25,8 +23,11 @@ private var lastTick = 0
 
 fun main(args: Array<String>) {
 
+    val img = "lisp"
+    val disk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
+
     val monitor = DeviceMonitor(FakeRef)
-    val floppyDrive = DeviceFloppyDrive(FakeRef) { FakeFloppyDisk }
+    val floppyDrive = DeviceFloppyDrive(FakeRef) { disk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
@@ -94,6 +95,7 @@ fun main(args: Array<String>) {
     timer = System.currentTimeMillis()
     while (motherboard.isOnline()) {
         networkCard.update()
+        floppyDrive.iterate()
         //run CPU
         motherboard.iterate()
 
@@ -207,23 +209,19 @@ class CustomRom(val str: String) : IROM {
     override fun getBIOS(): InputStream = File(str).inputStream()
 }
 
-object FakeFloppyDisk : IFloppyDisk {
-
-    val namePattern = Pattern.compile("""[^(\w|\d)]+""").toRegex()
+class FakeFloppyDisk(val file: File) : IFloppyDisk {
 
     override fun getStorageFile(): File {
-        val parent = File("./")
-        if (!parent.exists()) parent.mkdir()
-        return File(parent, "floppy_${label.replace(namePattern, "_")}.img")
+        return file
     }
 
     override fun getLabel(): String = "fake_floppy_disk"
 
     override fun setLabel(str: String) = Unit
 
-    override fun getSectorCount(): Int = 1000
+    override fun getSectorCount(): Int = 128
 
-    override fun getAccessTime(): Int = 5
+    override fun getAccessTime(): Int = 1
 
     override fun canRead(): Boolean = true
 

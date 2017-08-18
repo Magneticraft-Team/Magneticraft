@@ -72,7 +72,7 @@ class Motherboard(
             while (true) {
                 val r = it.read()
                 if (r == -1) break
-                memory.writeByte(index++, r.toByte())
+                memory.writeByte(0x8000 + index++, r.toByte())
             }
         }
     }
