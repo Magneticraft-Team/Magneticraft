@@ -19,26 +19,8 @@ fun initItems() {
     items_ += ElectricItems.initItems()
     items_ += CraftingItems.initItems()
     items_ += ComputerItems.initItems()
+    items_ += Upgrades.initItems()
 
     items_.forEach { ForgeRegistries.ITEMS.register(it) }
     items = items_
 }
-// TODO list
-//listOf<Item>(
-//        ItemGuideBook,
-//        ItemCrushedOre,
-//        ItemCrushedCoal,
-//        ItemCrushedLapis,
-//        ItemWoodChip,
-//        ItemPulpWood,
-//        ItemPebbles,
-//        ItemPebblesCoal,
-//        ItemPebblesLapis,
-//        ItemMesh,
-//        ItemCoilOfWire,
-//        ItemVoltmeter,
-//        ItemThermometer,
-//        ItemBattery,
-//        ItemFloppyDisk,
-//        ItemCoke
-//)

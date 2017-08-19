@@ -78,8 +78,9 @@ object ToolItems : IItemMaker {
 
             val msg = handler.nodes
                     .filterIsInstance<IElectricNode>()
-                    .map { "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage) }
-                    .joinToString("\n")
+                    .joinToString("\n") {
+                        "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage)
+                    }
 
             args.player.sendUnlocalizedMessage(msg)
         }
@@ -107,7 +108,7 @@ object ToolItems : IItemMaker {
 
         override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
             @Suppress("UNCHECKED_CAST")
-            return this as T
+            return if (capability == ITEM_HAMMER) this as T else null
         }
 
         override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean = capability == ITEM_HAMMER

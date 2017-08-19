@@ -100,7 +100,7 @@ abstract class TileBase : TileEntity() {
     }
 
     open fun save(): NBTTagCompound {
-        val moduleNbts = container.modules.mapNotNull { it.serializeNBT() }
+        val moduleNbts = container.modules.map { it.serializeNBT() }
         if (moduleNbts.isNotEmpty()) {
             return newNbt {
                 list("_modules") {

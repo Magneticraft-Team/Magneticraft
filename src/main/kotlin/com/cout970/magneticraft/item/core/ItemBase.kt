@@ -26,11 +26,14 @@ open class ItemBase : Item() {
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
     var createStack: ((Item, Int, Int) -> ItemStack)? = null
+
     var variants: Map<Int, String> = mapOf(0 to "normal")
+    var customModels: List<Pair<String, ResourceLocation>> = emptyList()
 
     override fun getUnlocalizedName(): String = "item.$MOD_ID.${registryName?.resourcePath}"
 
-    override fun getUnlocalizedName(stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata]}"
+    override fun getUnlocalizedName(
+            stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata] ?: "normal"}"
 
     override fun getHasSubtypes() = variants.size > 1
 

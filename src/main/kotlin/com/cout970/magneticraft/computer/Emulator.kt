@@ -23,7 +23,7 @@ private var lastTick = 0
 
 fun main(args: Array<String>) {
 
-    val img = "lisp"
+    val img = "forth"
     val disk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
 
     val monitor = DeviceMonitor(FakeRef)

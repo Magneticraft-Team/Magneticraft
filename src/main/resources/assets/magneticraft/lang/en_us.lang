@@ -114,6 +114,10 @@ item.magneticraft.floppy_disk_basic.name=Floppy Disk (BASIC)
 item.magneticraft.floppy_disk_vim.name=Floppy Disk (VI?)
 item.magneticraft.floppy_disk_asm.name=Floppy Disk (ASM)
 
+item.magneticraft.iron_gear_normal.name=Iron Gear
+item.magneticraft.steel_gear_normal.name=Steel Gear
+item.magneticraft.tungsten_gear_normal.name=Tungsten Gear
+
 tile.magneticraft.ores_copper.name=Chalcopyrite Ore
 tile.magneticraft.ores_lead.name=Galena Ore
 tile.magneticraft.ores_cobalt.name=Cobaltite Ore

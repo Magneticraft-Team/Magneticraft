@@ -32,13 +32,6 @@ fun initBlocks() {
 }
 
 //listOf<Block>(
-//        BlockWoodChip,
-//        BlockFiberboard,
-//        BlockFeedingTrough,
-//        BlockIncendiaryGenerator,
-//        BlockInfiniteCold,
-//        BlockAirLock,
-//        BlockAirBubble,
 //        BlockHydraulicPress,
 //        BlockKiln,
 //        BlockKilnShelf,
@@ -61,4 +54,3 @@ fun initBlocks() {
 //        BlockHeatPipe,
 //        BlockRedstoneHeatPipe,
 //        BlockElectricHeater
-//)

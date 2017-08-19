@@ -87,16 +87,16 @@ class ModuleElectricity(
     }
 
     fun loadConnections() {
-        unloadedWireConnections.forEach { (localName, nodeID) ->
-            val thisNode = electricNodes.find { it.id.name == localName } ?: return@forEach
+        unloadedWireConnections.removeAll { (localName, nodeID) ->
+            val thisNode = electricNodes.find { it.id.name == localName } ?: return@removeAll false
 
-            val otherTile = world.getTileEntity(nodeID.pos) ?: return@forEach
-            val other = otherTile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: return@forEach
-            val otherNode = (other.getNode(nodeID) as? IElectricNode) ?: return@forEach
+            val otherTile = world.getTileEntity(nodeID.pos) ?: return@removeAll false
+            val other = otherTile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: return@removeAll false
+            val otherNode = (other.getNode(nodeID) as? IElectricNode) ?: return@removeAll false
 
             tryConnect(this, thisNode, other, otherNode, null)
+            true
         }
-        unloadedWireConnections.clear()
     }
 
     fun updateNormalConnections() {

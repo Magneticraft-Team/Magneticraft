@@ -8,20 +8,19 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron"
+      "ore": "lightPlateTungsten"
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper"
+      "ore": "blockLapis"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "stone"
+      "ore": "blockQuartz"
     }
   },
   "result": {
     "item": "magneticraft:multiblock_parts",
-    "data": 1,
-    "count": 2
+    "data": 1
   }
 }

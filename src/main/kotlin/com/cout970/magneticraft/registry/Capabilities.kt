@@ -11,6 +11,7 @@ import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
+import com.cout970.magneticraft.api.tool.IGear
 import com.cout970.magneticraft.api.tool.IHammer
 import com.cout970.magneticraft.item.ComputerItems
 import net.minecraft.block.Block
@@ -61,6 +62,9 @@ var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
 @CapabilityInject(IHammer::class)
 var ITEM_HAMMER: Capability<IHammer>? = null
 
+@CapabilityInject(IGear::class)
+var ITEM_GEAR: Capability<IGear>? = null
+
 /**
  * This is called on the server and the client at preInit
  */
@@ -69,6 +73,7 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
     CapabilityManager.INSTANCE.register(IHammer::class.java, EmptyStorage(), { DefaultHammer() })
+    CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage(), { DefaultGear() })
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
         ComputerItems.FloppyDisk(
                 ItemStack(ComputerItems.floppyDisk, 1, 0,
@@ -161,4 +166,12 @@ class DefaultHammer : IHammer {
     override fun getMiningLevel(): Int = 0
     override fun getBreakingSpeed(): Int = 0
     override fun applyDamage(item: ItemStack, player: EntityPlayer): ItemStack = item
+}
+
+class DefaultGear : IGear{
+
+    override fun getSpeedMultiplier(): Float = 1f
+    override fun getMaxDurability(): Int = 0
+    override fun getDurability(): Int = 0
+    override fun applyDamage(): ItemStack = ItemStack.EMPTY
 }

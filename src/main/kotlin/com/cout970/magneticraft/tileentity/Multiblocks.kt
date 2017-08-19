@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
@@ -73,7 +74,8 @@ class TileSolarPanel : TileMultiblock(), ITickable {
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node),
-            canConnectAtSide = this::canConnectAtSide
+            canConnectAtSide = this::canConnectAtSide,
+            connectableDirections = this::getConnectableDirections
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
@@ -82,8 +84,23 @@ class TileSolarPanel : TileMultiblock(), ITickable {
             capabilityGetter = { _, _, _ -> null }
     )
 
+    //client animation
+    var currentAngle = 0f
+    var deltaTime = System.currentTimeMillis()
+
     init {
         initModules(multiblockModule, electricModule)
+    }
+
+    fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
+        val base = ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite }
+        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.NORTH, 5)) != null) {
+            return base + EnumFacing.NORTH.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
+        }
+        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.WEST, 5)) != null) {
+            return base + EnumFacing.WEST.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
+        }
+        return base
     }
 
     override fun update() {
@@ -91,7 +108,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
         if (world.isServer) {
             if (active && world.isDaytime && world.provider.hasSkyLight()) {
                 var count = 0
-                iterateArea(0..2, 0..2){ i, j ->
+                iterateArea(0..2, 0..2) { i, j ->
                     val offset = facing.rotatePoint(BlockPos.ORIGIN, BlockPos(i - 1, 0, j))
                     if (world.canBlockSeeSky(pos + offset)) {
                         count++
@@ -173,7 +190,8 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule, steamEngineMbModule)
+        initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
+                steamEngineMbModule)
     }
 
     override fun update() {

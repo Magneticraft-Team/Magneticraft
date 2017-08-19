@@ -43,11 +43,22 @@ class ClientProxy : CommonProxy() {
         registerSounds()
 
         //Item renders
-        items.forEach { item ->
-            (item as? ItemBase)?.let { item ->
+        items.forEach { i ->
+            (i as? ItemBase)?.let { item ->
                 item.variants.forEach { variant ->
-                    ModelLoader.setCustomModelResourceLocation(item, variant.key,
-                            item.registryName!!.toModel(variant.value))
+                    ModelLoader.setCustomModelResourceLocation(
+                            item,
+                            variant.key,
+                            item.registryName!!.toModel(variant.value)
+                    )
+                }
+
+                item.customModels.forEach { (state, location) ->
+                    ModelLoaderApi.registerModelWithDecorator(
+                            ModelResourceLocation(item.registryName, state),
+                            location,
+                            DefaultBlockDecorator
+                    )
                 }
             }
         }
@@ -57,20 +68,29 @@ class ClientProxy : CommonProxy() {
             (block as? BlockBase)?.let {
                 if (it.generateDefaultItemModel) {
                     it.inventoryVariants.forEach {
-                        ModelLoader.setCustomModelResourceLocation(itemBlock, it.key,
-                                itemBlock.registryName!!.toModel(it.value))
+                        ModelLoader.setCustomModelResourceLocation(
+                                itemBlock,
+                                it.key,
+                                itemBlock.registryName!!.toModel(it.value)
+                        )
                     }
                 } else {
-                    ModelLoader.setCustomModelResourceLocation(itemBlock, 0,
-                            itemBlock.registryName!!.toModel("inventory"))
+                    ModelLoader.setCustomModelResourceLocation(
+                            itemBlock,
+                            0,
+                            itemBlock.registryName!!.toModel("inventory")
+                    )
                 }
                 val mapper = it.getCustomStateMapper()
                 if (mapper != null) {
                     ModelLoader.setCustomStateMapper(block, mapper)
                 }
                 it.customModels.forEach { (state, location) ->
-                    ModelLoaderApi.registerModelWithDecorator(ModelResourceLocation(it.registryName, state),
-                            location, DefaultBlockDecorator)
+                    ModelLoaderApi.registerModelWithDecorator(
+                            ModelResourceLocation(it.registryName, state),
+                            location,
+                            DefaultBlockDecorator
+                    )
                 }
             }
         }
@@ -97,7 +117,7 @@ class ClientProxy : CommonProxy() {
                 val renderer = clazz.objectInstance as TileRenderer<TileBase>
 
                 register(tile, renderer)
-                if(Debug.DEBUG) {
+                if (Debug.DEBUG) {
                     info("Registering TESR: Tile = ${clazz.simpleName}, Renderer = ${renderer.javaClass.simpleName}")
                 }
             } catch (e: Exception) {

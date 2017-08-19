@@ -73,7 +73,7 @@ object Magneticraft {
                     save()
                 }
             }
-            log.info("Config loaded in $configTime miliseconds")
+            log.info("Config loaded in $configTime milliseconds")
 
             //Initialization of the Mod stuff
             proxy.preInit()
@@ -86,7 +86,7 @@ object Magneticraft {
             }
         }
 
-        log.info("Pre-init done in $time miliseconds")
+        log.info("Pre-init done in $time milliseconds")
     }
 
     /**
@@ -100,7 +100,7 @@ object Magneticraft {
             proxy.init()
         }
 
-        log.info("Init done in $time miliseconds")
+        log.info("Init done in $time milliseconds")
     }
 
     /**
@@ -115,6 +115,6 @@ object Magneticraft {
             proxy.postInit()
         }
 
-        log.info("Post-init done in $time miliseconds")
+        log.info("Post-init done in $time milliseconds")
     }
 }

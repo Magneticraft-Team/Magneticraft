@@ -155,7 +155,8 @@ object Utilities {
         val b = color.zf
         val a = 1f
 
-        glDisable(GL_TEXTURE_2D)
+//        glDisable(GL_TEXTURE_2D)
+        glBindTexture(GL_TEXTURE_2D, 0)
         GlStateManager.glLineWidth(2f)
         t.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR)
         t.pos(box.minX, box.minY, box.minZ).color(r, g, b, a).endVertex()
@@ -195,7 +196,7 @@ object Utilities {
         t.pos(box.maxX, box.minY, box.minZ).color(r, g, b, a).endVertex()
 
         tes.draw()
-        glEnable(GL_TEXTURE_2D)
+//        glEnable(GL_TEXTURE_2D)
     }
 
     fun renderLine(pos: IVector3, end: IVector3, color: IVector3 = vec3Of(1, 1, 1)) {
@@ -379,5 +380,9 @@ object Utilities {
         Utilities.rotateFromCenter(facing.opposite, 0f)
         Utilities.renderMultiblockBlueprint(multiblock)
         popMatrix()
+    }
+
+    fun drawCenter(size: Double = 0.0125) {
+        renderBox(vec3Of(-size) toAABBWith vec3Of(size))
     }
 }

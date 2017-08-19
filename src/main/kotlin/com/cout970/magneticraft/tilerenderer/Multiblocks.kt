@@ -14,6 +14,7 @@ import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -21,8 +22,21 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 @RegisterRenderer(TileSolarPanel::class)
 object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
-        modelLocation = { ModelResourceLocation(Multiblocks.solarPanel.registryName, "model") }
+        modelLocation = { ModelResourceLocation(Multiblocks.solarPanel.registryName, "model") },
+        filters = addInverse(
+                { it in TileRendererSolarPanel.left },
+                { it in TileRendererSolarPanel.right }
+        )
 ) {
+    val left = listOf(
+            "Panel1-1", "Panel1-2", "Panel1-3",
+            "Panel2-1", "Panel2-2", "Panel2-3",
+            "Panel3-1", "Panel3-2", "Panel3-3")
+
+    val right = listOf(
+            "Panel4-1", "Panel4-2", "Panel4-3",
+            "Panel5-1", "Panel5-2", "Panel5-3",
+            "Panel6-1", "Panel6-2", "Panel6-3")
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarPanel) {
         if (!te.active) {
@@ -32,7 +46,42 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
 
         Utilities.rotateFromCenter(te.facing, -90f)
         translate(-1.0, 0.0, 0.0)
-        models.forEach { it.renderTextured() }
+        models[0].renderTextured()
+
+        val targetAngle = when (te.facing) {
+            EnumFacing.NORTH -> {
+                val time = (te.world.worldTime % 24000L).toInt()
+                val normTime = time / 12000f
+                if (normTime > 1) 0f else (normTime * 2 - 1) * 30f
+            }
+            EnumFacing.SOUTH -> {
+                val time = (te.world.worldTime % 24000L).toInt()
+                val normTime = time / 12000f
+                if (normTime > 1) 0f else (normTime * 2 - 1) * -30f
+            }
+            else -> 0f
+        }
+
+        val oldTime = te.deltaTime
+        te.deltaTime = System.currentTimeMillis()
+        val delta = (Math.min(te.deltaTime - oldTime, 1000)) / 1000f
+
+        val angle = te.currentAngle
+        te.currentAngle += (targetAngle - te.currentAngle) * 0.5f * delta
+
+        stackMatrix {
+            translate(0f, 0.75f, 1.25f)
+            rotate(angle, 1f, 0f, 0f)
+            translate(0f, -0.75f + 0.1f, -1.25f)
+            models[1].renderTextured()
+        }
+        stackMatrix {
+            translate(0f, 0.75f, -0.25f)
+            rotate(angle, 1f, 0f, 0f)
+            translate(0f, -0.75f + 0.1f, 0.25f)
+            models[2].renderTextured()
+        }
+
     }
 }
 

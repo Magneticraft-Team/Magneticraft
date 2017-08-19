@@ -15,9 +15,7 @@ import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
-import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.toBlockPos
-import net.minecraft.client.Minecraft
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -130,7 +128,7 @@ class ModuleSluiceBox(
     fun playSounds() {
         if (world.isClient) {
             val sound = if (getNextSluice() == null) sounds["water_flow_end"] else sounds["water_flow"]
-            world.playSound(Minecraft.getMinecraft().player, pos, sound, SoundCategory.BLOCKS, 1F, 1F)
+            world.playSound(pos.xd, pos.yd, pos.zd, sound, SoundCategory.BLOCKS, 1F, 1F, false)
         }
     }
 

@@ -13,11 +13,17 @@ operator fun List<Multiblock.MultiblockLayer>.get(x: Int, y: Int, z: Int): IMult
     return this[this.size - y - 1].components[z][x]
 }
 
-fun <T> MutableList<T>.setAll(it: Iterable<T>){
+fun <T> MutableList<T>.setAll(it: Iterable<T>) {
     clear()
     addAll(it)
 }
 
-fun<T> List<T>.shuffled() = toMutableList().apply(Collections::shuffle)
+fun <T> List<T>.shuffled() = toMutableList().apply(Collections::shuffle)
 
-inline infix fun<reified T> List<T>.with(other: List<T>): MutableList<T> = mutableListOf(*toTypedArray(), *other.toTypedArray())
+inline infix fun <reified T> List<T>.with(other: List<T>): MutableList<T> = mutableListOf(*toTypedArray(),
+        *other.toTypedArray())
+
+fun <T> List<T>.rest(): List<T> {
+    if (isEmpty() || size == 1) return emptyList()
+    return takeLast(size - 1)
+}

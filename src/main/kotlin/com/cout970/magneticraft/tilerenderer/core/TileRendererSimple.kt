@@ -29,6 +29,10 @@ abstract class TileRendererSimple<T : TileBase>(
         fun filterOf(names: List<String>): List<(String) -> Boolean> {
             return listOf({ name: String -> name !in names }) + names.map { name -> { it: String -> it == name } }
         }
+
+        fun addInverse(vararg list: (String) -> Boolean): List<(String) -> Boolean> {
+            return listOf({ s: String -> list.none { it.invoke(s) } }) + list.toList()
+        }
     }
 
     abstract fun renderModels(models: List<ModelCache>, te: T)

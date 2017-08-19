@@ -27,6 +27,8 @@ class ItemBuilder {
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
     var createStack: ((Item, Int, Int) -> ItemStack)? = null
+    var containerItem: Item? = null
+    var customModels: List<Pair<String, ResourceLocation>>? = null
 
 
     fun withName(name: String): ItemBuilder {
@@ -38,19 +40,22 @@ class ItemBuilder {
         requireNotNull(registryName) { "registryName was null" }
         val item = constructor()
 
-        item.apply {
-            registryName = this@ItemBuilder.registryName
-            this@ItemBuilder.creativeTab?.let { setCreativeTab(it) }
-            this@ItemBuilder.variants?.let { variants = it }
-            if (isFull3d) setFull3D()
-            setMaxStackSize(this@ItemBuilder.maxStackSize)
-            if (this@ItemBuilder.maxDamage > 0) maxDamage = this@ItemBuilder.maxDamage
-            onHitEntity = this@ItemBuilder.onHitEntity
-            capabilityProvider = this@ItemBuilder.capabilityProvider
-            onItemUse = this@ItemBuilder.onItemUse
-            onItemRightClick = this@ItemBuilder.onItemRightClick
-            addInformation = this@ItemBuilder.addInformation
-            createStack = this@ItemBuilder.createStack
+
+        item.let {
+            it.registryName = registryName
+            creativeTab?.let { t -> it.setCreativeTab(t) }
+            variants?.let { v -> it.variants = v }
+            if (isFull3d) it.setFull3D()
+            it.setMaxStackSize(maxStackSize)
+            if (maxDamage > 0) it.maxDamage = maxDamage
+            it.onHitEntity = onHitEntity
+            it.capabilityProvider = capabilityProvider
+            it.onItemUse = onItemUse
+            it.onItemRightClick = onItemRightClick
+            it.addInformation = addInformation
+            it.createStack = createStack
+            it.containerItem = containerItem
+            customModels?.let { c -> it.customModels = c }
         }
 
         return item
@@ -70,6 +75,7 @@ class ItemBuilder {
         newBuilder.capabilityProvider = capabilityProvider
         newBuilder.addInformation = addInformation
         newBuilder.createStack = createStack
+        newBuilder.containerItem = containerItem
 
         func(newBuilder)
         return newBuilder

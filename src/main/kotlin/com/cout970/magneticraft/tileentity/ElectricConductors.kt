@@ -37,7 +37,7 @@ import net.minecraft.util.math.Vec3d
 class TileConnector : TileBase(), ITickable {
 
     val node = ElectricNode(container.ref, capacity = 1.0)
-    val wrapper = WireConnectorWrapper(node, this::getConnectors)
+    val wrapper = WireConnectorWrapper(node, this::getConnectors, "connector")
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(wrapper),
@@ -86,7 +86,7 @@ class TileConnector : TileBase(), ITickable {
             }
         }
         if (Debug.DEBUG) {
-            sendUpdateToNearPlayers()
+//            sendUpdateToNearPlayers()
         }
     }
 
@@ -134,7 +134,7 @@ class TileConnector : TileBase(), ITickable {
 @RegisterTileEntity("electric_pole")
 class TileElectricPole : TileBase(), ITickable {
     val node = ElectricNode(container.ref, capacity = 1.0)
-    val wrapper = WireConnectorWrapper(node, this::getConnectors)
+    val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(wrapper),
@@ -168,8 +168,8 @@ class TileElectricPole : TileBase(), ITickable {
 @RegisterTileEntity("electric_pole_transformer")
 class TileElectricPoleTransformer : TileBase(), ITickable {
     val node = ElectricNode(container.ref, capacity = 1.0)
-    val wrapper = WireConnectorWrapper(node, this::getConnectors)
-    val wrapper2 = WireConnectorWrapper(node, this::getConnectors2)
+    val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
+    val wrapper2 = WireConnectorWrapper(node, this::getConnectors2, "transformer_connector")
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(wrapper, wrapper2),
