@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.tool.IHammer
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HAMMER
@@ -33,9 +34,11 @@ import java.util.*
 /**
  * Created by cout970 on 2017/06/12.
  */
-class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivated {
+class ModuleCrushingTable(
+        val inventory: Inventory,
+        override val name: String = "module_crushing_table"
+) : IModule, IOnActivated {
 
-    override val name: String = "module_crushing_table"
     override lateinit var container: IModuleContainer
 
     companion object {
@@ -45,8 +48,8 @@ class ModuleCrushingTable(val invModule: ModuleInventory) : IModule, IOnActivate
     var damageTaken = 0
 
     var storedItem
-        get() = invModule.inventory.getStackInSlot(0)
-        set(value) = invModule.inventory.setStackInSlot(0, value)
+        get() = inventory.getStackInSlot(0)
+        set(value) = inventory.setStackInSlot(0, value)
 
     override fun onActivated(args: OnActivatedArgs): Boolean = args.run {
         if (side != EnumFacing.UP || hand == EnumHand.OFF_HAND) return false

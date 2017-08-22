@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.set
@@ -18,7 +19,7 @@ import net.minecraft.util.EnumFacing
  */
 class ModuleInserter(
         val facingGetter: () -> EnumFacing,
-        val invModule: ModuleInventory,
+        val inventory: Inventory,
         override val name: String = "module_conveyor_belt"
 ) : IModule {
 
@@ -34,7 +35,7 @@ class ModuleInserter(
             State.IDLE -> {
                 limit = 20
                 counter = 0
-                if (invModule.inventory[0].isEmpty) {
+                if (inventory[0].isEmpty) {
                     State.WAITING_FOR_PICK
                 } else {
                     State.WAITING_FOR_DROP
@@ -88,7 +89,7 @@ class ModuleInserter(
     }
 
     fun tryPick(): Boolean {
-        if (invModule.inventory[0].isNotEmpty) return true
+        if (inventory[0].isNotEmpty) return true
         val backTile = world.getTileEntity(pos.offset(facing.opposite))
         if (backTile != null) {
             if (tryPickFromInv(backTile, facing)) {
@@ -96,7 +97,7 @@ class ModuleInserter(
             } else if (backTile is TileConveyorBelt) {
                 val item = backTile.conveyorModule.removeItem()
                 if (item.isNotEmpty) {
-                    invModule.inventory[0] = item
+                    inventory[0] = item
                 }
             }
         }
@@ -108,7 +109,7 @@ class ModuleInserter(
             } else if (backDownTile is TileConveyorBelt) {
                 val item = backDownTile.conveyorModule.removeItem()
                 if (item.isNotEmpty) {
-                    invModule.inventory[0] = item
+                    inventory[0] = item
                 }
             }
         }
@@ -125,7 +126,7 @@ class ModuleInserter(
             val res = inv.extractItem(index, 64, true)
             if (res.isNotEmpty) {
                 val item = inv.extractItem(index, 64, false)
-                invModule.inventory[0] = item
+                inventory[0] = item
                 return true
             }
         }
@@ -133,15 +134,15 @@ class ModuleInserter(
     }
 
     fun tryDrop(): Boolean {
-        if (invModule.inventory[0].isEmpty) return true
+        if (inventory[0].isEmpty) return true
         val frontTile = world.getTileEntity(pos.offset(facing))
         if (frontTile != null) {
             if (tryDropToInv(frontTile, facing.opposite)) {
                 return true
             } else if (frontTile is TileConveyorBelt) {
-                val res = frontTile.conveyorModule.addItem(invModule.inventory[0])
+                val res = frontTile.conveyorModule.addItem(inventory[0])
                 if (res) {
-                    invModule.inventory[0] = ItemStack.EMPTY
+                    inventory[0] = ItemStack.EMPTY
                 }
             }
         }
@@ -151,9 +152,9 @@ class ModuleInserter(
             if (tryDropToInv(frontDownTile, EnumFacing.UP)) {
                 return true
             } else if (frontDownTile is TileConveyorBelt) {
-                val res = frontDownTile.conveyorModule.addItem(invModule.inventory[0])
+                val res = frontDownTile.conveyorModule.addItem(inventory[0])
                 if (res) {
-                    invModule.inventory[0] = ItemStack.EMPTY
+                    inventory[0] = ItemStack.EMPTY
                 }
             }
         }
@@ -164,10 +165,10 @@ class ModuleInserter(
         val inv = tile.getOrNull(ITEM_HANDLER, side) ?: return false
 
         for (index in 0 until inv.slots) {
-            val res = inv.insertItem(index, invModule.inventory[0], true)
+            val res = inv.insertItem(index, inventory[0], true)
             if (res.isEmpty) {
-                inv.insertItem(index, invModule.inventory[0], false)
-                invModule.inventory[0] = ItemStack.EMPTY
+                inv.insertItem(index, inventory[0], false)
+                inventory[0] = ItemStack.EMPTY
                 return true
             }
         }

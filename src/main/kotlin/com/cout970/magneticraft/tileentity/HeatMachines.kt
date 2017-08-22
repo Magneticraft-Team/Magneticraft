@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleCombustionChamber
@@ -19,8 +20,9 @@ import net.minecraft.util.ITickable
 class TileCombustionChamber : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val invModule = ModuleInventory(1)
-    val combustionChamberModule = ModuleCombustionChamber(invModule)
+    val inventory = Inventory(1)
+    val invModule = ModuleInventory(inventory)
+    val combustionChamberModule = ModuleCombustionChamber(inventory)
 
     init {
         initModules(invModule, combustionChamberModule)

@@ -6,6 +6,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
@@ -131,9 +132,10 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockShelvingUnit
 
-    val invModule = ModuleInventory(ModuleShelvingUnitMb.MAX_CHESTS * 27, capabilityFilter = { null })
+    val inventory = Inventory(ModuleShelvingUnitMb.MAX_CHESTS * 27)
+    val invModule = ModuleInventory(inventory, capabilityFilter = { null })
 
-    val shelvingUnitModule = ModuleShelvingUnitMb(invModule)
+    val shelvingUnitModule = ModuleShelvingUnitMb(inventory)
 
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),

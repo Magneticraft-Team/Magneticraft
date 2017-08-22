@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationCentered
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
@@ -30,8 +31,9 @@ class TileFeedingTrough : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientationCentered()
 
-    val invModule = ModuleInventory(1, capabilityFilter = {null})
-    val moduleFeedingTrough = ModuleFeedingTrough(invModule)
+    val inventory = Inventory(1)
+    val invModule = ModuleInventory(inventory, capabilityFilter = {null})
+    val moduleFeedingTrough = ModuleFeedingTrough(inventory)
 
     init {
         initModules(moduleFeedingTrough, invModule)
@@ -71,8 +73,9 @@ class TileConveyorBelt : TileBase(), ITickable {
 class TileInserter : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val invModule = ModuleInventory(1, capabilityFilter = { null })
-    val inserterModule = ModuleInserter({ facing }, invModule)
+    val inventory = Inventory(1)
+    val invModule = ModuleInventory(inventory, capabilityFilter = { null })
+    val inserterModule = ModuleInserter({ facing }, inventory)
 
     init {
         initModules(inserterModule, invModule)

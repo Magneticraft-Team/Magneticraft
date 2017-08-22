@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
@@ -33,7 +34,7 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/07/05.
  */
 class ModuleShelvingUnitMb(
-        val invModule: ModuleInventory,
+        val inventory: Inventory,
         override val name: String = "module_shelving_unit"
 ) : IModule, IOnActivated {
 
@@ -81,7 +82,7 @@ class ModuleShelvingUnitMb(
     fun getOtherShelf(): TileShelvingUnit? {
         val tile = world.getTile<TileMultiblockGap>(pos.add(0, -1, 0)) ?: return null
         val centerPos = tile.multiblockModule.centerPos ?: return null
-        return world.getTile<TileShelvingUnit>(pos.add(0, -1, 0).subtract(centerPos))
+        return world.getTile(pos.add(0, -1, 0).subtract(centerPos))
     }
 
     fun placeChest(pos: BlockPos, hit: IVector3, stack: ItemStack): Boolean {
@@ -171,7 +172,7 @@ class ModuleShelvingUnitMb(
                 }
             }
             val slots = getAvailableSlots(level)
-            return InventoryCapabilityFilter(invModule.inventory, slots.toList(), slots.toList())
+            return InventoryCapabilityFilter(inventory, slots.toList(), slots.toList())
         }
         return null
     }

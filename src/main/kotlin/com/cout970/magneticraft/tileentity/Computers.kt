@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
@@ -17,9 +18,10 @@ class TileComputer : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
 
-    val invModule = ModuleInventory(1)
+    val inventory = Inventory(1)
+    val invModule = ModuleInventory(inventory)
     val monitorModule = ModuleMonitor(container.ref)
-    val floppyDriveModule = ModuleFloppyDrive(container.ref, invModule, 0)
+    val floppyDriveModule = ModuleFloppyDrive(container.ref, inventory, 0)
     val networkCardModule = ModuleNetworkCard(container.ref)
 
     val computerModule = ModuleComputer(
@@ -44,9 +46,10 @@ class TileMiningRobot : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getFacing()
 
-    val invModule = ModuleInventory(17)
+    val inventory = Inventory(17)
+    val invModule = ModuleInventory(inventory)
     val monitorModule = ModuleMonitor(container.ref)
-    val floppyDriveModule = ModuleFloppyDrive(container.ref, invModule, 0)
+    val floppyDriveModule = ModuleFloppyDrive(container.ref, inventory, 0)
     val networkCardModule = ModuleNetworkCard(container.ref)
     val robotControlModule = ModuleRobotControl(container.ref, invModule)
 

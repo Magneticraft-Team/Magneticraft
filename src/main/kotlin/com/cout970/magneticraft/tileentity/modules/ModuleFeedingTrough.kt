@@ -4,6 +4,7 @@ import com.cout970.magneticraft.block.core.CommonMethods
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.shouldTick
@@ -28,7 +29,7 @@ import java.util.*
  */
 
 class ModuleFeedingTrough(
-        val invModule: ModuleInventory,
+        val inventory: Inventory,
         override val name: String = "module_feeding_trough"
 ) : IModule, IOnActivated {
 
@@ -41,7 +42,6 @@ class ModuleFeedingTrough(
     }
 
     override lateinit var container: IModuleContainer
-    val inventory get() = invModule.inventory
 
     override fun update() {
         if (world.isServer) {

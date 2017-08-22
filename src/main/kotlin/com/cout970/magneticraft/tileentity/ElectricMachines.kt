@@ -5,6 +5,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
@@ -33,10 +34,12 @@ class TileBattery : TileBase(), ITickable {
             upperVoltageLimit = ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE,
             lowerVoltageLimit = ElectricConstants.TIER_1_BATTERY_DISCHARGE_VOLTAGE
     )
-    val invModule = ModuleInventory(2)
+
+    val inventory = Inventory(2)
+    val invModule = ModuleInventory(inventory)
 
     val itemChargeModule = ModuleChargeItems(
-            invModule = invModule,
+            inventory = inventory,
             storage = storageModule,
             chargeSlot = 0,
             dischargeSlot = 1,
@@ -69,7 +72,7 @@ class TileElectricFurnace : TileBase(), ITickable {
             capacity = 10000,
             mainNode = node
     )
-    val invModule = ModuleInventory(2, capabilityFilter = {
+    val invModule = ModuleInventory(Inventory(2), capabilityFilter = {
         InventoryCapabilityFilter(it, inputSlots = listOf(0), outputSlots = listOf(1))
     })
     val processModule = ModuleElectricProcessing(

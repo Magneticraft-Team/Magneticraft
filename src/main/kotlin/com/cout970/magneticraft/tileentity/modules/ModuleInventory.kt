@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.forEach
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.registry.ITEM_HANDLER
@@ -11,13 +12,12 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.IItemHandler
-import net.minecraftforge.items.ItemStackHandler
 
 /**
  * Created by cout970 on 2017/06/12.
  */
 open class ModuleInventory(
-        size: Int,
+        val inventory: Inventory,
         override val name: String = "module_inventory",
         val capabilityFilter: (IItemHandler) -> IItemHandler? = { it },
         val onContentChange: (IItemHandler, Int) -> Unit = { _, _ -> Unit }
@@ -25,8 +25,8 @@ open class ModuleInventory(
 
     lateinit override var container: IModuleContainer
 
-    val inventory = object : ItemStackHandler(size) {
-        override fun onContentsChanged(slot: Int) = onContentChange(this, slot)
+    init {
+        inventory.onContentsChanges = onContentChange
     }
 
     override fun onBreak() {

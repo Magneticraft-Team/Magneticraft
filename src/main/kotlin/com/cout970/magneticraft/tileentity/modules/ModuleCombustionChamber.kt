@@ -5,6 +5,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.core.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MAX_BURNING_TIME
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
@@ -28,7 +29,7 @@ import net.minecraft.util.EnumParticleTypes
  * Created by cout970 on 2017/07/13.
  */
 class ModuleCombustionChamber(
-        val invModuleInventory: ModuleInventory,
+        val inventory: Inventory,
         override val name: String = "module_combustion_chamber"
 ) : IModule, IOnActivated {
 
@@ -61,10 +62,10 @@ class ModuleCombustionChamber(
             }
         } else {
             if (doorOpen && args.heldItem.item == Items.COAL) {
-                val space = 64 - invModuleInventory.inventory[0].count
+                val space = 64 - inventory[0].count
                 val toMove = Math.min(args.heldItem.count, space)
                 if (toMove > 0) {
-                    val notMoved = invModuleInventory.inventory.insertItem(0, Items.COAL.stack(toMove), false)
+                    val notMoved = inventory.insertItem(0, Items.COAL.stack(toMove), false)
                     args.heldItem.shrink(toMove - notMoved.count)
                 }
             } else {
@@ -77,7 +78,7 @@ class ModuleCombustionChamber(
 
     override fun update() {
         if (world.isClient) {
-            if (doorOpen && invModuleInventory.inventory[0].isNotEmpty) {
+            if (doorOpen && inventory[0].isNotEmpty) {
                 repeat(2) {
                     val rand = world.rand
                     val offset = (vec3Of(rand.nextFloat(), 0, rand.nextFloat()) * 2 - vec3Of(1, 0, 1)) * 0.25
@@ -119,7 +120,7 @@ class ModuleCombustionChamber(
 
     fun consumeFuel(): Boolean {
         maxBurningTime = 0
-        val stack = invModuleInventory.inventory[0]
+        val stack = inventory[0]
         if (stack.isEmpty || stack.item != Items.COAL) return false
         val time = TileEntityFurnace.getItemBurnTime(stack)
         if (time > 0) {

@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.gui.common.core.DATA_ID_ITEM_CHARGE_RATE
 import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
@@ -14,7 +15,7 @@ import com.cout970.magneticraft.tileentity.core.IModuleContainer
  * Created by cout970 on 2017/07/02.
  */
 class ModuleChargeItems(
-        val invModule: ModuleInventory,
+        val inventory: Inventory,
         val chargeSlot: Int = -1,
         val dischargeSlot: Int = -1,
         val storage: ModuleInternalStorage,
@@ -33,7 +34,7 @@ class ModuleChargeItems(
 
     fun discharge() {
         if (dischargeSlot == -1) return
-        val toDischarge = invModule.inventory[dischargeSlot]
+        val toDischarge = inventory[dischargeSlot]
         if (toDischarge.isEmpty) return
         val cap = FORGE_ENERGY!!.fromItem(toDischarge) ?: return
 
@@ -50,7 +51,7 @@ class ModuleChargeItems(
 
     fun charge() {
         if (chargeSlot == -1) return
-        val toCharge = invModule.inventory[chargeSlot]
+        val toCharge = inventory[chargeSlot]
         if (toCharge.isEmpty) return
         val cap = FORGE_ENERGY!!.fromItem(toCharge) ?: return
 

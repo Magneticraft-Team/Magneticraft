@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.misc.block.getOrientationCentered
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
@@ -21,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB
 @RegisterTileEntity("box")
 class TileBox : TileBase() {
 
-    val invModule = ModuleInventory(27)
+    val invModule = ModuleInventory(Inventory(27))
 
     init {
         initModules(invModule)
@@ -31,8 +32,9 @@ class TileBox : TileBase() {
 @RegisterTileEntity("crushing_table")
 class TileCrushingTable : TileBase() {
 
-    val invModule = ModuleInventory(1, capabilityFilter = { null })
-    val crushingModule = ModuleCrushingTable(invModule)
+    val inventory = Inventory(1)
+    val invModule = ModuleInventory(inventory, capabilityFilter = { null })
+    val crushingModule = ModuleCrushingTable(inventory)
 
     init {
         initModules(invModule, crushingModule)
@@ -44,8 +46,9 @@ class TileSluiceBox : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientationCentered()
 
-    val invModule = ModuleInventory(1, capabilityFilter = { null })
-    val sluiceBoxModule = ModuleSluiceBox({ facing }, invModule)
+    val inventory = Inventory(1)
+    val invModule = ModuleInventory(inventory, capabilityFilter = { null })
+    val sluiceBoxModule = ModuleSluiceBox({ facing }, inventory)
 
     init {
         initModules(sluiceBoxModule, invModule)

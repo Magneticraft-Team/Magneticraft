@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.set
@@ -27,7 +28,7 @@ import net.minecraft.util.SoundCategory
  */
 class ModuleSluiceBox(
         val facingGetter: () -> EnumFacing,
-        val invModuleInventory: ModuleInventory,
+        val inventory: Inventory,
         override val name: String = "module_sluice_box"
 ) : IModule, IOnActivated {
 
@@ -40,7 +41,7 @@ class ModuleSluiceBox(
         val MAX_PROGRESS = 80
     }
 
-    val level: Int get() = invModuleInventory.inventory[0].count
+    val level: Int get() = inventory[0].count
     var progressLeft = 0
     var chainDelay = 0
 
@@ -54,11 +55,11 @@ class ModuleSluiceBox(
             }
             activateChain()
         } else if (canAccept(heldItem)) {
-            val stack = invModuleInventory.inventory[0]
+            val stack = inventory[0]
             if (stack.isEmpty) {
                 val extracted = heldItem.splitStack(MAX_ITEMS)
                 if (extracted.isNotEmpty) {
-                    invModuleInventory.inventory[0] = extracted
+                    inventory[0] = extracted
                     container.sendUpdateToNearPlayers()
                 }
             } else if (stack.count < MAX_ITEMS && stack.isItemEqual(heldItem)) {
@@ -105,7 +106,7 @@ class ModuleSluiceBox(
     }
 
     fun craft() {
-        val stack = invModuleInventory.inventory[0]
+        val stack = inventory[0]
         if (stack.isEmpty) return
         val recipe = getRecipe(stack) ?: return
         val pos = this.pos + facingGetter().toBlockPos()
@@ -121,7 +122,7 @@ class ModuleSluiceBox(
             }
         }
 
-        invModuleInventory.inventory[0] = ItemStack.EMPTY
+        inventory[0] = ItemStack.EMPTY
         container.sendUpdateToNearPlayers()
     }
 

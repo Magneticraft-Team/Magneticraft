@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.computer.DeviceFloppyDrive
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.set
@@ -22,7 +23,7 @@ import net.minecraft.util.EnumHand
  */
 class ModuleFloppyDrive(
         val ref: ITileRef,
-        val invModule: ModuleInventory,
+        val inventory: Inventory,
         val slot: Int,
         override val name: String = "module_monitor"
 ) : IModule, IOnActivated {
@@ -32,7 +33,7 @@ class ModuleFloppyDrive(
     val drive: DeviceFloppyDrive = DeviceFloppyDrive(ref, this::getDisk)
 
     fun getDisk(): IFloppyDisk? {
-        return ITEM_FLOPPY_DISK!!.fromItem(invModule.inventory[slot])
+        return ITEM_FLOPPY_DISK!!.fromItem(inventory[slot])
     }
 
     override fun update() {
@@ -54,10 +55,10 @@ class ModuleFloppyDrive(
                 if (heldItem.isNotEmpty) {
                     val cap = ITEM_FLOPPY_DISK!!.fromItem(heldItem)
                     if (cap != null) {
-                        if (invModule.inventory[slot].isEmpty) {
+                        if (inventory[slot].isEmpty) {
                             val index = playerIn.inventory.currentItem
                             if (index in 0..8) {
-                                invModule.inventory[slot] = playerIn.inventory.removeStackFromSlot(index)
+                                inventory[slot] = playerIn.inventory.removeStackFromSlot(index)
                                 container.sendUpdateToNearPlayers()
                             }
                         } else {
@@ -77,9 +78,9 @@ class ModuleFloppyDrive(
             return true
         } else {
             if (worldIn.isServer && hand == EnumHand.MAIN_HAND && heldItem.isEmpty) {
-                if (invModule.inventory[slot].isNotEmpty) {
+                if (inventory[slot].isNotEmpty) {
                     playerIn.inventory.addItemStackToInventory(
-                            invModule.inventory.extractItem(slot, 64, false)
+                            inventory.extractItem(slot, 64, false)
                     )
                     container.sendUpdateToNearPlayers()
                 }
