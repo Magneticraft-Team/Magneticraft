@@ -23,6 +23,7 @@ import net.minecraft.util.EnumHand
 class ModuleFloppyDrive(
         val ref: ITileRef,
         val invModule: ModuleInventory,
+        val slot: Int,
         override val name: String = "module_monitor"
 ) : IModule, IOnActivated {
 
@@ -31,7 +32,7 @@ class ModuleFloppyDrive(
     val drive: DeviceFloppyDrive = DeviceFloppyDrive(ref, this::getDisk)
 
     fun getDisk(): IFloppyDisk? {
-        return ITEM_FLOPPY_DISK!!.fromItem(invModule.inventory[0])
+        return ITEM_FLOPPY_DISK!!.fromItem(invModule.inventory[slot])
     }
 
     override fun update() {
@@ -53,10 +54,10 @@ class ModuleFloppyDrive(
                 if (heldItem.isNotEmpty) {
                     val cap = ITEM_FLOPPY_DISK!!.fromItem(heldItem)
                     if (cap != null) {
-                        if (invModule.inventory[0].isEmpty) {
+                        if (invModule.inventory[slot].isEmpty) {
                             val index = playerIn.inventory.currentItem
                             if (index in 0..8) {
-                                invModule.inventory[0] = playerIn.inventory.removeStackFromSlot(index)
+                                invModule.inventory[slot] = playerIn.inventory.removeStackFromSlot(index)
                                 container.sendUpdateToNearPlayers()
                             }
                         } else {
@@ -76,9 +77,9 @@ class ModuleFloppyDrive(
             return true
         } else {
             if (worldIn.isServer && hand == EnumHand.MAIN_HAND && heldItem.isEmpty) {
-                if (invModule.inventory[0].isNotEmpty) {
+                if (invModule.inventory[slot].isNotEmpty) {
                     playerIn.inventory.addItemStackToInventory(
-                            invModule.inventory.extractItem(0, 64, false)
+                            invModule.inventory.extractItem(slot, 64, false)
                     )
                     container.sendUpdateToNearPlayers()
                 }
