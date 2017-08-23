@@ -1,13 +1,24 @@
 package com.cout970.magneticraft.tileentity
 
-import com.cout970.magneticraft.misc.block.getFacing
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.block.Computers
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
+import com.cout970.magneticraft.util.getList
+import com.cout970.magneticraft.util.getTagCompound
+import com.cout970.magneticraft.util.list
+import com.cout970.magneticraft.util.newNbt
+import net.minecraft.block.state.IBlockState
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2017/07/07.
@@ -39,19 +50,56 @@ class TileComputer : TileBase(), ITickable {
     override fun update() {
         super.update()
     }
+
+    override fun saveToPacket(): NBTTagCompound {
+        val moduleNbts = container.modules.filter { it !is ModuleComputer }.map { it.serializeNBT() }
+        if (moduleNbts.isNotEmpty()) {
+            return newNbt {
+                list("_modules") {
+                    moduleNbts.forEach { appendTag(it) }
+                }
+            }
+        }
+        return NBTTagCompound()
+    }
+
+    override fun loadFromPacket(nbt: NBTTagCompound) {
+        if (nbt.hasKey("_modules")) {
+            val list = nbt.getList("_modules")
+            container.modules.filter { it !is ModuleComputer }.forEachIndexed { index, module ->
+                module.deserializeNBT(list.getTagCompound(index))
+            }
+        }
+    }
 }
 
-@RegisterTileEntity("minning_robot")
+@RegisterTileEntity("mining_robot")
 class TileMiningRobot : TileBase(), ITickable {
 
-    val facing: EnumFacing get() = getBlockState().getFacing()
+    val orientation
+        get() = getBlockState()[Computers.PROPERTY_ROBOT_ORIENTATION] ?: Computers.RobotOrientation.NORTH
 
-    val inventory = Inventory(17)
+    val inventory = Inventory(18)
+    val node = ElectricNode(container.ref)
+
     val invModule = ModuleInventory(inventory)
+    val energyModule = ModuleElectricity(listOf(node))
+    val energyStorage = ModuleInternalStorage(node, 10000)
+
+    //computer
     val monitorModule = ModuleMonitor(container.ref)
-    val floppyDriveModule = ModuleFloppyDrive(container.ref, inventory, 0)
+    val floppyDriveModule = ModuleFloppyDrive(container.ref, inventory, 16)
     val networkCardModule = ModuleNetworkCard(container.ref)
-    val robotControlModule = ModuleRobotControl(container.ref, invModule)
+
+    val storageInventory = InventoryCapabilityFilter(inventory, (0..15).toList(), (0..15).toList())
+
+    val robotControlModule = ModuleRobotControl(
+            ref = container.ref,
+            inventory = storageInventory,
+            storage = energyStorage,
+            orientationGetter = { orientation },
+            orientationSetter = { world.setBlockState(pos, it.getBlockState(Computers.miningRobot)) }
+    )
 
     val computerModule = ModuleComputer(
             devices = mapOf(
@@ -63,11 +111,36 @@ class TileMiningRobot : TileBase(), ITickable {
     )
 
     init {
-        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule, robotControlModule)
+        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule, robotControlModule, energyModule)
     }
 
     override fun update() {
         super.update()
+    }
+
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
+        return oldState.block != newSate.block
+    }
+
+    override fun saveToPacket(): NBTTagCompound {
+        val moduleNbts = container.modules.filter { it !is ModuleComputer }.map { it.serializeNBT() }
+        if (moduleNbts.isNotEmpty()) {
+            return newNbt {
+                list("_modules") {
+                    moduleNbts.forEach { appendTag(it) }
+                }
+            }
+        }
+        return NBTTagCompound()
+    }
+
+    override fun loadFromPacket(nbt: NBTTagCompound) {
+        if (nbt.hasKey("_modules")) {
+            val list = nbt.getList("_modules")
+            container.modules.filter { it !is ModuleComputer }.forEachIndexed { index, module ->
+                module.deserializeNBT(list.getTagCompound(index))
+            }
+        }
     }
 }
 

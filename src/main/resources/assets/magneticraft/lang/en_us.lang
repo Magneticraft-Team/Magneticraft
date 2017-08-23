@@ -168,6 +168,7 @@ tile.magneticraft.airlock_normal.name=Airlock
 tile.magneticraft.air_bubble_on.name=Air Bubble
 tile.magneticraft.air_bubble_off.name=Air Bubble
 tile.magneticraft.computer_north.name=Computer
+tile.magneticraft.mining_robot_north.name=Mining Robot
 
 #multiblocks
 #tile.magneticraft.hydraulic_press.name=Hydraulic Press

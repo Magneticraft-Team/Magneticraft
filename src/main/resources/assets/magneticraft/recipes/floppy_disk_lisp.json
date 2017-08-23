@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "A",
+    "B"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "B": {
+      "item": "magneticraft:floppy_disk",
+      "data": 0,
+      "nbt": "{canRead:1b,canWrite:1b,label:\"Unnamed\",sectorCount:128,accessTime:1}"
+    }
+  },
+  "result": {
+    "item": "magneticraft:floppy_disk",
+    "data": 1,
+    "nbt": "{canRead:1b,canWrite:1b,label:\"Unnamed\",sectorCount:128,accessTime:1}"
+  }
+}

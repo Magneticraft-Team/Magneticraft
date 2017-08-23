@@ -31,7 +31,6 @@ class CompBookRenderer : IComponent {
         var pageIndex = 0
     }
 
-
     var pages: List<Page> = emptyList()
 
     override fun init() {
@@ -66,13 +65,17 @@ class CompBookRenderer : IComponent {
         GlStateManager.pushMatrix()
         GlStateManager.translate(gui.pos.x + textOffset.xi, gui.pos.y + textOffset.yi, 0.0)
         GlStateManager.scale(2 / 3.0, 2 / 3.0, 1.0)
-        renderPage(pages[pageIndex], vec2Of(0, 0))
+        if (pageIndex in pages.indices) {
+            renderPage(pages[pageIndex], vec2Of(0, 0))
+        }
         if (pageIndex + 1 in pages.indices) {
             renderPage(pages[pageIndex + 1], vec2Of(192, 0))
         }
         GlStateManager.popMatrix()
 
-        checkLinkClick(pages[pageIndex], mouse, textOffset)
+        if (pageIndex in pages.indices) {
+            checkLinkClick(pages[pageIndex], mouse, textOffset)
+        }
         if ((pageIndex + 1) in pages.indices) {
             checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0)+ textOffset)
         }
@@ -93,12 +96,14 @@ class CompBookRenderer : IComponent {
             openPage("index", 0)
         }
 
-        var link = checkLinkClick(pages[pageIndex], mouse, textOffset)
-        if (link == null && (pageIndex + 1) in pages.indices) {
-            link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0) + textOffset)
-        }
-        if (link != null) {
-            openPage(link.linkSection, link.linkPage)
+        if (pageIndex in pages.indices) {
+            var link = checkLinkClick(pages[pageIndex], mouse, textOffset)
+            if (link == null && (pageIndex + 1) in pages.indices) {
+                link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0) + textOffset)
+            }
+            if (link != null) {
+                openPage(link.linkSection, link.linkPage)
+            }
         }
 
         return false

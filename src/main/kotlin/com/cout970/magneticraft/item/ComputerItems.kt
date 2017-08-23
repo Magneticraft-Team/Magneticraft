@@ -18,7 +18,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
 import net.minecraftforge.fml.common.FMLCommonHandler
 import java.io.File
 import java.util.*
-import java.util.regex.Pattern
 
 
 /**
@@ -51,11 +50,7 @@ object ComputerItems : IItemMaker {
                 FloppyDiskCapabilityProvider(it.stack)
             }
             addInformation = {
-                val name = when (it.stack.tagCompound?.hasKey("label")) {
-                    true -> ITEM_FLOPPY_DISK!!.fromItem(it.stack)?.label
-                    else -> null
-                }
-                it.tooltip.add(name ?: "Unnamed")
+                it.tooltip.add(ITEM_FLOPPY_DISK!!.fromItem(it.stack)?.label ?: "Unnamed")
             }
             maxStackSize = 1
             createStack = { item, amount, meta -> ItemStack(item, amount, meta).also { fillNBT(it) } }
@@ -70,6 +65,7 @@ object ComputerItems : IItemMaker {
 
     fun createNBT(sectors: Int, read: Boolean, write: Boolean): NBTTagCompound {
         return newNbt {
+            add("label", "Unnamed")
             add("sectorCount", sectors)
             add("accessTime", 1)
             add("canRead", read)
@@ -78,7 +74,6 @@ object ComputerItems : IItemMaker {
     }
 
     private val cache = mutableMapOf<String, String>()
-    private val spacesRegex = Pattern.compile("[^(\\w|\\d)]+").toRegex()
 
     @Suppress("UNCHECKED_CAST")
     class FloppyDiskCapabilityProvider(val stack: ItemStack) : ICapabilityProvider {
@@ -100,7 +95,7 @@ object ComputerItems : IItemMaker {
             if (stack.itemDamage == 0) { // user created disks
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
                 if (!parent.exists()) parent.mkdir()
-                return File(parent, "floppy_${label.replace(spacesRegex, "_")}.img")
+                return File(parent, "floppy_${getSerialNumber()}.img")
             } else { // disks copied from pre-existent ROMs
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
                 if (!parent.exists()) {
@@ -125,12 +120,16 @@ object ComputerItems : IItemMaker {
             }
         }
 
-        override fun getLabel(): String {
+        fun getSerialNumber(): String {
             val nbt = stack.checkNBT()
-            if (!nbt.hasKey("label")) {
+            if (!nbt.hasKey("serialNumber")) {
                 val name = Random().ints(8).toArray().map { "0123456789ABCDEF"[it and 0xF] }.joinToString("")
-                nbt.add("label", name)
+                nbt.add("serialNumber", name)
             }
+            return nbt.getString("serialNumber")
+        }
+
+        override fun getLabel(): String {
             return stack.getString("label")
         }
 

@@ -10,6 +10,7 @@ import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
 import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.guiTexture
@@ -65,7 +66,7 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
     }
 
     fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
-        val ibd = IBD().apply { setInteger(2, button.id) }
+        val ibd = IBD().apply { setInteger(DATA_ID_SHELVING_UNIT_LEVEL, button.id) }
         container.sendUpdate(ibd)
         (container as ContainerShelvingUnit).switchLevel(ModuleShelvingUnitMb.Level.values()[button.id])
         return true

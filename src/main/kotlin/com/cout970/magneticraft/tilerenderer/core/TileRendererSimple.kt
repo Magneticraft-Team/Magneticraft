@@ -26,8 +26,14 @@ abstract class TileRendererSimple<T : TileBase>(
     }
 
     companion object {
+
         fun filterOf(names: List<String>): List<(String) -> Boolean> {
             return listOf({ name: String -> name !in names }) + names.map { name -> { it: String -> it == name } }
+        }
+
+        fun filtersOf(vararg names: List<String>): List<(String) -> Boolean> {
+            return listOf({ name: String -> names.none { name in it } }) +
+                   names.flatMap { it.map { name -> { it: String -> it == name } } }
         }
 
         fun addInverse(vararg list: (String) -> Boolean): List<(String) -> Boolean> {

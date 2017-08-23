@@ -1,0 +1,34 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A ",
+    "ABA",
+    "CDE"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "B": {
+      "item": "magneticraft:computer",
+      "data": 0
+    },
+    "C": {
+      "item": "magneticraft:battery_item_low",
+      "nbt": "{}"
+    },
+    "D": {
+      "item": "magneticraft:crafting",
+      "data": 2
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "chest"
+    }
+  },
+  "result": {
+    "item": "magneticraft:mining_robot",
+    "data": 0
+  }
+}

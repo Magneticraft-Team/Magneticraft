@@ -5,6 +5,7 @@ import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_SCROLL
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -33,7 +34,7 @@ class CompShelvingUnit(
         val scroll = scrollBar.getScroll() / 19f
         if (container.scroll != scroll) {
             container.withScroll(scroll)
-            container.sendUpdate(IBD().apply { setFloat(0, scroll) })
+            container.sendUpdate(IBD().apply { setFloat(DATA_ID_SHELVING_UNIT_SCROLL, scroll) })
         }
         val column = Math.max(0, Math.round(scroll * ((container.currentSlots.size / 9f) - 5)))
         gui.bindTexture(guiTexture("shelving_unit"))

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11
  * Created by cout970 on 20/05/2016.
  */
 
-class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
+class MonitorComponent(val monitor: DeviceMonitor, val green: Boolean) : IComponent {
 
     val TEXTURE = resource("textures/gui/monitor_text.png")
     var pressedKeyNum = -1
@@ -24,14 +24,16 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
 
         gui.bindTexture(TEXTURE)
-        GL11.glColor4f(76.0f / 256f, 1.0f, 0.0f, 1.0f)
+        if (green) {
+            GL11.glColor4f(76.0f / 256f, 1.0f, 0.0f, 1.0f)
+        }
         val lines = monitor.lines
         val columns = monitor.columns
         val scale = 4
-        val size = Vec2d(scale, scale)
+        val charSize = Vec2d(scale, scale)
 
-        for (line in 0..lines - 1) {
-            for (column in 0..columns - 1) {
+        for (line in 0 until lines) {
+            for (column in 0 until columns) {
                 var character = monitor.getChar(line * columns + column) and 0xFF
                 if (line == monitor.cursorLine && column == monitor.cursorColumn && monitor.world.worldTime % 20 >= 10) {
                     character = character xor 128
@@ -41,7 +43,7 @@ class MonitorComponent(val monitor: DeviceMonitor) : IComponent {
                     val x = character and 15
                     val y = character shr 4
                     gui.drawTexture(DrawableBox(
-                            screen = pos to size,
+                            screen = pos to charSize,
                             texture = Pair(Vec2d(x, y) * 16, Vec2d(16, 16)),
                             textureSize = Vec2d(256, 256)
                     ))

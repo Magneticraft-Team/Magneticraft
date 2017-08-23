@@ -28,6 +28,7 @@ object GuiHandler : IGuiHandler {
             is TileBattery -> GuiBattery(serverElement)
             is TileElectricFurnace -> GuiElectricFurnace(serverElement)
             is TileComputer -> GuiComputer(serverElement)
+            is TileMiningRobot -> GuiMiningRobot(serverElement)
             is TileCombustionChamber -> GuiCombustionChamber(serverElement)
             else -> null
         }
@@ -42,11 +43,13 @@ object GuiHandler : IGuiHandler {
         val tile = world.getTileEntity(pos)
         return when (tile) {
             is TileBox -> ContainerBox(tile, player, world, pos)
-            is TileShelvingUnit -> ContainerShelvingUnit(tile, player, world, pos,
-                    ModuleShelvingUnitMb.Level.values()[ID])
+            is TileShelvingUnit -> {
+                ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnitMb.Level.values()[ID])
+            }
             is TileBattery -> ContainerBattery(tile, player, world, pos)
             is TileElectricFurnace -> ContainerElectricFurnace(tile, player, world, pos)
             is TileComputer -> ContainerComputer(tile, player, world, pos)
+            is TileMiningRobot -> ContainerMiningRobot(tile, player, world, pos)
             is TileCombustionChamber -> ContainerCombustionChamber(tile, player, world, pos)
             else -> null
         }

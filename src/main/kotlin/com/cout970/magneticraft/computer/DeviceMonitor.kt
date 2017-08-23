@@ -3,6 +3,7 @@ package com.cout970.magneticraft.computer
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
+import com.cout970.magneticraft.gui.common.core.*
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.split
 import net.minecraft.nbt.NBTTagCompound
@@ -28,7 +29,7 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     var cursorLine = 0
     var cursorColumn = 0
     var currentLine = 0
-    private var buffer: ByteArray? = null
+    private var lineBuffer: ByteArray? = null
 
     //client aux vars
     var isKeyPressed = false
@@ -93,8 +94,8 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     }
 
     fun getBuffer(): ByteArray {
-        if (buffer == null || buffer!!.size != 80) buffer = ByteArray(80)
-        return buffer!!
+        if (lineBuffer == null || lineBuffer!!.size != columns) lineBuffer = ByteArray(columns)
+        return lineBuffer!!
     }
 
     fun getScreenBuffer(): ByteArray {
@@ -166,21 +167,21 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     //Client to Server sync
     fun saveToServer(ibd: IBD) {
-        ibd.setInteger(0, if (isKeyPressed) 1 else 0)
-        ibd.setInteger(1, keyPressed)
+        ibd.setInteger(DATA_ID_MONITOR_HAS_KEY, if (isKeyPressed) 1 else 0)
+        ibd.setInteger(DATA_ID_MONITOR_KEY, keyPressed)
         isKeyPressed = false
 
-        ibd.setInteger(2, if (isMousePressed) 1 else 0)
-        ibd.setInteger(3, mousePressed)
-        ibd.setInteger(4, mouseX)
-        ibd.setInteger(5, mouseY)
+        ibd.setInteger(DATA_ID_MONITOR_MOUSE_CLICK, if (isMousePressed) 1 else 0)
+        ibd.setInteger(DATA_ID_MONITOR_MOUSE_BUTTON, mousePressed)
+        ibd.setInteger(DATA_ID_MONITOR_MOUSE_X, mouseX)
+        ibd.setInteger(DATA_ID_MONITOR_MOUSE_Y, mouseY)
         isMousePressed = false
     }
 
     fun loadFromClient(ibd: IBD) {
 
-        ibd.getInteger(0) {
-            val key = ibd.getInteger(1)
+        ibd.getInteger(DATA_ID_MONITOR_HAS_KEY) {
+            val key = ibd.getInteger(DATA_ID_MONITOR_KEY)
 
             if (regKeyBufferSize != getKeyBuffer().size / 2) {
                 val pos = (regKeyBufferPtr + regKeyBufferSize) % (keyBuffer!!.size / 2)
@@ -190,10 +191,10 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
             }
         }
 
-        ibd.getInteger(2) {
-            val mouseButton = ibd.getInteger(3)
-            val mouseX = ibd.getInteger(4)
-            val mouseY = ibd.getInteger(5)
+        ibd.getInteger(DATA_ID_MONITOR_MOUSE_CLICK) {
+            val mouseButton = ibd.getInteger(DATA_ID_MONITOR_MOUSE_BUTTON)
+            val mouseX = ibd.getInteger(DATA_ID_MONITOR_MOUSE_X)
+            val mouseY = ibd.getInteger(DATA_ID_MONITOR_MOUSE_Y)
 
             if (regMouseBufferSize != getMouseBuffer().size / 6) {
                 val pos = ((regMouseBufferPtr + regMouseBufferSize) * 6) % keyBuffer!!.size
@@ -210,14 +211,14 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     //Server to Client sync
     fun saveToClient(ibd: IBD) {
-        ibd.setInteger(0, cursorLine)
-        ibd.setInteger(1, cursorColumn)
-        ibd.setByteArray(2, getScreenBuffer())
+        ibd.setInteger(DATA_ID_MONITOR_CURSOR_LINE, cursorLine)
+        ibd.setInteger(DATA_ID_MONITOR_CURSOR_COLUMN, cursorColumn)
+        ibd.setByteArray(DATA_ID_MONITOR_BUFFER, getScreenBuffer())
     }
 
     fun loadFromServer(ibd: IBD) {
-        ibd.getInteger(0) { cursorLine = it }
-        ibd.getInteger(1) { cursorColumn = it }
-        ibd.getByteArray(2) { System.arraycopy(it, 0, getScreenBuffer(), 0, screenSize) }
+        ibd.getInteger(DATA_ID_MONITOR_CURSOR_LINE) { cursorLine = it }
+        ibd.getInteger(DATA_ID_MONITOR_CURSOR_COLUMN) { cursorColumn = it }
+        ibd.getByteArray(DATA_ID_MONITOR_BUFFER) { System.arraycopy(it, 0, getScreenBuffer(), 0, screenSize) }
     }
 }

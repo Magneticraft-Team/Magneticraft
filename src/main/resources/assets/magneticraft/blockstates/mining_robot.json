@@ -1,0 +1,24 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/computers/mining_robot"
+        }
+    },
+    "variants": {
+        "north": [{}],
+        "east": [{}],
+        "south": [{}],
+        "west": [{}],
+        "up_north": [{}],
+        "up_east": [{}],
+        "up_south": [{}],
+        "up_west": [{}],
+        "down_north": [{}],
+        "down_east": [{}],
+        "down_south": [{}],
+        "down_west": [{}]
+    }
+}

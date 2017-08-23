@@ -11,11 +11,11 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class ModuleMonitor(
         val ref: ITileRef,
-        val monitor: DeviceMonitor = DeviceMonitor(ref),
         override val name: String = "module_monitor"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
+    val monitor: DeviceMonitor = DeviceMonitor(ref)
 
     override fun serializeNBT(): NBTTagCompound {
         return monitor.serializeNBT()

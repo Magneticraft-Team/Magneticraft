@@ -134,12 +134,19 @@ abstract class TileBase : TileEntity() {
                 .forEach { it.connection.sendPacket(packet) }
     }
 
+    open fun saveToPacket() = save()
+    open fun loadFromPacket(nbt: NBTTagCompound) = load(nbt)
+
     override fun getUpdatePacket(): SPacketUpdateTileEntity? {
-        return SPacketUpdateTileEntity(pos, 0, writeToNBT(NBTTagCompound()))
+        return SPacketUpdateTileEntity(pos, 1, saveToPacket())
     }
 
     override fun onDataPacket(net: NetworkManager?, pkt: SPacketUpdateTileEntity) {
-        readFromNBT(pkt.nbtCompound)
+        if (pkt.tileEntityType == 1) {
+            loadFromPacket(pkt.nbtCompound)
+        } else {
+            readFromNBT(pkt.nbtCompound)
+        }
     }
 
     override fun setWorldCreate(worldIn: World) {

@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_SCROLL
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -85,14 +88,14 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     }
 
     override fun receiveDataFromClient(ibd: IBD) {
-        ibd.getFloat(0) { withScroll(it) }
-        ibd.getString(1) { filterSlots(it) }
-        ibd.getInteger(2) { switchLevel(ModuleShelvingUnitMb.Level.values()[it]) }
+        ibd.getFloat(DATA_ID_SHELVING_UNIT_SCROLL) { withScroll(it) }
+        ibd.getString(DATA_ID_SHELVING_UNIT_FILTER) { filterSlots(it) }
+        ibd.getInteger(DATA_ID_SHELVING_UNIT_LEVEL) { switchLevel(ModuleShelvingUnitMb.Level.values()[it]) }
         super.receiveDataFromClient(ibd)
     }
 
     fun setFilter(text: String) {
         filterSlots(text)
-        sendUpdate(IBD().apply { setString(1, text) })
+        sendUpdate(IBD().apply { setString(DATA_ID_SHELVING_UNIT_FILTER, text) })
     }
 }
