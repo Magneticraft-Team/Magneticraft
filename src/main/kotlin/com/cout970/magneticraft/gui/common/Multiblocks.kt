@@ -27,6 +27,7 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     var currentSlots = emptyList<SlotShelvingUnit>()
     var scroll = 0f
     var currentLevel = level
+    var filterText: String = ""
 
     init {
         val inv = tile.invModule.inventory
@@ -78,6 +79,7 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     }
 
     fun filterSlots(filter: String) {
+        filterText = filter
         if (filter.isEmpty() || filter.isBlank()) {
             switchLevel(currentLevel)
             return

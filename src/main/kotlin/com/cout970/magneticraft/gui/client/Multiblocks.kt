@@ -10,6 +10,7 @@ import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
 import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
@@ -24,13 +25,15 @@ import org.lwjgl.input.Keyboard
 
 class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
 
+    lateinit var textInput: CompTextInput
+
     override fun initComponents() {
         xSize = 194
         ySize = 207
         val texture = guiTexture("shelving_unit")
         components.add(CompBackground(texture, size = vec2Of(194, 207)))
         val scrollBar = CompScrollBar(vec2Of(174, 21), texture = texture)
-        val textInput = CompTextInput(fontRenderer, vec2Of(10, 7), vec2Of(86, 13))
+        textInput = CompTextInput(fontRenderer, vec2Of(10, 7), vec2Of(86, 13)).apply { isFocused = true }
         val button1Map = mapOf(
                 ButtonState.UNPRESSED to (vec2Of(194, 75) to vec2Of(23, 24)),
                 ButtonState.HOVER_UNPRESSED to (vec2Of(194, 75) to vec2Of(23, 24)),
@@ -66,9 +69,15 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
     }
 
     fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
-        val ibd = IBD().apply { setInteger(DATA_ID_SHELVING_UNIT_LEVEL, button.id) }
+        val ibd = IBD().apply {
+            setInteger(DATA_ID_SHELVING_UNIT_LEVEL, button.id)
+            setString(DATA_ID_SHELVING_UNIT_FILTER, "")
+        }
+        (container as ContainerShelvingUnit)
+        textInput.text = ""
+        container.filterSlots("")
         container.sendUpdate(ibd)
-        (container as ContainerShelvingUnit).switchLevel(ModuleShelvingUnitMb.Level.values()[button.id])
+        container.switchLevel(ModuleShelvingUnitMb.Level.values()[button.id])
         return true
     }
 

@@ -5,8 +5,10 @@ import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
+import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.GuiTextField
+import org.lwjgl.opengl.GL11
 
 
 /**
@@ -30,7 +32,11 @@ class CompTextInput(
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         x = gui.pos.xi + pos.xi
         y = gui.pos.yi + pos.yi
+        if (isFocused) {
+            gui.drawColor(gui.pos + pos - vec2Of(2) to size + vec2Of(2, 0), 0x70654FF7)
+        }
         drawTextBox()
+        GL11.glColor4f(1f, 1f, 1f, 1f)
     }
 
     override fun onMouseClick(mouse: Vec2d, mouseButton: Int): Boolean {
