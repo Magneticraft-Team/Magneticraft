@@ -97,6 +97,7 @@ class TileMiningRobot : TileBase(), ITickable {
             ref = container.ref,
             inventory = storageInventory,
             storage = energyStorage,
+            node = node,
             orientationGetter = { orientation },
             orientationSetter = { world.setBlockState(pos, it.getBlockState(Computers.miningRobot)) }
     )
@@ -111,7 +112,8 @@ class TileMiningRobot : TileBase(), ITickable {
     )
 
     init {
-        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule, robotControlModule, energyModule)
+        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule, robotControlModule,
+                energyModule, energyStorage)
     }
 
     override fun update() {

@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
 import com.cout970.magneticraft.block.ElectricConductors
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
@@ -76,17 +77,17 @@ class TileConnector : TileBase(), ITickable {
                             ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
                     val accepted = Math.min(
                             handler.receiveEnergy(amount, true),
-                            node.applyPower(-amount.toDouble(), true).toInt()
+                            node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
                     )
                     if (accepted > 0) {
                         handler.receiveEnergy(accepted, false)
-                        node.applyPower(-accepted.toDouble(), false)
+                        node.applyPower(-accepted.toDouble() * Config.wattsToFE, false)
                     }
                 }
             }
         }
         if (Debug.DEBUG) {
-//            sendUpdateToNearPlayers()
+            sendUpdateToNearPlayers()
         }
     }
 

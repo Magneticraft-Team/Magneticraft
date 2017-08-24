@@ -2,7 +2,7 @@ package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
-import com.cout970.magneticraft.gui.client.components.CompElectricBar
+import com.cout970.magneticraft.gui.client.components.bars.CompElectricBar
 import com.cout970.magneticraft.gui.client.components.bars.BatteryStorageBar
 import com.cout970.magneticraft.gui.client.components.bars.CallbackBarProvider
 import com.cout970.magneticraft.gui.client.components.bars.CompVerticalBar

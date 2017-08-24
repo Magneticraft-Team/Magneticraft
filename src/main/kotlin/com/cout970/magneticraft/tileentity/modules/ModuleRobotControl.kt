@@ -1,9 +1,12 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.Computers
 import com.cout970.magneticraft.computer.DeviceRobotControl
 import com.cout970.magneticraft.computer.IMiningRobot
+import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.inventory.canAcceptAll
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -23,6 +26,7 @@ class ModuleRobotControl(
         val ref: ITileRef,
         val inventory: IItemHandler,
         val storage: ModuleInternalStorage,
+        val node: ElectricNode,
         val orientationGetter: () -> Computers.RobotOrientation,
         val orientationSetter: (Computers.RobotOrientation) -> Unit,
         override val name: String = "module_network_card"
@@ -56,6 +60,9 @@ class ModuleRobotControl(
             }
         }
         runTask()
+        if(node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE){
+            node.applyPower(-Config.miningRobotPassiveConsumption, false)
+        }
     }
 
     fun runTask() {

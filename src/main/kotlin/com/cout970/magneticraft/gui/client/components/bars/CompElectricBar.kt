@@ -1,8 +1,6 @@
-package com.cout970.magneticraft.gui.client.components
+package com.cout970.magneticraft.gui.client.components.bars
 
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.gui.client.components.bars.CompVerticalBar
-import com.cout970.magneticraft.gui.client.components.bars.IBarProvider
 import com.cout970.magneticraft.util.clamp
 import com.cout970.magneticraft.util.vector.Vec2d
 

@@ -42,11 +42,8 @@ object Config {
                                                        "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Incendiary Generator Energy Production")
-    var incendiaryGeneratorMaxProduction = 40.0
-
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Consumption")
-    var electricHeaterMaxConsumption = 20.0
+//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Consumption")
+//    var electricHeaterMaxConsumption = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0
@@ -58,14 +55,14 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: cost of removing a water block")
     var airlockAirCost = 2.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
-    var hydraulicPressConsumption = 40.0
-
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
-    var grinderConsumption = 40.0
-
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
-    var sifterConsumption = 10.0
+//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
+//    var hydraulicPressConsumption = 40.0
+//
+//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
+//    var grinderConsumption = 40.0
+//
+//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
+//    var sifterConsumption = 10.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
     var solarPanelMaxProduction = 160.0
@@ -91,5 +88,8 @@ object Config {
 
     @ConfigValue(category = CATEGORY_PC, comment = "Max TCP connections in all PCs")
     var maxTcpConnections: Int = 8
+
+    @ConfigValue(category = CATEGORY_PC, comment = "Energy consumed every tick by the mining robot")
+    var miningRobotPassiveConsumption: Double = 1.0
 
 }
