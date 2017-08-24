@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.Computers
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -84,14 +85,23 @@ class TileMiningRobot : TileBase(), ITickable {
 
     val invModule = ModuleInventory(inventory)
     val energyModule = ModuleElectricity(listOf(node))
-    val energyStorage = ModuleInternalStorage(node, 10000)
+
+    val energyStorage = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10000,
+            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
+    )
 
     //computer
     val monitorModule = ModuleMonitor(container.ref)
-    val floppyDriveModule = ModuleFloppyDrive(container.ref, inventory, 16)
+    val floppyDriveModule = ModuleFloppyDrive(ref = container.ref, inventory = inventory, slot = 16)
     val networkCardModule = ModuleNetworkCard(container.ref)
 
-    val storageInventory = InventoryCapabilityFilter(inventory, (0..15).toList(), (0..15).toList())
+    val storageInventory = InventoryCapabilityFilter(
+            inventory = inventory,
+            inputSlots = (0..15).toList(),
+            outputSlots = (0..15).toList()
+    )
 
     val robotControlModule = ModuleRobotControl(
             ref = container.ref,

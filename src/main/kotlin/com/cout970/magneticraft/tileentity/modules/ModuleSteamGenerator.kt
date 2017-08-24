@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -24,17 +25,24 @@ class ModuleSteamGenerator(
         val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_OPERATION
     }
 
-    override fun update() {
-        if (world.isClient) return
-        if (steamTank.fluidAmount < STEAM_PER_OPERATION) return
+    val producction = ValueAverage()
+
+    fun getAvailableOperations(): Int {
+        if (steamTank.fluidAmount < STEAM_PER_OPERATION) return 0
 
         val fluidLimit = steamTank.fluidAmount / STEAM_PER_OPERATION
         val energyLimit = (storage.capacity - storage.energy) / ENERGY_PER_OPERATION
-        val operations = Math.min(Math.min(fluidLimit, energyLimit), MAX_OPERATIONS_PER_TICK)
+        return Math.min(Math.min(fluidLimit, energyLimit), MAX_OPERATIONS_PER_TICK)
+    }
 
+    override fun update() {
+        if (world.isClient) return
+        val operations = getAvailableOperations()
         if (operations > 0) {
             steamTank.drain(STEAM_PER_OPERATION * operations, true)
             storage.energy += ENERGY_PER_OPERATION * operations
+            producction += operations
         }
+        producction.tick()
     }
 }

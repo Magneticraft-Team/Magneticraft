@@ -181,7 +181,8 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     val steamEngineMbModule = ModuleSteamEngineMb(
             facingGetter = { facing },
-            energyModule = energyModule
+            energyModule = energyModule,
+            steamProduction = steamGeneratorModule.producction
     )
 
     override val multiblockModule = ModuleMultiblockCenter(

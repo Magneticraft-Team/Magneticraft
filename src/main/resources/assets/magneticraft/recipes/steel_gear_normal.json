@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateSteel"
+    }
+  },
+  "result": {
+    "item": "magneticraft:steel_gear"
+  }
+}

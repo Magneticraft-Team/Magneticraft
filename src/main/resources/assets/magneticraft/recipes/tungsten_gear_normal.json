@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotTungsten"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateTungsten"
+    }
+  },
+  "result": {
+    "item": "magneticraft:tungsten_gear"
+  }
+}

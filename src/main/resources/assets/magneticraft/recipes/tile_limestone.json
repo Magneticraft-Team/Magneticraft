@@ -16,6 +16,7 @@
   },
   "result": {
     "item": "magneticraft:tile_limestone",
-    "data": 0
+    "data": 0,
+    "count": 4
   }
 }

@@ -3,8 +3,11 @@ package com.cout970.magneticraft.tileentity.modules
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -16,6 +19,7 @@ import com.cout970.magneticraft.util.vector.*
 import com.cout970.vector.extensions.times
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumParticleTypes
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraftforge.common.capabilities.Capability
@@ -27,6 +31,7 @@ import net.minecraftforge.common.capabilities.Capability
 class ModuleSteamEngineMb(
         val facingGetter: () -> EnumFacing,
         val energyModule: ModuleElectricity,
+        val steamProduction: ValueAverage,
         override val name: String = "module_steam_engine_mb"
 ) : IModule, IOnActivated {
 
@@ -55,8 +60,24 @@ class ModuleSteamEngineMb(
     }
 
     override fun update() {
-        if(auxTime > 0){
+        if (auxTime > 0) {
             auxTime--
+        }
+        if (world.isServer && container.shouldTick(40)) {
+            container.sendUpdateToNearPlayers()
+        }
+        if (world.isClient && steamProduction.storage > 0) {
+            if (world.rand.nextFloat() > 0.85) {
+                val toFront = facing.opposite.directionVec.toVec3d()
+                val particlePos = pos.toVec3d() + vec3Of(0.5, 1, 0.5) + toFront * 0.25
+
+                val randVec = vec3Of(world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat()) * 2 - 1
+                val randDir = randVec * vec3Of(0.00625) + vec3Of(0, 0.0625, 0)
+
+                world.spawnParticle(EnumParticleTypes.CLOUD,
+                        particlePos.x, particlePos.y, particlePos.z,
+                        randDir.x, randDir.y, randDir.z)
+            }
         }
     }
 
@@ -74,7 +95,7 @@ class ModuleSteamEngineMb(
                     container.sendUpdateToNearPlayers()
                 }
             } else {
-                if(index < lidBoxes.size){
+                if (index < lidBoxes.size) {
                     lidOpen = true
                     auxTime = 20
                     container.sendUpdateToNearPlayers()
@@ -119,10 +140,12 @@ class ModuleSteamEngineMb(
     override fun serializeNBT(): NBTTagCompound = newNbt {
         add("lidOpen", lidOpen)
         add("auxTime", auxTime)
+        add("energyProduction", steamProduction.average)
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         lidOpen = nbt.getBoolean("lidOpen")
         auxTime = nbt.getInteger("auxTime")
+        steamProduction.storage = nbt.getFloat("energyProduction")
     }
 }
