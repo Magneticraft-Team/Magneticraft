@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.gui.client.guide
 
+import com.cout970.magneticraft.util.ResourceList
 import net.minecraft.client.Minecraft
 
 /**
@@ -11,27 +12,29 @@ data class Book(val sections: Map<String, Section>)
 data class Section(val name: String, val document: MarkdownDocument)
 
 fun loadBook(): Book {
-    val loader = Thread.currentThread().contextClassLoader
-    val stream = loader.getResourceAsStream("assets/magneticraft/guide")
-    val langOptions = stream.reader().readLines()
-    val currentLang = Minecraft.getMinecraft().languageManager.currentLanguage.languageCode
 
-    val sections = if (currentLang in langOptions) {
-        loadFromLang(currentLang)
-    } else {
-        loadFromLang("en_us")
-    }
-    return Book((sections + createIndexPage(sections)).map { it.name to it }.toMap())
-}
+    try {
+        val langOptions = ResourceList.getGuideBookLanguages()
+        val currentLang = Minecraft.getMinecraft().languageManager.currentLanguage.languageCode
 
-fun loadFromLang(lang: String): List<Section> {
-    val loader = Thread.currentThread().contextClassLoader
-    val stream = loader.getResourceAsStream("assets/magneticraft/guide/$lang")
-    val files = stream.reader().readLines()
-    return files.map {
-        val sectionStream = loader.getResourceAsStream("assets/magneticraft/guide/$lang/$it")
-        val text = sectionStream.reader().readText()
-        Section(it.removeSuffix(".md"), MarkdownDocument(parseChildren(text)))
+        val lang = if (currentLang in langOptions) currentLang else "en_us"
+
+        val locations = ResourceList.getGuideBookPages(lang)
+
+        val sections = locations.map {
+            it to Minecraft.getMinecraft().resourceManager.getResource(it)
+        }.mapNotNull { (loc, res) ->
+            val text = res.inputStream.reader().readText()
+            if(text.isEmpty()) return@mapNotNull null
+            val name = loc.resourcePath.removePrefix("guide/$lang/").removeSuffix(".md")
+            Section(name, MarkdownDocument(parseChildren(text)))
+        }
+
+        return Book((sections + createIndexPage(sections)).map { it.name to it }.toMap())
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return Book(emptyMap())
     }
 }
 
@@ -45,9 +48,10 @@ fun createIndexPage(sections: List<Section>): Section {
 
     ) + sections.map {
         MarkdownLink(it.name + "#0", listOf(
-                MarkdownText("* " +it.name.replace("-", " ") + "\n"))
+                MarkdownText("* " + it.name.replace("-", " ").capitalize() + "\n"))
         )
     }
 
     return Section("index", MarkdownDocument(children))
 }
+

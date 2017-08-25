@@ -38,6 +38,9 @@ object Magneticraft {
     //The reference to the config file used by ConfigHandler
     lateinit var configFile: File
 
+    //The jar file of the mod
+    lateinit var sourceFile: File
+
     // Used to auto-register classes with an specific annotation
     internal lateinit var asmData: ASMDataTable
 
@@ -59,6 +62,7 @@ object Magneticraft {
         asmData = event.asmData
         log = event.modLog
         configFile = event.suggestedConfigurationFile
+        sourceFile = event.sourceFile
 
         val time = measureTimeMillis {
             //Enables the creative tab

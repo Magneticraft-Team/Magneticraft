@@ -9,7 +9,7 @@ Default config values:
 - Max Y level: 70
 
 **Lead Ore**
-
+//TODO
 
 **Tungsten Ore**
 
@@ -18,4 +18,5 @@ Generates from around Y: to Y:
 
 **Limestone**
 
-A common rock type that generates in large veins.
+A common rock type that generates in large veins
+//TODO

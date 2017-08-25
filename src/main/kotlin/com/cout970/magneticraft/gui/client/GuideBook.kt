@@ -13,7 +13,7 @@ import net.minecraft.world.World
 
 class ContainerGuideBook(player: EntityPlayer, world: World, pos: BlockPos) : ContainerBase(player, world, pos)
 
-class GuiGuideBook(val containerBook: ContainerGuideBook) : GuiBase(containerBook) {
+class GuiGuideBook(cont: ContainerBase) : GuiBase(cont) {
 
     override fun initComponents() {
         xSize = 280

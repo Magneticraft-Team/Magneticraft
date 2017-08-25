@@ -44,7 +44,7 @@ class CompBookRenderer : IComponent {
     }
 
     fun openSection() {
-        val section = book.sections[currentSection]!!
+        val section = book.sections[currentSection] ?: Section("empty", MarkdownDocument(emptyList()))
         val doc = section.document
 
         pages = doc.mapToPages()
@@ -77,7 +77,7 @@ class CompBookRenderer : IComponent {
             checkLinkClick(pages[pageIndex], mouse, textOffset)
         }
         if ((pageIndex + 1) in pages.indices) {
-            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0)+ textOffset)
+            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0) + textOffset)
         }
     }
 
@@ -140,7 +140,7 @@ class CompBookRenderer : IComponent {
         }
     }
 
-    fun Context.newLine(){
+    fun Context.newLine() {
         lastPosY += gui.fontHelper.FONT_HEIGHT
         lastPosX = 0
         if (lastPosY > 190) {
