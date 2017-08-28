@@ -4,10 +4,7 @@ import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
-import com.cout970.magneticraft.tileentity.TileAirLock
-import com.cout970.magneticraft.tileentity.TileBattery
-import com.cout970.magneticraft.tileentity.TileElectricFurnace
-import com.cout970.magneticraft.tileentity.TileInfiniteEnergy
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -30,6 +27,7 @@ object ElectricMachines : IBlockMaker {
     lateinit var infiniteEnergy: BlockBase private set
     lateinit var airLock: BlockBase private set
     lateinit var airBubble: BlockBase private set
+    lateinit var thermopile: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -104,7 +102,13 @@ object ElectricMachines : IBlockMaker {
             factory = factoryOf(::TileAirLock)
         }.build()
 
-        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock)
+        thermopile = builder.withName("thermopile").copy {
+            factory = factoryOf(::TileThermopile)
+            //methods
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile)
     }
 
     enum class DecayMode(

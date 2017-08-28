@@ -25,7 +25,7 @@ class ModuleSteamGenerator(
         val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_OPERATION
     }
 
-    val producction = ValueAverage()
+    val production = ValueAverage()
 
     fun getAvailableOperations(): Int {
         if (steamTank.fluidAmount < STEAM_PER_OPERATION) return 0
@@ -41,8 +41,8 @@ class ModuleSteamGenerator(
         if (operations > 0) {
             steamTank.drain(STEAM_PER_OPERATION * operations, true)
             storage.energy += ENERGY_PER_OPERATION * operations
-            producction += operations
+            production += operations
         }
-        producction.tick()
+        production.tick()
     }
 }

@@ -1,0 +1,12 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"normal": [{
+			"model": "cube_column",
+			"textures": {
+				"end": "magneticraft:blocks/electric_machines/thermopile_top",
+				"side": "magneticraft:blocks/electric_machines/thermopile"
+			}
+		}]
+	}
+}

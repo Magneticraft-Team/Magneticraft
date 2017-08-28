@@ -8,6 +8,7 @@ import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
+import com.cout970.magneticraft.tileentity.TileThermopile
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.math.BlockPos
@@ -33,7 +34,7 @@ class ContainerBattery(val tile: TileBattery, player: EntityPlayer, world: World
     }
 }
 
-class ContainerElectricFurnace(tile: TileElectricFurnace, player: EntityPlayer, world: World, blockPos: BlockPos)
+class ContainerElectricFurnace(val tile: TileElectricFurnace, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
 
     init {
@@ -45,6 +46,14 @@ class ContainerElectricFurnace(tile: TileElectricFurnace, player: EntityPlayer, 
                     filter = { FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
         }
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+class ContainerThermopile(val tile: TileThermopile, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
         bindPlayerInventory(player.inventory)
     }
 }

@@ -21,7 +21,7 @@ import net.minecraft.util.ITickable
 class TileBattery : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val node = ElectricNode(container.ref, capacity = 8.0)
+    val node = ElectricNode(ref, capacity = 8.0)
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node),
@@ -63,7 +63,7 @@ class TileBattery : TileBase(), ITickable {
 class TileElectricFurnace : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node)
@@ -94,7 +94,7 @@ class TileElectricFurnace : TileBase(), ITickable {
 @RegisterTileEntity("infinite_energy")
 class TileInfiniteEnergy : TileBase(), ITickable {
 
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
             listOf(node)
@@ -115,7 +115,7 @@ class TileInfiniteEnergy : TileBase(), ITickable {
 @RegisterTileEntity("airlock")
 class TileAirLock : TileBase(), ITickable {
 
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(node)
@@ -125,6 +125,33 @@ class TileAirLock : TileBase(), ITickable {
 
     init {
         initModules(airlockModule, electricModule)
+    }
+
+    override fun update() {
+        super.update()
+    }
+}
+
+
+@RegisterTileEntity("thermopile")
+class TileThermopile : TileBase(), ITickable {
+
+    val node = ElectricNode(ref)
+
+    val electricModule = ModuleElectricity(
+            electricNodes = listOf(node)
+    )
+    val storageModule = ModuleInternalStorage(
+            capacity = 10000,
+            mainNode = node,
+            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5,
+            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 10
+    )
+
+    val thermopileModule = ModuleThermopile(node)
+
+    init {
+        initModules(electricModule, storageModule, thermopileModule)
     }
 
     override fun update() {

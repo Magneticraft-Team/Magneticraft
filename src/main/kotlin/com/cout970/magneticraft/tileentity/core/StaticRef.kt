@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity.core
 
 import com.cout970.magneticraft.api.core.ITileRef
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -19,4 +20,11 @@ data class ModuleContainerRef(
 ): ITileRef {
     override fun getWorld(): World = container.world
     override fun getPos(): BlockPos = container.pos
+}
+
+data class DynamicTileRef(
+        val tile: TileEntity
+): ITileRef {
+    override fun getWorld(): World = tile.world
+    override fun getPos(): BlockPos = tile.pos
 }

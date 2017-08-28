@@ -2,25 +2,22 @@ package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
-import com.cout970.magneticraft.gui.client.components.bars.CompElectricBar
-import com.cout970.magneticraft.gui.client.components.bars.BatteryStorageBar
-import com.cout970.magneticraft.gui.client.components.bars.CallbackBarProvider
-import com.cout970.magneticraft.gui.client.components.bars.CompVerticalBar
-import com.cout970.magneticraft.gui.client.components.bars.TransferRateBar
+import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
-import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.tileentity.TileBattery
-import com.cout970.magneticraft.tileentity.TileElectricFurnace
+import com.cout970.magneticraft.gui.common.ContainerBattery
+import com.cout970.magneticraft.gui.common.ContainerElectricFurnace
+import com.cout970.magneticraft.gui.common.ContainerThermopile
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
+import com.cout970.magneticraft.util.vector.vec2Of
 
 /**
  * Created by cout970 on 2017/08/10.
  */
 
-class GuiElectricFurnace(container: ContainerBase) : GuiBase(container) {
+class GuiElectricFurnace(container: ContainerElectricFurnace) : GuiBase(container) {
 
-    val tile = (container.tileEntity as TileElectricFurnace)
+    val tile = container.tile
 
     override fun initComponents() {
         components.add(CompBackground(guiTexture("electric_furnace")))
@@ -45,9 +42,9 @@ class GuiElectricFurnace(container: ContainerBase) : GuiBase(container) {
     }
 }
 
-class GuiBattery(container: ContainerBase) : GuiBase(container) {
+class GuiBattery(container: ContainerBattery) : GuiBase(container) {
 
-    val tile = container.tileEntity as TileBattery
+    val tile = container.tile
 
     override fun initComponents() {
         components.add(CompBackground(guiTexture("battery")))
@@ -69,5 +66,34 @@ class GuiBattery(container: ContainerBase) : GuiBase(container) {
                 { 0.0 },
                 { tile.itemChargeModule.transferRate.toDouble() }, Vec2d(58 + 33, 16))
         )
+    }
+}
+
+class GuiThermopile(container: ContainerThermopile) : GuiBase(container) {
+
+    val tile = container.tile
+
+    override fun initComponents() {
+        components.add(CompBackground(guiTexture("thermopile")))
+        components.add(CompElectricBar(tile.node, Vec2d(64, 17)))
+        components.add(CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), guiTexture("thermopile")))
+
+        val production = StaticBarProvider(0.0, Config.thermopileProduction) {
+            tile.thermopileModule.production.storage.toDouble()
+        }
+
+        components.add(CompVerticalBar(production, 3, Vec2d(89, 17),
+                { listOf(String.format("%.2fW", production.callback())) }))
+
+        val source = StaticBarProvider(0.0, 300.0) { tile.thermopileModule.heatSource.toDouble() }
+
+        components.add(CompVerticalBar(source, 2, Vec2d(98, 17),
+                { listOf(source.callback().toInt().toString()) }))
+
+        val drain = StaticBarProvider(0.0, 300.0) { tile.thermopileModule.heatDrain.toDouble() }
+
+        components.add(CompVerticalBar(drain, 5, Vec2d(107, 17),
+                { listOf(drain.callback().toInt().toString()) }))
+
     }
 }

@@ -67,6 +67,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
     var solarPanelMaxProduction = 160.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Production")
+    var thermopileProduction = 20.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
     var batteryItemLowCapacity: Int = 250000
 

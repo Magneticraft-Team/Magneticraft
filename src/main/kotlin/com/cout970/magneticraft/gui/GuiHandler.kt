@@ -25,11 +25,12 @@ object GuiHandler : IGuiHandler {
         return when (tile) {
             is TileBox -> GuiBox(serverElement)
             is TileShelvingUnit -> GuiShelvingUnit(serverElement)
-            is TileBattery -> GuiBattery(serverElement)
-            is TileElectricFurnace -> GuiElectricFurnace(serverElement)
+            is TileBattery -> GuiBattery(serverElement as ContainerBattery)
+            is TileElectricFurnace -> GuiElectricFurnace(serverElement as ContainerElectricFurnace)
             is TileComputer -> GuiComputer(serverElement)
             is TileMiningRobot -> GuiMiningRobot(serverElement)
             is TileCombustionChamber -> GuiCombustionChamber(serverElement)
+            is TileThermopile -> GuiThermopile(serverElement as ContainerThermopile)
             else -> null
         }
     }
@@ -51,6 +52,7 @@ object GuiHandler : IGuiHandler {
             is TileComputer -> ContainerComputer(tile, player, world, pos)
             is TileMiningRobot -> ContainerMiningRobot(tile, player, world, pos)
             is TileCombustionChamber -> ContainerCombustionChamber(tile, player, world, pos)
+            is TileThermopile -> ContainerThermopile(tile, player, world, pos)
             else -> null
         }
     }

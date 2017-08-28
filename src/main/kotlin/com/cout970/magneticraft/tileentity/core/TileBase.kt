@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.core
 
+import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.util.getList
@@ -29,6 +30,8 @@ abstract class TileBase : TileEntity() {
 
     private var blockState: IBlockState? = null
     private var lastTime: Long = -1
+
+    val ref: ITileRef get() = DynamicTileRef(this)
 
     fun initModules(vararg list: IModule) {
         if (modules.isEmpty()) {

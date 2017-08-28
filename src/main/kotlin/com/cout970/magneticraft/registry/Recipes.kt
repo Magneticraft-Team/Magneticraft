@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager
+import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeNoDecay
+import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeWithDecay
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
@@ -9,6 +12,8 @@ import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.item.MetallicItems
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.withSize
+import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.COBBLESTONE
 import net.minecraft.init.Items
@@ -171,6 +176,22 @@ fun registerRecipes() {
                     Items.GOLD_NUGGET.stack() to 0.000078125f,
                     Items.GOLD_NUGGET.stack() to 0.0000390625f
             ))
+
+    //THERMOPILE
+
+    addThermopileRecipe(Blocks.AIR, 1)
+    addThermopileRecipe(Blocks.SNOW, -100)
+    addThermopileRecipe(Blocks.ICE, -100)
+    addThermopileRecipe(Blocks.PACKED_ICE, -80)
+    addThermopileRecipe(Blocks.SNOW_LAYER, -50)
+    addThermopileRecipe(Blocks.TORCH, 5)
+    addThermopileRecipe(Blocks.LIT_PUMPKIN, 3)
+    addThermopileRecipe(Blocks.WATER, -25)
+    addThermopileRecipe(Blocks.FIRE, 25)
+    addThermopileRecipe(Blocks.MAGMA, 25)
+
+    addThermopileRecipeWithDecay(Blocks.LAVA, 100, Blocks.OBSIDIAN.defaultState,-201, 0.00333f)
+
     //@formatter:on
 }
 
@@ -186,6 +207,14 @@ private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
 private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
                                otherOutput: List<Pair<ItemStack, Float>> = emptyList()) {
     SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, output, otherOutput, true))
+}
+
+private fun addThermopileRecipe(input: Block, heat: Int) {
+    ThermopileRecipeManager.registerRecipe(ThermopileRecipeNoDecay(input, heat))
+}
+
+private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replcement: IBlockState, limit: Int, prob: Float) {
+    ThermopileRecipeManager.registerRecipe(ThermopileRecipeWithDecay(input, heat, replcement, limit, prob))
 }
 //
 //private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack,

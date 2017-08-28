@@ -20,19 +20,22 @@ import javax.swing.*
 
 private var timer = 0L
 private var lastTick = 0
+private var useOs = true
 
 fun main(args: Array<String>) {
 
     val img = "forth"
-    val disk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
+    val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
+    val programDisk = FakeFloppyDisk(File("./run/disk.img"))
+    programDisk.file.writeText("")
 
     val monitor = DeviceMonitor(FakeRef)
-    val floppyDrive = DeviceFloppyDrive(FakeRef) { disk }
+    val floppyDrive = DeviceFloppyDrive(FakeRef) { if (useOs) osDisk else programDisk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
     val memory = RAM(0xFFFF + 1, false)
-    val rom = if(args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
+    val rom = if (args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)
     val mbDevice = DeviceMotherboard(FakeRef, motherboard)
@@ -138,6 +141,10 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     window.addKeyListener(object : KeyListener {
         override fun keyTyped(e: KeyEvent) {
+            if (e.keyChar.toInt() == 10) {
+                println("disk changed")
+                useOs = false
+            }
             val ibd = IBD()
             monitor.onKeyPressed(mapKey(e.keyChar.toInt()))
             monitor.saveToServer(ibd)

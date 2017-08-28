@@ -32,9 +32,9 @@ class TileComputer : TileBase(), ITickable {
 
     val inventory = Inventory(1)
     val invModule = ModuleInventory(inventory)
-    val monitorModule = ModuleMonitor(container.ref)
-    val floppyDriveModule = ModuleFloppyDrive(container.ref, inventory, 0)
-    val networkCardModule = ModuleNetworkCard(container.ref)
+    val monitorModule = ModuleMonitor(ref)
+    val floppyDriveModule = ModuleFloppyDrive(ref, inventory, 0)
+    val networkCardModule = ModuleNetworkCard(ref)
 
     val computerModule = ModuleComputer(
             devices = mapOf(
@@ -81,7 +81,7 @@ class TileMiningRobot : TileBase(), ITickable {
         get() = getBlockState()[Computers.PROPERTY_ROBOT_ORIENTATION] ?: Computers.RobotOrientation.NORTH
 
     val inventory = Inventory(18)
-    val node = ElectricNode(container.ref)
+    val node = ElectricNode(ref)
 
     val invModule = ModuleInventory(inventory)
     val energyModule = ModuleElectricity(listOf(node))
@@ -93,9 +93,9 @@ class TileMiningRobot : TileBase(), ITickable {
     )
 
     //computer
-    val monitorModule = ModuleMonitor(container.ref)
-    val floppyDriveModule = ModuleFloppyDrive(ref = container.ref, inventory = inventory, slot = 16)
-    val networkCardModule = ModuleNetworkCard(container.ref)
+    val monitorModule = ModuleMonitor(ref)
+    val floppyDriveModule = ModuleFloppyDrive(ref = ref, inventory = inventory, slot = 16)
+    val networkCardModule = ModuleNetworkCard(ref)
 
     val storageInventory = InventoryCapabilityFilter(
             inventory = inventory,
@@ -104,7 +104,7 @@ class TileMiningRobot : TileBase(), ITickable {
     )
 
     val robotControlModule = ModuleRobotControl(
-            ref = container.ref,
+            ref = ref,
             inventory = storageInventory,
             storage = energyStorage,
             node = node,

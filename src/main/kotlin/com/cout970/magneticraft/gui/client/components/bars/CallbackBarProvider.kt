@@ -11,3 +11,6 @@ open class CallbackBarProvider(val callback: () -> Double, val max: () -> Double
 
     private fun ensureNonZero(x: Double): Double = if (x == 0.0) 1.0 else x
 }
+
+class StaticBarProvider(val minVal: Double, val maxVal: Double, callback: () -> Double)
+    : CallbackBarProvider(callback = callback, max = { maxVal }, min = { minVal })
