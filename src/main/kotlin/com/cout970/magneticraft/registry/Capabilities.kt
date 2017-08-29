@@ -29,6 +29,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.fluids.capability.IFluidHandler
+import net.minecraftforge.fluids.capability.IFluidHandlerItem
 import net.minecraftforge.items.IItemHandler
 
 /**
@@ -52,6 +53,9 @@ var MANUAL_CONNECTION_HANDLER: Capability<IManualConnectionHandler>? = null
 
 @CapabilityInject(IFluidHandler::class)
 var FLUID_HANDLER: Capability<IFluidHandler>? = null
+
+@CapabilityInject(IFluidHandlerItem::class)
+var ITEM_FLUID_HANDLER: Capability<IFluidHandlerItem>? = null
 
 @CapabilityInject(IEnergyStorage::class)
 var FORGE_ENERGY: Capability<IEnergyStorage>? = null

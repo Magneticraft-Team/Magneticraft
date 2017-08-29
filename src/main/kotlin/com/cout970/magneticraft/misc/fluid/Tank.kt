@@ -24,6 +24,10 @@ open class Tank(
         canFill = allowInput
     }
 
+    fun isEmpty() = fluidAmount == 0
+
+    fun isNonEmpty() = !isEmpty()
+
     override fun canDrainFluidType(fluid: FluidStack?): Boolean {
         return fluid != null && canDrain && fluidFilter(fluid)
     }

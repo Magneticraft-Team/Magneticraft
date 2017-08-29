@@ -51,7 +51,7 @@ abstract class TileRendererSimple<T : TileBase>(
     override fun onModelRegistryReload() {
         val loc = modelLocation?.invoke() ?: return
         //cleaning
-        caches.forEach { it.clear() }
+        caches.forEach { it.close() }
         caches = filters.flatMap { ModelCacheFactory.createMultiTextureCache(loc, it) }
     }
 }

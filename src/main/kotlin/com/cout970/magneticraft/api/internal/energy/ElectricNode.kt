@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound
 open class ElectricNode(
         val ref: ITileRef,
         private val resistance: Double = 0.0001,
-        private val capacity: Double = 4.0,
+        private val capacity: Double = 2.0,
         private val name: String = "electric_node_1"
 ) : IElectricNode {
 

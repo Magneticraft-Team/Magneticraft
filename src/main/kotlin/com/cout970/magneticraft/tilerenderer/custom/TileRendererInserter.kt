@@ -36,7 +36,7 @@ object TileRendererInserter : TileRenderer<TileInserter>() {
     override fun onModelRegistryReload() {
         val loc = ModelResourceLocation(AutomaticMachines.inserter.registryName, "model")
         //cleaning
-        model?.clear()
+        model?.close()
 
         model = ModelCacheFactory.createCache(loc)
     }

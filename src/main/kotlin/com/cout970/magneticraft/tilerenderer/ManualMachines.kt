@@ -83,7 +83,7 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
 
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
-        waterModel?.clear()
+        waterModel?.close()
         val loc = ModelResourceLocation(ManualMachines.sluiceBox.registryName, "water")
         val model = ModelLoaderApi.getModel(loc) ?: return
         val textureMap = Minecraft.getMinecraft().textureMapBlocks

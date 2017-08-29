@@ -26,6 +26,7 @@ fun initBlocks() {
     blocks_ += HeatMachines.initBlocks()
     blocks_ += AutomaticMachines.initBlocks()
     blocks_ += ElectricConductors.initBlocks()
+    blocks_ += FluidMachines.initBlocks()
 
     blocks_.forEach { ForgeRegistries.BLOCKS.register(it.first); ForgeRegistries.ITEMS.register(it.second) }
     blocks = blocks_

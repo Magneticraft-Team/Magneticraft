@@ -157,12 +157,12 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
     override fun onModelRegistryReload() {
         val loc = ModelResourceLocation(AutomaticMachines.conveyorBelt.registryName, "model")
         //cleaning
-        axisBars?.clear()
-        backLegs?.clear()
-        frontLegs?.clear()
-        rollers.forEach { it.second?.clear() }
-        lateralLeft?.clear()
-        lateralRight?.clear()
+        axisBars?.close()
+        backLegs?.close()
+        frontLegs?.close()
+        rollers.forEach { it.second?.close() }
+        lateralLeft?.close()
+        lateralRight?.close()
 
         axisBars = ModelCacheFactory.createCache(loc) { it.startsWith("axis") }
         rollers = listOf(

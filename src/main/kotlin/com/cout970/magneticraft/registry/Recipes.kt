@@ -179,7 +179,7 @@ fun registerRecipes() {
 
     //THERMOPILE
 
-    addThermopileRecipe(Blocks.AIR, 1)
+    addThermopileRecipe(Blocks.AIR, -1)
     addThermopileRecipe(Blocks.SNOW, -100)
     addThermopileRecipe(Blocks.ICE, -100)
     addThermopileRecipe(Blocks.PACKED_ICE, -80)
