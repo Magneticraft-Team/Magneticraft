@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "A A",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateCopper"
+    }
+  },
+  "result": {
+    "item": "magneticraft:copper_tank",
+    "data": 0
+  }
+}

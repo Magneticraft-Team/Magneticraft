@@ -74,7 +74,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         map
     }
 
-    fun getItemName(stack: ItemStack?) = "${unlocalizedName}_${states.getOrNull(stack!!.metadata)?.stateName}"
+    fun getItemName(stack: ItemStack) = "${unlocalizedName}_${states.getOrNull(stack.metadata)?.stateName}"
 
     // metadata and block state stuff
     override fun getMetaFromState(state: IBlockState): Int = states.find {

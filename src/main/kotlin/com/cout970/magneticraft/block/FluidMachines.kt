@@ -6,8 +6,8 @@ import com.cout970.magneticraft.block.core.CommonMethods
 import com.cout970.magneticraft.block.core.IBlockMaker
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.tileentity.TileCopperPipe
 import com.cout970.magneticraft.tileentity.TileCopperTank
+import com.cout970.magneticraft.tileentity.TileIronPipe
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemBlock
 object FluidMachines : IBlockMaker {
 
     lateinit var copperTank: BlockBase private set
-    lateinit var copperPipe: BlockBase private set
+    lateinit var ironPipe: BlockBase private set
 
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
@@ -39,10 +39,17 @@ object FluidMachines : IBlockMaker {
             onActivated = CommonMethods::delegateToModule
         }.build()
 
-        copperPipe = builder.withName("copper_pipe").copy {
-            factory = factoryOf(::TileCopperPipe)
+        ironPipe = builder.withName("iron_pipe").copy {
+            factory = factoryOf(::TileIronPipe)
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/iron_pipe.mcx"),
+                    "inventory" to resource("models/block/mcx/iron_pipe.mcx")
+            )
+            onActivated = CommonMethods::delegateToModule
         }.build()
 
-        return itemBlockListOf(copperTank, copperPipe)
+        return itemBlockListOf(copperTank, ironPipe)
     }
 }

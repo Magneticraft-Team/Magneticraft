@@ -15,8 +15,8 @@ object GrinderRecipeManager : IGrinderRecipeManager {
 
     private val recipes = mutableListOf<IGrinderRecipe>()
 
-    override fun findRecipe(input: ItemStack?): IGrinderRecipe? {
-        return recipes.filter { it.matches(input) }.firstOrNull()
+    override fun findRecipe(input: ItemStack): IGrinderRecipe? {
+        return recipes.firstOrNull { it.matches(input) }
     }
 
     override fun getRecipes(): MutableList<IGrinderRecipe> = Collections.synchronizedList(recipes)

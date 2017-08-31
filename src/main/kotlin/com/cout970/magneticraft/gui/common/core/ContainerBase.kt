@@ -62,7 +62,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
         }
     }
 
-    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? {
+    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack {
         if (index in 0 until this.inventorySlots.size) {
             val slot = this.inventorySlots[index]
             // ignore empty slot

@@ -15,8 +15,8 @@ object HydraulicPressRecipeManager : IHydraulicPressRecipeManager {
 
     private val recipes = mutableListOf<IHydraulicPressRecipe>()
 
-    override fun findRecipe(input: ItemStack?): IHydraulicPressRecipe? {
-        return recipes.filter { it.matches(input) }.firstOrNull()
+    override fun findRecipe(input: ItemStack): IHydraulicPressRecipe? {
+        return recipes.firstOrNull { it.matches(input) }
     }
 
     override fun getRecipes(): MutableList<IHydraulicPressRecipe> = Collections.synchronizedList(recipes)

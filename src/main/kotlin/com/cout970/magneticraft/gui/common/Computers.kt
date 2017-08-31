@@ -13,7 +13,6 @@ import com.cout970.magneticraft.tileentity.TileComputer
 import com.cout970.magneticraft.tileentity.TileMiningRobot
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.SlotItemHandler
@@ -34,9 +33,8 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
                 return false
             }
         })
+        inventoryRegions += InventoryRegion(0..0)
     }
-
-    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
 
     override fun sendDataToClient(): IBD {
         val ibd = super.sendDataToClient() ?: IBD()
@@ -102,8 +100,6 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
 
         bindPlayerInventory(player.inventory, vec2Of(87, 151))
     }
-
-    override fun transferStackInSlot(playerIn: EntityPlayer?, index: Int): ItemStack? = null
 
     override fun sendDataToClient(): IBD {
         val ibd = super.sendDataToClient() ?: IBD()

@@ -159,11 +159,11 @@ class DefaultNodeProvider : INodeHandler, IElectricNodeHandler, IHeatNodeHandler
 
 class DefaultManualConnectionHandler : IManualConnectionHandler {
 
-    override fun getBasePos(thisBlock: BlockPos?, world: World?, player: EntityPlayer?, side: EnumFacing?,
-                            stack: ItemStack?): BlockPos? = thisBlock
+    override fun getBasePos(thisBlock: BlockPos, world: World, player: EntityPlayer, side: EnumFacing,
+                            stack: ItemStack): BlockPos? = thisBlock
 
-    override fun connectWire(otherBlock: BlockPos?, thisBlock: BlockPos?, world: World?, player: EntityPlayer?,
-                             side: EnumFacing?, stack: ItemStack?): Boolean = false
+    override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
+                             side: EnumFacing, stack: ItemStack): Boolean = false
 }
 class DefaultHammer : IHammer {
 

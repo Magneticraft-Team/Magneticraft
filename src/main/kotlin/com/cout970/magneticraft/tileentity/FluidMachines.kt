@@ -46,10 +46,11 @@ class TileCopperTank : TileBase(), ITickable {
     }
 }
 
-@RegisterTileEntity("copper_pipe")
-class TileCopperPipe : TileBase(), ITickable {
+@RegisterTileEntity("iron_pipe")
+class TileIronPipe : TileBase(), ITickable {
 
-    val pipeModule = ModulePipe(PipeType.COPPER)
+    val pipeModule = ModulePipe(PipeType.IRON)
+
 
     init {
         initModules(pipeModule)

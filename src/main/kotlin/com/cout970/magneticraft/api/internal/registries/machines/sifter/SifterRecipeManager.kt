@@ -15,8 +15,8 @@ object SifterRecipeManager : ISifterRecipeManager {
 
     private val recipes = mutableListOf<ISifterRecipe>()
 
-    override fun findRecipe(input: ItemStack?): ISifterRecipe? {
-        return recipes.filter { it.matches(input) }.firstOrNull()
+    override fun findRecipe(input: ItemStack): ISifterRecipe? {
+        return recipes.firstOrNull { it.matches(input) }
     }
 
     override fun getRecipes(): MutableList<ISifterRecipe> = Collections.synchronizedList(recipes)

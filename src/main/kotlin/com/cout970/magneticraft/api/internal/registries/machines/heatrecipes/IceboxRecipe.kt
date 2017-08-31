@@ -33,6 +33,6 @@ data class IceboxRecipe(
         return (specificHeat * (temp - minTemp)).toLong() + heat
     }
 
-    override fun matches(input: ItemStack?): Boolean = input?.isItemEqual(this.input) ?: false
+    override fun matches(input: ItemStack): Boolean = input.isItemEqual(this.input)
     override fun matchesReverse(output: FluidStack?): Boolean = reverse && (output?.isFluidEqual(this.output) ?: false)
 }

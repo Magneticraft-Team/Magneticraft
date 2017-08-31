@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack
  */
 object ApiUtils {
 
-    fun equalsIgnoreSize(a: ItemStack?, b: ItemStack?): Boolean {
-        return a == b || !(a == null || b == null)
+    fun equalsIgnoreSize(a: ItemStack, b: ItemStack): Boolean {
+        return a == b || !(a.isEmpty || b.isEmpty)
                 && a.item == b.item
                 && (!a.item.hasSubtypes || a.metadata == b.metadata)
                 && equals(a.tagCompound, b.tagCompound)

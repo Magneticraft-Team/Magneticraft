@@ -26,7 +26,7 @@ class RAM(val size: Int, val littleEndian: Boolean = true) : IMemory {
     override fun getMemorySize(): Int = size
 
     override fun writeWord(pos: Int, data: Int) {
-        if (littleEndian) {
+        if (!littleEndian) {
             writeByte(pos + 3, (data and 0x000000FF).toByte())
             writeByte(pos + 2, (data and 0x0000FF00 shr 8).toByte())
             writeByte(pos + 1, (data and 0x00FF0000 shr 16).toByte())

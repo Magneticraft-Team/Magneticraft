@@ -16,8 +16,8 @@ object KilnRecipeManager : IKilnRecipeManager {
 
     private val recipes = mutableListOf<IKilnRecipe>()
 
-    override fun findRecipe(input: ItemStack?): IKilnRecipe? {
-        return recipes.filter { it.matches(input) }.firstOrNull()
+    override fun findRecipe(input: ItemStack): IKilnRecipe? {
+        return recipes.firstOrNull { it.matches(input) }
     }
 
     override fun getRecipes(): MutableList<IKilnRecipe> = Collections.synchronizedList(recipes)
@@ -33,6 +33,6 @@ object KilnRecipeManager : IKilnRecipeManager {
     }
 
     override fun createRecipe(input: ItemStack, output: IBlockState, duration: Int, minTemp: Double, maxTemp: Double, oreDict: Boolean): IKilnRecipe {
-        return KilnRecipe(input, null, output, duration, minTemp, maxTemp, oreDict)
+        return KilnRecipe(input, ItemStack.EMPTY, output, duration, minTemp, maxTemp, oreDict)
     }
 }

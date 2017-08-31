@@ -24,7 +24,7 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "forth"
+    val img = "lisp"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
     val programDisk = FakeFloppyDisk(File("./run/disk.img"))
     programDisk.file.writeText("")
@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
     val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
-    val memory = RAM(0xFFFF + 1, false)
+    val memory = RAM(0xFFFF + 1, true)
     val rom = if (args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)

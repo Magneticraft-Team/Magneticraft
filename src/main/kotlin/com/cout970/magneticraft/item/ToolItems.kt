@@ -118,9 +118,9 @@ object ToolItems : IItemMaker {
 
         val POSITION_KEY = "Position"
 
-        override fun getItemStackDisplayName(stack: ItemStack?): String {
+        override fun getItemStackDisplayName(stack: ItemStack): String {
             val name = super.getItemStackDisplayName(stack)
-            if (stack!!.hasKey(POSITION_KEY)) {
+            if (stack.hasKey(POSITION_KEY)) {
                 val basePos = stack.getBlockPos(POSITION_KEY)
                 return name + " [${TextFormatting.AQUA}Position: ${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
             }

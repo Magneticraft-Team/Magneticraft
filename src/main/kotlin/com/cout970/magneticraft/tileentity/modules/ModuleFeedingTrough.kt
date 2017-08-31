@@ -95,14 +95,14 @@ class ModuleFeedingTrough(
         }
     }
 
-    fun insertItem(item: ItemStack?): ItemStack? {
-        if (item != null && ACCEPTED_ITEMS.contains(item.item)) {
+    fun insertItem(item: ItemStack): ItemStack {
+        if (item.isNotEmpty && ACCEPTED_ITEMS.contains(item.item)) {
             return inventory.insertItem(0, item, false)
         }
         return item
     }
 
-    fun extractItem(): ItemStack? {
+    fun extractItem(): ItemStack {
         return inventory.extractItem(0, 64, false)
     }
 }
