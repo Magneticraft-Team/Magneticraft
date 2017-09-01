@@ -24,10 +24,9 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "lisp"
+    val img = "forth"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
     val programDisk = FakeFloppyDisk(File("./run/disk.img"))
-    programDisk.file.writeText("")
 
     val monitor = DeviceMonitor(FakeRef)
     val floppyDrive = DeviceFloppyDrive(FakeRef) { if (useOs) osDisk else programDisk }
@@ -142,7 +141,6 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     window.addKeyListener(object : KeyListener {
         override fun keyTyped(e: KeyEvent) {
             if (e.keyChar.toInt() == 10) {
-                println("disk changed")
                 useOs = false
             }
             val ibd = IBD()

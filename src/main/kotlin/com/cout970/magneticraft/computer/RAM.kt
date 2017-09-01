@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  * Created by cout970 on 2016/09/30.
  */
-class RAM(val size: Int, val littleEndian: Boolean = true) : IMemory {
+class RAM(val size: Int, val littleEndian: Boolean) : IMemory {
 
     val mem = ByteArray(size)
 
@@ -41,7 +41,7 @@ class RAM(val size: Int, val littleEndian: Boolean = true) : IMemory {
 
     override fun readWord(pos: Int): Int {
         var data: Int
-        if (littleEndian) {
+        if (!littleEndian) {
             data = readByte(pos + 3).toInt() and 0xFF
             data = data or (readByte(pos + 2).toInt() and 0xFF shl 8)
             data = data or (readByte(pos + 1).toInt() and 0xFF shl 16)
