@@ -22,15 +22,9 @@ compileJava {
 
 minecraft {
     version = "1.12-14.21.1.2443"
+	mappings = "snapshot_20170624"
+	replace '@VERSION@', project.version
     runDir = "run"
-    
-	replaceIn 'src/main/kotlin/com/cout970/magneticraft/Metadata.kt'
-    replace '@VERSION@', project.version
-
-	replaceIn 'src/main/resources/mcmod.info'
-    replace '@VERSION@', project.version
-
-    mappings = "snapshot_20170624"
 }
 
 processResources {

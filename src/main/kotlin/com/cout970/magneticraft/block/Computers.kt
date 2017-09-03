@@ -22,9 +22,9 @@ object Computers : IBlockMaker {
 
     val PROPERTY_ROBOT_ORIENTATION = PropertyEnum.create("robot_orientation", RobotOrientation::class.java)!!
 
-
     lateinit var computer: BlockBase private set
     lateinit var miningRobot: BlockBase private set
+    lateinit var movingRobot: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -65,7 +65,14 @@ object Computers : IBlockMaker {
             onActivated = CommonMethods::delegateToModule
         }.build()
 
-        return itemBlockListOf(computer, miningRobot)
+        movingRobot = builder.withName("moving_robot").copy {
+            onDrop = { emptyList() }
+            generateDefaultItemModel = false
+            enableOcclusionOptimization = false
+            translucent = true
+        }.build()
+
+        return itemBlockListOf(computer, miningRobot, movingRobot)
     }
 
     fun placeWithRobotOrientation(it: OnBlockPlacedArgs): IBlockState {

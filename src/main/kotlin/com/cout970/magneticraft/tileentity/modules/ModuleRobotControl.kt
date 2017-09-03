@@ -8,6 +8,7 @@ import com.cout970.magneticraft.computer.IMiningRobot
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.inventory.canAcceptAll
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.tileentity.modules.mining_robot.*
@@ -50,7 +51,18 @@ class ModuleRobotControl(
     var task: RobotTask? = null
     override val cooldown: Int get() = (task?.cooldown ?: -1) + 1
 
+    var clientOrientation: Computers.RobotOrientation? = null
+    var clientCooldown = 0
+
     override fun update() {
+        if (clientCooldown == 0) {
+            clientOrientation = null
+        }
+        if (clientCooldown > 0) {
+            clientCooldown--
+        }
+        if (world.isClient) return
+
         requestedAction?.let {
             if (requestStatus == RequestStatus.PENDING) {
                 failReason = 0
@@ -60,7 +72,7 @@ class ModuleRobotControl(
             }
         }
         runTask()
-        if(node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE){
+        if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
             node.applyPower(-Config.miningRobotPassiveConsumption, false)
         }
     }
@@ -70,7 +82,7 @@ class ModuleRobotControl(
             it.tick(this)
             it.finish?.let {
                 task = null
-                requestStatus = if(it == 0) RequestStatus.SUCCESSFUL else RequestStatus.FAILED
+                requestStatus = if (it == 0) RequestStatus.SUCCESSFUL else RequestStatus.FAILED
             }
         }
     }
@@ -157,14 +169,22 @@ class ModuleRobotControl(
         add("cooldown", task?.cooldown ?: -1)
         add("requestStatus", requestStatus.ordinal)
         add("failReason", failReason)
+        add("clientCooldown", clientCooldown)
+        add("clientOrientation", clientOrientation?.ordinal ?: -1)
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         device.deserializeNBT(nbt.getCompoundTag("device"))
         requestedAction = nbt.getInteger("request").let { if (it == -1) null else RobotAction.values()[it] }
+
         val action = nbt.getInteger("action").let { if (it == -1) null else RobotAction.values()[it] }
         task = action?.taskFactory?.invoke()?.also { it.cooldown = nbt.getInteger("cooldown") }
+
         requestStatus = RequestStatus.values()[nbt.getInteger("requestStatus")]
         failReason = nbt.getInteger("failReason")
+        clientCooldown = nbt.getInteger("clientCooldown")
+        clientOrientation = nbt.getInteger("clientOrientation").let {
+            if (it == -1) null else Computers.RobotOrientation.values()[it]
+        }
     }
 }

@@ -18,13 +18,13 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
                     ReadOnlyByte("type", { 3 }),
                     ReadOnlyShort("status", { 0 })
             ),
-
             ReadWriteByte("signal", { signal(it) }, { 0 }),
             ReadOnlyByte("request", { ((robot.requestedAction?.ordinal ?: -1) + 1).toByte() }),
             ReadOnlyByte("requestStatus", { robot.requestStatus.ordinal.toByte() }),
             ReadOnlyByte("cooldown", { robot.cooldown.toByte() }),
             ReadOnlyInt("batteryCapacity", { robot.batterySize }),
-            ReadOnlyInt("batteryEnergy", { robot.batteryCharge })
+            ReadOnlyInt("batteryEnergy", { robot.batteryCharge }),
+            ReadOnlyInt("failReason", { robot.failReason })
     )
     //@formatter:on
 

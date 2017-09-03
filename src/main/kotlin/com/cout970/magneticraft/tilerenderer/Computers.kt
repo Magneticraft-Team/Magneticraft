@@ -49,61 +49,69 @@ object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
 
     override fun renderModels(models: List<ModelCache>, te: TileMiningRobot) {
 
-        // ROTATIONS
-        te.robotControlModule.task?.let {
-            val norm = Math.max(0f, it.cooldown.toFloat() - ticks) / it.action.cooldown
+        val mod = te.robotControlModule
+        val task = mod.task
+        val norm = task?.let { Math.max(0f, mod.clientCooldown.toFloat() - ticks) / it.action.cooldown } ?: 0.0f
+        val orientation = mod.clientOrientation ?: te.orientation
 
+        // Rotations (only when rotating)
+        task?.let {
             when (it.action) {
                 RobotAction.ROTATE_RIGHT -> {
                     translate(0.5f, 0.5f, 0.5f)
-                    rotate(-90 + norm * 90, 0f, 1f, 0f)
+                    rotate(norm * 90, 0f, 1f, 0f)
                     translate(-0.5f, -0.5f, -0.5f)
                 }
                 RobotAction.ROTATE_LEFT -> {
                     translate(0.5f, 0.5f, 0.5f)
-                    rotate(-90 + norm * 90, 0f, 1f, 0f)
+                    rotate(-norm * 90, 0f, 1f, 0f)
                     translate(-0.5f, -0.5f, -0.5f)
                 }
                 else -> Unit
             }
         }
 
-        Utilities.rotateFromCenter(te.orientation.direction, 180f)
+        // Rotations always
+        Utilities.rotateFromCenter(orientation.direction, 180f)
 
-        // TRANSLATION
-        (te.robotControlModule.task as? MoveRobotTask)?.let {
-            val normalized = Math.max(0f, it.cooldown.toFloat() - ticks) / it.action.cooldown
+        // Translation
+        (task as? MoveRobotTask)?.let {
 
             val amount = when (it.front) {
-                true -> normalized - 1
-                else -> 1 - normalized
+                true -> 1 - norm
+                else -> norm - 1
             }
 
-            translate(0.0, 0.0, amount.toDouble())
+            val level = orientation.level
+            when (level) {
+                Computers.OrientationLevel.UP -> translate(0.0, amount.toDouble(), 0.0)
+                Computers.OrientationLevel.DOWN -> translate(0.0, -amount.toDouble(), 0.0)
+                Computers.OrientationLevel.CENTER -> translate(0.0, 0.0, amount.toDouble())
+            }
         }
 
-        // render engines
+        // Render engines
         models[2].renderTextured()
 
-        te.robotControlModule.task?.let {
-            val norm = Math.max(0f, it.cooldown.toFloat() - ticks) / it.action.cooldown
+        // Rotate up/down (only when rotating)
+        task?.let {
 
             when (it.action) {
                 RobotAction.ROTATE_UP -> {
                     translate(0.5f, 0.5f, 0.5f)
-                    rotate(-90 + norm * 90, 1f, 0f, 0f)
+                    rotate(norm * 90, 1f, 0f, 0f)
                     translate(-0.5f, -0.5f, -0.5f)
                 }
                 RobotAction.ROTATE_DOWN -> {
                     translate(0.5f, 0.5f, 0.5f)
-                    rotate(90 - norm * 90, 1f, 0f, 0f)
+                    rotate(-norm * 90, 1f, 0f, 0f)
                     translate(-0.5f, -0.5f, -0.5f)
                 }
                 else -> Unit
             }
         }
 
-        when (te.robotControlModule.orientation.level) {
+        when (orientation.level) {
             Computers.OrientationLevel.UP -> {
                 translate(0.5f, 0.5f, 0.5f)
                 rotate(-90f, 1f, 0f, 0f)
@@ -119,13 +127,14 @@ object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
 
         models[0].renderTextured()
 
-        (te.robotControlModule.task as? MineBlockTask)?.let {
-            val normalized = Math.max(0f, it.cooldown.toFloat() - ticks) / it.action.cooldown
+        // Move drill
+        (task as? MineBlockTask)?.let {
 
             translate(0.5f, 0.5f, 0.5f)
-            rotate(normalized * 360 * 8, 0f, 0f, 1f)
+            rotate(norm * 360 * 4, 0f, 0f, 1f)
             translate(-0.5f, -0.5f, -0.5f)
         }
+
         models[1].renderTextured()
     }
 }

@@ -3,10 +3,7 @@ package com.cout970.magneticraft.tileentity.core
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.util.getList
-import com.cout970.magneticraft.util.getTagCompound
-import com.cout970.magneticraft.util.list
-import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.util.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
@@ -98,7 +95,9 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun writeToNBT(compound: NBTTagCompound): NBTTagCompound {
-        compound.apply { setTag("TileData", save()) }
+        compound.apply {
+            setTag("TileData", save())
+        }
         return super.writeToNBT(compound)
     }
 
@@ -141,12 +140,16 @@ abstract class TileBase : TileEntity() {
     open fun loadFromPacket(nbt: NBTTagCompound) = load(nbt)
 
     override fun getUpdatePacket(): SPacketUpdateTileEntity? {
-        return SPacketUpdateTileEntity(pos, 1, saveToPacket())
+        val nbt = super.writeToNBT(newNbt {
+            add("custom", saveToPacket())
+        })
+        return SPacketUpdateTileEntity(pos, 1, nbt)
     }
 
     override fun onDataPacket(net: NetworkManager?, pkt: SPacketUpdateTileEntity) {
-        if (pkt.tileEntityType == 1) {
-            loadFromPacket(pkt.nbtCompound)
+        if (pkt.nbtCompound.hasKey("custom")) {
+            val nbt = pkt.nbtCompound.getCompoundTag("custom")
+            loadFromPacket(nbt)
         } else {
             readFromNBT(pkt.nbtCompound)
         }

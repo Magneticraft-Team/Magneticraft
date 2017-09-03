@@ -59,7 +59,7 @@ fun ItemStack.withSize(size: Int) = ItemStack(item, size, itemDamage, tagCompoun
 fun IItemHandler.copy(): IItemHandler {
     val inv = Inventory(slots)
     forEachIndexed { index, stack ->
-        inv.setStackInSlot(index, stack)
+        inv.setStackInSlot(index, stack.copy())
     }
     return inv
 }

@@ -81,7 +81,7 @@ class ModuleElectricity(
             onUpdateConnections(this)
         }
 
-        if (world.isServer && container.shouldTick(400)) {
+        if (world.isServer && container.shouldTick(400) && electricNodes.any { it is IWireConnector }) {
             container.sendUpdateToNearPlayers()
         }
     }
