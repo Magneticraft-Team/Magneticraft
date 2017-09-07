@@ -24,7 +24,7 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "forth"
+    val img = "lisp"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
     val programDisk = FakeFloppyDisk(File("./run/disk.img"))
 

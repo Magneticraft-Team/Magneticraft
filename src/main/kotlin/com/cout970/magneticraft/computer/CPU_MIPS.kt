@@ -53,7 +53,7 @@ class CPU_MIPS : ICPU {
         Arrays.fill(registers, 0)
         regHI = 0
         regLO = 0
-        regPC = 0x08000
+        regPC = 0x09000
         regStatus = 0x0000FFFF
         regCause = 0
         regEPC = 0
@@ -62,7 +62,7 @@ class CPU_MIPS : ICPU {
     }
 
     enum class InstructionType {
-        R, I, J, EXCEPTION, COPROCESSOR, NOP
+        R, I, J, EXCEPTION, COPROCESSOR, NOOP
     }
 
     override fun iterate() {
@@ -85,18 +85,13 @@ class CPU_MIPS : ICPU {
         val opcode = getBitsFromInt(instruct, 26, 31, false)
         val type: InstructionType
 
-        if (instruct == 0) {
-            type = InstructionType.NOP              //no action
-        } else if (instruct == 0x0000000c || opcode == 0x10) {
-            type = InstructionType.EXCEPTION        //exception/syscall/trap
-        } else if (opcode and 0x10 > 0) {
-            type = InstructionType.COPROCESSOR
-        } else if (opcode == 0) {
-            type = InstructionType.R                //type R
-        } else if (opcode == 0x2 || opcode == 0x3) {
-            type = InstructionType.J                //type J
-        } else {
-            type = InstructionType.I                //type I
+        type = when {
+            instruct == 0 -> InstructionType.NOOP                                   // no action
+            instruct == 0x0000000c || opcode == 0x10 -> InstructionType.EXCEPTION   // exception/syscall/trap
+            opcode and 0x10 > 0 -> InstructionType.COPROCESSOR
+            opcode == 0 -> InstructionType.R                                        // type R
+            opcode == 0x2 || opcode == 0x3 -> InstructionType.J                     // type J
+            else -> InstructionType.I                                               // type I
         }
 
         //EXECUTE INSTRUCTION and WRITEBACK

@@ -17,6 +17,7 @@ object FailReason {
     val UNBREAKABLE = 3
     val LIMIT_REACHED = 4
     val INVENTORY_FULL = 5
+    val AIR = 6
 }
 
 val RequestStatus?.isFinished: Boolean get() = this == RequestStatus.FAILED || this == RequestStatus.SUCCESSFUL

@@ -146,20 +146,28 @@ class ModuleRobotControl(
 
         val frontPos = pos + orientation.facing
         val frontBlock = world.getBlockState(frontPos)
-        if (!world.isAirBlock(frontPos) && frontBlock.getBlockHardness(world, frontPos) >= 0) {
 
-            val items = NonNullList.create<ItemStack>().also {
-                frontBlock.block.getDrops(it, world, frontPos, frontBlock, 0)
-            }
-
-            if (inventory.canAcceptAll(items)) {
-                requestedAction = RobotAction.MINE
-                requestStatus = RequestStatus.PENDING
-                return
-            }
+        if (world.isAirBlock(frontPos)) {
+            requestStatus = RequestStatus.FAILED
+            failReason = FailReason.AIR
+            return
         }
-        requestStatus = RequestStatus.FAILED
-        failReason = FailReason.UNBREAKABLE
+        if (frontBlock.getBlockHardness(world, frontPos) < 0) {
+            requestStatus = RequestStatus.FAILED
+            failReason = FailReason.UNBREAKABLE
+            return
+        }
+        val items = NonNullList.create<ItemStack>().also {
+            frontBlock.block.getDrops(it, world, frontPos, frontBlock, 0)
+        }
+
+        if (inventory.canAcceptAll(items)) {
+            requestedAction = RobotAction.MINE
+            requestStatus = RequestStatus.PENDING
+        } else {
+            requestStatus = RequestStatus.FAILED
+            failReason = FailReason.INVENTORY_FULL
+        }
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
