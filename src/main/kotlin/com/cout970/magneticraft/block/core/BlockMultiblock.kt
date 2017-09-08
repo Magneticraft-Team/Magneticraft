@@ -15,7 +15,10 @@ import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.I18n
+import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
@@ -164,5 +167,11 @@ class BlockMultiblock(
             }
         }
         super.breakBlock(worldIn, pos, state)
+    }
+
+    override fun addInformation(stack: ItemStack, player: World?, tooltip: MutableList<String>, advanced: ITooltipFlag) {
+
+        tooltip.add(I18n.format("tooltip.magneticraft.multiblock.blueprint"))
+        super.addInformation(stack, player, tooltip, advanced)
     }
 }

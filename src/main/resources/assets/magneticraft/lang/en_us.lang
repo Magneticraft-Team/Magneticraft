@@ -227,5 +227,6 @@ text.magneticraft.multiblock.activate=Successfully activated
 #death.attack.kiln.player=%2$s pushed %1s$ into a blender.
 
 tooltip.magneticraft.item_storage.energy=%f/%fJ
+tooltip.magneticraft.multiblock.blueprint=Place down this blueprint to see the multiblock pattern
 
 fluid.magneticraft.steam=Steam

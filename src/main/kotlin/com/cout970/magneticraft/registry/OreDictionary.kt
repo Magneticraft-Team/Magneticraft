@@ -27,6 +27,7 @@ fun registerOreDictionaryEntries() {
         }
         if(it.useful && !it.isComposite) {
             OreDictionary.registerOre("lightPlate${it.name.toLowerCase().capitalize()}", it.getLightPlate())
+            OreDictionary.registerOre("plate${it.name.toLowerCase().capitalize()}", it.getLightPlate())
             OreDictionary.registerOre("heavyPlate${it.name.toLowerCase().capitalize()}", it.getHeavyPlate())
         }
         if(!it.isComposite) {

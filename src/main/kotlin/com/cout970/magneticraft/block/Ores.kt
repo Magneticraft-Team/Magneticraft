@@ -32,6 +32,12 @@ object Ores : IBlockMaker{
 
         ores = builder.withName("ores").build()
 
+        ores.setHarvestLevel("pickaxe", 1, OreType.COPPER.getBlockState(ores))
+        ores.setHarvestLevel("pickaxe", 1, OreType.LEAD.getBlockState(ores))
+        ores.setHarvestLevel("pickaxe", 2, OreType.COBALT.getBlockState(ores))
+        ores.setHarvestLevel("pickaxe", 2, OreType.TUNGSTEN.getBlockState(ores))
+        ores.setHarvestLevel("pickaxe", 1, OreType.PYRITE.getBlockState(ores))
+
         return itemBlockListOf(ores)
     }
 
