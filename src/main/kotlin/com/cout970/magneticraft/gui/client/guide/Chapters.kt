@@ -25,7 +25,7 @@ fun loadBook(): Book {
             it to Minecraft.getMinecraft().resourceManager.getResource(it)
         }.mapNotNull { (loc, res) ->
             val text = res.inputStream.reader().readText()
-            if(text.isEmpty()) return@mapNotNull null
+            if (text.isEmpty()) return@mapNotNull null
             val name = loc.resourcePath.removePrefix("guide/$lang/").removeSuffix(".md")
             Section(name, MarkdownDocument(parseChildren(text)))
         }
@@ -47,8 +47,9 @@ fun createIndexPage(sections: List<Section>): Section {
             MarkdownText("\n")
 
     ) + sections.map {
+        val name = it.name.split("-").joinToString(" ") { it.capitalize() }
         MarkdownLink(it.name + "#0", listOf(
-                MarkdownText("* " + it.name.replace("-", " ").capitalize() + "\n"))
+                MarkdownText("* $name\n"))
         )
     }
 

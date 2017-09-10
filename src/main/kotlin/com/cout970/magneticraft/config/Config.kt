@@ -22,7 +22,7 @@ object Config {
     @ConfigValue(category = CATEGORY_ORES, comment = "Tungsten ore")
     var tungstenOre = OreConfig(8, 8, 60, 20)
 
-    @ConfigValue(category = CATEGORY_ORES, comment = "Tungsten ore")
+    @ConfigValue(category = CATEGORY_ORES, comment = "Pyrite ore")
     var pyriteOre = OreConfig(9, 9, 100, 30)
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
@@ -65,9 +65,9 @@ object Config {
 //    var sifterConsumption = 10.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
-    var solarPanelMaxProduction = 160.0
+    var solarPanelMaxProduction = 100.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Production")
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Max Stable Production")
     var thermopileProduction = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
@@ -94,5 +94,4 @@ object Config {
 
     @ConfigValue(category = CATEGORY_PC, comment = "Energy consumed every tick by the mining robot")
     var miningRobotPassiveConsumption: Double = 1.0
-
 }

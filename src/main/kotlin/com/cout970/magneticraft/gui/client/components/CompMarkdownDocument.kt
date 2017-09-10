@@ -102,7 +102,8 @@ class CompBookRenderer : IComponent {
                 link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0) + textOffset)
             }
             if (link != null) {
-                openPage(link.linkSection, link.linkPage)
+                if (link.linkSection in book.sections)
+                    openPage(link.linkSection, link.linkPage)
             }
         }
 
@@ -197,7 +198,10 @@ class CompBookRenderer : IComponent {
                 return ret
             }
             is MarkdownHeader -> {
-                return childs.flatMap { it.mapToText(ctx) }
+                ctx.prefix += TextFormatting.BOLD
+                val ret = childs.flatMap { it.mapToText(ctx) }
+                ctx.prefix = ctx.prefix.substring(0, ctx.prefix.length - 2)
+                return ret
             }
         }
         return emptyList()

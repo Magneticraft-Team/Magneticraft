@@ -11,11 +11,14 @@ private val header = """(#+)(.*)""".toRegex()
 private val strong = """\*\*\*(.*)\*\*\*""".toRegex()
 private val bold = """\*\*(.*)\*\*""".toRegex()
 private val italic = """\*(.*)\*""".toRegex()
+private val link = """\[([^\]]*)\]\(([^)]*)\)""".toRegex()
+
+//[I'm an inline-style link](https://www.google.com)
 
 
 fun parseChildren(str: String): List<MarkdownTag> {
     if (str.isEmpty()) return emptyList()
-    val lines = str.lines().map { it + "\n" }
+    val lines = if (str.contains("\n")) str.lines().map { it + "\n" } else listOf(str)
     if (lines.isEmpty()) return emptyList()
     val children = mutableListOf<MarkdownTag>()
 
@@ -67,6 +70,20 @@ fun parseChildren(str: String): List<MarkdownTag> {
             children += parseChildren(end)
             return@forEach
         }
+
+        if (line.contains(link)) {
+            val match = link.find(line)!!
+            val preText = line.substring(0 until match.range.start)
+            val text = match.groupValues[1]
+            val postText = line.substring(match.range.endInclusive + 1 until line.length)
+            val address = match.groupValues[2]
+
+            children += parseChildren(preText)
+            children += MarkdownLink(address, parseChildren(text))
+            children += parseChildren(postText)
+            return@forEach
+        }
+
         children += MarkdownText(line)
         return@forEach
     }
@@ -94,7 +111,7 @@ class MarkdownHorizontalRule : MarkdownTag() {
     override val childs: List<MarkdownTag> = emptyList()
 }
 
-class MarkdownNewLine : MarkdownTag(){
+class MarkdownNewLine : MarkdownTag() {
     override val childs: List<MarkdownTag> = emptyList()
 }
 

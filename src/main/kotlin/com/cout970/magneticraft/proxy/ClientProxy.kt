@@ -5,6 +5,7 @@ import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.block.core.BlockBase
+import com.cout970.magneticraft.gui.client.components.CompBookRenderer
 import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.registry.blocks
@@ -103,6 +104,9 @@ class ClientProxy : CommonProxy() {
 
         //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
         MinecraftForge.EVENT_BUS.register(this)
+
+        // Preload guidebook
+        CompBookRenderer.book
     }
 
     @Suppress("UNCHECKED_CAST")
