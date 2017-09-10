@@ -40,9 +40,7 @@ fun loadBook(): Book {
 
 fun createIndexPage(sections: List<Section>): Section {
 
-    val children = (1..22).map {
-        MarkdownNewLine()
-    } + listOf(
+    val children = listOf(
             MarkdownHeader(1, listOf(MarkdownText("Index\n"))),
             MarkdownText("\n")
 

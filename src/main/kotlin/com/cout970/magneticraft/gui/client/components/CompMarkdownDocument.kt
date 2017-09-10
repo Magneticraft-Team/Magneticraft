@@ -24,14 +24,18 @@ class CompBookRenderer : IComponent {
 
     companion object {
         val BACKGROUND = resource("textures/gui/guide/book.png")
-        val book: Book by lazy { loadBook() }
+        //        val book: Book by lazy { loadBook() }
+        val book: Book get() = loadBook()
         val textOffset = vec2Of(22, 24)
 
         var currentSection: String = "index"
         var pageIndex = 0
+        var scale = 1.0
     }
 
     var pages: List<Page> = emptyList()
+    val pageSize get() = vec2Of(115 * scale, scale * 130)
+    val pageOffset get() = 130 * scale
 
     override fun init() {
         openSection()
@@ -64,12 +68,12 @@ class CompBookRenderer : IComponent {
 
         GlStateManager.pushMatrix()
         GlStateManager.translate(gui.pos.x + textOffset.xi, gui.pos.y + textOffset.yi, 0.0)
-        GlStateManager.scale(2 / 3.0, 2 / 3.0, 1.0)
+        GlStateManager.scale(scale, scale, 1.0)
         if (pageIndex in pages.indices) {
             renderPage(pages[pageIndex], vec2Of(0, 0))
         }
         if (pageIndex + 1 in pages.indices) {
-            renderPage(pages[pageIndex + 1], vec2Of(192, 0))
+            renderPage(pages[pageIndex + 1], vec2Of(pageOffset, 0))
         }
         GlStateManager.popMatrix()
 
@@ -77,7 +81,7 @@ class CompBookRenderer : IComponent {
             checkLinkClick(pages[pageIndex], mouse, textOffset)
         }
         if ((pageIndex + 1) in pages.indices) {
-            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0) + textOffset)
+            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + textOffset)
         }
     }
 
@@ -99,7 +103,7 @@ class CompBookRenderer : IComponent {
         if (pageIndex in pages.indices) {
             var link = checkLinkClick(pages[pageIndex], mouse, textOffset)
             if (link == null && (pageIndex + 1) in pages.indices) {
-                link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(192, 0) + textOffset)
+                link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageSize.xi, 0) + textOffset)
             }
             if (link != null) {
                 if (link.linkSection in book.sections)
@@ -112,7 +116,7 @@ class CompBookRenderer : IComponent {
 
     fun checkLinkClick(page: Page, mouse: Vec2d, offset: IVector2): LinkTextBox? {
         page.links.forEach {
-            if (mouse in (gui.pos + (it.pos * 2 / 3.0) + offset to it.size())) {
+            if (mouse in (gui.pos + (it.pos * scale) + offset to it.size())) {
                 return it
             }
         }
@@ -121,7 +125,7 @@ class CompBookRenderer : IComponent {
 
 
     fun TextBox.size(): IVector2 {
-        return vec2Of(gui.fontHelper.getStringWidth(txt + " ") * 2 / 3.0, gui.fontHelper.FONT_HEIGHT * 2 / 3.0)
+        return vec2Of(gui.fontHelper.getStringWidth(txt + " ") * scale, gui.fontHelper.FONT_HEIGHT * scale)
     }
 
     fun renderArrow(it: Arrow, hover: Boolean) {
@@ -144,7 +148,7 @@ class CompBookRenderer : IComponent {
     fun Context.newLine() {
         lastPosY += gui.fontHelper.FONT_HEIGHT
         lastPosX = 0
-        if (lastPosY > 190) {
+        if (lastPosY > pageSize.yi) {
             lastPosY = 0
             page++
         }
@@ -162,7 +166,7 @@ class CompBookRenderer : IComponent {
 
                         val size = gui.fontHelper.getStringWidth(ctx.prefix + it + " ")
 
-                        if (ctx.lastPosX + size > 170) {
+                        if (ctx.lastPosX + size > pageSize.xi) {
                             ctx.newLine()
                         }
 
