@@ -1,0 +1,15 @@
+{
+    "homepage": "https://minecraft.curseforge.com/projects/magneticraft",
+    "1.12": {
+        "2.0.0": "Updated to 2.0.0"
+    },
+    "1.12.1": {
+        "2.0.0": "Updated to 2.0.0"
+    },
+    "promos": {
+        "1.12-latest": "2.0.0",
+        "1.12-recommended": "2.0.0",
+        "1.12.1-latest": "2.0.0",
+        "1.12.1-recommended": "2.0.0"
+    }
+}

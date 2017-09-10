@@ -14,6 +14,6 @@
         "logoFile": "assets/magneticraft/textures/gui/guide/logo.png",
         "screenshots": [ ],
         "requiredMods": [ ],
-        "dependencies": [ ]
+        "dependencies": [ "Forgelin", "ModelLoader" ]
     }
 ]

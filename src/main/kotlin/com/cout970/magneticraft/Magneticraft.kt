@@ -23,8 +23,8 @@ import kotlin.system.measureTimeMillis
         version = MOD_VERSION,
         modLanguage = "kotlin",
         modLanguageAdapter = LANG_ADAPTER,
-        acceptedMinecraftVersions = "[1.12]"
-//        , dependencies = "required-after:modelloader@[1.0.0,1.1.0)"
+        acceptedMinecraftVersions = "[1.12]",
+        dependencies = "required-after:modelloader@[1.0.4,);required-after:forgelin"
 )
 //Singleton, see KotlinAdapter to know how it's loaded by forge
 object Magneticraft {

@@ -23,7 +23,7 @@ compileJava {
 minecraft {
     version = "1.12-14.21.1.2443"
 	mappings = "snapshot_20170624"
-	replace '@VERSION@', project.version
+	replace '@VERSION@': project.version
     runDir = "run"
 }
 
@@ -86,5 +86,5 @@ dependencies {
 	compile "mezz.jei:jei_1.12:4.7.5.86"
 	compile "CraftTweaker2:CraftTweaker2-API:4.0.3.242"
     compile "com.blamejared:MTLib:3.0.0.1"
-	compile files("lib/modelloader-1.0.2.jar")
+	compile files("lib/modelloader-1.0.4.jar", "lib/Forgelin-1.5.1.jar")
 }
