@@ -49,35 +49,35 @@ item.magneticraft.ingots_zinc.name=锌锭
 item.magneticraft.ingots_osmium.name=锇锭
 item.magneticraft.ingots_nickel.name=镍锭
 
-item.magneticraft.chunks_iron.name=大块铁矿
-item.magneticraft.chunks_gold.name=大块金矿
-item.magneticraft.chunks_copper.name=大块铜矿
-item.magneticraft.chunks_lead.name=大块铅矿
-item.magneticraft.chunks_cobalt.name=大块钴矿
-item.magneticraft.chunks_tungsten.name=大块钨矿
-item.magneticraft.chunks_aluminium.name=大块铝矿
-item.magneticraft.chunks_silver.name=大块银矿
-item.magneticraft.chunks_mithril.name=大块秘银矿
-item.magneticraft.chunks_tin.name=大块锡矿
-item.magneticraft.chunks_zinc.name=大块锌矿
-item.magneticraft.chunks_galena.name=大块方铅矿
-item.magneticraft.chunks_osmium.name=大块锇矿
-item.magneticraft.chunks_nickel.name=大块镍矿
+item.magneticraft.chunks_iron.name=细块铁矿
+item.magneticraft.chunks_gold.name=细块金矿
+item.magneticraft.chunks_copper.name=细块铜矿
+item.magneticraft.chunks_lead.name=细块铅矿
+item.magneticraft.chunks_cobalt.name=细块钴矿
+item.magneticraft.chunks_tungsten.name=细块钨矿
+item.magneticraft.chunks_aluminium.name=细块铝矿
+item.magneticraft.chunks_silver.name=细块银矿
+item.magneticraft.chunks_mithril.name=细块秘银矿
+item.magneticraft.chunks_tin.name=细块锡矿
+item.magneticraft.chunks_zinc.name=细块锌矿
+item.magneticraft.chunks_galena.name=细块方铅矿
+item.magneticraft.chunks_osmium.name=细块锇矿
+item.magneticraft.chunks_nickel.name=细块镍矿
 
-item.magneticraft.rocky_chunks_iron.name=细铁硬块
-item.magneticraft.rocky_chunks_gold.name=细金硬块
-item.magneticraft.rocky_chunks_copper.name=细铜硬块
-item.magneticraft.rocky_chunks_lead.name=细铅硬块
-item.magneticraft.rocky_chunks_cobalt.name=细钴硬块
-item.magneticraft.rocky_chunks_tungsten.name=细钨硬块
-item.magneticraft.rocky_chunks_aluminium.name=细铝硬块
-item.magneticraft.rocky_chunks_silver.name=细银硬块
-item.magneticraft.rocky_chunks_mithril.name=细秘银硬块
-item.magneticraft.rocky_chunks_tin.name=细锡硬块
-item.magneticraft.rocky_chunks_zinc.name=细锌硬块
-item.magneticraft.rocky_chunks_galena.name=细方铅硬块
-item.magneticraft.rocky_chunks_osmium.name=细锇硬块
-item.magneticraft.rocky_chunks_nickel.name=细镍硬块
+item.magneticraft.rocky_chunks_iron.name=铁砾岩
+item.magneticraft.rocky_chunks_gold.name=金砾岩
+item.magneticraft.rocky_chunks_copper.name=铜砾岩
+item.magneticraft.rocky_chunks_lead.name=铅砾岩
+item.magneticraft.rocky_chunks_cobalt.name=钴砾岩
+item.magneticraft.rocky_chunks_tungsten.name=钨砾岩
+item.magneticraft.rocky_chunks_aluminium.name=铝砾岩
+item.magneticraft.rocky_chunks_silver.name=银砾岩
+item.magneticraft.rocky_chunks_mithril.name=秘银砾岩
+item.magneticraft.rocky_chunks_tin.name=锡砾岩
+item.magneticraft.rocky_chunks_zinc.name=锌砾岩
+item.magneticraft.rocky_chunks_galena.name=方铅砾岩
+item.magneticraft.rocky_chunks_osmium.name=锇砾岩
+item.magneticraft.rocky_chunks_nickel.name=镍砾岩
 
 item.magneticraft.dusts_iron.name=铁粉
 item.magneticraft.dusts_gold.name=金粉
@@ -124,11 +124,11 @@ tile.magneticraft.ores_cobalt.name=钴矿石
 tile.magneticraft.ores_tungsten.name=黑钨矿石
 tile.magneticraft.ores_pyrite.name=黄铁矿石
 
-tile.magneticraft.box_normal.name=木盒
+tile.magneticraft.box_normal.name=木箱
 tile.magneticraft.crushing_table_normal.name=粉碎台
 tile.magneticraft.sluice_box_center_north.name=洗矿槽
-tile.magneticraft.feeding_trough_center_north.name=木质给料槽
-tile.magneticraft.kiln_shelf.name=窑板
+tile.magneticraft.feeding_trough_center_north.name=木质饲料槽
+#tile.magneticraft.kiln_shelf.name=窑板
 
 tile.magneticraft.limestone_normal.name=石灰石
 tile.magneticraft.limestone_brick.name=石灰石砖
@@ -137,7 +137,7 @@ tile.magneticraft.burnt_limestone_normal.name=焦灰石灰石
 tile.magneticraft.burnt_limestone_brick.name=焦灰石灰石砖
 tile.magneticraft.burnt_limestone_cobble.name=焦灰碎石灰石
 tile.magneticraft.tile_limestone_normal.name=方石灰石
-tile.magneticraft.tile_limestone_inverted.name=颠倒纹石灰石砖
+tile.magneticraft.tile_limestone_inverted.name=反向花纹石灰石砖
 tile.magneticraft.tube_light_north.name=灯管
 
 tile.magneticraft.conveyor_belt_north.name=传送带
@@ -161,22 +161,27 @@ tile.magneticraft.steam_boiler_normal.name=锅炉
 #tile.magneticraft.thermometer_block.name=热电偶
 #tile.magneticraft.brick_furnace.name=砖炉
 
-tile.magneticraft.water_generator_normal.name=无限水源
+tile.magneticraft.water_generator_normal.name=无限水源方块
 tile.magneticraft.infinite_energy_normal.name=创造模式无限能量源
 
 tile.magneticraft.airlock_normal.name=气锁
 tile.magneticraft.air_bubble_on.name=气泡
 tile.magneticraft.air_bubble_off.name=气泡
 tile.magneticraft.computer_north.name=电脑
+tile.magneticraft.mining_robot_north.name=采矿机器人
+tile.magneticraft.moving_robot_normal.name=机器人
+tile.magneticraft.copper_tank_normal.name=铜质液罐
+tile.magneticraft.thermopile_normal.name=温差电堆
+tile.magneticraft.iron_pipe_normal.name=铁质管道
 
 #multiblocks
-#tile.magneticraft.hydraulic_press.name=液压机核心
-#tile.magneticraft.kiln.name=多孔巢式窑核心
-#tile.magneticraft.sifter.name=电动滤筛台核心
-tile.magneticraft.solar_panel_inactive_north.name=太阳能板核心
-#tile.magneticraft.grinder.name=粉碎机核心
+#tile.magneticraft.hydraulic_press.name=液压机
+#tile.magneticraft.kiln.name=多孔巢式窑
+#tile.magneticraft.sifter.name=电动滤筛台
+tile.magneticraft.solar_panel_inactive_north.name=太阳能板
+#tile.magneticraft.grinder.name=粉碎机
 tile.magneticraft.shelving_unit_inactive_north.name=货架
-tile.magneticraft.steam_engine_inactive_north.name=蒸汽机核心
+tile.magneticraft.steam_engine_inactive_north.name=蒸汽机
 
 
 #tile.magneticraft.copper_block.name=铜块
@@ -188,7 +193,7 @@ tile.magneticraft.multiblock_parts_base.name=机座方块
 tile.magneticraft.multiblock_parts_mesh.name=滤筛机械方块
 tile.magneticraft.multiblock_parts_electric.name=电池机座方块
 tile.magneticraft.multiblock_parts_striped.name=条纹机械方块
-tile.magneticraft.multiblock_parts_grate.name=铁炉箅机械方块
+tile.magneticraft.multiblock_parts_grate.name=铁格栅机械方块
 tile.magneticraft.multiblock_parts_copper_coil.name=铜线圈机械方块
 tile.magneticraft.multiblock_parts_corrugated_iron.name=波纹铁质机械方块
 tile.magneticraft.multiblock_column_axis_y.name=机械支撑柱
@@ -222,5 +227,6 @@ text.magneticraft.multiblock.activate=启动成功！
 #death.attack.kiln.player=%2$s将%1s$扔进了搅拌机。
 
 tooltip.magneticraft.item_storage.energy=%f/%fJ
+tooltip.magneticraft.multiblock.blueprint=放下这个蓝图，以便您查看多方块结构的构成。
 
 fluid.magneticraft.steam=蒸汽
