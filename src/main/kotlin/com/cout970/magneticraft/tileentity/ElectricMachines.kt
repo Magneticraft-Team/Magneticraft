@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
@@ -50,6 +51,7 @@ class TileBattery : TileBase(), ITickable {
         initModules(electricModule, storageModule, invModule, itemChargeModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -86,6 +88,7 @@ class TileElectricFurnace : TileBase(), ITickable {
         initModules(electricModule, storageModule, invModule, processModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -104,6 +107,7 @@ class TileInfiniteEnergy : TileBase(), ITickable {
         initModules(electricModule)
     }
 
+    @DoNotRemove
     override fun update() {
         node.voltage = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
         super.update()
@@ -127,6 +131,7 @@ class TileAirLock : TileBase(), ITickable {
         initModules(airlockModule, electricModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -154,6 +159,7 @@ class TileThermopile : TileBase(), ITickable {
         initModules(electricModule, storageModule, thermopileModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

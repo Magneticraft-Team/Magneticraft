@@ -26,7 +26,5 @@ object ThermopileRecipeManager : IThermopileRecipeManager {
         return false
     }
 
-    override fun removeRecipe(recipe: IThermopileRecipe?): Boolean {
-        return recipeList.remove(recipe)
-    }
+    override fun removeRecipe(recipe: IThermopileRecipe?): Boolean = recipeList.remove(recipe)
 }

@@ -35,6 +35,18 @@ fun registerOreDictionaryEntries() {
         }
         OreDictionary.registerOre("rockyChunk${it.name.toLowerCase().capitalize()}", it.getRockyChunk())
     }
+
+    //oreAluminum has two names!
+    EnumMetal.ALUMINIUM.let {
+        OreDictionary.registerOre("ingotAluminum", it.getIngot())
+        OreDictionary.registerOre("nuggetAluminum", it.getNugget())
+        OreDictionary.registerOre("lightPlateAluminum", it.getLightPlate())
+        OreDictionary.registerOre("plateAluminum", it.getLightPlate())
+        OreDictionary.registerOre("heavyPlateAluminum", it.getHeavyPlate())
+        OreDictionary.registerOre("chunkAluminum", it.getChunk())
+        OreDictionary.registerOre("rockyChunkAluminum", it.getRockyChunk())
+    }
+
     OreDictionary.registerOre("dustSulfur", CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
     OreDictionary.registerOre("oreCopper", Ores.ores.stack(1, 0))
     OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))

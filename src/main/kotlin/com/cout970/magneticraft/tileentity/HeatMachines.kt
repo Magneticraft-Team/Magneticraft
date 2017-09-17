@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleCombustionChamber
@@ -28,6 +29,7 @@ class TileCombustionChamber : TileBase(), ITickable {
         initModules(invModule, combustionChamberModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -53,6 +55,7 @@ class TileSteamBoiler : TileBase(), ITickable {
         initModules(fluidModule, boilerModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

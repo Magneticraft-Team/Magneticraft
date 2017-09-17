@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
@@ -54,6 +55,7 @@ class TileSluiceBox : TileBase(), ITickable {
         initModules(sluiceBoxModule, invModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

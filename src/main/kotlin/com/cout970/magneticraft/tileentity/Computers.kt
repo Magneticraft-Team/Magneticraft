@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
@@ -48,6 +49,7 @@ class TileComputer : TileBase(), ITickable {
         initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -128,6 +130,7 @@ class TileMiningRobot : TileBase(), ITickable {
                 energyModule, energyStorage)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

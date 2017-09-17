@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
@@ -104,6 +105,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
         return base
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
         if (world.isServer) {
@@ -147,6 +149,7 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
         initModules(multiblockModule, shelvingUnitModule, invModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -197,6 +200,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
                 steamEngineMbModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

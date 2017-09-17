@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
@@ -31,6 +32,7 @@ class TileCopperTank : TileBase(), ITickable {
         initModules(fluidModule, bucketIoModule)
     }
 
+    @DoNotRemove
     override fun update() {
         if (world.isServer && container.shouldTick(10)) {
             if (amountCache != tank.fluidAmount) {
@@ -56,6 +58,7 @@ class TileIronPipe : TileBase(), ITickable {
         initModules(pipeModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

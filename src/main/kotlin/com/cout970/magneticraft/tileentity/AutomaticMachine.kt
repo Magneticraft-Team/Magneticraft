@@ -4,6 +4,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
@@ -39,6 +40,7 @@ class TileFeedingTrough : TileBase(), ITickable {
         initModules(moduleFeedingTrough, invModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -64,6 +66,7 @@ class TileConveyorBelt : TileBase(), ITickable {
         initModules(conveyorModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -81,6 +84,7 @@ class TileInserter : TileBase(), ITickable {
         initModules(inserterModule, invModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -89,6 +93,7 @@ class TileInserter : TileBase(), ITickable {
 @RegisterTileEntity("water_generator")
 class TileWaterGenerator : TileBase(), ITickable {
 
+    @DoNotRemove
     override fun update() {
         super.update()
         enumValues<EnumFacing>().forEach { dir ->

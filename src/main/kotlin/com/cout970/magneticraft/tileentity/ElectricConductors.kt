@@ -12,6 +12,7 @@ import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.render.RenderCache
+import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
@@ -66,6 +67,7 @@ class TileConnector : TileBase(), ITickable {
         initModules(electricModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
         if (world.isServer) {
@@ -151,6 +153,7 @@ class TileElectricPole : TileBase(), ITickable {
         initModules(electricModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }
@@ -186,6 +189,7 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
         initModules(electricModule)
     }
 
+    @DoNotRemove
     override fun update() {
         super.update()
     }

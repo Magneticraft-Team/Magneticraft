@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.COBBLESTONE
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 
@@ -186,12 +187,26 @@ fun registerRecipes() {
     addThermopileRecipe(Blocks.SNOW_LAYER, -50)
     addThermopileRecipe(Blocks.TORCH, 5)
     addThermopileRecipe(Blocks.LIT_PUMPKIN, 3)
-    addThermopileRecipe(Blocks.WATER, -25)
     addThermopileRecipe(Blocks.FIRE, 25)
     addThermopileRecipe(Blocks.MAGMA, 25)
 
+    addThermopileRecipe(Blocks.WATER, -25)
     addThermopileRecipeWithDecay(Blocks.LAVA, 100, Blocks.OBSIDIAN.defaultState,-201, 0.00333f)
 
+    val fluids = FluidRegistry.getRegisteredFluids()
+            .values
+            .filter { it != FluidRegistry.WATER }
+            .filter { it != FluidRegistry.LAVA }
+            .filter { it.canBePlacedInWorld() }
+
+    fluids.forEach { fluid ->
+        when {
+            fluid.temperature < 310 -> {
+                addThermopileRecipe(fluid.block, -25 + (-100 * (1 - (fluid.temperature / 310f))).toInt())
+            }
+            fluid.temperature > 310 -> addThermopileRecipe(fluid.block, (100 * (fluid.temperature / 1300f)).toInt())
+        }
+    }
     //@formatter:on
 }
 
