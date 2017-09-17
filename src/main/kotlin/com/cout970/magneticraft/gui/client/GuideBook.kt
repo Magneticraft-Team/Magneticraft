@@ -16,8 +16,8 @@ class ContainerGuideBook(player: EntityPlayer, world: World, pos: BlockPos) : Co
 class GuiGuideBook(cont: ContainerBase) : GuiBase(cont) {
 
     override fun initComponents() {
-        xSize = 280
-        ySize = 186
+        xSize = (280 * CompBookRenderer.scale).toInt()
+        ySize = (186 * CompBookRenderer.scale).toInt()
         components.add(CompBookRenderer())
     }
 }

@@ -119,7 +119,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     override fun drawShadelessString(text: String, pos: Vec2d, color: Int) {
-        fontRenderer.drawString(text, pos.xf, pos.yf, color, false)
+        fontRenderer.drawString(text, pos.xi.toFloat(), pos.yi.toFloat(), color, false)
     }
 
     override fun drawHorizontalLine(startX: Int, endX: Int, y: Int, color: Int) {

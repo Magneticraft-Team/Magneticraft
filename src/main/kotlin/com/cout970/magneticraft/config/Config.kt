@@ -38,6 +38,9 @@ object Config {
     @ConfigValue(category = CATEGORY_GUI, comment = "Allow players to use the gui of the combustion generator")
     var allowCombustionChamberGui = true
 
+    @ConfigValue(category = CATEGORY_GUI, comment = "Scale of the gui with respect of the background image")
+    val guideBookScale: Double = 1.5
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
                                                        "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0

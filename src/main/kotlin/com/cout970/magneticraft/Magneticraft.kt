@@ -24,7 +24,7 @@ import kotlin.system.measureTimeMillis
         modLanguage = "kotlin",
         modLanguageAdapter = LANG_ADAPTER,
         acceptedMinecraftVersions = "[1.12]",
-        dependencies = "required-after:modelloader@[1.0.4,);required-after:forgelin",
+        dependencies = "required-after:modelloader@[1.0.5,);required-after:forgelin",
         updateJSON = "https://raw.githubusercontent.com/Magneticraft-Team/Magneticraft/1.12/src/main/resources/update.json"
 )
 //Singleton, see KotlinAdapter to know how it's loaded by forge

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.gui.client.components
 
 import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
@@ -18,24 +19,23 @@ import net.minecraft.util.text.TextFormatting
  */
 class CompBookRenderer : IComponent {
 
-    override val pos: IVector2 = Vec2d.ZERO
-    override val size: IVector2 = vec2Of(280, 186)
-    override lateinit var gui: IGui
-
     companion object {
         val BACKGROUND = resource("textures/gui/guide/book.png")
-        //        val book: Book by lazy { loadBook() }
-        val book: Book get() = loadBook()
-        val textOffset = vec2Of(22, 24)
-
+        val backgroundSize: IVector2 = vec2Of(280, 186)
+        val book: Book by lazy { loadBook() }
         var currentSection: String = "index"
         var pageIndex = 0
-        var scale = 1.0
+        val scale get() = Config.guideBookScale
     }
 
+    override val pos: IVector2 = Vec2d.ZERO
+    override val size: IVector2 = vec2Of(280, 186) * scale
+    override lateinit var gui: IGui
+
     var pages: List<Page> = emptyList()
-    val pageSize get() = vec2Of(115 * scale, scale * 130)
+    val pageSize get() = vec2Of(110 * scale, scale * 130)
     val pageOffset get() = 130 * scale
+    val textOffset get() = vec2Of(22, 24) * scale
 
     override fun init() {
         openSection()
@@ -55,8 +55,9 @@ class CompBookRenderer : IComponent {
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        GlStateManager.color(1f, 1f, 1f)
         gui.bindTexture(BACKGROUND)
-        gui.drawTexture(DrawableBox(gui.pos to size, Vec2d.ZERO to size, vec2Of(512)))
+        gui.drawTexture(DrawableBox(gui.pos to size, Vec2d.ZERO to backgroundSize, vec2Of(512)))
 
         if (currentSection != "index") {
             renderArrow(Arrow.INDEX, mouse in Arrow.INDEX.collisionBox.offset(gui.pos))
@@ -66,22 +67,18 @@ class CompBookRenderer : IComponent {
         if (pageIndex + 2 in pages.indices)
             renderArrow(Arrow.RIGHT, mouse in Arrow.RIGHT.collisionBox.offset(gui.pos))
 
-        GlStateManager.pushMatrix()
-        GlStateManager.translate(gui.pos.x + textOffset.xi, gui.pos.y + textOffset.yi, 0.0)
-        GlStateManager.scale(scale, scale, 1.0)
         if (pageIndex in pages.indices) {
-            renderPage(pages[pageIndex], vec2Of(0, 0))
+            renderPage(pages[pageIndex], mouse, gui.pos + textOffset)
         }
         if (pageIndex + 1 in pages.indices) {
-            renderPage(pages[pageIndex + 1], vec2Of(pageOffset, 0))
+            renderPage(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
         }
-        GlStateManager.popMatrix()
 
         if (pageIndex in pages.indices) {
-            checkLinkClick(pages[pageIndex], mouse, textOffset)
+            checkLinkClick(pages[pageIndex], mouse, gui.pos + textOffset)
         }
         if ((pageIndex + 1) in pages.indices) {
-            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + textOffset)
+            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
         }
     }
 
@@ -101,9 +98,9 @@ class CompBookRenderer : IComponent {
         }
 
         if (pageIndex in pages.indices) {
-            var link = checkLinkClick(pages[pageIndex], mouse, textOffset)
+            var link = checkLinkClick(pages[pageIndex], mouse, gui.pos + textOffset)
             if (link == null && (pageIndex + 1) in pages.indices) {
-                link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageSize.xi, 0) + textOffset)
+                link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
             }
             if (link != null) {
                 if (link.linkSection in book.sections)
@@ -116,20 +113,15 @@ class CompBookRenderer : IComponent {
 
     fun checkLinkClick(page: Page, mouse: Vec2d, offset: IVector2): LinkTextBox? {
         page.links.forEach {
-            if (mouse in (gui.pos + (it.pos * scale) + offset to it.size())) {
+            if (it.contains(mouse, gui, offset)) {
                 return it
             }
         }
         return null
     }
 
-
-    fun TextBox.size(): IVector2 {
-        return vec2Of(gui.fontHelper.getStringWidth(txt + " ") * scale, gui.fontHelper.FONT_HEIGHT * scale)
-    }
-
     fun renderArrow(it: Arrow, hover: Boolean) {
-        val uv = if (hover) it.hoverUv to it.size else it.uvPos to it.size
+        val uv = if (hover) it.hoverUv to it.uvSize else it.uvPos to it.uvSize
         gui.drawTexture(DrawableBox(gui.pos + it.pos to it.size, uv, vec2Of(512)))
     }
 
@@ -146,7 +138,7 @@ class CompBookRenderer : IComponent {
     }
 
     fun Context.newLine() {
-        lastPosY += gui.fontHelper.FONT_HEIGHT
+        lastPosY += gui.fontHelper.FONT_HEIGHT + 2
         lastPosX = 0
         if (lastPosY > pageSize.yi) {
             lastPosY = 0
@@ -185,9 +177,7 @@ class CompBookRenderer : IComponent {
             }
             is MarkdownLink -> {
                 val (linkSection, page) = parseUrl(url)
-                return childs.flatMap { it.mapToText(ctx) }.map {
-                    LinkTextBox(it.txt, it.pos, it.page, linkSection, page)
-                }
+                return listOf(LinkTextBox(childs.flatMap { it.mapToText(ctx) }, linkSection, page))
             }
             is MarkdownItalic -> {
                 ctx.prefix += TextFormatting.ITALIC
@@ -231,41 +221,50 @@ class CompBookRenderer : IComponent {
         return section to page
     }
 
-    fun renderPage(page: Page, pos: IVector2) {
+    fun renderPage(page: Page, mouse: IVector2, pos: IVector2) {
         page.text.forEach {
-            renderTextBox(it, pos)
+            renderTextBox(it, pos, 0x303030)
         }
         page.links.forEach {
-            renderTextBox(it, pos)
+            val color = if (it.contains(mouse, gui, pos)) 0x0b99ff else 0x1d3fee
+            it.words.forEach { renderTextBox(it, pos, color) }
         }
     }
 
-    fun renderTextBox(it: TextBox, pos: IVector2) {
+    fun renderTextBox(it: TextBox, pos: IVector2, color: Int) {
+
         gui.drawShadelessString(
                 text = it.txt,
                 pos = pos + it.pos,
-                color = 0xAFAFAF
-        )
-        gui.drawShadelessString(
-                text = it.txt,
-                pos = pos + it.pos,
-                color = if (it is LinkTextBox) 0x3030F0 else 0x303030
+                color = color
         )
     }
 
     data class Page(val text: List<NormalTextBox>, val links: List<LinkTextBox> = emptyList(), val index: Int)
 
-    abstract class TextBox(val txt: String, val pos: IVector2, val page: Int)
+    abstract class TextBox(val txt: String, val pos: IVector2, val page: Int) {
 
-    class NormalTextBox(txt: String, pos: IVector2, page: Int) : TextBox(txt, pos, page)
+        abstract fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean
+    }
+
+    class NormalTextBox(txt: String, pos: IVector2, page: Int) : TextBox(txt, pos, page) {
+
+        override fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean {
+            val size = vec2Of(gui.fontHelper.getStringWidth(txt + " "), gui.fontHelper.FONT_HEIGHT)
+            return mouse in (pos + offset to size)
+        }
+    }
 
     class LinkTextBox(
-            txt: String,
-            pos: IVector2,
-            page: Int,
+            val words: List<TextBox>,
             val linkSection: String,
             val linkPage: Int
-    ) : TextBox(txt, pos, page)
+    ) : TextBox(words.joinToString(), words[0].pos, words[0].page) {
+
+        override fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean {
+            return words.any { it.contains(mouse, gui, offset) }
+        }
+    }
 
     data class Context(
             var lastPosX: Int = 0,
@@ -274,12 +273,14 @@ class CompBookRenderer : IComponent {
             var page: Int = 0
     )
 
-    enum class Arrow(val pos: IVector2, val size: IVector2 = vec2Of(18, 26), val uvPos: IVector2,
+    enum class Arrow(val pos: IVector2, val size: IVector2 = vec2Of(18, 26) * scale,
+                     val uvSize: IVector2 = vec2Of(18, 26),
+                     val uvPos: IVector2,
                      val hoverUv: IVector2) {
 
-        LEFT(pos = vec2Of(30, 164), uvPos = vec2Of(26, 188), hoverUv = vec2Of(26, 218)),
-        RIGHT(pos = vec2Of(232, 164), uvPos = vec2Of(4, 188), hoverUv = vec2Of(4, 218)),
-        INDEX(pos = vec2Of(98, 172), uvPos = vec2Of(4, 247), hoverUv = vec2Of(26, 247));
+        LEFT(pos = vec2Of(30 * scale, 164 * scale), uvPos = vec2Of(26, 188), hoverUv = vec2Of(26, 218)),
+        RIGHT(pos = vec2Of(232 * scale, 164 * scale), uvPos = vec2Of(4, 188), hoverUv = vec2Of(4, 218)),
+        INDEX(pos = vec2Of(98 * scale, 172 * scale), uvPos = vec2Of(4, 247), hoverUv = vec2Of(26, 247));
 
         val collisionBox = pos to size
     }
