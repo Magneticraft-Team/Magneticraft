@@ -13,47 +13,52 @@ import stanhebben.zenscript.annotations.ZenMethod
 
 @ZenClass("mods.magneticraft.CrushingTable")
 @ZenRegister
-class CrushingTable {
+object CrushingTable {
 
     @ZenMethod
+    @JvmStatic
     fun addRecipe(input: IItemStack, output: IItemStack, useOreDict: Boolean) {
+        CraftTweakerPlugin.delayExecution {
+            val a = input.toStack()
+            val b = output.toStack()
 
-        val a = input.toStack()
-        val b = output.toStack()
+            if (a.isEmpty) {
+                ctLogError("[CrushingTable] Invalid input stack: $input")
+                return@delayExecution
+            }
+            if (b.isEmpty) {
+                ctLogError("[CrushingTable] Invalid output stack: $output")
+                return@delayExecution
+            }
+            val man = MagneticraftApi.getCrushingTableRecipeManager()
+            val recipe = man.createRecipe(a, b, useOreDict)
 
-        if (a.isEmpty) {
-            ctLogError("[CrushingTable] Invalid input stack: $input")
-            return
-        }
-        if (b.isEmpty) {
-            ctLogError("[CrushingTable] Invalid output stack: $output")
-            return
-        }
-        val man = MagneticraftApi.getCrushingTableRecipeManager()
-        val recipe = man.createRecipe(a, b, useOreDict)
-
-        applyAction("Adding $recipe") {
-            man.registerRecipe(recipe)
+            applyAction("Adding $recipe") {
+                man.registerRecipe(recipe)
+            }
         }
     }
 
     @ZenMethod
+    @JvmStatic
     fun removeRecipe(input: IItemStack) {
-        val a = input.toStack()
+        CraftTweakerPlugin.delayExecution {
+            val a = input.toStack()
 
-        if (a.isEmpty) {
-            ctLogError("[CrushingTable] Invalid input stack: $input")
-            return
-        }
-        val man = MagneticraftApi.getCrushingTableRecipeManager()
-
-        val recipe = man.findRecipe(a)
-        if (recipe != null) {
-            applyAction("Removing $recipe") {
-                man.removeRecipe(recipe)
+            if (a.isEmpty) {
+                ctLogError("[CrushingTable] Invalid input stack: $input")
+                return@delayExecution
             }
-        } else {
-            ctLogError("[CrushingTable] Error removing recipe: Unable to find recipe with input = $input")
+            val man = MagneticraftApi.getCrushingTableRecipeManager()
+
+            val recipe = man.findRecipe(a)
+            if (recipe != null) {
+                applyAction("Removing $recipe") {
+                    man.removeRecipe(recipe)
+                }
+            } else {
+                ctLogError("[CrushingTable] Error removing recipe: Unable to find recipe with input = $input")
+            }
         }
     }
 }

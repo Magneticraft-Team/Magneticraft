@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.integration
 
+import com.cout970.magneticraft.integration.crafttweaker.CraftTweakerPlugin
 import net.minecraftforge.fml.common.Loader
 
 /**
@@ -16,5 +17,9 @@ object IntegrationHandler {
         jei = Loader.isModLoaded("jei")
         // also auto-loads classes with @ZenRegister
         craftTweaker = Loader.isModLoaded("crafttweaker")
+    }
+
+    fun init(){
+        CraftTweakerPlugin.runActions()
     }
 }

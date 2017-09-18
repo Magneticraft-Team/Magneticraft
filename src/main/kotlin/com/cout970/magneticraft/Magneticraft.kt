@@ -104,6 +104,7 @@ object Magneticraft {
         val time = measureTimeMillis {
             proxy.init()
         }
+        IntegrationHandler.init()
 
         log.info("Init done in $time milliseconds")
     }

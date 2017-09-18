@@ -12,63 +12,115 @@ import stanhebben.zenscript.annotations.ZenMethod
 
 @ZenClass("mods.magneticraft.SluiceBox")
 @ZenRegister
-class SluiceBox {
+object SluiceBox {
 
     @ZenMethod
-    fun addRecipe(input: IItemStack, output: IItemStack, extras: List<List<Any>>, useOreDict: Boolean) {
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack, useOreDict: Boolean) {
+        addRecipe(input, output, emptyList(), useOreDict)
+    }
 
-        val a = input.toStack()
-        val b = output.toStack()
+    @ZenMethod
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack, extp1: Float, exti1: IItemStack, useOreDict: Boolean) {
+        addRecipe(input, output, listOf(extp1 to exti1), useOreDict)
+    }
 
-        if (a.isEmpty) {
-            ctLogError("[SluiceBox] Invalid input stack: $input")
-            return
-        }
-        if (b.isEmpty) {
-            ctLogError("[SluiceBox] Invalid output stack: $output")
-            return
-        }
-        val ext = extras.mapNotNull {
-            if(it.size != 2){
-                ctLogError("[SluiceBox] Invalid extra parameter: Content should be Pairs (Stack, Float), but got: $it")
-                return@mapNotNull null
+    @ZenMethod
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack,
+                  extp1: Float, exti1: IItemStack,
+                  extp2: Float, exti2: IItemStack, useOreDict: Boolean) {
+        addRecipe(input, output, listOf(extp1 to exti1, extp2 to exti2), useOreDict)
+    }
+
+    @ZenMethod
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack,
+                  extp1: Float, exti1: IItemStack,
+                  extp2: Float, exti2: IItemStack,
+                  extp3: Float, exti3: IItemStack, useOreDict: Boolean) {
+        addRecipe(input, output, listOf(extp1 to exti1, extp2 to exti2, extp3 to exti3), useOreDict)
+    }
+
+    @ZenMethod
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack,
+                  extp1: Float, exti1: IItemStack,
+                  extp2: Float, exti2: IItemStack,
+                  extp3: Float, exti3: IItemStack,
+                  extp4: Float, exti4: IItemStack, useOreDict: Boolean) {
+
+        addRecipe(input, output, listOf(
+                extp1 to exti1,
+                extp2 to exti2,
+                extp3 to exti3,
+                extp4 to exti4), useOreDict)
+    }
+
+    @ZenMethod
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack,
+                  extp1: Float, exti1: IItemStack,
+                  extp2: Float, exti2: IItemStack,
+                  extp3: Float, exti3: IItemStack,
+                  extp4: Float, exti4: IItemStack,
+                  extp5: Float, exti5: IItemStack, useOreDict: Boolean) {
+
+        addRecipe(input, output, listOf(
+                extp1 to exti1,
+                extp2 to exti2,
+                extp3 to exti3,
+                extp4 to exti4,
+                extp5 to exti5), useOreDict)
+    }
+
+    @ZenMethod
+    @JvmStatic
+    fun addRecipe(input: IItemStack, output: IItemStack, extras: List<Pair<Number, IItemStack>>, useOreDict: Boolean) {
+        CraftTweakerPlugin.delayExecution {
+            val a = input.toStack()
+            val b = output.toStack()
+
+            if (a.isEmpty) {
+                ctLogError("[SluiceBox] Invalid input stack: $input")
+                return@delayExecution
             }
-            if(it[0] !is IItemStack){
-                ctLogError("[SluiceBox] Invalid extra parameter: Invalid Pair (Stack, Float), but got: $it")
-                return@mapNotNull null
+            if (b.isEmpty) {
+                ctLogError("[SluiceBox] Invalid output stack: $output")
+                return@delayExecution
             }
-            if(it[1] !is Number){
-                ctLogError("[SluiceBox] Invalid extra parameter: Invalid Pair (Stack, Float), but got: $it")
-                return@mapNotNull null
+            val ext = extras.map { it.second.toStack() to it.first.toFloat() }
+
+            val man = MagneticraftApi.getSluiceBoxRecipeManager()
+            val recipe = man.createRecipe(a, b, ext, useOreDict)
+
+            applyAction("Adding $recipe") {
+                man.registerRecipe(recipe)
             }
-            Pair((it[0] as IItemStack).toStack(), (it[1] as Number).toFloat())
-        }
-
-        val man = MagneticraftApi.getSluiceBoxRecipeManager()
-        val recipe = man.createRecipe(a, b, ext, useOreDict)
-
-        applyAction("Adding $recipe") {
-            man.registerRecipe(recipe)
         }
     }
 
     @ZenMethod
+    @JvmStatic
     fun removeRecipe(input: IItemStack) {
-        val a = input.toStack()
+        CraftTweakerPlugin.delayExecution {
+            val a = input.toStack()
 
-        if (a.isEmpty) {
-            ctLogError("[SluiceBox] Invalid input stack: $input")
-            return
-        }
-        val man = MagneticraftApi.getSluiceBoxRecipeManager()
-
-        val recipe = man.findRecipe(a)
-        if (recipe != null) {
-            applyAction("Removing $recipe") {
-                man.removeRecipe(recipe)
+            if (a.isEmpty) {
+                ctLogError("[SluiceBox] Invalid input stack: $input")
+                return@delayExecution
             }
-        } else {
-            ctLogError("[SluiceBox] Error removing recipe: Unable to find recipe with input = $input")
+            val man = MagneticraftApi.getSluiceBoxRecipeManager()
+
+            val recipe = man.findRecipe(a)
+            if (recipe != null) {
+                applyAction("Removing $recipe") {
+                    man.removeRecipe(recipe)
+                }
+            } else {
+                ctLogError("[SluiceBox] Error removing recipe: Unable to find recipe with input = $input")
+            }
         }
     }
 }

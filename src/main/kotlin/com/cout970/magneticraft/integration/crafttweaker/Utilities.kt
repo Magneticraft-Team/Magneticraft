@@ -18,6 +18,4 @@ fun ctLogError(msg: String) {
     CraftTweakerAPI.logError(msg)
 }
 
-fun IItemStack.toStack(): ItemStack {
-    return InputHelper.toStack(this)
-}
+fun IItemStack.toStack(): ItemStack = InputHelper.toStack(this)

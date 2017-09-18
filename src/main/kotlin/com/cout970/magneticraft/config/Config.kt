@@ -39,7 +39,7 @@ object Config {
     var allowCombustionChamberGui = true
 
     @ConfigValue(category = CATEGORY_GUI, comment = "Scale of the gui with respect of the background image")
-    val guideBookScale: Double = 1.5
+    var guideBookScale: Double = 1.5
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
                                                        "NOTE: all the values in the config about energy are in Watts")
