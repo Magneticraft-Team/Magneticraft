@@ -2,16 +2,18 @@
     "homepage": "https://minecraft.curseforge.com/projects/magneticraft",
     "1.12": {
         "2.0.0": "Updated to 2.0.0",
-        "2.0.1": "Updated GuideBook Scale, liquids now work with the thermopile, fixed typos in the guide book, added oreAluminum to oreDict"
+        "2.0.1": "Updated GuideBook Scale, liquids now work with the thermopile, fixed typos in the guide book, added oreAluminum to oreDict",
+        "2.0.2": "Fixed config value not updating, fixed CraftTweaker integration"
     },
     "1.12.1": {
         "2.0.0": "Updated to 2.0.0",
-        "2.0.1": "Updated GuideBook Scale, liquids now work with the thermopile, fixed typos in the guide book, added oreAluminum to oreDict"
+        "2.0.1": "Updated GuideBook Scale, liquids now work with the thermopile, fixed typos in the guide book, added oreAluminum to oreDict",
+        "2.0.2": "Fixed config value not updating, fixed CraftTweaker integration"
     },
     "promos": {
-        "1.12-latest": "2.0.1",
-        "1.12-recommended": "2.0.1",
-        "1.12.1-latest": "2.0.1",
-        "1.12.1-recommended": "2.0.1"
+        "1.12-latest": "2.0.2",
+        "1.12-recommended": "2.0.2",
+        "1.12.1-latest": "2.0.2",
+        "1.12.1-recommended": "2.0.2"
     }
 }
