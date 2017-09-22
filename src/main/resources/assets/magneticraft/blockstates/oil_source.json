@@ -1,0 +1,63 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cube_all"
+    },
+    "variants": {
+        "full_100": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_1"
+            }
+        }],
+        "full_90": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_1"
+            }
+        }],
+        "full_80": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_1"
+            }
+        }],
+        "full_70": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_2"
+            }
+        }],
+        "full_60": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_2"
+            }
+        }],
+        "full_50": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_2"
+            }
+        }],
+        "full_40": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_3"
+            }
+        }],
+        "full_30": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_3"
+            }
+        }],
+        "full_20": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_3"
+            }
+        }],
+        "full_10": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_4"
+            }
+        }],
+        "empty": [{
+            "textures": {
+                "all": "magneticraft:blocks/ore_block/oil_source_4"
+            }
+        }]
+    }
+}
