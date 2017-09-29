@@ -34,7 +34,7 @@ open class OreGenerator(
     }
 
     fun generateChunkOres(world: World, pos: Vec2d, random: Random, chunkAmount: Int) {
-        for (k in 0..chunkAmount - 1) {
+        for (k in 0 until chunkAmount) {
             val x = pos.xi * 16 + random.nextInt(16)
             val y = config.minLevel + random.nextInt(config.maxLevel - config.minLevel)
             val z = pos.yi * 16 + random.nextInt(16)
@@ -51,7 +51,7 @@ open class OreGenerator(
         val y1 = (y + random.nextInt(3) - 2).toDouble()
         val y2 = (y + random.nextInt(3) - 2).toDouble()
 
-        for (n in 0..config.veinAmount - 1) {
+        for (n in 0 until config.veinAmount) {
 
             val xPlace = posX + (negX - posX) * n / config.veinAmount
             val yPlace = y1 + (y2 - y1) * n / config.veinAmount
@@ -59,22 +59,22 @@ open class OreGenerator(
             val scale = random.nextDouble() * config.veinAmount / 16.0
             val desp = (Math.sin(n * Math.PI / config.veinAmount) + 1.0f) * scale + 1.0
 
-            val minX = floor_double(xPlace - desp / 2.0)
-            val minY = floor_double(yPlace - desp / 2.0)
-            val minZ = floor_double(zPlace - desp / 2.0)
-            val maxX = floor_double(xPlace + desp / 2.0)
-            val maxY = floor_double(yPlace + desp / 2.0)
-            val maxZ = floor_double(zPlace + desp / 2.0)
+            val minX = floorDouble(xPlace - desp / 2.0)
+            val minY = floorDouble(yPlace - desp / 2.0)
+            val minZ = floorDouble(zPlace - desp / 2.0)
+            val maxX = floorDouble(xPlace + desp / 2.0)
+            val maxY = floorDouble(yPlace + desp / 2.0)
+            val maxZ = floorDouble(zPlace + desp / 2.0)
 
-            for (i in minX..maxX - 1) {
+            for (i in minX until maxX) {
                 val xDistance = (i.toDouble() + 0.5 - xPlace) / (desp / 2.0)
 
                 if (xDistance * xDistance < 1.0) {
-                    for (j in minY..maxY - 1) {
+                    for (j in minY until maxY) {
                         val yDistance = (j.toDouble() + 0.5 - yPlace) / (desp / 2.0)
 
                         if (xDistance * xDistance + yDistance * yDistance < 1.0) {
-                            for (k in minZ..maxZ - 1) {
+                            for (k in minZ until maxZ) {
 
                                 val zDistance = (k.toDouble() + 0.5 - zPlace) / (desp / 2.0)
                                 val blockPos = BlockPos(i, j, k)
@@ -95,7 +95,7 @@ open class OreGenerator(
 
     companion object {
 
-        fun floor_double(value: Double): Int {
+        fun floorDouble(value: Double): Int {
             val i = value.toInt()
             return if (value < i.toDouble()) i - 1 else i
         }

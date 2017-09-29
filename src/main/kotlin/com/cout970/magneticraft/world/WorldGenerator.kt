@@ -18,12 +18,12 @@ object WorldGenerator : IWorldGenerator {
 
     fun init() {
         generators.clear()
-        Ores.OreType.COPPER.getBlockState(Ores.ores)
         generators.add(OreGenerator(Ores.OreType.COPPER.getBlockState(Ores.ores), Config.copperOre))
         generators.add(OreGenerator(Ores.OreType.LEAD.getBlockState(Ores.ores), Config.leadOre))
         generators.add(OreGenerator(Ores.OreType.TUNGSTEN.getBlockState(Ores.ores), Config.tungstenOre))
         generators.add(OreGenerator(Ores.OreType.PYRITE.getBlockState(Ores.ores), Config.pyriteOre))
         generators.add(GaussianOreGenerator(Decoration.LimestoneKind.NORMAL.getBlockState(Decoration.limestone), Config.limestone))
+        generators.add(OilSourceGenerator(Ores.OilAmount.FULL_100.getBlockState(Ores.oilSource), Config.oil))
     }
 
     override fun generate(random: Random, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator, chunkProvider: IChunkProvider) {

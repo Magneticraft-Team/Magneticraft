@@ -1,9 +1,6 @@
 package com.cout970.magneticraft.block
 
-import com.cout970.magneticraft.block.core.BlockBase
-import com.cout970.magneticraft.block.core.BlockBuilder
-import com.cout970.magneticraft.block.core.IBlockMaker
-import com.cout970.magneticraft.block.core.IStatesEnum
+import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import net.minecraft.block.Block
@@ -12,6 +9,7 @@ import net.minecraft.block.properties.IProperty
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemBlock
+import net.minecraft.item.ItemStack
 import net.minecraft.util.IStringSerializable
 
 /**
@@ -37,6 +35,8 @@ object Ores : IBlockMaker {
 
         oilSource = builder.withName("oil_source").copy {
             states = OilAmount.values().toList()
+            pickBlock = CommonMethods::pickDefaultBlock
+            onDrop = { listOf(ItemStack.EMPTY)}
         }.build()
 
         ores.setHarvestLevel("pickaxe", 1, OreType.COPPER.getBlockState(ores))

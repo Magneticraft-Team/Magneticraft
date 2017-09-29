@@ -26,7 +26,10 @@ object Config {
     var pyriteOre = OreConfig(9, 9, 100, 30)
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Limestone")
-    var limestone = GaussOreConfig(0, 5, 0.9f, 3, 50, 64, 16)
+    var limestone = GaussOreConfig(0, 5, 0.9f, 3, 32, 64, 16)
+
+    @ConfigValue(category = CATEGORY_ORES, comment = "Oil source")
+    var oil = OilGenConfig(1/50f, 10,  true)
 
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Set players on fire when processing blaze" +
                                                         " rods in the crushing table")
