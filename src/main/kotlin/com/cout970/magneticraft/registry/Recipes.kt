@@ -143,7 +143,6 @@ fun registerRecipes() {
     EnumMetal.values().forEach {
         if(it.isComposite) {
             addSmeltingRecipe(it.subComponents[0]().getIngot().withSize(2), it.getRockyChunk())
-            addSmeltingRecipe(it.subComponents[1]().getIngot().withSize(2), it.getChunk())
         } else {
             addSmeltingRecipe(it.getIngot(), it.getDust())
             if(it.isOre){
@@ -212,6 +211,8 @@ fun registerRecipes() {
 
 
 private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
+    if(input.isEmpty) throw IllegalStateException("Trying to register furnace recipe with empty input stack: $input")
+    if(result.isEmpty) throw IllegalStateException("Trying to register furnace recipe with empty result empty stack: $result")
     GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
 }
 
