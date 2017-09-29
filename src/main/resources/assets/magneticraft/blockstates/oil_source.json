@@ -6,7 +6,9 @@
     "variants": {
         "full_100": [{
             "textures": {
-                "all": "magneticraft:blocks/ore_block/oil_source_1"
+                "all": "magneticraft:blocks/ore_block/oil_source_1",
+                "test": "magneticraft:fluids/steam_still",
+                "test2": "magneticraft:fluids/steam_flow"
             }
         }],
         "full_90": [{
