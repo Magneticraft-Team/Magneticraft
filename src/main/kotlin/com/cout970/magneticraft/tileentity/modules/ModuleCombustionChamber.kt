@@ -5,10 +5,11 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.core.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MAX_BURNING_TIME
+import com.cout970.magneticraft.integration.ItemHolder
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
@@ -20,7 +21,10 @@ import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.toKelvinFromCelsius
 import com.cout970.magneticraft.util.vector.*
+import net.minecraft.init.Blocks
 import net.minecraft.init.Items
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumParticleTypes
@@ -40,9 +44,12 @@ class ModuleCombustionChamber(
     var doorOpen = false
 
     companion object {
-        @JvmStatic val HEAT_RISING_SPEED = 1f
-        @JvmStatic val HEAT_FALLING_SPEED = 0.25f
-        @JvmStatic val HEAT_PER_BURNING_TICK = 0.5f
+        @JvmStatic
+        val HEAT_RISING_SPEED = 1f
+        @JvmStatic
+        val HEAT_FALLING_SPEED = 0.25f
+        @JvmStatic
+        val HEAT_PER_BURNING_TICK = 0.5f
     }
 
     override fun onActivated(args: OnActivatedArgs): Boolean {
@@ -61,11 +68,11 @@ class ModuleCombustionChamber(
                 return false
             }
         } else {
-            if (doorOpen && args.heldItem.item == Items.COAL) {
+            if (doorOpen && isValidFuel(args.heldItem)) {
                 val space = 64 - inventory[0].count
                 val toMove = Math.min(args.heldItem.count, space)
                 if (toMove > 0) {
-                    val notMoved = inventory.insertItem(0, Items.COAL.stack(toMove), false)
+                    val notMoved = inventory.insertItem(0, args.heldItem.withSize(toMove), false)
                     args.heldItem.shrink(toMove - notMoved.count)
                 }
             } else {
@@ -98,7 +105,7 @@ class ModuleCombustionChamber(
                 burningTime = 0
             } else {
                 if (heat >= 99.toKelvinFromCelsius()) {
-                    val speed = if(doorOpen) 2 else 4
+                    val speed = if (doorOpen) 2 else 4
                     burningTime += speed
                     getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * speed)
                 } else {
@@ -114,20 +121,29 @@ class ModuleCombustionChamber(
         }
     }
 
-    fun getBoiler(): ModuleSteamBoiler? {
-        return world.getModule<ModuleSteamBoiler>(pos.up())
-    }
+    fun getBoiler(): ModuleSteamBoiler? = world.getModule<ModuleSteamBoiler>(pos.up())
 
     fun consumeFuel(): Boolean {
         maxBurningTime = 0
         val stack = inventory[0]
-        if (stack.isEmpty || stack.item != Items.COAL) return false
+        if (stack.isEmpty || !isValidFuel(stack)) return false
         val time = TileEntityFurnace.getItemBurnTime(stack)
         if (time > 0) {
             stack.shrink(1)
             maxBurningTime = time
         }
         return true
+    }
+
+    fun isValidFuel(stack: ItemStack): Boolean {
+        if (stack.isEmpty) return false
+        // vanilla
+        if (stack.item == Items.COAL) return true
+        if (stack.item == Item.getItemFromBlock(Blocks.COAL_BLOCK)) return true
+        // other mods
+        ItemHolder.coalCoke?.let { if (it.isItemEqual(stack)) return true }
+        ItemHolder.coalCokeBlock?.let { if (it.isItemEqual(stack)) return true }
+        return false
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
