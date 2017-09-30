@@ -68,6 +68,7 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
         Keyboard.enableRepeatEvents(true)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
         val ibd = IBD().apply {
             setInteger(DATA_ID_SHELVING_UNIT_LEVEL, button.id)

@@ -22,16 +22,14 @@ class PipeNetwork(module: ModulePipe) : Network<ModulePipe>(
     companion object {
 
         fun getInspectFunc(type: PipeType): InspectFunc {
-            return func@ { tile, side ->
+            return func@ { tile, _ ->
                 (tile as? TileBase)?.getModule<ModulePipe>()?.let {
                     if (it.type == type) listOf(it) else null
                 } ?: emptyList()
             }
         }
 
-        fun createNetwork(mod: ModulePipe): PipeNetwork {
-            return PipeNetwork(mod)
-        }
+        fun createNetwork(mod: ModulePipe): PipeNetwork = PipeNetwork(mod)
     }
 }
 

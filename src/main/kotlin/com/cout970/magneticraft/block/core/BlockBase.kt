@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.cout970.magneticraft.block.core
 
 import com.cout970.magneticraft.AABB
