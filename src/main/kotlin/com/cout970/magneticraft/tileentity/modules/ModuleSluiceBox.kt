@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
+import com.cout970.magneticraft.misc.fluid.VoidFluidHandler
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -17,11 +18,13 @@ import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.*
-import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.SoundCategory
+import net.minecraftforge.fluids.FluidRegistry
+import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.FluidUtil
 
 /**
  * Created by cout970 on 2017/07/11.
@@ -49,9 +52,9 @@ class ModuleSluiceBox(
 
         val heldItem = args.heldItem
         if (heldItem.isEmpty) return false
-        if (heldItem.item == Items.WATER_BUCKET && progressLeft == 0) {
+        if (isWaterContainer(heldItem) && progressLeft == 0) {
             if (!args.playerIn.isCreative) {
-                args.playerIn.setHeldItem(args.hand, heldItem.item.getContainerItem(heldItem))
+                args.playerIn.setHeldItem(args.hand, removeWaterFromContainer(heldItem))
             }
             activateChain()
         } else if (canAccept(heldItem)) {
@@ -71,6 +74,18 @@ class ModuleSluiceBox(
             }
         }
         return true
+    }
+
+    fun isWaterContainer(stack: ItemStack): Boolean {
+        val fluidStack = FluidUtil.getFluidContained(stack) ?: return false
+        return fluidStack.isFluidEqual(FluidStack(FluidRegistry.WATER, 1000))
+    }
+
+    fun removeWaterFromContainer(stack: ItemStack): ItemStack {
+        val result = FluidUtil.tryEmptyContainer(stack, VoidFluidHandler, 1000, null, true)
+
+        if (result.isSuccess) return result.result
+        return stack
     }
 
     fun activateChain() {
@@ -128,7 +143,7 @@ class ModuleSluiceBox(
 
     fun playSounds() {
         if (world.isClient) {
-            val sound = if (getNextSluice() == null) sounds["water_flow_end"] else sounds["water_flow"]
+            val sound = (if (getNextSluice() == null) sounds["water_flow_end"] else sounds["water_flow"]) ?: return
             world.playSound(pos.xd, pos.yd, pos.zd, sound, SoundCategory.BLOCKS, 1F, 1F, false)
         }
     }
