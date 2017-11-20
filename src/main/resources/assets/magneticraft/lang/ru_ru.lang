@@ -1,0 +1,243 @@
+itemGroup.magneticraft=Magneticraft
+item.magneticraft.guide_book_normal.name=Путеводитель Magneticraft
+
+item.magneticraft.iron_hammer_normal.name=Железный Молот
+item.magneticraft.stone_hammer_normal.name=Каменный Молот
+item.magneticraft.steel_hammer_normal.name=Стальной Молот
+
+
+item.magneticraft.heavy_plates_iron.name=Тяжёлая Железная Плита
+item.magneticraft.heavy_plates_gold.name=Тяжёлая Золотая Плита
+item.magneticraft.heavy_plates_copper.name=Тяжёлая Медная Плита
+item.magneticraft.heavy_plates_lead.name=Тяжёлая Свинцовая Плита
+item.magneticraft.heavy_plates_cobalt.name=Тяжёлая Кобальтовая Плита
+item.magneticraft.heavy_plates_tungsten.name=Тяжёлая Вольфрамовая Плита
+item.magneticraft.heavy_plates_steel.name=Тяжёлая Стальная Плита
+
+item.magneticraft.light_plates_iron.name=Лёгкая Железная Плита
+item.magneticraft.light_plates_gold.name=Лёгкая Золотая Плита
+item.magneticraft.light_plates_copper.name=Лёгкая Медная Плита
+item.magneticraft.light_plates_lead.name=Лёгкая Свинцовая Плита
+item.magneticraft.light_plates_cobalt.name=Лёгкая Кобальтовая Плита
+item.magneticraft.light_plates_tungsten.name=Лёгкая Вольфрамовая Плита
+item.magneticraft.light_plates_steel.name=Лёгкая Стальная Плита
+
+item.magneticraft.nuggets_copper.name=Медный Самородок
+item.magneticraft.nuggets_lead.name=Свинцовый Самородок
+item.magneticraft.nuggets_cobalt.name=Кобальтовый Самородок
+item.magneticraft.nuggets_tungsten.name=Вольфрамовый Самородок
+item.magneticraft.nuggets_steel.name=Стальной Самородок
+item.magneticraft.nuggets_aluminium.name=Алюминиевый Самородок
+item.magneticraft.nuggets_silver.name=Серебряный Самородок
+item.magneticraft.nuggets_mithril.name=Мифриловый Самородок
+item.magneticraft.nuggets_tin.name=Оловянный Самородок
+item.magneticraft.nuggets_zinc.name=Цинковый Самородок
+item.magneticraft.nuggets_galena.name=Галенитовый Самородок
+item.magneticraft.nuggets_osmium.name=Осмиевый Самородок
+item.magneticraft.nuggets_nickel.name=Никелевый Самородок
+
+item.magneticraft.ingots_copper.name=Медный Слиток
+item.magneticraft.ingots_lead.name=Свинцовый Слиток
+item.magneticraft.ingots_cobalt.name=Кобальтовый Слиток
+item.magneticraft.ingots_tungsten.name=Вольфрамовый Слиток
+item.magneticraft.ingots_steel.name=Стальной Слиток
+item.magneticraft.ingots_aluminium.name=Алюминиевый Слиток
+item.magneticraft.ingots_silver.name=Серебряный Слиток
+item.magneticraft.ingots_mithril.name=Мифриловый Слиток
+item.magneticraft.ingots_tin.name=Оловянный Слиток
+item.magneticraft.ingots_zinc.name=Цинковый Слиток
+item.magneticraft.ingots_osmium.name=Осмиевый Слиток
+item.magneticraft.ingots_nickel.name=Никелевый Слиток
+
+item.magneticraft.chunks_iron.name=Железный Кусок
+item.magneticraft.chunks_gold.name=Золотой Кусок
+item.magneticraft.chunks_copper.name=Медный Кусок
+item.magneticraft.chunks_lead.name=Свинцовый Кусок
+item.magneticraft.chunks_cobalt.name=Кобальтовый Кусок
+item.magneticraft.chunks_tungsten.name=Вольфрамовый Кусок
+item.magneticraft.chunks_aluminium.name=Алюминиевый Кусок
+item.magneticraft.chunks_silver.name=Серебряный Кусок
+item.magneticraft.chunks_mithril.name=Мифриловый Кусок
+item.magneticraft.chunks_tin.name=Оловяный Кусок
+item.magneticraft.chunks_zinc.name=Цинковый Кусок
+item.magneticraft.chunks_galena.name=Галенитовый Кусок
+item.magneticraft.chunks_osmium.name=Осмиевый Кусок
+item.magneticraft.chunks_nickel.name=Никелевый Кусок
+
+item.magneticraft.rocky_chunks_iron.name=Железный Каменистый Кусок
+item.magneticraft.rocky_chunks_gold.name=Золотой Каменистый Кусок
+item.magneticraft.rocky_chunks_copper.name=Медный Каменистый Кусок
+item.magneticraft.rocky_chunks_lead.name=Свинцовый Каменистый Кусок
+item.magneticraft.rocky_chunks_cobalt.name=Кобальтовый Каменистый Кусок
+item.magneticraft.rocky_chunks_tungsten.name=Вольфрамовый Каменистый Кусок
+item.magneticraft.rocky_chunks_aluminium.name=Алюминиевый Каменистый Кусок
+item.magneticraft.rocky_chunks_silver.name=Серебряный Каменистый Кусок
+item.magneticraft.rocky_chunks_mithril.name=Мифриловый Каменистый Кусок
+item.magneticraft.rocky_chunks_tin.name=Оловяный Каменистый Кусок
+item.magneticraft.rocky_chunks_zinc.name=Цинковый Каменистый Кусок
+item.magneticraft.rocky_chunks_galena.name=Галенитовый Каменистый Кусок
+item.magneticraft.rocky_chunks_osmium.name=Осмиевый Каменистый Кусок
+item.magneticraft.rocky_chunks_nickel.name=Никелевый Каменистый Кусок
+
+item.magneticraft.dusts_iron.name=Железная Пыль
+item.magneticraft.dusts_gold.name=Золотая Пыль
+item.magneticraft.dusts_copper.name=Медная Пыль
+item.magneticraft.dusts_lead.name=Свинцовая Пыль
+item.magneticraft.dusts_cobalt.name=Кобальтовая Пыль
+item.magneticraft.dusts_tungsten.name=Вольфрамовая Пыль
+item.magneticraft.dusts_steel.name=Стальная Пыль
+item.magneticraft.dusts_aluminium.name=Алюминиевая Пыль
+item.magneticraft.dusts_silver.name=Серебряная Пыль
+item.magneticraft.dusts_mithril.name=Мифриловая Пыль
+item.magneticraft.dusts_tin.name=Оловяная Пыль
+item.magneticraft.dusts_zinc.name=Цинковая Пыль
+item.magneticraft.dusts_osmium.name=Осмиевая Пыль
+item.magneticraft.dusts_nickel.name=Никелевая Пыль
+
+item.magneticraft.copper_coil_normal.name=Медная Катушка
+item.magneticraft.crafting_coil.name=Маленькая Медная Катушка
+item.magneticraft.crafting_sulfur.name=Кристалл Серы
+item.magneticraft.crafting_alternator.name=Генератор Переменного Тока
+item.magneticraft.crafting_motor.name=Мотор
+item.magneticraft.crafting_magnet.name=Магнит
+item.magneticraft.crafting_mesh.name=Железная Сетка
+item.magneticraft.crafting_string_fabric.name=Сетчатая Ткань
+item.magneticraft.voltmeter_normal.name=Вольтметр
+item.magneticraft.battery_item_low_normal.name=Маленькая Батарея
+item.magneticraft.battery_item_medium_normal.name=Средняя Батарея
+
+item.magneticraft.floppy_disk_user.name=Дискета
+item.magneticraft.floppy_disk_lisp.name=Дискета (Lisp)
+item.magneticraft.floppy_disk_forth.name=Дискета (FORTH)
+item.magneticraft.floppy_disk_js.name=Дискета (JS)
+item.magneticraft.floppy_disk_basic.name=Дискета (BASIC)
+item.magneticraft.floppy_disk_vim.name=Дискета (VI?)
+item.magneticraft.floppy_disk_asm.name=Дискета (ASM)
+
+item.magneticraft.iron_gear_normal.name=Железная Запчасть
+item.magneticraft.steel_gear_normal.name=Стальная Запчасть
+item.magneticraft.tungsten_gear_normal.name=Вольфрамовая Запчасть
+
+tile.magneticraft.ores_copper.name=Халькопиритовая Руда
+tile.magneticraft.ores_lead.name=Галенитовая Руда
+tile.magneticraft.ores_cobalt.name=Кобальтитовая Руда
+tile.magneticraft.ores_tungsten.name=Фольфрамитовая Руда
+tile.magneticraft.ores_pyrite.name=Пиритовая Руда
+tile.magneticraft.oil_source_full_100.name=Источник Нефти (Полный)
+tile.magneticraft.oil_source_full_90.name=Источник Нефти (90%)
+tile.magneticraft.oil_source_full_80.name=Источник Нефти (80%)
+tile.magneticraft.oil_source_full_70.name=Источник Нефти (70%)
+tile.magneticraft.oil_source_full_60.name=Источник Нефти (60%)
+tile.magneticraft.oil_source_full_50.name=Источник Нефти (50%)
+tile.magneticraft.oil_source_full_40.name=Источник Нефти (40%)
+tile.magneticraft.oil_source_full_30.name=Источник Нефти (30%)
+tile.magneticraft.oil_source_full_20.name=Источник Нефти (20%)
+tile.magneticraft.oil_source_full_10.name=Источник Нефти (10%)
+tile.magneticraft.oil_source_empty.name=Источник Нефти (Пустой)
+
+tile.magneticraft.box_normal.name=Деревянный Ящик
+tile.magneticraft.crushing_table_normal.name=Дробительный Стол
+tile.magneticraft.sluice_box_center_north.name=Рудопромывочный Шлюз
+tile.magneticraft.feeding_trough_center_north.name=Корыто
+#tile.magneticraft.kiln_shelf.name=Печная Полка
+
+tile.magneticraft.limestone_normal.name=Известняк
+tile.magneticraft.limestone_brick.name=Кирпич из Известняка
+tile.magneticraft.limestone_cobble.name=Булыжник из Известняка
+tile.magneticraft.burnt_limestone_normal.name=Жжёная Известь
+tile.magneticraft.burnt_limestone_brick.name=Кирпич из Жжёной Известняка
+tile.magneticraft.burnt_limestone_cobble.name=Булыжник из Жжёной Известняка
+tile.magneticraft.tile_limestone_normal.name=Плитка из Известняка
+tile.magneticraft.tile_limestone_inverted.name=Перевёрнутая Плитка из Известняка
+tile.magneticraft.tube_light_north.name=Световая Труба
+
+tile.magneticraft.conveyor_belt_north.name=Конвейерная Лента
+tile.magneticraft.inserter_north.name=Внедритель
+tile.magneticraft.connector_down.name=Электрический Соединитель
+tile.magneticraft.battery_north.name=Блок Батареи
+tile.magneticraft.electric_pole_north.name=Электроопора
+tile.magneticraft.electric_pole_transformer_north.name=Трансформатор для Электроопоры
+tile.magneticraft.electric_furnace_north.name=Электропечь
+tile.magneticraft.combustion_chamber_north.name=Камера Сгорания
+tile.magneticraft.steam_boiler_normal.name=Бойлер
+
+#tile.magneticraft.electric_heater_off.name=Электрический Нагреватель
+#tile.magneticraft.electric_heater_on.name=Электрический Нагреватель
+#tile.magneticraft.heat_pipe.name=Труба Нагрева
+#tile.magneticraft.redstone_heat_pipe.name=Труба Нагрева (Красный Камень)
+#tile.magneticraft.firebox.name=Топка
+#tile.magneticraft.icebox.name=Холодильник
+#tile.magneticraft.heat_sink.name=Кулер
+#tile.magneticraft.heat_reservoir.name=Тепловой Резервуар
+#tile.magneticraft.thermometer_block.name=Термопара
+#tile.magneticraft.brick_furnace.name=Кирпичная Печь
+
+tile.magneticraft.water_generator_normal.name=Водный Генератор
+tile.magneticraft.infinite_energy_normal.name=Бесконечная Энергия
+
+tile.magneticraft.airlock_normal.name=Шлюз
+tile.magneticraft.air_bubble_on.name=Пузырь Воздуха
+tile.magneticraft.air_bubble_off.name=Пузырь Воздуха
+tile.magneticraft.computer_north.name=Компьютер
+tile.magneticraft.mining_robot_north.name=Робот-добытчик
+tile.magneticraft.moving_robot_normal.name=Робот
+tile.magneticraft.copper_tank_normal.name=Медный Бак
+tile.magneticraft.thermopile_normal.name=Термоэлемент
+tile.magneticraft.iron_pipe_normal.name=Железная Труба
+
+#multiblocks
+#tile.magneticraft.hydraulic_press.name=Гидравлический Пресс
+#tile.magneticraft.kiln.name=Промышленная Печь
+#tile.magneticraft.sifter.name=Элестрическое Сито
+tile.magneticraft.solar_panel_inactive_north.name=Солнечная Панель
+#tile.magneticraft.grinder.name=Шлифовальный Станок
+tile.magneticraft.shelving_unit_inactive_north.name=Стеллаж
+tile.magneticraft.steam_engine_inactive_north.name=Паровой Двигатель
+
+
+#tile.magneticraft.copper_block.name=Медный Блок
+#tile.magneticraft.cobalt_block.name=Кобальтовый Блок
+#tile.magneticraft.lead_block.name=Свинцовый Блок
+#tile.magneticraft.tungsten_block.name=Вольфрамовый Блок
+
+tile.magneticraft.multiblock_parts_base.name=Машинный Блок
+tile.magneticraft.multiblock_parts_mesh.name=Машинный Блок (Фильтр)
+tile.magneticraft.multiblock_parts_electric.name=Машинный Блок (Электрический)
+tile.magneticraft.multiblock_parts_striped.name=Машинный Блок (Полосатый)
+tile.magneticraft.multiblock_parts_grate.name=Машинный Блок (Железная Решётка)
+tile.magneticraft.multiblock_parts_copper_coil.name=Машинный Блок (Медная Катушка)
+tile.magneticraft.multiblock_parts_corrugated_iron.name=Машинный Блок (Рифленое Железо)
+tile.magneticraft.multiblock_column_axis_y.name=Колона Поддержки
+tile.magneticraft.multiblock_column_axis_x.name=Колона Поддержки
+tile.magneticraft.multiblock_column_axis_z.name=Колона Поддержки
+tile.magneticraft.multiblock_gap_normal.name=Пустой макет
+
+itemGroup.magneticraft=Magneticraft
+
+text.magneticraft.wire_connect.success=Провод подсоединён
+text.magneticraft.wire_connect.fail=Нельзя подсоединить провод
+text.magneticraft.wire_connect.same_block=Нельзя подсоединить провод к тому же блоку
+text.magneticraft.wire_connect.no_other_connector=Не выбрана позиция(Shift+ПКМ)
+text.magneticraft.wire_connect.updated_position=Выбрана позиция %s
+text.magneticraft.auto_connect.activate=Авто подсоединение проводов включено
+text.magneticraft.auto_connect.deactivate=Авто подсоединение проводов выключено
+
+text.magneticraft.jei.crushing_table=Дробительный Стол
+text.magneticraft.jei.sluice_box=Рудопромывочный Шлюз
+#text.magneticraft.jei.hydraulic_press=Гидравлический Пресс
+#text.magneticraft.jei.kiln=Промышленная Печь
+#text.magneticraft.jei.grinder=Шлифовальный Станок
+#text.magneticraft.jei.sifter=Сито
+
+text.magneticraft.multiblock.invalid_block=Неправильный блок на %s, найдено: %s, ожидалось: %s
+text.magneticraft.multiblock.activate=Успешно Активировано
+
+#death.attack.kiln=%1$s зашёл в печь.
+#death.attack.kiln.player=%1$s зашёл в печь пытаясь убежать %2$s.
+#death.attack.kiln=%1$s измельчил себя в блендере.
+#death.attack.kiln.player=%2$s толкнул %1s$ в блендер.
+
+tooltip.magneticraft.item_storage.energy=%f/%fJ
+tooltip.magneticraft.multiblock.blueprint=Поставьте этот макет чтобы увидеть шаблон мультиблока
+
+fluid.magneticraft.steam=Пар
