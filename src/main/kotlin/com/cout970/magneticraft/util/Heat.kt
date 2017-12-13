@@ -2,6 +2,7 @@
 
 package com.cout970.magneticraft.util
 
+import com.cout970.magneticraft.util.vector.minus
 import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -98,5 +99,5 @@ fun guessAmbientTemp(worldIn: World, pos: BlockPos, range: Int = 10): Double {
 fun testBiomeHeat(worldIn: World, pos: BlockPos): Double {
     val biome = worldIn.getBiome(pos)
     val correction = if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f
-    return (biome.getFloatTemperature(pos) - correction).toKelvinFromMinecraftUnits()
+    return (biome.getTemperature(pos) - correction).toKelvinFromMinecraftUnits()
 }
