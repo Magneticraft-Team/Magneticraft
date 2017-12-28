@@ -131,7 +131,7 @@ object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
         val step = Math.max(0.0, (te.steamEngineMbModule.auxTime - ticks) / 20.0)
         val clock = if (te.steamEngineMbModule.lidOpen) 1 - step else step
 
-        translate(0, -2 * PIXEL * clock, 0)
+        translate(-0.5 * PIXEL * clock, -2.5 * PIXEL * clock, 0)
         translate(-4 * PIXEL, 1, 0)
         rotate(-120 * clock, 0, 0, 1)
         translate(4 * PIXEL, -1, 0)
