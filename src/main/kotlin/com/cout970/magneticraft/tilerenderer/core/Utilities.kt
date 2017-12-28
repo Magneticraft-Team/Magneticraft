@@ -7,6 +7,7 @@ import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.BufferBuilder
@@ -22,8 +23,10 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL14
+import java.awt.Color
 
 /**
  * Created by cout970 on 2017/06/16.
@@ -384,5 +387,19 @@ object Utilities {
 
     fun drawCenter(size: Double = 0.0125) {
         renderBox(vec3Of(-size) toAABBWith vec3Of(size))
+    }
+
+    fun setColor(color: Int) {
+        val col = Color(color)
+        GL11.glColor4f(
+                ((color ushr 16) and 0xFF) / 255f,
+                ((color ushr 8) and 0xFF) / 255f,
+                (color and 0xFF) / 255f,
+                ((color ushr 24) and 0xFF) / 255f
+        )
+    }
+
+    fun getColorComponent(color: Int, component: Int): Float {
+        return (color.split(component).toInt() and 0xFF) / 255f
     }
 }

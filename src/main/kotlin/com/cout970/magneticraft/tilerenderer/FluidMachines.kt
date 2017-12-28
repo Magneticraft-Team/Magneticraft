@@ -12,6 +12,7 @@ import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
+import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
@@ -21,6 +22,7 @@ import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.fluids.FluidStack
+import org.lwjgl.opengl.GL11
 
 /**
  * Created by cout970 on 2017/08/28.
@@ -40,12 +42,16 @@ object TileRendererCopperTank : TileRendererSimple<TileCopperTank>(
             if (te.tank.isNonEmpty()) {
                 val fluidStack = te.tank.fluid ?: return
                 val fillPercent = fluidStack.amount / te.tank.capacity.toDouble()
+                val color = fluidStack.fluid.getColor(fluidStack)
 
                 bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+
                 te.fluidRenderer.sprites = listOf(getFluidSprite(fluidStack))
                 te.fluidRenderer.size = vec3Of(12.px - 0.002, 15.px * fillPercent - 0.002, 12.px - 0.002)
                 te.fluidRenderer.pos = vec3Of(2.px + 0.001, 1.px + 0.001, 2.px + 0.001)
+                Utilities.setColor(color)
                 te.fluidRenderer.render()
+                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
             }
         }
     }
