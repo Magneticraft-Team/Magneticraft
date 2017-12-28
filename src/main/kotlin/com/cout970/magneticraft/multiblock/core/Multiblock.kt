@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.multiblock.core
 
 
+import com.cout970.magneticraft.api.multiblock.IMultiblock
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -10,7 +11,7 @@ import net.minecraft.util.text.ITextComponent
 /**
  * Created by cout970 on 19/08/2016.
  */
-abstract class Multiblock {
+abstract class Multiblock : IMultiblock {
 
     abstract val name: String
     abstract val size: BlockPos
@@ -35,4 +36,10 @@ abstract class Multiblock {
     open fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN toAABBWith size).offset(-center))
 
     infix fun Vec3d.to(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
+
+    override fun getMultiblockName(): String = name
+
+    override fun getMultiblockSize(): BlockPos = size
+
+    override fun getMultiblockCenter(): BlockPos = center
 }

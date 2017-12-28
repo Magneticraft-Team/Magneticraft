@@ -73,6 +73,8 @@ object MultiblockSteamEngine : Multiblock() {
         )
     }
 
+    override fun getControllerBlock() = Multiblocks.steamEngine
+
     override fun checkExtraRequirements(data: MutableList<BlockData>,
                                         context: MultiblockContext): List<ITextComponent> = listOf()
 

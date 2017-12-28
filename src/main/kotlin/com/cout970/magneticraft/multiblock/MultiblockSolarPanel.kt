@@ -42,6 +42,8 @@ object MultiblockSolarPanel : Multiblock() {
         )
     }
 
+    override fun getControllerBlock() = Multiblocks.solarPanel
+
     val hitbox = listOf(
             Vec3d(-13.0, 12.0, 1.0) * PIXEL to Vec3d(5.0, 14.0, 15.0) * PIXEL,
             Vec3d(-12.0, 11.0, 2.0) * PIXEL to Vec3d(4.0, 12.0, 14.0) * PIXEL,

@@ -49,6 +49,8 @@ object MultiblockShelvingUnit : Multiblock() {
         )
     }
 
+    override fun getControllerBlock() = Multiblocks.shelvingUnit
+
     val hitbox = listOf(
             (Vec3d.ZERO toAABBWith vec3Of(5, 1 - 5 * PIXEL, 2)),
             (vec3Of(0, 1 - 5 * PIXEL, 0) toAABBWith vec3Of(5, 2 - 5 * PIXEL, 2)),

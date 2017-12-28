@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.multiblock.core
 
 import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.api.multiblock.IMultiblock
+import com.cout970.magneticraft.api.multiblock.IMultiblockManager
+import com.cout970.magneticraft.api.multiblock.MultiBlockEvent
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
@@ -9,13 +12,14 @@ import com.cout970.magneticraft.util.vector.rotatePoint
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
+import net.minecraftforge.common.MinecraftForge
 
 /**
  * Created by cout970 on 19/08/2016.
  *
  * This class acts as a Multiblock registry and adds useful functions to create, delete anc check multiblocks
  */
-object MultiblockManager {
+object MultiblockManager : IMultiblockManager {
 
     private val multiblocks = mutableMapOf<String, Multiblock>()
 
@@ -24,7 +28,7 @@ object MultiblockManager {
         multiblocks.put(mb.name, mb)
     }
 
-    fun getMultiblock(name: String) = multiblocks[name] ?: throw IllegalStateException(
+    override fun getMultiblock(name: String) = multiblocks[name] ?: throw IllegalStateException(
             "Unregistered $MOD_ID Multiblock: $name, Please contact with the author")
 
     fun registerDefaults() {
@@ -32,6 +36,8 @@ object MultiblockManager {
         registerMultiblock(MultiblockShelvingUnit)
         registerMultiblock(MultiblockSteamEngine)
     }
+
+    override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()
 
     /**
      * This method checks if the blocks around matches the multiblock structure
@@ -54,6 +60,15 @@ object MultiblockManager {
             }
         }
         list.addAll(context.multiblock.checkExtraRequirements(data, context))
+
+        MinecraftForge.EVENT_BUS.post(MultiBlockEvent.CheckIntegrity(
+                context.multiblock,
+                context.world,
+                context.center,
+                context.facing,
+                context.player,
+                list
+        ))
         return list
     }
 
@@ -75,6 +90,14 @@ object MultiblockManager {
                 }
             }
             context.multiblock.onActivate(data, context)
+
+            MinecraftForge.EVENT_BUS.post(MultiBlockEvent.Activate(
+                    context.multiblock,
+                    context.world,
+                    context.center,
+                    context.facing
+            ))
+
         } catch (e: Exception) {
             e.printStackTrace()
             deactivateMultiblockStructure(context)
@@ -98,6 +121,13 @@ object MultiblockManager {
             }
         }
         context.multiblock.onDeactivate(data, context)
+
+        MinecraftForge.EVENT_BUS.post(MultiBlockEvent.Deactivate(
+                context.multiblock,
+                context.world,
+                context.center,
+                context.facing
+        ))
     }
 
     fun applyFacing(context: MultiblockContext, pos: BlockPos): BlockPos {
