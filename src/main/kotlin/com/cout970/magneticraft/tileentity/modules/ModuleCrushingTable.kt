@@ -7,6 +7,7 @@ import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HAMMER
 import com.cout970.magneticraft.registry.fromItem
@@ -47,6 +48,8 @@ class ModuleCrushingTable(
 
     var damageTaken = 0
 
+    var lastItem: ItemStack = ItemStack.EMPTY
+
     var storedItem
         get() = inventory.getStackInSlot(0)
         set(value) = inventory.setStackInSlot(0, value)
@@ -66,19 +69,26 @@ class ModuleCrushingTable(
         if (heldItem.isNotEmpty) {
             val hammer = ITEM_HAMMER!!.fromItem(heldItem)
             if (hammer != null) {
-                for (slot in 0 until playerIn.inventory.sizeInventory) {
-                    val stack = playerIn.inventory.getStackInSlot(slot)
-                    if (stack.isNotEmpty && CrushingTableRecipeManager.findRecipe(stack) != null) {
-                        storedItem = stack.copy().apply { count = 1 }
-                        stack.count--
+                if (lastItem.isNotEmpty) {
+                    for (slot in 0 until playerIn.inventory.sizeInventory) {
+                        val stack = playerIn.inventory.getStackInSlot(slot)
 
-                        if (stack.count <= 0) {
-                            playerIn.inventory.setInventorySlotContents(slot, ItemStack.EMPTY)
+                        if (stack.isNotEmpty &&
+                            CrushingTableRecipeManager.findRecipe(stack) != null &&
+                            lastItem.isItemEqual(stack)) {
+
+                            storedItem = stack.withSize(1)
+                            stack.count--
+
+                            if (stack.count <= 0) {
+                                playerIn.inventory.setInventorySlotContents(slot, ItemStack.EMPTY)
+                            }
+                            container.sendUpdateToNearPlayers()
+                            return true
                         }
-                        container.sendUpdateToNearPlayers()
-                        return true
                     }
                 }
+
             } else {
                 storedItem = heldItem.copy().apply { count = 1 }
                 heldItem.count--
@@ -135,6 +145,7 @@ class ModuleCrushingTable(
                 spawnParticles(world, pos)
             }
 
+            lastItem = storedItem
             storedItem = recipe.output
             damageTaken = 0
         } else if (world.isClient) {
@@ -158,7 +169,7 @@ class ModuleCrushingTable(
                 val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
                         center.xd, center.yd, center.zd,
                         (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
-                        Block.getStateId(state))
+                        Block.getStateId(state))!!
 
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }
@@ -170,7 +181,8 @@ class ModuleCrushingTable(
                 val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
                         center.xd, center.yd, center.zd,
                         (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
-                        Item.getIdFromItem(item), storedItem.itemDamage)
+                        Item.getIdFromItem(item), storedItem.itemDamage)!!
+
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }
         }
