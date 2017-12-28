@@ -11,12 +11,15 @@ object IntegrationHandler {
 
     var jei = false
     var craftTweaker = false
+    var tconstruct = false
 
     fun preInit(){
         // jei automatically loads MagneticraftPlugin because has @JEIPlugin
         jei = Loader.isModLoaded("jei")
         // also auto-loads classes with @ZenRegister
         craftTweaker = Loader.isModLoaded("crafttweaker")
+
+        tconstruct = Loader.isModLoaded("tconstruct")
     }
 
     fun init(){
