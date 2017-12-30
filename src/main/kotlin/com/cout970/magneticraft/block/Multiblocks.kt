@@ -8,16 +8,14 @@ import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.multiblock.MultiblockGrinder
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
-import com.cout970.magneticraft.tileentity.TileMultiblockGap
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
-import com.cout970.magneticraft.tileentity.TileSolarPanel
-import com.cout970.magneticraft.tileentity.TileSteamEngine
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleMultiblockGap
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.plus
@@ -44,6 +42,7 @@ object Multiblocks : IBlockMaker {
     lateinit var solarPanel: BlockBase private set
     lateinit var shelvingUnit: BlockBase private set
     lateinit var steamEngine: BlockBase private set
+    lateinit var grinder: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -113,8 +112,19 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        grinder = builder.withName("grinder").copy {
+            factory = factoryOf(::TileGrinder)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/grinder.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockGrinder })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
 
-        return itemBlockListOf(gap, solarPanel, shelvingUnit, steamEngine)
+
+        return itemBlockListOf(gap, solarPanel, shelvingUnit, steamEngine, grinder)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

@@ -7,5 +7,7 @@ interface ICraftingProcess {
 
     fun craft()
 
+    fun duration(): Float
+
     fun canCraft(): Boolean
 }

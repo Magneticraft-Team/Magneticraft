@@ -5,12 +5,14 @@ import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.multiblock.MultiblockGrinder
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
@@ -135,7 +137,7 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
     override fun getMultiblock(): Multiblock = MultiblockShelvingUnit
 
     val inventory = Inventory(ModuleShelvingUnitMb.MAX_CHESTS * 27)
-    val invModule = ModuleInventory(inventory, capabilityFilter = { null })
+    val invModule = ModuleInventory(inventory, capabilityFilter = ModuleInventory.ALLOW_NONE)
 
     val shelvingUnitModule = ModuleShelvingUnitMb(inventory)
 
@@ -198,6 +200,60 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     init {
         initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
                 steamEngineMbModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("grinder")
+class TileGrinder : TileMultiblock(), ITickable {
+    override fun getMultiblock(): Multiblock = MultiblockGrinder
+
+    val node = ElectricNode(ref, capacity = 8.0)
+
+    val inventory = Inventory(3)
+
+    val grinderModule: ModuleGrinderMb = ModuleGrinderMb(
+            facingGetter = { facing },
+            energyModule = { energyModule }
+    )
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            canConnectAtSide = grinderModule::canConnectAtSide,
+            connectableDirections = grinderModule::getConnectableDirections
+    )
+
+    val storageModule = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10_000,
+            lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+    )
+
+    val invModule = ModuleInventory(
+            inventory = inventory,
+            capabilityFilter = ModuleInventory.ALLOW_NONE
+    )
+
+    val processModule = ModuleElectricProcessing(
+            craftingProcess = GrinderCraftingProcess(invModule, 0, 1, 2),
+            storage = storageModule,
+            workingRate = 1f,
+            costPerTick = Config.grinderMaxConsumption.toFloat()
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = grinderModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, grinderModule)
     }
 
     @DoNotRemove

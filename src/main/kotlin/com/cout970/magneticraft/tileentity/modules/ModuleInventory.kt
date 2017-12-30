@@ -19,9 +19,14 @@ import net.minecraftforge.items.IItemHandler
 open class ModuleInventory(
         val inventory: Inventory,
         override val name: String = "module_inventory",
-        val capabilityFilter: (IItemHandler) -> IItemHandler? = { it },
+        val capabilityFilter: (IItemHandler) -> IItemHandler? = ALLOW_ALL,
         val onContentChange: (IItemHandler, Int) -> Unit = { _, _ -> Unit }
 ) : IModule {
+
+    companion object {
+        val ALLOW_NONE: (IItemHandler) -> IItemHandler? = { null }
+        val ALLOW_ALL: (IItemHandler) -> IItemHandler? = { it }
+    }
 
     lateinit override var container: IModuleContainer
 

@@ -14,6 +14,7 @@ import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.getTileEntitiesIn
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.tileentity.tryConnect
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
@@ -101,6 +102,7 @@ class ModuleElectricity(
 
     fun updateNormalConnections() {
         clearNormalConnections()
+        if (world.isClient) return
         electricNodes.forEach { thisNode ->
 
             connectableDirections().forEach directions@ { (vec, side) ->

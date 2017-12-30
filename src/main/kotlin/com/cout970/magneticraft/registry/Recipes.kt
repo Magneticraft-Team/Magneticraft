@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.generators.thermopile.Th
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeNoDecay
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeWithDecay
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
@@ -77,14 +78,12 @@ fun registerRecipes() {
 //    addKilnRecipe(ItemStack(CHORUS_FRUIT), ItemStack(CHORUS_FRUIT_POPPED, 1, 0), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
 //
 //    //GRINDER RECIPES
-//    addGrinderRecipe(ItemStack(Blocks.IRON_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 0), ItemStack(Blocks.GRAVEL), 1f, 5f)
-//    //TODO: Remove iron placeholder values
-//    addGrinderRecipe(ItemStack(Blocks.GOLD_ORE, 1, 0), ItemCrushedOre.stack(size = 1, meta = 1), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-//    addGrinderRecipe(ItemStack(BlockOre, 1, 0), ItemCrushedOre.stack(size = 1, meta = 2), ItemStack(Blocks.GRAVEL), 0.15f, 100f)
-//    addGrinderRecipe(ItemStack(BlockOre, 1, 1), ItemCrushedOre.stack(size = 1, meta = 3), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-//    addGrinderRecipe(ItemStack(BlockOre, 1, 2), ItemCrushedOre.stack(size = 1, meta = 4), ItemStack(Blocks.GRAVEL), 0.15f, 120f)
-//    addGrinderRecipe(ItemStack(BlockOre, 1, 3), ItemCrushedOre.stack(size = 1, meta = 5), ItemStack(Blocks.GRAVEL), 0.15f, 150f)
-//    addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+    EnumMetal.values().forEach { metal ->
+        metal.getOres().firstOrNull()?.let {
+            addGrinderRecipe(it, metal.getRockyChunk(), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+        }
+    }
+    addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
 //    addGrinderRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemCrushedLapis.stack(size = 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
 //    addGrinderRecipe(ItemStack(Blocks.COAL_ORE, 1), ItemCrushedCoal.stack(size = 2), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
 //    addGrinderRecipe(ItemStack((Blocks.LOG)), ItemWoodChip.stack(size = 16), 45f)
@@ -211,8 +210,9 @@ fun registerRecipes() {
 
 
 private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
-    if(input.isEmpty) throw IllegalStateException("Trying to register furnace recipe with empty input stack: $input")
-    if(result.isEmpty) throw IllegalStateException("Trying to register furnace recipe with empty result empty stack: $result")
+    if (input.isEmpty) throw IllegalStateException("Trying to register furnace recipe with empty input stack: $input")
+    if (result.isEmpty) throw IllegalStateException(
+            "Trying to register furnace recipe with empty result empty stack: $result")
     GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
 }
 
@@ -232,6 +232,7 @@ private fun addThermopileRecipe(input: Block, heat: Int) {
 private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replcement: IBlockState, limit: Int, prob: Float) {
     ThermopileRecipeManager.registerRecipe(ThermopileRecipeWithDecay(input, heat, replcement, limit, prob))
 }
+
 //
 //private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack,
 //                            prob2: Float, duration: Float) {
@@ -273,12 +274,10 @@ private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replcement: IB
 //            WATER_BOILING_POINT, reverse))
 //}
 //
-//private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float) {
-//    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output0, output1, prob, ticks, true))
-//}
-//
-//private fun addGrinderRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
-//    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output, output, 0f, ticks, true))
-//}
+private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float) {
+    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output0, output1, prob, ticks, true))
+}
 
-//
+private fun addGrinderRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
+    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output, output, 0f, ticks, true))
+}

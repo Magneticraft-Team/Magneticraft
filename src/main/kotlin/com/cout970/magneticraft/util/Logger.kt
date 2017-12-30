@@ -18,5 +18,9 @@ fun info(str: String, vararg args: Any) {
 }
 
 fun debug(vararg obj: Any?) {
-    Magneticraft.log.info("[$MOD_ID][DEBUG]${obj.joinToString()}")
+    obj.joinToString().forEach {
+        print(it)
+    }
+    print('\n')
+//    Magneticraft.log.info("[$MOD_ID][DEBUG]${obj.joinToString()}")
 }

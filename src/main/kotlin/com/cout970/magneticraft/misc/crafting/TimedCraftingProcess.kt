@@ -11,8 +11,7 @@ import net.minecraftforge.common.util.INBTSerializable
  */
 class TimedCraftingProcess(
         var process: ICraftingProcess,
-        var onWorkingTick: (Float) -> Unit,
-        var limit: () -> Float = { 100f }
+        var onWorkingTick: (Float) -> Unit
 ) : INBTSerializable<NBTTagCompound> {
 
     var timer = 0f
@@ -44,4 +43,6 @@ class TimedCraftingProcess(
     }
 
     fun isWorking(world: World): Boolean = world.totalWorldTime - lastTick < 20
+
+    fun limit(): Float = process.duration()
 }

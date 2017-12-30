@@ -1,14 +1,8 @@
 package com.cout970.magneticraft.multiblock
 
-import com.cout970.magneticraft.block.MultiblockParts
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.multiblock.components.IgnoreBlockComponent
-import com.cout970.magneticraft.multiblock.components.MainBlockComponent
-import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
-import com.cout970.magneticraft.multiblock.core.BlockData
-import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
-import com.cout970.magneticraft.multiblock.core.Multiblock
-import com.cout970.magneticraft.multiblock.core.MultiblockContext
+import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotateBox
@@ -32,23 +26,14 @@ object MultiblockSteamEngine : Multiblock() {
     override val center: BlockPos = BlockPos(0, 1, 0)
 
     init {
-        val replacement = Multiblocks.gap.defaultState
-
         val I = IgnoreBlockComponent
-        val C = SingleBlockComponent(MultiblockParts.column.defaultState, replacement)
-        val B = SingleBlockComponent(Blocks.BRICK_BLOCK.defaultState, replacement)
-        val vBlock = MultiblockParts.PartType.COPPER_COIL.getBlockState(MultiblockParts.parts)
-        val V = SingleBlockComponent(vBlock, replacement)
-        val gBlock = MultiblockParts.PartType.GRATE.getBlockState(MultiblockParts.parts)
-        val G = SingleBlockComponent(gBlock, replacement)
-        val nBlock = MultiblockParts.PartType.BASE.getBlockState(MultiblockParts.parts)
-        val N = SingleBlockComponent(nBlock, replacement)
-        val oBlock = MultiblockParts.PartType.CORRUGATED_IRON.getBlockState(MultiblockParts.parts)
-        val O = SingleBlockComponent(oBlock, replacement)
-
-        val M: IMultiblockComponent = MainBlockComponent(Multiblocks.steamEngine) { context, activate ->
-            Multiblocks.MultiblockOrientation.of(context.facing, activate).getBlockState(Multiblocks.steamEngine)
-        }
+        val C = collumnBlock()
+        val B = ofBlock(Blocks.BRICK_BLOCK)
+        val V = copperCoilBlock()
+        val G = grateBlock()
+        val N = baseBlock()
+        val O = corrugatedIronBlock()
+        val M = mainBlockOf(Multiblocks.steamEngine)
 
         scheme = yLayers(
                 zLayers(listOf(N, I, I), // y = 2

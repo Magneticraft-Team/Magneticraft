@@ -1,10 +1,14 @@
+@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.multiblock.MultiblockGrinder
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
+import com.cout970.magneticraft.tileentity.TileGrinder
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSolarPanel
 import com.cout970.magneticraft.tileentity.TileSteamEngine
@@ -136,5 +140,21 @@ object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
         rotate(-120 * clock, 0, 0, 1)
         translate(4 * PIXEL, -1, 0)
         models[1].renderTextured()
+    }
+}
+
+@RegisterRenderer(TileGrinder::class)
+object TileRendererGrinder : TileRendererSimple<TileGrinder>(
+        modelLocation = { ModelResourceLocation(Multiblocks.grinder.registryName, "model") }
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileGrinder) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockGrinder)
+            return
+        }
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(0, 0, -1)
+        models[0].renderTextured()
     }
 }

@@ -2,10 +2,12 @@ package com.cout970.magneticraft.api;
 
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry;
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipeManager;
 import com.cout970.magneticraft.multiblock.core.MultiblockManager;
 
@@ -21,9 +23,9 @@ public class MagneticraftApi {
 //        return HydraulicPressRecipeManager.INSTANCE;
 //    }
 
-//    public static IGrinderRecipeManager getGrinderRecipeManager() {
-//        return GrinderRecipeManager.INSTANCE;
-//    }
+    public static IGrinderRecipeManager getGrinderRecipeManager() {
+        return GrinderRecipeManager.INSTANCE;
+    }
 
 //    public static IIceboxRecipeManager getIceboxRecipeManager() {
 //        return IceboxRecipeManager.INSTANCE;

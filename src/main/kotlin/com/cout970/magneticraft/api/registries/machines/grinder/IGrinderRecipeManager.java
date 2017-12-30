@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.registries.machines.grinder;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public interface IGrinderRecipeManager {
      * @param input the input to check the recipes
      * @return the recipes that matches the input or null if none matches the input
      */
+    @Nullable
     IGrinderRecipe findRecipe(ItemStack input);
 
     /**

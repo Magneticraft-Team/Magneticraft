@@ -64,8 +64,8 @@ object Config {
 //    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
 //    var hydraulicPressConsumption = 40.0
 //
-//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
-//    var grinderConsumption = 40.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Max Consumption")
+    var grinderMaxConsumption = 20.0
 //
 //    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
 //    var sifterConsumption = 10.0

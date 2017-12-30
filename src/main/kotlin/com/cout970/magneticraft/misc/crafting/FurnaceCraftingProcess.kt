@@ -31,4 +31,6 @@ class FurnaceCraftingProcess(
         val insert = invModule.inventory.insertItem(outputSlot, output, true)
         return insert.isEmpty
     }
+
+    override fun duration(): Float = 100f
 }

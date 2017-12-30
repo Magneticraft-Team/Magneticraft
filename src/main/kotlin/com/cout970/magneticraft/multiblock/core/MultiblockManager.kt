@@ -4,6 +4,7 @@ import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.multiblock.IMultiblock
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager
 import com.cout970.magneticraft.api.multiblock.MultiBlockEvent
+import com.cout970.magneticraft.multiblock.MultiblockGrinder
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
 import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
@@ -35,6 +36,7 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockSolarPanel)
         registerMultiblock(MultiblockShelvingUnit)
         registerMultiblock(MultiblockSteamEngine)
+        registerMultiblock(MultiblockGrinder)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

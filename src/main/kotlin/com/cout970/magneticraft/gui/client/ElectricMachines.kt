@@ -36,9 +36,8 @@ class GuiElectricFurnace(container: ContainerElectricFurnace) : GuiBase(containe
                 { tile.processModule.timedProcess.limit().toDouble() },
                 { 0.0 }
         )
-        components.add(
-                CompVerticalBar(processCallback, 2, Vec2d(80, 16),
-                        { listOf("Burning: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
+        components.add(CompVerticalBar(processCallback, 2, Vec2d(80, 16),
+                { listOf("Burning: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
     }
 }
 

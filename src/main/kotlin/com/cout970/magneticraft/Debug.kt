@@ -201,8 +201,8 @@ object Debug {
         val timerField = Minecraft::class.java.getDeclaredField("timer")
         timerField.isAccessible = true
         val timer = timerField.get(Minecraft.getMinecraft()) as Timer
-        val tickField = Timer::class.java.getDeclaredField("ticksPerSecond")
+        val tickField = Timer::class.java.getDeclaredField("tickLength")
         tickField.isAccessible = true
-        tickField.set(timer, tps.toFloat())
+        tickField.set(timer, 1000.0f / tps.toFloat())
     }
 }

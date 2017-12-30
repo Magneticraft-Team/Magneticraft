@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tilerenderer.core
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.block.core.BlockMultiblock
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.util.get
@@ -23,6 +24,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.World
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL14
@@ -159,7 +161,7 @@ object Utilities {
         val a = 1f
 
 //        glDisable(GL_TEXTURE_2D)
-        glBindTexture(GL_TEXTURE_2D, 0)
+        bindTexture(0)
         GlStateManager.glLineWidth(2f)
         t.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR)
         t.pos(box.minX, box.minY, box.minZ).color(r, g, b, a).endVertex()
@@ -233,12 +235,22 @@ object Utilities {
     }
 
     fun renderMultiblockBoundingBoxes(te: IMultiblockModule) {
-        te.multiblock ?: return
-        val global = te.multiblock!!.getGlobalCollisionBoxes().map {
-            te.multiblockFacing!!.rotateBox(vec3Of(0.5, 0.5, 0.5), it)
+        val mb = te.multiblock ?: return
+        val facing = te.multiblockFacing ?: return
+
+        val global = mb.getGlobalCollisionBoxes().map {
+            facing.rotateBox(vec3Of(0.5, 0.5, 0.5), it)
         }
         global.forEach { renderBox(it) }
     }
+
+    fun renderMultiblockCollisionBoxes(world: World, blockPos: BlockPos, te: IMultiblockModule) {
+
+        val global = BlockMultiblock.getBoxes(world, blockPos, te)
+
+        global.forEach { renderBox(it) }
+    }
+
 
     fun renderFloatingLabel(str: String, pos: Vec3d) {
 
