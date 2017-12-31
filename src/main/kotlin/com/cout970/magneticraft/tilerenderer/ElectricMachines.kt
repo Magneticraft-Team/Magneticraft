@@ -4,11 +4,14 @@ import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
+import com.cout970.magneticraft.tileentity.TileWindTurbine
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.resource
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.util.EnumFacing
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -42,3 +45,38 @@ object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
         models[1].render()
     }
 }
+
+@RegisterRenderer(TileWindTurbine::class)
+object TileRendererWindTurbine : TileRendererSimple<TileWindTurbine>(
+        modelLocation = { ModelResourceLocation(ElectricMachines.windTurbine.registryName, "model") }
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileWindTurbine) {
+        if (!te.windTurbineModule.hasTurbineHitbox) return
+        Utilities.rotateFromCenter(te.facing, 180f)
+        translate(0, -5, 1)
+
+        var angle = te.windTurbineModule.rotation
+        angle += te.windTurbineModule.rotationSpeed * ticks
+
+        if (te.facing.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
+            angle = -angle
+        }
+
+        translate(0.5, 5.5, 0)
+        rotate(angle, 0, 0, 1)
+        translate(-0.5, -5.5 + 2 * PIXEL, 0)
+        models[0].renderTextured()
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

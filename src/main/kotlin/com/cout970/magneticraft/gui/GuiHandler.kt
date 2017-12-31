@@ -32,6 +32,7 @@ object GuiHandler : IGuiHandler {
             is TileCombustionChamber -> GuiCombustionChamber(serverElement)
             is TileThermopile -> GuiThermopile(serverElement as ContainerThermopile)
             is TileGrinder -> GuiGrinder(serverElement as ContainerGrinder)
+            is TileWindTurbine -> GuiWindTurbine(serverElement as ContainerWindTurbine)
             else -> null
         }
     }
@@ -55,6 +56,7 @@ object GuiHandler : IGuiHandler {
             is TileCombustionChamber -> ContainerCombustionChamber(tile, player, world, pos)
             is TileThermopile -> ContainerThermopile(tile, player, world, pos)
             is TileGrinder -> ContainerGrinder(tile, player, world, pos)
+            is TileWindTurbine -> ContainerWindTurbine(tile, player, world, pos)
             else -> null
         }
     }

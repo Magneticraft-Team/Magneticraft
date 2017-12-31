@@ -7,6 +7,7 @@ import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerBattery
 import com.cout970.magneticraft.gui.common.ContainerElectricFurnace
 import com.cout970.magneticraft.gui.common.ContainerThermopile
+import com.cout970.magneticraft.gui.common.ContainerWindTurbine
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -93,6 +94,31 @@ class GuiThermopile(container: ContainerThermopile) : GuiBase(container) {
 
         components.add(CompVerticalBar(drain, 5, Vec2d(107, 17),
                 { listOf(drain.callback().toInt().toString()) }))
+
+    }
+}
+
+class GuiWindTurbine(container: ContainerWindTurbine) : GuiBase(container) {
+
+    val tile = container.tile
+
+    override fun initComponents() {
+        components.add(CompBackground(guiTexture("wind_turbine")))
+        components.add(CompElectricBar(tile.node, Vec2d(74, 16)))
+
+        val openSpace = StaticBarProvider(0.0, 1.0) {
+            tile.windTurbineModule.openSpace.toDouble()
+        }
+
+        components.add(CompVerticalBar(openSpace, 3, Vec2d(85, 16),
+                { listOf("Wind not blocked: ${(openSpace.callback() * 100).toInt()}%") }))
+
+        val wind = StaticBarProvider(0.0, 1.0) {
+            tile.windTurbineModule.currentWind.toDouble()
+        }
+
+        components.add(CompVerticalBar(wind, 2, Vec2d(96, 16),
+                { listOf("Wind: ${(wind.callback() * 100).toInt()}%") }))
 
     }
 }

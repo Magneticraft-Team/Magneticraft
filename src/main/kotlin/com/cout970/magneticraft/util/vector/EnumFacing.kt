@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 2017/02/20.
  */
-fun EnumFacing.rotatePoint(origin: BlockPos, point: BlockPos): BlockPos {
+fun EnumFacing.rotatePoint(origin: BlockPos = BlockPos.ORIGIN, point: BlockPos): BlockPos {
     val rel = point - origin
     val rot = when (this) {
         DOWN -> return BlockPos(origin + BlockPos(Vec3d(rel).rotatePitch(-90.0f)))

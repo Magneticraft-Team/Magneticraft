@@ -6,6 +6,7 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.util.*
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.SPacketUpdateTileEntity
@@ -38,6 +39,8 @@ abstract class TileBase : TileEntity() {
     }
 
     fun getBlockState(): IBlockState {
+        if(world == null) return Blocks.AIR.defaultState
+
         if (blockState == null || blockState!!.block != getBlockType() || world.totalWorldTime > lastTime + 40) {
             lastTime = world.totalWorldTime
             blockState = world.getBlockState(pos)

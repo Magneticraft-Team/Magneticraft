@@ -9,6 +9,7 @@ import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.tileentity.TileThermopile
+import com.cout970.magneticraft.tileentity.TileWindTurbine
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.math.BlockPos
@@ -51,6 +52,14 @@ class ContainerElectricFurnace(val tile: TileElectricFurnace, player: EntityPlay
 }
 
 class ContainerThermopile(val tile: TileThermopile, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+class ContainerWindTurbine(val tile: TileWindTurbine, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
 
     init {

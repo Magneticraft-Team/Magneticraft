@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "normal": [{
+            "model": "magneticraft:empty",
+            "transform": "forge:default-block",
+            "textures": {
+                "particle": "magneticraft:blocks/computers/moving_robot"
+            }
+        }],
+        "inventory": [{
+            "model": "builtin/generated",
+            "transform": "forge:default-item",
+            "textures": {
+                "layer0": "magneticraft:blocks/computers/moving_robot"
+            }
+        }]
+    }
+}

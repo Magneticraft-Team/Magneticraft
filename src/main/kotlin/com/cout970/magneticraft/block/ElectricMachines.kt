@@ -4,7 +4,10 @@ import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.*
+import com.cout970.magneticraft.tileentity.modules.ModuleWindTurbine
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -28,6 +31,8 @@ object ElectricMachines : IBlockMaker {
     lateinit var airLock: BlockBase private set
     lateinit var airBubble: BlockBase private set
     lateinit var thermopile: BlockBase private set
+    lateinit var windTurbine: BlockBase private set
+    lateinit var windTurbineGap: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -108,7 +113,38 @@ object ElectricMachines : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile)
+        windTurbine = builder.withName("wind_turbine").copy {
+            states = CommonMethods.Orientation.values().toList()
+            factory = factoryOf(::TileWindTurbine)
+            alwaysDropDefault = true
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/wind_turbine.mcx")
+            )
+            //methods
+            onActivated = CommonMethods::openGui
+            onBlockPlaced = CommonMethods::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        windTurbineGap = builder.withName("wind_turbine_gap").copy {
+            factory = factoryOf(::TileWindTurbineGap)
+            hasCustomModel = true
+            onDrop = { emptyList() }
+            onBlockBreak = func@ {
+                val thisTile = it.worldIn.getTile<TileWindTurbineGap>(it.pos) ?: return@func
+                val pos = thisTile.centerPos ?: return@func
+                val mod = it.worldIn.getModule<ModuleWindTurbine>(pos) ?: return@func
+                if (mod.hasTurbineHitbox) {
+                    mod.removeTurbineHitbox()
+                }
+                it.worldIn.removeTileEntity(it.pos)
+            }
+        }.build()
+
+        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile,
+                windTurbine, windTurbineGap)
     }
 
     enum class DecayMode(
