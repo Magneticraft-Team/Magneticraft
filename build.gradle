@@ -74,7 +74,7 @@ repositories {
         url 'http://maven.epoxide.xyz'
     }
     maven {
-        name = "Crraft Tweaker"
+        name = "Craft Tweaker"
         url "http://maven.blamejared.com"
     }
     mavenCentral()
@@ -84,8 +84,12 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 	compile "mezz.jei:jei_1.12.2:4.8.5.136"
-    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.+"
-    deobfCompile "CraftTweaker2:CraftTweaker2-API:4.0.10.+"
-    deobfCompile "com.blamejared:MTLib:3.0.1.3"
+
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.12.+"
+    deobfCompile "CraftTweaker2:CraftTweaker2-API:4.0.12.+"
+    deobfCompile "CraftTweaker2:ZenScript:4.0.12.+"
+    deobfCompile "com.blamejared:MTLib:3.0.+"
+
+//    deobfCompile "com.blamejared:MTLib:3.0.1.3"
 	compile files("lib/modelloader-1.0.5.jar", "lib/Forgelin-1.5.1.jar")
 }
