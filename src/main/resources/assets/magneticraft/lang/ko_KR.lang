@@ -1,0 +1,206 @@
+itemGroup.magneticraft = Magneticraft
+item.magneticraft.guide_book_normal.name = MagneticFlash 가이드 북
+
+item.magneticraft.iron_hammer_normal.name = 철 망치
+item.magneticraft.stone_hammer_normal.name = 돌 망치
+item.magneticraft.steel_hammer_normal.name = 강철 망치
+
+
+item.magneticraft.heavy_plates_iron.name = 무거운 철판
+item.magneticraft.heavy_plates_gold.name = 무거운 금판
+item.magneticraft.heavy_plates_copper.name = 무거운 구리판
+item.magneticraft.heavy_plates_lead.name = 무거운 납판
+item.magneticraft.heavy_plates_cobalt.name = 무거운 코발트판
+item.magneticraft.heavy_plates_tungsten.name = 무거운 텅스텐판
+item.magneticraft.heavy_plates_steel.name = 두꺼운 강철판
+
+item.magneticraft.light_plates_iron.name = 가벼운 철판
+item.magneticraft.light_plates_gold.name = 가벼운 금판
+item.magneticraft.light_plates_copper.name = 가벼운 구리판
+item.magneticraft.light_plates_lead.name = 가벼운 납판
+item.magneticraft.light_plates_cobalt.name = 가벼운 코발트판
+item.magneticraft.light_plates_tungsten.name = 가벼운 텅스텐판
+item.magneticraft.light_plates_steel.name = 가벼운 강철판
+
+item.magneticraft.nuggets_copper.name = 구리 조각
+item.magneticraft.nuggets_lead.name = 납 조각
+item.magneticraft.nuggets_cobalt.name = 코발트 조각
+item.magneticraft.nuggets_tungsten.name = 텅스텐 조각
+item.magneticraft.nuggets_steel.name = 강철 조각
+item.magneticraft.nuggets_aluminium.name = 알루미늄 조각
+item.magneticraft.nuggets_silver.name = 은 조각
+item.magneticraft.nuggets_mithril.name = 미스릴 조각
+item.magneticraft.nuggets_tin.name = 주석 조각
+item.magneticraft.nuggets_zinc.name = 아연 조각
+item.magneticraft.nuggets_galena.name = 방연광 조각
+item.magneticraft.nuggets_osmium.name = 오스뮴 조각
+item.magneticraft.nuggets_nickel.name = 니켈 조각
+
+item.magneticraft.ingots_copper.name = 구리 주괴
+item.magneticraft.ingots_lead.name = 납 주괴
+item.magneticraft.ingots_cobalt.name = 코발트 주괴
+item.magneticraft.ingots_tungsten.name = 텅스텐 주괴
+item.magneticraft.ingots_steel.name = 강철 주괴
+item.magneticraft.ingots_aluminium.name = 알루미늄 주괴
+item.magneticraft.ingots_silver.name = 은 주괴
+item.magneticraft.ingots_mithril.name = 미스릴 주괴
+item.magneticraft.ingots_tin.name = 주석 주괴
+item.magneticraft.ingots_zinc.name = 아연 주괴
+item.magneticraft.ingots_osmium.name = 오스뮴 주괴
+item.magneticraft.ingots_nickel.name = 니켈 주괴
+
+item.magneticraft.chunks_iron.name = 철 덩어리
+item.magneticraft.chunks_gold.name = 금 덩어리
+item.magneticraft.chunks_copper.name = 구리 덩어리
+item.magneticraft.chunks_lead.name = 납 덩어리
+item.magneticraft.chunks_cobalt.name = 코발트 덩어리
+item.magneticraft.chunks_tungsten.name = 텅스텐 덩어리
+item.magneticraft.chunks_aluminium.name = 알루미늄 덩어리
+item.magneticraft.chunks_silver.name = 은 덩어리
+item.magneticraft.chunks_mithril.name = 미스릴 덩어리
+item.magneticraft.chunks_tin.name = 주석 덩어리
+item.magneticraft.chunks_zinc.name = 아연 덩어리
+item.magneticraft.chunks_galena.name = Galena 덩어리
+item.magneticraft.chunks_osmium.name = 오스뮴 덩어리
+item.magneticraft.chunks_nickel.name = 니켈 덩어리
+
+item.magneticraft.rocky_chunks_iron.name = 불안정한 철 덩어리
+item.magneticraft.rocky_chunks_gold.name = 불안정한 금 덩어리
+item.magneticraft.rocky_chunks_copper.name = 불안정한 구리 덩어리
+item.magneticraft.rocky_chunks_lead.name = 불안정한 납 덩어리
+item.magneticraft.rocky_chunks_cobalt.name = 불안정한 코발트 덩어리
+item.magneticraft.rocky_chunks_tungsten.name = 불안정한 텅스텐 덩어리
+item.magneticraft.rocky_chunks_aluminium.name = 불안정한 알루미늄 덩어리
+item.magneticraft.rocky_chunks_silver.name = 불안정한 은 덩어리
+item.magneticraft.rocky_chunks_mithril.name = 불안정한 미스릴 덩어리
+item.magneticraft.rocky_chunks_tin.name = 불안정한 주석 덩어리
+item.magneticraft.rocky_chunks_zinc.name = 불안정한 아연 덩어리
+item.magneticraft.rocky_chunks_galena.name = 불안정한 Galena 덩어리
+item.magneticraft.rocky_chunks_osmium.name = 불안정한 오스뮴 덩어리
+item.magneticraft.rocky_chunks_nickel.name = 불안정한 니켈 덩어리
+
+item.magneticraft.dusts_iron.name = 철 가루
+item.magneticraft.dusts_gold.name = 금 가루
+item.magneticraft.dusts_copper.name = 구리 가루
+item.magneticraft.dusts_lead.name = 납 가루
+item.magneticraft.dusts_cobalt.name = 코발트 가루
+item.magneticraft.dusts_tungsten.name = 텅스텐 가루
+item.magneticraft.dusts_steel.name = 철강 가루
+item.magneticraft.dusts_aluminium.name = 알루미늄 가루
+item.magneticraft.dusts_silver.name =은 가루
+item.magneticraft.dusts_mithril.name = 미스릴 가루
+item.magneticraft.dusts_tin.name = 주석 가루
+item.magneticraft.dusts_zinc.name = 아연 가루
+item.magneticraft.dusts_osmium.name = 오스뮴 가루
+item.magneticraft.dusts_nickel.name = 니켈 가루
+
+item.magneticraft.copper_coil_normal.name = 구리 코일
+item.magneticraft.crafting_sulfur.name = 유황 크리스탈
+item.magneticraft.crafting_coil.name = 작은 구리 코일
+item.magneticraft.crafting_alternator.name = 발전기
+item.magneticraft.crafting_motor.name = 모터
+item.magneticraft.crafting_magnet.name = 자석
+item.magneticraft.crafting_mesh.name = 망사
+item.magneticraft.crafting_string_fabric.name = 직물 망사
+item.magneticraft.voltmeter_normal.name = 전압계
+item.magneticraft.battery_item_low_normal.name = 작은 배터리
+item.magneticraft.battery_item_medium_normal.name = 중간 배터리
+
+item.magneticraft.floppy_disk_user.name = 플로피 디스크
+item.magneticraft.floppy_disk_lisp.name = 플로피 디스크 (Lisp)
+item.magneticraft.floppy_disk_forth.name = 플로피 디스크 (FORTH)
+item.magneticraft.floppy_disk_js.name = 플로피 디스크 (JS)
+item.magneticraft.floppy_disk_basic.name = 플로피 디스크 (BASIC)
+item.magneticraft.floppy_disk_vim.name = 플로피 디스크 (VI?)
+item.magneticraft.floppy_disk_asm.name = 플로피 디스크 (ASM)
+
+item.magneticraft.iron_gear_normal.name = 철 기어
+item.magneticraft.steel_gear_normal.name = 강철 기어
+item.magneticraft.tungsten_gear_normal.name = 텅스텐 기어
+
+tile.magneticraft.ores_copper.name = 구리 광석
+tile.magneticraft.ores_lead.name = 납 광석
+tile.magneticraft.ores_cobalt.name = 코발트 광석
+tile.magneticraft.ores_tungsten.name = 텅스텐 광석
+tile.magneticraft.ores_pyrite.name = 황동 광석
+tile.magneticraft.oil_source_full_100.name = 오일 소스 (전체)
+tile.magneticraft.oil_source_full_90.name = 오일 소스 (90 %)
+tile.magneticraft.oil_source_full_80.name = 원유 공급원 (80 %)
+tile.magneticraft.oil_source_full_70.name = 오일 소스 (70 %)
+tile.magneticraft.oil_source_full_60.name = 오일 소스 (60 %)
+tile.magneticraft.oil_source_full_50.name = 오일 소스 (50 %)
+tile.magneticraft.oil_source_full_40.name = 오일 소스 (40 %)
+tile.magneticraft.oil_source_full_30.name = 오일 소스 (30 %)
+tile.magneticraft.oil_source_full_20.name = 오일 소스 (20 %)
+tile.magneticraft.oil_source_full_10.name = 오일 소스 (10 %)
+tile.magneticraft.oil_source_empty.name = 오일 소스 (비어 있음)
+
+tile.magneticraft.box_normal.name = 나무 상자
+tile.magneticraft.crushing_table_normal.name = 분쇄 
+tile.magneticraft.sluice_box_center_north.name = 수문 상자
+tile.magneticraft.feeding_trough_center_north.name = 나무 먹이 골짜기
+# tile.magneticraft.kiln_shelf.name = 가마 선반
+
+tile.magneticraft.limestone_normal.name = 석회암
+tile.magneticraft.limestone_brick.name = 석회석 벽돌
+tile.magneticraft.limestone_cobble.name = 석회암 자갈
+tile.magneticraft.burnt_limestone_normal.name = 구운 석회암
+tile.magneticraft.burnt_limestone_brick.name = 구운 석회암 벽돌
+tile.magneticraft.burnt_limestone_cobble.name = 구운 석회암 자갈
+tile.magneticraft.tile_limestone_normal.name = 석회암 타일
+tile.magneticraft.tile_limestone_inverted.name = 거꾸로 된 석회암 타일
+tile.magneticraft.tube_light_north.name = 밝은 튜브
+
+tile.magneticraft.conveyor_belt_north.name = 컨베이어 벨트
+tile.magneticraft.inserter_north.name = 삽입기
+tile.magneticraft.connector_down.name = 전기 커넥터
+tile.magneticraft.battery_north.name = 배터리 블록
+tile.magneticraft.electric_pole_north.name = 전기 기둥
+tile.magneticraft.electric_pole_transformer_north.name = 전기 기둥 변압기
+tile.magneticraft.electric_furnace_north.name = 전기로
+tile.magneticraft.combustion_chamber_north.name = 연소방
+tile.magneticraft.steam_boiler_normal.name = 보일러
+
+# tile.magneticraft.electric_heater_off.name = 전기 히터
+# tile.magneticraft.electric_heater_on.name = 전기 히터
+# tile.magneticraft.heat_pipe.name = 히트 파이프
+# tile.magneticraft.redstone_heat_pipe.name = 레드 스톤 히트 파이프
+# tile.magneticraft.firebox.name = Firebox
+# tile.magneticraft.icebox.name = Icebox
+# tile.magneticraft.heat_sink.name = 방열판
+# tile.magneticraft.heat_reservoir.name = 열 저장소
+# tile.magneticraft.thermometer_block.name = 열전쌍
+# tile.magneticraft.brick_furnace.name = 벽돌로
+
+tile.magneticraft.water_generator_normal.name = 물 생성기
+tile.magneticraft.infinite_energy_normal.name = 무한 에너지
+
+tile.magneticraft.airlock_normal.name = 에어락
+tile.magneticraft.air_bubble_on.name = 기포
+tile.magneticraft.air_bubble_off.name = 기포
+tile.magneticraft.computer_north.name = 컴퓨터
+tile.magneticraft.mining_robot_north.name = 광업 로봇
+tile.magneticraft.moving_robot_normal.name = 로봇
+tile.magneticraft.copper_tank_normal.name = 구리 탱크
+tile.magneticraft.thermopile_normal.name = 써모 파일
+tile.magneticraft.iron_pipe_normal.name = 철 파이프
+
+#multiblocks
+# tile.magneticraft.hydraulic_press.name = 유압식 프레스
+# tile.magneticraft.kiln.name = 벌집 가마
+# tile.magneticraft.sifter.name = Electric Sifter
+tile.magneticraft.solar_panel_inactive_north.name = 태양광 패널
+# tile.magneticraft.grinder.name = 
+tile.magneticraft.shelving_unit_inactive_north.name = 선반 유닛
+tile.magneticraft.steam_engine_inactive_north.name = 스팀 엔진
+
+
+# tile.magneticraft.copper_block.name = 구리 블록
+# tile.magneticraft.cobalt_block.name = 코발트 블록
+# tile.magneticraft.lead_block.name = 리드 블록
+# tile.magneticraft.tungsten_block.name = 텅스텐 블록
+
+tile.magneticraft.multiblock_parts_base.name = 기계 블록
+tile.magneticraft.multiblock_parts_mesh.name = 필터 머신 블록
+tile.magneticraft.multiblock_parts_electric.name = 전기 기계 블록
+tile.magneticraft.multiblock_parts_striped.name = 줄무늬가있는 기계 블록
