@@ -4,10 +4,7 @@ import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.multiblock.IMultiblock
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager
 import com.cout970.magneticraft.api.multiblock.MultiBlockEvent
-import com.cout970.magneticraft.multiblock.MultiblockGrinder
-import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
-import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
-import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
+import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.vector.rotatePoint
 import net.minecraft.util.EnumFacing
@@ -37,6 +34,7 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockShelvingUnit)
         registerMultiblock(MultiblockSteamEngine)
         registerMultiblock(MultiblockGrinder)
+        registerMultiblock(MultiblockSieve)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

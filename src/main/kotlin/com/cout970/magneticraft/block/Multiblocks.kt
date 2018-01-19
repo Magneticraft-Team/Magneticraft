@@ -8,10 +8,7 @@ import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.multiblock.MultiblockGrinder
-import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
-import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
-import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
+import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
@@ -43,6 +40,7 @@ object Multiblocks : IBlockMaker {
     lateinit var shelvingUnit: BlockBase private set
     lateinit var steamEngine: BlockBase private set
     lateinit var grinder: BlockBase private set
+    lateinit var sieve: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -123,8 +121,19 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        sieve = builder.withName("sieve").copy {
+            factory = factoryOf(::TileSieve)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/sieve.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockSieve })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
 
-        return itemBlockListOf(gap, solarPanel, shelvingUnit, steamEngine, grinder)
+
+        return itemBlockListOf(gap, solarPanel, shelvingUnit, steamEngine, grinder, sieve)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

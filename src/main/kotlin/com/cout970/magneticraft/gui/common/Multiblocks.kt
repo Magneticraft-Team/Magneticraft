@@ -12,6 +12,7 @@ import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.TileGrinder
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
+import com.cout970.magneticraft.tileentity.TileSieve
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
@@ -117,6 +118,26 @@ class ContainerGrinder(val tile: TileGrinder, player: EntityPlayer, world: World
 
             inventoryRegions += InventoryRegion(0..0,filter = {
                 MagneticraftApi.getGrinderRecipeManager().findRecipe(it) != null
+            })
+            inventoryRegions += InventoryRegion(1..1, filter = { false })
+            inventoryRegions += InventoryRegion(2..2, filter = { false })
+        }
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+class ContainerSieve(val tile: TileSieve, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        tile.invModule.inventory.let { inv ->
+            addSlotToContainer(SlotItemHandler(inv, 0, 96, 16))
+            addSlotToContainer(SlotTakeOnly(inv, 1, 74, 48))
+            addSlotToContainer(SlotTakeOnly(inv, 2, 96, 48))
+            addSlotToContainer(SlotTakeOnly(inv, 3, 118, 48))
+
+            inventoryRegions += InventoryRegion(0..0,filter = {
+                MagneticraftApi.getSieveRecipeManager().findRecipe(it) != null
             })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
             inventoryRegions += InventoryRegion(2..2, filter = { false })

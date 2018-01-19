@@ -65,10 +65,10 @@ object Config {
 //    var hydraulicPressConsumption = 40.0
 //
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Max Consumption")
-    var grinderMaxConsumption = 20.0
-//
-//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Consumption")
-//    var sifterConsumption = 10.0
+    var grinderMaxConsumption = 40.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Sieve Max Consumption")
+    var sieveMaxConsumption = 40.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar Panel Production")
     var solarPanelMaxProduction = 100.0

@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.internal.registries.generators.thermopile.Th
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeWithDecay
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.sifter.SieveRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
@@ -31,6 +32,226 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 fun registerRecipes() {
 
     //@formatter:off
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                  GRINDER RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    EnumMetal.values().forEach { metal ->
+        metal.getOres().firstOrNull()?.let {
+            addGrinderRecipe(it, metal.getRockyChunk(), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+        }
+    }
+    addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+    addGrinderRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemStack(Items.DYE, 6, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                  SIEVE RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    EnumMetal.values().filter { it.isOre }.forEach {
+        val subComponents =
+                if(it.isComposite) {
+                    it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
+                } else {
+                    EnumMetal.subProducts[it]?.map { it.getDust() to 0.15f } ?: emptyList()
+                }
+
+        when(subComponents.size){
+            0 -> addSieveRecipe(it.getRockyChunk(), it.getChunk(), 1f, 50f)
+            1 -> addSieveRecipe(it.getRockyChunk(), it.getChunk(), 1f, subComponents[0].first, subComponents[0].second, 50f)
+            2 -> addSieveRecipe(it.getRockyChunk(), it.getChunk(), 1f, subComponents[0].first, subComponents[0].second,
+                    subComponents[1].first, subComponents[1].second, 50f)
+        }
+    }
+
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                              CRUSHING TABLE RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // skulls
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4))
+    // ores
+    EnumMetal.values().forEach { metal ->
+        metal.getOres().firstOrNull()?.let {
+            addCrushingTableRecipe(it, metal.getRockyChunk())
+        }
+    }
+
+    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 4), CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
+    // limestone
+    addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
+    addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))
+    // light plates
+    EnumMetal.values().filter { it.useful }.forEach {
+        addCrushingTableRecipe(it.getIngot(), it.getLightPlate())
+    }
+    // rods
+    addCrushingTableRecipe(ItemStack(Items.BLAZE_ROD), Items.BLAZE_POWDER.stack(5))
+    addCrushingTableRecipe(ItemStack(Items.BONE), Items.DYE.stack(4, 15))
+    // blocks
+    addCrushingTableRecipe(ItemStack(Blocks.STONE), Blocks.COBBLESTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), Blocks.STONE.stack(1, 5))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), Blocks.STONE.stack(1, 3))
+    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), Blocks.STONE.stack(1, 1))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), Blocks.STONEBRICK.stack(1, 2))
+    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), Blocks.MOSSY_COBBLESTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), Blocks.RED_SANDSTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), Blocks.SANDSTONE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), Blocks.PRISMARINE.stack())
+    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), Blocks.END_STONE.stack(1))
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                  SMELTING RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 0), ItemStack(Decoration.limestone, 1, 0))
+    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 2), ItemStack(Decoration.limestone, 1, 2))
+
+    //ores
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 2), ItemStack(Ores.ores, 1, 0))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 3), ItemStack(Ores.ores, 1, 1))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 4), ItemStack(Ores.ores, 1, 2))
+    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
+
+    EnumMetal.values().forEach {
+        if(it.isComposite) {
+            addSmeltingRecipe(it.subComponents[0]().getIngot().withSize(2), it.getRockyChunk())
+        } else {
+            addSmeltingRecipe(it.getIngot(), it.getDust())
+            if(it.isOre){
+                addSmeltingRecipe(it.getIngot(), it.getRockyChunk())
+                addSmeltingRecipe(it.getIngot().withSize(2), it.getChunk())
+            }
+        }
+    }
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                SLUICE BOX RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    EnumMetal.values()
+            .filter { it.isOre }
+            .forEach {
+
+        val subComponents =
+                if(it.isComposite) {
+                    it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
+                } else {
+                    EnumMetal.subProducts[it]?.map { it.getDust() to 0.15f } ?: emptyList()
+                }
+
+        addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), subComponents + listOf(COBBLESTONE.stack() to 0.15f))
+    }
+
+    addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))
+
+    addSluiceBoxRecipe(Blocks.SAND.stack(), ItemStack.EMPTY,
+            listOf(
+                    Items.GOLD_NUGGET.stack() to 0.01f,
+                    Items.GOLD_NUGGET.stack() to 0.005f,
+                    Items.GOLD_NUGGET.stack() to 0.0025f,
+                    Items.GOLD_NUGGET.stack() to 0.00125f,
+                    Items.GOLD_NUGGET.stack() to 0.000625f,
+                    Items.GOLD_NUGGET.stack() to 0.0003125f,
+                    Items.GOLD_NUGGET.stack() to 0.00015625f,
+                    Items.GOLD_NUGGET.stack() to 0.000078125f,
+                    Items.GOLD_NUGGET.stack() to 0.0000390625f
+            ))
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                  THERMOPILE RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    addThermopileRecipe(Blocks.AIR, -1)
+    addThermopileRecipe(Blocks.SNOW, -100)
+    addThermopileRecipe(Blocks.ICE, -100)
+    addThermopileRecipe(Blocks.PACKED_ICE, -80)
+    addThermopileRecipe(Blocks.SNOW_LAYER, -50)
+    addThermopileRecipe(Blocks.TORCH, 5)
+    addThermopileRecipe(Blocks.LIT_PUMPKIN, 3)
+    addThermopileRecipe(Blocks.FIRE, 25)
+    addThermopileRecipe(Blocks.MAGMA, 25)
+
+    addThermopileRecipe(Blocks.WATER, -25)
+    addThermopileRecipeWithDecay(Blocks.LAVA, 100, Blocks.OBSIDIAN.defaultState,-201, 0.00333f)
+
+    val fluids = FluidRegistry.getRegisteredFluids()
+            .values
+            .filter { it != FluidRegistry.WATER }
+            .filter { it != FluidRegistry.LAVA }
+            .filter { it.canBePlacedInWorld() }
+
+    fluids.forEach { fluid ->
+        when {
+            fluid.temperature < 310 -> {
+                addThermopileRecipe(fluid.block, -25 + (-100 * (1 - (fluid.temperature / 310f))).toInt())
+            }
+            fluid.temperature > 310 -> addThermopileRecipe(fluid.block, (100 * (fluid.temperature / 1300f)).toInt())
+        }
+    }
+
+    //@formatter:on
+}
+
+
+private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
+    if (input.isEmpty)
+        throw IllegalStateException("Trying to register furnace recipe with empty input stack: $input")
+    if (result.isEmpty)
+        throw IllegalStateException("Trying to register furnace recipe with empty result empty stack: $result")
+
+    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
+}
+
+private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
+    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
+}
+
+private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
+                               otherOutput: List<Pair<ItemStack, Float>> = emptyList()) {
+    SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, output, otherOutput, true))
+}
+
+private fun addThermopileRecipe(input: Block, heat: Int) {
+    ThermopileRecipeManager.registerRecipe(ThermopileRecipeNoDecay(input, heat))
+}
+
+private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replacement: IBlockState, limit: Int, prob: Float) {
+    ThermopileRecipeManager.registerRecipe(ThermopileRecipeWithDecay(input, heat, replacement, limit, prob))
+}
+
+
+private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, output1: ItemStack, prob1: Float,
+                           output2: ItemStack,
+                           prob2: Float, duration: Float) {
+    SieveRecipeManager.registerRecipe(
+            SieveRecipeManager.createRecipe(input, output0, prob0, output1, prob1, output2, prob2, duration, true))
+}
+
+private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, output1: ItemStack, prob1: Float,
+                           duration: Float) {
+    SieveRecipeManager.registerRecipe(
+            SieveRecipeManager.createRecipe(input, output0, prob0, output1, prob1, output1, 0f, duration, true))
+}
+
+private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, duration: Float) {
+    SieveRecipeManager.registerRecipe(
+            SieveRecipeManager.createRecipe(input, output0, prob0, output0, 0f, output0, 0f, duration, true))
+}
+
+private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float) {
+    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output0, output1, prob, ticks, true))
+}
+
+/* OLD RECIPES
+
+//
+//    //ICEBOX RECIPES
+//    addIceboxRecipeWater(ItemStack(Items.SNOWBALL), 125, false)
+//    addIceboxRecipeWater(ItemStack(Blocks.SNOW), 500, false)
+//    addIceboxRecipeWater(ItemStack(Blocks.ICE), 900, true)
+//    addIceboxRecipeWater(ItemStack(Blocks.PACKED_ICE), 1000, false)
+
 //    //HYDRAULIC PRESS RECIPES
 //    addHydraulicPressRecipe(ItemStack(IRON_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 0), 120f)
 //    addHydraulicPressRecipe(ItemStack(GOLD_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 1), 50f)
@@ -76,180 +297,8 @@ fun registerRecipes() {
 //    addKilnRecipe(ItemStack(COAL, 1, 0), ItemStack(ItemCoke), 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
 //    addKilnRecipe(ItemStack(CLAY_BALL), ItemStack(BRICK), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
 //    addKilnRecipe(ItemStack(CHORUS_FRUIT), ItemStack(CHORUS_FRUIT_POPPED, 1, 0), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
-//
-//    //GRINDER RECIPES
-    EnumMetal.values().forEach { metal ->
-        metal.getOres().firstOrNull()?.let {
-            addGrinderRecipe(it, metal.getRockyChunk(), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-        }
-    }
-    addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-//    addGrinderRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemCrushedLapis.stack(size = 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-//    addGrinderRecipe(ItemStack(Blocks.COAL_ORE, 1), ItemCrushedCoal.stack(size = 2), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-//    addGrinderRecipe(ItemStack((Blocks.LOG)), ItemWoodChip.stack(size = 16), 45f)
-//
-//    //ICEBOX RECIPES
-//    addIceboxRecipeWater(ItemStack(Items.SNOWBALL), 125, false)
-//    addIceboxRecipeWater(ItemStack(Blocks.SNOW), 500, false)
-//    addIceboxRecipeWater(ItemStack(Blocks.ICE), 900, true)
-//    addIceboxRecipeWater(ItemStack(Blocks.PACKED_ICE), 1000, false)
+ */
 
-    //CRUSHING TABLE RECIPES
-    // skulls
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8))
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15))
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4))
-    // ores
-    EnumMetal.values().forEach { metal ->
-        metal.getOres().firstOrNull()?.let {
-            addCrushingTableRecipe(it, metal.getRockyChunk())
-        }
-    }
-
-    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 4), CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
-    // limestone
-    addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
-    addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))
-    // light plates
-    EnumMetal.values().filter { it.useful }.forEach {
-        addCrushingTableRecipe(it.getIngot(), it.getLightPlate())
-    }
-    // rods
-    addCrushingTableRecipe(ItemStack(Items.BLAZE_ROD), Items.BLAZE_POWDER.stack(5))
-    addCrushingTableRecipe(ItemStack(Items.BONE), Items.DYE.stack(4, 15))
-    // blocks
-    addCrushingTableRecipe(ItemStack(Blocks.STONE), Blocks.COBBLESTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), Blocks.STONE.stack(1, 5))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), Blocks.STONE.stack(1, 3))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), Blocks.STONE.stack(1, 1))
-    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), Blocks.STONEBRICK.stack(1, 2))
-    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), Blocks.MOSSY_COBBLESTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), Blocks.RED_SANDSTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), Blocks.SANDSTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), Blocks.PRISMARINE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), Blocks.END_STONE.stack(1))
-
-    //SMELTING RECIPES
-    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 0), ItemStack(Decoration.limestone, 1, 0))
-    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 2), ItemStack(Decoration.limestone, 1, 2))
-
-    //ores
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 2), ItemStack(Ores.ores, 1, 0))
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 3), ItemStack(Ores.ores, 1, 1))
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 4), ItemStack(Ores.ores, 1, 2))
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
-
-    EnumMetal.values().forEach {
-        if(it.isComposite) {
-            addSmeltingRecipe(it.subComponents[0]().getIngot().withSize(2), it.getRockyChunk())
-        } else {
-            addSmeltingRecipe(it.getIngot(), it.getDust())
-            if(it.isOre){
-                addSmeltingRecipe(it.getIngot(), it.getRockyChunk())
-                addSmeltingRecipe(it.getIngot().withSize(2), it.getChunk())
-            }
-        }
-    }
-
-    //SLUICE BOX RECIPES
-
-    EnumMetal.values().filter { it.isOre }.forEach {
-        val subComponents = if(it.isComposite) {
-            it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
-        } else {
-            EnumMetal.subProducts[it]?.map { it.getDust() to 0.15f } ?: emptyList()
-        }
-        addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), subComponents + listOf(COBBLESTONE.stack() to 0.15f))
-    }
-
-    addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))
-    addSluiceBoxRecipe(Blocks.SAND.stack(), ItemStack.EMPTY,
-            listOf(
-                    Items.GOLD_NUGGET.stack() to 0.01f,
-                    Items.GOLD_NUGGET.stack() to 0.005f,
-                    Items.GOLD_NUGGET.stack() to 0.0025f,
-                    Items.GOLD_NUGGET.stack() to 0.00125f,
-                    Items.GOLD_NUGGET.stack() to 0.000625f,
-                    Items.GOLD_NUGGET.stack() to 0.0003125f,
-                    Items.GOLD_NUGGET.stack() to 0.00015625f,
-                    Items.GOLD_NUGGET.stack() to 0.000078125f,
-                    Items.GOLD_NUGGET.stack() to 0.0000390625f
-            ))
-
-    //THERMOPILE
-
-    addThermopileRecipe(Blocks.AIR, -1)
-    addThermopileRecipe(Blocks.SNOW, -100)
-    addThermopileRecipe(Blocks.ICE, -100)
-    addThermopileRecipe(Blocks.PACKED_ICE, -80)
-    addThermopileRecipe(Blocks.SNOW_LAYER, -50)
-    addThermopileRecipe(Blocks.TORCH, 5)
-    addThermopileRecipe(Blocks.LIT_PUMPKIN, 3)
-    addThermopileRecipe(Blocks.FIRE, 25)
-    addThermopileRecipe(Blocks.MAGMA, 25)
-
-    addThermopileRecipe(Blocks.WATER, -25)
-    addThermopileRecipeWithDecay(Blocks.LAVA, 100, Blocks.OBSIDIAN.defaultState,-201, 0.00333f)
-
-    val fluids = FluidRegistry.getRegisteredFluids()
-            .values
-            .filter { it != FluidRegistry.WATER }
-            .filter { it != FluidRegistry.LAVA }
-            .filter { it.canBePlacedInWorld() }
-
-    fluids.forEach { fluid ->
-        when {
-            fluid.temperature < 310 -> {
-                addThermopileRecipe(fluid.block, -25 + (-100 * (1 - (fluid.temperature / 310f))).toInt())
-            }
-            fluid.temperature > 310 -> addThermopileRecipe(fluid.block, (100 * (fluid.temperature / 1300f)).toInt())
-        }
-    }
-    //@formatter:on
-}
-
-
-private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
-    if (input.isEmpty) throw IllegalStateException("Trying to register furnace recipe with empty input stack: $input")
-    if (result.isEmpty) throw IllegalStateException(
-            "Trying to register furnace recipe with empty result empty stack: $result")
-    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
-}
-
-private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
-    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
-}
-
-private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
-                               otherOutput: List<Pair<ItemStack, Float>> = emptyList()) {
-    SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, output, otherOutput, true))
-}
-
-private fun addThermopileRecipe(input: Block, heat: Int) {
-    ThermopileRecipeManager.registerRecipe(ThermopileRecipeNoDecay(input, heat))
-}
-
-private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replcement: IBlockState, limit: Int, prob: Float) {
-    ThermopileRecipeManager.registerRecipe(ThermopileRecipeWithDecay(input, heat, replcement, limit, prob))
-}
-
-//
-//private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, output2: ItemStack,
-//                            prob2: Float, duration: Float) {
-//    SifterRecipeManager.registerRecipe(
-//            SifterRecipeManager.createRecipe(input, output0, output1, prob1, output2, prob2, duration, true))
-//}
-//
-//private fun addSifterRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob1: Float, duration: Float) {
-//    SifterRecipeManager.registerRecipe(
-//            SifterRecipeManager.createRecipe(input, output0, output1, prob1, output1, 0f, duration, true))
-//}
-//
-//private fun addSifterRecipe(input: ItemStack, output0: ItemStack, duration: Float) {
-//    SifterRecipeManager.registerRecipe(
-//            SifterRecipeManager.createRecipe(input, output0, output0, 0f, output0, 0f, duration, true))
-//}
-//
 //private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
 //    HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
 //}
@@ -274,10 +323,4 @@ private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replcement: IB
 //            WATER_BOILING_POINT, reverse))
 //}
 //
-private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float) {
-    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output0, output1, prob, ticks, true))
-}
 
-private fun addGrinderRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
-    GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output, output, 0f, ticks, true))
-}

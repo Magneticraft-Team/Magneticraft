@@ -6,16 +6,14 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
+import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.multiblock.MultiblockGrinder
-import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
-import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
-import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
+import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
@@ -159,6 +157,7 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
 
 @RegisterTileEntity("steam_engine")
 class TileSteamEngine : TileMultiblock(), ITickable {
+
     override fun getMultiblock(): Multiblock = MultiblockSteamEngine
 
     val tank = Tank(16000)
@@ -210,6 +209,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
 @RegisterTileEntity("grinder")
 class TileGrinder : TileMultiblock(), ITickable {
+
     override fun getMultiblock(): Multiblock = MultiblockGrinder
 
     val node = ElectricNode(ref, capacity = 8.0)
@@ -261,3 +261,60 @@ class TileGrinder : TileMultiblock(), ITickable {
         super.update()
     }
 }
+
+@RegisterTileEntity("sieve")
+class TileSieve : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockSieve
+
+    val node = ElectricNode(ref, capacity = 8.0)
+
+    val inventory = Inventory(4)
+
+    val sieveModule: ModuleSieveMb = ModuleSieveMb(
+            facingGetter = { facing },
+            energyModule = { energyModule }
+    )
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            canConnectAtSide = sieveModule::canConnectAtSide,
+            connectableDirections = sieveModule::getConnectableDirections
+    )
+
+    val storageModule = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10_000,
+            lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+    )
+
+    val invModule = ModuleInventory(
+            inventory = inventory,
+            capabilityFilter = ModuleInventory.ALLOW_NONE
+    )
+
+    val processModule = ModuleElectricProcessing(
+            craftingProcess = SieveCraftingProcess(invModule, 0, 1, 2, 3),
+            storage = storageModule,
+            workingRate = 1f,
+            costPerTick = Config.sieveMaxConsumption.toFloat()
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = sieveModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, sieveModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+

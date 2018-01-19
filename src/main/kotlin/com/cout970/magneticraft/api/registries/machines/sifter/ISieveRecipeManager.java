@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by cout970 on 24/08/2016.
  */
-public interface ISifterRecipeManager {
+public interface ISieveRecipeManager {
 
     /**
      * Retrieves the first recipe that matches the given input
@@ -15,12 +15,12 @@ public interface ISifterRecipeManager {
      * @param input the input to check the recipes
      * @return the recipes that matches the input or null if none matches the input
      */
-    ISifterRecipe findRecipe(ItemStack input);
+    ISieveRecipe findRecipe(ItemStack input);
 
     /**
      * The list with all registered recipes
      */
-    List<ISifterRecipe> getRecipes();
+    List<ISieveRecipe> getRecipes();
 
     /**
      * Register a recipe if is not already registered
@@ -28,7 +28,7 @@ public interface ISifterRecipeManager {
      * @param recipe The recipe to register
      * @return if the registration has ended successfully
      */
-    boolean registerRecipe(ISifterRecipe recipe);
+    boolean registerRecipe(ISieveRecipe recipe);
 
     /**
      * Creates a default recipe
@@ -41,5 +41,7 @@ public interface ISifterRecipeManager {
      * @param oreDict   if ore dictionary should be used to check the inputs
      * @return the new recipe
      */
-    ISifterRecipe createRecipe(ItemStack input, ItemStack primary, ItemStack secondary, float secondaryChance, ItemStack tertiary, float tertiaryChance, float duration, boolean oreDict);
+    ISieveRecipe createRecipe(ItemStack input, ItemStack primary, float primaryChance, ItemStack secondary,
+                              float secondaryChance, ItemStack tertiary, float tertiaryChance, float duration,
+                              boolean oreDict);
 }

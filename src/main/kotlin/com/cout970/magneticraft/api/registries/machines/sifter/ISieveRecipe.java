@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by cout970 on 24/08/2016.
  */
-public interface ISifterRecipe {
+public interface ISieveRecipe {
 
     /**
      * The input stack of this recipe
@@ -46,6 +46,11 @@ public interface ISifterRecipe {
     ItemStack getTertiary();
 
     /**
+     * @return The probability to get the primary output
+     */
+    float getPrimaryChance();
+
+    /**
      * @return The probability to get the secondary output
      */
     float getSecondaryChance();
@@ -59,7 +64,6 @@ public interface ISifterRecipe {
      * @return The time to perform one crafting operation
      */
     float getDuration();
-
 
     /**
      * Checks if this recipes has the same input as the given argument

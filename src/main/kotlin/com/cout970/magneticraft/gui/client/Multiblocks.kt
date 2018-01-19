@@ -14,6 +14,7 @@ import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerGrinder
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
+import com.cout970.magneticraft.gui.common.ContainerSieve
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
@@ -102,7 +103,7 @@ class GuiGrinder(val grinder: ContainerGrinder) : GuiBase(grinder) {
         components.add(CompElectricBar(tile.node, Vec2d(52, 16)))
         val consumptionCallback = CallbackBarProvider(
                 callback = { tile.processModule.production.storage.toDouble() },
-                max = { Config.electricFurnaceMaxConsumption },
+                max = { Config.grinderMaxConsumption },
                 min = { 0.0 }
         )
         components.add(CompVerticalBar(consumptionCallback, 3,
@@ -115,6 +116,32 @@ class GuiGrinder(val grinder: ContainerGrinder) : GuiBase(grinder) {
                 { 0.0 }
         )
         components.add(CompVerticalBar(processCallback, 2, Vec2d(74, 16),
+                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
+    }
+}
+
+class GuiSieve(val sieve: ContainerSieve) : GuiBase(sieve) {
+
+    override fun initComponents() {
+        val tile = sieve.tile
+
+        components.add(CompBackground(guiTexture("sieve")))
+        components.add(CompElectricBar(tile.node, Vec2d(41, 16)))
+        val consumptionCallback = CallbackBarProvider(
+                callback = { tile.processModule.production.storage.toDouble() },
+                max = { Config.sieveMaxConsumption },
+                min = { 0.0 }
+        )
+        components.add(CompVerticalBar(consumptionCallback, 3,
+                Vec2d(52, 16),
+                { listOf(String.format("%.2fW", consumptionCallback.callback())) }))
+
+        val processCallback = CallbackBarProvider(
+                { tile.processModule.timedProcess.timer.toDouble() },
+                { tile.processModule.timedProcess.limit().toDouble() },
+                { 0.0 }
+        )
+        components.add(CompVerticalBar(processCallback, 2, Vec2d(63, 16),
                 { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
     }
 }

@@ -4,14 +4,8 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.multiblock.MultiblockGrinder
-import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
-import com.cout970.magneticraft.multiblock.MultiblockSolarPanel
-import com.cout970.magneticraft.multiblock.MultiblockSteamEngine
-import com.cout970.magneticraft.tileentity.TileGrinder
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
-import com.cout970.magneticraft.tileentity.TileSolarPanel
-import com.cout970.magneticraft.tileentity.TileSteamEngine
+import com.cout970.magneticraft.multiblock.*
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
@@ -155,6 +149,22 @@ object TileRendererGrinder : TileRendererSimple<TileGrinder>(
         }
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -1)
+        models[0].renderTextured()
+    }
+}
+
+@RegisterRenderer(TileSieve::class)
+object TileRendererSieve : TileRendererSimple<TileSieve>(
+        modelLocation = { ModelResourceLocation(Multiblocks.sieve.registryName, "model") }
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileSieve) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockSieve)
+            return
+        }
+        Utilities.rotateFromCenter(te.facing, 180f)
+        translate(0, 0, 2)
         models[0].renderTextured()
     }
 }

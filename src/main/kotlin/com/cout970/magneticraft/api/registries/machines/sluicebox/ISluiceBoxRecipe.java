@@ -31,7 +31,7 @@ public interface ISluiceBoxRecipe {
     ItemStack getPrimaryOutput();
 
     /**
-     * The primary secondary of this recipe
+     * The secondary output of this recipe
      * The recipe will return this stack as output if, and only if, a Random number between 0 and 1 is less
      * that the probability of this recipe
      * WARNING: this should return a COPY of the output not the original instance of the output

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.api.internal.registries.machines.sifter
 
 import com.cout970.magneticraft.api.internal.ApiUtils
-import com.cout970.magneticraft.api.registries.machines.sifter.ISifterRecipe
+import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -11,17 +11,20 @@ import net.minecraftforge.oredict.OreDictionary
 data class SifterRecipe(
         private val input: ItemStack,
         private val primary: ItemStack,
+        private val primaryChance: Float,
         private val secondary: ItemStack,
         private val secondaryChance: Float,
         private val tertiary: ItemStack,
         private val tertiaryChance: Float,
         private val ticks: Float,
         private val oreDict: Boolean
-) : ISifterRecipe {
+) : ISieveRecipe {
 
     override fun getInput(): ItemStack = input.copy()
 
     override fun getPrimary(): ItemStack = primary.copy()
+
+    override fun getPrimaryChance(): Float = primaryChance
 
     override fun getSecondary(): ItemStack = secondary
 
@@ -34,6 +37,7 @@ data class SifterRecipe(
     override fun getDuration(): Float = ticks
 
     override fun matches(input: ItemStack): Boolean {
+        if (input.isEmpty) return false
         if (ApiUtils.equalsIgnoreSize(input, this.input)) return true
         if (oreDict) {
             val ids = OreDictionary.getOreIDs(this.input)

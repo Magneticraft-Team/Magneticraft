@@ -3,11 +3,13 @@ package com.cout970.magneticraft.api;
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry;
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.sifter.SieveRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipeManager;
 import com.cout970.magneticraft.multiblock.core.MultiblockManager;
 
@@ -35,9 +37,9 @@ public class MagneticraftApi {
 //        return KilnRecipeManager.INSTANCE;
 //    }
 
-//    public static ISifterRecipeManager getSifterRecipeManager() {
-//        return SifterRecipeManager.INSTANCE;
-//    }
+    public static ISieveRecipeManager getSieveRecipeManager() {
+        return SieveRecipeManager.INSTANCE;
+    }
 
     public static IMultiblockManager getMultiblockManager(){
         return MultiblockManager.INSTANCE;
