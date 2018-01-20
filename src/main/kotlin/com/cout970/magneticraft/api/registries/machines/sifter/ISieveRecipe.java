@@ -8,6 +8,12 @@ import net.minecraft.item.ItemStack;
 public interface ISieveRecipe {
 
     /**
+     * Whether or not this recipe use the OreDictionary to check if the input is valid
+     * @return if the OreDictionary will be used to compare items
+     */
+    boolean useOreDictionaryEquivalencies();
+
+    /**
      * The input stack of this recipe
      * The stacksize is ignored
      * WARNING: this should return a COPY of the input not the original instance of the input

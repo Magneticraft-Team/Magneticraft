@@ -17,6 +17,8 @@ data class GrinderRecipe(
         private val oreDict: Boolean
 ) : IGrinderRecipe {
 
+    override fun useOreDictionaryEquivalencies(): Boolean = oreDict
+
     override fun getInput(): ItemStack = input.copy()
 
     override fun getPrimaryOutput(): ItemStack = primaryOutput.copy()

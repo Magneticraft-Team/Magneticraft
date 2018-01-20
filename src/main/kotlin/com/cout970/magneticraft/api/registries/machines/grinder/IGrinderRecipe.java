@@ -8,6 +8,12 @@ import net.minecraft.item.ItemStack;
 public interface IGrinderRecipe {
 
     /**
+     * Whether or not this recipe use the OreDictionary to check if the input is valid
+     * @return if the OreDictionary will be used to compare items
+     */
+    boolean useOreDictionaryEquivalencies();
+
+    /**
      * The item, metadata and nbt used to determine if an item can be used for this recipe or not
      * Note: stacksize is used to check the recipe
      * WARNING: this should return a COPY of the input not the original instance of the input

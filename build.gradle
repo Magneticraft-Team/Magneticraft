@@ -81,15 +81,19 @@ repositories {
 }
 
 dependencies {
+    // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-	compile "mezz.jei:jei_1.12.2:4.8.5.136"
 
+    // JEI
+    compile "mezz.jei:jei_1.12.2:4.8.5.136"
+
+    // Craft Tweaker
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.12.+"
     deobfCompile "CraftTweaker2:CraftTweaker2-API:4.0.12.+"
     deobfCompile "CraftTweaker2:ZenScript:4.0.12.+"
     deobfCompile "com.blamejared:MTLib:3.0.+"
 
-//    deobfCompile "com.blamejared:MTLib:3.0.1.3"
-	compile files("lib/modelloader-1.0.5.jar", "lib/Forgelin-1.5.1.jar")
+    // Forgelin and ModelLoader
+	compile files("lib/modelloader-1.0.5.jar", "lib/Forgelin-1.6.0.jar")
 }

@@ -20,6 +20,8 @@ data class SifterRecipe(
         private val oreDict: Boolean
 ) : ISieveRecipe {
 
+    override fun useOreDictionaryEquivalencies(): Boolean = oreDict
+
     override fun getInput(): ItemStack = input.copy()
 
     override fun getPrimary(): ItemStack = primary.copy()

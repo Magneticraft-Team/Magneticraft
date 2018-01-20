@@ -3,8 +3,11 @@ package com.cout970.magneticraft.integration.jei
 import com.cout970.magneticraft.MOD_NAME
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
+import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
+import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.block.ManualMachines
+import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.util.add
@@ -35,6 +38,8 @@ class MagneticraftPlugin : IModPlugin {
     companion object {
         val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
         val SLUICE_BOX_ID = "magneticraft.sluice_box"
+        val GRINDER_ID = "magneticraft.grinder"
+        val SIEVE_ID = "magneticraft.sieve"
     }
 
     override fun register(registry: IModRegistry) {
@@ -47,9 +52,18 @@ class MagneticraftPlugin : IModPlugin {
         registry.addRecipeCatalyst(ManualMachines.sluiceBox.stack(), SLUICE_BOX_ID)
         registry.addRecipes(MagneticraftApi.getSluiceBoxRecipeManager().recipes, SLUICE_BOX_ID)
 
+        registry.handleRecipes(IGrinderRecipe::class.java, ::GrinderRecipeWrapper, GRINDER_ID)
+        registry.addRecipeCatalyst(Multiblocks.grinder.stack(), GRINDER_ID)
+        registry.addRecipes(MagneticraftApi.getGrinderRecipeManager().recipes, GRINDER_ID)
+
+        registry.handleRecipes(ISieveRecipe::class.java, ::SieveRecipeWrapper, SIEVE_ID)
+        registry.addRecipeCatalyst(Multiblocks.sieve.stack(), SIEVE_ID)
+        registry.addRecipes(MagneticraftApi.getSieveRecipeManager().recipes, SIEVE_ID)
+
     }
 
     override fun registerCategories(registry: IRecipeCategoryRegistration) {
+
         registry.addRecipeCategories(RecipeCategory<CrushingTableRecipeWrapper>(
                 id = CRUSHING_TABLE_ID,
                 backgroundTexture = "crushing_table",
@@ -61,6 +75,7 @@ class MagneticraftPlugin : IModPlugin {
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
                 }
         ))
+
         registry.addRecipeCategories(RecipeCategory<SluiceBoxRecipeWrapper>(
                 id = SLUICE_BOX_ID,
                 backgroundTexture = "sluice_box",
@@ -84,15 +99,48 @@ class MagneticraftPlugin : IModPlugin {
                         val stack = outputs[index].first
                         val percent = outputs[index].second * 100f
 
-                        stack.tagCompound = newNbt {
-                            add("display", newNbt {
-                                list("Lore") {
-                                    appendTag(NBTTagString("%.2f%%".format(percent)))
-                                }
-                            })
-                        }
+                        stack.addTooltip("%.2f%%".format(percent))
+
                         recipeLayout.itemStacks.set(index + 1, stack)
                     }
+                }
+        ))
+
+        registry.addRecipeCategories(RecipeCategory<GrinderRecipeWrapper>(
+                id = GRINDER_ID,
+                backgroundTexture = "grinder",
+                unlocalizedTitle = "text.magneticraft.jei.grinder",
+                initFunc = { recipeLayout, recipeWrapper, _ ->
+                    recipeLayout.itemStacks.init(0, true, 48, 10)
+                    recipeLayout.itemStacks.init(1, false, 39, 46)
+                    recipeLayout.itemStacks.init(2, false, 57, 46)
+                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primaryOutput)
+                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput)
+                }
+        ))
+
+        registry.addRecipeCategories(RecipeCategory<SieveRecipeWrapper>(
+                id = SIEVE_ID,
+                backgroundTexture = "sieve",
+                unlocalizedTitle = "text.magneticraft.jei.sieve",
+                initFunc = { recipeLayout, recipeWrapper, _ ->
+                    recipeLayout.itemStacks.init(0, true, 48, 10)
+                    recipeLayout.itemStacks.init(1, false, 30, 46)
+                    recipeLayout.itemStacks.init(2, false, 48, 46)
+                    recipeLayout.itemStacks.init(3, false, 66, 46)
+
+                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+
+                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primary.apply {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.primaryChance * 100))
+                    })
+                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondary.apply {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.secondaryChance * 100))
+                    })
+                    recipeLayout.itemStacks.set(3, recipeWrapper.recipe.tertiary.apply {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.tertiaryChance * 100))
+                    })
                 }
         ))
     }
@@ -144,6 +192,42 @@ class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
         ingredients.setOutputs(ItemStack::class.java,
                 listOf(recipe.primaryOutput) + recipe.secondaryOutput.map { it.first }
         )
+    }
+}
+
+class GrinderRecipeWrapper(val recipe: IGrinderRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients) {
+
+        if (recipe.useOreDictionaryEquivalencies()) {
+            ingredients.setInputs(ItemStack::class.java, listOf(getOreDictEquivalents(recipe.input)))
+        } else {
+            ingredients.setInput(ItemStack::class.java, recipe.input)
+        }
+        ingredients.setOutputs(ItemStack::class.java, listOf(recipe.primaryOutput, recipe.secondaryOutput))
+    }
+}
+
+class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients) {
+
+        if (recipe.useOreDictionaryEquivalencies()) {
+            ingredients.setInputs(ItemStack::class.java, listOf(getOreDictEquivalents(recipe.input)))
+        } else {
+            ingredients.setInput(ItemStack::class.java, recipe.input)
+        }
+        ingredients.setOutputs(ItemStack::class.java, listOf(recipe.primary, recipe.secondary, recipe.tertiary))
+    }
+}
+
+private fun ItemStack.addTooltip(str: String) {
+    tagCompound = newNbt {
+        add("display", newNbt {
+            list("Lore") {
+                appendTag(NBTTagString(str))
+            }
+        })
     }
 }
 
