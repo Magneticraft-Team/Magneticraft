@@ -8,5 +8,5 @@ import net.minecraft.item.ItemBlock
  */
 interface IBlockMaker {
 
-    fun initBlocks(): List<Pair<Block, ItemBlock>>
+    fun initBlocks(): List<Pair<Block, ItemBlock?>>
 }

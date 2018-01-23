@@ -66,6 +66,7 @@ class ClientProxy : CommonProxy() {
 
         //ItemBlock renders
         blocks.forEach { (block, itemBlock) ->
+            if (itemBlock == null) return@forEach
             (block as? BlockBase)?.let {
                 if (it.generateDefaultItemModel) {
                     it.inventoryVariants.forEach {

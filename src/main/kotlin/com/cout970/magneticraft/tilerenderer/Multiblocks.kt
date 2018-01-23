@@ -17,24 +17,20 @@ import net.minecraft.util.EnumFacing
 /**
  * Created by cout970 on 2017/08/10.
  */
+private fun genNames(prefix: String): List<String> = (1..3).map { "$prefix-$it" }
 
 @RegisterRenderer(TileSolarPanel::class)
 object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
         modelLocation = { ModelResourceLocation(Multiblocks.solarPanel.registryName, "model") },
-        filters = addInverse(
-                { it in TileRendererSolarPanel.left },
-                { it in TileRendererSolarPanel.right }
+        filters = filtersOf(
+                genNames("Panel1"),
+                genNames("Panel2"),
+                genNames("Panel3"),
+                genNames("Panel4"),
+                genNames("Panel5"),
+                genNames("Panel6")
         )
 ) {
-    val left = listOf(
-            "Panel1-1", "Panel1-2", "Panel1-3",
-            "Panel2-1", "Panel2-2", "Panel2-3",
-            "Panel3-1", "Panel3-2", "Panel3-3")
-
-    val right = listOf(
-            "Panel4-1", "Panel4-2", "Panel4-3",
-            "Panel5-1", "Panel5-2", "Panel5-3",
-            "Panel6-1", "Panel6-2", "Panel6-3")
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarPanel) {
         if (!te.active) {
@@ -46,17 +42,16 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
         translate(-1.0, 0.0, 0.0)
         models[0].renderTextured()
 
+        val worldTime = te.world.worldTime
+        val time = (worldTime % 24000L).toInt()
+        val normTime = time / 12000f
+        val preAngle = if (normTime > 1) 0f else (normTime * 2 - 1) * 30f
+
         val targetAngle = when (te.facing) {
-            EnumFacing.NORTH -> {
-                val time = (te.world.worldTime % 24000L).toInt()
-                val normTime = time / 12000f
-                if (normTime > 1) 0f else (normTime * 2 - 1) * 30f
-            }
-            EnumFacing.SOUTH -> {
-                val time = (te.world.worldTime % 24000L).toInt()
-                val normTime = time / 12000f
-                if (normTime > 1) 0f else (normTime * 2 - 1) * -30f
-            }
+            EnumFacing.NORTH -> preAngle
+            EnumFacing.SOUTH -> -preAngle
+            EnumFacing.WEST -> preAngle
+            EnumFacing.EAST -> -preAngle
             else -> 0f
         }
 
@@ -65,21 +60,48 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
         val delta = (Math.min(te.deltaTime - oldTime, 1000)) / 1000f
 
         val angle = te.currentAngle
-        te.currentAngle += (targetAngle - te.currentAngle) * 0.5f * delta
+        te.currentAngle += (targetAngle - te.currentAngle) * delta * 0.5f
 
-        stackMatrix {
-            translate(0f, 0.75f, 1.25f)
-            rotate(angle, 1f, 0f, 0f)
-            translate(0f, -0.75f + 0.1f, -1.25f)
-            models[1].renderTextured()
+        when (te.facing.axis) {
+            EnumFacing.Axis.X -> {
+                stackMatrix {
+                    translate(1.5f, 11f / 16f, 0.5f)
+                    rotate(angle, 0f, 0f, 1f)
+                    translate(-1.5f, -11f / 16f, -0.5f)
+                    (1..3).forEach { models[it].renderTextured() }
+                    (10..12).forEach { models[it].renderTextured() }
+                }
+                stackMatrix {
+                    translate(0.5f, 11f / 16f, 0.5f)
+                    rotate(angle, 0f, 0f, 1f)
+                    translate(-0.5f, -11f / 16f, -0.5f)
+                    (4..6).forEach { models[it].renderTextured() }
+                    (13..15).forEach { models[it].renderTextured() }
+                }
+                stackMatrix {
+                    translate(-0.5f, 11f / 16f, 0.5f)
+                    rotate(angle, 0f, 0f, 1f)
+                    translate(0.5f, -11f / 16f, -0.5f)
+                    (7..9).forEach { models[it].renderTextured() }
+                    (16..18).forEach { models[it].renderTextured() }
+                }
+            }
+            EnumFacing.Axis.Z -> {
+                stackMatrix {
+                    translate(0f, 0.75f, 1.25f)
+                    rotate(angle, 1f, 0f, 0f)
+                    translate(0f, -0.75f + 0.1f, -1.25f)
+                    (1..9).forEach { models[it].renderTextured() }
+                }
+                stackMatrix {
+                    translate(0f, 0.75f, -0.25f)
+                    rotate(angle, 1f, 0f, 0f)
+                    translate(0f, -0.75f + 0.1f, 0.25f)
+                    (10..18).forEach { models[it].renderTextured() }
+                }
+            }
+            else -> Unit
         }
-        stackMatrix {
-            translate(0f, 0.75f, -0.25f)
-            rotate(angle, 1f, 0f, 0f)
-            translate(0f, -0.75f + 0.1f, 0.25f)
-            models[2].renderTextured()
-        }
-
     }
 }
 

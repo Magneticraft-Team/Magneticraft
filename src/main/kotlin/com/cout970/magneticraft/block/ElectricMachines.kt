@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.block.core.*
+import com.cout970.magneticraft.item.itemblock.blockListOf
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
@@ -34,7 +35,7 @@ object ElectricMachines : IBlockMaker {
     lateinit var windTurbine: BlockBase private set
     lateinit var windTurbineGap: BlockBase private set
 
-    override fun initBlocks(): List<Pair<Block, ItemBlock>> {
+    override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
             material = Material.IRON
             creativeTab = CreativeTabMg
@@ -143,8 +144,8 @@ object ElectricMachines : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile,
-                windTurbine, windTurbineGap)
+        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile, windTurbine) +
+               blockListOf(windTurbineGap)
     }
 
     enum class DecayMode(

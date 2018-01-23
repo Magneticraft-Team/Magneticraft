@@ -11,6 +11,34 @@ import net.minecraft.util.math.Vec3d
 /**
  * Created by cout970 on 2017/02/20.
  */
+
+fun EnumFacing.getRelative(other: EnumFacing): EnumFacing = when (this) {
+    EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH -> other
+    EnumFacing.SOUTH -> other.safeRotateY().safeRotateY()
+    EnumFacing.WEST -> other.safeRotateYCCW()
+    EnumFacing.EAST -> other.safeRotateY()
+}
+
+fun EnumFacing.safeRotateYCCW(): EnumFacing{
+    return when (this) {
+        NORTH -> WEST
+        EAST -> NORTH
+        SOUTH -> EAST
+        WEST -> SOUTH
+        else -> this
+    }
+}
+
+fun EnumFacing.safeRotateY(): EnumFacing{
+    return when (this) {
+        NORTH -> EAST
+        EAST -> SOUTH
+        SOUTH -> WEST
+        WEST -> NORTH
+        else -> this
+    }
+}
+
 fun EnumFacing.rotatePoint(origin: BlockPos = BlockPos.ORIGIN, point: BlockPos): BlockPos {
     val rel = point - origin
     val rot = when (this) {
@@ -25,11 +53,11 @@ fun EnumFacing.rotatePoint(origin: BlockPos = BlockPos.ORIGIN, point: BlockPos):
     val pos3 = pos2.transform { Math.round(it).toDouble() }
     return BlockPos(origin + BlockPos(pos3))
 }
+
 /**
  * The default value is associated to the NORTH direction
  */
-fun EnumFacing.rotatePoint(origin: Vec3d,
-                           point: Vec3d): Vec3d {
+fun EnumFacing.rotatePoint(origin: Vec3d, point: Vec3d): Vec3d {
     val rel = point - origin
     val rot = when (this) {
         DOWN -> return origin + rel.rotatePitch(90.toRads().toFloat())

@@ -105,11 +105,18 @@ class ModuleElectricity(
         if (world.isClient) return
         electricNodes.forEach { thisNode ->
 
-            connectableDirections().forEach directions@ { (vec, side) ->
-                val tile = world.getTileEntity(pos.add(vec)) ?: return@directions
-                val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return@directions
-                if (handler === this) return@directions
+            val conDir = connectableDirections()
+            val spots = conDir.mapNotNull { (vec, side) ->
+                val tile = world.getTileEntity(pos.add(vec)) ?: return@mapNotNull null
+                tile to side
+            }
+            val handlers = spots.mapNotNull { (tile, side) ->
+                val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side)
+                if (handler === null || handler === this) return@mapNotNull null
+                handler to side
+            }
 
+            for ((handler, side) in handlers) {
                 val electricNodes = handler.nodes
                         .filter { it is IElectricNode }
                         .map { it as IElectricNode }

@@ -9,7 +9,6 @@ import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
-import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
@@ -22,7 +21,6 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumParticleTypes
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/08/12.
@@ -30,7 +28,6 @@ import net.minecraftforge.common.capabilities.Capability
 
 class ModuleSteamEngineMb(
         val facingGetter: () -> EnumFacing,
-        val energyModule: ModuleElectricity,
         val steamProduction: ValueAverage,
         override val name: String = "module_steam_engine_mb"
 ) : IModule, IOnActivated {
@@ -125,16 +122,6 @@ class ModuleSteamEngineMb(
     @Suppress("UNUSED_PARAMETER")
     fun getDynamicCollisionBoxes(otherPos: BlockPos): List<AABB> {
         return (if (lidOpen) shaftBox else lidBoxes) + gearboxShell
-    }
-
-    fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
-        if (cap == ELECTRIC_NODE_HANDLER && side == EnumFacing.UP) {
-            val rel = facing.opposite.rotatePoint(BlockPos.ORIGIN, BlockPos(2, 0, 2))
-            if (relPos == rel) {
-                return energyModule
-            }
-        }
-        return null
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {

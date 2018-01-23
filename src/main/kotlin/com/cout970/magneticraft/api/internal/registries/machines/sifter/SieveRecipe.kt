@@ -8,7 +8,7 @@ import net.minecraftforge.oredict.OreDictionary
 /**
  * Created by cout970 on 22/08/2016.
  */
-data class SifterRecipe(
+data class SieveRecipe(
         private val input: ItemStack,
         private val primary: ItemStack,
         private val primaryChance: Float,
@@ -26,11 +26,11 @@ data class SifterRecipe(
 
     override fun getPrimary(): ItemStack = primary.copy()
 
+    override fun getSecondary(): ItemStack = secondary.copy()
+
+    override fun getTertiary(): ItemStack = tertiary.copy()
+
     override fun getPrimaryChance(): Float = primaryChance
-
-    override fun getSecondary(): ItemStack = secondary
-
-    override fun getTertiary(): ItemStack = tertiary
 
     override fun getSecondaryChance(): Float = secondaryChance
 

@@ -1,16 +1,9 @@
 package com.cout970.magneticraft.tileentity.modules
 
-import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.block.core.IOnActivated
-import com.cout970.magneticraft.block.core.OnActivatedArgs
-import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.vector.rotatePoint
-import com.cout970.magneticraft.util.vector.xi
-import com.cout970.magneticraft.util.vector.yi
-import com.cout970.magneticraft.util.vector.zi
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
@@ -19,7 +12,7 @@ class ModuleSieveMb(
         val facingGetter: () -> EnumFacing,
         val energyModule: () -> ModuleElectricity,
         override val name: String = "module_sieve_mb"
-) : IModule, IOnActivated {
+) : IModule {
 
     override lateinit var container: IModuleContainer
     inline val facing get() = facingGetter()
@@ -46,16 +39,5 @@ class ModuleSieveMb(
 
     fun canConnectAtSide(facing: EnumFacing?): Boolean {
         return facing == getConnectionSide() || facing == getConnectionSide().opposite
-    }
-
-    override fun onActivated(args: OnActivatedArgs): Boolean {
-        if (!args.playerIn.isSneaking) {
-            if (args.worldIn.isServer) {
-                args.playerIn.openGui(Magneticraft, -1, args.worldIn, pos.xi, pos.yi, pos.zi)
-            }
-            return true
-        } else {
-            return false
-        }
     }
 }

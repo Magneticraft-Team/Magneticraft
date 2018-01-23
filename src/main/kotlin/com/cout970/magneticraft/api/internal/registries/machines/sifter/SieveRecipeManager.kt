@@ -31,7 +31,7 @@ object SieveRecipeManager : ISieveRecipeManager {
                               secondaryChance: Float, tertiary: ItemStack, tertiaryChance: Float, duration: Float,
                               oreDict: Boolean): ISieveRecipe {
 
-        return SifterRecipe(input, primary, primaryChance, secondary, secondaryChance, tertiary, tertiaryChance,
+        return SieveRecipe(input, primary, primaryChance, secondary, secondaryChance, tertiary, tertiaryChance,
                 duration, oreDict)
     }
 }

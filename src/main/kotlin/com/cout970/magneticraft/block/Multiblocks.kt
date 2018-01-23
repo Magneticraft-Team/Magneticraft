@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.block.core.*
+import com.cout970.magneticraft.item.itemblock.blockListOf
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
@@ -42,7 +43,7 @@ object Multiblocks : IBlockMaker {
     lateinit var grinder: BlockBase private set
     lateinit var sieve: BlockBase private set
 
-    override fun initBlocks(): List<Pair<Block, ItemBlock>> {
+    override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
             material = Material.IRON
             creativeTab = CreativeTabMg
@@ -133,7 +134,7 @@ object Multiblocks : IBlockMaker {
         }.build()
 
 
-        return itemBlockListOf(gap, solarPanel, shelvingUnit, steamEngine, grinder, sieve)
+        return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

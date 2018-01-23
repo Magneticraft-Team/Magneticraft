@@ -10,11 +10,11 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries
  */
 
 
-var blocks: List<Pair<Block, ItemBlock>> = emptyList()
+var blocks: List<Pair<Block, ItemBlock?>> = emptyList()
     private set
 
 fun initBlocks() {
-    val blocks_ = mutableListOf<Pair<Block, ItemBlock>>()
+    val blocks_ = mutableListOf<Pair<Block, ItemBlock?>>()
 
     blocks_ += Decoration.initBlocks()
     blocks_ += Ores.initBlocks()
@@ -28,7 +28,7 @@ fun initBlocks() {
     blocks_ += ElectricConductors.initBlocks()
     blocks_ += FluidMachines.initBlocks()
 
-    blocks_.forEach { ForgeRegistries.BLOCKS.register(it.first); ForgeRegistries.ITEMS.register(it.second) }
+    blocks_.forEach { ForgeRegistries.BLOCKS.register(it.first); it.second?.let { ForgeRegistries.ITEMS.register(it) } }
     blocks = blocks_
 }
 

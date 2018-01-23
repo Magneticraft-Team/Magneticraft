@@ -9,12 +9,14 @@ import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
 import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
-import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.interpolate
@@ -74,10 +76,28 @@ class TileSolarPanel : TileMultiblock(), ITickable {
 
     val node = ElectricNode(ref, capacity = 8.0)
 
-    val electricModule = ModuleElectricity(
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(
+                    ConnectionSpot(
+                            capability = ELECTRIC_NODE_HANDLER!!,
+                            pos = BlockPos(0, 0, -5),
+                            side = EnumFacing.NORTH,
+                            getter = { energyModule }
+                    ),
+                    ConnectionSpot(
+                            capability = ELECTRIC_NODE_HANDLER!!,
+                            pos = BlockPos(0, 0, 0),
+                            side = EnumFacing.SOUTH,
+                            getter = { energyModule }
+                    )
+            )
+    )
+
+    val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
-            canConnectAtSide = this::canConnectAtSide,
-            connectableDirections = this::getConnectableDirections
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
@@ -86,24 +106,25 @@ class TileSolarPanel : TileMultiblock(), ITickable {
             capabilityGetter = { _, _, _ -> null }
     )
 
+
     //client animation
     var currentAngle = 0f
     var deltaTime = System.currentTimeMillis()
 
     init {
-        initModules(multiblockModule, electricModule)
+        initModules(multiblockModule, energyModule, ioModule)
     }
 
-    fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
-        val base = ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite }
-        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.NORTH, 5)) != null) {
-            return base + EnumFacing.NORTH.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
-        }
-        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.WEST, 5)) != null) {
-            return base + EnumFacing.WEST.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
-        }
-        return base
-    }
+//    fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
+//        val base = ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite }
+//        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.NORTH, 5)) != null) {
+//            return base + EnumFacing.NORTH.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
+//        }
+//        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.WEST, 5)) != null) {
+//            return base + EnumFacing.WEST.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
+//        }
+//        return base
+//    }
 
     @DoNotRemove
     override fun update() {
@@ -126,7 +147,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
         }
     }
 
-    fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
+//    fun canConnectAtSide(facing: EnumFacing?): Boolean = facing?.axis != EnumFacing.Axis.Y
 }
 
 @RegisterTileEntity("shelving_unit")
@@ -185,20 +206,29 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     val steamEngineMbModule = ModuleSteamEngineMb(
             facingGetter = { facing },
-            energyModule = energyModule,
             steamProduction = steamGeneratorModule.production
+    )
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(-2, 0, -2),
+                    side = EnumFacing.UP,
+                    getter = { energyModule }
+            ))
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
             facingGetter = { facing },
-            capabilityGetter = steamEngineMbModule::getCapability,
+            capabilityGetter = ioModule::getCapability,
             dynamicCollisionBoxes = steamEngineMbModule::getDynamicCollisionBoxes
     )
 
     init {
         initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
-                steamEngineMbModule)
+                steamEngineMbModule, ioModule)
     }
 
     @DoNotRemove
@@ -216,15 +246,54 @@ class TileGrinder : TileMultiblock(), ITickable {
 
     val inventory = Inventory(3)
 
-    val grinderModule: ModuleGrinderMb = ModuleGrinderMb(
-            facingGetter = { facing },
-            energyModule = { energyModule }
+    val openGuiModule = ModuleOpenGui()
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(
+                    ConnectionSpot(
+                            capability = ELECTRIC_NODE_HANDLER!!,
+                            pos = BlockPos(1, 1, -1),
+                            side = EnumFacing.EAST,
+                            getter = { energyModule }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -2), EnumFacing.SOUTH,
+                            getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(1, 2)) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 3, 0), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(1, 3, 0), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(2, 3, 0), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 3, 1), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(1, 3, 1), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(2, 3, 1), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 3, 2), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(1, 3, 2), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(2, 3, 2), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    )
+            )
     )
 
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
-            canConnectAtSide = grinderModule::canConnectAtSide,
-            connectableDirections = grinderModule::getConnectableDirections
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
     )
 
     val storageModule = ModuleInternalStorage(
@@ -249,11 +318,11 @@ class TileGrinder : TileMultiblock(), ITickable {
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
             facingGetter = { facing },
-            capabilityGetter = grinderModule::getCapability
+            capabilityGetter = ioModule::getCapability
     )
 
     init {
-        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, grinderModule)
+        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, openGuiModule, ioModule)
     }
 
     @DoNotRemove
@@ -271,15 +340,42 @@ class TileSieve : TileMultiblock(), ITickable {
 
     val inventory = Inventory(4)
 
-    val sieveModule: ModuleSieveMb = ModuleSieveMb(
-            facingGetter = { facing },
-            energyModule = { energyModule }
+    val openGuiModule = ModuleOpenGui()
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(
+                    ConnectionSpot(
+                            capability = ELECTRIC_NODE_HANDLER!!,
+                            pos = BlockPos(-1, 1, 0),
+                            side = EnumFacing.SOUTH,
+                            getter = { energyModule }
+                    ),
+                    ConnectionSpot(
+                            capability = ELECTRIC_NODE_HANDLER!!,
+                            pos = BlockPos(1, 1, 0),
+                            side = EnumFacing.SOUTH,
+                            getter = { energyModule }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 1, 0), EnumFacing.UP,
+                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -1), EnumFacing.DOWN,
+                            getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(1)) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -2), EnumFacing.DOWN,
+                            getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(2)) }
+                    ),
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -3), EnumFacing.DOWN,
+                            getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(3)) }
+                    )
+            )
     )
 
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
-            canConnectAtSide = sieveModule::canConnectAtSide,
-            connectableDirections = sieveModule::getConnectableDirections
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
     )
 
     val storageModule = ModuleInternalStorage(
@@ -304,11 +400,11 @@ class TileSieve : TileMultiblock(), ITickable {
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
             facingGetter = { facing },
-            capabilityGetter = sieveModule::getCapability
+            capabilityGetter = ioModule::getCapability
     )
 
     init {
-        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, sieveModule)
+        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, ioModule, openGuiModule)
     }
 
     @DoNotRemove

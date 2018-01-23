@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.block.core.*
+import com.cout970.magneticraft.item.itemblock.blockListOf
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.tileentity.TileComputer
@@ -26,7 +27,7 @@ object Computers : IBlockMaker {
     lateinit var miningRobot: BlockBase private set
     lateinit var movingRobot: BlockBase private set
 
-    override fun initBlocks(): List<Pair<Block, ItemBlock>> {
+    override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
             material = Material.IRON
             creativeTab = CreativeTabMg
@@ -72,7 +73,7 @@ object Computers : IBlockMaker {
             translucent = true
         }.build()
 
-        return itemBlockListOf(computer, miningRobot, movingRobot)
+        return itemBlockListOf(computer, miningRobot) + blockListOf(movingRobot)
     }
 
     fun placeWithRobotOrientation(it: OnBlockPlacedArgs): IBlockState {

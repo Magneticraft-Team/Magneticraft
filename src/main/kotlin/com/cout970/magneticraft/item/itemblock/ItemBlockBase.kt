@@ -85,3 +85,7 @@ open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
 fun itemBlockListOf(vararg blocks: BlockBase): List<Pair<BlockBase, ItemBlockBase>> {
     return blocks.map { it to ItemBlockBase(it) }
 }
+
+fun blockListOf(vararg blocks: BlockBase): List<Pair<BlockBase, ItemBlockBase?>> {
+    return blocks.map { it to null }
+}
