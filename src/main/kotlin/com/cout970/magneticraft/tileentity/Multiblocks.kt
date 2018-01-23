@@ -257,36 +257,11 @@ class TileGrinder : TileMultiblock(), ITickable {
                             side = EnumFacing.EAST,
                             getter = { energyModule }
                     ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -2), EnumFacing.SOUTH,
+                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -2), EnumFacing.NORTH,
                             getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(1, 2)) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 3, 0), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(1, 3, 0), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(2, 3, 0), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 3, 1), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(1, 3, 1), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(2, 3, 1), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 3, 2), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(1, 3, 2), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
-                    ),
-                    ConnectionSpot(ITEM_HANDLER!!, BlockPos(2, 3, 2), EnumFacing.UP,
-                            getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
                     )
+            ) + ModuleMultiblockIO.connectionArea(ITEM_HANDLER!!, BlockPos(-1, 3, -2), BlockPos(1, 3, 0),
+                    EnumFacing.UP, getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
             )
     )
 

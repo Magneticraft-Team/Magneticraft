@@ -26,19 +26,36 @@ class ModuleMultiblockIO(
 
     override lateinit var container: IModuleContainer
 
+    companion object {
+        fun connectionArea(capability: Capability<*>, start: BlockPos, end: BlockPos, side: EnumFacing,
+                           getter: () -> Any?): List<ConnectionSpot> {
+            val result = mutableListOf<ConnectionSpot>()
+
+            for (x in start.x..end.x) {
+                for (y in start.y..end.y) {
+                    for (z in start.z..end.z) {
+                        result += ConnectionSpot(capability, BlockPos(x, y, z), side, getter)
+                    }
+                }
+            }
+            return result
+        }
+    }
+
 
     fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
         if (connectionSpots.isEmpty() || side == null) return null
 
         val direction = facing()
 
-        val valid = connectionSpots
-                            .filter { it.capability == cap }
-                            .find {
-                                direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos &&
-                                direction.getRelative(it.side) == side
-                            }
-                    ?: return null
+        val validCapability = connectionSpots.filter { it.capability == cap }
+
+        val valid = validCapability.find {
+            direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos &&
+            direction.getRelative(it.side) == side
+        }
+
+        if (valid == null) return null
 
 
         return valid.getter()
