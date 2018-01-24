@@ -9,13 +9,13 @@ import com.cout970.magneticraft.util.vector.yd
 import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.util.math.Vec3d
 
-fun Number.toRads() = Math.toRadians(this.toDouble())
+inline fun Number.toRads() = Math.toRadians(this.toDouble())
+
+fun Float.toRadians() = Math.toRadians(this.toDouble()).toFloat()
 
 infix fun Int.roundTo(factor: Int) = (this / factor) * factor
 
 infix fun Long.roundTo(factor: Long) = (this / factor) * factor
-
-fun Float.toRadians() = Math.toRadians(this.toDouble()).toFloat()
 
 fun clamp(value: Double, max: Double, min: Double) = Math.max(Math.min(max, value), min)
 

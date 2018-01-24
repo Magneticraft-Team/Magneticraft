@@ -33,7 +33,7 @@ object MultiblockSteamEngine : Multiblock() {
         val G = grateBlock()
         val N = baseBlock()
         val O = corrugatedIronBlock()
-        val M = mainBlockOf(Multiblocks.steamEngine)
+        val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
                 zLayers(listOf(N, I, I), // y = 2

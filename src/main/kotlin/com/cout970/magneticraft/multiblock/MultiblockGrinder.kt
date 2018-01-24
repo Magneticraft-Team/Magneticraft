@@ -29,7 +29,7 @@ object MultiblockGrinder : Multiblock() {
         val B = baseBlock()
         val S = strippedBlock()
         val C = corrugatedIronBlock()
-        val M = mainBlockOf(Multiblocks.grinder)
+        val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
                 zLayers(listOf(S, S, S), // y = 3
@@ -50,7 +50,7 @@ object MultiblockGrinder : Multiblock() {
         )
     }
 
-    override fun getControllerBlock() = Multiblocks.shelvingUnit
+    override fun getControllerBlock() = Multiblocks.grinder
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
 

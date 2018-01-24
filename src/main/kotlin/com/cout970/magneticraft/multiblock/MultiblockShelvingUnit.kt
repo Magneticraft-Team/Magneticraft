@@ -1,13 +1,7 @@
 package com.cout970.magneticraft.multiblock
 
-import com.cout970.magneticraft.block.MultiblockParts
 import com.cout970.magneticraft.block.Multiblocks
-import com.cout970.magneticraft.multiblock.components.MainBlockComponent
-import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
-import com.cout970.magneticraft.multiblock.core.BlockData
-import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
-import com.cout970.magneticraft.multiblock.core.Multiblock
-import com.cout970.magneticraft.multiblock.core.MultiblockContext
+import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.unaryMinus
@@ -28,14 +22,8 @@ object MultiblockShelvingUnit : Multiblock() {
     override val center: BlockPos = BlockPos(2, 0, 0)
 
     init {
-        val replacement = Multiblocks.gap.defaultState
-
-        val pBlock = MultiblockParts.PartType.GRATE.getBlockState(MultiblockParts.parts)
-        val P: IMultiblockComponent = SingleBlockComponent(pBlock, replacement)
-
-        val M: IMultiblockComponent = MainBlockComponent(Multiblocks.shelvingUnit) { context, activate ->
-            Multiblocks.MultiblockOrientation.of(context.facing, activate).getBlockState(Multiblocks.shelvingUnit)
-        }
+        val P = grateBlock()
+        val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
                 zLayers(listOf(P, P, P, P, P), // y = 2

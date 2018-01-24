@@ -25,5 +25,10 @@ inline infix fun <reified T> List<T>.with(other: List<T>): MutableList<T> = muta
 
 fun <T> List<T>.rest(): List<T> {
     if (isEmpty() || size == 1) return emptyList()
-    return takeLast(size - 1)
+    return drop(1)
+}
+
+fun runningAvg(previousAverage: Float, currentNumber: Float, index: Int): Float {
+    // avg = (avg' * (n-1) + x) / n
+    return (previousAverage * (index - 1) + currentNumber) / index
 }

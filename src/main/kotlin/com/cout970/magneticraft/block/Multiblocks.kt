@@ -42,6 +42,8 @@ object Multiblocks : IBlockMaker {
     lateinit var steamEngine: BlockBase private set
     lateinit var grinder: BlockBase private set
     lateinit var sieve: BlockBase private set
+    lateinit var solarTower: BlockBase private set
+    lateinit var solarMirror: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -133,8 +135,30 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        solarTower = builder.withName("solar_tower").copy {
+            factory = factoryOf(::TileSolarTower)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/solar_tower.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockSolarTower })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
 
-        return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve) + blockListOf(gap)
+        solarMirror = builder.withName("solar_mirror").copy {
+            factory = factoryOf(::TileSolarMirror)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/solar_mirror.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockSolarMirror })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror) +
+               blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

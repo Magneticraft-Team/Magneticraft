@@ -30,7 +30,7 @@ object MultiblockSieve : Multiblock() {
         val S = strippedBlock()
         val C = corrugatedIronBlock()
         val P = collumnBlock()
-        val M = mainBlockOf(Multiblocks.sieve)
+        val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
                 zLayers(listOf(B, B, B), // y = 1
@@ -47,7 +47,7 @@ object MultiblockSieve : Multiblock() {
         )
     }
 
-    override fun getControllerBlock() = Multiblocks.shelvingUnit
+    override fun getControllerBlock() = Multiblocks.sieve
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf(
             Vec3d(23.000, 0.000, 41.000) * PIXEL to Vec3d(27.000, 12.000, 45.000) * PIXEL,

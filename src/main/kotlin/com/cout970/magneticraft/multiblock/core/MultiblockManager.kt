@@ -22,7 +22,8 @@ object MultiblockManager : IMultiblockManager {
     private val multiblocks = mutableMapOf<String, Multiblock>()
 
     fun registerMultiblock(mb: Multiblock) {
-        if (mb.name in multiblocks) throw IllegalArgumentException("Multiblock with name: ${mb.name} is already registered")
+        if (mb.name in multiblocks) throw IllegalArgumentException(
+                "Multiblock with name: ${mb.name} is already registered")
         multiblocks.put(mb.name, mb)
     }
 
@@ -35,6 +36,8 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockSteamEngine)
         registerMultiblock(MultiblockGrinder)
         registerMultiblock(MultiblockSieve)
+        registerMultiblock(MultiblockSolarTower)
+        registerMultiblock(MultiblockSolarMirror)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

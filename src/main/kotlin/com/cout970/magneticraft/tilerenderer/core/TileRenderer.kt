@@ -31,18 +31,46 @@ abstract class TileRenderer<T : TileBase> : TileEntitySpecialRenderer<T>() {
     fun pushMatrix() = GlStateManager.pushMatrix()
     fun popMatrix() = GlStateManager.popMatrix()
 
-    fun translate(x: Number, y: Number, z: Number) = GlStateManager.translate(x.toFloat(), y.toFloat(), z.toFloat())
+    inline fun rotationCenter(x: Number, y: Number, z: Number, func: () -> Unit) {
+        GlStateManager.translate(x.toFloat(), y.toFloat(), z.toFloat())
+        func()
+        GlStateManager.translate(-x.toFloat(), -y.toFloat(), -z.toFloat())
+    }
+
+    inline fun rotationCenter(x: Double, y: Double, z: Double, func: () -> Unit) {
+        GlStateManager.translate(x, y, z)
+        func()
+        GlStateManager.translate(-x, -y, -z)
+    }
+
+    inline fun rotationCenter(x: Float, y: Float, z: Float, func: () -> Unit) {
+        GlStateManager.translate(x, y, z)
+        func()
+        GlStateManager.translate(-x, -y, -z)
+    }
+
+    inline fun rotationCenter(vec: IVector3, func: () -> Unit) {
+        GlStateManager.translate(vec.xd, vec.yd, vec.zd)
+        func()
+        GlStateManager.translate(-vec.xd, -vec.yd, -vec.zd)
+    }
+
+    inline fun translate(x: Number, y: Number, z: Number) {
+        GlStateManager.translate(x.toFloat(), y.toFloat(), z.toFloat())
+    }
+
     fun translate(x: Double, y: Double, z: Double) = GlStateManager.translate(x, y, z)
     fun translate(x: Float, y: Float, z: Float) = GlStateManager.translate(x, y, z)
     fun translate(vec: IVector3) = GlStateManager.translate(vec.xd, vec.yd, vec.zd)
 
     fun rotate(angle: Float, x: Float, y: Float, z: Float) = GlStateManager.rotate(angle, x, y, z)
     fun rotate(angle: Float, axis: IVector3) = GlStateManager.rotate(angle, axis.xf, axis.yf, axis.zf)
-    fun rotate(angle: Number, x: Number, y: Number, z: Number) {
+
+    inline fun rotate(angle: Number, x: Number, y: Number, z: Number) {
         GlStateManager.rotate(angle.toFloat(), x.toFloat(), y.toFloat(), z.toFloat())
     }
 
-    fun scale(x: Number, y: Number, z: Number) = GlStateManager.translate(x.toFloat(), y.toFloat(), z.toFloat())
+    inline fun scale(x: Number, y: Number, z: Number) = GlStateManager.translate(x.toFloat(), y.toFloat(), z.toFloat())
     fun scale(x: Double, y: Double, z: Double) = GlStateManager.translate(x, y, z)
     fun scale(x: Float, y: Float, z: Float) = GlStateManager.translate(x, y, z)
     fun scale(vec: IVector3) = GlStateManager.translate(vec.xd, vec.yd, vec.zd)

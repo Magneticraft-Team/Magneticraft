@@ -76,6 +76,11 @@ object Utilities {
         }.forEach { Utilities.renderBox(it) }
     }
 
+    fun rotationScaled(scale: Float): Float {
+        val value = (System.currentTimeMillis() and 0xFFFF).toFloat() / 0xFFFF.toFloat()
+        return value * scale
+    }
+
     /**
      * This uses DOWN as default facing
      */

@@ -13,11 +13,15 @@ class ModuleMultiblockCenter(
         val multiblockStructure: Multiblock,
         val facingGetter: () -> EnumFacing,
         val capabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any?,
-        val dynamicCollisionBoxes: (BlockPos) -> List<AABB> = { emptyList()},
+        val dynamicCollisionBoxes: (BlockPos) -> List<AABB> = { emptyList() },
         override val name: String = "module_multiblock"
 ) : IModule, IMultiblockCenter {
 
-    lateinit override var container: IModuleContainer
+    override lateinit var container: IModuleContainer
+
+    companion object {
+        val emptyCapabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any? = { cap, side, pos -> null }
+    }
 
     //current multiblock
     override var multiblock: Multiblock? = multiblockStructure

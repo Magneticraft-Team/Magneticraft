@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
 import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
@@ -16,6 +17,7 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
@@ -388,4 +390,68 @@ class TileSieve : TileMultiblock(), ITickable {
     }
 }
 
+@RegisterTileEntity("solar_tower")
+class TileSolarTower : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockSolarTower
+
+    val waterTank = Tank(8000)
+    val steamTank = Tank(32000)
+
+    val fluidModule = ModuleFluidHandler(waterTank, steamTank, capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
+
+    val solarTowerModule = ModuleSolarTower({ facing })
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(
+                    ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -1), EnumFacing.DOWN) {
+                        TankCapabilityFilter(waterTank, true, true)
+                    },
+                    ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -1), EnumFacing.DOWN) {
+                        TankCapabilityFilter(steamTank, false, true)
+                    }
+            )
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = ioModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, fluidModule, ioModule, solarTowerModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("solar_mirror")
+class TileSolarMirror : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockSolarMirror
+
+    val solarMirrorModule = ModuleSolarMirror(
+            facingGetter = { facing }
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = ModuleMultiblockCenter.emptyCapabilityGetter
+    )
+
+    init {
+        initModules(multiblockModule, solarMirrorModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
 

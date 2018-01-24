@@ -18,11 +18,18 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties
  */
 class ModuleFluidHandler(
         vararg val tanks: Tank,
-        val capabilityFilter: (IFluidHandler) -> IFluidHandler? = { it },
+        val capabilityFilter: (IFluidHandler) -> IFluidHandler? = ALLOW_ALL,
         override val name: String = "module_fluid_handler"
 ) : IModule, IFluidHandler {
 
     override lateinit var container: IModuleContainer
+
+    companion object {
+        @JvmStatic
+        val ALLOW_NONE: (IFluidHandler) -> IFluidHandler? = { null }
+        @JvmStatic
+        val ALLOW_ALL: (IFluidHandler) -> IFluidHandler? = { it }
+    }
 
     override fun init() {
         tanks.forEach { it.setTileEntity(container.tile) }

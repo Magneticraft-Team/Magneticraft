@@ -1,13 +1,7 @@
 package com.cout970.magneticraft.multiblock
 
-import com.cout970.magneticraft.block.MultiblockParts
 import com.cout970.magneticraft.block.Multiblocks
-import com.cout970.magneticraft.multiblock.components.MainBlockComponent
-import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
-import com.cout970.magneticraft.multiblock.core.BlockData
-import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
-import com.cout970.magneticraft.multiblock.core.Multiblock
-import com.cout970.magneticraft.multiblock.core.MultiblockContext
+import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.times
 import net.minecraft.util.math.AxisAlignedBB
@@ -26,14 +20,8 @@ object MultiblockSolarPanel : Multiblock() {
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
-        val replacement = Multiblocks.gap.defaultState
-
-        val pBlock = MultiblockParts.PartType.ELECTRIC.getBlockState(MultiblockParts.parts)
-        val P: IMultiblockComponent = SingleBlockComponent(pBlock, replacement)
-
-        val M: IMultiblockComponent = MainBlockComponent(Multiblocks.solarPanel) { context, activate ->
-            Multiblocks.MultiblockOrientation.of(context.facing, activate).getBlockState(Multiblocks.solarPanel)
-        }
+        val P = electricBlock()
+        val M  = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
                 zLayers(listOf(P, M, P),
