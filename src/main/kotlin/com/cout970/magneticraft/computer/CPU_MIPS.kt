@@ -14,7 +14,7 @@ class CPU_MIPS : ICPU {
 
     private var motherboard: IMotherboard? = null
 
-    // /debug mode to see where the emulator fails
+    // debug mode to see where the emulator fails
     var debugLevel = 0
 
     //cpu registers
@@ -22,6 +22,7 @@ class CPU_MIPS : ICPU {
     var regHI = 0
     var regLO = 0
     var regPC = 0
+    // https://wiki.osdev.org/MIPS_Overview
     //exceptions registers
     var regStatus = 0
     var regCause = 0
@@ -374,26 +375,18 @@ class CPU_MIPS : ICPU {
 
             if (code == 0x0) {//mfc0 rd, rt | move from coprocessor 0
                 var `val` = 0
-                if (rt == 12) {
-                    `val` = regStatus
-                }
-                if (rt == 13) {
-                    `val` = regCause
-                }
-                if (rt == 14) {
-                    `val` = regEPC
+                when (rt) {
+                    12 -> `val` = regStatus
+                    13 -> `val` = regCause
+                    14 -> `val` = regEPC
                 }
                 setRegister(rd, `val`)
             } else if (code == 0x4) {//mtc0 rd, rt | move to coprocessor 0
                 val `val` = getRegister(rt)
-                if (rt == 12) {
-                    regStatus = `val`
-                }
-                if (rt == 13) {
-                    regCause = `val`
-                }
-                if (rt == 14) {
-                    regEPC = `val`
+                when (rt) {
+                    12 -> regStatus = `val`
+                    13 -> regCause = `val`
+                    14 -> regEPC = `val`
                 }
             } else if (code == 0x10 && instruct and 63 == 16) {//rfe | return from exception
                 regPC = regEPC
@@ -406,9 +399,9 @@ class CPU_MIPS : ICPU {
 
     companion object {
 
-        val registerNames = arrayOf("z0", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3", "t4", "t5",
-                "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp", "sp", "fp",
-                "ra")
+        val registerNames = arrayOf("z0", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3",
+                "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp",
+                "sp", "fp", "ra")
         val TYPE_R = arrayOf("SLL  ", "UNKNOW", "SRL  ", "SRA  ", "SLLV ", "UNKNOW", "SRLV ", "SRAV ", "JR   ", "JALR ",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW",
