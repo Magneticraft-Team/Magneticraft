@@ -194,6 +194,8 @@ tile.magneticraft.solar_panel_inactive_north.name=Solar Panel
 tile.magneticraft.grinder_inactive_north.name=Grinder
 tile.magneticraft.shelving_unit_inactive_north.name=Shelving Unit
 tile.magneticraft.steam_engine_inactive_north.name=Steam Engine
+tile.magneticraft.solar_tower_inactive_north.name=Solar Tower
+tile.magneticraft.solar_mirror_inactive_north.name=Solar Mirror
 
 
 #tile.magneticraft.copper_block.name=Copper Block
