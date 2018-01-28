@@ -39,7 +39,7 @@ interface IGuiRenderer {
     }
 
     fun drawSprite(rect: Pair<Vec2d, Vec2d>, sprite: Sprite) = drawSprite(rect.pos, rect.size, sprite)
-    fun drawSprite(start: Vec2d, end: Vec2d, sprite: Sprite)
+    fun drawSprite(pos: Vec2d, size: Vec2d, sprite: Sprite)
 
     //texture render
     fun drawTexture(box: DrawableBox)

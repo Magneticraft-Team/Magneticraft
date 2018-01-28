@@ -7,11 +7,12 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fluids.FluidStack
 
 class ModuleFluidExporter(
         val tank: Tank,
-        vararg val sides: EnumFacing,
+        val ports: () ->List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
         override val name: String = "module_fluid_exporter"
 ) : IModule {
 
@@ -22,9 +23,9 @@ class ModuleFluidExporter(
         val stack = tank.fluid ?: return
         if (stack.amount <= 0) return
 
-        for (dir in sides) {
-            val tile = world.getTileEntity(pos.offset(dir)) ?: continue
-            val handler = tile.getOrNull(FLUID_HANDLER, dir.opposite) ?: continue
+        for ((off, dir) in ports()) {
+            val tile = world.getTileEntity(pos.add(off)) ?: continue
+            val handler = tile.getOrNull(FLUID_HANDLER, dir) ?: continue
 
             val amount = handler.fill(stack, false)
             if (amount <= 0) continue

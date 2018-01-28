@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.misc.gui
 
+import com.cout970.magneticraft.misc.network.FloatSyncVariable
+
 /**
  * Created by cout970 on 10/07/2016.
  */
@@ -31,4 +33,6 @@ class ValueAverage(val maxCounter: Int = 20) {
     operator fun minusAssign(value: Number) {
         accumulated -= value.toFloat()
     }
+
+    fun toSyncVariable(id: Int) = FloatSyncVariable(id, getter = { average }, setter = { storage = it })
 }

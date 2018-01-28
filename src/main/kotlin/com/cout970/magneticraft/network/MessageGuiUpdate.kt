@@ -49,7 +49,7 @@ class MessageGuiUpdate() : IMessage {
         override fun onMessage(message: MessageGuiUpdate?, ctx: MessageContext?): IMessage? {
             if (ctx!!.side == Side.SERVER) {
                 val server = FMLCommonHandler.instance().minecraftServerInstance ?: return null
-                val player = server.playerList.getPlayerByUUID(message!!.uuid) ?: return null
+                val player = server.playerList.getPlayerByUUID(message!!.uuid!!) ?: return null
                 val container = player.openContainer
                 if (container is ContainerBase) {
                     container.receiveDataFromClient(message.ibd!!)

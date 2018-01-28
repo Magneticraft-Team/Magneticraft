@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_AMOUNT_LIST
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.network.IntSyncVariable
+import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -78,5 +81,9 @@ class ModuleFluidHandler(
         tanks.forEachIndexed { index, tank ->
             tank.readFromNBT(nbt.getCompoundTag("tank$index"))
         }
+    }
+
+    override fun getGuiSyncVariables(): List<SyncVariable> = tanks.mapIndexed { index, tank ->
+        IntSyncVariable(DATA_ID_FLUID_AMOUNT_LIST[index], { tank.fluidAmount }, { tank.clientFluidAmount = it })
     }
 }

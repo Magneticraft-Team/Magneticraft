@@ -7,10 +7,12 @@ import com.cout970.magneticraft.gui.client.components.CompShelvingUnit
 import com.cout970.magneticraft.gui.client.components.CompTextInput
 import com.cout970.magneticraft.gui.client.components.bars.CallbackBarProvider
 import com.cout970.magneticraft.gui.client.components.bars.CompElectricBar
+import com.cout970.magneticraft.gui.client.components.bars.CompFluidBar
 import com.cout970.magneticraft.gui.client.components.bars.CompVerticalBar
 import com.cout970.magneticraft.gui.client.components.buttons.AbstractButton
 import com.cout970.magneticraft.gui.client.components.buttons.ButtonState
 import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
+import com.cout970.magneticraft.gui.client.components.buttons.SimpleButton
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerGrinder
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
@@ -38,9 +40,11 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
         xSize = 194
         ySize = 207
         val texture = guiTexture("shelving_unit")
-        +CompBackground(texture, size = vec2Of(194, 207))
         val scrollBar = CompScrollBar(vec2Of(174, 21), texture = texture)
+
         textInput = CompTextInput(fontRenderer, vec2Of(10, 7), vec2Of(86, 13)).apply { isFocused = true }
+        +CompBackground(texture, size = vec2Of(194, 207))
+
         val button1Map = mapOf(
                 ButtonState.UNPRESSED to (vec2Of(194, 75) to vec2Of(23, 24)),
                 ButtonState.HOVER_UNPRESSED to (vec2Of(194, 75) to vec2Of(23, 24)),
@@ -151,16 +155,35 @@ class GuiSolarTower(val tower: ContainerSolarTower) : GuiBase(tower) {
 
     override fun initComponents() {
         val tile = tower.tile
+        val texture = guiTexture("solar_tower")
 
-        +CompBackground(guiTexture("solar_tower"))
+        +CompBackground(texture)
 
-        val heatCallback = CallbackBarProvider(
-                { tile.steamBoilerModule.heatUnits.toDouble() },
-                { tile.steamBoilerModule.heatCapacity.toDouble() },
+        val prodCallback = CallbackBarProvider(
+                { tile.steamBoilerModule.production.storage.toDouble() },
+                { tile.steamBoilerModule.maxSteamProduction.toDouble() },
                 { 0.0 }
         )
 
-        +CompVerticalBar(heatCallback, 2, Vec2d(63, 16),
-                { listOf("Heat: " + heatCallback.callback()) })
+        +CompVerticalBar(prodCallback, 3, Vec2d(53, 16),
+                { listOf("Steam production: ${prodCallback.callback()} mB/t") })
+
+        +CompFluidBar(vec2Of(64, 16), texture, vec2Of(0, 166), tile.waterTank)
+        +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.steamTank)
+
+        val buttonSize = vec2Of(16)
+        val buttonMap = mapOf(
+                ButtonState.UNPRESSED to (vec2Of(16, 166) to buttonSize),
+                ButtonState.HOVER_UNPRESSED to (vec2Of(16, 182) to buttonSize),
+                ButtonState.HOVER_PRESSED to (vec2Of(16, 198) to buttonSize)
+        )
+
+        +SimpleButton(
+                id = 0,
+                box = vec2Of(108, 48) to buttonSize,
+                texture = texture,
+                textureSize = vec2Of(256, 256),
+                uvGetter = buttonMap::getValue
+        ).apply { listener = tower::onClick }
     }
 }

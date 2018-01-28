@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.api.MagneticraftApi
+import com.cout970.magneticraft.gui.client.components.buttons.AbstractButton
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
@@ -15,6 +16,7 @@ import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSieve
 import com.cout970.magneticraft.tileentity.TileSolarTower
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
+import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
@@ -117,7 +119,7 @@ class ContainerGrinder(val tile: TileGrinder, player: EntityPlayer, world: World
             addSlotToContainer(SlotTakeOnly(inv, 1, 85, 48))
             addSlotToContainer(SlotTakeOnly(inv, 2, 107, 48))
 
-            inventoryRegions += InventoryRegion(0..0,filter = {
+            inventoryRegions += InventoryRegion(0..0, filter = {
                 MagneticraftApi.getGrinderRecipeManager().findRecipe(it) != null
             })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
@@ -137,7 +139,7 @@ class ContainerSieve(val tile: TileSieve, player: EntityPlayer, world: World, bl
             addSlotToContainer(SlotTakeOnly(inv, 2, 96, 48))
             addSlotToContainer(SlotTakeOnly(inv, 3, 118, 48))
 
-            inventoryRegions += InventoryRegion(0..0,filter = {
+            inventoryRegions += InventoryRegion(0..0, filter = {
                 MagneticraftApi.getSieveRecipeManager().findRecipe(it) != null
             })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
@@ -152,5 +154,16 @@ class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world:
 
     init {
         bindPlayerInventory(player.inventory)
+    }
+
+    fun onClick(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
+        sendUpdate(IBD().apply { this.setBoolean(button.id, true) })
+        return true
+    }
+
+    override fun receiveDataFromClient(ibd: IBD) {
+        ibd.getBoolean(0){
+            tile.solarTowerModule.searchMirrors = true
+        }
     }
 }

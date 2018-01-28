@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.gui.client.core.isMouseButtonDown
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
+import com.cout970.magneticraft.util.vector.offset
 import net.minecraft.util.ResourceLocation
 
 class SimpleButton(
@@ -15,7 +16,7 @@ class SimpleButton(
 ) : AbstractButton(id, texture, box, textureSize, uvGetter) {
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        if (mouse in box) {
+        if (mouse in box.offset(gui.pos)) {
             state = if (isMouseButtonDown(0)) ButtonState.HOVER_PRESSED else ButtonState.HOVER_UNPRESSED
         } else {
             state = ButtonState.UNPRESSED

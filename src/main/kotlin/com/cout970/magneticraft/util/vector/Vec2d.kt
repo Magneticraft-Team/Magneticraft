@@ -15,11 +15,11 @@ inline val Pair<Vec2d, Vec2d>.end get() = first + second
 inline val Pair<Vec2d, Vec2d>.pos get() = first
 inline val Pair<Vec2d, Vec2d>.size get() = second
 
-operator fun Pair<Vec2d, Vec2d>.contains(point: Vec2d): Boolean {
+inline operator fun Pair<Vec2d, Vec2d>.contains(point: Vec2d): Boolean {
     return (point.x in (start.x..end.x)) && (point.y in (start.y..end.y))
 }
 
-fun Pair<Vec2d, Vec2d>.offset(offset: Vec2d): Pair<Vec2d, Vec2d> {
+inline fun Pair<Vec2d, Vec2d>.offset(offset: Vec2d): Pair<Vec2d, Vec2d> {
     return first + offset to second
 }
 

@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.tileentity.modules
 
-import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
+import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.misc.fluid.Tank
-import com.cout970.magneticraft.misc.network.FloatSyncVariable
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -25,7 +25,10 @@ class ModuleSteamBoiler(
 
     override lateinit var container: IModuleContainer
     val maxWaterPerTick = (maxProduction / ConversionTable.WATER_TO_STEAM).toInt()
+    val production = ValueAverage()
     var heatUnits = 0f
+
+    val maxSteamProduction = (maxWaterPerTick * ConversionTable.WATER_TO_STEAM).toInt()
 
     fun applyHeat(heat: Float) {
         if (heat + heatUnits > heatCapacity) return
@@ -34,6 +37,7 @@ class ModuleSteamBoiler(
 
     override fun update() {
         if (world.isClient) return
+        production.tick()
         // has heat
         if (heatUnits <= 0) return
         val waterLimit = inputTank.fluidAmount
@@ -49,16 +53,11 @@ class ModuleSteamBoiler(
         // boil water
         inputTank.drainInternal(operations, true)
         outputTank.fillInternal(FluidStack(fluid, operations * ConversionTable.WATER_TO_STEAM.toInt()), true)
+        production += operations * ConversionTable.WATER_TO_STEAM.toInt()
         heatUnits -= operations
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
-        return listOf(
-                FloatSyncVariable(
-                        id = DATA_ID_MACHINE_HEAT,
-                        getter = { heatUnits },
-                        setter = { heatUnits = it }
-                )
-        )
+        return listOf(production.toSyncVariable(DATA_ID_MACHINE_PRODUCTION))
     }
 }

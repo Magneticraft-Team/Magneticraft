@@ -64,7 +64,6 @@ class ModuleElectricProcessing(
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
             FloatSyncVariable(DATA_ID_BURNING_TIME, getter = { timedProcess.timer },
                     setter = { timedProcess.timer = it }),
-            FloatSyncVariable(DATA_ID_MACHINE_PRODUCTION, getter = { production.average },
-                    setter = { production.storage = it })
+            production.toSyncVariable(DATA_ID_MACHINE_PRODUCTION)
     )
 }

@@ -4,7 +4,6 @@ import com.cout970.magneticraft.gui.common.core.DATA_ID_ITEM_CHARGE_RATE
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
-import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromItem
@@ -65,8 +64,6 @@ class ModuleChargeItems(
         }
     }
 
-    override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-            FloatSyncVariable(DATA_ID_ITEM_CHARGE_RATE, getter = { itemChargeRate.average },
-                    setter = { itemChargeRate.storage = it })
-    )
+    override fun getGuiSyncVariables(): List<SyncVariable> =
+            listOf(itemChargeRate.toSyncVariable(DATA_ID_ITEM_CHARGE_RATE))
 }

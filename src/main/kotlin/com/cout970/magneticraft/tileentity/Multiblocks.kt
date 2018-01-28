@@ -385,16 +385,24 @@ class TileSolarTower : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarTower
 
-    val waterTank = Tank(8000)
-    val steamTank = Tank(32000)
+    val waterTank = Tank(8000).apply { clientFluidName = "water" }
+    val steamTank = Tank(32000).apply { clientFluidName = "steam" }
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank, capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
 
     val openGuiModule = ModuleOpenGui()
 
-    val steamBoilerModule = ModuleSteamBoiler(waterTank, steamTank, 500f, 120)
+    val steamBoilerModule = ModuleSteamBoiler(waterTank, steamTank, 5000f, 1200)
 
-    val solarTowerModule = ModuleSolarTower({ facing })
+    val solarTowerModule = ModuleSolarTower(
+            facingGetter = { facing },
+            steamBoilerModule = steamBoilerModule
+    )
+
+    val fluidExportModule = ModuleFluidExporter(steamTank, {
+        listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(1, -1, -1)) to EnumFacing.UP)
+    })
+
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
@@ -415,7 +423,8 @@ class TileSolarTower : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, fluidModule, ioModule, solarTowerModule, steamBoilerModule, openGuiModule)
+        initModules(multiblockModule, fluidModule, ioModule, solarTowerModule, steamBoilerModule, openGuiModule,
+                fluidExportModule)
     }
 
     @DoNotRemove

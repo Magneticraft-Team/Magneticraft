@@ -1,3 +1,9 @@
+### TODO list
+- finish solar tower gui
+- finish solar tower heat distribution
+- update conveyor belt model
+- add conveyor belt corners
+- add conveyor belt up/down blocks
 
 ### Steps to add a new multiblock
 - Add Controller Block

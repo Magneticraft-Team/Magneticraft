@@ -29,7 +29,7 @@ object Config {
     var limestone = GaussOreConfig(0, 5, 0.9f, 3, 32, 64, 16)
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Oil source")
-    var oil = OilGenConfig(1/50f, 10,  true)
+    var oil = OilGenConfig(1 / 50f, 10, true)
 
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Set players on fire when processing blaze" +
                                                         " rods in the crushing table")
@@ -61,7 +61,7 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: cost of removing a water block")
     var airlockAirCost = 2.0
 
-//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
+    //    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
 //    var hydraulicPressConsumption = 40.0
 //
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Max Consumption")
@@ -78,6 +78,9 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Max Stable Production")
     var thermopileProduction = 20.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per second, 1 Heat unit = 2 RF")
+    var solarMirrorHeatProduction = 8.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
     var batteryItemLowCapacity: Int = 250000

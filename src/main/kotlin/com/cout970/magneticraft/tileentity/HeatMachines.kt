@@ -9,6 +9,7 @@ import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
+import net.minecraft.util.math.BlockPos
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -47,7 +48,7 @@ class TileSteamBoiler : TileBase(), ITickable {
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank)
     val boilerModule = ModuleSteamBoiler(waterTank, steamTank, 100f, 40)
-    val fluidExportModule = ModuleFluidExporter(steamTank, EnumFacing.UP)
+    val fluidExportModule = ModuleFluidExporter(steamTank, { listOf(BlockPos(0, 1, 0) to EnumFacing.DOWN) })
 
     init {
         initModules(fluidModule, boilerModule, fluidExportModule)

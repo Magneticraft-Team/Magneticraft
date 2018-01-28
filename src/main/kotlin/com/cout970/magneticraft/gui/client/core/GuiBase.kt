@@ -142,7 +142,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         drawGradientRect(start.xi, start.yi, end.xi, end.yi, startColor, endColor)
     }
 
-    override fun drawSprite(start: IVector2, end: IVector2, sprite: Sprite) {
+    override fun drawSprite(pos: IVector2, size: IVector2, sprite: Sprite) {
         drawTexturedModalRect(pos.xi, pos.yi, sprite, size.xi, size.yi)
     }
 
