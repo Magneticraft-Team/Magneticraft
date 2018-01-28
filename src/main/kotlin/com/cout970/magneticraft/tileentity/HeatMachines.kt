@@ -6,10 +6,7 @@ import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleCombustionChamber
-import com.cout970.magneticraft.tileentity.modules.ModuleFluidHandler
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
-import com.cout970.magneticraft.tileentity.modules.ModuleSteamBoiler
+import com.cout970.magneticraft.tileentity.modules.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 
@@ -49,10 +46,11 @@ class TileSteamBoiler : TileBase(), ITickable {
     )
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank)
-    val boilerModule = ModuleSteamBoiler(waterTank, steamTank)
+    val boilerModule = ModuleSteamBoiler(waterTank, steamTank, 100f, 40)
+    val fluidExportModule = ModuleFluidExporter(steamTank, EnumFacing.UP)
 
     init {
-        initModules(fluidModule, boilerModule)
+        initModules(fluidModule, boilerModule, fluidExportModule)
     }
 
     @DoNotRemove

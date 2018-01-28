@@ -13,6 +13,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.TileGrinder
 import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.TileSieve
+import com.cout970.magneticraft.tileentity.TileSolarTower
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
@@ -142,6 +143,14 @@ class ContainerSieve(val tile: TileSieve, player: EntityPlayer, world: World, bl
             inventoryRegions += InventoryRegion(1..1, filter = { false })
             inventoryRegions += InventoryRegion(2..2, filter = { false })
         }
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
         bindPlayerInventory(player.inventory)
     }
 }

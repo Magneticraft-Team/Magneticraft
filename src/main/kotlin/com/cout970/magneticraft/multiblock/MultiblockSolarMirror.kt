@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.multiblock
 
 import com.cout970.magneticraft.block.Multiblocks
-import com.cout970.magneticraft.multiblock.components.IgnoreBlockComponent
 import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -23,7 +22,7 @@ object MultiblockSolarMirror : Multiblock() {
 
     init {
         val B = baseBlock()
-        val G = IgnoreBlockComponent
+        val G = grateBlock()
         val I = electricBlock()
         val M = mainBlockOf(controllerBlock)
 
@@ -44,12 +43,16 @@ object MultiblockSolarMirror : Multiblock() {
 
     override fun getControllerBlock() = Multiblocks.solarMirror
 
-    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf(
+    val hitbox = listOf(
             Vec3d(-9.000, 0.000, 6.000) * PIXEL to Vec3d(25.000, 2.000, 10.000) * PIXEL,
             Vec3d(6.000, 0.000, -10.000) * PIXEL to Vec3d(10.000, 2.000, 25.000) * PIXEL,
             Vec3d(7.000, 2.000, 7.000) * PIXEL to Vec3d(9.000, 28.000, 9.000) * PIXEL,
-            Vec3d(6.500, 27.500, 6.500) * PIXEL to Vec3d(9.500, 30.500, 9.500) * PIXEL
+            Vec3d(6.500, 27.500, 6.500) * PIXEL to Vec3d(9.500, 30.500, 9.500) * PIXEL,
+
+            Vec3d(-10.000, 12.000, -10.000) * PIXEL to Vec3d(26.000, 48.000, 26.000) * PIXEL
     ).map { EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it) + vec3Of(0, 0, 1) }
+
+    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
 
     override fun checkExtraRequirements(data: MutableList<BlockData>,
                                         context: MultiblockContext): List<ITextComponent> = listOf()

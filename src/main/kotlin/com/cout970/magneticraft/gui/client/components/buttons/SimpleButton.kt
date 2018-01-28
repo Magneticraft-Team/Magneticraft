@@ -16,11 +16,7 @@ class SimpleButton(
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         if (mouse in box) {
-            if (isMouseButtonDown(0)) {
-                state = ButtonState.HOVER_PRESSED
-            } else {
-                state = ButtonState.HOVER_UNPRESSED
-            }
+            state = if (isMouseButtonDown(0)) ButtonState.HOVER_PRESSED else ButtonState.HOVER_UNPRESSED
         } else {
             state = ButtonState.UNPRESSED
         }

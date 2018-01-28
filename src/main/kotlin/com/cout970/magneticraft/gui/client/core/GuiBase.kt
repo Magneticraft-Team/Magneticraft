@@ -37,6 +37,10 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         super.initGui()
     }
 
+    inline operator fun IComponent.unaryPlus() {
+        components.add(this)
+    }
+
     abstract fun initComponents()
 
     override fun getWindowSize(): Vec2d = Vec2d(width, height)

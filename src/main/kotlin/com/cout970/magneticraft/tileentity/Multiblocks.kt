@@ -117,16 +117,6 @@ class TileSolarPanel : TileMultiblock(), ITickable {
         initModules(multiblockModule, energyModule, ioModule)
     }
 
-//    fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
-//        val base = ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite }
-//        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.NORTH, 5)) != null) {
-//            return base + EnumFacing.NORTH.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
-//        }
-//        if (world.getTile<TileSolarPanel>(pos.offset(EnumFacing.WEST, 5)) != null) {
-//            return base + EnumFacing.WEST.let { BlockPos.ORIGIN.offset(it, 5) to it.opposite }
-//        }
-//        return base
-//    }
 
     @DoNotRemove
     override fun update() {
@@ -400,6 +390,10 @@ class TileSolarTower : TileMultiblock(), ITickable {
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank, capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
 
+    val openGuiModule = ModuleOpenGui()
+
+    val steamBoilerModule = ModuleSteamBoiler(waterTank, steamTank, 500f, 120)
+
     val solarTowerModule = ModuleSolarTower({ facing })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
@@ -421,7 +415,7 @@ class TileSolarTower : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, fluidModule, ioModule, solarTowerModule)
+        initModules(multiblockModule, fluidModule, ioModule, solarTowerModule, steamBoilerModule, openGuiModule)
     }
 
     @DoNotRemove

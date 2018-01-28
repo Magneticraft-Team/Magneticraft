@@ -78,7 +78,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     )
 
     fun getMacAddress(): Int {
-        if (parent is FakeRef) {
+        if (parent == FakeRef) {
             return 0xABCDEF01.toInt()
         }
         return parent.pos.hashCode()
@@ -95,7 +95,8 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
                         connectionError = INVALID_OUTPUT_BUFFER_POINTER
                     } else if (outputBufferPtr > 0) {
                         it.getOutputStream().write(outputBuffer, 0, outputBufferPtr)
-                        println(String(outputBuffer, 0, outputBufferPtr))
+                        // debug print request
+//                        println(String(outputBuffer, 0, outputBufferPtr))
                         outputBufferPtr = 0
                     }
                 } catch (e: Exception) {
@@ -205,13 +206,19 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
 
 fun main(args: Array<String>) {
     val socketFactory = SSLSocketFactory.getDefault()
-    val socket = socketFactory.createSocket("raw.githubusercontent.com", 443)
+    val socket = socketFactory.createSocket("pastebin.com", 443)//"raw.githubusercontent.com", 443)
 
     socket.outputStream.apply {
-        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/blockstates/battery.json HTTP/1.1\r\n" +
-                "Host: raw.githubusercontent.com\r\n" +
-                "Connection: close\r\n" +
-                "\r\n").toByteArray())
+
+        //        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/blockstates/battery.json HTTP/1.1\r\n" +
+//                "Host: raw.githubusercontent.com\r\n" +
+//                "Connection: close\r\n" +
+//                "\r\n").toByteArray())
+
+        write(("GET /raw/pJwsc2XP HTTP/1.1\r\n" +
+               "Host: pastebin.com\r\n" +
+               "Connection: close\r\n" +
+               "\r\n").toByteArray())
     }
 
     val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)

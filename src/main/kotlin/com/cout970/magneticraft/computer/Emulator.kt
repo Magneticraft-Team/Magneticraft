@@ -24,7 +24,7 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "lisp"
+    val img = "drivers"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
     val programDisk = FakeFloppyDisk(File("./run/disk.img"))
 
@@ -33,56 +33,18 @@ fun main(args: Array<String>) {
     val networkCard = DeviceNetworkCard(FakeRef)
 
     val cpu = CPU_MIPS()
-    val memory = RAM(0xFFFF + 1, true)
+    val memory = RAM(0x20000, true)
     val rom = if (args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)
     val mbDevice = DeviceMotherboard(FakeRef, motherboard)
 
-    bus.devices.put(0xFF, mbDevice)
-    bus.devices.put(0x00, monitor)
-    bus.devices.put(0x01, floppyDrive)
-    bus.devices.put(0x02, networkCard)
+    bus.devices[0xFF] = mbDevice
+    bus.devices[0x00] = monitor
+    bus.devices[0x01] = floppyDrive
+    bus.devices[0x02] = networkCard
 
-//     bios string print
-//    print("\n\n\n\n\n")
-//    println(rom.bios.reader(Charsets.US_ASCII).readText())
-//    print("\n\n\n\n\n")
-//
-////     bios instruction decompiler
-//    rom.bios.buffered().iterator().apply {
-//        var pc = 0
-//        while (hasNext()) {
-//            var tmp = 0
-//            tmp = tmp.splitSet(0, nextByte())
-//            tmp = tmp.splitSet(1, nextByte())
-//            tmp = tmp.splitSet(2, nextByte())
-//            tmp = tmp.splitSet(3, nextByte())
-//            println("0x%08x  ".format(pc) + CPU_MIPS.decompileInst(tmp))
-//            pc += 4
-//        }
-//    }
-//    print("\n\n\n\n\n")
-//
-////     bios hexdump
-//    rom.bios.use {
-//        var index = 0
-//        var lineCounter = 0
-//        while (true) {
-//            val r = it.read()
-//            if (r == -1) break
-//            if (lineCounter == 0) {
-//                lineCounter = 16
-//                print("\n 0x" + "%04x ".format(index))
-//            }
-//            print("%02x ".format(r))
-//            lineCounter--
-//
-//            memory.writeByte(index++, r.toByte())
-//        }
-//        println("\nBios size: $index bytes")
-//    }
-//    print("\n\n\n\n\n")
+
 
     val display = createDisplay(monitor)
 
@@ -232,3 +194,43 @@ class FakeFloppyDisk(val file: File) : IFloppyDisk {
 
     override fun canWrite(): Boolean = true
 }
+
+//     bios string print
+//    print("\n\n\n\n\n")
+//    println(rom.bios.reader(Charsets.US_ASCII).readText())
+//    print("\n\n\n\n\n")
+//
+////     bios instruction decompiler
+//    rom.bios.buffered().iterator().apply {
+//        var pc = 0
+//        while (hasNext()) {
+//            var tmp = 0
+//            tmp = tmp.splitSet(0, nextByte())
+//            tmp = tmp.splitSet(1, nextByte())
+//            tmp = tmp.splitSet(2, nextByte())
+//            tmp = tmp.splitSet(3, nextByte())
+//            println("0x%08x  ".format(pc) + CPU_MIPS.decompileInst(tmp))
+//            pc += 4
+//        }
+//    }
+//    print("\n\n\n\n\n")
+//
+////     bios hexdump
+//    rom.bios.use {
+//        var index = 0
+//        var lineCounter = 0
+//        while (true) {
+//            val r = it.read()
+//            if (r == -1) break
+//            if (lineCounter == 0) {
+//                lineCounter = 16
+//                print("\n 0x" + "%04x ".format(index))
+//            }
+//            print("%02x ".format(r))
+//            lineCounter--
+//
+//            memory.writeByte(index++, r.toByte())
+//        }
+//        println("\nBios size: $index bytes")
+//    }
+//    print("\n\n\n\n\n")

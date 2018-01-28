@@ -15,6 +15,7 @@ import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerGrinder
 import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
 import com.cout970.magneticraft.gui.common.ContainerSieve
+import com.cout970.magneticraft.gui.common.ContainerSolarTower
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
@@ -37,7 +38,7 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
         xSize = 194
         ySize = 207
         val texture = guiTexture("shelving_unit")
-        components.add(CompBackground(texture, size = vec2Of(194, 207)))
+        +CompBackground(texture, size = vec2Of(194, 207))
         val scrollBar = CompScrollBar(vec2Of(174, 21), texture = texture)
         textInput = CompTextInput(fontRenderer, vec2Of(10, 7), vec2Of(86, 13)).apply { isFocused = true }
         val button1Map = mapOf(
@@ -63,10 +64,10 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
                 MultiButton(1, texture, vec2Of(176, 154) to vec2Of(23, 24), vec2Of(256), { button2Map[it]!! }),
                 MultiButton(2, texture, vec2Of(176, 179) to vec2Of(23, 24), vec2Of(256), { button3Map[it]!! })
         )
-        components.add(scrollBar)
-        components.add(textInput)
-        buttons.forEach { components.add(it); it.listener = this::onPress; it.allButtons = buttons }
-        components.add(CompShelvingUnit(container as ContainerShelvingUnit, scrollBar, textInput))
+        +scrollBar
+        +textInput
+        buttons.forEach { +it; it.listener = this::onPress; it.allButtons = buttons }
+        +CompShelvingUnit(container as ContainerShelvingUnit, scrollBar, textInput)
 
         (container as? ContainerShelvingUnit)?.let {
             buttons[2 - it.level.levelIndex].state = ButtonState.PRESSED
@@ -99,24 +100,24 @@ class GuiGrinder(val grinder: ContainerGrinder) : GuiBase(grinder) {
     override fun initComponents() {
         val tile = grinder.tile
 
-        components.add(CompBackground(guiTexture("grinder")))
-        components.add(CompElectricBar(tile.node, Vec2d(52, 16)))
+        +CompBackground(guiTexture("grinder"))
+        +CompElectricBar(tile.node, Vec2d(52, 16))
         val consumptionCallback = CallbackBarProvider(
                 callback = { tile.processModule.production.storage.toDouble() },
                 max = { Config.grinderMaxConsumption },
                 min = { 0.0 }
         )
-        components.add(CompVerticalBar(consumptionCallback, 3,
+        +CompVerticalBar(consumptionCallback, 3,
                 Vec2d(63, 16),
-                { listOf(String.format("%.2fW", consumptionCallback.callback())) }))
+                { listOf(String.format("%.2fW", consumptionCallback.callback())) })
 
         val processCallback = CallbackBarProvider(
                 { tile.processModule.timedProcess.timer.toDouble() },
                 { tile.processModule.timedProcess.limit().toDouble() },
                 { 0.0 }
         )
-        components.add(CompVerticalBar(processCallback, 2, Vec2d(74, 16),
-                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
+        +CompVerticalBar(processCallback, 2, Vec2d(74, 16),
+                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") })
     }
 }
 
@@ -125,23 +126,41 @@ class GuiSieve(val sieve: ContainerSieve) : GuiBase(sieve) {
     override fun initComponents() {
         val tile = sieve.tile
 
-        components.add(CompBackground(guiTexture("sieve")))
-        components.add(CompElectricBar(tile.node, Vec2d(41, 16)))
+        +CompBackground(guiTexture("sieve"))
+        +CompElectricBar(tile.node, Vec2d(41, 16))
         val consumptionCallback = CallbackBarProvider(
                 callback = { tile.processModule.production.storage.toDouble() },
                 max = { Config.sieveMaxConsumption },
                 min = { 0.0 }
         )
-        components.add(CompVerticalBar(consumptionCallback, 3,
+        +CompVerticalBar(consumptionCallback, 3,
                 Vec2d(52, 16),
-                { listOf(String.format("%.2fW", consumptionCallback.callback())) }))
+                { listOf(String.format("%.2fW", consumptionCallback.callback())) })
 
         val processCallback = CallbackBarProvider(
                 { tile.processModule.timedProcess.timer.toDouble() },
                 { tile.processModule.timedProcess.limit().toDouble() },
                 { 0.0 }
         )
-        components.add(CompVerticalBar(processCallback, 2, Vec2d(63, 16),
-                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") }))
+        +CompVerticalBar(processCallback, 2, Vec2d(63, 16),
+                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") })
+    }
+}
+
+class GuiSolarTower(val tower: ContainerSolarTower) : GuiBase(tower) {
+
+    override fun initComponents() {
+        val tile = tower.tile
+
+        +CompBackground(guiTexture("solar_tower"))
+
+        val heatCallback = CallbackBarProvider(
+                { tile.steamBoilerModule.heatUnits.toDouble() },
+                { tile.steamBoilerModule.heatCapacity.toDouble() },
+                { 0.0 }
+        )
+
+        +CompVerticalBar(heatCallback, 2, Vec2d(63, 16),
+                { listOf("Heat: " + heatCallback.callback()) })
     }
 }
