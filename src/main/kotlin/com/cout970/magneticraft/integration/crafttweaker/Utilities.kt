@@ -10,6 +10,12 @@ import net.minecraft.item.ItemStack
  */
 
 
+inline fun ItemStack.ifEmpty(action: () -> Unit) {
+    if (this.isEmpty) {
+        action()
+    }
+}
+
 fun applyAction(desc: String, func: () -> Unit) {
     CraftTweakerAPI.apply(Action(func, desc))
 }

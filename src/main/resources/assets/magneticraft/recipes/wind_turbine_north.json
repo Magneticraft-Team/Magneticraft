@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:crafting",
+      "data": 6
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron"
+    },
+    "C": {
+      "item": "magneticraft:multiblock_parts",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:wind_turbine",
+    "data": 0
+  }
+}

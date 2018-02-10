@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.internal.registries.machines.crushingtable
 
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -13,6 +14,10 @@ data class CrushingTableRecipe(
         private val output: ItemStack,
         private val oreDict: Boolean
 ) : ICrushingTableRecipe {
+
+    init {
+        require(input.isNotEmpty) { "Input MUST be a non-empty stack" }
+    }
 
     override fun useOreDictionaryEquivalencies(): Boolean = oreDict
 

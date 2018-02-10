@@ -120,7 +120,7 @@ class GuiGrinder(val grinder: ContainerGrinder) : GuiBase(grinder) {
                 { tile.processModule.timedProcess.limit().toDouble() },
                 { 0.0 }
         )
-        +CompVerticalBar(processCallback, 2, Vec2d(74, 16),
+        +CompVerticalBar(processCallback, 6, Vec2d(74, 16),
                 { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") })
     }
 }
@@ -146,7 +146,7 @@ class GuiSieve(val sieve: ContainerSieve) : GuiBase(sieve) {
                 { tile.processModule.timedProcess.limit().toDouble() },
                 { 0.0 }
         )
-        +CompVerticalBar(processCallback, 2, Vec2d(63, 16),
+        +CompVerticalBar(processCallback, 6, Vec2d(63, 16),
                 { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") })
     }
 }

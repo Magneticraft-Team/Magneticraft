@@ -81,6 +81,8 @@ object Ores : IBlockMaker {
         TUNGSTEN("tungsten", true),
         PYRITE("pyrite", true);
 
+        fun stack(amount: Int = 1) = ItemStack(ores, amount, ordinal)
+
         override fun getName() = name.toLowerCase()
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_ORE_TYPE)
 

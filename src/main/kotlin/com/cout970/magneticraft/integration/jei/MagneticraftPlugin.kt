@@ -99,7 +99,7 @@ class MagneticraftPlugin : IModPlugin {
                         val stack = outputs[index].first
                         val percent = outputs[index].second * 100f
 
-                        stack.addTooltip("%.2f%%".format(percent))
+                        stack.applyNonEmpty { addTooltip("%.2f%%".format(percent)) }
 
                         recipeLayout.itemStacks.set(index + 1, stack)
                     }
@@ -116,7 +116,9 @@ class MagneticraftPlugin : IModPlugin {
                     recipeLayout.itemStacks.init(2, false, 57, 46)
                     recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primaryOutput)
-                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput)
+                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput.applyNonEmpty {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.probability * 100))
+                    })
                 }
         ))
 
@@ -132,15 +134,21 @@ class MagneticraftPlugin : IModPlugin {
 
                     recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
 
-                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primary.apply {
-                        addTooltip("%.2f%%".format(recipeWrapper.recipe.primaryChance * 100))
-                    })
-                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondary.apply {
-                        addTooltip("%.2f%%".format(recipeWrapper.recipe.secondaryChance * 100))
-                    })
-                    recipeLayout.itemStacks.set(3, recipeWrapper.recipe.tertiary.apply {
-                        addTooltip("%.2f%%".format(recipeWrapper.recipe.tertiaryChance * 100))
-                    })
+                    if (recipeWrapper.recipe.primaryChance > 0) {
+                        recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primary.applyNonEmpty {
+                            addTooltip("%.2f%%".format(recipeWrapper.recipe.primaryChance * 100))
+                        })
+                    }
+                    if (recipeWrapper.recipe.secondaryChance > 0) {
+                        recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondary.applyNonEmpty {
+                            addTooltip("%.2f%%".format(recipeWrapper.recipe.secondaryChance * 100))
+                        })
+                    }
+                    if (recipeWrapper.recipe.tertiaryChance > 0) {
+                        recipeLayout.itemStacks.set(3, recipeWrapper.recipe.tertiary.applyNonEmpty {
+                            addTooltip("%.2f%%".format(recipeWrapper.recipe.tertiaryChance * 100))
+                        })
+                    }
                 }
         ))
     }
@@ -221,6 +229,11 @@ class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
     }
 }
 
+private inline fun ItemStack.applyNonEmpty(func: ItemStack.() -> Unit): ItemStack {
+    if (this.isNotEmpty) func()
+    return this
+}
+
 private fun ItemStack.addTooltip(str: String) {
     tagCompound = newNbt {
         add("display", newNbt {
@@ -232,6 +245,7 @@ private fun ItemStack.addTooltip(str: String) {
 }
 
 private fun getOreDictEquivalents(stack: ItemStack): List<ItemStack> {
+    if (stack.isEmpty) return emptyList()
     val ids = OreDictionary.getOreIDs(stack)
     if (ids.isEmpty()) return listOf(stack)
     val ores = ids.flatMap { id ->

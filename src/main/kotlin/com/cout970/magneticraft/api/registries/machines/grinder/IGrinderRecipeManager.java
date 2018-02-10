@@ -33,6 +33,14 @@ public interface IGrinderRecipeManager {
     boolean registerRecipe(IGrinderRecipe recipe);
 
     /**
+     * Removes a recipe from the registry
+     *
+     * @param recipe The recipe to remove
+     * @return if the removal has ended successfully
+     */
+    boolean removeRecipe(IGrinderRecipe recipe);
+
+    /**
      * Creates a default recipe
      *
      * @param input   the input item and required stackSize

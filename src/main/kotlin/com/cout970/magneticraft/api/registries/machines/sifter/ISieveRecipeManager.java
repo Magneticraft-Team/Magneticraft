@@ -31,6 +31,14 @@ public interface ISieveRecipeManager {
     boolean registerRecipe(ISieveRecipe recipe);
 
     /**
+     * Removes a recipe from the registry
+     *
+     * @param recipe The recipe to remove
+     * @return if the removal has ended successfully
+     */
+    boolean removeRecipe(ISieveRecipe recipe);
+
+    /**
      * Creates a default recipe
      *
      * @param input     the input stack

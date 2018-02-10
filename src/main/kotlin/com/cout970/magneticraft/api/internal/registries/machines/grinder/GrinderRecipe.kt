@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api.internal.registries.machines.grinder
 
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -16,6 +17,10 @@ data class GrinderRecipe(
         private val ticks: Float,
         private val oreDict: Boolean
 ) : IGrinderRecipe {
+
+    init {
+        require(input.isNotEmpty) { "Input MUST be a non-empty stack" }
+    }
 
     override fun useOreDictionaryEquivalencies(): Boolean = oreDict
 

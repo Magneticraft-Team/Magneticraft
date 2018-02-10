@@ -9,7 +9,7 @@ import net.minecraft.world.World
 /**
  * Created by cout970 on 2017/08/28.
  */
-class ThermopileRecipeNoDecay(val block: Block, val heat: Int) : IThermopileRecipe {
+data class ThermopileRecipeNoDecay(val block: Block, val heat: Int) : IThermopileRecipe {
 
     override fun getRecipeBlock(): Block = block
 

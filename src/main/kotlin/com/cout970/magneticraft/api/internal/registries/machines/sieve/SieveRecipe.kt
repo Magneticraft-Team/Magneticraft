@@ -1,7 +1,8 @@
-package com.cout970.magneticraft.api.internal.registries.machines.sifter
+package com.cout970.magneticraft.api.internal.registries.machines.sieve
 
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -19,6 +20,10 @@ data class SieveRecipe(
         private val ticks: Float,
         private val oreDict: Boolean
 ) : ISieveRecipe {
+
+    init {
+        require(input.isNotEmpty) { "Input MUST be a non-empty stack" }
+    }
 
     override fun useOreDictionaryEquivalencies(): Boolean = oreDict
 

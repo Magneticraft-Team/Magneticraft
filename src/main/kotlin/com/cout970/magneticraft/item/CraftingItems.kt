@@ -7,6 +7,7 @@ import com.cout970.magneticraft.item.core.ItemBuilder
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.world.isClient
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumActionResult
 
@@ -18,15 +19,19 @@ object CraftingItems : IItemMaker {
     lateinit var guideBook: ItemBase private set
     lateinit var crafting: ItemBase private set
 
-    val meta = mapOf(
-            "sulfur" to 0,
-            "alternator" to 1,
-            "motor" to 2,
-            "coil" to 3,
-            "magnet" to 4,
-            "mesh" to 5,
-            "string_fabric" to 6
-    )
+    enum class Type(val meta: Int) {
+        SULFUR(0),
+        ALTERNATOR(1),
+        MOTOR(2),
+        COIL(3),
+        MAGNET(4),
+        MESH(5),
+        STRING_FABRIC(6);
+
+        fun stack(amount: Int = 1): ItemStack = ItemStack(crafting, amount, meta)
+    }
+
+    val meta = Type.values().map { it.name.toLowerCase() to it.meta }.toMap()
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {

@@ -5,10 +5,11 @@ import com.cout970.magneticraft.api.internal.registries.generators.thermopile.Th
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeWithDecay
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
-import com.cout970.magneticraft.api.internal.registries.machines.sifter.SieveRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
+import com.cout970.magneticraft.integration.ItemHolder
 import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.item.MetallicItems
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 /**
  * Created by cout970 on 11/06/2016.
  * Modified by Yurgen
+ *
  * Called by CommonProxy to register all the recipes in the mod
  */
 fun registerRecipes() {
@@ -38,11 +40,48 @@ fun registerRecipes() {
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     EnumMetal.values().forEach { metal ->
         metal.getOres().firstOrNull()?.let {
-            addGrinderRecipe(it, metal.getRockyChunk(), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+            addGrinderRecipe(it, metal.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
+        }
+        if(metal.subComponents.isEmpty()){
+            addGrinderRecipe(metal.getIngot(), metal.getDust(), ItemStack.EMPTY, 0.0f, 50f)
         }
     }
-    addGrinderRecipe(ItemStack(Blocks.REDSTONE_ORE, 1), ItemStack(Items.REDSTONE, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
-    addGrinderRecipe(ItemStack(Blocks.LAPIS_ORE, 1), ItemStack(Items.DYE, 6, 4), ItemStack(Blocks.GRAVEL), 0.15f, 50f)
+
+    addGrinderRecipe(Blocks.REDSTONE_ORE.stack(), Items.REDSTONE.stack(4), Blocks.GRAVEL.stack(), 0.15f, 50f)
+    addGrinderRecipe(Blocks.LAPIS_ORE.stack(), Items.DYE.stack(6, 4), Blocks.GRAVEL.stack(), 0.15f, 50f)
+    addGrinderRecipe(Blocks.QUARTZ_ORE.stack(), Items.QUARTZ.stack(3), Items.QUARTZ.stack(1), 0.5f, 60f)
+    addGrinderRecipe(Blocks.EMERALD_ORE.stack(), Items.EMERALD.stack(2), Blocks.GRAVEL.stack(), 0.15f, 50f)
+
+    addGrinderRecipe(Blocks.GLOWSTONE.stack(), Items.GLOWSTONE_DUST.stack(4), ItemStack.EMPTY, 0.0f, 40f)
+    addGrinderRecipe(Blocks.SANDSTONE.stack(), Blocks.SAND.stack(4), ItemStack.EMPTY, 0.0f, 40f)
+    addGrinderRecipe(Blocks.RED_SANDSTONE.stack(), Blocks.SAND.stack(4, 1), ItemStack.EMPTY, 0.0f, 40f)
+    addGrinderRecipe(Items.BLAZE_ROD.stack(), Items.BLAZE_POWDER.stack(4), CraftingItems.Type.SULFUR.stack(1), 0.5f, 50f)
+    addGrinderRecipe(Blocks.WOOL.stack(), Items.STRING.stack(4), ItemStack.EMPTY, 0.0f, 40f)
+    addGrinderRecipe(Items.BONE.stack(), Items.DYE.stack(5, 15), Items.DYE.stack(3, 15), 0.5f, 40f)
+    addGrinderRecipe(Items.REEDS.stack(), Items.SUGAR.stack(1), Items.SUGAR.stack(2), 0.5f, 40f)
+    addGrinderRecipe(Blocks.COBBLESTONE.stack(), Blocks.GRAVEL.stack(1), Blocks.SAND.stack(1), 0.5f, 60f)
+    addGrinderRecipe(Blocks.QUARTZ_BLOCK.stack(), Items.QUARTZ.stack(4), ItemStack.EMPTY, 0.0f, 50f)
+
+    addGrinderRecipe(Ores.OreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), Blocks.GRAVEL.stack(), 0.01f, 40f)
+
+    ItemHolder.sawdust?.let { sawdust ->
+        addGrinderRecipe(Blocks.LOG.stack(), sawdust.withSize(8), sawdust.withSize(4), 0.5f, 100f)
+        addGrinderRecipe(Blocks.PLANKS.stack(), sawdust.withSize(2), sawdust.withSize(1), 0.5f, 80f)
+    }
+
+    ItemHolder.pulverizedCoal?.let { pulverizedCoal ->
+        addGrinderRecipe(Blocks.COAL_ORE.stack(), pulverizedCoal.withSize(1), pulverizedCoal.withSize(1), 0.25f, 50f)
+        addGrinderRecipe(Blocks.COAL_BLOCK.stack(), pulverizedCoal.withSize(9), pulverizedCoal.withSize(1), 0.15f, 120f)
+        addGrinderRecipe(Items.COAL.stack(), pulverizedCoal.withSize(1), pulverizedCoal.withSize(1), 0.05f, 40f)
+    }
+
+    ItemHolder.pulverizedObsidian?.let { pulverizedObsidian ->
+        addGrinderRecipe(Blocks.OBSIDIAN.stack(), pulverizedObsidian.withSize(4), pulverizedObsidian.withSize(1), 0.25f, 80f)
+    }
+
+    ItemHolder.pulverizedCharcoal?.let { pulverizedCharcoal ->
+        addGrinderRecipe(Items.COAL.stack(meta = 1), pulverizedCharcoal.withSize(1), pulverizedCharcoal.withSize(1), 0.15f, 40f)
+    }
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  SIEVE RECIPES
@@ -63,14 +102,18 @@ fun registerRecipes() {
         }
     }
 
+    addSieveRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), 1f, Items.FLINT.stack(), 0.15f, Items.FLINT.stack(), 0.05f, 50f)
+    addSieveRecipe(Blocks.SAND.stack(), Items.GOLD_NUGGET.stack(), 0.04f, Items.GOLD_NUGGET.stack(), 0.02f, Items.QUARTZ.stack(), 0.01f, 80f)
+    addSieveRecipe(Blocks.SOUL_SAND.stack(), Items.QUARTZ.stack(), 0.15f, Items.QUARTZ.stack(), 0.1f, Items.QUARTZ.stack(), 0.05f, 80f)
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                              CRUSHING TABLE RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // skulls
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8))
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15))
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4))
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8))    // creeper
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15)) // skeleton
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4)) // zombie
+
     // ores
     EnumMetal.values().forEach { metal ->
         metal.getOres().firstOrNull()?.let {
@@ -78,40 +121,40 @@ fun registerRecipes() {
         }
     }
 
-    addCrushingTableRecipe(ItemStack(Ores.ores, 1, 4), CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
+    addCrushingTableRecipe(Ores.OreType.PYRITE.stack(), CraftingItems.Type.SULFUR.stack(2))
     // limestone
-    addCrushingTableRecipe(ItemStack(Decoration.limestone, 1, 0), Decoration.limestone.stack(1, 2))
-    addCrushingTableRecipe(ItemStack(Decoration.burnLimestone, 1, 0), Decoration.burnLimestone.stack(1, 2))
+    addCrushingTableRecipe(Decoration.limestone.stack(), Decoration.limestone.stack(1, 2))
+    addCrushingTableRecipe(Decoration.burnLimestone.stack(), Decoration.burnLimestone.stack(1, 2))
     // light plates
     EnumMetal.values().filter { it.useful }.forEach {
         addCrushingTableRecipe(it.getIngot(), it.getLightPlate())
     }
     // rods
-    addCrushingTableRecipe(ItemStack(Items.BLAZE_ROD), Items.BLAZE_POWDER.stack(5))
-    addCrushingTableRecipe(ItemStack(Items.BONE), Items.DYE.stack(4, 15))
+    addCrushingTableRecipe(Items.BLAZE_ROD.stack(), Items.BLAZE_POWDER.stack(5))
+    addCrushingTableRecipe(Items.BONE.stack(), Items.DYE.stack(4, 15))
     // blocks
-    addCrushingTableRecipe(ItemStack(Blocks.STONE), Blocks.COBBLESTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 6), Blocks.STONE.stack(1, 5))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 4), Blocks.STONE.stack(1, 3))
-    addCrushingTableRecipe(ItemStack(Blocks.STONE, 1, 2), Blocks.STONE.stack(1, 1))
-    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK), Blocks.STONEBRICK.stack(1, 2))
-    addCrushingTableRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), Blocks.MOSSY_COBBLESTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), Blocks.RED_SANDSTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), Blocks.SANDSTONE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), Blocks.PRISMARINE.stack())
-    addCrushingTableRecipe(ItemStack(Blocks.END_BRICKS, 1), Blocks.END_STONE.stack(1))
+    addCrushingTableRecipe(Blocks.STONE.stack(), Blocks.COBBLESTONE.stack())
+    addCrushingTableRecipe(Blocks.STONE.stack(1, 6), Blocks.STONE.stack(1, 5))
+    addCrushingTableRecipe(Blocks.STONE.stack(1, 4), Blocks.STONE.stack(1, 3))
+    addCrushingTableRecipe(Blocks.STONE.stack(1, 2), Blocks.STONE.stack(1, 1))
+    addCrushingTableRecipe(Blocks.STONEBRICK.stack(), Blocks.STONEBRICK.stack(1, 2))
+    addCrushingTableRecipe(Blocks.STONEBRICK.stack(1, 1), Blocks.MOSSY_COBBLESTONE.stack())
+    addCrushingTableRecipe(Blocks.RED_SANDSTONE.stack(1, 2), Blocks.RED_SANDSTONE.stack())
+    addCrushingTableRecipe(Blocks.SANDSTONE.stack(1, 2), Blocks.SANDSTONE.stack())
+    addCrushingTableRecipe(Blocks.PRISMARINE.stack(1, 1), Blocks.PRISMARINE.stack())
+    addCrushingTableRecipe(Blocks.END_BRICKS.stack(1), Blocks.END_STONE.stack(1))
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  SMELTING RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 0), ItemStack(Decoration.limestone, 1, 0))
-    addSmeltingRecipe(ItemStack(Decoration.burnLimestone, 1, 2), ItemStack(Decoration.limestone, 1, 2))
+    addSmeltingRecipe(Decoration.burnLimestone.stack(1, 0), Decoration.limestone.stack(1, 0))
+    addSmeltingRecipe(Decoration.burnLimestone.stack(1, 2), Decoration.limestone.stack(1, 2))
 
     //ores
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 2), ItemStack(Ores.ores, 1, 0))
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 3), ItemStack(Ores.ores, 1, 1))
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 4), ItemStack(Ores.ores, 1, 2))
-    addSmeltingRecipe(ItemStack(MetallicItems.ingots, 1, 5), ItemStack(Ores.ores, 1, 3))
+    addSmeltingRecipe(MetallicItems.ingots.stack(1, 2), Ores.ores.stack(1, 0))
+    addSmeltingRecipe(MetallicItems.ingots.stack(1, 3), Ores.ores.stack(1, 1))
+    addSmeltingRecipe(MetallicItems.ingots.stack(1, 4), Ores.ores.stack(1, 2))
+    addSmeltingRecipe(MetallicItems.ingots.stack(1, 5), Ores.ores.stack(1, 3))
 
     EnumMetal.values().forEach {
         if(it.isComposite) {

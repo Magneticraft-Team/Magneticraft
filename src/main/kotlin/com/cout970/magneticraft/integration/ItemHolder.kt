@@ -15,4 +15,20 @@ object ItemHolder {
     @JvmField
     @GameRegistry.ItemStackHolder("immersiveengineering:stone_decoration", meta = 3)
     val coalCokeBlock: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 800)
+    val sawdust: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 768)
+    val pulverizedCoal: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 769)
+    val pulverizedCharcoal: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 770)
+    val pulverizedObsidian: ItemStack? = null
 }

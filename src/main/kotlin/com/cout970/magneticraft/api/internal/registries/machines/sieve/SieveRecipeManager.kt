@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.api.internal.registries.machines.sifter
+package com.cout970.magneticraft.api.internal.registries.machines.sieve
 
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipeManager
@@ -26,6 +26,8 @@ object SieveRecipeManager : ISieveRecipeManager {
         recipes.add(recipe)
         return true
     }
+
+    override fun removeRecipe(recipe: ISieveRecipe?): Boolean = recipes.remove(recipe)
 
     override fun createRecipe(input: ItemStack, primary: ItemStack, primaryChance: Float, secondary: ItemStack,
                               secondaryChance: Float, tertiary: ItemStack, tertiaryChance: Float, duration: Float,

@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "  ",
+    "AB"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:crafting",
+      "data": 5
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    }
+  },
+  "result": {
+    "item": "magneticraft:sieve",
+    "data": 0
+  }
+}

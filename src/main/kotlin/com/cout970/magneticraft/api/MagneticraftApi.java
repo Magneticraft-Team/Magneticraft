@@ -3,7 +3,7 @@ package com.cout970.magneticraft.api;
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry;
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
-import com.cout970.magneticraft.api.internal.registries.machines.sifter.SieveRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;

@@ -17,13 +17,12 @@ class GrinderCraftingProcess(
         val outputSlot1: Int
 ) : ICraftingProcess {
 
-    private var cacheKey: ItemStack = getInput()
+    private var cacheKey: ItemStack = ItemStack.EMPTY
     private var cacheValue: IGrinderRecipe? = null
 
     private fun getInput() = invModule.inventory.extractItem(inputSlot, 1, true)
 
-    private fun getRecipe(): IGrinderRecipe? {
-        val input = getInput()
+    private fun getRecipe(input: ItemStack): IGrinderRecipe? {
         if (ApiUtils.equalsIgnoreSize(cacheKey, input)) return cacheValue
 
         val recipe = MagneticraftApi.getGrinderRecipeManager().findRecipe(input)
@@ -36,29 +35,46 @@ class GrinderCraftingProcess(
         val input = invModule.inventory.extractItem(inputSlot, 1, false)
         val recipe = MagneticraftApi.getGrinderRecipeManager().findRecipe(input) ?: return
 
-        invModule.inventory.insertItem(outputSlot0, recipe.primaryOutput, false)
-        if (Math.random() < recipe.probability) {
-            invModule.inventory.insertItem(outputSlot1, recipe.secondaryOutput, false)
+        recipe.primaryOutput.let {
+            if (it.isNotEmpty) {
+                invModule.inventory.insertItem(outputSlot0, it, false)
+            }
+        }
+
+        recipe.secondaryOutput.let {
+            if (it.isNotEmpty) {
+                if (Math.random() < recipe.probability) {
+                    invModule.inventory.insertItem(outputSlot1, it, false)
+                }
+            }
         }
     }
 
     override fun canCraft(): Boolean {
-        val input = invModule.inventory.extractItem(inputSlot, 1, true)
+        val input = getInput()
         // check non empty and size >= 1
         if (input.isEmpty) return false
 
         //check recipe
-        val recipe = getRecipe() ?: return false
+        val recipe = getRecipe(input) ?: return false
 
         //check inventory space
-        val insert = invModule.inventory.insertItem(outputSlot0, recipe.primaryOutput, true)
-        if (insert.isNotEmpty) return false
+        recipe.primaryOutput.let {
+            if (it.isNotEmpty) {
+                val insert = invModule.inventory.insertItem(outputSlot0, it, true)
+                if (insert.isNotEmpty) return false
+            }
+        }
 
-        val insert2 = invModule.inventory.insertItem(outputSlot1, recipe.secondaryOutput, true)
-        if (insert2.isNotEmpty) return false
+        recipe.secondaryOutput.let {
+            if (it.isNotEmpty) {
+                val insert2 = invModule.inventory.insertItem(outputSlot1, it, true)
+                if (insert2.isNotEmpty) return false
+            }
+        }
 
         return true
     }
 
-    override fun duration(): Float = getRecipe()?.duration ?: 100f
+    override fun duration(): Float = getRecipe(getInput())?.duration ?: 100f
 }

@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.misc.crafting
 
+import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.tileentity.modules.ModuleInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 
 /**
@@ -12,6 +14,20 @@ class FurnaceCraftingProcess(
         val outputSlot: Int
 ) : ICraftingProcess {
 
+    private var cacheKey: ItemStack = ItemStack.EMPTY
+    private var cacheValue: ItemStack = ItemStack.EMPTY
+
+    private fun getInput() = invModule.inventory.extractItem(inputSlot, 1, true)
+
+    private fun getOutput(input: ItemStack): ItemStack {
+        if (ApiUtils.equalsIgnoreSize(cacheKey, input)) return cacheValue
+
+        val recipe = FurnaceRecipes.instance().getSmeltingResult(input)
+        cacheKey = input
+        cacheValue = recipe
+        return recipe
+    }
+
     override fun craft() {
         val input = invModule.inventory.extractItem(inputSlot, 1, false)
         val output = FurnaceRecipes.instance().getSmeltingResult(input).copy()
@@ -19,13 +35,13 @@ class FurnaceCraftingProcess(
     }
 
     override fun canCraft(): Boolean {
-        val input = invModule.inventory.extractItem(inputSlot, 1, true)
+        val input = getInput()
         // check non empty and size >= 1
-        if(input.isEmpty) return false
+        if (input.isEmpty) return false
 
         //check recipe
-        val output = FurnaceRecipes.instance().getSmeltingResult(input)
-        if(output.isEmpty) return false
+        val output = getOutput(input)
+        if (output.isEmpty) return false
 
         //check inventory space
         val insert = invModule.inventory.insertItem(outputSlot, output, true)

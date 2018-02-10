@@ -1,5 +1,7 @@
 ### TODO list
-- Add crafting recipes
+- check crafting recipes
+- check jei
+- check craftweaker
 - update manual
 - update conveyor belt model
 - add conveyor belt corners

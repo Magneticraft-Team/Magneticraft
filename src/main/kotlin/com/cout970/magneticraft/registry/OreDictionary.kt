@@ -34,7 +34,9 @@ fun registerOreDictionaryEntries() {
             OreDictionary.registerOre("chunk${it.name.toLowerCase().capitalize()}", it.getChunk())
         }
         OreDictionary.registerOre("rockyChunk${it.name.toLowerCase().capitalize()}", it.getRockyChunk())
-        OreDictionary.registerOre("dust${it.name.toLowerCase().capitalize()}", it.getDust())
+        if(it.subComponents.isEmpty()){
+            OreDictionary.registerOre("dust${it.name.toLowerCase().capitalize()}", it.getDust())
+        }
     }
 
     //oreAluminum has two names!

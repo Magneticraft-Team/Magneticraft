@@ -8,7 +8,14 @@ object CraftTweakerPlugin {
     private val delayedActions = mutableListOf<() -> Unit>()
 
     fun runActions() {
-        delayedActions.forEach { it.invoke() }
+        delayedActions.forEach {
+            try {
+                it.invoke()
+            } catch (e: Exception) {
+                ctLogError(e.message ?: "Unknown Exception, please read the game log")
+                e.printStackTrace()
+            }
+        }
     }
 
     fun delayExecution(action: () -> Unit) {
