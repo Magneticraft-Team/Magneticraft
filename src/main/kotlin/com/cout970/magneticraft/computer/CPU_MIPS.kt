@@ -67,9 +67,10 @@ class CPU_MIPS : ICPU {
     }
 
     override fun iterate() {
+        val bus = motherboard?.bus!!
         //FETCH INSTRUCTION
         pfPC = regPC
-        val instruct = motherboard?.bus!!.readWord(regPC)
+        val instruct = bus.readWord(regPC)
         //increment PC or perform a jump
         if (jump != -1) {
             regPC = jump
@@ -333,34 +334,84 @@ class CPU_MIPS : ICPU {
                 -> {
                 }
                 0x20//lb
-                -> setRegister(rt, motherboard?.bus!!.readByte(getRegister(rs) + inmed).toInt())
+                -> setRegister(rt, bus.readByte(getRegister(rs) + inmed).toInt())
                 0x21//lh
-                -> setRegister(rt, (motherboard?.bus!!.readWord(getRegister(rs) + inmed).toShort()).toInt())
+                -> setRegister(rt, (bus.readWord(getRegister(rs) + inmed).toShort()).toInt())
+                0x22//lwl
+                -> {
+                    // TODO test and maybe optimize
+                    val addr = getRegister(rs) + inmed
+                    val word = bus.readWord((addr ushr 2) shl 2)
+                    when (addr and 0x3) {
+                        1 -> setRegister(rt, ((word and 0x00FF_FFFF) shl 8) or (getRegister(rt) and 0x0000_00FF))
+                        2 -> setRegister(rt, ((word and 0x0000_FFFF) shl 16) or (getRegister(rt) and 0x0000_FFFF))
+                        3 -> setRegister(rt, ((word and 0x0000_00FF) shl 24) or (getRegister(rt) and 0x00FF_FFFF))
+                        else -> setRegister(rt, word)
+                    }
+                }
                 0x23//lw
                 -> {
                     if (getRegister(rs) + inmed and 0x3 != 0) {
                         interrupt(WordBoundaryException(getRegister(rs) + inmed))
                     } else {
-                        setRegister(rt, motherboard?.bus!!.readWord(getRegister(rs) + inmed))
+                        setRegister(rt, bus.readWord(getRegister(rs) + inmed))
                     }
                 }
                 0x24//lbu
-                -> setRegister(rt, motherboard?.bus!!.readByte(getRegister(rs) + inmed).toInt() and 0xFF)
+                -> setRegister(rt, bus.readByte(getRegister(rs) + inmed).toInt() and 0xFF)
                 0x25//lhu
-                -> setRegister(rt, motherboard?.bus!!.readWord(getRegister(rs) + inmed) and 0xFFFF)
+                -> setRegister(rt, bus.readWord(getRegister(rs) + inmed) and 0xFFFF)
+                0x26//lwr
+                -> {
+                    // TODO test and maybe optimize
+                    val addr = getRegister(rs) + inmed
+                    val word = bus.readWord((addr ushr 2) shl 2)
+                    when (addr and 0x3) {
+                        0 -> setRegister(rt, (word ushr 24) or (getRegister(rt) and 0xFFFFFF00.toInt()))
+                        1 -> setRegister(rt, (word ushr 16) or (getRegister(rt) and 0xFFFF0000.toInt()))
+                        2 -> setRegister(rt, (word ushr 8) or (getRegister(rt) and 0xFF000000.toInt()))
+                        else -> setRegister(rt, word)
+                    }
+                }
                 0x28//sb
-                -> motherboard?.bus!!.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
+                -> bus.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
                 0x29//sh
                 -> {
-                    motherboard?.bus!!.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
-                    motherboard?.bus!!.writeByte(getRegister(rs) + inmed + 1, (getRegister(rt) and 0xFF00).toByte())
+                    bus.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
+                    bus.writeByte(getRegister(rs) + inmed + 1, (getRegister(rt) and 0xFF00).toByte())
+                }
+                0x2a//swl
+                -> {
+                    // TODO test and maybe optimize
+                    val addr = getRegister(rs) + inmed
+                    val alignAddr = (addr ushr 2) shl 2
+                    val word = bus.readWord(alignAddr)
+                    when (addr and 0x3) {
+                        1 -> bus.writeWord(alignAddr, (getRegister(rt) shl 8 ) or (word and 0xFF00_0000.toInt()))
+                        2 -> bus.writeWord(alignAddr, (getRegister(rt) shl 16) or (word and 0xFFFF_0000.toInt()))
+                        3 -> bus.writeWord(alignAddr, (getRegister(rt) shl 24) or (word and 0xFFFF_FF00.toInt()))
+                        else -> bus.writeWord(alignAddr, word)
+                    }
                 }
                 0x2b//sw
                 -> {
                     if (getRegister(rs) + inmed and 0x3 != 0) {
                         interrupt(WordBoundaryException(getRegister(rs) + inmed))
                     } else {
-                        motherboard?.bus!!.writeWord(getRegister(rs) + inmed, getRegister(rt))
+                        bus.writeWord(getRegister(rs) + inmed, getRegister(rt))
+                    }
+                }
+                0x2e//swr
+                -> {
+                    // TODO test and maybe optimize
+                    val addr = getRegister(rs) + inmed
+                    val alignAddr = (addr ushr 2) shl 2
+                    val word = bus.readWord(alignAddr)
+                    when (addr and 0x3) {
+                        0 -> bus.writeWord(alignAddr, (getRegister(rt) shl 24) or (word and 0x00FF_FFFF))
+                        1 -> bus.writeWord(alignAddr, (getRegister(rt) shl 16) or (word and 0x0000_FFFF))
+                        2 -> bus.writeWord(alignAddr, (getRegister(rt) shl 8 ) or (word and 0x0000_00FF))
+                        else -> bus.writeWord(alignAddr, word)
                     }
                 }
                 else -> interrupt(InvalidInstruction())
@@ -412,8 +463,8 @@ class CPU_MIPS : ICPU {
         val TYPE_I = arrayOf("UNKNOW", "BGEZ ", "UNKNOW", "UNKNOW", "BEQ  ", "BNE  ", "BLEZ ", "BGTZ ", "ADDI ",
                 "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LLO  ", "LHI  ", "TRAP ", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "LB   ", "LH   ", "UNKNOW", "LW   ", "LBU  ", "LHU  ", "UNKNOW", "UNKNOW", "SB   ",
-                "SH   ", "UNKNOW", "SW   ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+                "UNKNOW", "UNKNOW", "LB   ", "LH   ", "LWL  ", "LW   ", "LBU  ", "LHU  ", "LWR   ", "UNKNOW", "SB   ",
+                "SH   ", "SWL  ", "SW   ", "UNKNOW", "UNKNOW", "SWR  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
                 "UNKNOW", "UNKNOW", "UNKNOW")
 
@@ -477,8 +528,9 @@ class CPU_MIPS : ICPU {
                 val rt: Int = getBitsFromInt(instruct, 16, 20, false)
                 val inmed: Int = getBitsFromInt(instruct, 0, 15, true)
                 val inmedU: Int = getBitsFromInt(instruct, 0, 15, false)
-                return "%s $%s, $%s, %05d (%05d) \t Type I: inst: 0x%08x"
-                        .format(TYPE_I[opcode], registerNames[rs], registerNames[rt], inmed, inmedU, instruct)
+                return "%s $%s, $%s, %05d (%05d) \t Type I: inst: 0x%08x (opcode: 0x%x %d)"
+                        .format(TYPE_I[opcode], registerNames[rs], registerNames[rt], inmed, inmedU, instruct, opcode,
+                                opcode)
             }
         }
     }
@@ -490,9 +542,10 @@ class CPU_MIPS : ICPU {
     override fun interrupt(exception: ICPU.IInterruption) {
         motherboard?.halt()
         if (debugLevel > 0) {
+            val bus = motherboard?.bus!!
             log("Exception: %d (%s), regPC: 0x%08x, pfPC: 0x%08x, Description: %s", exception.code, exception.name,
                     regPC, pfPC, exception.description)
-            val inst = motherboard?.bus!!.readWord(pfPC)
+            val inst = bus.readWord(pfPC)
             debugInst(inst)
 
             debug("Registers: ")
@@ -503,20 +556,20 @@ class CPU_MIPS : ICPU {
             println("Code before error: ")
             for (j in 0..15) {
                 val i = 15 - j
-                val word = motherboard?.bus!!.readWord(pfPC - i * 4)
-                println("(PC - $i * 4) 0x%08x            %s".format(word, decompileInst(word)))
+                val word = bus.readWord(pfPC - i * 4)
+                println("(PC 0x%08x) 0x%08x            %s".format(pfPC - i * 4, word, decompileInst(word)))
             }
             println("Code after error: ")
             for (i in 0..15) {
-                val word = motherboard?.bus!!.readWord(pfPC + i * 4)
-                println("(PC + $i * 4) 0x%08x            %s".format(word, decompileInst(word)))
+                val word = bus.readWord(pfPC + i * 4)
+                println("(PC 0x%08x) 0x%08x            %s".format(pfPC + i * 4, word, decompileInst(word)))
             }
 
             println("Stacktrace:")
             println("Stack Pointer: 0x%08x".format(getRegister(29)))
             for (i in 0..50) {
                 println("(0x%08x) 0x%08x".format(getRegister(29) + i * 4,
-                        motherboard?.bus!!.readWord(getRegister(29) + i * 4)))
+                        bus.readWord(getRegister(29) + i * 4)))
             }
         } else {
 //            int flag = exception.getCode();

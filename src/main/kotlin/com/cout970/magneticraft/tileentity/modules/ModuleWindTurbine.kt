@@ -14,7 +14,6 @@ import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.state.IBlockState
-import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -49,7 +48,7 @@ class ModuleWindTurbine(
 
     override fun update() {
 
-        if(facingCache == EnumFacing.UP){
+        if (facingCache == EnumFacing.UP) {
             facingCache = facingGetter()
         }
 
@@ -83,7 +82,6 @@ class ModuleWindTurbine(
 
     fun isBlockValid(blockPos: BlockPos): Boolean {
         val state = world.getBlockState(blockPos)
-        if (state == Blocks.GLASS.defaultState) return true
         if (state != getReplaceBlock()) {
             return false
         } else {
@@ -129,7 +127,7 @@ class ModuleWindTurbine(
     fun removeTurbineHitbox(centerBreaking: Boolean = false) {
         hasTurbineHitbox = false
         iterateHitbox { base ->
-            world.setBlockState(pos + base, Blocks.GLASS.defaultState)
+            world.setBlockToAir(pos + base)
         }
         if (!centerBreaking) {
             container.sendUpdateToNearPlayers()

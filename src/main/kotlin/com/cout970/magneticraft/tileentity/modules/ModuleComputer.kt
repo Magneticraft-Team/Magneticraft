@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound
 
 class ModuleComputer(
         val cpu: ICPU = CPU_MIPS(),
-        val ram: IMemory = RAM(0xFFFF + 1, true),
+        val ram: IMemory = RAM(0x20000, true),
         val rom: IROM = ROM("assets/$MOD_ID/cpu/bios.bin"),
         val devices: Map<Int, IDevice>,
         override val name: String = "module_computer"

@@ -102,8 +102,9 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     window.addKeyListener(object : KeyListener {
         override fun keyTyped(e: KeyEvent) {
-            if (e.keyChar.toInt() == 10) {
+            if (e.keyChar.toInt() == 10 && useOs) {
                 useOs = false
+                println("Disk changed!")
             }
             val ibd = IBD()
             monitor.onKeyPressed(mapKey(e.keyChar.toInt()))

@@ -1,6 +1,6 @@
 ### TODO list
-- finish solar tower gui
-- finish solar tower heat distribution
+- Add crafting recipes
+- update manual
 - update conveyor belt model
 - add conveyor belt corners
 - add conveyor belt up/down blocks
