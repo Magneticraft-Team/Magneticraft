@@ -20,14 +20,17 @@ abstract class Network<T : INetworkNode>(
     fun add(node: T) {
         setNetwork(node, this)
         members.add(node)
+        clearCache()
     }
 
     fun remove(node: T) {
         members.remove(node)
+        clearCache()
     }
 
     // Destroys this network and create new ones for the isolated parts
     fun split(node: T) {
+        clearCache()
         val remaining = (members - node).toMutableList()
         remaining.forEach { it.network = null }
 
@@ -42,10 +45,13 @@ abstract class Network<T : INetworkNode>(
 
     @Suppress("UNCHECKED_CAST")
     fun expand() {
+        clearCache()
         val first = members.firstOrNull() ?: return
         val results = nearestFirstSearch(first, inspectFunc)
         results.forEach { add(it as T) }
     }
+
+    abstract fun clearCache()
 
 //    // merges the members of this network with other network, this network is destroyed in the process
 //    fun merge(other: Network<T>) {

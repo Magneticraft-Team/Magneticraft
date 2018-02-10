@@ -106,7 +106,7 @@ class TileConnector : TileBase(), ITickable {
             if (handler is IElectricNodeHandler) {
                 val node = handler.nodes.firstOrNull { it is IElectricNode }
                 if (node != null && handler.canConnect(node as IElectricNode, te.electricModule, te.wrapper,
-                        te.facing)) {
+                                te.facing)) {
                     return false
                 }
             }

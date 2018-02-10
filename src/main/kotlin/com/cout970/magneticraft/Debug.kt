@@ -161,10 +161,7 @@ object Debug {
 
             val gson = GsonBuilder().setPrettyPrinting().create()
             val jsonStr = gson.toJson(obj)
-//            print((1..20).forEach { print('\n') })
-//
-//            print(jsonStr as Any?)
-//            println()
+
             if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
                 val folder = File(srcDir, "src/main/resources/assets/magneticraft/recipes")
                 val fileName = handItem.unlocalizedName.replace(".name", "").replaceBeforeLast(".", "").substring(1)

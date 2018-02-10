@@ -56,6 +56,13 @@ val ItemStack.isNotEmpty get() = !isEmpty
 
 fun ItemStack.withSize(size: Int) = ItemStack(item, size, itemDamage, tagCompound)
 
+fun IItemHandler.isEmpty(): Boolean {
+    forEach { stack ->
+        if (stack.isNotEmpty) return false
+    }
+    return true
+}
+
 fun IItemHandler.copy(): IItemHandler {
     val inv = Inventory(slots)
     forEachIndexed { index, stack ->

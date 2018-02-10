@@ -207,7 +207,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
                     capability = ELECTRIC_NODE_HANDLER!!,
                     pos = BlockPos(-2, 0, -2),
                     side = EnumFacing.UP,
-                    getter = { energyModule }
+                    getter = { if (active) energyModule else null }
             ))
     )
 
@@ -237,6 +237,12 @@ class TileGrinder : TileMultiblock(), ITickable {
     val node = ElectricNode(ref, capacity = 8.0)
 
     val inventory = Inventory(3)
+
+    val itemExporterModule = ModuleItemExporter(
+            facing = { facing },
+            inventory = InventoryCapabilityFilter(inventory, listOf(1, 2), listOf(1, 2)),
+            ports = { listOf(BlockPos(0, 0, -3) to EnumFacing.SOUTH) }
+    )
 
     val openGuiModule = ModuleOpenGui()
 
@@ -289,7 +295,8 @@ class TileGrinder : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, openGuiModule, ioModule)
+        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, openGuiModule, ioModule,
+                itemExporterModule)
     }
 
     @DoNotRemove
@@ -306,6 +313,24 @@ class TileSieve : TileMultiblock(), ITickable {
     val node = ElectricNode(ref, capacity = 8.0)
 
     val inventory = Inventory(4)
+
+    val itemExporterModule0 = ModuleItemExporter(
+            facing = { facing },
+            inventory = InventoryCapabilityFilter(inventory, listOf(1), listOf(1)),
+            ports = { listOf(BlockPos(0, -1, -1) to EnumFacing.UP) }
+    )
+
+    val itemExporterModule1 = ModuleItemExporter(
+            facing = { facing },
+            inventory = InventoryCapabilityFilter(inventory, listOf(2), listOf(2)),
+            ports = { listOf(BlockPos(0, -1, -2) to EnumFacing.UP) }
+    )
+
+    val itemExporterModule2 = ModuleItemExporter(
+            facing = { facing },
+            inventory = InventoryCapabilityFilter(inventory, listOf(3), listOf(3)),
+            ports = { listOf(BlockPos(0, -1, -3) to EnumFacing.UP) }
+    )
 
     val openGuiModule = ModuleOpenGui()
 
@@ -371,7 +396,8 @@ class TileSieve : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, ioModule, openGuiModule)
+        initModules(multiblockModule, energyModule, storageModule, processModule, invModule, ioModule, openGuiModule,
+                itemExporterModule0, itemExporterModule1, itemExporterModule2)
     }
 
     @DoNotRemove

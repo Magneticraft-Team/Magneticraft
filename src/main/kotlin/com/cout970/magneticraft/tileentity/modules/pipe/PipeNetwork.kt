@@ -19,6 +19,12 @@ class PipeNetwork(module: ModulePipe) : Network<ModulePipe>(
         Companion::createNetwork
 ) {
 
+    var tankCache: List<IFluidHandler>? = null
+
+    override fun clearCache() {
+        tankCache = null
+    }
+
     companion object {
 
         fun getInspectFunc(type: PipeType): InspectFunc {
@@ -36,9 +42,15 @@ class PipeNetwork(module: ModulePipe) : Network<ModulePipe>(
 class PipeNetworkHandler(val network: PipeNetwork, val exPos: BlockPos, val exSide: EnumFacing) : IFluidHandler {
 
     fun getTanks(): List<IFluidHandler> {
-        return network.members.flatMap { it.getAdjacentTanksExcluding(exPos, exSide) }
-                .distinct()
-                .filter { if (it is PipeNetworkHandler) it.network != network else true }
+
+        if (network.tankCache == null) {
+            network.tankCache = network
+                    .members
+                    .flatMap { it.getAdjacentTanksExcluding(exPos, exSide) }
+                    .distinct()
+                    .filter { if (it is PipeNetworkHandler) it.network != network else true }
+        }
+        return network.tankCache!!
     }
 
     override fun drain(resource: FluidStack, doDrain: Boolean): FluidStack? {

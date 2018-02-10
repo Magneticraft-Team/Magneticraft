@@ -19,10 +19,10 @@ class ModuleSteamGenerator(
     override lateinit var container: IModuleContainer
 
     companion object {
-        val MAX_ENERGY_PER_TICK = 160
-        val STEAM_PER_OPERATION = 10
-        val ENERGY_PER_OPERATION = (STEAM_PER_OPERATION * ConversionTable.STEAM_TO_J).toInt()
-        val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_OPERATION
+        const val MAX_ENERGY_PER_TICK = 160
+        const val STEAM_PER_OPERATION = 10
+        const val ENERGY_PER_OPERATION = (STEAM_PER_OPERATION * ConversionTable.STEAM_TO_J).toInt()
+        const val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_OPERATION
     }
 
     val production = ValueAverage()
