@@ -32,7 +32,7 @@ object ComputerItems : IItemMaker {
             "user" to 0,
             "lisp" to 1,
             "forth" to 2,
-            "js" to 3,
+            "drivers" to 3,
             "basic" to 4,
             "vim" to 5,
             "asm" to 6
@@ -73,6 +73,7 @@ object ComputerItems : IItemMaker {
         }
     }
 
+    // Avoid loading the same floppy drive twice
     private val cache = mutableMapOf<String, String>()
 
     @Suppress("UNCHECKED_CAST")
@@ -94,9 +95,13 @@ object ComputerItems : IItemMaker {
 
             if (stack.itemDamage == 0) { // user created disks
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
-                if (!parent.exists()) parent.mkdir()
-                return File(parent, "floppy_${getSerialNumber()}.img")
-            } else { // disks copied from pre-existent ROMs
+                if (!parent.exists()) {
+                    parent.mkdir()
+                }
+                return File(parent, "floppy_${serialNumber.toHex()}.img")
+
+            } else {
+                // disks copied from pre-existent ROMs
                 val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
                 if (!parent.exists()) {
                     parent.mkdir()
@@ -104,7 +109,8 @@ object ComputerItems : IItemMaker {
                 val file: File
                 val source = (defaultDisks.toList().find { it.second == stack.itemDamage }?.first ?: "bios") + ".bin"
 
-                val bytes = ComputerItems::class.java.getResourceAsStream("/assets/$MOD_ID/cpu/$source")
+                val bytes = ComputerItems::class.java
+                                    .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
                                     ?.readBytes() ?: ByteArray(0)
 
                 if (stack.getString("label") in cache) {
@@ -114,19 +120,25 @@ object ComputerItems : IItemMaker {
                     file = createTempFile(directory = parent)
                     file.writeBytes(bytes)
                     file.deleteOnExit()
-                    cache.put(stack.getString("label"), file.absolutePath)
+                    cache[stack.getString("label")] = file.absolutePath
                 }
                 return file
             }
         }
 
-        fun getSerialNumber(): String {
+        override fun getSerialNumber(): Int {
             val nbt = stack.checkNBT()
             if (!nbt.hasKey("serialNumber")) {
-                val name = Random().ints(8).toArray().map { "0123456789ABCDEF"[it and 0xF] }.joinToString("")
-                nbt.add("serialNumber", name)
+                val num = Random()
+                        .ints(8)
+                        .toArray()
+                        .map { "0123456789ABCDEF"[it and 0xF] }
+                        .joinToString("")
+                        .let { Integer.parseInt(it, 16) }
+
+                nbt.add("serialNumber", num)
             }
-            return nbt.getString("serialNumber")
+            return nbt.getInteger("serialNumber")
         }
 
         override fun getLabel(): String {

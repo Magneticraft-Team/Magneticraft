@@ -33,7 +33,7 @@ class CPU_MIPS : ICPU {
     //otherwise the value should be the effective jump address
     var jump = -1
 
-    fun getRegister(t: Int): Int {
+    inline fun getRegister(t: Int): Int {
         return registers[t]
     }
 
@@ -84,366 +84,356 @@ class CPU_MIPS : ICPU {
         }
 
         //DECODE INSTRUCTION
-        val opcode = getBitsFromInt(instruct, 26, 31, false)
+        val opcode = instruct ushr 26
         val type: InstructionType
 
         type = when {
             instruct == 0 -> InstructionType.NOOP                                   // no action
             instruct == 0x0000000c || opcode == 0x10 -> InstructionType.EXCEPTION   // exception/syscall/trap
-            opcode and 0x10 > 0 -> InstructionType.COPROCESSOR
+            (opcode ushr 2) == 0x04 -> InstructionType.COPROCESSOR
             opcode == 0 -> InstructionType.R                                        // type R
             opcode == 0x2 || opcode == 0x3 -> InstructionType.J                     // type J
             else -> InstructionType.I                                               // type I
         }
 
         //EXECUTE INSTRUCTION and WRITEBACK
-        if (type == InstructionType.R) {
-            //aux vars used to calculate unsigned operations without having overflow
-            var m1: Long
-            var m2: Long
-            var mt: Long
+        when (type) {
+            InstructionType.R -> {
+                //aux vars used to calculate unsigned operations without having overflow
+                val m1: Long
+                val m2: Long
+                val mt: Long
 
-            val func = getBitsFromInt(instruct, 0, 5, false)
-            val shamt = getBitsFromInt(instruct, 6, 10, false)
-            val rd = getBitsFromInt(instruct, 11, 15, false)
-            val rt = getBitsFromInt(instruct, 16, 20, false)
-            val rs = getBitsFromInt(instruct, 21, 25, false)
+                val func = instruct and 0b111111        // getBitsFromInt(instruct, 0, 5, false)
+                val shamt = instruct ushr 6 and 0b11111 //getBitsFromInt(instruct, 6, 10, false)
+                val rd = instruct ushr 11 and 0b11111   //getBitsFromInt(instruct, 11, 15, false)
+                val rt = instruct ushr 16 and 0b11111   //getBitsFromInt(instruct, 16, 20, false)
+                val rs = instruct ushr 21 and 0b11111   //getBitsFromInt(instruct, 21, 25, false)
 
-            when (func) {
+                when (func) {
 
-                0x0//sll
-                -> setRegister(rd, getRegister(rt) shl shamt)
-                0x2//srl
-                -> setRegister(rd, getRegister(rt).ushr(shamt))
-                0x3//sra
-                -> setRegister(rd, getRegister(rt) shr shamt)
-                0x4//sllv
-                -> setRegister(rd, getRegister(rt) shl rs)
-                0x6//srlv
-                -> setRegister(rd, getRegister(rt) shr rs)
-                0x7//srav
-                -> setRegister(rd, getRegister(rs).ushr(rt))
-                0x8//jr
-                -> {
-                    if (getRegister(rs) == 0 || getRegister(rs) == -1) {
-                        interrupt(NullPointerException())
-                        return
+                    0x0//sll
+                    -> setRegister(rd, getRegister(rt) shl shamt)
+                    0x2//srl
+                    -> setRegister(rd, getRegister(rt).ushr(shamt))
+                    0x3//sra
+                    -> setRegister(rd, getRegister(rt) shr shamt)
+                    0x4//sllv
+                    -> setRegister(rd, getRegister(rt) shl getRegister(rs))
+                    0x6//srlv
+                    -> setRegister(rd, getRegister(rt) ushr getRegister(rs))
+                    0x7//srav
+                    -> setRegister(rd, getRegister(rt) shr getRegister(rs))
+                    0x8//jr
+                    -> {
+                        if (getRegister(rs) == 0 || getRegister(rs) == -1) {
+                            interrupt(NullPointerException())
+                            return
+                        }
+                        jump = getRegister(rs)
                     }
-                    jump = getRegister(rs)
-                }
-                0x9//jalr
-                -> {
-                    if (getRegister(rs) == -1 || getRegister(rs) == 0) {
-                        interrupt(NullPointerException())
+                    0x9//jalr
+                    -> {
+                        if (getRegister(rs) == -1 || getRegister(rs) == 0) {
+                            interrupt(NullPointerException())
+                        }
+                        if (rt == 0) {
+                            setRegister(31, regPC)
+                        } else {
+                            setRegister(rt, regPC)
+                        }
+                        jump = getRegister(rs)
                     }
-                    if (rt == 0) {
-                        setRegister(31, regPC)
+
+                    0x0d // break
+                    -> interrupt(BreakpointException())
+                    0x10//mfhi
+                    -> setRegister(rd, regHI)
+                    0x11//mthi
+                    -> regHI = getRegister(rd)
+                    0x12//mflo
+                    -> setRegister(rd, regLO)
+                    0x13//mtlo
+                    -> regLO = getRegister(rd)
+
+                    0x18//mult
+                    -> {
+                        m1 = getRegister(rs).toLong()
+                        m2 = getRegister(rt).toLong()
+                        mt = m1 * m2
+                        regLO = mt.toInt()
+                        regHI = (mt shr 32).toInt()
+                    }
+                    0x19//multu
+                    -> {
+                        m1 = getRegister(rs).toLong() and 0xFFFF_FFFF
+                        m2 = getRegister(rt).toLong() and 0xFFFF_FFFF
+                        mt = m1 * m2
+                        regLO = mt.toInt()
+                        regHI = (mt shr 32).toInt()
+                    }
+                    0x1a//div
+                    -> if (getRegister(rt) != 0) {
+                        regLO = getRegister(rs) / getRegister(rt)
+                        regHI = getRegister(rs) % getRegister(rt)
                     } else {
-                        setRegister(rt, regPC)
-                    }
-                    jump = getRegister(rs)
-                }
-
-                0x10//mfhi
-                -> setRegister(rd, regHI)
-                0x11//mthi
-                -> regHI = getRegister(rd)
-                0x12//mflo
-                -> setRegister(rd, regLO)
-                0x13//mtlo
-                -> regLO = getRegister(rd)
-
-                0x18//mult
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = getRegister(rt).toLong()
-                    mt = m1 * m2
-                    regLO = mt.toInt()
-                    regHI = (mt shr 32).toInt()
-                }
-                0x19//multu
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = getRegister(rt).toLong()
-                    m1 = (m1 shl 32).ushr(32)
-                    m2 = (m2 shl 32).ushr(32)
-                    mt = m1 * m2
-                    regLO = mt.toInt()
-                    regHI = (mt shr 32).toInt()
-                }
-                0x1a//div
-                -> if (getRegister(rt) != 0) {
-                    regLO = getRegister(rs) / getRegister(rt)
-                    regHI = getRegister(rs) % getRegister(rt)
-                } else {
-                    interrupt(ArithmeticException())
-                }
-                0x1b//divu
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = getRegister(rt).toLong()
-                    m1 = (m1 shl 32).ushr(32)
-                    m2 = (m2 shl 32).ushr(32)
-                    if (m2 == 0L) {
                         interrupt(ArithmeticException())
-                    } else {
-                        regLO = (m1 / m2).toInt()
-                        regHI = (m1 % m2).toInt()
                     }
-                }
-                0x20//add
-                -> setRegister(rd, getRegister(rt) + getRegister(rs))
-                0x21//addu
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = getRegister(rt).toLong()
-                    m1 = (m1 shl 32).ushr(32)
-                    m2 = (m2 shl 32).ushr(32)
-                    mt = m1 + m2
-                    setRegister(rd, mt.toInt())
-                }
-                0x22//sub
-                -> setRegister(rd, getRegister(rs) - getRegister(rt))
-                0x23//subu
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = getRegister(rt).toLong()
-                    m1 = m1 and 0xFFFFFFFF
-                    m2 = m2 and 0xFFFFFFFF
-                    mt = m1 - m2
-                    mt = mt and 0xFFFFFFFF
-                    setRegister(rd, mt.toInt())
-                }
-                0x24//and
-                -> setRegister(rd, getRegister(rt) and getRegister(rs))
-                0x25//or
-                -> setRegister(rd, getRegister(rt) or getRegister(rs))
-                0x26//xor
-                -> setRegister(rd, getRegister(rt) xor getRegister(rs))
-                0x27//nor
-                -> setRegister(rd, (getRegister(rt) or getRegister(rs)).inv())
-                0x2a//slt
-                -> if (getRegister(rs) < getRegister(rt)) {
-                    setRegister(rd, 1)
-                } else {
-                    setRegister(rd, 0)
-                }
-                0x2b//sltu
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = getRegister(rt).toLong()
-                    m1 = (m1 shl 32).ushr(32)
-                    m2 = (m2 shl 32).ushr(32)
-                    if (m1 < m2) {
-                        setRegister(rd, 1)
-                    } else {
-                        setRegister(rd, 0)
+                    0x1b//divu
+                    -> {
+                        m1 = getRegister(rs).toLong() and 0xFFFF_FFFF
+                        m2 = getRegister(rt).toLong() and 0xFFFF_FFFF
+                        if (m2 == 0L) {
+                            interrupt(ArithmeticException())
+                        } else {
+                            regLO = (m1 / m2).toInt()
+                            regHI = (m1 % m2).toInt()
+                        }
                     }
-                }
-                else -> interrupt(InvalidInstruction())
-            }
-        } else if (type == InstructionType.J) {
-            val dir = getBitsFromInt(instruct, 0, 25, false)
-
-            when (opcode) {
-                0x2//j
-                -> {
-                    jump = regPC
-                    jump = jump and 0xF0000000.toInt()
-                    jump = jump or (dir shl 2)
-                }
-                0x3//jal
-                -> {
-                    setRegister(31, regPC + 4)
-                    jump = regPC
-                    jump = jump and 0xF0000000.toInt()
-                    jump = jump or (dir shl 2)
+                    0x20//add
+                    -> {
+                        // TODO throw exception on overflow
+                        setRegister(rd, getRegister(rt) + getRegister(rs))
+                    }
+                    0x21//addu
+                    -> setRegister(rd, getRegister(rt) + getRegister(rs))
+                    0x22//sub
+                    -> setRegister(rd, getRegister(rs) - getRegister(rt))
+                    0x23//subu
+                    -> setRegister(rd, getRegister(rs) - getRegister(rt))
+                    0x24//and
+                    -> setRegister(rd, getRegister(rt) and getRegister(rs))
+                    0x25//or
+                    -> setRegister(rd, getRegister(rt) or getRegister(rs))
+                    0x26//xor
+                    -> setRegister(rd, getRegister(rt) xor getRegister(rs))
+                    0x27//nor
+                    -> setRegister(rd, (getRegister(rt) or getRegister(rs)).inv())
+                    0x2a//slt
+                    -> setRegister(rd, if (getRegister(rs) < getRegister(rt)) 1 else 0)
+                    0x2b//sltu
+                    -> {
+                        m1 = getRegister(rs).toLong() and 0xFFFF_FFFF
+                        m2 = getRegister(rt).toLong() and 0xFFFF_FFFF
+                        setRegister(rd, if (m1 < m2) 1 else 0)
+                    }
+                    else -> interrupt(InvalidInstruction())
                 }
             }
-        } else if (type == InstructionType.I) {
-            //aux vars for unsigned operations
-            var m1: Long
-            var m2: Long
+            InstructionType.J -> {
+                val dir = getBitsFromInt(instruct, 0, 25, false)
 
-            val rs = getBitsFromInt(instruct, 21, 25, false)
-            val rt = getBitsFromInt(instruct, 16, 20, false)
-            val inmed = getBitsFromInt(instruct, 0, 15, true)
-            val inmedU = getBitsFromInt(instruct, 0, 15, false)
+                when (opcode) {
+                    0x2//j
+                    -> {
+                        jump = regPC
+                        jump = jump and 0xF0000000.toInt()
+                        jump = jump or (dir shl 2)
+                    }
+                    0x3//jal
+                    -> {
+                        setRegister(31, regPC + 4)
+                        jump = regPC
+                        jump = jump and 0xF0000000.toInt()
+                        jump = jump or (dir shl 2)
+                    }
+                }
+            }
+            InstructionType.I -> {
+                //aux vars for unsigned operations
+                val m1: Long
+                val m2: Long
 
-            when (opcode) {
-                0x1 -> if (rt == 1) {//bgez
-                    if (getRegister(rs) >= 0) {
+                val rs = instruct shr 21 and 31
+                val rt = instruct shr 16 and 31
+
+                val inmed = instruct shl 16 shr 16
+                val inmedU = instruct shl 16 ushr 16
+
+                when (opcode) {
+                    0x1 -> when (rt) {
+                    //bltz
+                        0b00000 -> if (getRegister(rs) < 0) {
+                            jump = regPC + (inmed shl 2)
+                        }
+                    //bgez
+                        0b00001 -> if (getRegister(rs) >= 0) {
+                            jump = regPC + (inmed shl 2)
+                        }
+                    //bltzal
+                        0b10000 -> if (getRegister(rs) < 0) {
+                            setRegister(31, regPC + 4)
+                            jump = regPC + (inmed shl 2)
+                        }
+                    //bgezal
+                        0b10001 -> if (getRegister(rs) >= 0) {
+                            setRegister(31, regPC + 4)
+                            jump = regPC + (inmed shl 2)
+                        }
+                    }
+                    0x4//beq
+                    -> if (getRegister(rt) == getRegister(rs)) {
                         jump = regPC + (inmed shl 2)
                     }
-                } else if (rt == 0) {//bltz
-                    if (getRegister(rs) < 0) {
+                    0x5//bne
+                    -> if (getRegister(rt) != getRegister(rs)) {
                         jump = regPC + (inmed shl 2)
                     }
-                }
-                0x4//beq
-                -> if (getRegister(rt) == getRegister(rs)) {
-                    jump = regPC + (inmed shl 2)
-                }
-                0x5//bne
-                -> if (getRegister(rt) != getRegister(rs)) {
-                    jump = regPC + (inmed shl 2)
-                }
-                0x6//blez
-                -> if (getRegister(rs) <= 0) {
-                    jump = regPC + (inmed shl 2)
-                }
-                0x7//bgtz
-                -> if (getRegister(rs) > 0) {
-                    jump = regPC + (inmed shl 2)
-                }
-                0x8//addi
-                -> setRegister(rt, getRegister(rs) + inmed)
-                0x9//addiu
-                -> setRegister(rt, getRegister(rs) + inmed)
-                0xa//slti
-                -> if (getRegister(rs) < inmed) {
-                    setRegister(rt, 1)
-                } else {
-                    setRegister(rt, 0)
-                }
-                0xb//sltiu
-                -> {
-                    m1 = getRegister(rs).toLong()
-                    m2 = inmedU.toLong()
-                    m1 = (m1 shl 32).ushr(32)
-                    m2 = (m2 shl 32).ushr(32)
-                    if (m1 < m2) {
-                        setRegister(rt, 1)
-                    } else {
-                        setRegister(rt, 0)
+                    0x6//blez
+                    -> if (getRegister(rs) <= 0) {
+                        jump = regPC + (inmed shl 2)
                     }
-                }
-                0xc//andi
-                -> setRegister(rt, getRegister(rs) and inmedU)
-                0xd//ori
-                -> setRegister(rt, getRegister(rs) or inmedU)
-                0xe//xori
-                -> setRegister(rt, getRegister(rs) xor inmedU)
-                0xf//lui
-                -> setRegister(rt, inmedU shl 16)
-                0x18//llo
-                -> setRegister(rt, getRegister(rt) and 0xFFFF0000.toInt() or inmedU)
-                0x19//lhi
-                -> setRegister(rt, getRegister(rt) and 0x0000FFFF or (inmedU shl 16))
-                0x1a//trap
-                -> {
-                }
-                0x20//lb
-                -> setRegister(rt, bus.readByte(getRegister(rs) + inmed).toInt())
-                0x21//lh
-                -> setRegister(rt, (bus.readWord(getRegister(rs) + inmed).toShort()).toInt())
-                0x22//lwl
-                -> {
-                    // TODO test and maybe optimize
-                    val addr = getRegister(rs) + inmed
-                    val word = bus.readWord((addr ushr 2) shl 2)
-                    when (addr and 0x3) {
-                        1 -> setRegister(rt, ((word and 0x00FF_FFFF) shl 8) or (getRegister(rt) and 0x0000_00FF))
-                        2 -> setRegister(rt, ((word and 0x0000_FFFF) shl 16) or (getRegister(rt) and 0x0000_FFFF))
-                        3 -> setRegister(rt, ((word and 0x0000_00FF) shl 24) or (getRegister(rt) and 0x00FF_FFFF))
-                        else -> setRegister(rt, word)
+                    0x7//bgtz
+                    -> if (getRegister(rs) > 0) {
+                        jump = regPC + (inmed shl 2)
                     }
-                }
-                0x23//lw
-                -> {
-                    if (getRegister(rs) + inmed and 0x3 != 0) {
-                        interrupt(WordBoundaryException(getRegister(rs) + inmed))
-                    } else {
-                        setRegister(rt, bus.readWord(getRegister(rs) + inmed))
+                    0x8//addi
+                    -> setRegister(rt, getRegister(rs) + inmed)
+                    0x9//addiu
+                    -> {
+                        // TODO add trap on overflow
+                        setRegister(rt, getRegister(rs) + inmed)
                     }
-                }
-                0x24//lbu
-                -> setRegister(rt, bus.readByte(getRegister(rs) + inmed).toInt() and 0xFF)
-                0x25//lhu
-                -> setRegister(rt, bus.readWord(getRegister(rs) + inmed) and 0xFFFF)
-                0x26//lwr
-                -> {
-                    // TODO test and maybe optimize
-                    val addr = getRegister(rs) + inmed
-                    val word = bus.readWord((addr ushr 2) shl 2)
-                    when (addr and 0x3) {
-                        0 -> setRegister(rt, (word ushr 24) or (getRegister(rt) and 0xFFFFFF00.toInt()))
-                        1 -> setRegister(rt, (word ushr 16) or (getRegister(rt) and 0xFFFF0000.toInt()))
-                        2 -> setRegister(rt, (word ushr 8) or (getRegister(rt) and 0xFF000000.toInt()))
-                        else -> setRegister(rt, word)
+                    0xa//slti
+                    -> setRegister(rt, if (getRegister(rs) < inmed) 1 else 0)
+                    0xb//sltiu
+                    -> {
+                        m1 = getRegister(rs).toLong() and 0xFFFF_FFFF
+                        m2 = inmedU.toLong() and 0xFFFF_FFFF
+                        setRegister(rt, if (m1 < m2) 1 else 0)
                     }
-                }
-                0x28//sb
-                -> bus.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
-                0x29//sh
-                -> {
-                    bus.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
-                    bus.writeByte(getRegister(rs) + inmed + 1, (getRegister(rt) and 0xFF00).toByte())
-                }
-                0x2a//swl
-                -> {
-                    // TODO test and maybe optimize
-                    val addr = getRegister(rs) + inmed
-                    val alignAddr = (addr ushr 2) shl 2
-                    val word = bus.readWord(alignAddr)
-                    when (addr and 0x3) {
-                        1 -> bus.writeWord(alignAddr, (getRegister(rt) shl 8 ) or (word and 0xFF00_0000.toInt()))
-                        2 -> bus.writeWord(alignAddr, (getRegister(rt) shl 16) or (word and 0xFFFF_0000.toInt()))
-                        3 -> bus.writeWord(alignAddr, (getRegister(rt) shl 24) or (word and 0xFFFF_FF00.toInt()))
-                        else -> bus.writeWord(alignAddr, word)
+                    0xc//andi
+                    -> setRegister(rt, getRegister(rs) and inmedU)
+                    0xd//ori
+                    -> setRegister(rt, getRegister(rs) or inmedU)
+                    0xe//xori
+                    -> setRegister(rt, getRegister(rs) xor inmedU)
+                    0xf//lui
+                    -> setRegister(rt, inmedU shl 16)
+                    0x18//llo
+                    -> setRegister(rt, getRegister(rt) and 0xFFFF0000.toInt() or inmedU)
+                    0x19//lhi
+                    -> setRegister(rt, getRegister(rt) and 0x0000FFFF or (inmedU shl 16))
+                    0x1a//trap
+                    -> interrupt(Syscall())
+                    0x20//lb
+                    -> setRegister(rt, bus.readByte(getRegister(rs) + inmed).toInt())
+                    0x21//lh
+                    -> setRegister(rt, (bus.readWord(getRegister(rs) + inmed).toShort()).toInt())
+                    0x22//lwl
+                    -> {
+                        val addr = getRegister(rs) + inmed
+                        val word = bus.readWord(addr and 0xFFFF_FFFC.toInt())
+                        when (addr and 0x3) {
+                            0 -> setRegister(rt, ((word and 0x0000_00FF) shl 24) or (getRegister(rt) and 0x00FF_FFFF))
+                            1 -> setRegister(rt, ((word and 0x0000_FFFF) shl 16) or (getRegister(rt) and 0x0000_FFFF))
+                            2 -> setRegister(rt, ((word and 0x00FF_FFFF) shl 8) or (getRegister(rt) and 0x0000_00FF))
+                            3 -> setRegister(rt, word)
+                        }
                     }
-                }
-                0x2b//sw
-                -> {
-                    if (getRegister(rs) + inmed and 0x3 != 0) {
-                        interrupt(WordBoundaryException(getRegister(rs) + inmed))
-                    } else {
-                        bus.writeWord(getRegister(rs) + inmed, getRegister(rt))
+                    0x23//lw
+                    -> {
+                        val addr = getRegister(rs) + inmed
+                        if (addr and 0x3 != 0) {
+                            interrupt(WordBoundaryException(addr))
+                        } else {
+                            setRegister(rt, bus.readWord(addr))
+                        }
                     }
-                }
-                0x2e//swr
-                -> {
-                    // TODO test and maybe optimize
-                    val addr = getRegister(rs) + inmed
-                    val alignAddr = (addr ushr 2) shl 2
-                    val word = bus.readWord(alignAddr)
-                    when (addr and 0x3) {
-                        0 -> bus.writeWord(alignAddr, (getRegister(rt) shl 24) or (word and 0x00FF_FFFF))
-                        1 -> bus.writeWord(alignAddr, (getRegister(rt) shl 16) or (word and 0x0000_FFFF))
-                        2 -> bus.writeWord(alignAddr, (getRegister(rt) shl 8 ) or (word and 0x0000_00FF))
-                        else -> bus.writeWord(alignAddr, word)
+                    0x24//lbu
+                    -> setRegister(rt, bus.readByte(getRegister(rs) + inmed).toInt() and 0xFF)
+                    0x25//lhu
+                    -> setRegister(rt, bus.readWord(getRegister(rs) + inmed) and 0xFFFF)
+                    0x26//lwr
+                    -> {
+                        val addr = getRegister(rs) + inmed
+                        val word = bus.readWord(addr and 0xFFFF_FFFC.toInt())
+                        when (addr and 0x3) {
+                            0 -> setRegister(rt, word)
+                            1 -> setRegister(rt, (word ushr 8) or (getRegister(rt) and 0xFF000000.toInt()))
+                            2 -> setRegister(rt, (word ushr 16) or (getRegister(rt) and 0xFFFF0000.toInt()))
+                            3 -> setRegister(rt, (word ushr 24) or (getRegister(rt) and 0xFFFFFF00.toInt()))
+                        }
                     }
+                    0x28//sb
+                    -> bus.writeByte(getRegister(rs) + inmed, (getRegister(rt) and 0xFF).toByte())
+                    0x29//sh
+                    -> {
+                        val addr = getRegister(rs) + inmed
+                        val value = getRegister(rt)
+                        bus.writeByte(addr, (value and 0xFF).toByte())
+                        bus.writeByte(addr + 1, (value and 0xFF00 ushr 8).toByte())
+                    }
+                    0x2a//swl
+                    -> {
+                        val addr = getRegister(rs) + inmed
+                        val alignAddr = addr and 0xFFFF_FFFC.toInt()
+                        val word = bus.readWord(alignAddr)
+                        when (addr and 0x3) {
+                            0 -> bus.writeWord(alignAddr, (getRegister(rt) ushr 24) or (word and 0xFFFF_FF00.toInt()))
+                            1 -> bus.writeWord(alignAddr, (getRegister(rt) ushr 16) or (word and 0xFFFF_0000.toInt()))
+                            2 -> bus.writeWord(alignAddr, (getRegister(rt) ushr 8) or (word and 0xFF00_0000.toInt()))
+                            3 -> bus.writeWord(alignAddr, getRegister(rt))
+                        }
+                    }
+                    0x2b//sw
+                    -> {
+                        if (getRegister(rs) + inmed and 0x3 != 0) {
+                            interrupt(WordBoundaryException(getRegister(rs) + inmed))
+                        } else {
+                            bus.writeWord(getRegister(rs) + inmed, getRegister(rt))
+                        }
+                    }
+                    0x2e//swr
+                    -> {
+                        // TODO test and maybe optimize
+                        val addr = getRegister(rs) + inmed
+                        val alignAddr = addr and 0xFFFF_FFFC.toInt()
+                        val word = bus.readWord(alignAddr)
+                        when (addr and 0x3) {
+                            0 -> bus.writeWord(alignAddr, getRegister(rt))
+                            1 -> bus.writeWord(alignAddr, (getRegister(rt) ushr 8) or (word and 0x0000_00FF))
+                            2 -> bus.writeWord(alignAddr, (getRegister(rt) ushr 16) or (word and 0x0000_FFFF))
+                            3 -> bus.writeWord(alignAddr, (getRegister(rt) ushr 24) or (word and 0x00FF_FFFF))
+                        }
+                    }
+                    else -> interrupt(InvalidInstruction())
                 }
-                else -> interrupt(InvalidInstruction())
             }
-        } else if (type == InstructionType.EXCEPTION) {
-            interrupt(Syscall())//syscall/trap
-        } else if (type == InstructionType.COPROCESSOR) {//coprocessor instructions
+            InstructionType.EXCEPTION -> interrupt(Syscall())//syscall/trap
+            InstructionType.COPROCESSOR -> {//coprocessor instructions
 
-            val code = getBitsFromInt(instruct, 21, 25, false)
-            val rt = getBitsFromInt(instruct, 16, 20, false)
-            val rd = getBitsFromInt(instruct, 11, 15, false)
+                val code = getBitsFromInt(instruct, 21, 25, false)
+                val rt = getBitsFromInt(instruct, 16, 20, false)
+                val rd = getBitsFromInt(instruct, 11, 15, false)
 
-            if (code == 0x0) {//mfc0 rd, rt | move from coprocessor 0
-                var `val` = 0
-                when (rt) {
-                    12 -> `val` = regStatus
-                    13 -> `val` = regCause
-                    14 -> `val` = regEPC
+                when {
+                    code == 0x0 -> {//mfc0 rd, rt | move from coprocessor 0
+                        var value = 0
+                        when (rt) {
+                            12 -> value = regStatus
+                            13 -> value = regCause
+                            14 -> value = regEPC
+                        }
+                        setRegister(rd, value)
+                    }
+                    code == 0x4 -> {//mtc0 rd, rt | move to coprocessor 0
+                        val value = getRegister(rt)
+                        when (rt) {
+                            12 -> regStatus = value
+                            13 -> regCause = value
+                            14 -> regEPC = value
+                        }
+                    }
+                    code == 0x10 && instruct and 63 == 16 -> {//rfe | return from exception
+                        regPC = regEPC
+                        regStatus = regStatus shr 4
+                    }
+                    else -> interrupt(InvalidInstruction())
                 }
-                setRegister(rd, `val`)
-            } else if (code == 0x4) {//mtc0 rd, rt | move to coprocessor 0
-                val `val` = getRegister(rt)
-                when (rt) {
-                    12 -> regStatus = `val`
-                    13 -> regCause = `val`
-                    14 -> regEPC = `val`
-                }
-            } else if (code == 0x10 && instruct and 63 == 16) {//rfe | return from exception
-                regPC = regEPC
-                regStatus = regStatus shr 4
-            } else {
-                interrupt(InvalidInstruction())
+            }
+            CPU_MIPS.InstructionType.NOOP -> {
+                // Nothing
             }
         }
     }

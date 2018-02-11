@@ -1,12 +1,10 @@
-package com.cout970.magneticraft.computer
+package cpu
 
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.computer.IROM
-import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.computer.*
 import com.cout970.magneticraft.misc.network.IBD
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -25,25 +23,28 @@ private var useOs = true
 fun main(args: Array<String>) {
 
     val img = "drivers"
-    val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"))
-    val programDisk = FakeFloppyDisk(File("./run/disk.img"))
+    val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
+    val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
     val monitor = DeviceMonitor(FakeRef)
     val floppyDrive = DeviceFloppyDrive(FakeRef) { if (useOs) osDisk else programDisk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
+    networkCard.debugLevel = 5
+
     val cpu = CPU_MIPS()
     val memory = RAM(0x20000, true)
+
     val rom = if (args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
+
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)
-    val mbDevice = DeviceMotherboard(FakeRef, motherboard)
+    val mbDevice = DeviceMotherboard(FakeRef,motherboard)
 
     bus.devices[0xFF] = mbDevice
     bus.devices[0x00] = monitor
     bus.devices[0x01] = floppyDrive
     bus.devices[0x02] = networkCard
-
 
 
     val display = createDisplay(monitor)
@@ -80,7 +81,6 @@ fun main(args: Array<String>) {
     // This is used to avoid: 'Disconnected from the target VM' in the middle of the CPU output
     System.out.flush()
     Thread.sleep(10)
-
 }
 
 private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
@@ -168,20 +168,17 @@ class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
     }
 }
 
-object FakeRef : ITileRef {
-    override fun getWorld(): World = error("Not available in emulation mode")
-    override fun getPos(): BlockPos = error("Not available in emulation mode")
-}
-
 class CustomRom(val str: String) : IROM {
     override fun getBIOS(): InputStream = File(str).inputStream()
 }
 
-class FakeFloppyDisk(val file: File) : IFloppyDisk {
+class FakeFloppyDisk(val file: File, val readOnly: Boolean) : IFloppyDisk {
 
     override fun getStorageFile(): File {
         return file
     }
+
+    override fun getSerialNumber(): Int = 0x0000_ABCD
 
     override fun getLabel(): String = "fake_floppy_disk"
 
@@ -193,7 +190,7 @@ class FakeFloppyDisk(val file: File) : IFloppyDisk {
 
     override fun canRead(): Boolean = true
 
-    override fun canWrite(): Boolean = true
+    override fun canWrite(): Boolean = !readOnly
 }
 
 //     bios string print

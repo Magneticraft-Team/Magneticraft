@@ -26,6 +26,11 @@ public interface IFloppyDisk {
     void setLabel(String str);
 
     /**
+     * Unique id used to detect when a disk has been replaced by another
+     */
+    int getSerialNumber();
+
+    /**
      * Gets tha number of sector of the disk, every sector has 1Kb (1024B), this
      * is used to get the size of the disk
      */

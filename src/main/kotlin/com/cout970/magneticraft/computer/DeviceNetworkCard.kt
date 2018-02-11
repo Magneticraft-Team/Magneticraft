@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.util.debug
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
@@ -33,6 +34,8 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     var outputBufferPtr = 0
 
     var connectionError = 0
+
+    var debugLevel = 0
 
     var socket: Socket? = null
 
@@ -84,6 +87,12 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
         return parent.pos.hashCode()
     }
 
+    private fun log(level: Int, vararg any: Any?) {
+        if (debugLevel > level) {
+            debug(*any)
+        }
+    }
+
     override fun update() {
         socket?.let {
             if (it.isClosed) {
@@ -93,28 +102,42 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
                 try {
                     if (outputBufferPtr > outputBuffer.size || outputBufferPtr < 0) {
                         connectionError = INVALID_OUTPUT_BUFFER_POINTER
+                        log(2, "Error INVALID_OUTPUT_BUFFER_POINTER $outputBufferPtr not in [0, ${outputBuffer.size})")
+                        closeTcpConnection()
                     } else if (outputBufferPtr > 0) {
                         it.getOutputStream().write(outputBuffer, 0, outputBufferPtr)
                         // debug print request
-//                        println(String(outputBuffer, 0, outputBufferPtr))
+                        if(outputBufferPtr > 0){
+                            log(2, "Sending data: " + String(outputBuffer, 0, outputBufferPtr))
+                        }
                         outputBufferPtr = 0
                     }
                 } catch (e: Exception) {
                     connectionError = UNABLE_TO_SEND_PACKET
+                    log(2, "Error UNABLE_TO_SEND_PACKET")
+
+                    closeTcpConnection()
                     e.printStackTrace()
                 }
                 try {
                     if (inputBufferPtr > inputBuffer.size || inputBufferPtr < 0) {
                         connectionError = INVALID_INPUT_BUFFER_POINTER
+                        log(2, "Error INVALID_INPUT_BUFFER_POINTER $inputBufferPtr no in [0, ${inputBuffer.size})")
+                        closeTcpConnection()
                     } else {
                         val stream = it.getInputStream()
                         if (inputBuffer.size - inputBufferPtr > 0) {
                             val read = stream.read(inputBuffer, inputBufferPtr, inputBuffer.size - inputBufferPtr)
                             inputBufferPtr += read
+                            if(read > 0 && inputBufferPtr - read > 0){
+                                log(2, "Receiving data: " + String(inputBuffer, inputBufferPtr - read, read))
+                            }
                         }
                     }
                 } catch (e: Exception) {
                     connectionError = UNABLE_TO_READ_PACKET
+                    log(2, "Error UNABLE_TO_READ_PACKET")
+                    closeTcpConnection()
                     e.printStackTrace()
                 }
             }
@@ -131,6 +154,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
 
     fun closeTcpConnection() {
         socket?.let {
+            log(1, "Closing connection")
             activeSockets--
             it.close()
         }
@@ -149,16 +173,20 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     }
 
     fun openConnection(factory: (String, Int) -> Socket) {
+        log(1, "Opening connection")
         if (!internetAllowed) {
             connectionError = INTERNET_NOT_ALLOWED
+            log(1, "Error: INTERNET_NOT_ALLOWED")
             return
         }
         if (activeSockets >= maxSockets) {
             connectionError = MAX_SOCKET_REACH
+            log(1, "Error: MAX_SOCKET_REACH")
             return
         }
         if (targetPort <= 0 || targetPort > 0xFFFF) {
             connectionError = INVALID_PORT
+            log(1, "Error: INVALID_PORT")
             return
         }
         val ipStr: String
@@ -171,18 +199,23 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
             val tmp = ByteArray(size)
             System.arraycopy(targetIp, 0, tmp, 0, size)
             ipStr = tmp.toString(Charset.forName("US-ASCII"))
+            log(1, "Ip parsed: '$ipStr'")
         } catch (e: Exception) {
             e.printStackTrace()
             connectionError = EXCEPTION_PARSING_IP
+            log(1, "Error: EXCEPTION_PARSING_IP")
             return
         }
         try {
             socket = factory(ipStr, targetPort)
             connectionError = NO_ERROR
             activeSockets++
+            log(1, "Socket created with ip '$ipStr' and port '$targetPort'")
         } catch (e: Exception) {
             e.printStackTrace()
             connectionError = EXCEPTION_OPEN_SOCKET
+            log(1, "Error: EXCEPTION_OPEN_SOCKET")
+
             closeTcpConnection()
         }
     }

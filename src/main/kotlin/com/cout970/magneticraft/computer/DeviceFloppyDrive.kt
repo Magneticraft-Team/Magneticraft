@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
+import com.cout970.magneticraft.util.debug
 import net.minecraft.nbt.NBTTagCompound
 import java.io.RandomAccessFile
 import java.nio.charset.Charset
@@ -57,6 +58,7 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
                     }
 //                    val checksum = getBuffer().sumBy { it.toInt() and 0xFF }
                     map.close()
+                    debug("Read sector: $currentSector")
                 } else {
                     Arrays.fill(getBuffer(), 0)
                 }
@@ -65,6 +67,8 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
             }
             sleep = floppy.accessTime
             status = 1
+        } else {
+            debug("Read invalid sector: $currentSector")
         }
     }
 
@@ -77,11 +81,14 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
                 map.seek(currentSector * 1024L)
                 map.write(getBuffer())
                 map.close()
+                debug("Write sector: $currentSector")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             sleep = floppy.accessTime
             status = 2
+        } else {
+            debug("Write invalid sector: $currentSector")
         }
     }
 
@@ -124,6 +131,7 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
             ReadOnlyByte("padding", { 0 }),
 
             ReadOnlyInt("numSectors", { getDisk()?.sectorCount ?: 0 }),
+//            ReadOnlyInt("serialNumber", { getDisk()?.serialNumber ?: 0 }),
             ReadWriteInt("currentSector", { currentSector = it }, { currentSector }),
             ReadWriteByteArray("buffer", getBuffer())
     )
