@@ -4,7 +4,6 @@ package com.cout970.magneticraft.tileentity.modules.mining_robot
  * Created by cout970 on 2017/08/23.
  */
 enum class RequestStatus {
-    PENDING,
     RUNNING,
     FAILED,
     SUCCESSFUL

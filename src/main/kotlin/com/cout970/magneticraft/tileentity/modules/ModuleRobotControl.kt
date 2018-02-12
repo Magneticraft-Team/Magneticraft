@@ -38,19 +38,23 @@ class ModuleRobotControl(
     override val batterySize: Int = storage.capacity
     override val batteryCharge: Int = storage.energy
 
+    val device = DeviceRobotControl(ref, this)
+
     var orientation
         get() = orientationGetter()
         set(i) = orientationSetter(i)
 
-    val device = DeviceRobotControl(ref, this)
+    override val cooldown: Int
+        get() = (task?.cooldown ?: -1) + 1
 
-    override var requestedAction: RobotAction? = null
-    override var requestStatus: RequestStatus = RequestStatus.SUCCESSFUL
+    override val orientationFlag: Int
+        get() = (orientation.level.ordinal shl 2) or (orientation.direction.horizontalIndex)
+
+    override var status = RequestStatus.SUCCESSFUL
     override var failReason: Int = 0
-
+    override var scanResult: Int = 0
+    var requestedAction: RobotAction? = null
     var task: RobotTask? = null
-    override val cooldown: Int get() = (task?.cooldown ?: -1) + 1
-
     var clientOrientation: Computers.RobotOrientation? = null
     var clientCooldown = 0
 
@@ -63,17 +67,18 @@ class ModuleRobotControl(
         }
         if (world.isClient) return
 
-        requestedAction?.let {
-            if (requestStatus == RequestStatus.PENDING) {
-                failReason = 0
-                task = it.taskFactory()
-                requestStatus = RequestStatus.RUNNING
-                container.sendUpdateToNearPlayers()
-            }
-        }
         runTask()
         if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
             node.applyPower(-Config.miningRobotPassiveConsumption, false)
+        }
+    }
+
+    fun updateTask() {
+        requestedAction?.let {
+            failReason = 0
+            task = it.taskFactory()
+            status = RequestStatus.RUNNING
+            container.sendUpdateToNearPlayers()
         }
     }
 
@@ -82,78 +87,84 @@ class ModuleRobotControl(
             it.tick(this)
             it.finish?.let {
                 task = null
-                requestStatus = if (it == 0) RequestStatus.SUCCESSFUL else RequestStatus.FAILED
+                status = if (it == 0) RequestStatus.SUCCESSFUL else RequestStatus.FAILED
             }
         }
     }
 
     override fun move(front: Boolean) {
-        if (requestStatus.isNotFinished) return
+        if (status.isNotFinished) return
 
         val newPos = pos + if (front) orientation.facing else orientation.facing.opposite
         val state = world.getBlockState(newPos)
 
+        if(world.isOutsideBuildHeight(newPos)){
+            status = RequestStatus.FAILED
+            failReason = FailReason.BLOCKED
+            return
+        }
+
         if (state.block.canPlaceBlockAt(world, newPos)) {
             if (front) {
                 requestedAction = RobotAction.MOVE_FRONT
-                requestStatus = RequestStatus.PENDING
+                updateTask()
             } else {
                 requestedAction = RobotAction.MOVE_BACK
-                requestStatus = RequestStatus.PENDING
+                updateTask()
             }
         } else {
-            requestStatus = RequestStatus.FAILED
+            status = RequestStatus.FAILED
             failReason = FailReason.BLOCKED
         }
     }
 
     override fun rotateLeft() {
-        if (requestStatus.isNotFinished) return
+        if (status.isNotFinished) return
         requestedAction = RobotAction.ROTATE_LEFT
-        requestStatus = RequestStatus.PENDING
+        updateTask()
     }
 
     override fun rotateRight() {
-        if (requestStatus.isNotFinished) return
+        if (status.isNotFinished) return
         requestedAction = RobotAction.ROTATE_RIGHT
-        requestStatus = RequestStatus.PENDING
+        updateTask()
     }
 
     override fun rotateUp() {
-        if (requestStatus.isNotFinished) return
+        if (status.isNotFinished) return
         if (orientation.level != Computers.OrientationLevel.UP) {
             requestedAction = RobotAction.ROTATE_UP
-            requestStatus = RequestStatus.PENDING
+            updateTask()
         } else {
-            requestStatus = RequestStatus.FAILED
+            status = RequestStatus.FAILED
             failReason = FailReason.LIMIT_REACHED
         }
     }
 
     override fun rotateDown() {
-        if (requestStatus.isNotFinished) return
+        if (status.isNotFinished) return
         if (orientation.level != Computers.OrientationLevel.DOWN) {
             requestedAction = RobotAction.ROTATE_DOWN
-            requestStatus = RequestStatus.PENDING
+            updateTask()
         } else {
-            requestStatus = RequestStatus.FAILED
+            status = RequestStatus.FAILED
             failReason = FailReason.LIMIT_REACHED
         }
     }
 
     override fun mine() {
-        if (requestStatus.isNotFinished) return
+        if (status.isNotFinished) return
 
         val frontPos = pos + orientation.facing
         val frontBlock = world.getBlockState(frontPos)
 
         if (world.isAirBlock(frontPos)) {
-            requestStatus = RequestStatus.FAILED
+            status = RequestStatus.FAILED
             failReason = FailReason.AIR
             return
         }
         if (frontBlock.getBlockHardness(world, frontPos) < 0) {
-            requestStatus = RequestStatus.FAILED
+            status = RequestStatus.FAILED
             failReason = FailReason.UNBREAKABLE
             return
         }
@@ -163,11 +174,20 @@ class ModuleRobotControl(
 
         if (inventory.canAcceptAll(items)) {
             requestedAction = RobotAction.MINE
-            requestStatus = RequestStatus.PENDING
+            updateTask()
         } else {
-            requestStatus = RequestStatus.FAILED
+            status = RequestStatus.FAILED
             failReason = FailReason.INVENTORY_FULL
         }
+    }
+
+    override fun scan() {
+        if (status.isNotFinished) return
+
+        val frontPos = pos + orientation.facing
+
+        scanResult = if (world.isAirBlock(frontPos)) 0 else 1
+        status = RequestStatus.SUCCESSFUL
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
@@ -175,7 +195,7 @@ class ModuleRobotControl(
         add("request", requestedAction?.ordinal ?: -1)
         add("action", task?.action?.ordinal ?: -1)
         add("cooldown", task?.cooldown ?: -1)
-        add("requestStatus", requestStatus.ordinal)
+        add("requestStatus", status.ordinal)
         add("failReason", failReason)
         add("clientCooldown", clientCooldown)
         add("clientOrientation", clientOrientation?.ordinal ?: -1)
@@ -188,7 +208,7 @@ class ModuleRobotControl(
         val action = nbt.getInteger("action").let { if (it == -1) null else RobotAction.values()[it] }
         task = action?.taskFactory?.invoke()?.also { it.cooldown = nbt.getInteger("cooldown") }
 
-        requestStatus = RequestStatus.values()[nbt.getInteger("requestStatus")]
+        status = RequestStatus.values()[nbt.getInteger("requestStatus")]
         failReason = nbt.getInteger("failReason")
         clientCooldown = nbt.getInteger("clientCooldown")
         clientOrientation = nbt.getInteger("clientOrientation").let {

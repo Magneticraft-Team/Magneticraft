@@ -20,7 +20,7 @@
                 "layer0": "magneticraft:items/computer/floppy_disk_2"
             }
         }],
-        "js": [{
+        "shell": [{
             "textures": {
                 "layer0": "magneticraft:items/computer/floppy_disk_3"
             }

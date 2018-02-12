@@ -85,7 +85,15 @@ class TileMiningRobot : TileBase(), ITickable {
     val inventory = Inventory(18)
     val node = ElectricNode(ref)
 
-    val invModule = ModuleInventory(inventory)
+    val storageInventory = InventoryCapabilityFilter(
+            inventory = inventory,
+            inputSlots = (0..15).toList(),
+            outputSlots = (0..15).toList()
+    )
+
+    val invModule = ModuleInventory(
+            inventory = inventory,
+            capabilityFilter = { storageInventory })
 
     val energyModule = ModuleElectricity(listOf(node))
 
@@ -100,12 +108,6 @@ class TileMiningRobot : TileBase(), ITickable {
     val monitorModule = ModuleMonitor(ref)
     val floppyDriveModule = ModuleFloppyDrive(ref = ref, inventory = inventory, slot = 16)
     val networkCardModule = ModuleNetworkCard(ref)
-
-    val storageInventory = InventoryCapabilityFilter(
-            inventory = inventory,
-            inputSlots = (0..15).toList(),
-            outputSlots = (0..15).toList()
-    )
 
     val robotControlModule = ModuleRobotControl(
             ref = ref,

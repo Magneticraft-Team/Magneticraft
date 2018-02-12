@@ -32,6 +32,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     var inputBufferPtr = 0
     val outputBuffer = ByteArray(1024)
     var outputBufferPtr = 0
+    var hardwareLock = 0
 
     var connectionError = 0
 
@@ -76,6 +77,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
             ReadOnlyInt("connectionError", { connectionError }),
             ReadWriteInt("inputBufferPtr", { inputBufferPtr = it }, { inputBufferPtr }),
             ReadWriteInt("outputBufferPtr", { outputBufferPtr = it }, { outputBufferPtr }),
+            ReadWriteInt("hardwareLock", { hardwareLock = it }, { hardwareLock }),
             ReadWriteByteArray("inputBuffer", inputBuffer),
             ReadWriteByteArray("outputBuffer ", outputBuffer)
     )
@@ -99,46 +101,54 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
                 connectionError = SOCKET_CLOSED
                 closeTcpConnection()
             } else {
-                try {
-                    if (outputBufferPtr > outputBuffer.size || outputBufferPtr < 0) {
-                        connectionError = INVALID_OUTPUT_BUFFER_POINTER
-                        log(2, "Error INVALID_OUTPUT_BUFFER_POINTER $outputBufferPtr not in [0, ${outputBuffer.size})")
-                        closeTcpConnection()
-                    } else if (outputBufferPtr > 0) {
-                        it.getOutputStream().write(outputBuffer, 0, outputBufferPtr)
-                        // debug print request
-                        if(outputBufferPtr > 0){
-                            log(2, "Sending data: " + String(outputBuffer, 0, outputBufferPtr))
+                if (hardwareLock == 0) {
+                    try {
+                        if (outputBufferPtr > outputBuffer.size || outputBufferPtr < 0) {
+                            connectionError = INVALID_OUTPUT_BUFFER_POINTER
+                            log(2,
+                                    "Error INVALID_OUTPUT_BUFFER_POINTER $outputBufferPtr not in [0, ${outputBuffer.size})")
+                            closeTcpConnection()
+                        } else if (outputBufferPtr > 0) {
+                            it.getOutputStream().write(outputBuffer, 0, outputBufferPtr)
+                            // debug print request
+                            if (outputBufferPtr > 0) {
+                                log(2, "Sending data: " + String(outputBuffer, 0, outputBufferPtr))
+                            }
+                            outputBufferPtr = 0
                         }
-                        outputBufferPtr = 0
-                    }
-                } catch (e: Exception) {
-                    connectionError = UNABLE_TO_SEND_PACKET
-                    log(2, "Error UNABLE_TO_SEND_PACKET")
+                    } catch (e: Exception) {
+                        connectionError = UNABLE_TO_SEND_PACKET
+                        log(2, "Error UNABLE_TO_SEND_PACKET")
 
-                    closeTcpConnection()
-                    e.printStackTrace()
-                }
-                try {
-                    if (inputBufferPtr > inputBuffer.size || inputBufferPtr < 0) {
-                        connectionError = INVALID_INPUT_BUFFER_POINTER
-                        log(2, "Error INVALID_INPUT_BUFFER_POINTER $inputBufferPtr no in [0, ${inputBuffer.size})")
                         closeTcpConnection()
-                    } else {
-                        val stream = it.getInputStream()
-                        if (inputBuffer.size - inputBufferPtr > 0) {
-                            val read = stream.read(inputBuffer, inputBufferPtr, inputBuffer.size - inputBufferPtr)
-                            inputBufferPtr += read
-                            if(read > 0 && inputBufferPtr - read > 0){
-                                log(2, "Receiving data: " + String(inputBuffer, inputBufferPtr - read, read))
+                        e.printStackTrace()
+                    }
+                    try {
+                        if (inputBufferPtr > inputBuffer.size || inputBufferPtr < 0) {
+                            connectionError = INVALID_INPUT_BUFFER_POINTER
+                            log(2, "Error INVALID_INPUT_BUFFER_POINTER $inputBufferPtr no in [0, ${inputBuffer.size})")
+                            closeTcpConnection()
+                        } else {
+                            val stream = it.getInputStream()
+                            if (inputBuffer.size - inputBufferPtr > 0) {
+                                val read = stream.read(inputBuffer, inputBufferPtr, inputBuffer.size - inputBufferPtr)
+                                if (read > 0) {
+                                    inputBufferPtr += read
+                                    if (inputBufferPtr - read > 0) {
+                                        log(2, "Receiving data: " + String(inputBuffer, inputBufferPtr - read, read))
+                                    }
+                                } else if (read == -1) {
+                                    connectionError = SOCKET_CLOSED
+                                    closeTcpConnection()
+                                }
                             }
                         }
+                    } catch (e: Exception) {
+                        connectionError = UNABLE_TO_READ_PACKET
+                        log(2, "Error UNABLE_TO_READ_PACKET")
+                        closeTcpConnection()
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    connectionError = UNABLE_TO_READ_PACKET
-                    log(2, "Error UNABLE_TO_READ_PACKET")
-                    closeTcpConnection()
-                    e.printStackTrace()
                 }
             }
         }
@@ -210,6 +220,8 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
             socket = factory(ipStr, targetPort)
             connectionError = NO_ERROR
             activeSockets++
+            outputBufferPtr = 0
+            inputBufferPtr = 0
             log(1, "Socket created with ip '$ipStr' and port '$targetPort'")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -239,19 +251,19 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
 
 fun main(args: Array<String>) {
     val socketFactory = SSLSocketFactory.getDefault()
-    val socket = socketFactory.createSocket("pastebin.com", 443)//"raw.githubusercontent.com", 443)
+    val socket = socketFactory.createSocket("raw.githubusercontent.com", 443)// "pastebin.com", 443)//
 
     socket.outputStream.apply {
 
-        //        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/blockstates/battery.json HTTP/1.1\r\n" +
-//                "Host: raw.githubusercontent.com\r\n" +
-//                "Connection: close\r\n" +
-//                "\r\n").toByteArray())
+                write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/cpu/bios.bin HTTP/1.1\r\n" +
+                "Host: raw.githubusercontent.com\r\n" +
+                "Connection: close\r\n" +
+                "\r\n").toByteArray())
 
-        write(("GET /raw/pJwsc2XP HTTP/1.1\r\n" +
-               "Host: pastebin.com\r\n" +
-               "Connection: close\r\n" +
-               "\r\n").toByteArray())
+//        write(("GET /raw/pJwsc2XP HTTP/1.1\r\n" +
+//               "Host: pastebin.com\r\n" +
+//               "Connection: close\r\n" +
+//               "\r\n").toByteArray())
     }
 
     val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)

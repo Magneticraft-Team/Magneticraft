@@ -22,7 +22,7 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "drivers"
+    val img = "shell"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
     val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
@@ -39,7 +39,7 @@ fun main(args: Array<String>) {
 
     val bus = Bus(memory, mutableMapOf())
     val motherboard = Motherboard(cpu, memory, rom, bus)
-    val mbDevice = DeviceMotherboard(FakeRef,motherboard)
+    val mbDevice = DeviceMotherboard(FakeRef, motherboard)
 
     bus.devices[0xFF] = mbDevice
     bus.devices[0x00] = monitor
@@ -100,6 +100,7 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     window.setSize(8 * 80 + 10 + 16, 16 * 35 + 3 + 39)
     window.isVisible = true
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+
     window.addKeyListener(object : KeyListener {
         override fun keyTyped(e: KeyEvent) {
             if (e.keyChar.toInt() == 10 && useOs) {
@@ -112,7 +113,19 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
             monitor.loadFromClient(ibd)
         }
 
-        override fun keyPressed(e: KeyEvent?) = Unit
+        override fun keyPressed(e: KeyEvent) {
+            val code = when(e.keyCode){
+                37 -> 203
+                39 -> 205
+                else -> 0
+            }
+            if (code != 0) {
+                val ibd = IBD()
+                monitor.onKeyPressed(code)
+                monitor.saveToServer(ibd)
+                monitor.loadFromClient(ibd)
+            }
+        }
 
         override fun keyReleased(e: KeyEvent?) = Unit
     })

@@ -79,7 +79,7 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Max Stable Production")
     var thermopileProduction = 20.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per second, 1 Heat unit = 2 RF")
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick, 1 Heat unit = 2 RF")
     var solarMirrorHeatProduction = 8.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")

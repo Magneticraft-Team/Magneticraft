@@ -19,16 +19,17 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
                     ReadOnlyShort("status", { 0 })
             ),
             ReadWriteByte("signal", { signal(it) }, { 0 }),
-            ReadOnlyByte("request", { ((robot.requestedAction?.ordinal ?: -1) + 1).toByte() }),
-            ReadOnlyByte("requestStatus", { robot.requestStatus.ordinal.toByte() }),
+            ReadOnlyByte("requestStatus", { robot.status.ordinal.toByte() }),
             ReadOnlyByte("cooldown", { robot.cooldown.toByte() }),
+            ReadOnlyByte("orientation", {robot.orientationFlag.toByte()}),
             ReadOnlyInt("batteryCapacity", { robot.batterySize }),
             ReadOnlyInt("batteryEnergy", { robot.batteryCharge }),
-            ReadOnlyInt("failReason", { robot.failReason })
+            ReadOnlyInt("failReason", { robot.failReason }),
+            ReadOnlyInt("scanResult", { robot.scanResult })
     )
     //@formatter:on
 
-    fun signal(data: Byte){
+    fun signal(data: Byte) {
         val signal = data.toInt()
         when (signal) {
             1 -> robot.move(true)
@@ -38,6 +39,7 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
             5 -> robot.rotateUp()
             6 -> robot.rotateDown()
             7 -> robot.mine()
+            8 -> robot.scan()
         }
     }
 
@@ -47,7 +49,7 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
 
     override fun deserializeNBT(nbt: NBTTagCompound?) = Unit
 
-    override fun serializeNBT(): NBTTagCompound = newNbt { }
+    override fun serializeNBT(): NBTTagCompound = newNbt {}
 
     override fun getId(): NodeID = NodeID("mining_robot", pos, world)
 }

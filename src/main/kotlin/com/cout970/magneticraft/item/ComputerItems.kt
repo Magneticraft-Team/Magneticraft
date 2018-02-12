@@ -32,7 +32,7 @@ object ComputerItems : IItemMaker {
             "user" to 0,
             "lisp" to 1,
             "forth" to 2,
-            "drivers" to 3,
+            "shell" to 3,
             "basic" to 4,
             "vim" to 5,
             "asm" to 6
@@ -134,7 +134,7 @@ object ComputerItems : IItemMaker {
                         .toArray()
                         .map { "0123456789ABCDEF"[it and 0xF] }
                         .joinToString("")
-                        .let { Integer.parseInt(it, 16) }
+                        .let { java.lang.Long.decode("0x$it").toInt() }
 
                 nbt.add("serialNumber", num)
             }
