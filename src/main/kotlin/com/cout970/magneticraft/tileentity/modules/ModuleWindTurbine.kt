@@ -127,7 +127,9 @@ class ModuleWindTurbine(
     fun removeTurbineHitbox(centerBreaking: Boolean = false) {
         hasTurbineHitbox = false
         iterateHitbox { base ->
-            world.setBlockToAir(pos + base)
+            if (world.getBlockState(pos + base) == getReplaceBlock()) {
+                world.setBlockToAir(pos + base)
+            }
         }
         if (!centerBreaking) {
             container.sendUpdateToNearPlayers()
