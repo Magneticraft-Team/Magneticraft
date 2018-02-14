@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
     val floppyDrive = DeviceFloppyDrive(FakeRef) { if (useOs) osDisk else programDisk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
-//    networkCard.debugLevel = 5
+    networkCard.debugLevel = 5
 
     val cpu = CPU_MIPS()
     val memory = RAM(0x20000, true)
