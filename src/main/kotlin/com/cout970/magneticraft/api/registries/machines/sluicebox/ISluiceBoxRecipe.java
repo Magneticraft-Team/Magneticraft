@@ -26,23 +26,12 @@ public interface ISluiceBoxRecipe {
     ItemStack getInput();
 
     /**
-     * The primary output of this recipe
-     * The recipe will always return this stack as output
-     * WARNING: this should return a COPY of the output not the original instance of the output
-     *
-     * @return The primary output of this recipe
-     */
-    ItemStack getPrimaryOutput();
-
-    /**
-     * The secondary output of this recipe
-     * The recipe will return this stack as output if, and only if, a Random number between 0 and 1 is less
-     * that the probability of this recipe
+     * The outputs of this recipe
      * WARNING: this should return a COPY of the output not the original instance of the output
      *
      * @return The secondary outputs of this recipe
      */
-    List<Pair<ItemStack, Float>> getSecondaryOutput();
+    List<Pair<ItemStack, Float>> getOutputs();
 
     /**
      * Checks if this recipes has the same input as the given argument

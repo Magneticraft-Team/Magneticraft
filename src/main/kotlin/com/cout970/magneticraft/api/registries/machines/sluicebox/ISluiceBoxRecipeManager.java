@@ -45,4 +45,13 @@ public interface ISluiceBoxRecipeManager {
      * @return the new recipe
      */
     ISluiceBoxRecipe createRecipe(ItemStack input, ItemStack primaryOutput, List<Pair<ItemStack, Float>> secondaryOutput, boolean oreDict);
+
+    /**
+     * Creates a default recipe
+     * @param input the input stack
+     * @param outputs the output stacks and probability of every item to be created by the sluice box
+     * @param oreDict if ore dictionary should be used to check the inputs
+     * @return the new recipe
+     */
+    ISluiceBoxRecipe createRecipe(ItemStack input, List<Pair<ItemStack, Float>> outputs, boolean oreDict);
 }

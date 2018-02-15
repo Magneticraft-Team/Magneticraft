@@ -28,7 +28,7 @@ object SluiceBoxRecipeManager : ISluiceBoxRecipeManager {
     }
 
     override fun removeRecipe(recipe: ISluiceBoxRecipe): Boolean {
-        if (findRecipe(recipe.input) != null){
+        if (findRecipe(recipe.input) != null) {
             return recipes.remove(recipe)
         }
         return false
@@ -36,7 +36,13 @@ object SluiceBoxRecipeManager : ISluiceBoxRecipeManager {
 
     override fun getRecipes(): List<ISluiceBoxRecipe> = Collections.synchronizedList(recipes)
 
-    override fun createRecipe(input: ItemStack, primaryOutput: ItemStack,  secondaryOutput: List<Pair<ItemStack, Float>>, oreDict: Boolean): ISluiceBoxRecipe {
-        return SluiceBoxRecipe(input, primaryOutput, secondaryOutput, oreDict)
+    override fun createRecipe(input: ItemStack, primaryOutput: ItemStack, secondaryOutput: List<Pair<ItemStack, Float>>,
+                              oreDict: Boolean): ISluiceBoxRecipe {
+        return SluiceBoxRecipe(input, listOf(primaryOutput to 1f) + secondaryOutput, oreDict)
+    }
+
+    override fun createRecipe(input: ItemStack, outputs: MutableList<Pair<ItemStack, Float>>, oreDict: Boolean)
+            : ISluiceBoxRecipe {
+        return SluiceBoxRecipe(input, outputs, oreDict)
     }
 }

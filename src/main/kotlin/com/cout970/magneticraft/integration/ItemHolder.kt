@@ -17,18 +17,18 @@ object ItemHolder {
     val coalCokeBlock: ItemStack? = null
 
     @JvmField
-    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 800)
+    @GameRegistry.ItemStackHolder("thermalfoundation:material", meta = 800)
     val sawdust: ItemStack? = null
 
     @JvmField
-    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 768)
+    @GameRegistry.ItemStackHolder("thermalfoundation:material", meta = 768)
     val pulverizedCoal: ItemStack? = null
 
     @JvmField
-    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 769)
+    @GameRegistry.ItemStackHolder("thermalfoundation:material", meta = 769)
     val pulverizedCharcoal: ItemStack? = null
 
     @JvmField
-    @GameRegistry.ItemStackHolder("thermalfundation:material", meta = 770)
+    @GameRegistry.ItemStackHolder("thermalfoundation:material", meta = 770)
     val pulverizedObsidian: ItemStack? = null
 }

@@ -127,11 +127,8 @@ class ModuleSluiceBox(
         val pos = this.pos + facingGetter().toBlockPos()
 
         (0 until stack.count).forEach {
-            if (recipe.primaryOutput.isNotEmpty) {
-                world.dropItem(recipe.primaryOutput, pos, false)
-            }
-            recipe.secondaryOutput.forEach { (item, prob) ->
-                if (world.rand.nextFloat() < prob) {
+            recipe.outputs.forEach { (item, prob) ->
+                if (item.isNotEmpty && world.rand.nextFloat() < prob) {
                     world.dropItem(item, pos, false)
                 }
             }

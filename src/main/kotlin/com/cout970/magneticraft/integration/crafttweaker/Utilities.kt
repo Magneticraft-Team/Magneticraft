@@ -16,6 +16,12 @@ inline fun ItemStack.ifEmpty(action: () -> Unit) {
     }
 }
 
+inline fun ItemStack.ifNonEmpty(action: (ItemStack) -> Unit) {
+    if (!this.isEmpty) {
+        action(this)
+    }
+}
+
 fun applyAction(desc: String, func: () -> Unit) {
     CraftTweakerAPI.apply(Action(func, desc))
 }

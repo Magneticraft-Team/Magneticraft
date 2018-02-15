@@ -10,6 +10,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.Sluic
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.integration.ItemHolder
+import com.cout970.magneticraft.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.item.MetallicItems
@@ -64,22 +65,22 @@ fun registerRecipes() {
 
     addGrinderRecipe(Ores.OreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), Blocks.GRAVEL.stack(), 0.01f, 40f)
 
-    ItemHolder.sawdust?.let { sawdust ->
+    ItemHolder.sawdust?.ifNonEmpty { sawdust ->
         addGrinderRecipe(Blocks.LOG.stack(), sawdust.withSize(8), sawdust.withSize(4), 0.5f, 100f)
         addGrinderRecipe(Blocks.PLANKS.stack(), sawdust.withSize(2), sawdust.withSize(1), 0.5f, 80f)
     }
 
-    ItemHolder.pulverizedCoal?.let { pulverizedCoal ->
+    ItemHolder.pulverizedCoal?.ifNonEmpty { pulverizedCoal ->
         addGrinderRecipe(Blocks.COAL_ORE.stack(), pulverizedCoal.withSize(1), pulverizedCoal.withSize(1), 0.25f, 50f)
         addGrinderRecipe(Blocks.COAL_BLOCK.stack(), pulverizedCoal.withSize(9), pulverizedCoal.withSize(1), 0.15f, 120f)
         addGrinderRecipe(Items.COAL.stack(), pulverizedCoal.withSize(1), pulverizedCoal.withSize(1), 0.05f, 40f)
     }
 
-    ItemHolder.pulverizedObsidian?.let { pulverizedObsidian ->
+    ItemHolder.pulverizedObsidian?.ifNonEmpty { pulverizedObsidian ->
         addGrinderRecipe(Blocks.OBSIDIAN.stack(), pulverizedObsidian.withSize(4), pulverizedObsidian.withSize(1), 0.25f, 80f)
     }
 
-    ItemHolder.pulverizedCharcoal?.let { pulverizedCharcoal ->
+    ItemHolder.pulverizedCharcoal?.ifNonEmpty { pulverizedCharcoal ->
         addGrinderRecipe(Items.COAL.stack(meta = 1), pulverizedCharcoal.withSize(1), pulverizedCharcoal.withSize(1), 0.15f, 40f)
     }
 

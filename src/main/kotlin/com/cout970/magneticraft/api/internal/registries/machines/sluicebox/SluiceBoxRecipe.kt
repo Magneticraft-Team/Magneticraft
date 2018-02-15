@@ -11,8 +11,7 @@ import net.minecraftforge.oredict.OreDictionary
  */
 data class SluiceBoxRecipe(
         private val input: ItemStack,
-        private val primaryOutput: ItemStack,
-        private val secondaryOutput: List<Pair<ItemStack, Float>>,
+        private val outputs: List<Pair<ItemStack, Float>>,
         val oreDict: Boolean
 ) : ISluiceBoxRecipe {
 
@@ -24,10 +23,8 @@ data class SluiceBoxRecipe(
 
     override fun getInput(): ItemStack = input.copy()
 
-    override fun getPrimaryOutput(): ItemStack = primaryOutput.copy()
-
-    override fun getSecondaryOutput(): MutableList<Pair<ItemStack, Float>> {
-        return secondaryOutput.map { it.first.copy() to it.second }.toMutableList()
+    override fun getOutputs(): MutableList<Pair<ItemStack, Float>> {
+        return outputs.map { it.first.copy() to it.second }.toMutableList()
     }
 
     override fun matches(input: ItemStack): Boolean {

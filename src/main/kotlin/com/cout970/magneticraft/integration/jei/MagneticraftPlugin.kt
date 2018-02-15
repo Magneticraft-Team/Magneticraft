@@ -83,8 +83,7 @@ class MagneticraftPlugin : IModPlugin {
                 initFunc = { recipeLayout, recipeWrapper, ing ->
                     val recipe = recipeWrapper.recipe
 
-                    val outputs = (listOf(recipe.primaryOutput to 1f) + recipe.secondaryOutput)
-                            .filter { it.first.isNotEmpty }
+                    val outputs = recipe.outputs.filter { it.first.isNotEmpty }
 
                     recipeLayout.itemStacks.init(0, true, 41, 12)
                     val columns = Math.min(outputs.size, 9)
@@ -197,9 +196,7 @@ class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
         } else {
             ingredients.setInput(ItemStack::class.java, recipe.input)
         }
-        ingredients.setOutputs(ItemStack::class.java,
-                listOf(recipe.primaryOutput) + recipe.secondaryOutput.map { it.first }
-        )
+        ingredients.setOutputs(ItemStack::class.java, recipe.outputs.map { it.first })
     }
 }
 
