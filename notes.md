@@ -12,12 +12,13 @@
 - add pumpjack
 - fix pipes collision box and add auto-import
 - add heat system and remove all 'symbolic heat values'
-- add gears for steam pump tiers (and add a fucking GUI)
+- add gears for steam engine tiers (and add a fucking GUI)
 - add gui to the steam boiler
 - change tank model and add auto-export
 - add conveyor belt end that drops stuff in chests
 - add wire coil durability and remove auto-connect (make lag)
 - update forge
+- add shipping crate/container
 - the rest of the things that i can't remember
 
 
@@ -37,14 +38,14 @@
     - Import model
     - Add animations if needed
     
-Add Gui and Container
+- Add Gui and Container
     - Create class
     - Import texture
     - Add components
     - Set component parameters
     - Add slots and slot regions
     
-Add Multiblock logic
+- Add Multiblock logic
     - Inventory
     - Energy
     - Fluids
@@ -75,7 +76,7 @@ Add Multiblock logic
     - Import model
     - Add animations if needed
     
-Add Gui and Container
+- Add Gui and Container
     - Create class
     - Import texture
     - Add components
