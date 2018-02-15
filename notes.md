@@ -1,11 +1,25 @@
 ### TODO list
-- check crafting recipes
-- check jei
-- check craftweaker
-- update manual
+
+- fix manual markdown support
 - update conveyor belt model
 - add conveyor belt corners
 - add conveyor belt up/down blocks
+- add insert animation
+- add steam engine animation
+- add sieve animation, particles and sound
+- add grinder particles and sound
+- add flare stack
+- add pumpjack
+- fix pipes collision box and add auto-import
+- add heat system and remove all 'symbolic heat values'
+- add gears for steam pump tiers (and add a fucking GUI)
+- add gui to the steam boiler
+- change tank model and add auto-export
+- add conveyor belt end that drops stuff in chests
+- add wire coil durability and remove auto-connect (make lag)
+- update forge
+- the rest of the things that i can't remember
+
 
 ### Steps to add a new multiblock
 - Add Controller Block

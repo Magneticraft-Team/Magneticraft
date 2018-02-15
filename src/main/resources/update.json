@@ -6,7 +6,8 @@
         "2.0.2": "Fixed config value not updating, fixed CraftTweaker integration",
         "2.0.3": "Added coal coke as fuel for the combustion chamber, added oil generation, fixed several bugs",
         "2.0.4": "Fixed small bugs",
-        "2.1.0": "New content"
+        "2.1.0": "New content",
+        "2.1.1": "Hotfix: fixed robots"
     },
     "1.12.1": {
         "2.0.0": "Updated to 2.0.0",
@@ -14,18 +15,20 @@
         "2.0.2": "Fixed config value not updating, fixed CraftTweaker integration",
         "2.0.3": "Added coal coke as fuel for the combustion chamber, added oil generation, fixed several bugs",
         "2.0.4": "Fixed small bugs",
-        "2.1.0": "New content"
+        "2.1.0": "New content",
+        "2.1.1": "Hotfix: fixed robots"
     },
     "1.12.2": {
         "2.0.4": "Fixed small bugs",
-        "2.1.0": "New content"
+        "2.1.0": "New content",
+        "2.1.1": "Hotfix: fixed robots"
     },
     "promos": {
-        "1.12-latest": "2.1.0",
-        "1.12-recommended": "2.1.0",
-        "1.12.1-latest": "2.1.0",
-        "1.12.1-recommended": "2.1.0",
-        "1.12.2-latest": "2.1.0",
-        "1.12.2-recommended": "2.1.0"
+        "1.12-latest": "2.1.1",
+        "1.12-recommended": "2.1.1",
+        "1.12.1-latest": "2.1.1",
+        "1.12.1-recommended": "2.1.1",
+        "1.12.2-latest": "2.1.1",
+        "1.12.2-recommended": "2.1.1"
     }
 }
