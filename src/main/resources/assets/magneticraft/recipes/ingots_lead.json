@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetLead"
+    }
+  },
+  "result": {
+    "item": "magneticraft:ingots",
+    "data": 3
+  }
+}

@@ -6,12 +6,12 @@
   "key": {
     "A": {
       "item": "magneticraft:ingots",
-      "data": 1
+      "data": 3
     }
   },
   "result": {
     "item": "magneticraft:nuggets",
-    "data": 1,
+    "data": 3,
     "count": 9
   }
 }
