@@ -130,7 +130,7 @@ class MoveRobotTask(val front: Boolean) : EndTickRobotTask(
 ) {
 
     override fun startTick(mod: ModuleRobotControl) = mod.run {
-        val newPos = pos + if (front) mod.orientation.facing else mod.orientation.facing.opposite
+        val newPos = pos + orientation.facing.let { if (front) it else it.opposite }
 
         world.setBlockState(newPos, Computers.movingRobot.defaultState)
         mod.clientCooldown = action.cooldown

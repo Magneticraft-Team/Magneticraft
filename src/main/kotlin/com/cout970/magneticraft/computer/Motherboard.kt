@@ -92,6 +92,7 @@ class Motherboard(
     fun isOnline() = cpuCycles >= 0
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
+        sleep = nbt.getInteger("sleep")
         cpuCycles = nbt.getInteger("cycles")
         cpu.deserializeNBT(nbt.getCompoundTag("cpu"))
         memory.deserializeNBT(nbt.getCompoundTag("ram"))
@@ -99,6 +100,7 @@ class Motherboard(
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
         add("cycles", cpuCycles)
+        add("sleep", sleep)
         add("cpu", cpu.serializeNBT())
         add("ram", memory.serializeNBT())
     }

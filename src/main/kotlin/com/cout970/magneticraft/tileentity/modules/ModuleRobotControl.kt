@@ -95,10 +95,10 @@ class ModuleRobotControl(
     override fun move(front: Boolean) {
         if (status.isNotFinished) return
 
-        val newPos = pos + if (front) orientation.facing else orientation.facing.opposite
+        val newPos = pos + orientation.facing.let { if (front) it else it.opposite }
         val state = world.getBlockState(newPos)
 
-        if(world.isOutsideBuildHeight(newPos)){
+        if (world.isOutsideBuildHeight(newPos)) {
             status = RequestStatus.FAILED
             failReason = FailReason.BLOCKED
             return
@@ -195,6 +195,7 @@ class ModuleRobotControl(
         add("request", requestedAction?.ordinal ?: -1)
         add("action", task?.action?.ordinal ?: -1)
         add("cooldown", task?.cooldown ?: -1)
+        add("finish", task?.finish ?: -1)
         add("requestStatus", status.ordinal)
         add("failReason", failReason)
         add("clientCooldown", clientCooldown)
@@ -205,8 +206,18 @@ class ModuleRobotControl(
         device.deserializeNBT(nbt.getCompoundTag("device"))
         requestedAction = nbt.getInteger("request").let { if (it == -1) null else RobotAction.values()[it] }
 
-        val action = nbt.getInteger("action").let { if (it == -1) null else RobotAction.values()[it] }
-        task = action?.taskFactory?.invoke()?.also { it.cooldown = nbt.getInteger("cooldown") }
+        nbt.getInteger("action").let {
+            if (it != -1) {
+                val action = RobotAction.values()[it]
+
+                task = action.taskFactory().also {
+                    it.cooldown = nbt.getInteger("cooldown")
+                    it.finish = nbt.getInteger("finish").let { if (it == -1) null else it }
+                }
+            } else {
+                task = null
+            }
+        }
 
         status = RequestStatus.values()[nbt.getInteger("requestStatus")]
         failReason = nbt.getInteger("failReason")

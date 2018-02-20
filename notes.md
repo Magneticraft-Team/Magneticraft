@@ -1,6 +1,5 @@
 ### TODO list
 
-- fix ming robot desync on login
 - update conveyor belt model
 - add conveyor belt corners
 - add conveyor belt up/down blocks
@@ -23,6 +22,8 @@
 ### change log
 - updated forge
 - fix manual markdown support
+- fix ming robot desync on login
+
 
 ### Steps to add a new multiblock
 - Add Controller Block
