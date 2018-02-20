@@ -12,7 +12,6 @@ import com.cout970.magneticraft.util.vector.contains
 import com.cout970.magneticraft.util.vector.offset
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.util.text.TextFormatting
 
 /**
  * Created by cout970 on 2017/08/03.
@@ -51,7 +50,7 @@ class CompBookRenderer : IComponent {
         val section = book.sections[currentSection] ?: Section("empty", MarkdownDocument(emptyList()))
         val doc = section.document
 
-        pages = doc.mapToPages()
+        pages = MdRenderer.render(doc, pageSize, gui.fontHelper.FONT_HEIGHT, gui.fontHelper::getStringWidth)
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
@@ -125,101 +124,6 @@ class CompBookRenderer : IComponent {
         gui.drawTexture(DrawableBox(gui.pos + it.pos to it.size, uv, vec2Of(512)))
     }
 
-    fun MarkdownDocument.mapToPages(): List<Page> {
-        val ctx = Context()
-        val txt = root.flatMap { it.mapToText(ctx) }
-        return txt.groupBy { it.page }.map {
-            Page(
-                    text = it.value.filterIsInstance<NormalTextBox>(),
-                    links = it.value.filterIsInstance<LinkTextBox>(),
-                    index = it.key
-            )
-        }
-    }
-
-    fun Context.newLine() {
-        lastPosY += gui.fontHelper.FONT_HEIGHT + 2
-        lastPosX = 0
-        if (lastPosY > pageSize.yi) {
-            lastPosY = 0
-            page++
-        }
-    }
-
-    fun MarkdownTag.mapToText(ctx: Context): List<TextBox> {
-        when (this) {
-            is MarkdownText -> {
-                if (txt.isEmpty()) return emptyList()
-
-                val list = mutableListOf<TextBox>()
-
-                if (txt.length != 1 || txt != "\n") {
-                    txt.split(" ", "\n").filter { it.isNotEmpty() }.forEach {
-
-                        val size = gui.fontHelper.getStringWidth(ctx.prefix + it + " ")
-
-                        if (ctx.lastPosX + size > pageSize.xi) {
-                            ctx.newLine()
-                        }
-
-                        list += NormalTextBox(ctx.prefix + it, vec2Of(ctx.lastPosX, ctx.lastPosY), ctx.page)
-                        ctx.lastPosX += size
-                    }
-                }
-
-                if (txt.endsWith("\n")) {
-                    ctx.newLine()
-                }
-                return list
-            }
-            is MarkdownNewLine -> {
-                ctx.newLine()
-            }
-            is MarkdownLink -> {
-                val (linkSection, page) = parseUrl(url)
-                return listOf(LinkTextBox(childs.flatMap { it.mapToText(ctx) }, linkSection, page))
-            }
-            is MarkdownItalic -> {
-                ctx.prefix += TextFormatting.ITALIC
-                val ret = childs.flatMap { it.mapToText(ctx) }
-                ctx.prefix = ctx.prefix.substring(0, ctx.prefix.length - 2)
-                return ret
-            }
-            is MarkdownBold -> {
-                ctx.prefix += TextFormatting.BOLD
-                val ret = childs.flatMap { it.mapToText(ctx) }
-                ctx.prefix = ctx.prefix.substring(0, ctx.prefix.length - 2)
-                return ret
-            }
-            is MarkdownHeader -> {
-                ctx.prefix += TextFormatting.BOLD
-                val ret = childs.flatMap { it.mapToText(ctx) }
-                ctx.prefix = ctx.prefix.substring(0, ctx.prefix.length - 2)
-                return ret
-            }
-        }
-        return emptyList()
-    }
-
-    fun parseUrl(url: String): Pair<String, Int> {
-        val separator = url.indexOfLast { it == '#' }
-
-        val page = if (separator != -1) {
-            url.substringAfterLast('#').toIntOrNull() ?: 0
-        } else 0
-
-        val urlWithoutPage = if (separator != -1) {
-            url.substringBeforeLast('#')
-        } else url
-
-        val slashIndex = urlWithoutPage.indexOfLast { it == '/' }
-
-        val section = if (slashIndex == -1) {
-            urlWithoutPage
-        } else urlWithoutPage.substringAfterLast('/')
-
-        return section to page
-    }
 
     fun renderPage(page: Page, mouse: IVector2, pos: IVector2) {
         page.text.forEach {
@@ -239,39 +143,6 @@ class CompBookRenderer : IComponent {
                 color = color
         )
     }
-
-    data class Page(val text: List<NormalTextBox>, val links: List<LinkTextBox> = emptyList(), val index: Int)
-
-    abstract class TextBox(val txt: String, val pos: IVector2, val page: Int) {
-
-        abstract fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean
-    }
-
-    class NormalTextBox(txt: String, pos: IVector2, page: Int) : TextBox(txt, pos, page) {
-
-        override fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean {
-            val size = vec2Of(gui.fontHelper.getStringWidth(txt + " "), gui.fontHelper.FONT_HEIGHT)
-            return mouse in (pos + offset to size)
-        }
-    }
-
-    class LinkTextBox(
-            val words: List<TextBox>,
-            val linkSection: String,
-            val linkPage: Int
-    ) : TextBox(words.joinToString(), words[0].pos, words[0].page) {
-
-        override fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean {
-            return words.any { it.contains(mouse, gui, offset) }
-        }
-    }
-
-    data class Context(
-            var lastPosX: Int = 0,
-            var lastPosY: Int = 0,
-            var prefix: String = "",
-            var page: Int = 0
-    )
 
     enum class Arrow(val pos: IVector2, val size: IVector2 = vec2Of(18, 26) * scale,
                      val uvSize: IVector2 = vec2Of(18, 26),

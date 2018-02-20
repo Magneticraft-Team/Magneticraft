@@ -1,6 +1,6 @@
 ### TODO list
 
-- fix manual markdown support
+- fix ming robot desync on login
 - update conveyor belt model
 - add conveyor belt corners
 - add conveyor belt up/down blocks
@@ -17,10 +17,12 @@
 - change tank model and add auto-export
 - add conveyor belt end that drops stuff in chests
 - add wire coil durability and remove auto-connect (make lag)
-- update forge
 - add shipping crate/container
 - the rest of the things that i can't remember
 
+### change log
+- updated forge
+- fix manual markdown support
 
 ### Steps to add a new multiblock
 - Add Controller Block

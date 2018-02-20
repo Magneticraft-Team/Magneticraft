@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation
 import java.io.File
 import java.io.IOException
 import java.util.*
-import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
@@ -15,7 +14,7 @@ import java.util.zip.ZipFile
  */
 object ResourceList {
 
-    private fun getResourcesFromJarFile(file: File, pattern: Pattern): List<String> {
+    private fun getResourcesFromJarFile(file: File, pattern: Regex): List<String> {
         val returnVal = ArrayList<String>()
         val zf: ZipFile
         try {
@@ -28,8 +27,7 @@ object ResourceList {
         while (e.hasMoreElements()) {
             val ze = e.nextElement() as ZipEntry
             val fileName = ze.name
-            val accept = pattern.matcher(fileName).matches()
-            if (accept) {
+            if (pattern.matches(fileName)) {
                 returnVal.add(fileName)
             }
         }
@@ -42,7 +40,7 @@ object ResourceList {
         return returnVal
     }
 
-    private fun getResourcesFromDirectory(directory: File, pattern: Pattern): List<String> {
+    private fun getResourcesFromDirectory(directory: File, pattern: Regex): List<String> {
         val returnVal = ArrayList<String>()
         val fileList = directory.listFiles()!!
         for (file in fileList) {
@@ -51,8 +49,7 @@ object ResourceList {
             } else {
                 try {
                     val fileName = file.canonicalPath
-                    val accept = pattern.matcher(fileName).matches()
-                    if (accept) {
+                    if (pattern.matches(fileName)) {
                         returnVal.add(fileName)
                     }
                 } catch (e: IOException) {
@@ -65,7 +62,7 @@ object ResourceList {
 
     fun getModAssets(): List<String> {
         val file = Magneticraft.sourceFile
-        val pattern = ".*assets[/\\\\]magneticraft[/\\\\].*".toPattern()
+        val pattern = """.*assets[/\\]magneticraft[/\\].*""".toRegex()
         return if (file.isDirectory) {
             getResourcesFromDirectory(file, pattern)
         } else {
@@ -75,7 +72,7 @@ object ResourceList {
 
     fun getGuideBookLanguages(): List<String> {
         val file = Magneticraft.sourceFile
-        val pattern = ".*assets[/\\\\]magneticraft[/\\\\]guide[/\\\\].*".toPattern()
+        val pattern = """.*assets[/\\]magneticraft[/\\]guide[/\\].*""".toRegex()
         val files = if (file.isDirectory) {
             getResourcesFromDirectory(file, pattern)
         } else {
@@ -83,21 +80,21 @@ object ResourceList {
         }
         return files
                 .map {
-                    it.replace(".*assets[/\\\\]magneticraft[/\\\\]guide[/\\\\](.*)[/\\\\].*".toRegex(), "$1")
+                    it.replace(""".*assets[/\\]magneticraft[/\\]guide[/\\](.*)[/\\].*""".toRegex(), "$1")
                 }
                 .distinct()
     }
 
     fun getGuideBookPages(lang: String): List<ResourceLocation> {
         val file = Magneticraft.sourceFile
-        val pattern = ".*assets[/\\\\]magneticraft[/\\\\]guide[/\\\\]$lang[/\\\\].*".toPattern()
+        val pattern = """.*assets[/\\]magneticraft[/\\]guide[/\\]$lang[/\\].*""".toRegex()
         val files = if (file.isDirectory) {
             getResourcesFromDirectory(file, pattern)
         } else {
             getResourcesFromJarFile(file, pattern)
         }
         return files.map {
-            it.replace(".*assets[/\\\\]magneticraft[/\\\\]guide[/\\\\]$lang[/\\\\](.*)".toRegex(), "$1")
+            it.replace(""".*assets[/\\]magneticraft[/\\]guide[/\\]$lang[/\\](.*)""".toRegex(), "$1")
         }.map { name ->
             ResourceLocation(MOD_ID, "guide/$lang/$name")
         }
