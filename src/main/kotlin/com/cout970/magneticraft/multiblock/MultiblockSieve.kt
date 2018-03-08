@@ -29,7 +29,7 @@ object MultiblockSieve : Multiblock() {
         val B = baseBlock()
         val S = strippedBlock()
         val C = corrugatedIronBlock()
-        val P = collumnBlock()
+        val P = columnBlock(EnumFacing.UP)
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(

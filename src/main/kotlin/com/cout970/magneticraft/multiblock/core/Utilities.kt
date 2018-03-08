@@ -2,9 +2,14 @@ package com.cout970.magneticraft.multiblock.core
 
 import com.cout970.magneticraft.block.MultiblockParts
 import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.block.toColumnAxis
+import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.multiblock.components.ContextBlockComponent
 import com.cout970.magneticraft.multiblock.components.MainBlockComponent
 import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
+import com.cout970.magneticraft.util.vector.getRelative
 import net.minecraft.block.Block
+import net.minecraft.util.EnumFacing
 
 fun Multiblock.ofBlock(block: Block): SingleBlockComponent {
     return SingleBlockComponent(block.defaultState, Multiblocks.gap.defaultState)
@@ -40,8 +45,12 @@ fun Multiblock.electricBlock(): SingleBlockComponent {
     return SingleBlockComponent(block, Multiblocks.gap.defaultState)
 }
 
-fun Multiblock.collumnBlock(): SingleBlockComponent {
-    return SingleBlockComponent(MultiblockParts.column.defaultState, Multiblocks.gap.defaultState)
+fun Multiblock.columnBlock(dir: EnumFacing): ContextBlockComponent {
+    val block = MultiblockParts.column
+    return ContextBlockComponent(
+            { ctx -> ctx.facing.getRelative(dir).axis.toColumnAxis().getBlockState(block) },
+            block.defaultState.stack(), Multiblocks.gap.defaultState
+    )
 }
 
 fun Multiblock.mainBlockOf(it: Block): MainBlockComponent {

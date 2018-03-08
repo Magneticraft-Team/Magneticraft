@@ -23,7 +23,7 @@ object MultiblockSolarMirror : Multiblock() {
     init {
         val B = baseBlock()
         val G = grateBlock()
-        val I = electricBlock()
+        val I = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(

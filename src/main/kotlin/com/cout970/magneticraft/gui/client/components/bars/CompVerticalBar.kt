@@ -7,6 +7,7 @@ import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
 import com.cout970.magneticraft.util.vector.vec2Of
+import net.minecraft.client.renderer.GlStateManager
 
 /**
  * Created by cout970 on 09/07/2016.
@@ -28,11 +29,21 @@ open class CompVerticalBar(
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(BAR_TEXTURES)
         val level = (provider.getLevel() * 48).toInt()
+
+        GlStateManager.color(1f, 1f, 1f, 0.2f)
+        gui.drawTexture(DrawableBox(
+                screen = Pair(gui.pos + pos, vec2Of(5, 48)),
+                texture = vec2Of(index * 5, 0) to vec2Of(5, 48),
+                textureSize = vec2Of(64, 64)
+        ))
+        GlStateManager.color(1f, 1f, 1f, 1f)
+
         gui.drawTexture(DrawableBox(
                 screen = Pair(gui.pos + pos + vec2Of(0, 48 - level), vec2Of(5, level)),
                 texture = vec2Of(index * 5, 48 - level) to vec2Of(5, level),
                 textureSize = vec2Of(64, 64)
         ))
+
 //        gui.drawColor(gui.pos + pos to size, 0x7FFF7070.toInt())
     }
 

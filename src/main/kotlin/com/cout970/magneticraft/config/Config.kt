@@ -5,11 +5,11 @@ package com.cout970.magneticraft.config
  */
 
 const val CATEGORY_GENERAL = "general"
-const val CATEGORY_ORES = CATEGORY_GENERAL + ".ores"
-const val CATEGORY_ENERGY = CATEGORY_GENERAL + ".energy"
-const val CATEGORY_GUI = CATEGORY_GENERAL + ".gui"
-const val CATEGORY_PC = CATEGORY_GENERAL + ".pc"
-const val CATEGORY_MACHINES = CATEGORY_GENERAL + ".machines"
+const val CATEGORY_ORES = "$CATEGORY_GENERAL.ores"
+const val CATEGORY_ENERGY = "$CATEGORY_GENERAL.energy"
+const val CATEGORY_GUI = "$CATEGORY_GENERAL.gui"
+const val CATEGORY_PC = "$CATEGORY_GENERAL.pc"
+const val CATEGORY_MACHINES = "$CATEGORY_GENERAL.machines"
 
 object Config {
 
@@ -79,17 +79,17 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Max Stable Production")
     var thermopileProduction = 20.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick, 1 Heat unit = 2 RF")
-    var solarMirrorHeatProduction = 8.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick, 1 Heat unit = 1mB/t of steam = 2 RF")
+    var solarMirrorHeatProduction = 8
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
-    var batteryItemLowCapacity: Int = 250000
+    var batteryItemLowCapacity: Int = 250_000
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Medium Battery Capacity")
-    var batteryItemMediumCapacity: Int = 2500000
+    var batteryItemMediumCapacity: Int = 2_500_000
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Capacity")
-    var blockBatteryCapacity: Int = 1000000
+    var blockBatteryCapacity: Int = 1_000_000
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Battery Block Item charge and discharge " +
                                                        "speed in Joules/tick (Watts)")

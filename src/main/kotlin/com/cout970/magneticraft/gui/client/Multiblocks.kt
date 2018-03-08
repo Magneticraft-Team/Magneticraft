@@ -168,6 +168,15 @@ class GuiSolarTower(val tower: ContainerSolarTower) : GuiBase(tower) {
         +CompVerticalBar(prodCallback, 3, Vec2d(53, 16),
                 { listOf("Steam production: ${prodCallback.callback()} mB/t") })
 
+        val heatCallback = CallbackBarProvider(
+                { tile.solarTowerModule.production.storage.toDouble() },
+                { tile.steamBoilerModule.heatCapacity.toDouble() },
+                { 0.0 }
+        )
+
+        +CompVerticalBar(heatCallback, 2, Vec2d(42, 16),
+                { listOf("Heat received: ${heatCallback.callback()} Heat/t") })
+
         +CompFluidBar(vec2Of(64, 16), texture, vec2Of(0, 166), tile.waterTank)
         +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.steamTank)
 

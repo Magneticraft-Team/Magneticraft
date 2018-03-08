@@ -37,24 +37,29 @@ class ModuleSteamBoiler(
 
     override fun update() {
         if (world.isClient) return
+
         production.tick()
-        // has heat
-        if (heatUnits <= 0) return
+
         val waterLimit = inputTank.fluidAmount
         if (waterLimit <= 0) return
 
         val spaceLimit = (outputTank.capacity - outputTank.fluidAmount) / ConversionTable.WATER_TO_STEAM.toInt()
         if (spaceLimit <= 0) return
 
-        val operations = minOf(minOf(waterLimit, spaceLimit), minOf(maxWaterPerTick, heatUnits.toInt()))
-        if (operations <= 0) return
+        val heatLimit = (heatUnits * ConversionTable.HEAT_TO_STEAM / ConversionTable.WATER_TO_STEAM).toInt()
+        if (heatLimit <= 0) return
+
+        val water = minOf(minOf(waterLimit, spaceLimit), minOf(maxWaterPerTick, heatLimit))
+        if (water <= 0) return
 
         val fluid = FluidRegistry.getFluid("steam") ?: return
+        val steam = (water * ConversionTable.WATER_TO_STEAM).toInt()
+
         // boil water
-        inputTank.drainInternal(operations, true)
-        outputTank.fillInternal(FluidStack(fluid, operations * ConversionTable.WATER_TO_STEAM.toInt()), true)
-        production += operations * ConversionTable.WATER_TO_STEAM.toInt()
-        heatUnits -= operations
+        inputTank.drainInternal(water, true)
+        outputTank.fillInternal(FluidStack(fluid, steam), true)
+        production += steam
+        heatUnits -= steam
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {

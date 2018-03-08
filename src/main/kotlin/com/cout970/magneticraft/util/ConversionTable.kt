@@ -14,9 +14,11 @@ object ConversionTable {
     const val FE_TO_EU = 0.25         // 1FE = 0.25EU; | 1EU = 4FE
 
     // Steam conversion
-    const val STEAM_TO_FE = 2.0       // 1mb = 2.0FE   | 1FE = 0.5mb (20mb = 4MJ = 40RF = 40FE; using 2 MJ = 5 EU ratio)
-    const val STEAM_TO_EU = 0.5       // 1mb = 0.5EU   | 1EU = 2mb (STEAM_TO_FE * FE_TO_EU)
+    const val STEAM_TO_FE = 2.0       // 1mB = 2.0FE   | 1FE = 0.5mb (20mb = 4MJ = 40RF = 40FE; using 2 MJ = 5 EU ratio)
+    const val STEAM_TO_EU = 0.5       // 1mB = 0.5EU   | 1EU = 2mb (STEAM_TO_FE * FE_TO_EU)
     const val STEAM_TO_J = 2.0        // 1mB = 2.0J;   | 1J  = 0.5mB
+
+    const val HEAT_TO_STEAM = 1.0     // 1heat = 2 RF  | 1heat = 1mb
 
     // Fluids
     const val WATER_TO_STEAM = 10.0   // 1mB Water = 10mB Steam | 1mB Steam = 0.1 mB Water

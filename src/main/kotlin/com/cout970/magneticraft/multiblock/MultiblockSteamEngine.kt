@@ -27,7 +27,7 @@ object MultiblockSteamEngine : Multiblock() {
 
     init {
         val I = IgnoreBlockComponent
-        val C = collumnBlock()
+        val C = columnBlock(EnumFacing.UP)
         val B = ofBlock(Blocks.BRICK_BLOCK)
         val V = copperCoilBlock()
         val G = grateBlock()

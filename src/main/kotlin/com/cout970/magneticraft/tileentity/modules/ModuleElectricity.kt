@@ -52,7 +52,7 @@ class ModuleElectricity(
         val NEGATIVE_DIRECTIONS = EnumFacing.values().filter { it.axisDirection == EnumFacing.AxisDirection.NEGATIVE }
     }
 
-    lateinit override var container: IModuleContainer
+    override lateinit var container: IModuleContainer
 
     var autoConnectWires = false
 

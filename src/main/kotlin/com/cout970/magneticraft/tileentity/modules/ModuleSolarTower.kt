@@ -1,6 +1,10 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
+import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.vector.plus
@@ -16,15 +20,21 @@ class ModuleSolarTower(
 
     override lateinit var container: IModuleContainer
     var searchMirrors = false
+    val production = ValueAverage()
 
     override fun update() {
-        if(searchMirrors){
+        if (world.isClient) return
+
+        production.tick()
+
+        if (searchMirrors) {
             searchMirrors = false
             orientateNearMirrors()
         }
     }
 
-    fun applyHeat(heat: Float){
+    fun applyHeat(heat: Float) {
+        production += heat
         steamBoilerModule.applyHeat(heat)
     }
 
@@ -42,5 +52,9 @@ class ModuleSolarTower(
                 }
             }
         }
+    }
+
+    override fun getGuiSyncVariables(): List<SyncVariable> {
+        return listOf(production.toSyncVariable(DATA_ID_MACHINE_HEAT))
     }
 }

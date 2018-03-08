@@ -83,7 +83,7 @@ class TileMiningRobot : TileBase(), ITickable {
         get() = getBlockState()[Computers.PROPERTY_ROBOT_ORIENTATION] ?: Computers.RobotOrientation.NORTH
 
     val inventory = Inventory(18)
-    val node = ElectricNode(ref)
+    val node = ElectricNode(ref, capacity = 0.5)
 
     val storageInventory = InventoryCapabilityFilter(
             inventory = inventory,
@@ -99,8 +99,8 @@ class TileMiningRobot : TileBase(), ITickable {
 
     val energyStorage = ModuleInternalStorage(
             mainNode = node,
-            capacity = 10000,
-            maxChargeSpeed = 10.0,
+            capacity = 50000,
+            maxChargeSpeed = 50.0,
             upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
     )
 

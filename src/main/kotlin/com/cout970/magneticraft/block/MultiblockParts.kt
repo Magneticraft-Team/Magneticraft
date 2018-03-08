@@ -35,6 +35,7 @@ object MultiblockParts : IBlockMaker {
         parts = builder.withName("multiblock_parts").copy {
             states = PartType.values().toList()
         }.build()
+
         column = builder.withName("multiblock_column").copy {
             states = ColumnOrientation.values().toList()
             alwaysDropDefault = true
@@ -76,10 +77,10 @@ object MultiblockParts : IBlockMaker {
             return block.defaultState.withProperty(PROPERTY_COLUMN_AXIS, this)
         }
     }
+}
 
-    fun EnumFacing.Axis.toColumnAxis(): MultiblockParts.ColumnOrientation = when(this){
-        EnumFacing.Axis.X -> ColumnOrientation.AXIS_X
-        EnumFacing.Axis.Y -> ColumnOrientation.AXIS_Y
-        EnumFacing.Axis.Z -> ColumnOrientation.AXIS_Z
-    }
+fun EnumFacing.Axis.toColumnAxis(): MultiblockParts.ColumnOrientation = when(this){
+    EnumFacing.Axis.X -> MultiblockParts.ColumnOrientation.AXIS_X
+    EnumFacing.Axis.Y -> MultiblockParts.ColumnOrientation.AXIS_Y
+    EnumFacing.Axis.Z -> MultiblockParts.ColumnOrientation.AXIS_Z
 }
