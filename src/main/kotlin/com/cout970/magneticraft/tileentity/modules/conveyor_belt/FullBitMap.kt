@@ -32,27 +32,32 @@ class FullBitMap(val current: IBitMap, val others: Map<BitmapLocation, IBitMap>)
     }
 
     override fun mark(box: AABB) {
-        mark(vec2Of(box.minX, box.minZ) * 16, vec2Of(
-                box.maxX, box.maxZ) * 16)
+        mark(vec2Of(box.minX * 16.0, box.minZ * 16.0), vec2Of(box.maxX * 16.0, box.maxZ * 16.0))
     }
 
     override fun mark(start: IVector2, end: IVector2) {
-        for (i in Math.floor(start.x).toInt() until Math.floor(end.x).toInt()) {
-            for (j in Math.floor(start.y).toInt() until Math.floor(end.y).toInt()) {
-                this[i, j] = true
-            }
-        }
+        set(start, end, true)
     }
 
     override fun unmark(box: AABB) {
-        unmark(vec2Of(box.minX, box.minZ) * 16, vec2Of(
-                box.maxX, box.maxZ) * 16)
+        unmark(vec2Of(box.minX * 16, box.minZ * 16), vec2Of(box.maxX * 16, box.maxZ * 16))
     }
 
     override fun unmark(start: IVector2, end: IVector2) {
-        for (i in Math.floor(start.x).toInt() until Math.floor(end.x).toInt()) {
-            for (j in Math.floor(start.y).toInt() until Math.floor(end.y).toInt()) {
-                this[i, j] = false
+        set(start, end, false)
+    }
+
+    fun set(start: IVector2, end: IVector2, value: Boolean) {
+
+        val minX = Math.floor(start.x).toInt()
+        val maxX = Math.ceil(end.x).toInt()
+
+        val minY = Math.floor(start.y).toInt()
+        val maxY = Math.ceil(end.y).toInt()
+
+        for (i in minX until maxX) {
+            for (j in minY until maxY) {
+                this[i, j] = value
             }
         }
     }
@@ -63,11 +68,19 @@ class FullBitMap(val current: IBitMap, val others: Map<BitmapLocation, IBitMap>)
     }
 
     override fun test(start: IVector2, end: IVector2): Boolean {
-        for (i in Math.floor(start.x).toInt() until Math.floor(end.x).toInt()) {
-            for (j in Math.floor(start.y).toInt() until Math.floor(end.y).toInt()) {
+
+        val minX = Math.floor(start.x).toInt()
+        val maxX = Math.ceil(end.x).toInt()
+
+        val minY = Math.floor(start.y).toInt()
+        val maxY = Math.ceil(end.y).toInt()
+
+        for (i in minX until maxX) {
+            for (j in minY until maxY) {
                 if (this[i, j]) return false
             }
         }
+
         return true
     }
 
@@ -77,8 +90,7 @@ class FullBitMap(val current: IBitMap, val others: Map<BitmapLocation, IBitMap>)
     }
 
     override fun copy(): IBitMap {
-        return FullBitMap(current.copy(),
-                others.mapValues { it.value.copy() })
+        return FullBitMap(current.copy(), others.mapValues { it.value.copy() })
     }
 
     override fun toString(): String {

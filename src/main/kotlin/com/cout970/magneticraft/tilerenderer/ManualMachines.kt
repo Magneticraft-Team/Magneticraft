@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.tilerenderer
 
-import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.block.ManualMachines
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -10,15 +9,10 @@ import com.cout970.magneticraft.tileentity.TileSluiceBox
 import com.cout970.magneticraft.tileentity.modules.ModuleSluiceBox
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
-import com.cout970.modelloader.ModelData
-import com.cout970.modelloader.QuadProvider
-import com.cout970.modelloader.QuadStorage
 import com.cout970.modelloader.api.ModelLoaderApi
 import com.cout970.modelloader.api.ModelUtilties
-import com.cout970.vector.api.IVector2
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemSkull
 import net.minecraftforge.client.MinecraftForgeClient
@@ -53,7 +47,7 @@ object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
 
 @RegisterRenderer(TileSluiceBox::class)
 object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
-        modelLocation = { ModelResourceLocation(ManualMachines.sluiceBox.registryName, "model") },
+        modelLocation = modelOf(ManualMachines.sluiceBox),
         filters = listOf<(String) -> Boolean>({ it != "Shape17" }, { it == "Shape17" })
 ) {
 
@@ -84,40 +78,15 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         waterModel?.close()
-        val loc = ModelResourceLocation(ManualMachines.sluiceBox.registryName, "water")
+        val loc = modelOf(ManualMachines.sluiceBox, "water")()
         val model = ModelLoaderApi.getModel(loc) ?: return
+
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val waterFlow = textureMap.getAtlasSprite("minecraft:blocks/water_flow")
-        val finalModel = updateModelUvs(model, waterFlow)
+        val finalModel = ModelTransform.updateModelUvs(model, waterFlow)
+
         waterModel = ModelCache {
             ModelUtilties.renderModelParts(finalModel.modelData, finalModel.modelData.parts)
         }
-    }
-
-    fun updateModelUvs(provider: QuadProvider, sprite: Sprite): QuadProvider {
-        val quads = QuadStorage(
-                provider.modelData.quads.pos,
-                provider.modelData.quads.tex.map { sprite.mapUv(it) },
-                provider.modelData.quads.indices
-        )
-        val modelData = ModelData(
-                provider.modelData.useAmbientOcclusion,
-                provider.modelData.use3dInGui,
-                provider.modelData.particleTexture,
-                provider.modelData.parts,
-                quads
-        )
-        return QuadProvider(
-                modelData,
-                provider.particles,
-                provider.bakedQuads.flatMap { it.value }
-        )
-    }
-
-    fun Sprite.mapUv(uv: IVector2): IVector2 {
-        return com.cout970.vector.extensions.vec2Of(
-                getInterpolatedU(uv.xd * 16),
-                getInterpolatedV(uv.yd * 16)
-        )
     }
 }

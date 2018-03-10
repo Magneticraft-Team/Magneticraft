@@ -10,14 +10,10 @@ import com.cout970.magneticraft.tileentity.TileCopperTank
 import com.cout970.magneticraft.tileentity.TileIronPipe
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
-import com.cout970.magneticraft.tilerenderer.core.Utilities
-import com.cout970.magneticraft.tilerenderer.core.px
+import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.MinecraftForgeClient
@@ -30,7 +26,7 @@ import org.lwjgl.opengl.GL11
 
 @RegisterRenderer(TileCopperTank::class)
 object TileRendererCopperTank : TileRendererSimple<TileCopperTank>(
-        modelLocation = { ModelResourceLocation(FluidMachines.copperTank.registryName, "model") }
+        modelLocation = modelOf(FluidMachines.copperTank)
 ) {
 
 
@@ -64,7 +60,7 @@ object TileRendererCopperTank : TileRendererSimple<TileCopperTank>(
 
 @RegisterRenderer(TileIronPipe::class)
 object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
-        modelLocation = { ModelResourceLocation(FluidMachines.ironPipe.registryName, "model") },
+        modelLocation = modelOf(FluidMachines.ironPipe),
         filters = filterOf(listOf("base", "up", "down", "north", "south", "west", "east"))
 ) {
 
@@ -81,9 +77,11 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
         models[0].renderTextured()
         sides.forEach {
             val tile = te.world.getTileEntity(te.pos + it.first) ?: return@forEach
+
             FLUID_HANDLER!!.fromTile(tile, it.first.opposite)?.let { _ ->
                 models[it.second].render()
             }
+
             (tile as? TileBase)?.getModule<ModulePipe>()?.let { mod ->
                 if (mod.type == te.pipeModule.type) {
                     models[it.second].render()

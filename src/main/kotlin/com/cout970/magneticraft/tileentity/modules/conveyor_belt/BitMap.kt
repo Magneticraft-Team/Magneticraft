@@ -19,8 +19,7 @@ open class BitMap(val map: BooleanArray = BooleanArray(16 * 16)) : IBitMap {
     }
 
     override fun mark(box: AABB) {
-        mark(vec2Of(box.minX, box.minZ) * 16, vec2Of(
-                box.maxX, box.maxZ) * 16)
+        mark(vec2Of(box.minX, box.minZ) * 16, vec2Of(box.maxX, box.maxZ) * 16)
     }
 
     override fun mark(start: IVector2, end: IVector2) {
@@ -32,8 +31,7 @@ open class BitMap(val map: BooleanArray = BooleanArray(16 * 16)) : IBitMap {
     }
 
     override fun unmark(box: AABB) {
-        unmark(vec2Of(box.minX, box.minZ) * 16, vec2Of(
-                box.maxX, box.maxZ) * 16)
+        unmark(vec2Of(box.minX, box.minZ) * 16, vec2Of(box.maxX, box.maxZ) * 16)
     }
 
     override fun unmark(start: IVector2, end: IVector2) {
@@ -46,8 +44,7 @@ open class BitMap(val map: BooleanArray = BooleanArray(16 * 16)) : IBitMap {
 
     // Returns true if there and empty space in the hitbox area
     override fun test(box: AABB): Boolean {
-        return test(vec2Of(box.minX, box.minZ) * 16, vec2Of(
-                box.maxX, box.maxZ) * 16)
+        return test(vec2Of(box.minX, box.minZ) * 16, vec2Of(box.maxX, box.maxZ) * 16)
     }
 
     override fun test(start: IVector2, end: IVector2): Boolean {

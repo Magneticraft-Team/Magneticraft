@@ -1,15 +1,18 @@
 package com.cout970.magneticraft.tilerenderer.custom
 
-import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import com.cout970.modelloader.QuadProvider
+import com.cout970.modelloader.api.ModelLoaderApi
+import com.cout970.modelloader.api.ModelUtilties
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.util.ResourceLocation
 
 /**
  * Created by cout970 on 2017/06/16.
@@ -18,22 +21,24 @@ import net.minecraft.client.renderer.texture.TextureMap
 object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
 
     val texture = resource("textures/blocks/machines/conveyor_belt.png")
+    val cornerTexture = resource("textures/blocks/machines/conveyor_belt_corner.png")
 
-    var axisBars: ModelCache? = null
+    var rest: ModelCache? = null
+    var belt: ModelCache? = null
     var backLegs: ModelCache? = null
     var frontLegs: ModelCache? = null
     var lateralLeft: ModelCache? = null
     var lateralRight: ModelCache? = null
     var panelLeft: ModelCache? = null
     var panelRight: ModelCache? = null
-    var rollers: List<Pair<IVector3, ModelCache?>> = emptyList()
-
+    var corner: ModelCache? = null
+    var cornerBelt: ModelCache? = null
 
     override fun renderTileEntityAt(te: TileConveyorBelt, x: Double, y: Double, z: Double, partialTicks: Float,
                                     destroyStage: Int) {
 
         // error loading the model
-        axisBars ?: return
+        rest ?: return
 
         stackMatrix {
             translate(x, y, z)
@@ -45,17 +50,21 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
 //            renderHitboxes(te)
         }
 
-//        if (te.pos.xi == -261 && te.pos.zi == 322) {
-//        renderBitmap(te, x, y, z)
+//        if (te.pos.xi == -391 && te.pos.zi == -280 ||
+//            te.pos.xi == -392 && te.pos.zi == -280 ||
+//            te.pos.xi == -392 && te.pos.zi == -281 ||
+//            te.pos.xi == -391 && te.pos.zi == -281 ||
+//            te.pos.xi == -391 && te.pos.zi == -280) {
+//            renderBitmap(te, x, y, z)
 //        }
     }
 
+    // debug
     fun renderHitboxes(te: TileConveyorBelt) {
         te.conveyorModule.boxes.forEach {
             Utilities.renderBox(it.getHitBox())
         }
     }
-
 
     // debug bitmaps
     fun renderBitmap(te: TileConveyorBelt, x: Double, y: Double, z: Double) {
@@ -72,19 +81,17 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
 
             for (i in 0 until 16) {
                 for (j in 0 until 16) {
-                    if (!bitmap2[i, j]) {
-                        Utilities.renderBox(
-                                vec3Of(i, 0, j) * PIXEL toAABBWith vec3Of(i + 1, 0, j + 1) * PIXEL,
-                                vec3Of(1, 1, 1))
-                    } else {
-                        Utilities.renderBox(
-                                vec3Of(i, 0, j) * PIXEL toAABBWith vec3Of(i + 1, 1, j + 1) * PIXEL,
-                                vec3Of(0, 0, 1))
-                    }
+
+                    val color = if (!bitmap2[i, j]) vec3Of(1, 1, 1) else vec3Of(0, 0, 1)
+                    val h = if (bitmap2[i, j]) 1 else 0
+
+                    Utilities.renderBox(
+                            vec3Of(i, h, j) * PIXEL toAABBWith vec3Of(i + 1, h, j + 1) * PIXEL, color)
                 }
             }
         }
     }
+
 
     fun renderDynamicParts(te: TileConveyorBelt, partialTicks: Float) {
 
@@ -99,85 +106,111 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
         }
     }
 
+
     fun renderStaticParts(te: TileConveyorBelt) {
 
-        bindTexture(texture)
-        axisBars?.render()
+        val mod = te.conveyorModule
 
-        val backTile = te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.opposite.directionVec))
-        if (backTile?.facing == te.facing) {
+        if (mod.isCorner) {
             stackMatrix {
-                translate(0f, 0f, PIXEL)
+
+                if (mod.hasRight()) {
+                    rotate(90f, 0f, 1f, 0f)
+                    scale(-1f, 1f, 1f)
+                    GlStateManager.cullFace(GlStateManager.CullFace.FRONT)
+
+                    bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+                    cornerBelt?.render()
+
+                    bindTexture(cornerTexture)
+                    corner?.render()
+
+                    GlStateManager.cullFace(GlStateManager.CullFace.BACK)
+                } else {
+                    translate(1f, 0f, 0f)
+                    rotate(-90f, 0f, 1f, 0f)
+
+                    bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+                    cornerBelt?.render()
+
+                    bindTexture(cornerTexture)
+                    corner?.render()
+                }
+            }
+
+        } else {
+            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            belt?.render()
+
+            bindTexture(texture)
+            rest?.render()
+
+            if (mod.hasBack()) {
+                stackMatrix {
+                    translate(0f, 0f, PIXEL)
+                    backLegs?.render()
+                }
+            } else {
                 backLegs?.render()
             }
-        } else {
 
-            backLegs?.render()
-        }
+            if (!mod.hasFront()) {
+                frontLegs?.render()
+            }
 
-        val frontTile = te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.directionVec))
-        if (frontTile?.facing != te.facing) {
-            frontLegs?.render()
-        }
+            if (mod.hasLeft()) {
+                lateralLeft?.render()
+            } else {
+                panelLeft?.render()
+            }
 
-        val leftTile = te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.rotateYCCW().directionVec))
-        val useLeft = leftTile?.facing == te.facing.rotateY()
-        if (useLeft) {
-            lateralLeft?.render()
-        } else {
-            panelLeft?.render()
-        }
-
-        val rightTile = te.world.getTile<TileConveyorBelt>(te.pos.add(te.facing.rotateY().directionVec))
-        val useRight = rightTile?.facing == te.facing.rotateYCCW()
-        if (useRight) {
-            lateralRight?.render()
-        } else {
-            panelRight?.render()
-        }
-
-        rollers.forEach {
-            if (it.second != null) {
-                val angle = te.rotation
-                val delta = System.currentTimeMillis() - te.deltaTimer
-                te.deltaTimer = System.currentTimeMillis()
-                te.rotation = (te.rotation + delta * 0.1f) % 360
-                val trans = it.first * PIXEL
-
-                pushMatrix()
-                translate(trans.xd, trans.yd, trans.zd)
-                rotate(-angle, 1f, 0f, 0f)
-                translate(-trans.xd, -trans.yd, -trans.zd)
-                it.second?.render()
-                popMatrix()
+            if (mod.hasRight()) {
+                lateralRight?.render()
+            } else {
+                panelRight?.render()
             }
         }
     }
 
     override fun onModelRegistryReload() {
-        val loc = ModelResourceLocation(AutomaticMachines.conveyorBelt.registryName, "model")
+        val base = modelOf(AutomaticMachines.conveyorBelt, "base")()
+        val anim = modelOf(AutomaticMachines.conveyorBelt, "anim")()
+        val cornerBase = modelOf(AutomaticMachines.conveyorBelt, "corner_base")()
+        val cornerAnim = modelOf(AutomaticMachines.conveyorBelt, "corner_anim")()
         //cleaning
-        axisBars?.close()
+
+        corner?.close()
+        cornerBelt?.close()
+        rest?.close()
+        belt?.close()
         backLegs?.close()
         frontLegs?.close()
-        rollers.forEach { it.second?.close() }
         lateralLeft?.close()
         lateralRight?.close()
 
-        axisBars = ModelCacheFactory.createCache(loc) { it.startsWith("axis") }
-        rollers = listOf(
-                vec3Of(0.0, 11, 1.25) to ModelCacheFactory.createCache(loc) { it == "roller5" }, // 1
-                vec3Of(0.0, 11, 3.85) to ModelCacheFactory.createCache(loc) { it == "roller2" }, // 2
-                vec3Of(0.0, 11, 6.6) to ModelCacheFactory.createCache(loc) { it == "roller3" }, // 3
-                vec3Of(0.0, 11, 9.2) to ModelCacheFactory.createCache(loc) { it == "roller6" }, // 4
-                vec3Of(0.0, 11, 11.9) to ModelCacheFactory.createCache(loc) { it == "roller4" }, // 5
-                vec3Of(0.0, 11, 14.65) to ModelCacheFactory.createCache(loc) { it == "roller1" } // 6
-        )
-        lateralLeft = ModelCacheFactory.createCache(loc) { it.startsWith("lateral_left") }
-        lateralRight = ModelCacheFactory.createCache(loc) { it.startsWith("lateral_right") }
-        panelLeft = ModelCacheFactory.createCache(loc) { it.startsWith("panel_left") }
-        panelRight = ModelCacheFactory.createCache(loc) { it.startsWith("panel_right") }
-        backLegs = ModelCacheFactory.createCache(loc) { it.startsWith("back_leg") }
-        frontLegs = ModelCacheFactory.createCache(loc) { it.startsWith("front_leg") }
+        rest = ModelCacheFactory.createCache(base) {
+            !it.startsWith("lateral_left") && !it.startsWith("lateral_right") && !it.startsWith("panel_left") &&
+            !it.startsWith("panel_right") && !it.startsWith("back_leg") && !it.startsWith("front_leg")
+        }
+        lateralLeft = ModelCacheFactory.createCache(base) { it.startsWith("lateral_left") }
+        lateralRight = ModelCacheFactory.createCache(base) { it.startsWith("lateral_right") }
+        panelLeft = ModelCacheFactory.createCache(base) { it.startsWith("panel_left") }
+        panelRight = ModelCacheFactory.createCache(base) { it.startsWith("panel_right") }
+        backLegs = ModelCacheFactory.createCache(base) { it.startsWith("back_leg") }
+        frontLegs = ModelCacheFactory.createCache(base) { it.startsWith("front_leg") }
+        corner = ModelCacheFactory.createCache(cornerBase)
+
+        val beltModel = ModelLoaderApi.getModel(anim) ?: return
+        val cornerBeltModel = ModelLoaderApi.getModel(cornerAnim) ?: return
+
+        belt = updateTexture(beltModel, resource("blocks/machines/conveyor_belt_anim"))
+        cornerBelt = updateTexture(cornerBeltModel, resource("blocks/machines/conveyor_belt_anim"))
+    }
+
+    private fun updateTexture(model: QuadProvider, texture: ResourceLocation): ModelCache {
+        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+        val animTexture = textureMap.getAtlasSprite(texture.toString())
+        val finalModel = ModelTransform.updateModelUvs(model, animTexture)
+        return ModelCache { ModelUtilties.renderModelParts(finalModel.modelData, finalModel.modelData.parts) }
     }
 }

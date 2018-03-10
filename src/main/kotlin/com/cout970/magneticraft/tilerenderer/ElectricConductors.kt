@@ -11,9 +11,9 @@ import com.cout970.magneticraft.tileentity.TileElectricPoleTransformer
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
 import com.cout970.magneticraft.tilerenderer.core.Utilities
+import com.cout970.magneticraft.tilerenderer.core.modelOf
 import com.cout970.magneticraft.util.vector.minus
 import com.cout970.magneticraft.util.vector.vec3Of
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.util.EnumFacing
 
 /**
@@ -23,7 +23,7 @@ import net.minecraft.util.EnumFacing
 
 @RegisterRenderer(TileConnector::class)
 object TileRendererConnector : TileRendererSimple<TileConnector>(
-        modelLocation = { ModelResourceLocation(ElectricConductors.connector.registryName, "model") },
+        modelLocation = modelOf(ElectricConductors.connector),
         filters = listOf<(String) -> Boolean>({ !it.startsWith("Base") }, { it.startsWith("Base") })
 ) {
 
@@ -55,7 +55,7 @@ object TileRendererConnector : TileRendererSimple<TileConnector>(
 
 @RegisterRenderer(TileElectricPole::class)
 object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
-        modelLocation = { ModelResourceLocation(ElectricConductors.electric_pole.registryName, "model") }
+        modelLocation = modelOf(ElectricConductors.electric_pole)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileElectricPole) {
@@ -86,7 +86,7 @@ object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
 
 @RegisterRenderer(TileElectricPoleTransformer::class)
 object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPoleTransformer>(
-        modelLocation = { ModelResourceLocation(ElectricConductors.electric_pole_transformer.registryName, "model") }
+        modelLocation = modelOf(ElectricConductors.electric_pole_transformer)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileElectricPoleTransformer) {

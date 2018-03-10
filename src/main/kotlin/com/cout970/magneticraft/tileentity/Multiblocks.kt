@@ -241,7 +241,7 @@ class TileGrinder : TileMultiblock(), ITickable {
     val itemExporterModule = ModuleItemExporter(
             facing = { facing },
             inventory = InventoryCapabilityFilter(inventory, listOf(1, 2), listOf(1, 2)),
-            ports = { listOf(BlockPos(0, 0, -3) to EnumFacing.SOUTH) }
+            ports = { listOf(BlockPos(0, 0, -3) to EnumFacing.SOUTH, BlockPos(0, 0, -3) to EnumFacing.UP) }
     )
 
     val openGuiModule = ModuleOpenGui()

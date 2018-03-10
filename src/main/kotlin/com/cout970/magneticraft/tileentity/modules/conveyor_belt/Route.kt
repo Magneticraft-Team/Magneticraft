@@ -6,6 +6,7 @@ enum class Route(val leftSide: Boolean, val isRect: Boolean, val isShort: Boolea
     LEFT_SHORT(true, false, true),
     LEFT_LONG(true, false, false),
     RIGHT_SHORT(false, false, true),
-    RIGHT_LONG(false, false, false);
-
+    RIGHT_LONG(false, false, false),
+    LEFT_CORNER(true, false, false),
+    RIGHT_CORNER(false, false, false);
 }

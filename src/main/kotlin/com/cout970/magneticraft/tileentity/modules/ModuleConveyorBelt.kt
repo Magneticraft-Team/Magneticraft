@@ -1,13 +1,16 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.item.itemblock.ItemBlockBase
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.tileentity.TimeCache
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -18,6 +21,10 @@ import com.cout970.magneticraft.util.newNbt
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.items.IItemHandler
 
 /**
  * Created by cout970 on 2017/06/17.
@@ -28,17 +35,26 @@ class ModuleConveyorBelt(
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer
+
+    val tileRefCallback = object : ITileRef {
+        override fun getWorld(): World = container.world
+        override fun getPos(): BlockPos = container.pos
+    }
+
     val facing get() = facingGetter()
 
     val boxes = mutableListOf<BoxedItem>()
     var toUpdate = false
-    val newBoxes = mutableListOf<BoxedItem>()
-    var flip = true
+    private val newBoxes = mutableListOf<BoxedItem>()
+    private var flip = true
+    private var needsSync = true
 
     fun generateGlobalBitMap(): IBitMap {
         val map = getSurroundMap()
-        val bitmap = FullBitMap(BitMap(), map.entries.map { (key, _) -> key to BitMap() }.toMap())
+        val bitmap = FullBitMap(BitMap(), map.mapValues { BitMap() })
+
         boxes.forEach { bitmap.mark(it.getHitBox()) }
+
         map.forEach { pos, mod ->
             mod.boxes.forEach {
                 bitmap.mark(pos.fromExternalToLocal(it.getHitBox()))
@@ -47,11 +63,33 @@ class ModuleConveyorBelt(
         return bitmap
     }
 
+    val hasBack = TimeCache(tileRefCallback, 10) {
+        world.getTile<TileConveyorBelt>(pos.add(facing.opposite.directionVec))?.facing == facing
+    }
+
+    val hasFront = TimeCache(tileRefCallback, 10) {
+        world.getTile<TileConveyorBelt>(pos.add(facing.directionVec)) != null
+    }
+
+    val hasLeft = TimeCache(tileRefCallback, 10) {
+        world.getTile<TileConveyorBelt>(pos.add(facing.rotateYCCW().directionVec))?.facing == facing.rotateY()
+    }
+
+    val hasRight = TimeCache(tileRefCallback, 10) {
+        world.getTile<TileConveyorBelt>(pos.add(facing.rotateY().directionVec))?.facing == facing.rotateYCCW()
+    }
+
+    val isCorner
+        get() = !hasBack() && hasFront() && (hasLeft() xor hasRight())
+
     override fun update() {
         advanceSimulation()
     }
 
     fun advanceSimulation() {
+        // debug
+//        if (world.isServer || world.totalWorldTime % 20 != 0L) return
+
         if (toUpdate) {
             boxes.clear()
             boxes.addAll(newBoxes)
@@ -65,9 +103,11 @@ class ModuleConveyorBelt(
         val limit = if (frontTile == null) 13f else 15f
 
         val fullBitMap = generateGlobalBitMap()
+        val now = world.totalWorldTime
 
         boxes.forEach {
-            if (it.lastTick != world.totalWorldTime) {
+
+            if (it.lastTick != now) {
                 if (it.position <= limit) {
 
                     val speed = (if (it.route.isShort) 2f else 1f)
@@ -84,7 +124,7 @@ class ModuleConveyorBelt(
                 } else {
                     it.locked = true
                 }
-                it.lastTick = world.totalWorldTime
+                it.lastTick = now
             }
         }
         // Move to next belt
@@ -94,13 +134,18 @@ class ModuleConveyorBelt(
                 frontTile.conveyorModule.addItem(it.item, facing, it.route)
             }
             if (removed) {
-                container.sendUpdateToNearPlayers()
+                markUpdate()
             }
+        }
+
+        if (needsSync && world.isServer) {
+            container.sendUpdateToNearPlayers()
+            needsSync = false
         }
     }
 
     // Note: this cannot be called on deserializeNBT or the game will crash of StackOverflow
-    fun getSurroundMap(): Map<BitmapLocation, ModuleConveyorBelt> {
+    val getSurroundMap = TimeCache(tileRefCallback, 10) {
         val map = mutableMapOf<BitmapLocation, ModuleConveyorBelt>()
 
         world.getTile<TileConveyorBelt>(pos.offset(facing.opposite))?.let {
@@ -121,7 +166,7 @@ class ModuleConveyorBelt(
                 else -> Unit
             }
         }
-        return map
+        map
     }
 
     private fun checkCollision(thisBitMap: IBitMap, boxedItem: BoxedItem, speed: Float): Boolean {
@@ -138,23 +183,24 @@ class ModuleConveyorBelt(
         return tempResult
     }
 
-    fun addItem(stack: ItemStack): Boolean {
-        val route = if (flip) {
-            Route.LEFT_FORWARD
-        } else {
-            Route.RIGHT_FORWARD
-        }
-        flip = !flip
+    fun addItem(stack: ItemStack, simulated: Boolean): Boolean {
+
+        val route = if (flip) Route.LEFT_FORWARD else Route.RIGHT_FORWARD
+
+        if (!simulated)
+            flip = !flip
+
         val box = BoxedItem(stack.copy(), 2f, route, world.totalWorldTime)
         val bitmap = BitMap().apply { boxes.forEach { mark(it.getHitBox()) } }
 
-        if (bitmap.test(box.getHitBox())) {
+        val test = bitmap.test(box.getHitBox())
+
+        if (test && !simulated) {
             boxes += box
-            container.sendUpdateToNearPlayers()
-            return true
-        } else {
-            return false
+            markUpdate()
         }
+
+        return test
     }
 
     fun addItem(stack: ItemStack, side: EnumFacing, oldRoute: Route): Boolean {
@@ -162,13 +208,14 @@ class ModuleConveyorBelt(
         val box = BoxedItem(stack.copy(), 0f, newRoute, world.totalWorldTime)
         val bitmap = BitMap().apply { boxes.forEach { mark(it.getHitBox()) } }
 
-        if (bitmap.test(box.getHitBox())) {
+        val test = bitmap.test(box.getHitBox())
+
+        if (test) {
             boxes += box
-            container.sendUpdateToNearPlayers()
-            return true
-        } else {
-            return false
+            markUpdate()
         }
+
+        return test
     }
 
     fun getRoute(facing: EnumFacing, side: EnumFacing, oldRoute: Route): Route {
@@ -179,12 +226,24 @@ class ModuleConveyorBelt(
         if (facing.opposite == side) {
             return if (oldRoute.leftSide) Route.RIGHT_FORWARD else Route.LEFT_FORWARD
         }
-        if (facing.rotateY() == side) {
-            return if (oldRoute.leftSide) Route.LEFT_SHORT else Route.LEFT_LONG
+
+        if (isCorner) {
+
+            if (facing.rotateY() == side) {
+                return if (oldRoute.leftSide) Route.LEFT_SHORT else Route.RIGHT_CORNER
+            }
+            if (facing.rotateYCCW() == side) {
+                return if (oldRoute.leftSide) Route.LEFT_CORNER else Route.RIGHT_SHORT
+            }
+        } else {
+            if (facing.rotateY() == side) {
+                return if (oldRoute.leftSide) Route.LEFT_SHORT else Route.LEFT_LONG
+            }
+            if (facing.rotateYCCW() == side) {
+                return if (oldRoute.leftSide) Route.RIGHT_LONG else Route.RIGHT_SHORT
+            }
         }
-        if (facing.rotateYCCW() == side) {
-            return if (oldRoute.leftSide) Route.RIGHT_LONG else Route.RIGHT_SHORT
-        }
+
         throw IllegalStateException("Illegal side: $side for facing: $facing")
     }
 
@@ -193,10 +252,27 @@ class ModuleConveyorBelt(
         if (boxes.isNotEmpty()) {
             val lastBox = boxes.maxBy { it.position } ?: return ItemStack.EMPTY
             boxes.remove(lastBox)
-            container.sendUpdateToNearPlayers()
+            markUpdate()
             return lastBox.item
         }
         return ItemStack.EMPTY
+    }
+
+    fun removeItem(slot: Int, amount: Int, simulate: Boolean): ItemStack {
+        if (boxes.isEmpty()) return ItemStack.EMPTY
+        val lastBox = boxes[slot]
+        if (lastBox.item.count > amount) return ItemStack.EMPTY
+
+        if (!simulate) {
+            boxes.remove(lastBox)
+            markUpdate()
+        }
+        return lastBox.item
+    }
+
+
+    private fun markUpdate() {
+        needsSync = true
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
@@ -228,7 +304,7 @@ class ModuleConveyorBelt(
             if (item is ItemBlockBase && item.blockBase == AutomaticMachines.conveyorBelt) {
                 return false
             }
-            val success = addItem(args.heldItem)
+            val success = addItem(args.heldItem, false)
             if (success && world.isServer) {
                 args.playerIn.setHeldItem(args.hand, ItemStack.EMPTY)
             }
@@ -243,5 +319,30 @@ class ModuleConveyorBelt(
             }
         }
         return false
+    }
+
+    override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
+
+        if (cap == ITEM_HANDLER && facing == EnumFacing.UP) {
+            return object : IItemHandler {
+
+                override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
+                    if (slot != 0) return stack
+                    return if (addItem(stack, simulate)) ItemStack.EMPTY else stack
+                }
+
+                override fun getStackInSlot(slot: Int): ItemStack =
+                        if (slot == 0) ItemStack.EMPTY else boxes[slot - 1].item
+
+                override fun getSlotLimit(slot: Int): Int = 64
+
+                override fun getSlots(): Int = boxes.size + 1
+
+                override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack =
+                        if (slot == 0) ItemStack.EMPTY else removeItem(slot - 1, amount, simulate)
+            } as T
+        }
+
+        return null
     }
 }

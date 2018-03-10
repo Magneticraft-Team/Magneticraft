@@ -4,12 +4,8 @@ import com.cout970.magneticraft.block.HeatMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileCombustionChamber
 import com.cout970.magneticraft.tileentity.TileSteamBoiler
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
-import com.cout970.magneticraft.tilerenderer.core.Utilities
+import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.vector.vec3Of
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -17,7 +13,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 @RegisterRenderer(TileCombustionChamber::class)
 object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>(
-        modelLocation = { ModelResourceLocation(HeatMachines.combustionChamber.registryName, "model") },
+        modelLocation = modelOf(HeatMachines.combustionChamber),
         filters = listOf<(String) -> Boolean>({ it != "Door" }, { it == "Door" })
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileCombustionChamber) {
@@ -32,7 +28,7 @@ object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>
 
 @RegisterRenderer(TileSteamBoiler::class)
 object TileRendererSteamBoiler : TileRendererSimple<TileSteamBoiler>(
-        modelLocation = { ModelResourceLocation(HeatMachines.steamBoiler.registryName, "model") }
+        modelLocation = modelOf(HeatMachines.steamBoiler)
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileSteamBoiler) {
         models.forEach { it.renderTextured() }

@@ -7,7 +7,7 @@ import com.cout970.magneticraft.tileentity.TileTubeLight
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
 import com.cout970.magneticraft.tilerenderer.core.Utilities
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import com.cout970.magneticraft.tilerenderer.core.modelOf
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 @RegisterRenderer(TileTubeLight::class)
 object TileRendererTubeLight : TileRendererSimple<TileTubeLight>(
-        modelLocation = { ModelResourceLocation(Decoration.tubeLight.registryName, "model") },
+        modelLocation = modelOf(Decoration.tubeLight),
         filters = listOf(
                 { it: String -> !it.matches("Right\\d".toRegex()) && !it.matches("Left\\d".toRegex()) },
                 { it: String -> it.matches("Left\\d".toRegex()) },

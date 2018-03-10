@@ -4,17 +4,13 @@ import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
-import com.cout970.magneticraft.tilerenderer.core.Utilities
+import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.vector.xd
 import com.cout970.magneticraft.util.vector.yd
 import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.Vec3d
@@ -25,7 +21,7 @@ import net.minecraft.util.math.Vec3d
 
 @RegisterRenderer(TileFeedingTrough::class)
 object TileRendererFeedingTrough : TileRendererSimple<TileFeedingTrough>(
-        modelLocation = { ModelResourceLocation(AutomaticMachines.feedingTrough.registryName, "model") }
+        modelLocation = modelOf(AutomaticMachines.feedingTrough)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileFeedingTrough) {

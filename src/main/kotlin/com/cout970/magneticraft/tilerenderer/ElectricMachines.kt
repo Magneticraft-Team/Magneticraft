@@ -5,12 +5,8 @@ import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileElectricFurnace
 import com.cout970.magneticraft.tileentity.TileWindTurbine
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
-import com.cout970.magneticraft.tilerenderer.core.Utilities
+import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.util.EnumFacing
 
 /**
@@ -19,7 +15,7 @@ import net.minecraft.util.EnumFacing
 
 @RegisterRenderer(TileBattery::class)
 object TileRendererBattery : TileRendererSimple<TileBattery>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.battery.registryName, "model") }
+        modelLocation = modelOf(ElectricMachines.battery)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileBattery) {
@@ -30,7 +26,7 @@ object TileRendererBattery : TileRendererSimple<TileBattery>(
 
 @RegisterRenderer(TileElectricFurnace::class)
 object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.electricFurnace.registryName, "model") },
+        modelLocation = modelOf(ElectricMachines.electricFurnace),
         filters = listOf({ name -> name == "Shape_0" }, { name -> name == "Shape_1" })
 ) {
     val texture_normal = resource("textures/blocks/electric_machines/electric_furnace.png")
@@ -48,7 +44,7 @@ object TileRendererElectricFurnace : TileRendererSimple<TileElectricFurnace>(
 
 @RegisterRenderer(TileWindTurbine::class)
 object TileRendererWindTurbine : TileRendererSimple<TileWindTurbine>(
-        modelLocation = { ModelResourceLocation(ElectricMachines.windTurbine.registryName, "model") }
+        modelLocation = modelOf(ElectricMachines.windTurbine)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileWindTurbine) {

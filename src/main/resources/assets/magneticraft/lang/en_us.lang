@@ -213,7 +213,8 @@ tile.magneticraft.multiblock_parts_corrugated_iron.name=Corrugate Iron Machine B
 tile.magneticraft.multiblock_column_axis_y.name=Support Column (Y axis)
 tile.magneticraft.multiblock_column_axis_x.name=Support Column (X axis)
 tile.magneticraft.multiblock_column_axis_z.name=Support Column (Z axis)
-tile.magneticraft.multiblock_gap_normal.name=Multiblock Gap
+tile.magneticraft.multiblock_gap_normal.name=Multiblock
+tile.magneticraft.multiblock_gap.name=Multiblock
 
 itemGroup.magneticraft=Magneticraft
 

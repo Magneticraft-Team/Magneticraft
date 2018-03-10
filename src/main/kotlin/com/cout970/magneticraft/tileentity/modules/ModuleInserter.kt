@@ -140,7 +140,7 @@ class ModuleInserter(
             if (tryDropToInv(frontTile, facing.opposite)) {
                 return true
             } else if (frontTile is TileConveyorBelt) {
-                val res = frontTile.conveyorModule.addItem(inventory[0])
+                val res = frontTile.conveyorModule.addItem(inventory[0], false)
                 if (res) {
                     inventory[0] = ItemStack.EMPTY
                 }
@@ -152,7 +152,7 @@ class ModuleInserter(
             if (tryDropToInv(frontDownTile, EnumFacing.UP)) {
                 return true
             } else if (frontDownTile is TileConveyorBelt) {
-                val res = frontDownTile.conveyorModule.addItem(inventory[0])
+                val res = frontDownTile.conveyorModule.addItem(inventory[0], false)
                 if (res) {
                     inventory[0] = ItemStack.EMPTY
                 }

@@ -9,11 +9,7 @@ import com.cout970.magneticraft.tileentity.TileMiningRobot
 import com.cout970.magneticraft.tileentity.modules.mining_robot.MineBlockTask
 import com.cout970.magneticraft.tileentity.modules.mining_robot.MoveRobotTask
 import com.cout970.magneticraft.tileentity.modules.mining_robot.RobotAction
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
-import com.cout970.magneticraft.tilerenderer.core.Utilities
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import com.cout970.magneticraft.tilerenderer.core.*
 
 
 /**
@@ -22,7 +18,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 @RegisterRenderer(TileComputer::class)
 object TileRendererComputer : TileRendererSimple<TileComputer>(
-        modelLocation = { ModelResourceLocation(Computers.computer.registryName, "model") }
+        modelLocation = modelOf(Computers.computer)
 ) {
     override fun renderModels(models: List<ModelCache>, te: TileComputer) {
         Utilities.rotateFromCenter(te.facing, 0f)
@@ -39,7 +35,7 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
 
 @RegisterRenderer(TileMiningRobot::class)
 object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
-        modelLocation = { ModelResourceLocation(Computers.miningRobot.registryName, "model") },
+        modelLocation = modelOf(Computers.miningRobot),
         filters = listOf<(String) -> Boolean>(
                 { !it.contains("drill") && !it.contains("prop") },
                 { it.contains("drill") },

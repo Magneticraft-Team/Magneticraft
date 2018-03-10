@@ -7,14 +7,10 @@ import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
-import com.cout970.magneticraft.tilerenderer.core.Utilities
+import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.toRads
 import com.cout970.magneticraft.util.vector.*
 import com.cout970.vector.extensions.rotateZ
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import java.lang.Math.*
@@ -26,7 +22,7 @@ private fun genNames(prefix: String): List<String> = (1..3).map { "$prefix-$it" 
 
 @RegisterRenderer(TileSolarPanel::class)
 object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
-        modelLocation = { ModelResourceLocation(Multiblocks.solarPanel.registryName, "model") },
+        modelLocation = modelOf(Multiblocks.solarPanel),
         filters = filtersOf(
                 genNames("Panel1"),
                 genNames("Panel2"),
@@ -112,7 +108,7 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
 
 @RegisterRenderer(TileShelvingUnit::class)
 object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
-        modelLocation = { ModelResourceLocation(Multiblocks.shelvingUnit.registryName, "model") },
+        modelLocation = modelOf(Multiblocks.shelvingUnit),
         filters = filterOf((1..24).map { "Crate$it" })
 ) {
 
@@ -134,7 +130,7 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
 
 @RegisterRenderer(TileSteamEngine::class)
 object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
-        modelLocation = { ModelResourceLocation(Multiblocks.steamEngine.registryName, "model") },
+        modelLocation = modelOf(Multiblocks.steamEngine),
         filters = listOf<(String) -> Boolean>(
                 { it !in TileRendererSteamEngine.partsNames },
                 { it in TileRendererSteamEngine.partsNames }
@@ -166,7 +162,7 @@ object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
 
 @RegisterRenderer(TileGrinder::class)
 object TileRendererGrinder : TileRendererSimple<TileGrinder>(
-        modelLocation = { ModelResourceLocation(Multiblocks.grinder.registryName, "model") }
+        modelLocation = modelOf(Multiblocks.grinder)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileGrinder) {
@@ -182,7 +178,7 @@ object TileRendererGrinder : TileRendererSimple<TileGrinder>(
 
 @RegisterRenderer(TileSieve::class)
 object TileRendererSieve : TileRendererSimple<TileSieve>(
-        modelLocation = { ModelResourceLocation(Multiblocks.sieve.registryName, "model") }
+        modelLocation = modelOf(Multiblocks.sieve)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileSieve) {
@@ -199,7 +195,7 @@ object TileRendererSieve : TileRendererSimple<TileSieve>(
 
 @RegisterRenderer(TileSolarTower::class)
 object TileRendererSolarTower : TileRendererSimple<TileSolarTower>(
-        modelLocation = { ModelResourceLocation(Multiblocks.solarTower.registryName, "model") }
+        modelLocation = modelOf(Multiblocks.solarTower)
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarTower) {
@@ -215,7 +211,7 @@ object TileRendererSolarTower : TileRendererSimple<TileSolarTower>(
 
 @RegisterRenderer(TileSolarMirror::class)
 object TileRendererSolarMirror : TileRendererSimple<TileSolarMirror>(
-        modelLocation = { ModelResourceLocation(Multiblocks.solarMirror.registryName, "model") },
+        modelLocation = modelOf(Multiblocks.solarMirror),
         filters = listOf<(String) -> Boolean>(
                 { !it.contains("mirror") },
                 { it.contains("mirror") }

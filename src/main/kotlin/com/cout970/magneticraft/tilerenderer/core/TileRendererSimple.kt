@@ -44,7 +44,7 @@ abstract class TileRendererSimple<T : TileBase>(
     abstract fun renderModels(models: List<ModelCache>, te: T)
 
     fun ModelCache.renderTextured() {
-        bindTexture(texture)
+        texture?.let { bindTexture(it) }
         render()
     }
 

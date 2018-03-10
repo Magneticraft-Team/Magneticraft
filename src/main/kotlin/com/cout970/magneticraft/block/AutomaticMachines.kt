@@ -39,7 +39,10 @@ object AutomaticMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileConveyorBelt)
             customModels = listOf(
-                    "model" to resource("models/block/mcx/conveyor_belt.mcx"),
+                    "base" to resource("models/block/mcx/conveyor_belt_base.mcx"),
+                    "anim" to resource("models/block/mcx/conveyor_belt_anim.mcx"),
+                    "corner_base" to resource("models/block/mcx/conveyor_belt_corner_base.mcx"),
+                    "corner_anim" to resource("models/block/mcx/conveyor_belt_corner_anim.mcx"),
                     "inventory" to resource("models/block/mcx/conveyor_belt.mcx")
             )
             hasCustomModel = true

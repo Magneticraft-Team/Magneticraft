@@ -10,12 +10,14 @@ import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.vector.*
+import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.BufferBuilder
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.item.ItemSkull
@@ -35,6 +37,8 @@ import java.awt.Color
  */
 
 const val PIXEL = 0.0625
+
+inline fun modelOf(block: Block, id: String = "model") = { ModelResourceLocation(block.registryName, id) }
 
 object Utilities {
 
@@ -114,7 +118,7 @@ object Utilities {
             val s = 0.5
             GlStateManager.scale(s, s, s)
         } else {
-            rotate(-facing.horizontalAngle, 0f, 1f, 0f)
+            rotate(facing.horizontalAngle, 0f, 1f, 0f)
             translate(0.0, -1.9 * PIXEL, 0.0)
             val s = 0.9
             GlStateManager.scale(s, s, s)
