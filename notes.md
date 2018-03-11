@@ -1,7 +1,5 @@
 ### TODO list
 
-- update conveyor belt model
-- add conveyor belt corners
 - add conveyor belt up/down blocks
 - add insert animation
 - add steam engine animation
