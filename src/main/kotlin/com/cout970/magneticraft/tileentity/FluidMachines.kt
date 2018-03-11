@@ -20,7 +20,7 @@ import net.minecraft.util.ITickable
 @RegisterTileEntity("copper_tank")
 class TileCopperTank : TileBase(), ITickable {
 
-    val tank = Tank(16_000)
+    val tank = Tank(32_000)
 
     val fluidModule = ModuleFluidHandler(tank)
     var amountCache = 0

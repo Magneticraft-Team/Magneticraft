@@ -44,6 +44,8 @@ object Multiblocks : IBlockMaker {
     lateinit var sieve: BlockBase private set
     lateinit var solarTower: BlockBase private set
     lateinit var solarMirror: BlockBase private set
+    lateinit var container: BlockBase private set
+    lateinit var pumpjack: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -62,7 +64,7 @@ object Multiblocks : IBlockMaker {
             states = null
             factory = factoryOf(::TileMultiblockGap)
             onDrop = { emptyList() }
-            onActivated = func@ {
+            onActivated = func@{
                 val tile = it.worldIn.getTile<TileMultiblockGap>(it.pos) ?: return@func false
                 val module = tile.multiblockModule
                 val storedPos = module.centerPos ?: return@func false
@@ -70,7 +72,7 @@ object Multiblocks : IBlockMaker {
                 val actionable = it.worldIn.getModule<IOnActivated>(mainBlockPos) ?: return@func false
                 return@func actionable.onActivated(it)
             }
-            onBlockBreak = func@ {
+            onBlockBreak = func@{
                 val mod = it.worldIn.getModule<ModuleMultiblockGap>(it.pos) ?: return@func
                 if (mod.multiblock == null) {
                     val relPos = mod.centerPos ?: return@func
@@ -157,8 +159,30 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
-        return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror) +
-               blockListOf(gap)
+        container = builder.withName("container").copy {
+            factory = factoryOf(::TileContainer)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/container.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockContainer })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        pumpjack = builder.withName("pumpjack").copy {
+            factory = factoryOf(::TilePumpjack)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/pumpjack.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockPumpjack })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
+                container, pumpjack) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {
@@ -168,7 +192,7 @@ object Multiblocks : IBlockMaker {
     }
 
     fun defaultOnActivated(multiblock: () -> Multiblock): (OnActivatedArgs) -> Boolean {
-        return func@ {
+        return func@{
             val state = it.state[PROPERTY_MULTIBLOCK_ORIENTATION] ?: return@func false
             if (state.active) {
                 val actionable = it.worldIn.getModule<IOnActivated>(it.pos) ?: return@func false

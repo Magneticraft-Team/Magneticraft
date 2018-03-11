@@ -74,7 +74,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
             val stack = slot.stack
 
             //try insert in any valid range
-            if (tryMergeItemStack(stack, slotRanges)) {
+            if (tryMergeItemStack(stack, index, slotRanges)) {
                 if (stack.count == 0) {
                     slot.putStack(ItemStack.EMPTY)
                 } else {
@@ -88,10 +88,10 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
     /**
      * Try to merge the [stack] in any region in [regions]
      */
-    protected fun tryMergeItemStack(stack: ItemStack, regions: List<InventoryRegion>): Boolean {
+    protected fun tryMergeItemStack(stack: ItemStack, index: Int, regions: List<InventoryRegion>): Boolean {
         regions.forEach {
-            if (it.filter(stack) && mergeItemStack(stack, it.region.start, it.region.endInclusive + 1,
-                    it.inverseDirection)) {
+            if (it.advFilter(stack, index) && mergeItemStack(stack, it.region.start,
+                            it.region.endInclusive + 1, it.inverseDirection)) {
                 return true
             }
         }

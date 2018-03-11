@@ -14,10 +14,7 @@ import com.cout970.magneticraft.gui.client.components.buttons.ButtonState
 import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
 import com.cout970.magneticraft.gui.client.components.buttons.SimpleButton
 import com.cout970.magneticraft.gui.client.core.GuiBase
-import com.cout970.magneticraft.gui.common.ContainerGrinder
-import com.cout970.magneticraft.gui.common.ContainerShelvingUnit
-import com.cout970.magneticraft.gui.common.ContainerSieve
-import com.cout970.magneticraft.gui.common.ContainerSolarTower
+import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
@@ -194,5 +191,23 @@ class GuiSolarTower(val tower: ContainerSolarTower) : GuiBase(tower) {
                 textureSize = vec2Of(256, 256),
                 uvGetter = buttonMap::getValue
         ).apply { listener = tower::onClick }
+    }
+}
+
+class GuiContainer(val inv: ContainerContainer) : GuiBase(inv) {
+
+    override fun initComponents() {
+        +CompBackground(guiTexture("container"))
+
+        val mod = inv.tile.stackInventoryModule
+
+        val callback = CallbackBarProvider(
+                { mod.amount.toDouble() },
+                { mod.maxItems.toDouble() },
+                { 0.0 }
+        )
+
+        +CompVerticalBar(callback, 7, Vec2d(74, 16),
+                { listOf("Items: ${mod.amount}/${mod.maxItems}") })
     }
 }

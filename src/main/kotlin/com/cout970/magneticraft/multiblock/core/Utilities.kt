@@ -9,10 +9,15 @@ import com.cout970.magneticraft.multiblock.components.MainBlockComponent
 import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
 import com.cout970.magneticraft.util.vector.getRelative
 import net.minecraft.block.Block
+import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 
 fun Multiblock.ofBlock(block: Block): SingleBlockComponent {
     return SingleBlockComponent(block.defaultState, Multiblocks.gap.defaultState)
+}
+
+fun Multiblock.airBlock(): SingleBlockComponent {
+    return SingleBlockComponent(Blocks.AIR.defaultState, Multiblocks.gap.defaultState)
 }
 
 fun Multiblock.copperCoilBlock(): SingleBlockComponent {

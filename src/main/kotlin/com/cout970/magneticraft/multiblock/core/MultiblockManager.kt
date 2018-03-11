@@ -38,6 +38,8 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockSieve)
         registerMultiblock(MultiblockSolarTower)
         registerMultiblock(MultiblockSolarMirror)
+        registerMultiblock(MultiblockContainer)
+        registerMultiblock(MultiblockPumpjack)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

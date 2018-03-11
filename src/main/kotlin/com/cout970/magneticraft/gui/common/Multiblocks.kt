@@ -8,13 +8,12 @@ import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_SCROLL
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
+import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandler
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.tileentity.TileGrinder
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
-import com.cout970.magneticraft.tileentity.TileSieve
-import com.cout970.magneticraft.tileentity.TileSolarTower
+import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -162,8 +161,24 @@ class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world:
     }
 
     override fun receiveDataFromClient(ibd: IBD) {
-        ibd.getBoolean(0){
+        ibd.getBoolean(0) {
             tile.solarTowerModule.searchMirrors = true
         }
+    }
+}
+
+class ContainerContainer(val tile: TileContainer, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        tile.stackInventoryModule.getCapability(ITEM_HANDLER!!, null)?.let { inv ->
+            addSlotToContainer(SlotUnmodifiableItemHandler(inv, 0, 85, 16))
+            addSlotToContainer(SlotTakeOnly(inv, 1, 85, 48))
+
+            inventoryRegions += InventoryRegion(0..0, advFilter = { _, i -> i != 1 })
+            inventoryRegions += InventoryRegion(1..1, advFilter = { _, _ -> false })
+        }
+
+        bindPlayerInventory(player.inventory)
     }
 }

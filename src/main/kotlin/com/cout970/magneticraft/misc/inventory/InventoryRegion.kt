@@ -8,5 +8,8 @@ import net.minecraft.item.ItemStack
 data class InventoryRegion(
         val region: IntRange,
         val inverseDirection: Boolean = false,
-        val filter: (ItemStack) -> Boolean = { true }
-)
+        val advFilter: (ItemStack, Int) -> Boolean = { _, _ -> true }
+) {
+    constructor(region: IntRange, inverseDirection: Boolean = false, filter: (ItemStack) -> Boolean)
+            : this(region, inverseDirection, { it, _ -> filter(it) })
+}

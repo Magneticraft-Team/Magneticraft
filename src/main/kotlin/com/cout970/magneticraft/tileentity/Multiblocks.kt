@@ -484,3 +484,48 @@ class TileSolarMirror : TileMultiblock(), ITickable {
     }
 }
 
+@RegisterTileEntity("container")
+class TileContainer : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockContainer
+
+    val stackInventoryModule = ModuleStackInventory(Config.containerMaxItemStorage)
+    val openGui = ModuleOpenGui()
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = { cap, side, _ -> stackInventoryModule.getCapability(cap, side) }
+    )
+
+    init {
+        initModules(multiblockModule, stackInventoryModule, openGui)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("pumpjack")
+class TilePumpjack : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockPumpjack
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = ModuleMultiblockCenter.emptyCapabilityGetter
+    )
+
+    init {
+        initModules(multiblockModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+

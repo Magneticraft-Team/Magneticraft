@@ -314,3 +314,35 @@ object TileRendererSolarMirror : TileRendererSimple<TileSolarMirror>(
         }
     }
 }
+
+@RegisterRenderer(TileContainer::class)
+object TileRendererContainer : TileRendererSimple<TileContainer>(
+        modelLocation = modelOf(Multiblocks.container)
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileContainer) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockContainer)
+            return
+        }
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(0, 0, -3)
+        models[0].renderTextured()
+    }
+}
+
+@RegisterRenderer(TilePumpjack::class)
+object TileRendererPumpjack : TileRendererSimple<TilePumpjack>(
+        modelLocation = modelOf(Multiblocks.pumpjack)
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TilePumpjack) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.facing, MultiblockPumpjack)
+            return
+        }
+        Utilities.rotateFromCenter(te.facing, 90f)
+        translate(1, 0, 0)
+        models[0].renderTextured()
+    }
+}

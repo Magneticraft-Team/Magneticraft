@@ -1,0 +1,27 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cube_all",
+        "transform": "forge:default-block",
+        "textures": {
+            "all": "magneticraft:blocks/multiblocks/unmounted_multiblock"
+        }
+    },
+    "variants": {
+        "inactive_north": [{}],
+        "inactive_south": [{}],
+        "inactive_east": [{}],
+        "inactive_west": [{}],
+        "active_north": [{ "model": "magneticraft:empty" }],
+        "active_south": [{ "model": "magneticraft:empty" }],
+        "active_east": [{ "model": "magneticraft:empty" }],
+        "active_west": [{ "model": "magneticraft:empty" }],
+        "inventory": [{
+            "model": "builtin/generated",
+            "transform": "forge:default-item",
+            "textures": {
+                "layer0": "magneticraft:blocks/multiblocks/pattern"
+            }
+        }]
+    }
+}
