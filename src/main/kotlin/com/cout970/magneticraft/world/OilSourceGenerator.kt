@@ -57,6 +57,8 @@ class OilSourceGenerator(
             return
         }
 
+        println("Generating at: $chunkX, $chunkZ")
+
         val height = 8 + (sectorX and 3) + (sectorZ and 3)
 
         for (k in -4..4) {

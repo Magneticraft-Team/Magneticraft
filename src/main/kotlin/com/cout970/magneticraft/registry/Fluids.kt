@@ -21,4 +21,15 @@ fun initFluids() {
                 }
         )
     }
+
+    if (!FluidRegistry.isFluidRegistered("oil")) {
+        FluidRegistry.registerFluid(
+                Fluid("oil", resource("fluids/oil_still"), resource("fluids/oil_flow")).also {
+                    it.unlocalizedName = "magneticraft.oil"
+                    it.temperature = 24.toKelvinFromCelsius().toInt()
+                    it.density = 1100
+                    it.viscosity = 2000
+                }
+        )
+    }
 }

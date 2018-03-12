@@ -24,7 +24,7 @@ class ModuleElectricProcessing(
         override val name: String = "module_electric_processing"
 ) : IModule {
 
-    lateinit override var container: IModuleContainer
+    override lateinit var container: IModuleContainer
 
     val timedProcess = TimedCraftingProcess(craftingProcess, this::onWorkingTick)
     val production = ValueAverage()

@@ -513,14 +513,49 @@ class TilePumpjack : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockPumpjack
 
+    val tank = Tank(64000)
+    val node = ElectricNode(ref)
+
+    val fluidModule = ModuleFluidHandler(tank,
+            capabilityFilter = { it, side -> if (side == facing.opposite) it else null })
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            connectableDirections = { emptyList() },
+            capabilityFilter = { false }
+    )
+
+    val storageModule = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10_000,
+            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE,
+            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+    )
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(-1, 0, 0),
+                    side = EnumFacing.UP,
+                    getter = { if (active) energyModule else null }
+            ))
+    )
+
+    val pumpjackModule = ModulePumpjack(
+            storage = storageModule,
+            tank = tank,
+            ref = { pos.offset(facing, 5) }
+    )
+
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
             facingGetter = { facing },
-            capabilityGetter = ModuleMultiblockCenter.emptyCapabilityGetter
+            capabilityGetter = ioModule::getCapability
     )
 
     init {
-        initModules(multiblockModule)
+        initModules(multiblockModule, fluidModule, energyModule, storageModule, ioModule, pumpjackModule)
     }
 
     @DoNotRemove

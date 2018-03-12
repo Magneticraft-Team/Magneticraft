@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties
  */
 class ModuleFluidHandler(
         vararg val tanks: Tank,
-        val capabilityFilter: (IFluidHandler) -> IFluidHandler? = ALLOW_ALL,
+        val capabilityFilter: (IFluidHandler, EnumFacing?) -> IFluidHandler? = ALLOW_ALL,
         override val name: String = "module_fluid_handler"
 ) : IModule, IFluidHandler {
 
@@ -29,9 +29,9 @@ class ModuleFluidHandler(
 
     companion object {
         @JvmStatic
-        val ALLOW_NONE: (IFluidHandler) -> IFluidHandler? = { null }
+        val ALLOW_NONE: (IFluidHandler, EnumFacing?) -> IFluidHandler? = { _, _ -> null }
         @JvmStatic
-        val ALLOW_ALL: (IFluidHandler) -> IFluidHandler? = { it }
+        val ALLOW_ALL: (IFluidHandler, EnumFacing?) -> IFluidHandler? = { it, _ -> it }
     }
 
     override fun init() {
@@ -40,7 +40,7 @@ class ModuleFluidHandler(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
-        return if (cap == FLUID_HANDLER) capabilityFilter(this) as T else null
+        return if (cap == FLUID_HANDLER) capabilityFilter(this, facing) as T else null
     }
 
     override fun drain(resource: FluidStack, doDrain: Boolean): FluidStack? {

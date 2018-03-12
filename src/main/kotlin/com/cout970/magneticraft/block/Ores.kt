@@ -36,7 +36,7 @@ object Ores : IBlockMaker {
         oilSource = builder.withName("oil_source").copy {
             states = OilAmount.values().toList()
             pickBlock = CommonMethods::pickDefaultBlock
-            onDrop = { listOf(ItemStack.EMPTY)}
+            onDrop = { listOf(ItemStack.EMPTY) }
         }.build()
 
         ores.setHarvestLevel("pickaxe", 1, OreType.COPPER.getBlockState(ores))
@@ -50,25 +50,29 @@ object Ores : IBlockMaker {
 
     enum class OilAmount(override val stateName: String,
                          override val isVisible: Boolean,
-                         val amount: Float) : IStatesEnum, IStringSerializable {
+                         val amount: Int) : IStatesEnum, IStringSerializable {
 
-        FULL_100("full_100", true, 1f),
-        FULL_90("full_90", false, 0.9f),
-        FULL_80("full_80", false, 0.8f),
-        FULL_70("full_70", false, 0.7f),
-        FULL_60("full_60", false, 0.6f),
-        FULL_50("full_50", false, 0.5f),
-        FULL_40("full_40", false, 0.4f),
-        FULL_30("full_30", false, 0.3f),
-        FULL_20("full_20", false, 0.2f),
-        FULL_10("full_10", false, 0.1f),
-        EMPTY("empty", true, 0f);
+        FULL_100("full_100", true, 10),
+        FULL_90("full_90", false, 9),
+        FULL_80("full_80", false, 8),
+        FULL_70("full_70", false, 7),
+        FULL_60("full_60", false, 6),
+        FULL_50("full_50", false, 5),
+        FULL_40("full_40", false, 4),
+        FULL_30("full_30", false, 3),
+        FULL_20("full_20", false, 2),
+        FULL_10("full_10", false, 1),
+        EMPTY("empty", true, 0);
 
         override fun getName() = name.toLowerCase()
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_OIL_AMOUNT)
 
         override fun getBlockState(block: Block): IBlockState {
             return block.defaultState.withProperty(PROPERTY_OIL_AMOUNT, this)
+        }
+
+        companion object {
+            fun fromAmount(amount: Int) = values().find { it.amount == amount }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.multiblock
 
 import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.multiblock.components.IgnoreBlockComponent
 import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -21,41 +22,46 @@ object MultiblockPumpjack : Multiblock() {
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
-        val I = airBlock()
-        val B = corrugatedIronBlock()
+        val I = IgnoreBlockComponent
+        val V = columnBlock(EnumFacing.UP)
+        val H = columnBlock(EnumFacing.NORTH)
+        val C = copperCoilBlock()
+        val G = grateBlock()
+        val B = baseBlock()
+        val R = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
         scheme = Multiblock.yLayers(
 
-                Multiblock.zLayers(listOf(B, B, B), // y = 4
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B)),
+                Multiblock.zLayers(listOf(I, I, I), // y = 4
+                        listOf(G, G, G),
+                        listOf(G, G, G),
+                        listOf(G, G, G),
+                        listOf(I, G, I),
+                        listOf(I, R, I)),
 
-                Multiblock.zLayers(listOf(B, B, B), // y = 3
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B)),
+                Multiblock.zLayers(listOf(I, I, I), // y = 3
+                        listOf(G, H, G),
+                        listOf(G, H, G),
+                        listOf(G, H, G),
+                        listOf(I, H, I),
+                        listOf(I, R, I)),
 
-                Multiblock.zLayers(listOf(B, B, B), // y = 2
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B),
-                        listOf(B, B, B)),
+                Multiblock.zLayers(listOf(I, I, I), // y = 2
+                        listOf(G, R, G),
+                        listOf(G, G, G),
+                        listOf(G, V, G),
+                        listOf(I, G, I),
+                        listOf(I, R, I)),
 
-                Multiblock.zLayers(listOf(B, B, B), // y = 1
-                        listOf(B, I, B),
-                        listOf(B, I, B),
-                        listOf(B, I, B),
-                        listOf(B, I, B),
-                        listOf(B, B, B)),
+                Multiblock.zLayers(listOf(I, I, I), // y = 1
+                        listOf(G, R, G),
+                        listOf(G, G, G),
+                        listOf(G, V, G),
+                        listOf(I, G, I),
+                        listOf(I, G, I)),
 
-                Multiblock.zLayers(listOf(B, M, B), // y = 0
+                Multiblock.zLayers(listOf(B, M, C), // y = 0
                         listOf(B, B, B),
                         listOf(B, B, B),
                         listOf(B, B, B),
