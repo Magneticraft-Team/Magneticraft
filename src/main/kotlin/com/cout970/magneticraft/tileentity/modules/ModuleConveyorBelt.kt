@@ -5,12 +5,14 @@ import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.item.itemblock.ItemBlockBase
+import com.cout970.magneticraft.misc.inventory.insertItem
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.tileentity.TimeCache
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -97,9 +99,11 @@ class ModuleConveyorBelt(
             toUpdate = false
         }
 
-        val frontTile = world.getTile<TileConveyorBelt>(pos.offset(facing))
+        val tile = world.getTileEntity(pos.offset(facing))
+        val frontTile = tile as? TileConveyorBelt
+        val frontInv = tile?.let { ITEM_HANDLER!!.fromTile(it, facing.opposite) }
 
-        //if there is no block in front don't go all the way
+        // if there is no block in front don't go all the way
         val limit = if (frontTile == null) 13f else 15f
 
         val fullBitMap = generateGlobalBitMap()
@@ -132,6 +136,20 @@ class ModuleConveyorBelt(
             val removed = boxes.removeAll {
                 if (it.position <= limit) return@removeAll false
                 frontTile.conveyorModule.addItem(it.item, facing, it.route)
+            }
+            if (removed) {
+                markUpdate()
+            }
+        } else if (frontInv != null) {
+            val removed = boxes.removeAll {
+                if (it.position <= limit)
+                    return@removeAll false
+
+                if (frontInv.insertItem(it.item, true).isEmpty) {
+                    frontInv.insertItem(it.item, false)
+                    return@removeAll true
+                }
+                return@removeAll false
             }
             if (removed) {
                 markUpdate()

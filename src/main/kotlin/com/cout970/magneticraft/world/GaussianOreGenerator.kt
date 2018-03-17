@@ -30,8 +30,8 @@ class GaussianOreGenerator(
                     .coerceAtLeast(0)
                     .coerceIn(conf.minAmountPerChunk, conf.maxAmountPerChunk)
 
-//            if (conf.maxAmountPerChunk == 1 && veins == 1)
-//                debug(randGaussian, veins, random.nextGaussian(), conf.deviation)
+//            if (config.maxAmountPerChunk == 1 && veins == 1)
+//                debug(randGaussian, veins, random.nextGaussian(), config.deviation)
 
             if (veins > 0) {
                 generateChunkOres(world, Vec2d(chunkX, chunkZ), random, veins)

@@ -2,23 +2,26 @@ package com.cout970.magneticraft
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.util.addPostfix
-import com.cout970.magneticraft.util.addPrefix
-import com.cout970.magneticraft.util.logError
-import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.*
 import com.cout970.modelloader.ModelSerializer
 import com.cout970.modelloader.api.ModelUtilties
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
+import net.minecraft.command.CommandBase
+import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.ItemStack
 import net.minecraft.launchwrapper.Launch
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util.EnumHand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.Timer
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import net.minecraft.world.gen.ChunkProviderServer
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.oredict.OreDictionary
 import org.lwjgl.input.Keyboard
@@ -201,5 +204,51 @@ object Debug {
         val tickField = Timer::class.java.getDeclaredField("tickLength")
         tickField.isAccessible = true
         tickField.set(timer, 1000.0f / tps.toFloat())
+    }
+
+    object MgCommand : CommandBase() {
+        override fun getName(): String = "mg"
+
+        override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
+            if (args.isNotEmpty()) {
+                when (args[0]) {
+                    "gen" -> regenTerrain(sender, sender.entityWorld, sender.position)
+                    else -> {
+                        sender.sendMessage("Unknown arg: '$args[0]'".toTextComponent())
+                    }
+                }
+            } else {
+                sender.sendMessage("No args".toTextComponent())
+            }
+        }
+
+        private fun regenTerrain(sender: ICommandSender, world: World, pos: BlockPos) {
+            val prov = world.chunkProvider as ChunkProviderServer
+
+            for (i in -5..5) {
+                for (j in -5..5) {
+                    val chunkX = i + (pos.x shr 4)
+                    val chunkZ = j + (pos.z shr 4)
+
+                    prov.getLoadedChunk(chunkX, chunkZ)?.let { chunk ->
+                        sender.sendMessage("Regenerating chunk: ($chunkX, $chunkZ)".toTextComponent())
+                        val newTerrain = prov.chunkGenerator.generateChunk(chunkX, chunkZ)
+
+                        repeat(16) {
+                            chunk.blockStorageArray[it] = newTerrain.blockStorageArray[it]
+                        }
+
+                        chunk.setStorageArrays(newTerrain.blockStorageArray)
+
+                        chunk.isTerrainPopulated = false
+                        chunk.populate(prov, prov.chunkGenerator)
+                        chunk.markDirty()
+
+                    }
+                }
+            }
+        }
+
+        override fun getUsage(sender: ICommandSender?): String = "Magneticraft debug command, is you see this please report to the mod author"
     }
 }

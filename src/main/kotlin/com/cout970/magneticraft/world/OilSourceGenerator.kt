@@ -2,8 +2,7 @@ package com.cout970.magneticraft.world
 
 import com.cout970.magneticraft.config.OilGenConfig
 import com.cout970.magneticraft.util.iterateArea
-import com.cout970.magneticraft.util.vector.vec2Of
-import com.cout970.magneticraft.util.vector.vec3Of
+import com.cout970.magneticraft.util.vector.*
 import com.cout970.vector.extensions.distanceSq
 import com.google.common.base.Predicate
 import net.minecraft.block.state.IBlockState
@@ -20,7 +19,7 @@ import java.util.*
  */
 class OilSourceGenerator(
         val blockstate: IBlockState,
-        val conf: OilGenConfig
+        val config: OilGenConfig
 ) : IWorldGenerator {
 
     companion object {
@@ -32,57 +31,63 @@ class OilSourceGenerator(
                           chunkGenerator: IChunkGenerator,
                           chunkProvider: IChunkProvider) {
 
-        if (!conf.active) return
+        if (!config.active) return
 
-        val sectorX = chunkX shr 3
-        val sectorZ = chunkZ shr 3
+        val sectorX = chunkX shr 4
+        val sectorZ = chunkZ shr 4
 
-        if (sectorX % conf.distance == 0 && sectorZ % conf.distance == 0) {
+        if (sectorX % config.distance == 0 && sectorZ % config.distance == 0) {
             placeBlocks(random, chunkX, chunkZ, world)
         }
     }
 
     fun placeBlocks(random: Random, chunkX: Int, chunkZ: Int, world: World) {
 
-        val sectorX = chunkX shr 3
-        val sectorZ = chunkZ shr 3
+        // sectors are 16x16 chunks
+        val sectorX = chunkX shr 4
+        val sectorZ = chunkZ shr 4
 
-        val sign = vec2Of(Math.signum(chunkX.toFloat()), Math.signum(chunkZ.toFloat()))
-        val centerX = (sectorX * 8 - 4 * sign.xi) * 16 + 8
-        val centerZ = (sectorZ * 8 - 4 * sign.yi) * 16 + 8
-        val center = vec3Of(centerX, 0, centerZ)
+        val start = vec3Of((sectorX shl 4) * 16, 0, (sectorZ shl 4) * 16)
+        val size = vec3Of(16 * 16, 0, 16 * 16)
+
+        val center = start + size * 0.5
+        val centerBlock = (center).toBlockPos()
+
+        // chunk pos in block coordinates
+        val chunkPos = BlockPos((chunkX shl 4), 0, (chunkZ shl 4))
+        val outerRadiusSq = (5.5 * 16) * (5.5 * 16) // 5.5 chunk radius
 
         // do nothing if the chunk is too far away
-        if (vec3Of(chunkX * 16 + 16, 0, chunkZ * 16 + 16).distanceSq(center) > 1188) {
+        if (chunkPos.toVec3d().distanceSq(center) > outerRadiusSq) {
             return
         }
 
-        println("Generating at: $chunkX, $chunkZ")
+        val innerRadiusSq = (5 * 16) * (5 * 16) // 5 chunk radius
+        val height = 20
 
-        val height = 8 + (sectorX and 3) + (sectorZ and 3)
+        iterateArea(0..15, 0..15) { i, j ->
 
-        for (k in -4..4) {
+            if (random.nextInt(3) == 0) {
 
-            iterateArea(0..15, 0..15) { i, j ->
-                val x = chunkX * 16 + i + 8
-                val z = chunkZ * 16 + j + 8
-                val y = height + k
+                // the -8 is needed to avoid cascading chunk updates see Chunk#populate
+                val pos = chunkPos.add(i - 8, 0, j - 8)
+                val dist = centerBlock.distanceSq(pos)
 
-                val radiusSq = 1024 - Math.abs(k) * 32
+                if (dist < innerRadiusSq) {
+                    val elev = ((1 - dist / innerRadiusSq) * 4).toInt()
+                    for (k in -elev..elev) {
 
-                if (vec3Of(x, 0, z).distanceSq(center) < radiusSq) {
+                        val currentPos = pos.up(height + k)
+                        val currentBlock = world.getBlockState(currentPos)
 
-                    if (random.nextFloat() < conf.prob) {
-
-                        val pos = BlockPos(x, y, z)
-                        val currentBlock = world.getBlockState(pos)
-
-                        if (currentBlock.block.isReplaceableOreGen(currentBlock, world, pos, replaceable)) {
-                            world.setBlockState(pos, blockstate, 2)
+                        if (currentBlock.block.isReplaceableOreGen(currentBlock, world, currentPos, replaceable)) {
+                            // flag 2 to not send block updates when generating world
+                            world.setBlockState(currentPos, blockstate, 2)
                         }
                     }
                 }
             }
+
         }
     }
 }

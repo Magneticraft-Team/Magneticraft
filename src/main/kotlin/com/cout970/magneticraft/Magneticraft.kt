@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import org.apache.logging.log4j.Logger
 import java.io.File
@@ -122,5 +123,12 @@ object Magneticraft {
         }
 
         log.info("Post-init done in $time milliseconds")
+    }
+
+    @Mod.EventHandler
+    fun stating(event: FMLServerStartingEvent) {
+        if (Debug.DEBUG) {
+            event.registerServerCommand(Debug.MgCommand)
+        }
     }
 }

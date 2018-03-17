@@ -102,7 +102,7 @@ object Config {
     var containerMaxItemDrops: Int = 128 * 64
 
     @ConfigValue(category = CATEGORY_MACHINES, comment = "Max amount of items that a container can store")
-    val containerMaxItemStorage: Int = 1024 * 64
+    var containerMaxItemStorage: Int = 1024 * 64
 
     @ConfigValue(category = CATEGORY_PC, comment = "Allow TCP connections in PCs")
     var allowTcpConnections: Boolean = true
