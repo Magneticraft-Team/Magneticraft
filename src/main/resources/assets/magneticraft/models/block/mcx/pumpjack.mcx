@@ -445,7 +445,7 @@
       "name": "Shape26",
       "from": 438,
       "to": 444,
-      "texture": "domainNo Texture"
+      "texture": "magneticraft:blocks/multiblocks/pumpjack"
     },
     {
       "name": "Shape9",

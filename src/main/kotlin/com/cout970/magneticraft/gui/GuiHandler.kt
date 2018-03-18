@@ -36,6 +36,7 @@ object GuiHandler : IGuiHandler {
             is TileWindTurbine -> GuiWindTurbine(serverElement as ContainerWindTurbine)
             is TileSolarTower -> GuiSolarTower(serverElement as ContainerSolarTower)
             is TileContainer -> GuiContainer(serverElement as ContainerContainer)
+            is TilePumpjack -> GuiPumpjack(serverElement as ContainerPumpjack)
             else -> null
         }
     }
@@ -63,6 +64,7 @@ object GuiHandler : IGuiHandler {
             is TileWindTurbine -> ContainerWindTurbine(tile, player, world, pos)
             is TileSolarTower -> ContainerSolarTower(tile, player, world, pos)
             is TileContainer -> ContainerContainer(tile, player, world, pos)
+            is TilePumpjack -> ContainerPumpjack(tile, player, world, pos)
             else -> null
         }
     }

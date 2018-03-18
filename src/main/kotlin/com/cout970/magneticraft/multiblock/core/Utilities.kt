@@ -17,7 +17,7 @@ fun Multiblock.ofBlock(block: Block): SingleBlockComponent {
 }
 
 fun Multiblock.airBlock(): SingleBlockComponent {
-    return SingleBlockComponent(Blocks.AIR.defaultState, Multiblocks.gap.defaultState)
+    return SingleBlockComponent(Blocks.AIR.defaultState, Blocks.AIR.defaultState)
 }
 
 fun Multiblock.copperCoilBlock(): SingleBlockComponent {

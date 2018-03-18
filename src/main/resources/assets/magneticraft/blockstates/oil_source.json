@@ -8,7 +8,9 @@
             "textures": {
                 "all": "magneticraft:blocks/ore_block/oil_source_1",
                 "test": "magneticraft:fluids/steam_still",
-                "test2": "magneticraft:fluids/steam_flow"
+                "test2": "magneticraft:fluids/steam_flow",
+                "test3": "magneticraft:fluids/oil_still",
+                "test4": "magneticraft:fluids/oil_flow"
             }
         }],
         "full_90": [{

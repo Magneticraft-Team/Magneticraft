@@ -10,6 +10,9 @@ import net.minecraftforge.fluids.FluidRegistry
  */
 
 fun initFluids() {
+
+//  blockstates/oil_source.json has the texture locations so they get loaded with the model
+
     if (!FluidRegistry.isFluidRegistered("steam")) {
         FluidRegistry.registerFluid(
                 Fluid("steam", resource("fluids/steam_still"), resource("fluids/steam_flow")).also {

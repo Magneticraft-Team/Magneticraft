@@ -43,6 +43,9 @@ const val DATA_ID_FLUID_AMOUNT_2 = 35 // Used by FluidHandlers
 const val DATA_ID_FLUID_AMOUNT_3 = 36 // Used by FluidHandlers
 const val DATA_ID_FLUID_AMOUNT_4 = 37 // Used by FluidHandlers
 const val DATA_ID_ITEM_AMOUNT = 38
+const val DATA_ID_DEPOSIT_SIZE = 39
+const val DATA_ID_DEPOSIT_LEFT = 40
+const val DATA_ID_STATUS = 41
 
 val DATA_ID_VOLTAGE_LIST = listOf(
         DATA_ID_VOLTAGE_0,

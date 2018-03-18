@@ -1,10 +1,7 @@
 package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.gui.client.components.CompBackground
-import com.cout970.magneticraft.gui.client.components.CompScrollBar
-import com.cout970.magneticraft.gui.client.components.CompShelvingUnit
-import com.cout970.magneticraft.gui.client.components.CompTextInput
+import com.cout970.magneticraft.gui.client.components.*
 import com.cout970.magneticraft.gui.client.components.bars.CallbackBarProvider
 import com.cout970.magneticraft.gui.client.components.bars.CompElectricBar
 import com.cout970.magneticraft.gui.client.components.bars.CompFluidBar
@@ -13,12 +10,14 @@ import com.cout970.magneticraft.gui.client.components.buttons.AbstractButton
 import com.cout970.magneticraft.gui.client.components.buttons.ButtonState
 import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
 import com.cout970.magneticraft.gui.client.components.buttons.SimpleButton
+import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.tileentity.modules.ModulePumpjack
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -209,5 +208,64 @@ class GuiContainer(val inv: ContainerContainer) : GuiBase(inv) {
 
         +CompVerticalBar(callback, 7, Vec2d(74, 16),
                 { listOf("Items: ${mod.amount}/${mod.maxItems}") })
+    }
+}
+
+class GuiPumpjack(val cont: ContainerPumpjack) : GuiBase(cont) {
+
+    override fun initComponents() {
+        val tile = cont.tile
+        val texture = guiTexture("pumpjack")
+
+        +CompBackground(texture)
+
+        +CompElectricBar(tile.node, Vec2d(53, 16))
+        val consumptionCallback = CallbackBarProvider(
+                callback = { tile.pumpjackModule.production.storage.toDouble() },
+                max = { Config.pumpjackConsumption },
+                min = { 0.0 }
+        )
+        +CompVerticalBar(consumptionCallback, 3,
+                Vec2d(64, 16),
+                { listOf(String.format("%.2fW", consumptionCallback.callback())) })
+
+
+        val processCallback = CallbackBarProvider(
+                { tile.pumpjackModule.depositLeft.toDouble() },
+                { tile.pumpjackModule.depositSize.toDouble() },
+                { 0.0 }
+        )
+
+        +CompVerticalBar(processCallback, 6, Vec2d(75, 16),
+                { listOf("Oil deposit: ${tile.pumpjackModule.depositLeft}/${tile.pumpjackModule.depositSize} blocks") })
+
+        +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.tank)
+
+        val size = vec2Of(16, 16)
+        val box = pos + Vec2d(108, 16) to size
+
+        +CompLight(
+                on = DrawableBox(box, vec2Of(26, 166) to size, vec2Of(256)),
+                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
+                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.SEARCHING_DEPOSIT }
+        )
+
+        +CompLight(
+                on = DrawableBox(box, vec2Of(26, 166 + 16) to size, vec2Of(256)),
+                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
+                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.DIGGING }
+        )
+
+        +CompLight(
+                on = DrawableBox(box, vec2Of(26, 166 + 16 * 2) to size, vec2Of(256)),
+                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
+                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.EXTRACTING }
+        )
+
+        +CompLight(
+                on = DrawableBox(box, vec2Of(26, 166 + 16 * 3) to size, vec2Of(256)),
+                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
+                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.SEARCHING_SOURCE }
+        )
     }
 }

@@ -82,6 +82,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick, 1 Heat unit = 1mB/t of steam = 2 RF")
     var solarMirrorHeatProduction = 8
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Pumpjack Max Consumption")
+    var pumpjackConsumption = 80.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
     var batteryItemLowCapacity: Int = 250_000
 

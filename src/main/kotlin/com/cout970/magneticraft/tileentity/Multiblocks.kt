@@ -513,7 +513,7 @@ class TilePumpjack : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockPumpjack
 
-    val tank = Tank(64000)
+    val tank = Tank(64000).apply { clientFluidName = "oil" }
     val node = ElectricNode(ref)
 
     val fluidModule = ModuleFluidHandler(tank,
@@ -531,6 +531,12 @@ class TilePumpjack : TileMultiblock(), ITickable {
             lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE,
             upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
     )
+
+    val openGuiModule = ModuleOpenGui()
+
+    val fluidExportModule = ModuleFluidExporter(tank, {
+        listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(0, 0, 1)) to facing.opposite)
+    })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
@@ -555,7 +561,8 @@ class TilePumpjack : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, fluidModule, energyModule, storageModule, ioModule, pumpjackModule)
+        initModules(multiblockModule, fluidModule, energyModule, storageModule, ioModule, pumpjackModule,
+                openGuiModule, fluidExportModule)
     }
 
     @DoNotRemove

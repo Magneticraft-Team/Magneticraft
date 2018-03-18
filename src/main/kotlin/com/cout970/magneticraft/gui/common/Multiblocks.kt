@@ -182,3 +182,11 @@ class ContainerContainer(val tile: TileContainer, player: EntityPlayer, world: W
         bindPlayerInventory(player.inventory)
     }
 }
+
+class ContainerPumpjack(val tile: TilePumpjack, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        bindPlayerInventory(player.inventory)
+    }
+}
