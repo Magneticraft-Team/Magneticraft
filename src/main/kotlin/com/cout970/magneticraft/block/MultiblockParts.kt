@@ -25,6 +25,7 @@ object MultiblockParts : IBlockMaker {
 
     lateinit var parts: BlockBase private set
     lateinit var column: BlockBase private set
+    lateinit var pumpjackDrill: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -42,7 +43,9 @@ object MultiblockParts : IBlockMaker {
             onBlockPlaced = { it.defaultValue.withProperty(PROPERTY_COLUMN_AXIS, it.facing.axis.toColumnAxis())}
         }.build()
 
-        return itemBlockListOf(parts, column)
+        pumpjackDrill = builder.withName("pumpjack_drill").build()
+
+        return itemBlockListOf(parts, column, pumpjackDrill)
     }
 
     enum class PartType(override val stateName: String,

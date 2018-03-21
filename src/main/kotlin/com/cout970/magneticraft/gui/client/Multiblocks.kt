@@ -17,7 +17,7 @@ import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.tileentity.modules.ModulePumpjack
+import com.cout970.magneticraft.tileentity.modules.ModulePumpjack.Status.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -215,29 +215,46 @@ class GuiPumpjack(val cont: ContainerPumpjack) : GuiBase(cont) {
 
     override fun initComponents() {
         val tile = cont.tile
+        val mod = tile.pumpjackModule
         val texture = guiTexture("pumpjack")
 
         +CompBackground(texture)
 
         +CompElectricBar(tile.node, Vec2d(53, 16))
         val consumptionCallback = CallbackBarProvider(
-                callback = { tile.pumpjackModule.production.storage.toDouble() },
+                callback = { mod.production.storage.toDouble() },
                 max = { Config.pumpjackConsumption },
                 min = { 0.0 }
         )
         +CompVerticalBar(consumptionCallback, 3,
                 Vec2d(64, 16),
-                { listOf(String.format("%.2fW", consumptionCallback.callback())) })
+                { listOf("%.2fW".format(consumptionCallback.callback())) })
 
 
         val processCallback = CallbackBarProvider(
-                { tile.pumpjackModule.depositLeft.toDouble() },
-                { tile.pumpjackModule.depositSize.toDouble() },
+                {
+                    when (mod.status) {
+                        SEARCHING_OIL, SEARCHING_DEPOSIT, DIGGING -> mod.processPercent.toDouble()
+                        SEARCHING_SOURCE, EXTRACTING -> mod.depositLeft.toDouble()
+                    }
+                },
+                {
+                    when (mod.status) {
+                        SEARCHING_OIL, SEARCHING_DEPOSIT, DIGGING -> 1.0
+                        SEARCHING_SOURCE, EXTRACTING -> mod.depositSize.toDouble()
+                    }
+                },
                 { 0.0 }
         )
 
-        +CompVerticalBar(processCallback, 6, Vec2d(75, 16),
-                { listOf("Oil deposit: ${tile.pumpjackModule.depositLeft}/${tile.pumpjackModule.depositSize} blocks") })
+        +CompVerticalBar(processCallback, 6, Vec2d(75, 16)) {
+            when (mod.status) {
+                SEARCHING_OIL -> listOf("Searching for oil: ${"%.2f".format(mod.processPercent * 100)}%")
+                SEARCHING_DEPOSIT -> listOf("Scanning oil deposit: ${"%.2f".format(mod.processPercent * 100)}%")
+                DIGGING -> listOf("Mining to the oil deposit: ${"%.2f".format(mod.processPercent * 100)}%")
+                SEARCHING_SOURCE, EXTRACTING -> listOf("Oil deposit: ${mod.depositLeft}/${mod.depositSize} blocks")
+            }
+        }
 
         +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.tank)
 
@@ -247,25 +264,31 @@ class GuiPumpjack(val cont: ContainerPumpjack) : GuiBase(cont) {
         +CompLight(
                 on = DrawableBox(box, vec2Of(26, 166) to size, vec2Of(256)),
                 off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.SEARCHING_DEPOSIT }
+                texture = texture, condition = { mod.status == SEARCHING_OIL }
         )
 
         +CompLight(
                 on = DrawableBox(box, vec2Of(26, 166 + 16) to size, vec2Of(256)),
                 off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.DIGGING }
+                texture = texture, condition = { mod.status == SEARCHING_DEPOSIT }
         )
 
         +CompLight(
                 on = DrawableBox(box, vec2Of(26, 166 + 16 * 2) to size, vec2Of(256)),
                 off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.EXTRACTING }
+                texture = texture, condition = { mod.status == DIGGING }
         )
 
         +CompLight(
                 on = DrawableBox(box, vec2Of(26, 166 + 16 * 3) to size, vec2Of(256)),
                 off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { tile.pumpjackModule.status == ModulePumpjack.Status.SEARCHING_SOURCE }
+                texture = texture, condition = { mod.status == EXTRACTING }
+        )
+
+        +CompLight(
+                on = DrawableBox(box, vec2Of(26, 166 + 16 * 4) to size, vec2Of(256)),
+                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
+                texture = texture, condition = { mod.status == SEARCHING_SOURCE }
         )
     }
 }

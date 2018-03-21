@@ -46,6 +46,7 @@ const val DATA_ID_ITEM_AMOUNT = 38
 const val DATA_ID_DEPOSIT_SIZE = 39
 const val DATA_ID_DEPOSIT_LEFT = 40
 const val DATA_ID_STATUS = 41
+const val DATA_ID_MACHINE_PROGRESS = 42
 
 val DATA_ID_VOLTAGE_LIST = listOf(
         DATA_ID_VOLTAGE_0,
