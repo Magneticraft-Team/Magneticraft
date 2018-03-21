@@ -72,19 +72,19 @@ public class MultiBlockEvent extends Event {
         }
     }
 
-    IMultiblock getMultiblock(){
+    public IMultiblock getMultiblock(){
         return multiblock;
     }
 
-    World getWorld(){
+    public World getWorld(){
         return world;
     }
 
-    BlockPos getCenter(){
+    public BlockPos getCenter(){
         return center;
     }
 
-    EnumFacing getFacing(){
+    public EnumFacing getFacing(){
         return facing;
     }
 }
