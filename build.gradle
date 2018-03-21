@@ -13,7 +13,7 @@ apply plugin: 'kotlin'
 apply plugin: 'maven'
 
 archivesBaseName = name
-version project.version
+version project.version + '-' + getBuildNumber()
 group project.groupId
 
 sourceCompatibility = targetCompatibility = '1.8'
@@ -108,4 +108,12 @@ uploadArchives {
             repository(url: "file://" + (System.getenv("local_maven") != null ? System.getenv("local_maven") : System.getenv("bamboo_local_maven")))
         }
     }
+}
+
+static String getBuildNumber() {
+    String buildNumber = System.getenv("BUILD_NUMBER") != null ? System.getenv("BUILD_NUMBER") : ""
+    if(buildNumber == "") {
+        buildNumber = System.getenv("bamboo_buildNumber") != null ? "." + System.getenv("bamboo_buildNumber") : ""
+    }
+    return buildNumber
 }
