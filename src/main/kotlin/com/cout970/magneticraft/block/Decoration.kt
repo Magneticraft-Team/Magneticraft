@@ -22,8 +22,8 @@ import net.minecraft.util.math.Vec3d
 
 object Decoration : IBlockMaker {
 
-    val PROPERTY_LIMESTONE_KIND = PropertyEnum.create("limestone_kind", LimestoneKind::class.java)!!
-    val PROPERTY_INVERTED = PropertyEnum.create("inverted", TileInverted::class.java)!!
+    val PROPERTY_LIMESTONE_KIND = PropertyEnum.create("limestone_kind", LimestoneKind::class.java)
+    val PROPERTY_INVERTED = PropertyEnum.create("inverted", TileInverted::class.java)
 
     lateinit var limestone: BlockBase private set
     lateinit var burnLimestone: BlockBase private set

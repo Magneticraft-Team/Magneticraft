@@ -5,6 +5,7 @@ import net.minecraft.util.SoundEvent
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 
 //Map with all the sounds in the mod
+// TODO replace with enum
 val sounds = listOf(
     "crushing_hit",
     "crushing_final",

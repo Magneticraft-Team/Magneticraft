@@ -33,6 +33,7 @@ class CPU_MIPS : ICPU {
     //otherwise the value should be the effective jump address
     var jump = -1
 
+    @Suppress("NOTHING_TO_INLINE")
     inline fun getRegister(t: Int): Int {
         return registers[t]
     }

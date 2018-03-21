@@ -9,6 +9,7 @@ import com.cout970.magneticraft.util.vector.yd
 import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.util.math.Vec3d
 
+@Suppress("NOTHING_TO_INLINE")
 inline fun Number.toRads() = Math.toRadians(this.toDouble())
 
 fun Float.toRadians() = Math.toRadians(this.toDouble()).toFloat()

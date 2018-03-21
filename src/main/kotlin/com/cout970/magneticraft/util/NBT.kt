@@ -119,7 +119,7 @@ fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing) {
     setInteger(key, facing.ordinal)
 }
 
-fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))!!
+fun NBTTagCompound.getEnumFacing(key: String) = EnumFacing.getFront(getInteger(key))
 
 // Builders
 
@@ -159,7 +159,7 @@ inline fun NBTTagList.forEachTag(action: (NBTTagCompound) -> Unit): Unit {
     for (i in 0 until this.tagCount()) action(getTagCompound(i))
 }
 
-fun NBTTagList.getTagCompound(index: Int) = getCompoundTagAt(index)!!
+fun NBTTagList.getTagCompound(index: Int) = getCompoundTagAt(index)
 
 fun NBTTagCompound.add(key: String, value: Int) = setInteger(key, value)
 fun NBTTagCompound.add(key: String, value: Boolean) = setBoolean(key, value)

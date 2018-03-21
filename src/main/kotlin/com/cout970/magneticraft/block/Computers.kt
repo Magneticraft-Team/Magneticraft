@@ -21,7 +21,7 @@ import net.minecraft.util.IStringSerializable
  */
 object Computers : IBlockMaker {
 
-    val PROPERTY_ROBOT_ORIENTATION = PropertyEnum.create("robot_orientation", RobotOrientation::class.java)!!
+    val PROPERTY_ROBOT_ORIENTATION = PropertyEnum.create("robot_orientation", RobotOrientation::class.java)
 
     lateinit var computer: BlockBase private set
     lateinit var miningRobot: BlockBase private set

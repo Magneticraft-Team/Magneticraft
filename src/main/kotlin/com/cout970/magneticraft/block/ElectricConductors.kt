@@ -44,7 +44,7 @@ import net.minecraft.world.World
 
 object ElectricConductors : IBlockMaker {
 
-    val PROPERTY_POLE_ORIENTATION = PropertyEnum.create("pole_orientation", PoleOrientation::class.java)!!
+    val PROPERTY_POLE_ORIENTATION = PropertyEnum.create("pole_orientation", PoleOrientation::class.java)
 
     lateinit var connector: BlockBase private set
     lateinit var electric_pole: BlockBase private set

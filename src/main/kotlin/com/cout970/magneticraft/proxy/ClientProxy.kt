@@ -56,7 +56,7 @@ class ClientProxy : CommonProxy() {
 
                 item.customModels.forEach { (state, location) ->
                     ModelLoaderApi.registerModelWithDecorator(
-                            ModelResourceLocation(item.registryName, state),
+                            ModelResourceLocation(item.registryName!!, state),
                             location,
                             DefaultBlockDecorator
                     )
@@ -89,7 +89,7 @@ class ClientProxy : CommonProxy() {
                 }
                 it.customModels.forEach { (state, location) ->
                     ModelLoaderApi.registerModelWithDecorator(
-                            ModelResourceLocation(it.registryName, state),
+                            ModelResourceLocation(it.registryName!!, state),
                             location,
                             DefaultBlockDecorator
                     )

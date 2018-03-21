@@ -26,8 +26,8 @@ val Vec3i.zd: Double get() = z.toDouble()
 val Vec3i.lengthSqr: Double get() = xd * xd + yd * yd + zd * zd
 val Vec3i.length: Double get() = Math.sqrt(lengthSqr)
 
-operator fun Vec3i.plus(dir: EnumFacing) = toBlockPos().offset(dir)!!
-operator fun Vec3i.minus(dir: EnumFacing) = toBlockPos().offset(dir.opposite)!!
+operator fun Vec3i.plus(dir: EnumFacing) = toBlockPos().offset(dir)
+operator fun Vec3i.minus(dir: EnumFacing) = toBlockPos().offset(dir.opposite)
 
 fun Vec3i.toBlockPos() = if (this is BlockPos) this else BlockPos(x, y, z)
 fun Vec3d.toBlockPos() = BlockPos(Math.round(xd).toInt(), Math.round(yd).toInt(), Math.round(zd).toInt())

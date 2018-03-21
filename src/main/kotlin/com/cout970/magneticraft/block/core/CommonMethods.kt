@@ -140,9 +140,9 @@ object CommonMethods {
     }
 
     // Common properties
-    val PROPERTY_FACING = PropertyEnum.create("facing", Facing::class.java)!!
-    val PROPERTY_ORIENTATION = PropertyEnum.create("orientation", Orientation::class.java)!!
-    val PROPERTY_CENTER_ORIENTATION = PropertyEnum.create("center_orientation", CenterOrientation::class.java)!!
+    val PROPERTY_FACING = PropertyEnum.create("facing", Facing::class.java)
+    val PROPERTY_ORIENTATION = PropertyEnum.create("orientation", Orientation::class.java)
+    val PROPERTY_CENTER_ORIENTATION = PropertyEnum.create("center_orientation", CenterOrientation::class.java)
 
     enum class Facing(override val stateName: String,
                       val facing: EnumFacing,

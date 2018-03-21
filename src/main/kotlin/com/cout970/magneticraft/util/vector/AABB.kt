@@ -13,15 +13,15 @@ import net.minecraft.util.math.Vec3i
 
 operator fun AxisAlignedBB.plus(offsetVector: Vec3i) = offset(offsetVector)
 
-operator fun AxisAlignedBB.plus(offsetVector: Vec3d) = offset(offsetVector)!!
+operator fun AxisAlignedBB.plus(offsetVector: Vec3d) = offset(offsetVector)
 
-operator fun AxisAlignedBB.minus(offsetVector: Vec3i) = offset(-offsetVector)!!
+operator fun AxisAlignedBB.minus(offsetVector: Vec3i) = offset(-offsetVector)
 
-operator fun AxisAlignedBB.minus(offsetVector: Vec3d) = offset(-offsetVector)!!
+operator fun AxisAlignedBB.minus(offsetVector: Vec3d) = offset(-offsetVector)
 
 // Offset overloads for vectors
 
-fun AxisAlignedBB.offset(offsetVector: Vec3i) = offset(offsetVector.toBlockPos())!!
+fun AxisAlignedBB.offset(offsetVector: Vec3i) = offset(offsetVector.toBlockPos())
 
 //Box construction
 

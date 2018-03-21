@@ -7,7 +7,7 @@ import net.minecraft.util.DamageSource
  */
 object DamageSources {
 
-    val damageSourceKiln = DamageSource("kiln").setFireDamage()!!
+    val damageSourceKiln = DamageSource("kiln").setFireDamage()
 
     val damageSourceGrinder = DamageSource("grinder")
 }

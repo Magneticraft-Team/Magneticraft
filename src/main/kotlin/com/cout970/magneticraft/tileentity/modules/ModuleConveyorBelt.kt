@@ -339,6 +339,7 @@ class ModuleConveyorBelt(
         return false
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
 
         if (cap == ITEM_HANDLER && facing == EnumFacing.UP) {

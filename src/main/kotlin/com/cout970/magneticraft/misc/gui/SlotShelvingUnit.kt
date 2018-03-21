@@ -40,7 +40,7 @@ class SlotShelvingUnit(inv: IItemHandler, id: Int, x: Int, y: Int) : SlotItemHan
         locked = false
     }
 
-    override fun canTakeStack(playerIn: EntityPlayer?): Boolean {
+    override fun canTakeStack(playerIn: EntityPlayer): Boolean {
         return !locked && super.canTakeStack(playerIn)
     }
 

@@ -17,8 +17,8 @@ import net.minecraft.util.IStringSerializable
  */
 object Ores : IBlockMaker {
 
-    val PROPERTY_ORE_TYPE = PropertyEnum.create("ore_type", OreType::class.java)!!
-    val PROPERTY_OIL_AMOUNT = PropertyEnum.create("oil_amount", OilAmount::class.java)!!
+    val PROPERTY_ORE_TYPE = PropertyEnum.create("ore_type", OreType::class.java)
+    val PROPERTY_OIL_AMOUNT = PropertyEnum.create("oil_amount", OilAmount::class.java)
 
     lateinit var ores: BlockBase private set
     lateinit var oilSource: BlockBase private set

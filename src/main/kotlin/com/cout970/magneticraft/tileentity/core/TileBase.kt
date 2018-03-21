@@ -132,7 +132,7 @@ abstract class TileBase : TileEntity() {
     //NOTE: never send a packet every tick, instead use shouldTick(20) to send a packet only every second
     fun sendUpdateToNearPlayers() {
         if (world.isClient) return
-        val packet = updatePacket
+        val packet = updatePacket ?: return
         world.playerEntities
                 .map { it as EntityPlayerMP }
                 .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
@@ -166,7 +166,7 @@ abstract class TileBase : TileEntity() {
         return writeToNBT(NBTTagCompound())
     }
 
-    override fun handleUpdateTag(tag: NBTTagCompound?) {
+    override fun handleUpdateTag(tag: NBTTagCompound) {
         super.handleUpdateTag(tag)
     }
 

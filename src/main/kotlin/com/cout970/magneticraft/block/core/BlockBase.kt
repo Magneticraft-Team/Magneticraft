@@ -177,7 +177,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     }
 
     // Called in server and client
-    override fun removedByPlayer(state: IBlockState, world: World, pos: BlockPos, player: EntityPlayer?,
+    override fun removedByPlayer(state: IBlockState, world: World, pos: BlockPos, player: EntityPlayer,
                                  willHarvest: Boolean): Boolean {
         if (world.isClient) {
             world.getTile<TileBase>(pos)?.onBreak()
@@ -199,13 +199,13 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         override fun getModelResourceLocation(state: IBlockState): ModelResourceLocation {
             stateMapper?.let { return it.invoke(state) }
             val variant = states.find { it.getBlockState(this@BlockBase) == state }?.stateName ?: "normal"
-            return ModelResourceLocation(registryName, variant)
+            return ModelResourceLocation(registryName!!, variant)
         }
     }
 
     override fun getStateForPlacement(world: World, pos: BlockPos, facing: EnumFacing,
                                       hitX: Float, hitY: Float, hitZ: Float, meta: Int,
-                                      placer: EntityLivingBase?, hand: EnumHand): IBlockState {
+                                      placer: EntityLivingBase, hand: EnumHand): IBlockState {
 
         val state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand)
         onBlockPlaced?.let {

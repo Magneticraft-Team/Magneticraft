@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.core.BlockMultiblock
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.util.get
@@ -30,7 +31,6 @@ import net.minecraft.world.World
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL14
-import java.awt.Color
 
 /**
  * Created by cout970 on 2017/06/16.
@@ -38,7 +38,8 @@ import java.awt.Color
 
 const val PIXEL = 0.0625
 
-inline fun modelOf(block: Block, id: String = "model") = { ModelResourceLocation(block.registryName, id) }
+@Suppress("NOTHING_TO_INLINE")
+inline fun modelOf(block: Block, id: String = "model") = { ModelResourceLocation(block.registryName!!, id) }
 
 object Utilities {
 
@@ -128,8 +129,8 @@ object Utilities {
     }
 
     fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms.TransformType, alpha: Float) {
-        var bakedmodel = Minecraft.getMinecraft().renderItem.getItemModelWithOverrides(stack, null, null)
-        if (stack.item != null) {
+        var bakedModel = Minecraft.getMinecraft().renderItem.getItemModelWithOverrides(stack, null, null)
+        if (stack.isNotEmpty) {
             val textureManager = Minecraft.getMinecraft().textureManager
             textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false)
@@ -141,9 +142,9 @@ object Utilities {
             glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA)
             pushMatrix()
 
-            bakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedmodel, transform, false)
+            bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedModel, transform, false)
 
-            Minecraft.getMinecraft().renderItem.renderItem(stack, bakedmodel)
+            Minecraft.getMinecraft().renderItem.renderItem(stack, bakedModel)
             cullFace(CullFace.BACK)
             popMatrix()
             disableRescaleNormal()
@@ -411,7 +412,6 @@ object Utilities {
     }
 
     fun setColor(color: Int) {
-        val col = Color(color)
         GL11.glColor4f(
                 ((color ushr 16) and 0xFF) / 255f,
                 ((color ushr 8) and 0xFF) / 255f,

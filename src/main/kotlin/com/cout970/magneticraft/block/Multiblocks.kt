@@ -34,7 +34,7 @@ import net.minecraft.util.text.TextFormatting
 object Multiblocks : IBlockMaker {
 
     val PROPERTY_MULTIBLOCK_ORIENTATION = PropertyEnum.create("multiblock_orientation",
-            MultiblockOrientation::class.java)!!
+            MultiblockOrientation::class.java)
 
     lateinit var gap: BlockBase private set
     lateinit var solarPanel: BlockBase private set

@@ -20,7 +20,7 @@ class ModuleMultiblockCenter(
     override lateinit var container: IModuleContainer
 
     companion object {
-        val emptyCapabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any? = { cap, side, pos -> null }
+        val emptyCapabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any? = { _, _, _ -> null }
     }
 
     //current multiblock

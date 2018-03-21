@@ -3,12 +3,8 @@ package com.cout970.magneticraft.tilerenderer.custom
 import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileInserter
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.ModelCacheFactory
-import com.cout970.magneticraft.tilerenderer.core.TileRenderer
-import com.cout970.magneticraft.tilerenderer.core.Utilities
+import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 /**
  * Created by cout970 on 2017/06/20.
@@ -34,7 +30,7 @@ object TileRendererInserter : TileRenderer<TileInserter>() {
     }
 
     override fun onModelRegistryReload() {
-        val loc = ModelResourceLocation(AutomaticMachines.inserter.registryName, "model")
+        val loc = modelOf(AutomaticMachines.inserter)()
         //cleaning
         model?.close()
 

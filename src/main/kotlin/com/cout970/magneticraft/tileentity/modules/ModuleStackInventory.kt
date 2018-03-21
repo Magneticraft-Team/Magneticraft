@@ -41,6 +41,7 @@ class ModuleStackInventory(
         stackType = ItemStack.EMPTY
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
 
         if (cap == ITEM_HANDLER) {

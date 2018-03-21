@@ -55,6 +55,7 @@ abstract class TileRenderer<T : TileBase> : TileEntitySpecialRenderer<T>() {
         GlStateManager.translate(-vec.xd, -vec.yd, -vec.zd)
     }
 
+    @Suppress("NOTHING_TO_INLINE")
     inline fun translate(x: Number, y: Number, z: Number) {
         GlStateManager.translate(x.toFloat(), y.toFloat(), z.toFloat())
     }
@@ -66,10 +67,12 @@ abstract class TileRenderer<T : TileBase> : TileEntitySpecialRenderer<T>() {
     fun rotate(angle: Float, x: Float, y: Float, z: Float) = GlStateManager.rotate(angle, x, y, z)
     fun rotate(angle: Float, axis: IVector3) = GlStateManager.rotate(angle, axis.xf, axis.yf, axis.zf)
 
+    @Suppress("NOTHING_TO_INLINE")
     inline fun rotate(angle: Number, x: Number, y: Number, z: Number) {
         GlStateManager.rotate(angle.toFloat(), x.toFloat(), y.toFloat(), z.toFloat())
     }
 
+    @Suppress("NOTHING_TO_INLINE")
     inline fun scale(x: Number, y: Number, z: Number) = GlStateManager.scale(x.toFloat(), y.toFloat(), z.toFloat())
     fun scale(x: Double, y: Double, z: Double) = GlStateManager.scale(x, y, z)
     fun scale(x: Float, y: Float, z: Float) = GlStateManager.scale(x, y, z)

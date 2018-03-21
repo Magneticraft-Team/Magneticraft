@@ -37,6 +37,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         super.initGui()
     }
 
+    @Suppress("NOTHING_TO_INLINE")
     inline operator fun IComponent.unaryPlus() {
         components.add(this)
     }

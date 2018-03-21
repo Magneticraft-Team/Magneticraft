@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.multiblock
 
 import com.cout970.magneticraft.block.Multiblocks
-import com.cout970.magneticraft.multiblock.components.IgnoreBlockComponent
 import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -23,7 +22,6 @@ object MultiblockGrinder : Multiblock() {
 
     init {
 
-        val I = IgnoreBlockComponent
         val E = copperCoilBlock()
         val P = grateBlock()
         val B = baseBlock()

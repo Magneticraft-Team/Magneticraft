@@ -155,6 +155,7 @@ class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world:
         bindPlayerInventory(player.inventory)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onClick(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
         sendUpdate(IBD().apply { this.setBoolean(button.id, true) })
         return true

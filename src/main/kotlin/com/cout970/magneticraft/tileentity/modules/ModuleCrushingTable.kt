@@ -141,7 +141,7 @@ class ModuleCrushingTable(
 
         if (damageTaken >= CRUSHING_DAMAGE) {
             if (world.isClient) {
-                world.playSound(pos.xd, pos.yd, pos.zd, sounds["crushing_final"], SoundCategory.BLOCKS, 1F, 1F, false)
+                world.playSound(pos.xd, pos.yd, pos.zd, sounds["crushing_final"]!!, SoundCategory.BLOCKS, 1F, 1F, false)
                 spawnParticles(world, pos)
             }
 
@@ -149,7 +149,7 @@ class ModuleCrushingTable(
             storedItem = recipe.output
             damageTaken = 0
         } else if (world.isClient) {
-            world.playSound(pos.xd, pos.yd, pos.zd, sounds["crushing_hit"], SoundCategory.BLOCKS, 1F, 1F, false)
+            world.playSound(pos.xd, pos.yd, pos.zd, sounds["crushing_hit"]!!, SoundCategory.BLOCKS, 1F, 1F, false)
             spawnParticles(world, pos)
         }
         container.sendUpdateToNearPlayers()

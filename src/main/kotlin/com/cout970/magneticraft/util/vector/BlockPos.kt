@@ -24,8 +24,8 @@ val BlockPos.zd: Double get() = z.toDouble()
 val BlockPos.lengthSqr: Double get() = xd * xd + yd * yd + zd * zd
 val BlockPos.length: Double get() = Math.sqrt(lengthSqr)
 
-operator fun BlockPos.plus(dir: EnumFacing) = this.offset(dir)!!
-operator fun BlockPos.minus(dir: EnumFacing) = this.offset(dir.opposite)!!
+operator fun BlockPos.plus(dir: EnumFacing) = this.offset(dir)
+operator fun BlockPos.minus(dir: EnumFacing) = this.offset(dir.opposite)
 
 
 operator fun BlockPos.minus(other: BlockPos) = BlockPos(x - other.x, y - other.y, z - other.z)

@@ -20,8 +20,8 @@ import net.minecraft.util.IStringSerializable
  */
 object MultiblockParts : IBlockMaker {
 
-    val PROPERTY_PART_TYPE = PropertyEnum.create("part_type", PartType::class.java)!!
-    val PROPERTY_COLUMN_AXIS = PropertyEnum.create("column_axis", ColumnOrientation::class.java)!!
+    val PROPERTY_PART_TYPE = PropertyEnum.create("part_type", PartType::class.java)
+    val PROPERTY_COLUMN_AXIS = PropertyEnum.create("column_axis", ColumnOrientation::class.java)
 
     lateinit var parts: BlockBase private set
     lateinit var column: BlockBase private set

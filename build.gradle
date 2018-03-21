@@ -76,7 +76,7 @@ repositories {
         url 'http://maven.epoxide.xyz'
     }
     maven {
-        name = "Craft Tweaker"
+        name = "Team Acronym Coders"
         url "http://maven.blamejared.com"
     }
     mavenCentral()
@@ -88,7 +88,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // JEI
-    compile "mezz.jei:jei_1.12.2:4.8.5.136"
+    compile "mezz.jei:jei_1.12.2:4.8.5.159"
 
     // Craft Tweaker
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.12.+"
@@ -114,6 +114,9 @@ static String getBuildNumber() {
     String buildNumber = System.getenv("BUILD_NUMBER") != null ? System.getenv("BUILD_NUMBER") : ""
     if(buildNumber == "") {
         buildNumber = System.getenv("bamboo_buildNumber") != null ? "." + System.getenv("bamboo_buildNumber") : ""
+    }
+    if(buildNumber == null || buildNumber == ""){
+        buildNumber = "dev"
     }
     return buildNumber
 }
