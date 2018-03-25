@@ -18,6 +18,9 @@ import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.SlotItemHandler
@@ -83,6 +86,20 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
         inventoryRegions += InventoryRegion(min..max)
         inventoryRegions += InventoryRegion(648..674)
         inventoryRegions += InventoryRegion(675..683)
+    }
+
+    data class StackId(val item: Item, val metadata: Int, val nbt: NBTTagCompound?)
+
+    fun ItemStack.toId() = StackId(item, metadata, tagCompound)
+
+    fun sortSlots(ascending: Boolean) {
+        filterText = ""
+        val amounts = allSlots.groupBy { it.stack.toId() }.mapValues { it.value.sumBy { it.stack.count } }
+
+        val slots = if (ascending) allSlots.sortedBy { amounts[it.stack.toId()] }
+        else allSlots.sortedByDescending { amounts[it.stack.toId()] }
+
+        updateCurrentSlots(slots)
     }
 
     fun filterSlots(filter: String) {

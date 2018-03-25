@@ -6,11 +6,13 @@ import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.tileentity.*
+import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.toRads
 import com.cout970.magneticraft.util.vector.*
 import com.cout970.vector.extensions.rotateZ
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import java.lang.Math.*
@@ -20,8 +22,17 @@ import java.lang.Math.*
  */
 private fun genNames(prefix: String): List<String> = (1..3).map { "$prefix-$it" }
 
+
+abstract class TileRendererMultiblock<T : TileBase>(
+        modelLocation: (() -> ModelResourceLocation)?,
+        filters: List<(String) -> Boolean> = listOf({ _ -> true })
+) : TileRendererSimple<T>(modelLocation, filters){
+
+    override fun isGlobalRenderer(te: T): Boolean = true
+}
+
 @RegisterRenderer(TileSolarPanel::class)
-object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
+object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>(
         modelLocation = modelOf(Multiblocks.solarPanel),
         filters = filtersOf(
                 genNames("Panel1"),
@@ -107,7 +118,7 @@ object TileRendererSolarPanel : TileRendererSimple<TileSolarPanel>(
 }
 
 @RegisterRenderer(TileShelvingUnit::class)
-object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
+object TileRendererShelvingUnit : TileRendererMultiblock<TileShelvingUnit>(
         modelLocation = modelOf(Multiblocks.shelvingUnit),
         filters = filterOf((1..24).map { "Crate$it" })
 ) {
@@ -129,7 +140,7 @@ object TileRendererShelvingUnit : TileRendererSimple<TileShelvingUnit>(
 }
 
 @RegisterRenderer(TileSteamEngine::class)
-object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
+object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>(
         modelLocation = modelOf(Multiblocks.steamEngine),
         filters = listOf<(String) -> Boolean>(
                 { it !in TileRendererSteamEngine.partsNames },
@@ -161,7 +172,7 @@ object TileRendererSteamEngine : TileRendererSimple<TileSteamEngine>(
 }
 
 @RegisterRenderer(TileGrinder::class)
-object TileRendererGrinder : TileRendererSimple<TileGrinder>(
+object TileRendererGrinder : TileRendererMultiblock<TileGrinder>(
         modelLocation = modelOf(Multiblocks.grinder)
 ) {
 
@@ -177,7 +188,7 @@ object TileRendererGrinder : TileRendererSimple<TileGrinder>(
 }
 
 @RegisterRenderer(TileSieve::class)
-object TileRendererSieve : TileRendererSimple<TileSieve>(
+object TileRendererSieve : TileRendererMultiblock<TileSieve>(
         modelLocation = modelOf(Multiblocks.sieve)
 ) {
 
@@ -194,7 +205,7 @@ object TileRendererSieve : TileRendererSimple<TileSieve>(
 
 
 @RegisterRenderer(TileSolarTower::class)
-object TileRendererSolarTower : TileRendererSimple<TileSolarTower>(
+object TileRendererSolarTower : TileRendererMultiblock<TileSolarTower>(
         modelLocation = modelOf(Multiblocks.solarTower)
 ) {
 
@@ -210,7 +221,7 @@ object TileRendererSolarTower : TileRendererSimple<TileSolarTower>(
 }
 
 @RegisterRenderer(TileSolarMirror::class)
-object TileRendererSolarMirror : TileRendererSimple<TileSolarMirror>(
+object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>(
         modelLocation = modelOf(Multiblocks.solarMirror),
         filters = listOf<(String) -> Boolean>(
                 { !it.contains("mirror") },
@@ -316,7 +327,7 @@ object TileRendererSolarMirror : TileRendererSimple<TileSolarMirror>(
 }
 
 @RegisterRenderer(TileContainer::class)
-object TileRendererContainer : TileRendererSimple<TileContainer>(
+object TileRendererContainer : TileRendererMultiblock<TileContainer>(
         modelLocation = modelOf(Multiblocks.container)
 ) {
 
@@ -332,7 +343,7 @@ object TileRendererContainer : TileRendererSimple<TileContainer>(
 }
 
 @RegisterRenderer(TilePumpjack::class)
-object TileRendererPumpjack : TileRendererSimple<TilePumpjack>(
+object TileRendererPumpjack : TileRendererMultiblock<TilePumpjack>(
         modelLocation = modelOf(Multiblocks.pumpjack)
 ) {
 

@@ -5,6 +5,8 @@
 - [Grinder](2.3-grinder)
 - [Sieve](2.4-sieve)
 - [Wind turbine](2.5-wind-turbine)
+- [Shipping Container](2.6-shipping-container)
+- [Pumpjack](6.6-pumpjack)
 - Water Generator
 - Combustion Chamber
 - Steam Boiler

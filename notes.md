@@ -6,7 +6,6 @@
 - add sieve animation, particles and sound
 - add grinder particles and sound
 - add flare stack
-- add pumpjack
 - fix pipes collision box and add auto-import
 - add heat system and remove all 'symbolic heat values'
 - add gears for steam engine tiers (and add a fucking GUI)
@@ -14,13 +13,30 @@
 - change tank model and add auto-export
 - add conveyor belt end that drops stuff in chests
 - add wire coil durability and remove auto-connect (make lag)
-- add shipping crate/container
-- the rest of the things that i can't remember
 
-### change log
-- updated forge
-- fix manual markdown support
-- fix ming robot desync on login
+### Ideas to add at some point
+- Realistic reactors
+- Voltage tiers
+- Rainbow cables
+- Computer controlled stuff
+- Logistics
+- Boats?
+- Crafter/Assembler
+- Laser Cutter
+- Farms
+- Original Tanks
+- Auto-extract pipes
+- Steam tubine
+- Rockets/Rocket silo
+- Better ore processing (galvanization tank, Allow furnace)
+- Geothermal power
+- Quarry?
+- Chainsaw, Drill, pneumatic wrench
+- Particles, lots of particles
+- Textil factory
+- Emerald nuggets for tradding?
+- Pump?
+- Shelving unit ordering...
 
 
 ### Steps to add a new multiblock

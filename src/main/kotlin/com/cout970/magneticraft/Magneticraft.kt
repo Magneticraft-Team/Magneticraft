@@ -21,7 +21,7 @@ import kotlin.system.measureTimeMillis
 @Mod(
         modid = MOD_ID,
         name = MOD_NAME,
-        version = "2.1.2",
+        version = "2.2.0",
         modLanguage = "kotlin",
         modLanguageAdapter = LANG_ADAPTER,
         acceptedMinecraftVersions = "[1.12]",

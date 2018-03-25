@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
+import com.cout970.magneticraft.misc.tileentity.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -26,11 +27,12 @@ class ModuleInternalStorage(
         val upperVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
         val lowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
         override val name: String = "module_electric_storage"
-) : IModule {
+) : IModule, IMachineEnergyInterface {
     lateinit override var container: IModuleContainer
 
     companion object {
-        @JvmStatic val INTERVAL = 5
+        @JvmStatic
+        val INTERVAL = 5
     }
 
     var energy: Int = 0
@@ -61,6 +63,12 @@ class ModuleInternalStorage(
             }
             chargeRate.tick()
         }
+    }
+
+    override fun hasEnergy(amount: Double): Boolean = energy >= amount
+
+    override fun useEnergy(amount: Double) {
+        energy = Math.max(0, energy - amount.toInt())
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {

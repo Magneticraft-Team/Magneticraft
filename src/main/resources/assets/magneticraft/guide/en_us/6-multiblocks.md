@@ -7,6 +7,8 @@
 - [Sieve](2.4-sieve)
 - [Solar Mirrors](6.4-solar-mirror)
 - [Solar Tower](6.5-solar-tower)
+- [Shipping Container](2.6-shipping-container)
+- [Pumpjack](6.6-pumpjack)
 
 To build a multiblock, craft the blueprint, place it in the ground, it will show the block pattern of the multiblock, 
 place the needed blocks and right click on the wooden box to active it.

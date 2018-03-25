@@ -22,13 +22,12 @@ object MultiblockManager : IMultiblockManager {
     private val multiblocks = mutableMapOf<String, Multiblock>()
 
     fun registerMultiblock(mb: Multiblock) {
-        if (mb.name in multiblocks) throw IllegalArgumentException(
-                "Multiblock with name: ${mb.name} is already registered")
+        if (mb.name in multiblocks) error("Multiblock with name: ${mb.name} is already registered")
         multiblocks.put(mb.name, mb)
     }
 
-    override fun getMultiblock(name: String) = multiblocks[name] ?: throw IllegalStateException(
-            "Unregistered $MOD_ID Multiblock: $name, Please contact with the author")
+    override fun getMultiblock(name: String) = multiblocks[name] ?:
+            error("Unregistered $MOD_ID Multiblock: $name, Please contact with the author")
 
     fun registerDefaults() {
         registerMultiblock(MultiblockSolarPanel)

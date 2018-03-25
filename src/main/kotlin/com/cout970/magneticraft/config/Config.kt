@@ -61,6 +61,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: cost of removing a water block")
     var airlockAirCost = 2.0
 
+    @ConfigValue(category = CATEGORY_ORES, comment = "Oil per stage in a oil source block, every block has 10 stages")
+    var oilPerStage = 1000
+
     //    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Consumption")
 //    var hydraulicPressConsumption = 40.0
 //
@@ -84,6 +87,9 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Pumpjack Max Consumption")
     var pumpjackConsumption = 80.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Pumpjack Scan tries per tick, every scan checks 8 blocks")
+    var pumpjackScanSpeed = 80
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
     var batteryItemLowCapacity: Int = 250_000

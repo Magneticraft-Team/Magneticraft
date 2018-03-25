@@ -11,6 +11,7 @@ import com.cout970.magneticraft.misc.network.AverageSyncVariable
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
+import com.cout970.magneticraft.misc.tileentity.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -28,9 +29,10 @@ import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 
 class ModulePumpjack(
-        val storage: ModuleInternalStorage,
+        val energy: IMachineEnergyInterface,
         val tank: Tank,
         val ref: () -> BlockPos,
+        val active: () -> Boolean,
         override val name: String = "module_pumpjack"
 ) : IModule {
 
@@ -38,6 +40,11 @@ class ModulePumpjack(
 
     companion object {
         val oilFilter: (IBlockState) -> Boolean = { it.block == Ores.oilSource }
+        val pipeFilter: (IBlockState) -> Boolean = { it.block != MultiblockParts.pumpjackDrill }
+
+        val nonEmptyOilFilter: (IBlockState) -> Boolean = {
+            it.block == Ores.oilSource && it.getValue(Ores.PROPERTY_OIL_AMOUNT) != Ores.OilAmount.EMPTY
+        }
     }
 
     val production = ValueAverage()
@@ -121,12 +128,12 @@ class ModulePumpjack(
 
     fun searchDeposit() {
 
-        if (storage.energy > Config.pumpjackConsumption) return
+        if (!energy.hasEnergy(Config.pumpjackConsumption)) return
         val depositSearch = depositSearch
 
         if (depositSearch != null) {
 
-            repeat(100) {
+            repeat(Config.pumpjackScanSpeed) {
                 if (!depositSearch.hasNext()) {
                     this.depositSearch = null
 
@@ -137,7 +144,6 @@ class ModulePumpjack(
                     }
                 } else {
 
-                    // analize 32 blocks every tick
                     val (pos) = find(depositSearch, oilFilter, 8) ?: return@repeat
                     depositSize++
 
@@ -146,47 +152,23 @@ class ModulePumpjack(
                     }
                 }
             }
-            storage.energy -= Math.max(0, Config.pumpjackConsumption.toInt())
+
+            energy.useEnergy(Config.pumpjackConsumption)
         } else {
             status = Status.SEARCHING_OIL
             container.sendUpdateToNearPlayers()
         }
     }
 
-    fun digAndPlacePipes() {
-        if (!container.shouldTick(20)) return
-        if (storage.energy > Config.pumpjackConsumption) return
+    fun searchNextSource() {
 
-        if (placeBlocks == null) {
-            val start = ref()
-            placeBlocks = WorldIterator.create(
-                    BlockPos(start.x, start.y, start.z),
-                    BlockPos(start.x, depositStart.y, start.z),
-                    true
-            )
-        }
-
-        placeBlocks?.let {
-            if (!it.hasNext()) {
-                placeBlocks = null
-                status = Status.SEARCHING_SOURCE
+        if (container.shouldTick(80)) {
+            if (!scanPipes()) {
+                status = Status.DIGGING
                 container.sendUpdateToNearPlayers()
-            } else {
-                val (pos) = find(it, { it.block != MultiblockParts.pumpjackDrill }, 5) ?: return
-                val blockstate = world.getBlockState(pos)
-
-                if (!blockstate.block.isAir(blockstate, world, pos)) {
-
-                    world.playEvent(2001, pos, Block.getStateId(blockstate))
-                    blockstate.block.dropBlockAsItem(world, pos, blockstate, 0)
-                }
-                world.setBlockState(pos, MultiblockParts.pumpjackDrill.defaultState)
-                storage.energy -= Math.max(0, Config.pumpjackConsumption.toInt())
+                return
             }
         }
-    }
-
-    fun searchNextSource() {
 
         if (depositSize == 0 || depositLeft == 0) {
             status = Status.SEARCHING_DEPOSIT
@@ -204,13 +186,15 @@ class ModulePumpjack(
             )
         }
 
-        nextSource?.let {
-            if (!it.hasNext()) {
+        repeat(Config.pumpjackScanSpeed) {
+            val source = nextSource!!
+            if (!source.hasNext()) {
                 status = Status.SEARCHING_DEPOSIT
                 nextSource = null
                 container.sendUpdateToNearPlayers()
+                return
             } else {
-                val result = find(it, oilFilter, 1600) ?: return
+                val result = find(source, nonEmptyOilFilter, 8) ?: return@repeat
                 nextSourcePos = result.first
                 status = Status.EXTRACTING
             }
@@ -218,34 +202,37 @@ class ModulePumpjack(
     }
 
     fun extractOil() {
-        if (storage.energy > Config.pumpjackConsumption) return
+        if (!energy.hasEnergy(Config.pumpjackConsumption)) return
 
         val state = world.getBlockState(nextSourcePos)
 
-        if (state.block == Ores.oilSource) {
-            val amount = state[Ores.PROPERTY_OIL_AMOUNT]!!.amount
-
-            if (amount > 0) {
-                val oil = FluidRegistry.getFluid("oil") ?: error("Oil not found")
-                val fluid = FluidStack(oil, 1000)
-
-                if (tank.fill(fluid, false) == 1000) {
-                    val newState = Ores.OilAmount.fromAmount(amount - 1)!!.getBlockState(Ores.oilSource)
-
-                    world.setBlockState(nextSourcePos, newState)
-                    tank.fill(fluid, true)
-                    production += Config.pumpjackConsumption
-                    storage.energy -= Math.max(0, Config.pumpjackConsumption.toInt())
-                }
-                // does not change 'status'
-                return
-            } else {
-                depositLeft--
-            }
+        if (state.block != Ores.oilSource || state[Ores.PROPERTY_OIL_AMOUNT] == Ores.OilAmount.EMPTY) {
+            status = Status.SEARCHING_SOURCE
+            searchNextSource()
+            return
         }
 
-        status = Status.SEARCHING_SOURCE
-        searchNextSource()
+        val oil = FluidRegistry.getFluid("oil") ?: error("Oil not found, please report to mod author")
+        val fluid = FluidStack(oil, Config.oilPerStage)
+
+        if (tank.fill(fluid, false) == Config.oilPerStage) {
+
+            val newAmount = state[Ores.PROPERTY_OIL_AMOUNT]!!.amount - 1
+            val newState = Ores.OilAmount.fromAmount(newAmount)!!.getBlockState(Ores.oilSource)
+
+            if (newAmount == 0) {
+                depositLeft--
+            }
+
+            world.setBlockState(nextSourcePos, newState)
+            tank.fill(fluid, true)
+
+            production += Config.pumpjackConsumption
+            energy.useEnergy(Config.pumpjackConsumption)
+
+            status = Status.SEARCHING_SOURCE
+            searchNextSource()
+        }
     }
 
     fun find(iterator: WorldIterator, filter: (IBlockState) -> Boolean, limit: Int): Pair<BlockPos, IBlockState>? {
@@ -261,6 +248,53 @@ class ModulePumpjack(
             count++
         }
         return null
+    }
+
+    fun digAndPlacePipes() {
+        if (!container.shouldTick(20)) return
+        if (!energy.hasEnergy(Config.pumpjackConsumption)) return
+
+        if (placeBlocks == null) {
+            val start = ref()
+            placeBlocks = WorldIterator.create(
+                    BlockPos(start.x, start.y, start.z),
+                    BlockPos(start.x, depositStart.y, start.z),
+                    true
+            )
+        }
+
+        placeBlocks?.let {
+            if (!it.hasNext()) {
+                placeBlocks = null
+                status = Status.SEARCHING_SOURCE
+                container.sendUpdateToNearPlayers()
+            } else {
+                val (pos) = find(it, pipeFilter, 5) ?: return
+                val blockstate = world.getBlockState(pos)
+
+                if (!blockstate.block.isAir(blockstate, world, pos)) {
+
+                    world.playEvent(2001, pos, Block.getStateId(blockstate))
+                    blockstate.block.dropBlockAsItem(world, ref().up(), blockstate, 0)
+                }
+                world.setBlockState(pos, MultiblockParts.pumpjackDrill.defaultState)
+                energy.useEnergy(Config.pumpjackConsumption)
+            }
+        }
+    }
+
+    // true if the pipes are fine, false if they need repair
+    fun scanPipes(): Boolean {
+        val start = ref()
+
+        repeat(start.y - depositStart.y) {
+            val block = world.getBlockState(BlockPos(start.x, it, start.z))
+
+            if (!pipeFilter(block)) {
+                return false
+            }
+        }
+        return true
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
@@ -303,6 +337,9 @@ class ModulePumpjack(
                         }
                         ModulePumpjack.Status.DIGGING -> {
                             placeBlocks?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
+                        }
+                        ModulePumpjack.Status.SEARCHING_SOURCE -> {
+                            nextSource?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
                         }
                         else -> 0f
                     }

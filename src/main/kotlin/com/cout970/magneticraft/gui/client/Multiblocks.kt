@@ -248,11 +248,16 @@ class GuiPumpjack(val cont: ContainerPumpjack) : GuiBase(cont) {
         )
 
         +CompVerticalBar(processCallback, 6, Vec2d(75, 16)) {
+
+            val percent = "%.2f".format(mod.processPercent * 100)
+            val amount = "${mod.depositLeft}/${mod.depositSize}"
+
             when (mod.status) {
-                SEARCHING_OIL -> listOf("Searching for oil: ${"%.2f".format(mod.processPercent * 100)}%")
-                SEARCHING_DEPOSIT -> listOf("Scanning oil deposit: ${"%.2f".format(mod.processPercent * 100)}%")
-                DIGGING -> listOf("Mining to the oil deposit: ${"%.2f".format(mod.processPercent * 100)}%")
-                SEARCHING_SOURCE, EXTRACTING -> listOf("Oil deposit: ${mod.depositLeft}/${mod.depositSize} blocks")
+                SEARCHING_OIL -> listOf("Searching for oil: $percent%")
+                SEARCHING_DEPOSIT -> listOf("Scanning oil deposit: $percent%")
+                DIGGING -> listOf("Mining to the oil deposit: $percent%")
+                SEARCHING_SOURCE -> listOf("Oil deposit: $amount blocks", "Scanning: $percent%")
+                EXTRACTING -> listOf("Oil deposit: $amount blocks", "Extracting...")
             }
         }
 

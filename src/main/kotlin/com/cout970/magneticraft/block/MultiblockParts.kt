@@ -40,16 +40,18 @@ object MultiblockParts : IBlockMaker {
         column = builder.withName("multiblock_column").copy {
             states = ColumnOrientation.values().toList()
             alwaysDropDefault = true
-            onBlockPlaced = { it.defaultValue.withProperty(PROPERTY_COLUMN_AXIS, it.facing.axis.toColumnAxis())}
+            onBlockPlaced = { it.defaultValue.withProperty(PROPERTY_COLUMN_AXIS, it.facing.axis.toColumnAxis()) }
         }.build()
 
-        pumpjackDrill = builder.withName("pumpjack_drill").build()
+        pumpjackDrill = builder.withName("pumpjack_drill").copy {
+            onDrop = { emptyList() }
+        }.build()
 
         return itemBlockListOf(parts, column, pumpjackDrill)
     }
 
     enum class PartType(override val stateName: String,
-                       override val isVisible: Boolean) : IStatesEnum, IStringSerializable {
+                        override val isVisible: Boolean) : IStatesEnum, IStringSerializable {
 
         BASE("base", true),
         ELECTRIC("electric", true),
@@ -67,7 +69,7 @@ object MultiblockParts : IBlockMaker {
     }
 
     enum class ColumnOrientation(override val stateName: String,
-                       override val isVisible: Boolean) : IStatesEnum, IStringSerializable {
+                                 override val isVisible: Boolean) : IStatesEnum, IStringSerializable {
 
         AXIS_Y("axis_y", true),
         AXIS_X("axis_x", false),
@@ -82,7 +84,7 @@ object MultiblockParts : IBlockMaker {
     }
 }
 
-fun EnumFacing.Axis.toColumnAxis(): MultiblockParts.ColumnOrientation = when(this){
+fun EnumFacing.Axis.toColumnAxis(): MultiblockParts.ColumnOrientation = when (this) {
     EnumFacing.Axis.X -> MultiblockParts.ColumnOrientation.AXIS_X
     EnumFacing.Axis.Y -> MultiblockParts.ColumnOrientation.AXIS_Y
     EnumFacing.Axis.Z -> MultiblockParts.ColumnOrientation.AXIS_Z

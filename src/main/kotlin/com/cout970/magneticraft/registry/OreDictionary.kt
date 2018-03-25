@@ -27,7 +27,6 @@ fun registerOreDictionaryEntries() {
         }
         if(it.useful && !it.isComposite) {
             OreDictionary.registerOre("lightPlate${it.name.toLowerCase().capitalize()}", it.getLightPlate())
-            OreDictionary.registerOre("plate${it.name.toLowerCase().capitalize()}", it.getLightPlate())
             OreDictionary.registerOre("heavyPlate${it.name.toLowerCase().capitalize()}", it.getHeavyPlate())
         }
         if(!it.isComposite) {
@@ -50,7 +49,7 @@ fun registerOreDictionaryEntries() {
         OreDictionary.registerOre("rockyChunkAluminum", it.getRockyChunk())
     }
 
-    OreDictionary.registerOre("dustSulfur", CraftingItems.crafting.stack(1, CraftingItems.meta["sulfur"]!!))
+    OreDictionary.registerOre("dustSulfur", CraftingItems.crafting.stack(1, CraftingItems.Type.SULFUR.meta))
     OreDictionary.registerOre("oreCopper", Ores.ores.stack(1, 0))
     OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))
     OreDictionary.registerOre("oreCobalt", Ores.ores.stack(1, 2))

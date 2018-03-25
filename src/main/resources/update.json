@@ -24,14 +24,15 @@
         "2.0.4": "Fixed small bugs",
         "2.1.0": "New content",
         "2.1.1": "Hotfix: fixed robots",
-        "2.1.2": "Fixed nugget recipes, fixed FORTH"
+        "2.1.2": "Fixed nugget recipes, fixed FORTH",
+        "2.2.0": "Added shipping containers and added pumpjack, removed plates from ore dictionary"
     },
     "promos": {
         "1.12-latest": "2.1.2",
         "1.12-recommended": "2.1.2",
         "1.12.1-latest": "2.1.2",
         "1.12.1-recommended": "2.1.2",
-        "1.12.2-latest": "2.1.2",
-        "1.12.2-recommended": "2.1.2"
+        "1.12.2-latest": "2.2.0",
+        "1.12.2-recommended": "2.2.0"
     }
 }

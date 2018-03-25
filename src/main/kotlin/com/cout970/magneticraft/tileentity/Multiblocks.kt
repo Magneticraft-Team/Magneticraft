@@ -528,8 +528,8 @@ class TilePumpjack : TileMultiblock(), ITickable {
     val storageModule = ModuleInternalStorage(
             mainNode = node,
             capacity = 10_000,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+            lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
     )
 
     val openGuiModule = ModuleOpenGui()
@@ -549,9 +549,10 @@ class TilePumpjack : TileMultiblock(), ITickable {
     )
 
     val pumpjackModule = ModulePumpjack(
-            storage = storageModule,
+            energy = storageModule,
             tank = tank,
-            ref = { pos.offset(facing, 5) }
+            ref = { pos.offset(facing, 5) },
+            active = ::active
     )
 
     override val multiblockModule = ModuleMultiblockCenter(

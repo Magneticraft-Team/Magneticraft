@@ -67,7 +67,7 @@ class WorldIterator(val start: BlockPos, val end: BlockPos, val inverted: Boolea
     }
 
     fun doneBlocks(): Int {
-        val totalArea = (end - start)
+        val totalArea = (end - start) + BlockPos(1, 1, 1)
 
         val yLayers = if (!inverted) {
             (current.y - start.y) * (totalArea.x * totalArea.z)
