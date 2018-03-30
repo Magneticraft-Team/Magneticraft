@@ -3,10 +3,7 @@ package com.cout970.magneticraft.gui.client
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.*
 import com.cout970.magneticraft.gui.client.components.bars.*
-import com.cout970.magneticraft.gui.client.components.buttons.AbstractButton
-import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
-import com.cout970.magneticraft.gui.client.components.buttons.buttonOf
-import com.cout970.magneticraft.gui.client.components.buttons.buttonUV
+import com.cout970.magneticraft.gui.client.components.buttons.*
 import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
@@ -28,7 +25,6 @@ fun guiShelvingUnit(gui: GuiBase, container: ContainerShelvingUnit) = gui.run {
     var scrollBar: CompScrollBar? = null
     var textInput: CompTextInput? = null
     val texture = guiTexture("shelving_unit")
-    val tile = container.tile
 
     sizeX = 194
     sizeY = 207
@@ -54,12 +50,16 @@ fun guiShelvingUnit(gui: GuiBase, container: ContainerShelvingUnit) = gui.run {
     }
 
     val buttons = listOf(
-            MultiButton(0, box = vec2Of(176, 129) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 0), vec2Of(23, 24))),
-            MultiButton(1, box = vec2Of(176, 154) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 3), vec2Of(23, 24))),
-            MultiButton(2, box = vec2Of(176, 179) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 6), vec2Of(23, 24)))
+            MultiButton(0, texture, vec2Of(176, 129) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 0), vec2Of(23, 24))),
+            MultiButton(1, texture, vec2Of(176, 154) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 3), vec2Of(23, 24))),
+            MultiButton(2, texture, vec2Of(176, 179) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 6), vec2Of(23, 24)))
     )
-
     buttons.forEach { +it; it.listener = ::onPress; it.allButtons = buttons }
+
+    val level = container.level.levelIndex
+    if (level != -1) {
+        buttons[2 - level].state = ButtonState.PRESSED
+    }
 }
 
 fun guiGrinder(gui: GuiBase, container: ContainerGrinder) = gui.run {

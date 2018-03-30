@@ -47,9 +47,12 @@ fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
         +it
     }
 
+    val size = vec2Of(7, 7)
+    val pos = Vec2d((width - sizeX) / 2, (height - sizeY) / 2) + Vec2d(14, 220)
+
     +CompLight(
-            on = DrawableBox(pos + Vec2d(14, 221), vec2Of(7, 7), vec2Of(24, 230), vec2Of(7, 7), textureSize),
-            off = DrawableBox(pos + Vec2d(14, 221), vec2Of(7, 7), vec2Of(24, 237), vec2Of(7, 7), textureSize),
+            on = DrawableBox(pos, size, vec2Of(24, 237), size, textureSize),
+            off = DrawableBox(pos, size, vec2Of(24, 230), size, textureSize),
             texture = texture, condition = motherboard::isOnline
     )
 
@@ -72,9 +75,9 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     +CompElectricBar(tile.node, Vec2d(10, 238))
 
     listOf(
-            buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 318)),
-            buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 318)),
-            buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 318))
+            buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 317)),
+            buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 317)),
+            buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 317))
     ).forEach {
         it.listener = { btn, _, _ ->
             val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, btn.id) }
@@ -86,9 +89,12 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
 
     +CompStorageBar(tile.energyStorage, vec2Of(19, 238), vec2Of(31, 317), texture, textureSize)
 
+    val size = vec2Of(7, 7)
+    val pos = Vec2d((width - sizeX) / 2, (height - sizeY) / 2) + Vec2d(14, 220)
+
     +CompLight(
-            on = DrawableBox(pos + Vec2d(14, 221), vec2Of(7, 7), vec2Of(7, 325), vec2Of(7, 7), textureSize),
-            off = DrawableBox(pos + Vec2d(14, 221), vec2Of(7, 7), vec2Of(0, 325), vec2Of(7, 7), textureSize),
+            on = DrawableBox(pos, size, vec2Of(24, 324), size, textureSize),
+            off = DrawableBox(pos, size, vec2Of(24, 317), size, textureSize),
             texture = texture, condition = { motherboard.isOnline() }
     )
     +CompEnableRepeatedEvents()
