@@ -47,11 +47,29 @@ fun registerRecipes() {
             addGrinderRecipe(metal.getIngot(), metal.getDust(), ItemStack.EMPTY, 0.0f, 50f)
         }
     }
+    ItemHolder.tinOre?.ifNonEmpty {
+        addGrinderRecipe(it, EnumMetal.TIN.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
+    }
+    ItemHolder.osmiumOre?.ifNonEmpty {
+        addGrinderRecipe(it, EnumMetal.OSMIUM.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
+    }
+    ItemHolder.dimensionalShard?.ifNonEmpty { shard ->
+        ItemHolder.dimensionalShardOre0?.ifNonEmpty {ore ->
+            addGrinderRecipe(ore, shard.withSize(4), shard.withSize(1), 0.5f, 50f)
+        }
+        ItemHolder.dimensionalShardOre1?.ifNonEmpty { ore ->
+            addGrinderRecipe(ore, shard.withSize(4), shard.withSize(1), 0.5f, 50f)
+        }
+        ItemHolder.dimensionalShardOre2?.ifNonEmpty { ore ->
+            addGrinderRecipe(ore, shard.withSize(4), shard.withSize(1), 0.5f, 50f)
+        }
+    }
 
     addGrinderRecipe(Blocks.REDSTONE_ORE.stack(), Items.REDSTONE.stack(4), Blocks.GRAVEL.stack(), 0.15f, 50f)
     addGrinderRecipe(Blocks.LAPIS_ORE.stack(), Items.DYE.stack(6, 4), Blocks.GRAVEL.stack(), 0.15f, 50f)
     addGrinderRecipe(Blocks.QUARTZ_ORE.stack(), Items.QUARTZ.stack(3), Items.QUARTZ.stack(1), 0.5f, 60f)
     addGrinderRecipe(Blocks.EMERALD_ORE.stack(), Items.EMERALD.stack(2), Blocks.GRAVEL.stack(), 0.15f, 50f)
+    addGrinderRecipe(Blocks.DIAMOND_ORE.stack(), Items.DIAMOND.stack(1), Items.DIAMOND.stack(1), 0.75f, 50f)
 
     addGrinderRecipe(Blocks.GLOWSTONE.stack(), Items.GLOWSTONE_DUST.stack(4), ItemStack.EMPTY, 0.0f, 40f)
     addGrinderRecipe(Blocks.SANDSTONE.stack(), Blocks.SAND.stack(4), ItemStack.EMPTY, 0.0f, 40f)
@@ -120,6 +138,12 @@ fun registerRecipes() {
         metal.getOres().firstOrNull()?.let {
             addCrushingTableRecipe(it, metal.getRockyChunk())
         }
+    }
+    ItemHolder.tinOre?.ifNonEmpty {
+        addCrushingTableRecipe(it, EnumMetal.TIN.getRockyChunk())
+    }
+    ItemHolder.osmiumOre?.ifNonEmpty {
+        addCrushingTableRecipe(it, EnumMetal.OSMIUM.getRockyChunk())
     }
 
     addCrushingTableRecipe(Ores.OreType.PYRITE.stack(), CraftingItems.Type.SULFUR.stack(2))

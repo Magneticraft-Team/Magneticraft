@@ -55,7 +55,7 @@ object ToolItems : IItemMaker {
 
         steelHammer = builder.withName("steel_hammer").copy {
             onHitEntity = createHitEntity(5.0f)
-            capabilityProvider = { Hammer(3, 15) }
+            capabilityProvider = { Hammer(4, 15) }
             maxDamage = 750
         }.build()
 

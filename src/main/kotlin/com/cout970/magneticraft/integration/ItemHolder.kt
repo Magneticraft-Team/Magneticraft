@@ -31,4 +31,28 @@ object ItemHolder {
     @JvmField
     @GameRegistry.ItemStackHolder("thermalfoundation:material", meta = 770)
     val pulverizedObsidian: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("mekanism:oreblock", meta = 2)
+    val tinOre: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("mekanism:oreblock", meta = 0)
+    val osmiumOre: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("rftools:dimensional_shard_ore", meta = 0)
+    val dimensionalShardOre0: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("rftools:dimensional_shard_ore", meta = 1)
+    val dimensionalShardOre1: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("rftools:dimensional_shard_ore", meta = 2)
+    val dimensionalShardOre2: ItemStack? = null
+
+    @JvmField
+    @GameRegistry.ItemStackHolder("rftools:dimensional_shard", meta = 0)
+    val dimensionalShard: ItemStack? = null
 }

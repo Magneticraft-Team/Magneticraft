@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.integration.tinkersconstruct
 
+import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.util.info
 import net.minecraftforge.fluids.FluidRegistry
@@ -22,5 +23,8 @@ object TinkersConstruct {
             registerMelting(it.getLightPlate(), fluid, ingotAmount)
             registerMelting(it.getHeavyPlate(), fluid, ingotAmount * 2)
         }
+
+        info("Registering galena ores smelting recipe into Tinkers construct")
+        registerMelting(Ores.OreType.LEAD.stack(1), FluidRegistry.getFluid("silver"), ingotAmount * 2)
     }
 }

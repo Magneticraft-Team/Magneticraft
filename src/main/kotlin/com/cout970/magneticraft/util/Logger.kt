@@ -2,6 +2,7 @@
 
 package com.cout970.magneticraft.util
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
 import net.minecraft.util.text.ITextComponent
@@ -16,10 +17,11 @@ fun logError(str: String, vararg args: Any) {
 }
 
 fun info(str: String, vararg args: Any) {
-    Magneticraft.log.info("$str", *args)
+    Magneticraft.log.info(str, *args)
 }
 
 fun debug(vararg obj: Any?) {
+    if (!Debug.DEBUG) return
     obj.joinToString().forEach {
         print(it)
     }

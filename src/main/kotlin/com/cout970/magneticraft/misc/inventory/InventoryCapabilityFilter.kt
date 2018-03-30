@@ -12,9 +12,28 @@ class InventoryCapabilityFilter(
         val outputSlots: List<Int>
 ) : IItemHandler {
 
+    val slotMap = generateSlotMap()
+
+    private fun generateSlotMap(): List<Int> {
+        val map = mutableListOf<Int>()
+
+        inputSlots.forEach { slot ->
+            if (slot !in map)
+                map.add(slot)
+        }
+
+        outputSlots.forEach { slot ->
+            if (slot !in map)
+                map.add(slot)
+        }
+
+        return map
+    }
+
     override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-        if (toRealSlot(slot) in inputSlots) {
-            return inventory.insertItem(toRealSlot(slot), stack, simulate)
+        val realSlot = toRealSlot(slot)
+        if (realSlot in inputSlots) {
+            return inventory.insertItem(realSlot, stack, simulate)
         }
         return stack
     }
@@ -23,19 +42,14 @@ class InventoryCapabilityFilter(
 
     override fun getSlotLimit(slot: Int): Int = inventory.getSlotLimit(toRealSlot(slot))
 
-    override fun getSlots(): Int = inputSlots.size + outputSlots.size
+    override fun getSlots(): Int = slotMap.size
 
-    fun toRealSlot(index: Int): Int {
-        if (index < inputSlots.size) {
-            return inputSlots[index]
-        } else {
-            return outputSlots[index - inputSlots.size]
-        }
-    }
+    fun toRealSlot(index: Int): Int = slotMap[index]
 
     override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack {
-        if (toRealSlot(slot) in outputSlots) {
-            return inventory.extractItem(toRealSlot(slot), amount, simulate)
+        val realSlot = toRealSlot(slot)
+        if (realSlot in outputSlots) {
+            return inventory.extractItem(realSlot, amount, simulate)
         }
         return ItemStack.EMPTY
     }
