@@ -27,6 +27,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
  */
 object CommonMethods {
 
+    inline fun <reified T> propertyOf(name: String): PropertyEnum<T> where T : IStringSerializable, T : Enum<T> {
+        return PropertyEnum.create(name, T::class.java)
+    }
+
     fun pickDefaultBlock(args: PickBlockArgs): ItemStack {
         return ItemStack(args.default.item, 1, 0)
     }

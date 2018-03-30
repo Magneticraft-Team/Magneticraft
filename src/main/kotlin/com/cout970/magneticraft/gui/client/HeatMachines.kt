@@ -3,40 +3,31 @@ package com.cout970.magneticraft.gui.client
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.bars.CallbackBarProvider
 import com.cout970.magneticraft.gui.client.components.bars.CompVerticalBar
+import com.cout970.magneticraft.gui.client.components.bars.toHeatText
+import com.cout970.magneticraft.gui.client.components.bars.toPercentText
 import com.cout970.magneticraft.gui.client.core.GuiBase
-import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.misc.gui.formatHeat
-import com.cout970.magneticraft.tileentity.TileCombustionChamber
+import com.cout970.magneticraft.gui.common.ContainerCombustionChamber
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.util.WATER_BOILING_POINT
 import com.cout970.magneticraft.util.guiTexture
-import com.cout970.magneticraft.util.toKelvinFromCelsius
 import com.cout970.magneticraft.util.vector.Vec2d
 
 /**
  * Created by cout970 on 2017/08/10.
  */
 
-class GuiCombustionChamber(container: ContainerBase) : GuiBase(container) {
+fun guiCombustionChamber(gui: GuiBase, container: ContainerCombustionChamber) = gui.run {
+    val tile = container.tile
 
-    val tile = (container.tileEntity as TileCombustionChamber)
+    +CompBackground(guiTexture("combustion_chamber"))
 
-    override fun initComponents() {
-        components.add(CompBackground(guiTexture("combustion_chamber")))
-        val burningCallback = CallbackBarProvider(
-                { tile.combustionChamberModule.maxBurningTime.toDouble() - tile.combustionChamberModule.burningTime.toDouble() },
-                { tile.combustionChamberModule.maxBurningTime.toDouble() },
-                { 0.0 }
-        )
-        components.add(
-                CompVerticalBar(burningCallback, 1, Vec2d(69, 16),
-                        { listOf(String.format("Fuel: %.1f%%", burningCallback.getLevel() * 100)) }))
+    val burningCallback = CallbackBarProvider(
+            { tile.combustionChamberModule.maxBurningTime - tile.combustionChamberModule.burningTime.toDouble() },
+            tile.combustionChamberModule::maxBurningTime, { 0.0 })
 
-        val heatCallback = CallbackBarProvider(
-                { tile.combustionChamberModule.heat.toDouble() },
-                { 99.5.toKelvinFromCelsius() },
-                { 24.0.toKelvinFromCelsius() }
-        )
-        components.add(
-                CompVerticalBar(heatCallback, 2, Vec2d(80, 16),
-                        { listOf("Heat: " + formatHeat(heatCallback.callback())) }))
-    }
+    val heatCallback = CallbackBarProvider(tile.combustionChamberModule::heat,
+            ::WATER_BOILING_POINT, ::STANDARD_AMBIENT_TEMPERATURE)
+
+    +CompVerticalBar(burningCallback, 1, Vec2d(69, 16), burningCallback.toPercentText("Fuel: "))
+    +CompVerticalBar(heatCallback, 2, Vec2d(80, 16), heatCallback.toHeatText())
 }

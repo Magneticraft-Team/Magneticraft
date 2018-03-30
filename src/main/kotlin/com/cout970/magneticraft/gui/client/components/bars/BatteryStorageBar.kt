@@ -24,13 +24,11 @@ class BatteryStorageBar(val parent: GuiBase, val texture: ResourceLocation,
     override lateinit var gui: IGui
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        gui.bindTexture(texture)
         val level = (storageModule.energy * 48 / storageModule.capacity.toFloat()).toInt()
-        gui.drawTexture(DrawableBox(
-                screen = pos + vec2Of(0, 48 - level) to vec2Of(size.x, level),
-                texture = vec2Of(0, 166 + 48 - level) to vec2Of(size.x, level),
-                textureSize = vec2Of(256)
-        ))
+
+        gui.bindTexture(texture)
+        gui.drawTexture(DrawableBox(pos + vec2Of(0, 48 - level), vec2Of(size.x, level),
+                vec2Of(0, 166 + 48 - level)))
     }
 
     override fun drawSecondLayer(mouse: Vec2d) {

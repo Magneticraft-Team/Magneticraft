@@ -17,9 +17,10 @@ import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.util.WATER_BOILING_POINT
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
-import com.cout970.magneticraft.util.toKelvinFromCelsius
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
@@ -40,7 +41,7 @@ class ModuleCombustionChamber(
     override lateinit var container: IModuleContainer
     var burningTime = 0
     var maxBurningTime = 0
-    var heat = 24.toKelvinFromCelsius().toFloat()
+    var heat = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     var doorOpen = false
 
     companion object {
@@ -56,9 +57,9 @@ class ModuleCombustionChamber(
         val block = container.blockState.block
 
         val boxes = (block as? BlockBase)
-                            ?.aabb
-                            ?.invoke(BoundingBoxArgs(container.blockState, world, pos))
-                    ?: emptyList()
+                ?.aabb
+                ?.invoke(BoundingBoxArgs(container.blockState, world, pos))
+                ?: emptyList()
 
         val index = boxes.indexOfFirst { it.isHitBy(args.hit) }
         if (index != 2) {
@@ -83,20 +84,24 @@ class ModuleCombustionChamber(
         }
     }
 
+    fun spawnParticles() {
+        if (doorOpen && inventory[0].isNotEmpty) {
+            repeat(2) {
+                val rand = world.rand
+                val offset = (vec3Of(rand.nextFloat(), 0, rand.nextFloat()) * 2 - vec3Of(1, 0, 1)) * 0.25
+                val pos = pos.toVec3d() + vec3Of(0.5, 0.2, 0.5) + offset
+
+                val randDir = vec3Of(rand.nextFloat(), rand.nextFloat(), rand.nextFloat())
+                val randDirAllDirections = randDir * vec3Of(2, 1, 2) - vec3Of(1, 0, 1)
+                val dir = randDirAllDirections * 0.001 + (-offset + vec3Of(0, 1, 0)) * 0.025
+                world.spawnParticle(EnumParticleTypes.FLAME, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z)
+            }
+        }
+    }
+
     override fun update() {
         if (world.isClient) {
-            if (doorOpen && inventory[0].isNotEmpty) {
-                repeat(2) {
-                    val rand = world.rand
-                    val offset = (vec3Of(rand.nextFloat(), 0, rand.nextFloat()) * 2 - vec3Of(1, 0, 1)) * 0.25
-                    val pos = pos.toVec3d() + vec3Of(0.5, 0.2, 0.5) + offset
-
-                    val randDir = vec3Of(rand.nextFloat(), rand.nextFloat(), rand.nextFloat())
-                    val randDirAllDirections = randDir * vec3Of(2, 1, 2) - vec3Of(1, 0, 1)
-                    val dir = randDirAllDirections * 0.001 + (-offset + vec3Of(0, 1, 0)) * 0.025
-                    world.spawnParticle(EnumParticleTypes.FLAME, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z)
-                }
-            }
+            spawnParticles()
             return
         }
         if (maxBurningTime > 0) {
@@ -104,7 +109,7 @@ class ModuleCombustionChamber(
                 maxBurningTime = 0
                 burningTime = 0
             } else {
-                if (heat >= 99.toKelvinFromCelsius()) {
+                if (heat >= WATER_BOILING_POINT - 1) {
                     val speed = if (doorOpen) 2 else 4
                     burningTime += speed
                     getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * speed)
@@ -115,7 +120,7 @@ class ModuleCombustionChamber(
         }
         if (maxBurningTime <= 0) {
             val consumed = consumeFuel()
-            if (!consumed && heat > 24.toKelvinFromCelsius()) {
+            if (!consumed && heat > STANDARD_AMBIENT_TEMPERATURE) {
                 heat -= HEAT_FALLING_SPEED
             }
         }

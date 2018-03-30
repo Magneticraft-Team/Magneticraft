@@ -1,12 +1,13 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.gui.common.core.DATA_ID_BURNING_TIME
-import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_PRODUCTION
+import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_CONSUMPTION
 import com.cout970.magneticraft.misc.crafting.ICraftingProcess
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.add
@@ -27,10 +28,11 @@ class ModuleElectricProcessing(
     override lateinit var container: IModuleContainer
 
     val timedProcess = TimedCraftingProcess(craftingProcess, this::onWorkingTick)
-    val production = ValueAverage()
+    val consumption = ValueAverage()
     var working = false
 
     override fun update() {
+        if (world.isClient) return
         val fullPercentage = storage.energy.toFloat() / storage.capacity
         val rate = workingRate * fullPercentage
         //making sure that (speed * costPerTick) is an integer
@@ -43,11 +45,11 @@ class ModuleElectricProcessing(
             working = isWorking
             container.sendUpdateToNearPlayers()
         }
-        production.tick()
+        consumption.tick()
     }
 
     fun onWorkingTick(speed: Float) {
-        production.add(speed * costPerTick)
+        consumption += speed * costPerTick
         storage.energy = Math.max(0, storage.energy - (speed * costPerTick).toInt())
     }
 
@@ -62,8 +64,7 @@ class ModuleElectricProcessing(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-            FloatSyncVariable(DATA_ID_BURNING_TIME, getter = { timedProcess.timer },
-                    setter = { timedProcess.timer = it }),
-            production.toSyncVariable(DATA_ID_MACHINE_PRODUCTION)
+            FloatSyncVariable(DATA_ID_BURNING_TIME, { timedProcess.timer }, { timedProcess.timer = it }),
+            consumption.toSyncVariable(DATA_ID_MACHINE_CONSUMPTION)
     )
 }

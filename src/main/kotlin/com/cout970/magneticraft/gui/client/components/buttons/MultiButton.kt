@@ -1,19 +1,16 @@
 package com.cout970.magneticraft.gui.client.components.buttons
 
 import com.cout970.magneticraft.IVector2
-import com.cout970.magneticraft.util.vector.Vec2d
-import com.cout970.magneticraft.util.vector.contains
-import com.cout970.magneticraft.util.vector.pos
-import com.cout970.magneticraft.util.vector.size
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.ResourceLocation
 
 class MultiButton(
-        id: Int,
-        texture: ResourceLocation,
+        id: Int = 0,
+        texture: ResourceLocation? = null,
         box: Pair<IVector2, IVector2>,
-        textureSize: IVector2,
-        uvGetter: (ButtonState) -> Pair<IVector2, IVector2>
-) : AbstractButton(id, texture, box, textureSize, uvGetter) {
+        textureSize: IVector2 = vec2Of(256),
+        uv: (ButtonState) -> Pair<IVector2, IVector2>
+) : AbstractButton(id, texture, box, textureSize, uv) {
 
     lateinit var allButtons: List<MultiButton>
 

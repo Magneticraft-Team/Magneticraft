@@ -9,6 +9,7 @@ import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_SCROLL
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandler
+import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandlerTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
@@ -191,7 +192,7 @@ class ContainerContainer(val tile: TileContainer, player: EntityPlayer, world: W
     init {
         tile.stackInventoryModule.getCapability(ITEM_HANDLER!!, null)?.let { inv ->
             addSlotToContainer(SlotUnmodifiableItemHandler(inv, 0, 85, 16))
-            addSlotToContainer(SlotTakeOnly(inv, 1, 85, 48))
+            addSlotToContainer(SlotUnmodifiableItemHandlerTakeOnly(inv, 1, 85, 48))
 
             inventoryRegions += InventoryRegion(0..0, advFilter = { _, i -> i != 1 })
             inventoryRegions += InventoryRegion(1..1, advFilter = { _, _ -> false })

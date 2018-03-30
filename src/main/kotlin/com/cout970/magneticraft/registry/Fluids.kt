@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.util.WATER_BOILING_POINT
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.toKelvinFromCelsius
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidRegistry
 
@@ -17,7 +18,7 @@ fun initFluids() {
         FluidRegistry.registerFluid(
                 Fluid("steam", resource("fluids/steam_still"), resource("fluids/steam_flow")).also {
                     it.unlocalizedName = "magneticraft.steam"
-                    it.temperature = 100.toKelvinFromCelsius().toInt()
+                    it.temperature = WATER_BOILING_POINT.toInt()
                     it.density = 1
                     it.viscosity = 10
                     it.isGaseous = true
@@ -29,7 +30,7 @@ fun initFluids() {
         FluidRegistry.registerFluid(
                 Fluid("oil", resource("fluids/oil_still"), resource("fluids/oil_flow")).also {
                     it.unlocalizedName = "magneticraft.oil"
-                    it.temperature = 24.toKelvinFromCelsius().toInt()
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
                     it.density = 1100
                     it.viscosity = 2000
                 }

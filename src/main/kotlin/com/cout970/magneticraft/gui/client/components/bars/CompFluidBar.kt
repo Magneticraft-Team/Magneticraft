@@ -59,11 +59,7 @@ class CompFluidBar(
 
         gui.bindTexture(overlayTexture)
 
-        gui.drawTexture(DrawableBox(
-                screen = gui.pos + pos to size,
-                texture = overlayPos to size,
-                textureSize = Vec2d(256, 256)
-        ))
+        gui.drawTexture(DrawableBox(gui.pos + pos, size, overlayPos))
     }
 
     override fun drawSecondLayer(mouse: Vec2d) {

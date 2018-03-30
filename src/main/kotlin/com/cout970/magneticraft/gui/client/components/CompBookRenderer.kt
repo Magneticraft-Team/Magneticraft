@@ -56,7 +56,7 @@ class CompBookRenderer : IComponent {
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         GlStateManager.color(1f, 1f, 1f)
         gui.bindTexture(BACKGROUND)
-        gui.drawTexture(DrawableBox(gui.pos to size, Vec2d.ZERO to backgroundSize, vec2Of(512)))
+        gui.drawTexture(DrawableBox(gui.pos, size, Vec2d.ZERO, backgroundSize, vec2Of(512)))
 
         if (currentSection != "index") {
             renderArrow(Arrow.INDEX, mouse in Arrow.INDEX.collisionBox.offset(gui.pos))
@@ -121,7 +121,7 @@ class CompBookRenderer : IComponent {
 
     fun renderArrow(it: Arrow, hover: Boolean) {
         val uv = if (hover) it.hoverUv to it.uvSize else it.uvPos to it.uvSize
-        gui.drawTexture(DrawableBox(gui.pos + it.pos to it.size, uv, vec2Of(512)))
+        gui.drawTexture(DrawableBox(gui.pos + it.pos, it.size, uv.first, uv.second, vec2Of(512)))
     }
 
 

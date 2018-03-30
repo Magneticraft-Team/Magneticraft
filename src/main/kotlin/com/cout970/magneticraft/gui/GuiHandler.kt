@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.gui
 
 import com.cout970.magneticraft.gui.client.*
+import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.tileentity.*
@@ -16,56 +17,69 @@ import net.minecraftforge.fml.common.network.IGuiHandler
 object GuiHandler : IGuiHandler {
 
     override fun getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
-        val serverElement = getServerGuiElement(ID, player, world, x, y, z) as ContainerBase
+        val container = getServerGuiElement(ID, player, world, x, y, z) as ContainerBase
         if (ID == -2) {
-            return GuiGuideBook(serverElement as ContainerGuideBook)
+            return GuiGuideBook(container as ContainerGuideBook)
         }
 
-        val tile = world.getTileEntity(BlockPos(x, y, z))
-        return when (tile) {
-            is TileBox -> GuiBox(serverElement)
-            is TileShelvingUnit -> GuiShelvingUnit(serverElement)
-            is TileBattery -> GuiBattery(serverElement as ContainerBattery)
-            is TileElectricFurnace -> GuiElectricFurnace(serverElement as ContainerElectricFurnace)
-            is TileComputer -> GuiComputer(serverElement)
-            is TileMiningRobot -> GuiMiningRobot(serverElement)
-            is TileCombustionChamber -> GuiCombustionChamber(serverElement)
-            is TileThermopile -> GuiThermopile(serverElement as ContainerThermopile)
-            is TileGrinder -> GuiGrinder(serverElement as ContainerGrinder)
-            is TileSieve -> GuiSieve(serverElement as ContainerSieve)
-            is TileWindTurbine -> GuiWindTurbine(serverElement as ContainerWindTurbine)
-            is TileSolarTower -> GuiSolarTower(serverElement as ContainerSolarTower)
-            is TileContainer -> GuiContainer(serverElement as ContainerContainer)
-            is TilePumpjack -> GuiPumpjack(serverElement as ContainerPumpjack)
+        // @formatter:off
+        return when (container) {
+            is ContainerElectricHeater    -> guiOf(container, ::guiElectricHeater)
+            is ContainerBattery           -> guiOf(container, ::guiBattery)
+            is ContainerElectricFurnace   -> guiOf(container, ::guiElectricFurnace)
+            is ContainerThermopile        -> guiOf(container, ::guiThermopile)
+            is ContainerWindTurbine       -> guiOf(container, ::guiWindTurbine)
+            is ContainerCombustionChamber -> guiOf(container, ::guiCombustionChamber)
+            is ContainerBox               -> guiOf(container, ::guiBox)
+            is ContainerGrinder           -> guiOf(container, ::guiGrinder)
+            is ContainerSieve             -> guiOf(container, ::guiSieve)
+            is ContainerSolarTower        -> guiOf(container, ::guiSolarTower)
+            is ContainerContainer         -> guiOf(container, ::guiContainer)
+            is ContainerPumpjack          -> guiOf(container, ::guiPumpjack)
+            is ContainerShelvingUnit      -> guiOf(container, ::guiShelvingUnit)
+            is ContainerComputer          -> guiOf(container, ::guiComputer)
+            is ContainerMiningRobot       -> guiOf(container, ::guiMiningRobot)
             else -> null
         }
+        // @formatter:on
     }
 
     override fun getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
         val pos = BlockPos(x, y, z)
+
         if (ID == -2) {
             return ContainerGuideBook(player, world, pos)
         }
 
         val tile = world.getTileEntity(pos)
+
+        // @formatter:off
         return when (tile) {
-            is TileBox -> ContainerBox(tile, player, world, pos)
-            is TileShelvingUnit -> {
-                ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnitMb.Level.values()[ID])
-            }
-            is TileBattery -> ContainerBattery(tile, player, world, pos)
-            is TileElectricFurnace -> ContainerElectricFurnace(tile, player, world, pos)
-            is TileComputer -> ContainerComputer(tile, player, world, pos)
-            is TileMiningRobot -> ContainerMiningRobot(tile, player, world, pos)
+            is TileBox               -> ContainerBox(tile, player, world, pos)
+            is TileShelvingUnit      -> ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnitMb.Level.values()[ID])
+            is TileBattery           -> ContainerBattery(tile, player, world, pos)
+            is TileElectricFurnace   -> ContainerElectricFurnace(tile, player, world, pos)
+            is TileComputer          -> ContainerComputer(tile, player, world, pos)
+            is TileMiningRobot       -> ContainerMiningRobot(tile, player, world, pos)
             is TileCombustionChamber -> ContainerCombustionChamber(tile, player, world, pos)
-            is TileThermopile -> ContainerThermopile(tile, player, world, pos)
-            is TileGrinder -> ContainerGrinder(tile, player, world, pos)
-            is TileSieve -> ContainerSieve(tile, player, world, pos)
-            is TileWindTurbine -> ContainerWindTurbine(tile, player, world, pos)
-            is TileSolarTower -> ContainerSolarTower(tile, player, world, pos)
-            is TileContainer -> ContainerContainer(tile, player, world, pos)
-            is TilePumpjack -> ContainerPumpjack(tile, player, world, pos)
+            is TileThermopile        -> ContainerThermopile(tile, player, world, pos)
+            is TileGrinder           -> ContainerGrinder(tile, player, world, pos)
+            is TileSieve             -> ContainerSieve(tile, player, world, pos)
+            is TileWindTurbine       -> ContainerWindTurbine(tile, player, world, pos)
+            is TileSolarTower        -> ContainerSolarTower(tile, player, world, pos)
+            is TileContainer         -> ContainerContainer(tile, player, world, pos)
+            is TilePumpjack          -> ContainerPumpjack(tile, player, world, pos)
+            is TileElectricHeater    -> ContainerElectricHeater(tile, player, world, pos)
             else -> null
+        }
+        // @formatter:on
+    }
+
+    private fun <T : ContainerBase> guiOf(container: T, func: (GuiBase, T) -> Unit): GuiBase {
+        return object : GuiBase(container) {
+            override fun initComponents() {
+                func(this, container)
+            }
         }
     }
 }

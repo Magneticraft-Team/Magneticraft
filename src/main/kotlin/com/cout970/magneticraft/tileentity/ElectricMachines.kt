@@ -225,3 +225,29 @@ class TileWindTurbineGap : TileBase() {
         }
     }
 }
+
+
+@RegisterTileEntity("electric_heater")
+class TileElectricHeater : TileBase(), ITickable {
+
+    val node = ElectricNode(ref)
+
+    val electricModule = ModuleElectricity(
+            electricNodes = listOf(node)
+    )
+    val storageModule = ModuleInternalStorage(
+            capacity = 10000,
+            mainNode = node
+    )
+
+    val electricHeaterModule = ModuleElectricHeater(storageModule)
+
+    init {
+        initModules(electricModule, storageModule, electricHeaterModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}

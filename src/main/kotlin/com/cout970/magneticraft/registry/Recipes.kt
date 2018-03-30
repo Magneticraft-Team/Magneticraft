@@ -140,8 +140,6 @@ fun registerRecipes() {
     addCrushingTableRecipe(Blocks.STONE.stack(1, 2), Blocks.STONE.stack(1, 1))
     addCrushingTableRecipe(Blocks.STONEBRICK.stack(), Blocks.STONEBRICK.stack(1, 2))
     addCrushingTableRecipe(Blocks.STONEBRICK.stack(1, 1), Blocks.MOSSY_COBBLESTONE.stack())
-    addCrushingTableRecipe(Blocks.RED_SANDSTONE.stack(1, 2), Blocks.RED_SANDSTONE.stack())
-    addCrushingTableRecipe(Blocks.SANDSTONE.stack(1, 2), Blocks.SANDSTONE.stack())
     addCrushingTableRecipe(Blocks.PRISMARINE.stack(1, 1), Blocks.PRISMARINE.stack())
     addCrushingTableRecipe(Blocks.END_BRICKS.stack(1), Blocks.END_STONE.stack(1))
 

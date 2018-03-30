@@ -351,7 +351,7 @@ class ModulePumpjack(
         SEARCHING_OIL,
         SEARCHING_DEPOSIT,
         DIGGING,
-        SEARCHING_SOURCE,
-        EXTRACTING
+        EXTRACTING,
+        SEARCHING_SOURCE
     }
 }

@@ -213,6 +213,13 @@ object Debug {
             if (args.isNotEmpty()) {
                 when (args[0]) {
                     "gen" -> regenTerrain(sender, sender.entityWorld, sender.position)
+                    "ticks" -> setTicksPerSecond(args.getOrNull(1)?.toIntOrNull() ?: 20)
+                    "info" -> {
+                        val stack = (sender as EntityPlayer).inventory.getCurrentItem()
+                        sender.sendMessage("Item: $stack".toTextComponent())
+                        sender.sendMessage("NBT: ${stack.tagCompound}".toTextComponent())
+                        sender.sendMessage("OreDict: ${OreDictionary.getOreIDs(stack).map { OreDictionary.getOreName(it) }}".toTextComponent())
+                    }
                     else -> {
                         sender.sendMessage("Unknown arg: '$args[0]'".toTextComponent())
                     }

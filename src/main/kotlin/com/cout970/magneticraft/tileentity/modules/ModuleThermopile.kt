@@ -28,7 +28,7 @@ import net.minecraft.util.math.BlockPos
  */
 class ModuleThermopile(
         val node: IElectricNode,
-        override val name: String = "module_steam_generator"
+        override val name: String = "module_thermopile"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

@@ -42,11 +42,7 @@ class MonitorComponent(val monitor: DeviceMonitor, val green: Boolean) : ICompon
                     val pos = gui.pos + Vec2d(15 + column * scale, 15 + line * (scale + 2))
                     val x = character and 15
                     val y = character shr 4
-                    gui.drawTexture(DrawableBox(
-                            screen = pos to charSize,
-                            texture = Pair(Vec2d(x, y) * 16, Vec2d(16, 16)),
-                            textureSize = Vec2d(256, 256)
-                    ))
+                    gui.drawTexture(DrawableBox(pos, charSize, Vec2d(x, y) * 16))
                 }
             }
         }
@@ -70,8 +66,8 @@ class MonitorComponent(val monitor: DeviceMonitor, val green: Boolean) : ICompon
             208 -> sendKey(129 or shift, keyCode)
             210 -> sendKey(134 or shift, keyCode)
             0 -> if (keyCode != 54 && keyCode != 42 && keyCode != 56 && keyCode != 184 && keyCode != 29 &&
-                     keyCode != 221 && keyCode != 157 && (keyCode < 59 || keyCode > 70) && keyCode != 87 &&
-                     keyCode != 88 && keyCode != 197 && keyCode != 183 && keyCode != 0) {
+                    keyCode != 221 && keyCode != 157 && (keyCode < 59 || keyCode > 70) && keyCode != 87 &&
+                    keyCode != 88 && keyCode != 197 && keyCode != 183 && keyCode != 0) {
                 sendKey(keyCode, keyCode)
             }
             else -> if (typedChar.toInt() in 1..127) {

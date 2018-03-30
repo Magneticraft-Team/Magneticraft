@@ -49,11 +49,7 @@ class CompShelvingUnit(
                 val x = it % 9 * 18 + 8
                 val y = it / 9 * 18 + 21
 
-                gui.drawTexture(DrawableBox(
-                        screen = Pair(gui.pos + vec2Of(x, y), vec2Of(16, 16)),
-                        texture = Pair(vec2Of(240, 15), vec2Of(16, 16)),
-                        textureSize = vec2Of(256, 256)
-                ))
+                gui.drawTexture(DrawableBox(gui.pos + vec2Of(x, y), vec2Of(16, 16), vec2Of(240, 15)))
             }
         }
         if (container.currentSlots.isEmpty() && (container.filterText.isEmpty() || container.filterText.isBlank())) {

@@ -2,78 +2,42 @@ package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.*
-import com.cout970.magneticraft.gui.client.components.bars.CallbackBarProvider
-import com.cout970.magneticraft.gui.client.components.bars.CompElectricBar
-import com.cout970.magneticraft.gui.client.components.bars.CompFluidBar
-import com.cout970.magneticraft.gui.client.components.bars.CompVerticalBar
+import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.components.buttons.AbstractButton
-import com.cout970.magneticraft.gui.client.components.buttons.ButtonState
 import com.cout970.magneticraft.gui.client.components.buttons.MultiButton
-import com.cout970.magneticraft.gui.client.components.buttons.SimpleButton
+import com.cout970.magneticraft.gui.client.components.buttons.buttonOf
+import com.cout970.magneticraft.gui.client.components.buttons.buttonUV
 import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
-import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.tileentity.modules.ModulePumpjack
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack.Status.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
-import org.lwjgl.input.Keyboard
 
 /**
  * Created by cout970 on 2017/08/10.
  */
 
-class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
+fun guiShelvingUnit(gui: GuiBase, container: ContainerShelvingUnit) = gui.run {
+    var scrollBar: CompScrollBar? = null
+    var textInput: CompTextInput? = null
+    val texture = guiTexture("shelving_unit")
+    val tile = container.tile
 
-    lateinit var textInput: CompTextInput
+    sizeX = 194
+    sizeY = 207
 
-    override fun initComponents() {
-        xSize = 194
-        ySize = 207
-        val texture = guiTexture("shelving_unit")
-        val scrollBar = CompScrollBar(vec2Of(174, 21), texture = texture)
-
-        textInput = CompTextInput(fontRenderer, vec2Of(10, 7), vec2Of(86, 13)).apply { isFocused = true }
-        +CompBackground(texture, size = vec2Of(194, 207))
-
-        val button1Map = mapOf(
-                ButtonState.UNPRESSED to (vec2Of(194, 75) to vec2Of(23, 24)),
-                ButtonState.HOVER_UNPRESSED to (vec2Of(194, 75) to vec2Of(23, 24)),
-                ButtonState.PRESSED to (vec2Of(194, 0) to vec2Of(23, 24)),
-                ButtonState.HOVER_PRESSED to (vec2Of(194, 0) to vec2Of(23, 24))
-        )
-        val button2Map = mapOf(
-                ButtonState.UNPRESSED to (vec2Of(194, 100) to vec2Of(23, 24)),
-                ButtonState.HOVER_UNPRESSED to (vec2Of(194, 100) to vec2Of(23, 24)),
-                ButtonState.PRESSED to (vec2Of(194, 25) to vec2Of(23, 24)),
-                ButtonState.HOVER_PRESSED to (vec2Of(194, 25) to vec2Of(23, 24))
-        )
-        val button3Map = mapOf(
-                ButtonState.UNPRESSED to (vec2Of(194, 125) to vec2Of(23, 24)),
-                ButtonState.HOVER_UNPRESSED to (vec2Of(194, 125) to vec2Of(23, 24)),
-                ButtonState.PRESSED to (vec2Of(194, 50) to vec2Of(23, 24)),
-                ButtonState.HOVER_PRESSED to (vec2Of(194, 50) to vec2Of(23, 24))
-        )
-        val buttons = listOf(
-                MultiButton(0, texture, vec2Of(176, 129) to vec2Of(23, 24), vec2Of(256), { button1Map[it]!! }),
-                MultiButton(1, texture, vec2Of(176, 154) to vec2Of(23, 24), vec2Of(256), { button2Map[it]!! }),
-                MultiButton(2, texture, vec2Of(176, 179) to vec2Of(23, 24), vec2Of(256), { button3Map[it]!! })
-        )
-        +scrollBar
-        +textInput
-        buttons.forEach { +it; it.listener = this::onPress; it.allButtons = buttons }
-        +CompShelvingUnit(container as ContainerShelvingUnit, scrollBar, textInput)
-
-        (container as? ContainerShelvingUnit)?.let {
-            buttons[2 - it.level.levelIndex].state = ButtonState.PRESSED
-        }
-        Keyboard.enableRepeatEvents(true)
-    }
+    +CompBackground(texture, size = vec2Of(194, 207))
+    +CompScrollBar(vec2Of(174, 21), texture = texture).apply { scrollBar = this }
+    +CompTextInput(fontHelper, vec2Of(10, 7), vec2Of(86, 13)).apply { textInput = this; isFocused = true }
+    +CompShelvingUnit(container, scrollBar!!, textInput!!)
+    +CompEnableRepeatedEvents()
 
     @Suppress("UNUSED_PARAMETER")
     fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
@@ -81,219 +45,124 @@ class GuiShelvingUnit(container: ContainerBase) : GuiBase(container) {
             setInteger(DATA_ID_SHELVING_UNIT_LEVEL, button.id)
             setString(DATA_ID_SHELVING_UNIT_FILTER, "")
         }
-        (container as ContainerShelvingUnit)
-        textInput.text = ""
-        container.filterSlots("")
         container.sendUpdate(ibd)
+
+        textInput!!.text = ""
+        container.filterSlots("")
         container.switchLevel(ModuleShelvingUnitMb.Level.values()[button.id])
         return true
     }
 
-    override fun onGuiClosed() {
-        Keyboard.enableRepeatEvents(false)
-        super.onGuiClosed()
-    }
+    val buttons = listOf(
+            MultiButton(0, box = vec2Of(176, 129) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 0), vec2Of(23, 24))),
+            MultiButton(1, box = vec2Of(176, 154) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 3), vec2Of(23, 24))),
+            MultiButton(2, box = vec2Of(176, 179) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 6), vec2Of(23, 24)))
+    )
+
+    buttons.forEach { +it; it.listener = ::onPress; it.allButtons = buttons }
 }
 
-class GuiGrinder(val grinder: ContainerGrinder) : GuiBase(grinder) {
+fun guiGrinder(gui: GuiBase, container: ContainerGrinder) = gui.run {
+    val tile = container.tile
+    +CompBackground(guiTexture("grinder"))
+    +CompElectricBar(tile.node, Vec2d(52, 16))
 
-    override fun initComponents() {
-        val tile = grinder.tile
+    val consumption = tile.processModule.consumption.toBarProvider(Config.grinderMaxConsumption)
+    val process = tile.processModule.timedProcess.toBarProvider()
 
-        +CompBackground(guiTexture("grinder"))
-        +CompElectricBar(tile.node, Vec2d(52, 16))
-        val consumptionCallback = CallbackBarProvider(
-                callback = { tile.processModule.production.storage.toDouble() },
-                max = { Config.grinderMaxConsumption },
-                min = { 0.0 }
-        )
-        +CompVerticalBar(consumptionCallback, 3,
-                Vec2d(63, 16),
-                { listOf(String.format("%.2fW", consumptionCallback.callback())) })
-
-        val processCallback = CallbackBarProvider(
-                { tile.processModule.timedProcess.timer.toDouble() },
-                { tile.processModule.timedProcess.limit().toDouble() },
-                { 0.0 }
-        )
-        +CompVerticalBar(processCallback, 6, Vec2d(74, 16),
-                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") })
-    }
+    +CompVerticalBar(consumption, 3, Vec2d(63, 16), consumption.toEnergyText())
+    +CompVerticalBar(process, 6, Vec2d(74, 16), process.toPercentText("Processing: "))
 }
 
-class GuiSieve(val sieve: ContainerSieve) : GuiBase(sieve) {
+fun guiSieve(gui: GuiBase, container: ContainerSieve) = gui.run {
+    val tile = container.tile
 
-    override fun initComponents() {
-        val tile = sieve.tile
+    +CompBackground(guiTexture("sieve"))
+    +CompElectricBar(tile.node, Vec2d(41, 16))
 
-        +CompBackground(guiTexture("sieve"))
-        +CompElectricBar(tile.node, Vec2d(41, 16))
-        val consumptionCallback = CallbackBarProvider(
-                callback = { tile.processModule.production.storage.toDouble() },
-                max = { Config.sieveMaxConsumption },
-                min = { 0.0 }
-        )
-        +CompVerticalBar(consumptionCallback, 3,
-                Vec2d(52, 16),
-                { listOf(String.format("%.2fW", consumptionCallback.callback())) })
+    val consumption = tile.processModule.consumption.toBarProvider(Config.sieveMaxConsumption)
+    val process = tile.processModule.timedProcess.toBarProvider()
 
-        val processCallback = CallbackBarProvider(
-                { tile.processModule.timedProcess.timer.toDouble() },
-                { tile.processModule.timedProcess.limit().toDouble() },
-                { 0.0 }
-        )
-        +CompVerticalBar(processCallback, 6, Vec2d(63, 16),
-                { listOf("Processing: " + "%.1f".format(processCallback.getLevel() * 100) + "%") })
-    }
+    +CompVerticalBar(consumption, 3, Vec2d(52, 16), consumption.toEnergyText())
+    +CompVerticalBar(process, 6, Vec2d(63, 16), process.toPercentText("Processing: "))
 }
 
-class GuiSolarTower(val tower: ContainerSolarTower) : GuiBase(tower) {
+fun guiSolarTower(gui: GuiBase, container: ContainerSolarTower) = gui.run {
+    val tile = container.tile
 
-    override fun initComponents() {
-        val tile = tower.tile
-        val texture = guiTexture("solar_tower")
+    val texture = guiTexture("solar_tower")
 
-        +CompBackground(texture)
+    +CompBackground(texture)
 
-        val prodCallback = CallbackBarProvider(
-                { tile.steamBoilerModule.production.storage.toDouble() },
-                { tile.steamBoilerModule.maxSteamProduction.toDouble() },
-                { 0.0 }
-        )
+    +buttonOf(pos = vec2Of(108, 48), uv = vec2Of(16, 166), listener = container::onClick)
 
-        +CompVerticalBar(prodCallback, 3, Vec2d(53, 16),
-                { listOf("Steam production: ${prodCallback.callback()} mB/t") })
+    val prod = tile.steamBoilerModule.production.toBarProvider(tile.steamBoilerModule.maxSteamProduction)
+    val heat = tile.solarTowerModule.production.toBarProvider(tile.steamBoilerModule.heatCapacity)
 
-        val heatCallback = CallbackBarProvider(
-                { tile.solarTowerModule.production.storage.toDouble() },
-                { tile.steamBoilerModule.heatCapacity.toDouble() },
-                { 0.0 }
-        )
+    +CompVerticalBar(prod, 3, Vec2d(53, 16), prod.toIntText("Steam consumption: ", "mB/t"))
+    +CompVerticalBar(heat, 2, Vec2d(42, 16), heat.toIntText("Heat received: ", " Heat/t"))
 
-        +CompVerticalBar(heatCallback, 2, Vec2d(42, 16),
-                { listOf("Heat received: ${heatCallback.callback()} Heat/t") })
-
-        +CompFluidBar(vec2Of(64, 16), texture, vec2Of(0, 166), tile.waterTank)
-        +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.steamTank)
-
-        val buttonSize = vec2Of(16)
-        val buttonMap = mapOf(
-                ButtonState.UNPRESSED to (vec2Of(16, 166) to buttonSize),
-                ButtonState.HOVER_UNPRESSED to (vec2Of(16, 182) to buttonSize),
-                ButtonState.HOVER_PRESSED to (vec2Of(16, 198) to buttonSize)
-        )
-
-        +SimpleButton(
-                id = 0,
-                box = vec2Of(108, 48) to buttonSize,
-                texture = texture,
-                textureSize = vec2Of(256, 256),
-                uvGetter = buttonMap::getValue
-        ).apply { listener = tower::onClick }
-    }
+    +CompFluidBar(vec2Of(64, 16), texture, vec2Of(0, 166), tile.waterTank)
+    +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.steamTank)
 }
 
-class GuiContainer(val inv: ContainerContainer) : GuiBase(inv) {
+fun guiContainer(gui: GuiBase, container: ContainerContainer) = gui.run {
+    val mod = container.tile.stackInventoryModule
+    val callback = CallbackBarProvider(mod::amount, mod::maxItems, ZERO)
 
-    override fun initComponents() {
-        +CompBackground(guiTexture("container"))
-
-        val mod = inv.tile.stackInventoryModule
-
-        val callback = CallbackBarProvider(
-                { mod.amount.toDouble() },
-                { mod.maxItems.toDouble() },
-                { 0.0 }
-        )
-
-        +CompVerticalBar(callback, 7, Vec2d(74, 16),
-                { listOf("Items: ${mod.amount}/${mod.maxItems}") })
-    }
+    +CompBackground(guiTexture("container"))
+    +CompVerticalBar(callback, 7, Vec2d(74, 16), { listOf("Items: ${mod.amount}/${mod.maxItems}") })
 }
 
-class GuiPumpjack(val cont: ContainerPumpjack) : GuiBase(cont) {
+fun guiPumpjack(gui: GuiBase, container: ContainerPumpjack) = gui.run {
+    val tile = container.tile
 
-    override fun initComponents() {
-        val tile = cont.tile
-        val mod = tile.pumpjackModule
-        val texture = guiTexture("pumpjack")
+    val mod = tile.pumpjackModule
+    val texture = guiTexture("pumpjack")
 
-        +CompBackground(texture)
+    +CompBackground(texture)
+    +CompElectricBar(tile.node, Vec2d(53, 16))
 
-        +CompElectricBar(tile.node, Vec2d(53, 16))
-        val consumptionCallback = CallbackBarProvider(
-                callback = { mod.production.storage.toDouble() },
-                max = { Config.pumpjackConsumption },
-                min = { 0.0 }
-        )
-        +CompVerticalBar(consumptionCallback, 3,
-                Vec2d(64, 16),
-                { listOf("%.2fW".format(consumptionCallback.callback())) })
+    val consumptionCallback = mod.production.toBarProvider(Config.pumpjackConsumption)
 
+    +CompVerticalBar(consumptionCallback, 3, Vec2d(64, 16), consumptionCallback.toEnergyText())
 
-        val processCallback = CallbackBarProvider(
-                {
-                    when (mod.status) {
-                        SEARCHING_OIL, SEARCHING_DEPOSIT, DIGGING -> mod.processPercent.toDouble()
-                        SEARCHING_SOURCE, EXTRACTING -> mod.depositLeft.toDouble()
-                    }
-                },
-                {
-                    when (mod.status) {
-                        SEARCHING_OIL, SEARCHING_DEPOSIT, DIGGING -> 1.0
-                        SEARCHING_SOURCE, EXTRACTING -> mod.depositSize.toDouble()
-                    }
-                },
-                { 0.0 }
-        )
-
-        +CompVerticalBar(processCallback, 6, Vec2d(75, 16)) {
-
-            val percent = "%.2f".format(mod.processPercent * 100)
-            val amount = "${mod.depositLeft}/${mod.depositSize}"
-
-            when (mod.status) {
-                SEARCHING_OIL -> listOf("Searching for oil: $percent%")
-                SEARCHING_DEPOSIT -> listOf("Scanning oil deposit: $percent%")
-                DIGGING -> listOf("Mining to the oil deposit: $percent%")
-                SEARCHING_SOURCE -> listOf("Oil deposit: $amount blocks", "Scanning: $percent%")
-                EXTRACTING -> listOf("Oil deposit: $amount blocks", "Extracting...")
-            }
+    val processCallback = CallbackBarProvider({
+        when (mod.status) {
+            SEARCHING_OIL, SEARCHING_DEPOSIT, DIGGING -> mod.processPercent
+            SEARCHING_SOURCE, EXTRACTING -> mod.depositLeft
         }
+    }, {
+        when (mod.status) {
+            SEARCHING_OIL, SEARCHING_DEPOSIT, DIGGING -> 1.0
+            SEARCHING_SOURCE, EXTRACTING -> mod.depositSize
+        }
+    }, ZERO)
 
-        +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.tank)
+    +CompVerticalBar(processCallback, 6, Vec2d(75, 16)) {
 
-        val size = vec2Of(16, 16)
-        val box = pos + Vec2d(108, 16) to size
+        val percent = "%.2f".format(mod.processPercent * 100)
+        val amount = "${mod.depositLeft}/${mod.depositSize}"
 
+        when (mod.status) {
+            SEARCHING_OIL -> listOf("Searching for oil: $percent%")
+            SEARCHING_DEPOSIT -> listOf("Scanning oil deposit: $percent%")
+            DIGGING -> listOf("Mining to the oil deposit: $percent%")
+            SEARCHING_SOURCE -> listOf("Oil deposit: $amount blocks", "Scanning: $percent%")
+            EXTRACTING -> listOf("Oil deposit: $amount blocks", "Extracting...")
+        }
+    }
+
+    +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.tank)
+
+    val size = vec2Of(16, 16)
+    val pos = pos + Vec2d(108, 16)
+
+    repeat(5) {
         +CompLight(
-                on = DrawableBox(box, vec2Of(26, 166) to size, vec2Of(256)),
-                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { mod.status == SEARCHING_OIL }
-        )
-
-        +CompLight(
-                on = DrawableBox(box, vec2Of(26, 166 + 16) to size, vec2Of(256)),
-                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { mod.status == SEARCHING_DEPOSIT }
-        )
-
-        +CompLight(
-                on = DrawableBox(box, vec2Of(26, 166 + 16 * 2) to size, vec2Of(256)),
-                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { mod.status == DIGGING }
-        )
-
-        +CompLight(
-                on = DrawableBox(box, vec2Of(26, 166 + 16 * 3) to size, vec2Of(256)),
-                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { mod.status == EXTRACTING }
-        )
-
-        +CompLight(
-                on = DrawableBox(box, vec2Of(26, 166 + 16 * 4) to size, vec2Of(256)),
-                off = DrawableBox(box, vec2Of(26, 9999) to size, vec2Of(256)),
-                texture = texture, condition = { mod.status == SEARCHING_SOURCE }
+                on = DrawableBox(pos, size, vec2Of(26, 166 + 16 * it)),
+                off = DrawableBox(pos, size, vec2Of(26, 9999)),
+                texture = texture, condition = { mod.status == ModulePumpjack.Status.values()[it] }
         )
     }
 }

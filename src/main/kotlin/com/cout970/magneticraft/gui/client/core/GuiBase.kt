@@ -4,8 +4,6 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.util.vector.Vec2d
-import com.cout970.magneticraft.util.vector.size
-import com.cout970.magneticraft.util.vector.start
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.inventory.GuiContainer
@@ -105,6 +103,18 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         super.onGuiClosed()
     }
 
+    var sizeX: Int
+        get() = super.xSize
+        set(value) {
+            super.xSize = value
+        }
+
+    var sizeY: Int
+        get() = super.ySize
+        set(value) {
+            super.ySize = value
+        }
+
     //render utilities
 
     override fun bindTexture(res: ResourceLocation) {
@@ -149,11 +159,11 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override fun drawTexture(box: DrawableBox) {
         drawScaledCustomSizeModalRect(
-                box.screen.start.xi, box.screen.start.yi,
-                box.texture.start.xf, box.texture.start.yf,
-                box.texture.size.xi, box.texture.size.yi,
-                box.screen.size.xi, box.screen.size.yi,
-                box.textureSize.xf, box.textureSize.yf
+                box.screenPos.xi, box.screenPos.yi,
+                box.texturePos.xf, box.texturePos.yf,
+                box.textureSize.xi, box.textureSize.yi,
+                box.screenSize.xi, box.screenSize.yi,
+                box.textureScale.xf, box.textureScale.yf
         )
     }
 

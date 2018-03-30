@@ -5,8 +5,6 @@ import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.util.vector.Vec2d
-import com.cout970.magneticraft.util.vector.pos
-import com.cout970.magneticraft.util.vector.size
 import net.minecraft.util.ResourceLocation
 
 /**
@@ -14,8 +12,8 @@ import net.minecraft.util.ResourceLocation
  */
 class CompImage(val texture: ResourceLocation, val box: DrawableBox) : IComponent {
 
-    override val pos: IVector2 = box.screen.pos
-    override val size: IVector2 = box.screen.size
+    override val pos: IVector2 = box.screenPos
+    override val size: IVector2 = box.screenSize
     override lateinit var gui: IGui
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {

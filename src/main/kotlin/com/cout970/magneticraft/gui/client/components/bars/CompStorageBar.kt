@@ -31,9 +31,9 @@ class CompStorageBar(
         gui.bindTexture(texture)
         val level = (storageModule.energy * size.yi / storageModule.capacity.toFloat()).toInt()
         gui.drawTexture(DrawableBox(
-                screen = gui.pos + pos + vec2Of(0, size.yi - level) to vec2Of(size.x, level),
-                texture = tex + vec2Of(0, size.yi - level) to vec2Of(size.x, level),
-                textureSize = textureSize
+                gui.pos + pos + vec2Of(0, size.yi - level), vec2Of(size.x, level),
+                tex + vec2Of(0, size.yi - level), vec2Of(size.x, level),
+                textureSize
         ))
     }
 

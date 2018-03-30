@@ -3,7 +3,10 @@ package com.cout970.magneticraft.tileentity.modules
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.config.Config
+import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
@@ -40,6 +43,7 @@ class ModuleWindTurbine(
     // This is needed because calling facingGetter in onBreak returns NORTH, facingGetter tries to get the orientation
     // from the current IBlockState, but it is already removed when onBreak is called
     var facingCache = EnumFacing.UP
+    val production = ValueAverage()
     private var nextWind = 0f
     private var counter = 150
     var hasTurbineHitbox = false
@@ -75,7 +79,10 @@ class ModuleWindTurbine(
         if (hasTurbineHitbox && electricNode.voltage < ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE) {
             val power = Config.windTurbineMaxProduction * openSpace * currentWind
             electricNode.applyPower(power, false)
+            production += power
         }
+
+        production.tick()
     }
 
     fun getReplaceBlock(): IBlockState = ElectricMachines.windTurbineGap.defaultState
@@ -201,5 +208,9 @@ class ModuleWindTurbine(
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         hasTurbineHitbox = nbt.getBoolean("hasTurbine")
+    }
+
+    override fun getGuiSyncVariables(): List<SyncVariable> {
+        return listOf(production.toSyncVariable(DATA_ID_MACHINE_PRODUCTION))
     }
 }

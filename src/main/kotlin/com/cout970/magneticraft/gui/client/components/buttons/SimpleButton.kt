@@ -5,11 +5,12 @@ import com.cout970.magneticraft.gui.client.core.isMouseButtonDown
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
 import com.cout970.magneticraft.util.vector.offset
+import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.util.ResourceLocation
 
 class SimpleButton(
         id: Int,
-        texture: ResourceLocation,
+        texture: ResourceLocation?,
         box: Pair<IVector2, IVector2>,
         textureSize: IVector2,
         uvGetter: (ButtonState) -> Pair<IVector2, IVector2>
@@ -30,5 +31,21 @@ class SimpleButton(
             state = ButtonState.HOVER_PRESSED
         }
         return press
+    }
+}
+
+fun buttonUV(offset: IVector2, size: IVector2 = vec2Of(16)): (ButtonState) -> Pair<IVector2, IVector2> = {
+    when (it) {
+        ButtonState.UNPRESSED -> vec2Of(0, 0)
+        ButtonState.HOVER_UNPRESSED -> vec2Of(0, size.y)
+        ButtonState.PRESSED, ButtonState.HOVER_PRESSED -> vec2Of(0, size.y * 2)
+    } + offset to size
+}
+
+
+fun buttonOf(id: Int = 0, texture: ResourceLocation? = null, pos: IVector2, size: IVector2 = vec2Of(16),
+             textureSize: IVector2 = vec2Of(256, 256), uv: IVector2, listener: IButtonListener? = null): SimpleButton {
+    return SimpleButton(id, texture, pos to size, textureSize, buttonUV(uv, size)).apply {
+        this.listener = listener
     }
 }

@@ -28,7 +28,7 @@ class ModuleInternalStorage(
         val lowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
         override val name: String = "module_electric_storage"
 ) : IModule, IMachineEnergyInterface {
-    lateinit override var container: IModuleContainer
+    override lateinit var container: IModuleContainer
 
     companion object {
         @JvmStatic

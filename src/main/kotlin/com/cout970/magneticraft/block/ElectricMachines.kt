@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.block.core.*
+import com.cout970.magneticraft.block.core.CommonMethods.propertyOf
 import com.cout970.magneticraft.item.itemblock.blockListOf
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
@@ -24,7 +25,8 @@ import net.minecraft.util.IStringSerializable
  */
 object ElectricMachines : IBlockMaker {
 
-    val PROPERTY_DECAY_MODE = PropertyEnum.create("decay_mode", DecayMode::class.java)
+    val PROPERTY_DECAY_MODE: PropertyEnum<DecayMode> = propertyOf("decay_mode")
+    val PROPERTY_WORKING_MODE: PropertyEnum<WorkingMode> = propertyOf("working_mode")
 
     lateinit var battery: BlockBase private set
     lateinit var electricFurnace: BlockBase private set
@@ -34,6 +36,7 @@ object ElectricMachines : IBlockMaker {
     lateinit var thermopile: BlockBase private set
     lateinit var windTurbine: BlockBase private set
     lateinit var windTurbineGap: BlockBase private set
+    lateinit var electricHeater: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -97,7 +100,7 @@ object ElectricMachines : IBlockMaker {
             }
             onDrop = { emptyList() }
             collisionBox = { null }
-            shouldSideBeRendered = func@ {
+            shouldSideBeRendered = func@{
                 val state = it.blockAccess.getBlockState(it.pos.offset(it.side))
                 if (state.block === it.state.block) false
                 else !state.doesSideBlockRendering(it.blockAccess, it.pos.offset(it.side), it.side.opposite)
@@ -133,7 +136,7 @@ object ElectricMachines : IBlockMaker {
             factory = factoryOf(::TileWindTurbineGap)
             hasCustomModel = true
             onDrop = { emptyList() }
-            onBlockBreak = func@ {
+            onBlockBreak = func@{
                 val thisTile = it.worldIn.getTile<TileWindTurbineGap>(it.pos) ?: return@func
                 val pos = thisTile.centerPos ?: return@func
                 val mod = it.worldIn.getModule<ModuleWindTurbine>(pos) ?: return@func
@@ -144,8 +147,33 @@ object ElectricMachines : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile, windTurbine) +
-               blockListOf(windTurbineGap)
+        electricHeater = builder.withName("electric_heater").copy {
+            states = WorkingMode.values().toList()
+            factory = factoryOf(::TileElectricHeater)
+            alwaysDropDefault = true
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile,
+                windTurbine, electricHeater) + blockListOf(windTurbineGap)
+    }
+
+    enum class WorkingMode(
+            override val stateName: String,
+            override val isVisible: Boolean,
+            val enable: Boolean
+    ) : IStatesEnum, IStringSerializable {
+
+        OFF("off", true, false),
+        ON("on", false, true);
+
+        override fun getName() = name.toLowerCase()
+        override val properties: List<IProperty<*>> get() = listOf(PROPERTY_WORKING_MODE)
+
+        override fun getBlockState(block: Block): IBlockState {
+            return block.defaultState.withProperty(PROPERTY_WORKING_MODE, this)
+        }
     }
 
     enum class DecayMode(

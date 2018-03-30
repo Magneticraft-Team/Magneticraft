@@ -47,11 +47,7 @@ class CompScrollBar(
         gui.bindTexture(texture)
         GL11.glColor4f(1f, 1f, 1f, 1f)
 
-        gui.drawTexture(DrawableBox(
-                screen = Pair(gui.pos + pos + vec2Of(0, currentScroll), sliderSize),
-                texture = Pair(vec2Of(232, 0), sliderSize),
-                textureSize = vec2Of(256, 256)
-        ))
+        gui.drawTexture(DrawableBox(gui.pos + pos + vec2Of(0, currentScroll), sliderSize, vec2Of(232, 0)))
 
         if (Mouse.isButtonDown(0)) {
             onMouseClick(mouse, 0)
