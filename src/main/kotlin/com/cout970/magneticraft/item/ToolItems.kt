@@ -62,6 +62,7 @@ object ToolItems : IItemMaker {
         copperCoil = builder.withName("copper_coil").copy {
             constructor = ::CopperCoil
             isFull3d = false
+            maxStackSize = 16
         }.build()
 
         voltmeter = builder.withName("voltmeter").copy {

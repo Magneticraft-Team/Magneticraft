@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "ACA",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "B": {
+      "item": "magneticraft:crafting",
+      "data": 3
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotTungsten"
+    }
+  },
+  "result": {
+    "item": "magneticraft:electric_heater",
+    "data": 0
+  }
+}
