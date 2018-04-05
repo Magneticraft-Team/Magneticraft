@@ -10,6 +10,5 @@ import com.cout970.magneticraft.util.guiTexture
  */
 
 fun guiBox(gui: GuiBase, container: ContainerBox) = gui.run {
-    val tile = container.tile
     +CompBackground(guiTexture("box"))
 }
