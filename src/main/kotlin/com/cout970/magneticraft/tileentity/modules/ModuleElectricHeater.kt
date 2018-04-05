@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_CONSUMPTION
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_PRODUCTION
@@ -40,7 +41,7 @@ class ModuleElectricHeater(
     override fun update() {
         if (world.isClient) return
 
-        val heatToApply = HEAT_PER_BURNING_TICK * 4
+        val heatToApply = Config.electricHeaterMaxHeatPerTick.toFloat()
         val energyToSpend = heatToApply * ConversionTable.HEAT_TO_FE * ConversionTable.FE_TO_J
 
         if (!energy.hasEnergy(energyToSpend)) {

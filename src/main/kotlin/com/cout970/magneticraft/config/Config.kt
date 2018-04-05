@@ -48,8 +48,11 @@ object Config {
                                                        "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0
 
-//    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Consumption")
-//    var electricHeaterMaxConsumption = 20.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Heat produces per tick 1 Heat/t = 2W = 2FE ")
+    var electricHeaterMaxHeatPerTick = 20.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber max speed in Fuel per tick")
+    var combustionChamberMaxSpeed = 4.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0

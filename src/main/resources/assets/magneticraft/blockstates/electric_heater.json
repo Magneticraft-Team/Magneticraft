@@ -1,12 +1,33 @@
 {
-	"forge_marker": 1,
-	"variants": {
-		"normal": [{
-			"model": "cube_column",
-			"textures": {
-				"end": "magneticraft:blocks/electric_machines/electric_heater_top",
-				"side": "magneticraft:blocks/electric_machines/electric_heater"
-			}
-		}]
-	}
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_column",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "off": [
+      {
+        "textures": {
+          "end": "magneticraft:blocks/electric_machines/heater_off",
+          "side": "magneticraft:blocks/electric_machines/heater"
+        }
+      }
+    ],
+    "on": [
+      {
+        "textures": {
+          "end": "magneticraft:blocks/electric_machines/heater_on",
+          "side": "magneticraft:blocks/electric_machines/heater"
+        }
+      }
+    ],
+    "inventory": [
+      {
+        "textures": {
+          "end": "magneticraft:blocks/electric_machines/heater_off",
+          "side": "magneticraft:blocks/electric_machines/heater"
+        }
+      }
+    ]
+  }
 }

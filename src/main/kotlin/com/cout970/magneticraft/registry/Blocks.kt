@@ -3,7 +3,7 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.block.*
 import net.minecraft.block.Block
 import net.minecraft.item.ItemBlock
-import net.minecraftforge.fml.common.registry.ForgeRegistries
+import net.minecraftforge.registries.IForgeRegistry
 
 /**
  * Created by cout970 on 2017/03/26.
@@ -13,23 +13,23 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries
 var blocks: List<Pair<Block, ItemBlock?>> = emptyList()
     private set
 
-fun initBlocks() {
-    val blocks_ = mutableListOf<Pair<Block, ItemBlock?>>()
+fun initBlocks(registry: IForgeRegistry<Block>) {
+    val blockList = mutableListOf<Pair<Block, ItemBlock?>>()
 
-    blocks_ += Decoration.initBlocks()
-    blocks_ += Ores.initBlocks()
-    blocks_ += ManualMachines.initBlocks()
-    blocks_ += MultiblockParts.initBlocks()
-    blocks_ += ElectricMachines.initBlocks()
-    blocks_ += Multiblocks.initBlocks()
-    blocks_ += Computers.initBlocks()
-    blocks_ += HeatMachines.initBlocks()
-    blocks_ += AutomaticMachines.initBlocks()
-    blocks_ += ElectricConductors.initBlocks()
-    blocks_ += FluidMachines.initBlocks()
+    blockList += Decoration.initBlocks()
+    blockList += Ores.initBlocks()
+    blockList += ManualMachines.initBlocks()
+    blockList += MultiblockParts.initBlocks()
+    blockList += ElectricMachines.initBlocks()
+    blockList += Multiblocks.initBlocks()
+    blockList += Computers.initBlocks()
+    blockList += HeatMachines.initBlocks()
+    blockList += AutomaticMachines.initBlocks()
+    blockList += ElectricConductors.initBlocks()
+    blockList += FluidMachines.initBlocks()
 
-    blocks_.forEach { ForgeRegistries.BLOCKS.register(it.first); it.second?.let { ForgeRegistries.ITEMS.register(it) } }
-    blocks = blocks_
+    blockList.forEach { registry.register(it.first) }
+    blocks = blockList
 }
 
 //listOf<Block>(

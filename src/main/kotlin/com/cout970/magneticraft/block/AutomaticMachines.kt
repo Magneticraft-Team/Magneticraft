@@ -73,6 +73,7 @@ object AutomaticMachines : IBlockMaker {
 
         waterGenerator = builder.withName("water_generator").copy {
             factory = factoryOf(::TileWaterGenerator)
+            onActivated = CommonMethods::delegateToModule
         }.build()
         
         feedingTrough = builder.withName("feeding_trough").copy {

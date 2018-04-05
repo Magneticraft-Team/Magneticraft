@@ -182,7 +182,7 @@ object Multiblocks : IBlockMaker {
         }.build()
 
         return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
-                container, pumpjack) + blockListOf(gap)
+                    container, pumpjack) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

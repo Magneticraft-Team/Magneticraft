@@ -30,3 +30,12 @@ fun debug(vararg obj: Any?) {
 }
 
 fun String.toTextComponent(): ITextComponent = TextComponentString(this)
+
+
+fun <R> logTime(prefix: String = "Time", func: () -> R): R {
+    val start = System.currentTimeMillis()
+    val res = func()
+    val end = System.currentTimeMillis()
+    info("$prefix ${end - start}ms")
+    return res
+}

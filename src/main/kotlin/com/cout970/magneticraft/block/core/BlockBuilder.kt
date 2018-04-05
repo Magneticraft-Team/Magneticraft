@@ -159,6 +159,7 @@ class BlockBuilder {
         newBuilder.tickRate = tickRate
 
         func(newBuilder)
+
         return newBuilder
     }
 }

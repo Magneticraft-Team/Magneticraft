@@ -7,8 +7,10 @@ import com.cout970.magneticraft.network.MessageContainerUpdate
 import com.cout970.magneticraft.network.MessageGuiUpdate
 import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.registry.*
+import com.cout970.magneticraft.util.logTime
 import com.cout970.magneticraft.world.WorldGenerator
 import net.minecraftforge.fml.common.network.NetworkRegistry
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.relauncher.Side
 
@@ -20,36 +22,44 @@ import net.minecraftforge.fml.relauncher.Side
 abstract class CommonProxy {
 
     open fun preInit() {
-        registerCapabilities()
-
-        initBlocks()
-        initItems()
-        initTileEntities()
-        initFluids()
-        //Common preInit stuff
-        registerOreDictionaryEntries()
-        registerOreGenerations()
-        MultiblockManager.registerDefaults()
+        // @formatter:off
+        logTime("Task initBlocks:")                   { initBlocks(ForgeRegistries.BLOCKS) }
+        logTime("Task initItems:")                    { initItems(ForgeRegistries.ITEMS) }
+        logTime("Task registerCapabilities:")         { registerCapabilities() }
+        logTime("Task initTileEntities:")             { initTileEntities() }
+        logTime("Task initFluids:")                   { initFluids() }
+        logTime("Task registerOreDictionaryEntries:") { registerOreDictionaryEntries() }
+        logTime("Task registerOreGenerations:")       { registerOreGenerations() }
+        logTime("Task registerMultiblocks:")          { MultiblockManager.registerDefaults() }
+        // @formatter:on
     }
 
     open fun init() {
         //Init recipes
-        registerRecipes()
+        logTime("Task registerRecipes:") {
+            registerRecipes()
+        }
 
         //World generator
-        WorldGenerator.init()
-        GameRegistry.registerWorldGenerator(WorldGenerator, 10)
+        logTime("Task registerWorldGenerator:") {
+            WorldGenerator.init()
+            GameRegistry.registerWorldGenerator(WorldGenerator, 10)
+        }
 
         //Gui
-        NetworkRegistry.INSTANCE.registerGuiHandler(Magneticraft, GuiHandler)
+        logTime("Task registerGuiHandler:") {
+            NetworkRegistry.INSTANCE.registerGuiHandler(Magneticraft, GuiHandler)
+        }
 
         //Network
         //Note for implementing Messages:
         //The class that implements IMessage must have an empty constructor
-        Magneticraft.network.registerMessage(MessageContainerUpdate.Companion, MessageContainerUpdate::class.java, 0, Side.CLIENT)
-        Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 1, Side.CLIENT)
-        Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 2, Side.SERVER)
-        Magneticraft.network.registerMessage(MessageGuiUpdate.Companion, MessageGuiUpdate::class.java, 3, Side.SERVER)
+        logTime("Task registerNetworkMessages:") {
+            Magneticraft.network.registerMessage(MessageContainerUpdate.Companion, MessageContainerUpdate::class.java, 0, Side.CLIENT)
+            Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 1, Side.CLIENT)
+            Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 2, Side.SERVER)
+            Magneticraft.network.registerMessage(MessageGuiUpdate.Companion, MessageGuiUpdate::class.java, 3, Side.SERVER)
+        }
     }
 
     open fun postInit() = Unit

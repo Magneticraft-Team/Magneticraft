@@ -110,7 +110,7 @@ class ModuleCombustionChamber(
                 burningTime = 0
             } else {
                 if (heat >= WATER_BOILING_POINT - 1) {
-                    val speed = if (doorOpen) 2 else 4
+                    val speed = ((if (doorOpen) 0.5f else 1f) * Config.combustionChamberMaxSpeed.toFloat()).toInt()
                     burningTime += speed
                     getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * speed)
                 } else {

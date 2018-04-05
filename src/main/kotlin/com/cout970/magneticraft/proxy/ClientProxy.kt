@@ -15,6 +15,7 @@ import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tilerenderer.core.TileRenderer
 import com.cout970.magneticraft.util.info
 import com.cout970.magneticraft.util.logError
+import com.cout970.magneticraft.util.logTime
 import com.cout970.magneticraft.util.toModel
 import com.cout970.modelloader.api.DefaultBlockDecorator
 import com.cout970.modelloader.api.ModelLoaderApi
@@ -41,9 +42,29 @@ class ClientProxy : CommonProxy() {
         super.preInit()
 
         //Sounds
-        registerSounds()
+        logTime("Task registerSounds:") { registerSounds() }
 
         //Item renders
+        logTime("Task registerSounds:") { registerItemModels() }
+
+        //ItemBlock renders
+        logTime("Task registerBlockAndItemBlockModels:") { registerBlockAndItemBlockModels() }
+
+
+        //Model loaders
+        OBJLoader.INSTANCE.addDomain(MOD_ID)
+
+        //TileEntity renderers
+        logTime("Task registerTileEntityRenderers:") { registerTileEntityRenderers() }
+
+        //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
+        MinecraftForge.EVENT_BUS.register(this)
+
+        // Preload guidebook
+        logTime("Task loadGuideBookPages:") { CompBookRenderer.book }
+    }
+
+    fun registerItemModels() {
         items.forEach { i ->
             (i as? ItemBase)?.let { item ->
                 item.variants.forEach { variant ->
@@ -63,8 +84,9 @@ class ClientProxy : CommonProxy() {
                 }
             }
         }
+    }
 
-        //ItemBlock renders
+    fun registerBlockAndItemBlockModels() {
         blocks.forEach { (block, itemBlock) ->
             if (itemBlock == null) return@forEach
             (block as? BlockBase)?.let {
@@ -96,22 +118,10 @@ class ClientProxy : CommonProxy() {
                 }
             }
         }
-
-        //Model loaders
-        OBJLoader.INSTANCE.addDomain(MOD_ID)
-
-        //TileEntity renderers
-        processRegisterRenderer()
-
-        //registering model bake event listener, for TESR (TileEntitySpecialRenderer) model reloading
-        MinecraftForge.EVENT_BUS.register(this)
-
-        // Preload guidebook
-        CompBookRenderer.book
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun processRegisterRenderer() {
+    fun registerTileEntityRenderers() {
         val data = Magneticraft.asmData.getAll(RegisterRenderer::class.java.canonicalName)
         data.forEach {
             try {

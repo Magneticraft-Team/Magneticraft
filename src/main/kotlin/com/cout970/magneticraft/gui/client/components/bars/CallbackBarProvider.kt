@@ -43,3 +43,7 @@ fun CallbackBarProvider.toEnergyText(prefix: String = "", postfix: String = "") 
 fun CallbackBarProvider.toHeatText(prefix: String = "Heat ", postfix: String = "") = {
     listOf("$prefix${formatHeat(callback().toDouble())}$postfix")
 }
+
+fun CallbackBarProvider.toHeatPerTickText(prefix: String = "", postfix: String = " Heat/t") = {
+    listOf("$prefix${String.format("%.2f", callback())}$postfix")
+}

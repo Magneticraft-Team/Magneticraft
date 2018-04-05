@@ -2,7 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.item.*
 import net.minecraft.item.Item
-import net.minecraftforge.fml.common.registry.ForgeRegistries
+import net.minecraftforge.registries.IForgeRegistry
 
 /**
  * Created by cout970 on 2017/03/26.
@@ -11,16 +11,17 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries
 var items: List<Item> = emptyList()
     private set
 
-fun initItems() {
-    val items_ = mutableListOf<Item>()
+fun initItems(registry: IForgeRegistry<Item>) {
+    val itemList = mutableListOf<Item>()
 
-    items_ += MetallicItems.initItems()
-    items_ += ToolItems.initItems()
-    items_ += ElectricItems.initItems()
-    items_ += CraftingItems.initItems()
-    items_ += ComputerItems.initItems()
-    items_ += Upgrades.initItems()
+    itemList += MetallicItems.initItems()
+    itemList += ToolItems.initItems()
+    itemList += ElectricItems.initItems()
+    itemList += CraftingItems.initItems()
+    itemList += ComputerItems.initItems()
+    itemList += Upgrades.initItems()
 
-    items_.forEach { ForgeRegistries.ITEMS.register(it) }
-    items = items_
+    itemList.forEach { registry.register(it) }
+    blocks.forEach { it.second?.let { registry.register(it) } }
+    items = itemList
 }

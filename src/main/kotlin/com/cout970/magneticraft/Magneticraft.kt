@@ -4,6 +4,8 @@ import com.cout970.magneticraft.config.ConfigHandler
 import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.proxy.CommonProxy
+import com.cout970.magneticraft.util.info
+import com.cout970.magneticraft.util.logTime
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.discovery.ASMDataTable
@@ -14,14 +16,13 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import org.apache.logging.log4j.Logger
 import java.io.File
-import kotlin.system.measureTimeMillis
 
 @Suppress("UNUSED_PARAMETER", "unused")
 //Basic mod information for Forge
 @Mod(
         modid = MOD_ID,
         name = MOD_NAME,
-        version = "2.2.0",
+        version = "2.2.1",
         modLanguage = "kotlin",
         modLanguageAdapter = LANG_ADAPTER,
         acceptedMinecraftVersions = "[1.12]",
@@ -61,38 +62,41 @@ object Magneticraft {
      */
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
-        asmData = event.asmData
         log = event.modLog
+        info("Starting pre-init")
+
+        asmData = event.asmData
         configFile = event.suggestedConfigurationFile
         sourceFile = event.sourceFile
 
-        val time = measureTimeMillis {
-            //Enables the creative tab
-            CreativeTabMg
+        logTime("Pre-init done in") {
 
-            log.info("Starting pre-init")
-            log.info("Loading config...")
-            val configTime = measureTimeMillis {
+            //Enables the creative tab
+            logTime("CreativeTab created in") { CreativeTabMg }
+
+            info("Loading config...")
+            logTime("Config loaded in") {
                 ConfigHandler.apply {
                     load()
                     read()
                     save()
                 }
             }
-            log.info("Config loaded in $configTime milliseconds")
 
             //Initialization of the Mod stuff
-            proxy.preInit()
+            logTime("Mod preinit:") { proxy.preInit() }
 
             //Detection of other mods installed for compatibility
-            IntegrationHandler.preInit()
+            logTime("Inter Mod integration preinit:") {
+                IntegrationHandler.preInit()
+            }
 
             if (Debug.DEBUG) {
-                Debug.preInit(event)
+                logTime("Debug operations") {
+                    Debug.preInit(event)
+                }
             }
         }
-
-        log.info("Pre-init done in $time milliseconds")
     }
 
     /**
@@ -100,14 +104,12 @@ object Magneticraft {
      */
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        log.info("Starting init")
+        info("Starting init")
 
-        val time = measureTimeMillis {
-            proxy.init()
+        logTime("Init done in") {
+            logTime("Mod init:") { proxy.init() }
+            logTime("Inter Mod integration init:") { IntegrationHandler.init() }
         }
-        IntegrationHandler.init()
-
-        log.info("Init done in $time milliseconds")
     }
 
     /**
@@ -116,13 +118,11 @@ object Magneticraft {
      */
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
-        log.info("Starting post-init")
+        info("Starting post-init")
 
-        val time = measureTimeMillis {
+        logTime("Post-init done in") {
             proxy.postInit()
         }
-
-        log.info("Post-init done in $time milliseconds")
     }
 
     @Mod.EventHandler

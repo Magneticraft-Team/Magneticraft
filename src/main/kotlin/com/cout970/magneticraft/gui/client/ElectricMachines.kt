@@ -5,6 +5,7 @@ import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
+import com.cout970.magneticraft.util.ConversionTable
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -97,13 +98,20 @@ fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.run {
 
 fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.run {
     val tile = container.tile
+    val texture = guiTexture("wind_turbine")
 
-    +CompBackground(guiTexture("wind_turbine"))
-    +CompElectricBar(tile.node, Vec2d(74, 16))
+    +CompBackground(texture)
+    +CompElectricBar(tile.node, Vec2d(64, 17))
+    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), texture)
 
-    val consumption = StaticBarProvider(0.0, 1.0, tile.electricHeaterModule.consumption::storage)
-    val production = StaticBarProvider(0.0, 1.0, tile.electricHeaterModule.production::storage)
+    val maxProduction = Config.electricHeaterMaxHeatPerTick
+    val maxConsumption = maxProduction * ConversionTable.HEAT_TO_FE * ConversionTable.FE_TO_J
 
-    +CompVerticalBar(consumption, 3, Vec2d(85, 16), consumption.toPercentText("", "W"))
-    +CompVerticalBar(production, 2, Vec2d(96, 16), production.toPercentText("", " Heat/t"))
+    val consumption = StaticBarProvider(0.0, maxConsumption, tile.electricHeaterModule.consumption::storage)
+    val production = StaticBarProvider(0.0, maxProduction, tile.electricHeaterModule.production::storage)
+    val heat = StaticBarProvider(0.0, 100.0, tile.electricHeaterModule::heat)
+
+    +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toEnergyText())
+    +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
+    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toPercentText("", " Heat"))
 }

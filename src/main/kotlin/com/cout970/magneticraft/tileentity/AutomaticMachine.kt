@@ -3,6 +3,7 @@ package com.cout970.magneticraft.tileentity
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationCentered
+import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
@@ -10,10 +11,7 @@ import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.TileBase
-import com.cout970.magneticraft.tileentity.modules.ModuleConveyorBelt
-import com.cout970.magneticraft.tileentity.modules.ModuleFeedingTrough
-import com.cout970.magneticraft.tileentity.modules.ModuleInserter
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
+import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.vector.toBlockPos
 import com.cout970.magneticraft.util.vector.xd
 import com.cout970.magneticraft.util.vector.yd
@@ -96,6 +94,23 @@ class TileInserter : TileBase(), ITickable {
 class TileWaterGenerator : TileBase(), ITickable {
 
     val cache: MutableList<IFluidHandler> = mutableListOf()
+    val tank = object : Tank(32_000) {
+        init {
+            onContentsChanged()
+        }
+
+        override fun onContentsChanged() {
+            fluid = FluidRegistry.getFluidStack("water", 32_000)
+        }
+    }
+
+    val fluidModule = ModuleFluidHandler(tank)
+
+    val bucketIoModule = ModuleBucketIO(tank)
+
+    init {
+        initModules(bucketIoModule, fluidModule)
+    }
 
     @DoNotRemove
     override fun update() {
