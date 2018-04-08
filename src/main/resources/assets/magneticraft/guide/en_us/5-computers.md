@@ -16,6 +16,6 @@ and the third loads the bios into the RAM, so basically resets the computer.
 In order to start the computer you need a floppy disk with an operative system or a program, 
 the bios will load the data from the floppy and start the program/OS.
 
-Currently there are WIP programs, [FORTH](5.1-forth), [Lisp](5.2-lisp), Assembler and as a non-WIP program [Shell](5.3-shell.md).
+Currently there are WIP programs, [FORTH](5.1-forth.md), [Lisp](5.2-lisp.md), Assembler and as a non-WIP program [Shell](5.3-shell.md.md).
 
 
