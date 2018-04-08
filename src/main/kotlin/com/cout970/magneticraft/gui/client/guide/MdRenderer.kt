@@ -30,7 +30,11 @@ object MdRenderer {
             }
             is MdLink -> {
                 val (linkSection, page) = parseUrl(url)
-                listOf(LinkTextBox(childs.flatMap { renderTag(ctx, it) }, linkSection, page))
+                // we remove the ".md" suffix of the page Url because
+                // * with .md suffix, in github we can follow the links in the formatted Markdown
+                // * in game we register resources without ".md" suffixes (see removeSuffix(...) call in ./Chapters.kt)
+
+                listOf(LinkTextBox(childs.flatMap { renderTag(ctx, it) }, linkSection.removeSuffix(".md"), page))
             }
             is MdItalic -> {
                 ctx.prefix += TextFormatting.ITALIC
