@@ -23,9 +23,9 @@ abstract class CommonProxy {
 
     open fun preInit() {
         // @formatter:off
+        logTime("Task registerCapabilities:")         { registerCapabilities() }
         logTime("Task initBlocks:")                   { initBlocks(ForgeRegistries.BLOCKS) }
         logTime("Task initItems:")                    { initItems(ForgeRegistries.ITEMS) }
-        logTime("Task registerCapabilities:")         { registerCapabilities() }
         logTime("Task initTileEntities:")             { initTileEntities() }
         logTime("Task initFluids:")                   { initFluids() }
         logTime("Task registerOreDictionaryEntries:") { registerOreDictionaryEntries() }

@@ -77,8 +77,7 @@ object ElectricConductors : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::enableAutoConnectWires
             canPlaceBlockOnSide = { it.default && canStayInSide(it.worldIn, it.pos, it.side) }
-            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER,
-                    ConnectorManualConnectionHandler)
+            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER, ConnectorManualConnectionHandler)
             onNeighborChanged = {
                 if (!canStayInSide(it.worldIn, it.pos, it.state.getFacing())) {
                     it.worldIn.destroyBlock(it.pos, true)
