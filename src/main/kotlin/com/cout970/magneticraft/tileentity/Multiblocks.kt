@@ -9,6 +9,7 @@ import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
 import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
+import com.cout970.magneticraft.misc.fluid.wrapWithFluidFilter
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
@@ -176,7 +177,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     val tank = Tank(16000)
     val node = ElectricNode(ref, capacity = 8.0)
 
-    val fluidModule = ModuleFluidHandler(tank)
+    val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
 
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),

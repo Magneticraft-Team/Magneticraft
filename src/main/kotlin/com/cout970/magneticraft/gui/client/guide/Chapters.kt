@@ -40,16 +40,13 @@ fun loadBook(): Book {
 
 fun createIndexPage(sections: List<Section>): Section {
 
-    val children = listOf(
-            MdHeader(1, listOf(MdText("Index\n"))),
-            MdText("\n")
-
-    ) + sections.map {
-        val name = it.name.split("-").joinToString(" ") { it.capitalize() }
-        MdLink(it.name + "#0", listOf(
-                MdText("* $name\n"))
-        )
-    }
+    val children = listOf(MdHeader(1, listOf(MdText("Index\n"))), MdBr) +
+            sections.map {
+                val name = it.name.split("-").joinToString(" ") { it.capitalize() }
+                MdLink(it.name + "#0", listOf(
+                        MdText("* $name\n"))
+                )
+            }
 
     return Section("index", MarkdownDocument(children))
 }

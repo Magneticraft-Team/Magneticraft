@@ -40,20 +40,30 @@ class MdHorizontalRule : MdEndTag()
 
 class MdNewLine : MdEndTag()
 
-data class MdText(val txt: String) : MdEndTag()
+data class MdText(val txt: String) : MdEndTag() {
+    override fun toString(): String {
+        return "MdText(txt='${txt.replace("\n", "\\n")}')"
+    }
+}
+
+object MdBr : MdEndTag()
 
 
 fun parseChildren(str: String): List<MdTag> {
-    if (str.isEmpty())
+    if (str.isEmpty()) {
         return emptyList()
+    }
 
-    if (str == "\n")
-        return listOf(MdText(str))
+    if (str == "\n") {
+        return listOf(MdBr)
+    }
 
     val lines = if (str.contains("\n")) str.lines().map { it + "\n" } else listOf(str)
+    //    val lines = str.lines().flatMap { if (it.isBlank()) listOf("\n", "\n") else listOf(it) }
 
-    if (lines.isEmpty())
+    if (lines.isEmpty()) {
         return emptyList()
+    }
 
     val children = mutableListOf<MdTag>()
 
@@ -65,10 +75,12 @@ fun parseChildren(str: String): List<MdTag> {
                 return@forEach
             }
         }
+
         if (line == "---" || line == "===") {
             children += MdHorizontalRule()
             return@forEach
         }
+
         if (line.contains(strong)) {
             val a = line.indexOfFirst { it == '*' }
             val b = line.indexOfLast { it == '*' }
@@ -81,6 +93,7 @@ fun parseChildren(str: String): List<MdTag> {
             children += parseChildren(end)
             return@forEach
         }
+
         if (line.contains(bold)) {
             val a = line.indexOfFirst { it == '*' }
             val b = line.indexOfLast { it == '*' }
@@ -93,6 +106,7 @@ fun parseChildren(str: String): List<MdTag> {
             children += parseChildren(end)
             return@forEach
         }
+
         if (line.contains(italic)) {
             val a = line.indexOfFirst { it == '*' }
             val b = line.indexOfLast { it == '*' }
@@ -120,7 +134,6 @@ fun parseChildren(str: String): List<MdTag> {
         }
 
         children += MdText(line)
-        return@forEach
     }
     return children
 }

@@ -1,6 +1,7 @@
 # Welcome to Magneticraft
 
 **Disclaimer**
+
 A lot of stuff is not finished or needs more work, 
 the mod was tested and should be stable but some features, for example, images in the guide book are not done yet.
 

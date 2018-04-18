@@ -21,6 +21,7 @@ object MdRenderer {
 
     fun renderTag(ctx: Context, tag: MdTag): List<TextBox> = tag.run {
         when (this) {
+            is MdBr -> renderText(ctx, "\n")
             is MdText -> {
                 if (txt.isEmpty()) {
                     emptyList()
