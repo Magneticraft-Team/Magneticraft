@@ -1,17 +1,22 @@
 package com.cout970.magneticraft.gui.client.components
 
 import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.computer.DeviceMonitor
 import com.cout970.magneticraft.gui.client.core.*
+import com.cout970.magneticraft.gui.common.core.ContainerBase
+import com.cout970.magneticraft.gui.common.core.DATA_ID_MONITOR_CLIPBOARD
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
+import net.minecraft.client.gui.GuiScreen
 import org.lwjgl.opengl.GL11
 
 /**
  * Created by cout970 on 20/05/2016.
  */
 
-class MonitorComponent(val monitor: DeviceMonitor, val green: Boolean) : IComponent {
+class MonitorComponent(val tile: ITileRef, val monitor: DeviceMonitor, val container: ContainerBase, val green: Boolean) : IComponent {
 
     companion object {
         @JvmStatic
@@ -39,7 +44,7 @@ class MonitorComponent(val monitor: DeviceMonitor, val green: Boolean) : ICompon
         for (line in 0 until lines) {
             for (column in 0 until columns) {
                 var character = monitor.getChar(line * columns + column) and 0xFF
-                if (line == monitor.cursorLine && column == monitor.cursorColumn && monitor.world.worldTime % 20 >= 10) {
+                if (line == monitor.cursorLine && column == monitor.cursorColumn && tile.world.worldTime % 20 >= 10) {
                     character = character xor 128
                 }
                 if (character != 32 && character != 0) {
@@ -57,6 +62,16 @@ class MonitorComponent(val monitor: DeviceMonitor, val green: Boolean) : ICompon
     override fun onKeyTyped(typedChar: Char, keyCode: Int): Boolean {
         if (typedChar.toInt() == 27) return false
         var shift = 0
+
+        if (isShiftKeyDown() && isCtrlKeyDown() && isAltKeyDown() && keyCode == 47) {
+
+            val str = GuiScreen.getClipboardString()
+
+            if (str.isNotBlank()) {
+                container.sendUpdate(IBD().apply { setString(DATA_ID_MONITOR_CLIPBOARD, str) })
+            }
+        }
+
         if (isShiftKeyDown()) shift = shift or 64
         if (isCtrlKeyDown()) shift = shift or 32
         when (typedChar.toByte().toInt()) {

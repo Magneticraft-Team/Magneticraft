@@ -13,6 +13,7 @@ import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.tool.IGear
 import com.cout970.magneticraft.api.tool.IHammer
+import com.cout970.magneticraft.computer.FloppyDisk
 import com.cout970.magneticraft.item.ComputerItems
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
@@ -79,9 +80,9 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IHammer::class.java, EmptyStorage(), { DefaultHammer() })
     CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage(), { DefaultGear() })
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
-        ComputerItems.FloppyDisk(
+        FloppyDisk(
                 ItemStack(ComputerItems.floppyDisk, 1, 0,
-                        ComputerItems.createNBT( 128, true, true)
+                        ComputerItems.createNBT(128, true, true)
                 )
         )
     })

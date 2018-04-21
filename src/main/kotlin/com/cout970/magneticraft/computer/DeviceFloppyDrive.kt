@@ -2,9 +2,6 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IFloppyDisk
-import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.api.core.NodeID
-import net.minecraft.nbt.NBTTagCompound
 import java.io.RandomAccessFile
 import java.nio.charset.Charset
 import java.util.*
@@ -12,7 +9,7 @@ import java.util.*
 /**
  * Created by cout970 on 2016/10/13.
  */
-class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) : IDevice, ITileRef by parent {
+class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
 
     private var buffer: ByteArray? = null
     var sleep = 0
@@ -21,8 +18,6 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
     var currentSector = 0
 
     val isActive: Boolean = true
-
-    override fun getId(): NodeID = NodeID("module_device_floppy_drive", pos, world)
 
     fun iterate() {
         if (sleep > 0) {
@@ -148,21 +143,20 @@ class DeviceFloppyDrive(val parent: ITileRef, val getDisk: () -> IFloppyDisk?) :
         return buffer!!
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound) {
-        sleep = nbt.getInteger("sleep")
-        status = nbt.getInteger("status")
-        action = nbt.getInteger("action")
-        currentSector = nbt.getInteger("sector")
-        System.arraycopy(nbt.getByteArray("buffer"), 0, getBuffer(), 0, getBuffer().size)
-    }
+    override fun serialize() = mapOf(
+            "sleep" to sleep,
+            "status" to status,
+            "action" to action,
+            "sector" to currentSector,
+            "buffer" to getBuffer().copyOf()
+    )
 
-    override fun serializeNBT(): NBTTagCompound {
-        return NBTTagCompound().apply {
-            setInteger("sleep", sleep)
-            setInteger("status", status)
-            setInteger("action", action)
-            setInteger("sector", currentSector)
-            setByteArray("buffer", getBuffer())
-        }
+    override fun deserialize(map: Map<String, Any>) {
+        sleep = map["sleep"] as Int
+        status = map["status"] as Int
+        action = map["action"] as Int
+        currentSector = map["sector"] as Int
+
+        System.arraycopy(map["buffer"] as ByteArray, 0, getBuffer(), 0, getBuffer().size)
     }
 }

@@ -14,6 +14,8 @@ import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.tileentity.modules.mining_robot.*
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.util.toMap
+import com.cout970.magneticraft.util.toNBT
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -191,7 +193,7 @@ class ModuleRobotControl(
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
-        add("device", device.serializeNBT())
+        add("device", device.serialize().toNBT())
         add("request", requestedAction?.ordinal ?: -1)
         add("action", task?.action?.ordinal ?: -1)
         add("cooldown", task?.cooldown ?: -1)
@@ -203,7 +205,7 @@ class ModuleRobotControl(
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        device.deserializeNBT(nbt.getCompoundTag("device"))
+        device.deserialize(nbt.getCompoundTag("device").toMap())
         requestedAction = nbt.getInteger("request").let { if (it == -1) null else RobotAction.values()[it] }
 
         nbt.getInteger("action").let {

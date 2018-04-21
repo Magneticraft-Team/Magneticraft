@@ -1,18 +1,16 @@
 package com.cout970.magneticraft.computer
 
-import com.cout970.magneticraft.api.computer.IMemory
-import net.minecraft.nbt.NBTTagCompound
+import com.cout970.magneticraft.api.computer.IRAM
 
 /**
  * Created by cout970 on 2016/09/30.
  */
-class RAM(val size: Int, val littleEndian: Boolean) : IMemory {
+class RAM(val size: Int, val littleEndian: Boolean) : IRAM {
 
     val mem = ByteArray(size)
 
     override fun readByte(addr: Int): Byte {
-        if (addr < 0 || addr >= memorySize)
-            return 0
+        if (addr < 0 || addr >= memorySize) return 0
         return mem[addr]
     }
 
@@ -21,43 +19,62 @@ class RAM(val size: Int, val littleEndian: Boolean) : IMemory {
         mem[addr] = data
     }
 
-    override fun isLittleEndian(): Boolean = littleEndian
-
-    override fun getMemorySize(): Int = size
-
     override fun writeWord(pos: Int, data: Int) {
-        if (!littleEndian) {
-            writeByte(pos + 3, (data and 0x000000FF).toByte())
-            writeByte(pos + 2, (data and 0x0000FF00 shr 8).toByte())
-            writeByte(pos + 1, (data and 0x00FF0000 shr 16).toByte())
-            writeByte(pos, (data and 0xFF000000.toInt() shr 24).toByte())
+
+        val a = (data and 0x000000FF).toByte()
+        val b = (data and 0x0000FF00 shr 8).toByte()
+        val c = (data and 0x00FF0000 shr 16).toByte()
+        val d = (data and 0xFF000000.toInt() shr 24).toByte()
+
+        if (littleEndian) {
+            writeByte(pos, a)
+            writeByte(pos + 1, b)
+            writeByte(pos + 2, c)
+            writeByte(pos + 3, d)
         } else {
-            writeByte(pos, (data and 0x000000FF).toByte())
-            writeByte(pos + 1, (data and 0x0000FF00 shr 8).toByte())
-            writeByte(pos + 2, (data and 0x00FF0000 shr 16).toByte())
-            writeByte(pos + 3, (data and 0xFF000000.toInt() shr 24).toByte())
+            writeByte(pos, d)
+            writeByte(pos + 1, c)
+            writeByte(pos + 2, b)
+            writeByte(pos + 3, a)
         }
     }
 
     override fun readWord(pos: Int): Int {
-        var data: Int
-        if (!littleEndian) {
-            data = readByte(pos + 3).toInt() and 0xFF
-            data = data or (readByte(pos + 2).toInt() and 0xFF shl 8)
-            data = data or (readByte(pos + 1).toInt() and 0xFF shl 16)
-            data = data or (readByte(pos).toInt() and 0xFF shl 24)
+
+        val a = readByte(pos)
+        val b = readByte(pos + 1)
+        val c = readByte(pos + 2)
+        val d = readByte(pos + 3)
+
+        return if (littleEndian) {
+
+            val ai = a.toInt() and 0xFF
+            val bi = b.toInt() and 0xFF shl 8
+            val ci = c.toInt() and 0xFF shl 16
+            val di = d.toInt() and 0xFF shl 24
+
+            ai or bi or ci or di
         } else {
-            data = readByte(pos).toInt() and 0xFF
-            data = data or (readByte(pos + 1).toInt() and 0xFF shl 8)
-            data = data or (readByte(pos + 2).toInt() and 0xFF shl 16)
-            data = data or (readByte(pos + 3).toInt() and 0xFF shl 24)
+
+            val di = d.toInt() and 0xFF
+            val ci = c.toInt() and 0xFF shl 8
+            val bi = b.toInt() and 0xFF shl 16
+            val ai = a.toInt() and 0xFF shl 24
+
+            ai or bi or ci or di
         }
-        return data
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) {
-        System.arraycopy(nbt!!.getByteArray("mem"), 0,  mem, 0, size)
+    override fun isLittleEndian(): Boolean = littleEndian
+
+    override fun getMemorySize(): Int = size
+
+    override fun serialize(): Map<String, Any> {
+        return mapOf("mem" to mem.copyOf())
     }
 
-    override fun serializeNBT(): NBTTagCompound = NBTTagCompound().apply { setByteArray("mem", mem) }
+    override fun deserialize(map: Map<String, Any>) {
+        val data = map["mem"] as ByteArray
+        System.arraycopy(data, 0, mem, 0, size)
+    }
 }

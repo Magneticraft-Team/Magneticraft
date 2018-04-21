@@ -4,6 +4,8 @@ import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.computer.DeviceMonitor
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.util.toMap
+import com.cout970.magneticraft.util.toNBT
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -17,11 +19,15 @@ class ModuleMonitor(
     override lateinit var container: IModuleContainer
     val monitor: DeviceMonitor = DeviceMonitor(ref)
 
+    override fun update() {
+        monitor.update()
+    }
+
     override fun serializeNBT(): NBTTagCompound {
-        return monitor.serializeNBT()
+        return monitor.serialize().toNBT()
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        monitor.deserializeNBT(nbt)
+        monitor.deserialize(nbt.toMap())
     }
 }

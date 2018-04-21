@@ -2,10 +2,8 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.splitSet
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 
 /**
@@ -13,20 +11,15 @@ import net.minecraft.util.math.BlockPos
  */
 class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITileRef by tile {
 
-    override fun getId(): NodeID = NodeID("module_device_motherboard", pos, world.provider.dimension)
-
-    override fun deserializeNBT(nbt: NBTTagCompound) = Unit
-    override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
-
     var logType = 0
 
     val memStruct = ReadWriteStruct("motherboard_header",
-            ReadOnlyByte("online", { if (mb.isOnline()) 1 else 0 }),
+            ReadOnlyByte("online", { if (mb.isOnline) 1 else 0 }),
             ReadWriteByte("signal", { signal(it.toInt()) }, { 0 }),
             ReadWriteByte("sleep", { mb.sleep(it.toInt()) }, { 0 }),
             ReadOnlyByte("padding", { 0 }),
-            ReadOnlyInt("memSize", { mb.memory.memorySize }),
-            ReadOnlyInt("littleEndian", { if (mb.memory.isLittleEndian) -1 else 0 }),
+            ReadOnlyInt("memSize", { mb.ram.memorySize }),
+            ReadOnlyInt("littleEndian", { if (mb.ram.isLittleEndian) -1 else 0 }),
             ReadOnlyInt("worldTime", { (getWorldTime() and 0xFFFFFFFF).toInt() }),
             ReadOnlyInt("cpuTime", { mb.clock }),
             ReadWriteByte("logType", { logType = it.toInt() }, { logType.toByte() }),
@@ -40,8 +33,8 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
 
     fun getDevices(): IntArray {
         val buffer = IntArray(16)
-        repeat(16){
-            if(it in mb.bus.devices){
+        repeat(16) {
+            if (it in mb.bus.devices.keySet()) {
                 buffer[it] = 0xFF000000.toInt() or (it shl 16)
             }
         }
@@ -91,12 +84,12 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
     }
 
     fun getWorldTime(): Long {
-        if (tile is FakeRef) return 0L
+        if (tile == FakeRef) return 0L
         return world.totalWorldTime
     }
 
     fun getComputerPos(): BlockPos {
-        if (tile is FakeRef) return BlockPos.ORIGIN
+        if (tile == FakeRef) return BlockPos.ORIGIN
         return pos
     }
 
@@ -136,5 +129,11 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
         }
 
         override fun toString(): String = "i16 $name;"
+    }
+
+    override fun serialize() = mapOf("logType" to logType)
+
+    override fun deserialize(map: Map<String, Any>) {
+        logType = map["logType"] as Int
     }
 }

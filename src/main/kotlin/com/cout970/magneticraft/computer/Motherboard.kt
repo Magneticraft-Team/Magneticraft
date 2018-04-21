@@ -1,19 +1,20 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.*
-import com.cout970.magneticraft.util.add
-import com.cout970.magneticraft.util.newNbt
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2016/09/30.
  */
 class Motherboard(
         private val cpu: ICPU,
-        private val memory: IMemory,
+        private val ram: IRAM,
         private val rom: IROM,
         private val bus: Bus
 ) : IMotherboard {
+
+    companion object {
+        val CPU_START_POINT = 0x9000
+    }
 
     var cyclesPerTick = 1_000_000 / 20 // 1MHz
     private var cpuCycles = -1
@@ -31,10 +32,12 @@ class Motherboard(
         }
         if (cpuCycles >= 0) {
             cpuCycles += cyclesPerTick
+
             //limits cycles if the CPU halts using sleep();
             if (cpuCycles > cyclesPerTick * 10) {
                 cpuCycles = cyclesPerTick * 10
             }
+
             //DEBUG to measure the performance of the cpu
 //            var nanos = System.nanoTime()
 //            val cycles = cpuCycles
@@ -64,15 +67,19 @@ class Motherboard(
         cpuCycles = -1
     }
 
+    override fun isOnline() = cpuCycles >= 0
+
     override fun reset() {
         clock = 0
         cpu.reset()
+        devices.filterIsInstance<IResettable>().forEach { it.reset() }
         rom.bios.use {
-            var index = 0
+            var index = CPU_START_POINT
             while (true) {
                 val r = it.read()
                 if (r == -1) break
-                memory.writeByte(0x9000 + index++, r.toByte())
+
+                ram.writeByte(index++, r.toByte())
             }
         }
     }
@@ -81,27 +88,28 @@ class Motherboard(
 
     override fun getCPU(): ICPU = cpu
 
-    override fun getMemory(): IMemory = memory
+    override fun getRAM(): IRAM = ram
 
     override fun getROM(): IROM = rom
 
-    override fun getDevices(): MutableList<IDevice>? = bus.devices.values.toMutableList()
+    override fun getDevices(): List<IDevice> = bus.devices.valueCollection().toList()
 
     override fun getClock(): Int = clock
 
-    fun isOnline() = cpuCycles >= 0
-
-    override fun deserializeNBT(nbt: NBTTagCompound) {
-        sleep = nbt.getInteger("sleep")
-        cpuCycles = nbt.getInteger("cycles")
-        cpu.deserializeNBT(nbt.getCompoundTag("cpu"))
-        memory.deserializeNBT(nbt.getCompoundTag("ram"))
+    override fun serialize(): Map<String, Any> {
+        return mapOf(
+                "sleep" to sleep,
+                "cycles" to cpuCycles,
+                "cpu" to cpu.serialize(),
+                "ram" to ram.serialize()
+        )
     }
 
-    override fun serializeNBT(): NBTTagCompound = newNbt {
-        add("cycles", cpuCycles)
-        add("sleep", sleep)
-        add("cpu", cpu.serializeNBT())
-        add("ram", memory.serializeNBT())
+    @Suppress("UNCHECKED_CAST")
+    override fun deserialize(map: Map<String, Any>) {
+        sleep = map["sleep"] as Int
+        cpuCycles = map["cycles"] as Int
+        cpu.deserialize(map["cpu"] as Map<String, Any>)
+        ram.deserialize(map["ram"] as Map<String, Any>)
     }
 }

@@ -22,7 +22,6 @@ import com.cout970.magneticraft.util.vector.vec2Of
  */
 
 fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
-    val monitor = container.monitor
     val motherboard = container.motherboard
     val texture = guiTexture("old_monitor")
     val textureSize = Vec2d(512, 512)
@@ -32,7 +31,7 @@ fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
     sizeY = 255
 
     +CompBackground(texture, textureSize = textureSize, size = Vec2d(350, 230))
-    +MonitorComponent(monitor, true)
+    +MonitorComponent(container.tile.ref, container.monitor, container, true)
 
     listOf(
             buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 230)),
@@ -61,7 +60,6 @@ fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
 
 fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     val tile = container.tile
-    val monitor = container.monitor
     val motherboard = container.motherboard
     val texture = guiTexture("mining_robot")
     val textureSize = Vec2d(512, 512)
@@ -71,7 +69,7 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     sizeY = 317
 
     +CompBackground(texture, textureSize = textureSize, size = Vec2d(350, 317))
-    +MonitorComponent(monitor, false)
+    +MonitorComponent(tile.ref, container.monitor, container, false)
     +CompElectricBar(tile.node, Vec2d(10, 238))
 
     listOf(

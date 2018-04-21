@@ -2,9 +2,6 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.api.core.NodeID
-import com.cout970.magneticraft.util.newNbt
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2017/08/22.
@@ -47,9 +44,7 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
 
     override fun writeByte(addr: Int, data: Byte) = memStruct.write(addr, data)
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) = Unit
+    override fun serialize(): Map<String, Any> = mapOf()
 
-    override fun serializeNBT(): NBTTagCompound = newNbt {}
-
-    override fun getId(): NodeID = NodeID("mining_robot", pos, world)
+    override fun deserialize(map: Map<String, Any>) = Unit
 }

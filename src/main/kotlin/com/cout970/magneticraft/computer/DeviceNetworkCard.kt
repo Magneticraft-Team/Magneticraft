@@ -2,10 +2,8 @@ package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.debug
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -56,8 +54,6 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
         const val INVALID_OUTPUT_BUFFER_POINTER = 10
         const val INVALID_INPUT_BUFFER_POINTER = 11
     }
-
-    override fun getId(): NodeID = NodeID("module_device_network_card", pos, world)
 
     val memStruct = ReadWriteStruct("network_header",
             ReadWriteStruct("device_header",
@@ -257,9 +253,10 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
 
     override fun getPos(): BlockPos = parent.pos
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) = Unit
+    // TODO fix this
+    override fun serialize() = emptyMap<String, Any>()
 
-    override fun serializeNBT(): NBTTagCompound = NBTTagCompound()
+    override fun deserialize(map: Map<String, Any>) = Unit
 }
 
 fun main(args: Array<String>) {
@@ -268,15 +265,15 @@ fun main(args: Array<String>) {
 
     socket.outputStream.apply {
 
-//        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/cpu/bios.bin HTTP/1.1\r\n" +
+        //        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/cpu/bios.bin HTTP/1.1\r\n" +
 //               "Host: raw.githubusercontent.com\r\n" +
 //               "Connection: close\r\n" +
 //               "\r\n").toByteArray())
 
         write(("GET /raw/pJwsc2XP HTTP/1.0\r\n" +
-               "Host: pastebin.com\r\n" +
-               "Connection: close\r\n" +
-               "\r\n").toByteArray())
+                "Host: pastebin.com\r\n" +
+                "Connection: close\r\n" +
+                "\r\n").toByteArray())
     }
 
     val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)

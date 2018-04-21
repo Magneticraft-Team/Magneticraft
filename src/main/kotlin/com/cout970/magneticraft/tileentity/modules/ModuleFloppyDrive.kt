@@ -15,6 +15,8 @@ import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.util.toMap
+import com.cout970.magneticraft.util.toNBT
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumHand
 
@@ -30,7 +32,7 @@ class ModuleFloppyDrive(
 
     override lateinit var container: IModuleContainer
 
-    val drive: DeviceFloppyDrive = DeviceFloppyDrive(ref, this::getDisk)
+    val drive: DeviceFloppyDrive = DeviceFloppyDrive(this::getDisk)
 
     fun getDisk(): IFloppyDisk? {
         return ITEM_FLOPPY_DISK!!.fromItem(inventory[slot])
@@ -41,11 +43,11 @@ class ModuleFloppyDrive(
     }
 
     override fun serializeNBT(): NBTTagCompound {
-        return drive.serializeNBT()
+        return drive.serialize().toNBT()
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        drive.deserializeNBT(nbt)
+        drive.deserialize(nbt.toMap())
     }
 
     override fun onActivated(args: OnActivatedArgs): Boolean = args.run {

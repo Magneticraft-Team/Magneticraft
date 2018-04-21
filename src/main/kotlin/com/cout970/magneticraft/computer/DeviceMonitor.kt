@@ -1,17 +1,17 @@
 package com.cout970.magneticraft.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.computer.IResettable
 import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.gui.common.core.*
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.util.split
-import net.minecraft.nbt.NBTTagCompound
+import java.lang.StringBuilder
 
 /**
  * Created by cout970 on 31/12/2015.
  */
-class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
+class DeviceMonitor(val parent: ITileRef) : IDevice, IResettable {
 
     private var screenBuffer: ByteArray? = null
 
@@ -43,14 +43,13 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     val lines: Int = 34
     val columns: Int = 80
     val screenSize: Int = lines * columns
-    val isActive: Boolean = true
 
-    override fun getId(): NodeID = NodeID("module_device_monitor", pos, world)
+    val clipboardToPaste = StringBuilder()
 
     //@formatter:off
     val memStruct = ReadWriteStruct("monitor_header",
             ReadWriteStruct("device_header",
-                    ReadOnlyByte("online", { if (isActive) 1 else 0 }),
+                    ReadOnlyByte("online", { 1 }),
                     ReadOnlyByte("type", { 1 }),
                     ReadOnlyShort("status", { 0 })
             ),
@@ -69,6 +68,31 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
             ReadWriteByteArray("buffer", getBuffer())
     )
     //@formatter:on
+
+    override fun reset(){
+        clipboardToPaste.delete(0, clipboardToPaste.length)
+    }
+
+    fun update() {
+        if (clipboardToPaste.isNotEmpty()) {
+
+            var key = clipboardToPaste[0]
+            val buff = getKeyBuffer()
+
+            while (regKeyBufferSize != buff.size / 2) {
+
+                val pos = (regKeyBufferPtr + regKeyBufferSize) % (keyBuffer!!.size / 2)
+                buff[2 * pos] = 1
+                buff[2 * pos + 1] = key.toByte()
+
+                regKeyBufferSize++
+                clipboardToPaste.deleteCharAt(0)
+
+                if (clipboardToPaste.isEmpty()) break
+                key = clipboardToPaste[0]
+            }
+        }
+    }
 
     fun signal(id: Int) {
         when (id) {
@@ -131,38 +155,32 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
         mousePressed = button
     }
 
-    override fun deserializeNBT(main: NBTTagCompound) {
-        val nbt = main.getCompoundTag("OldMonitor")
-        regKeyBufferPtr = nbt.getInteger("KeyBufferPtr")
-        regKeyBufferSize = nbt.getInteger("KeyBufferSize")
-        System.arraycopy(nbt.getByteArray("KeyBuffer"), 0, getKeyBuffer(), 0, getKeyBuffer().size)
-        regMouseBufferPtr = nbt.getInteger("MouseBufferPtr")
-        regMouseBufferSize = nbt.getInteger("MouseBufferSize")
-        System.arraycopy(nbt.getByteArray("MouseBuffer"), 0, getMouseBuffer(), 0, getMouseBuffer().size)
-        System.arraycopy(nbt.getByteArray("Buffer"), 0, getBuffer(), 0, getBuffer().size)
-        screenBuffer = nbt.getByteArray("ScreenBuffer").clone()
-        currentLine = nbt.getInteger("CurrentLine")
-        cursorLine = nbt.getInteger("CursorLine")
-        cursorColumn = nbt.getInteger("CursorColumn")
-        getScreenBuffer()
-    }
+    override fun serialize() = mapOf(
+            "KeyBufferPtr" to regKeyBufferPtr,
+            "KeyBufferSize" to regKeyBufferSize,
+            "KeyBuffer" to getKeyBuffer().copyOf(),
+            "MouseBufferPtr" to regMouseBufferPtr,
+            "MouseBufferSize" to regMouseBufferSize,
+            "MouseBuffer" to getMouseBuffer().copyOf(),
+            "Buffer" to getBuffer().copyOf(),
+            "ScreenBuffer" to getScreenBuffer().copyOf(),
+            "CurrentLine" to currentLine,
+            "CursorLine" to cursorLine,
+            "CursorColumn" to cursorColumn
+    )
 
-    override fun serializeNBT(): NBTTagCompound {
-        val main = NBTTagCompound()
-        val nbt = NBTTagCompound()
-        nbt.setInteger("KeyBufferPtr", regKeyBufferPtr)
-        nbt.setInteger("KeyBufferSize", regKeyBufferSize)
-        nbt.setByteArray("KeyBuffer", getKeyBuffer())
-        nbt.setInteger("MouseBufferPtr", regMouseBufferPtr)
-        nbt.setInteger("MouseBufferSize", regMouseBufferSize)
-        nbt.setByteArray("MouseBuffer", getMouseBuffer())
-        nbt.setByteArray("Buffer", getBuffer())
-        nbt.setByteArray("ScreenBuffer", getScreenBuffer())
-        nbt.setInteger("CurrentLine", currentLine)
-        nbt.setInteger("CursorLine", cursorLine)
-        nbt.setInteger("CursorColumn", cursorColumn)
-        main.setTag("OldMonitor", nbt)
-        return main
+    override fun deserialize(map: Map<String, Any>) {
+        regKeyBufferPtr = map["KeyBufferPtr"] as Int
+        regKeyBufferSize = map["KeyBufferSize"] as Int
+        System.arraycopy(map["KeyBuffer"] as ByteArray, 0, getKeyBuffer(), 0, getKeyBuffer().size)
+        regMouseBufferPtr = map["MouseBufferPtr"] as Int
+        regMouseBufferSize = map["MouseBufferSize"] as Int
+        System.arraycopy(map["MouseBuffer"] as ByteArray, 0, getMouseBuffer(), 0, getMouseBuffer().size)
+        System.arraycopy(map["Buffer"] as ByteArray, 0, getBuffer(), 0, getBuffer().size)
+        screenBuffer = map["ScreenBuffer"] as ByteArray
+        currentLine = map["CurrentLine"] as Int
+        cursorLine = map["CursorLine"] as Int
+        cursorColumn = map["CursorColumn"] as Int
     }
 
     //Client to Server sync
@@ -179,6 +197,10 @@ class DeviceMonitor(val parent: ITileRef) : IDevice, ITileRef by parent {
     }
 
     fun loadFromClient(ibd: IBD) {
+
+        ibd.getString(DATA_ID_MONITOR_CLIPBOARD) {
+            clipboardToPaste.append(it)
+        }
 
         ibd.getInteger(DATA_ID_MONITOR_HAS_KEY) {
             val key = ibd.getInteger(DATA_ID_MONITOR_KEY)

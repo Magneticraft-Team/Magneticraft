@@ -7,7 +7,8 @@ import io.netty.buffer.ByteBuf
  * Created by cout970 on 09/07/2016.
  *
  * Indexed Binary Data
- * Encodes and decodes data from a ByteBuf using a index to identify the data
+ * Encodes and decodes data from a ByteBuf using an index to identify the data,
+ * this way more efficient than NBT for network packets because doesn't use Strings for indexing
  * See gui.common.core.Constants.kt for ids
  */
 class IBD {
@@ -15,31 +16,31 @@ class IBD {
     private val map = mutableMapOf<Int, Any>()
 
     fun setInteger(id: Int, value: Int) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun setLong(id: Int, value: Long) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun setFloat(id: Int, value: Float) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun setDouble(id: Int, value: Double) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun setBoolean(id: Int, value: Boolean) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun setString(id: Int, value: String) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun setByteArray(id: Int, value: ByteArray) {
-        map.put(id, value)
+        map[id] = value
     }
 
     fun getInteger(id: Int) = map[id] as Int
@@ -131,7 +132,7 @@ class IBD {
 
     fun merge(other: IBD) {
         for ((key, value) in other.map) {
-            map.put(key, value)
+            map[key] = value
         }
     }
 

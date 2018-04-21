@@ -3,7 +3,6 @@ package com.cout970.magneticraft.computer
 import com.cout970.magneticraft.api.computer.ICPU
 import com.cout970.magneticraft.api.computer.IMotherboard
 import com.cout970.magneticraft.computer.exception.*
-import net.minecraft.nbt.NBTTagCompound
 import java.util.*
 
 
@@ -55,7 +54,7 @@ class CPU_MIPS : ICPU {
         Arrays.fill(registers, 0)
         regHI = 0
         regLO = 0
-        regPC = 0x09000
+        regPC = Motherboard.CPU_START_POINT
         regStatus = 0x0000FFFF
         regCause = 0
         regEPC = 0
@@ -574,36 +573,31 @@ class CPU_MIPS : ICPU {
         }
     }
 
-    override fun setMotherboard(mb: IMotherboard?) {
+    override fun setMotherboard(mb: IMotherboard) {
         motherboard = mb
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound) {
-        if (nbt.hasKey("PC")) {
-            registers = nbt.getIntArray("Regs")
-            if (registers.size != 32) {
-                registers = IntArray(32)
-            }
-            regPC = nbt.getInteger("PC")
-            regHI = nbt.getInteger("regHI")
-            regLO = nbt.getInteger("regLO")
-            regStatus = nbt.getInteger("Status")
-            regCause = nbt.getInteger("Cause")
-            regEPC = nbt.getInteger("EPC")
-            jump = nbt.getInteger("Jump")
-        }
+    override fun serialize(): Map<String, Any> {
+        return mapOf(
+                "Regs" to registers.copyOf(),
+                "PC" to regPC,
+                "regHI" to regHI,
+                "regLO" to regLO,
+                "Status" to regStatus,
+                "Cause" to regCause,
+                "EPC" to regEPC,
+                "Jump" to jump
+        )
     }
 
-    override fun serializeNBT(): NBTTagCompound {
-        val nbt = NBTTagCompound()
-        nbt.setIntArray("Regs", registers)
-        nbt.setInteger("PC", regPC)
-        nbt.setInteger("regHI", regHI)
-        nbt.setInteger("regLO", regLO)
-        nbt.setInteger("Status", regStatus)
-        nbt.setInteger("Cause", regCause)
-        nbt.setInteger("EPC", regEPC)
-        nbt.setInteger("Jump", jump)
-        return nbt
+    override fun deserialize(map: Map<String, Any>) {
+        registers = map["Regs"] as IntArray
+        regPC = map["PC"] as Int
+        regHI = map["regHI"] as Int
+        regLO = map["regLO"] as Int
+        regStatus = map["Status"] as Int
+        regCause = map["Cause"] as Int
+        regEPC = map["EPC"] as Int
+        jump = map["Jump"] as Int
     }
 }
