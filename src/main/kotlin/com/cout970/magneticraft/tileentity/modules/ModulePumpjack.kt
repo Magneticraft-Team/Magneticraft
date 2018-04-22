@@ -21,6 +21,7 @@ import com.cout970.magneticraft.tileentity.modules.pumpjack.serializeNBT
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.util.vector.yi
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.nbt.NBTTagCompound
@@ -103,8 +104,8 @@ class ModulePumpjack(
 
                     val size = 5 * 16
                     this.depositSearch = WorldIterator.create(
-                            BlockPos(pos.x - size, 20 - 3, pos.z - size),
-                            BlockPos(pos.x + size, 20 + 3, pos.z + size)
+                            BlockPos(pos.x - size, pos.yi - 7, pos.z - size),
+                            BlockPos(pos.x + size, pos.yi + 4, pos.z + size)
                     )
 
                     depositSize = 0

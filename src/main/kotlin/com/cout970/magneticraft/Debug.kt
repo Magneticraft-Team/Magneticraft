@@ -221,7 +221,7 @@ object Debug {
                         sender.sendMessage("OreDict: ${OreDictionary.getOreIDs(stack).map { OreDictionary.getOreName(it) }}".toTextComponent())
                     }
                     else -> {
-                        sender.sendMessage("Unknown arg: '$args[0]'".toTextComponent())
+                        sender.sendMessage("Unknown arg: '${args[0]}'".toTextComponent())
                     }
                 }
             } else {

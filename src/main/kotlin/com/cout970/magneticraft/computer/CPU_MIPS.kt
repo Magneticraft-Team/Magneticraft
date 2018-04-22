@@ -443,6 +443,7 @@ class CPU_MIPS : ICPU {
         val registerNames = arrayOf("z0", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3",
                 "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp",
                 "sp", "fp", "ra")
+
         val TYPE_R = arrayOf("SLL  ", "UNKNOW", "SRL  ", "SRA  ", "SLLV ", "UNKNOW", "SRLV ", "SRAV ", "JR   ", "JALR ",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW",
@@ -450,6 +451,7 @@ class CPU_MIPS : ICPU {
                 "UNKNOW", "SLT  ", "SLTU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
                 "UNKNOW", "UNKNOW", "UNKNOW")
+
         val TYPE_I = arrayOf("UNKNOW", "BGEZ ", "UNKNOW", "UNKNOW", "BEQ  ", "BNE  ", "BLEZ ", "BGTZ ", "ADDI ",
                 "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
                 "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LLO  ", "LHI  ", "TRAP ", "UNKNOW", "UNKNOW", "UNKNOW",
@@ -562,14 +564,15 @@ class CPU_MIPS : ICPU {
                         bus.readWord(getRegister(29) + i * 4)))
             }
         } else {
-//            int flag = exception.getCode();
-//            if ((regStatus & (flag + 1)) == 0) {
-//                return;
+//            val flag = exception.code
+//            if ((regStatus and (flag + 1)) == 0) {
+//                 // ignored, already handling other interruption
+//                return
 //            }
-//            regCause = flag;
-//            regEPC = regPC;
-//            regStatus <<= 4;
-//            regPC = 0x000;
+//            regCause = flag
+//            regEPC = regPC
+//            regStatus = regStatus shl 4
+//            regPC = 0x0000
         }
     }
 

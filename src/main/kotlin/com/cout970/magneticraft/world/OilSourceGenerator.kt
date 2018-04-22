@@ -69,8 +69,8 @@ class OilSourceGenerator(
 
             if (random.nextInt(3) == 0) {
 
-                // the -8 is needed to avoid cascading chunk updates see Chunk#populate
-                val pos = chunkPos.add(i - 8, 0, j - 8)
+                // the +8 is needed to avoid cascading chunk updates see Chunk#populate
+                val pos = chunkPos.add(i + 8, 0, j + 8)
                 val dist = centerBlock.distanceSq(pos)
 
                 if (dist < innerRadiusSq) {

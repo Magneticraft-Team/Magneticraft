@@ -1,12 +1,13 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "cube_all"
+        "model": "cube_column"
     },
 	"variants": {
 		"normal": [{
 			"textures": {
-				"all": "magneticraft:blocks/multiblock_parts/pumpjack_drill"
+				"end": "magneticraft:blocks/multiblock_parts/pumpjack_drill",
+				"side": "magneticraft:blocks/multiblock_parts/pumpjack_drill_side"
 			}
 		}]
 	}
