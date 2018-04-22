@@ -24,34 +24,39 @@ object MultiblockHydraulicPress : Multiblock() {
     init {
         val I = IgnoreBlockComponent
         val R = corrugatedIronBlock()
+        val G = grateBlock()
+        val C = copperCoilBlock()
+        val Y = strippedBlock()
+        val U = columnBlock(EnumFacing.UP)
+        val H = columnBlock(EnumFacing.EAST)
         val M = mainBlockOf(controllerBlock)
 
         scheme = Multiblock.yLayers(
 
                 Multiblock.zLayers(
                         listOf(I, I, I), // y = 4
-                        listOf(R, R, R),
+                        listOf(H, H, H),
                         listOf(I, I, I)),
 
                 Multiblock.zLayers(
                         listOf(I, I, I), // y = 3
-                        listOf(R, R, R),
+                        listOf(U, R, U),
                         listOf(I, I, I)),
 
                 Multiblock.zLayers(
                         listOf(I, I, I), // y = 2
-                        listOf(R, R, R),
+                        listOf(U, Y, U),
                         listOf(I, I, I)),
 
                 Multiblock.zLayers(
-                        listOf(R, R, R), // y = 1
-                        listOf(R, R, R),
-                        listOf(R, R, R)),
+                        listOf(G, G, G), // y = 1
+                        listOf(C, R, C),
+                        listOf(G, G, G)),
 
                 Multiblock.zLayers(
-                        listOf(R, M, R), // y = 0
-                        listOf(R, R, R),
-                        listOf(R, R, R))
+                        listOf(G, M, G), // y = 0
+                        listOf(G, G, G),
+                        listOf(G, G, G))
         )
     }
 
@@ -93,7 +98,6 @@ object MultiblockHydraulicPress : Multiblock() {
             Vec3d(0.000, 0.000, -16.000) * PIXEL to Vec3d(1.000, 20.000, -12.000) * PIXEL,
             Vec3d(15.000, 0.000, -16.000) * PIXEL to Vec3d(16.000, 20.000, -12.000) * PIXEL,
             Vec3d(1.000, 19.000, -16.000) * PIXEL to Vec3d(15.000, 20.000, -12.000) * PIXEL,
-            Vec3d(0.000, 0.000, 24.000) * PIXEL to Vec3d(16.000, 20.000, 32.000) * PIXEL,
             Vec3d(-10.000, 12.000, -11.000) * PIXEL to Vec3d(8.000, 24.000, 27.000) * PIXEL,
             Vec3d(8.000, 12.000, -11.000) * PIXEL to Vec3d(26.000, 24.000, 27.000) * PIXEL,
             Vec3d(-12.000, 0.000, -12.000) * PIXEL to Vec3d(8.000, 12.000, 8.000) * PIXEL,
@@ -101,7 +105,8 @@ object MultiblockHydraulicPress : Multiblock() {
             Vec3d(8.000, 0.000, 8.000) * PIXEL to Vec3d(28.000, 12.000, 28.000) * PIXEL,
             Vec3d(-12.000, 0.000, 8.000) * PIXEL to Vec3d(8.000, 12.000, 28.000) * PIXEL,
             Vec3d(-14.500, 18.000, 4.000) * PIXEL to Vec3d(-10.500, 30.000, 12.000) * PIXEL,
-            Vec3d(-15.500, 22.000, 6.000) * PIXEL to Vec3d(-14.500, 26.000, 10.000) * PIXEL
+            Vec3d(-15.500, 22.000, 6.000) * PIXEL to Vec3d(-14.500, 26.000, 10.000) * PIXEL,
+            Vec3d(0.000, 0.000, 24.000) * PIXEL to Vec3d(16.000, 15.000, 32.000) * PIXEL
     ).map { EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it) + vec3Of(0, 0, 1) }
 
     override fun checkExtraRequirements(data: MutableList<BlockData>, context: MultiblockContext): List<ITextComponent> = emptyList()

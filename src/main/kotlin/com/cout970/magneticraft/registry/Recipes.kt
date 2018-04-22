@@ -268,21 +268,21 @@ fun registerRecipes() {
     //@formatter:on
 
     // Heavy recipes
-    addHydraulicPressRecipe(IRON_INGOT.stack(4), IRON.getHeavyPlate(), HEAVY, 120f)
-    addHydraulicPressRecipe(GOLD_INGOT.stack(4), GOLD.getHeavyPlate(), HEAVY, 50f)
-    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(4), EnumMetal.COPPER.getHeavyPlate(), HEAVY, 100f)
-    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(4), EnumMetal.LEAD.getHeavyPlate(), HEAVY, 50f)
-    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(4), EnumMetal.TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
-    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(4), EnumMetal.STEEL.getHeavyPlate(), HEAVY, 140f)
+    addHydraulicPressRecipe(IRON_INGOT.stack(2), IRON.getHeavyPlate(), HEAVY, 120f)
+    addHydraulicPressRecipe(GOLD_INGOT.stack(2), GOLD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(2), EnumMetal.COPPER.getHeavyPlate(), HEAVY, 100f)
+    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(2), EnumMetal.LEAD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(2), EnumMetal.TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
+    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(2), EnumMetal.STEEL.getHeavyPlate(), HEAVY, 140f)
 
     // Medium recipes
-    addHydraulicPressRecipe(IRON_INGOT.stack(2), IRON.getLightPlate(), MEDIUM, 120f)
-    addHydraulicPressRecipe(GOLD_INGOT.stack(2), GOLD.getLightPlate(), MEDIUM, 50f)
-    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(2), EnumMetal.COPPER.getLightPlate(), MEDIUM, 100f)
-    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(2), EnumMetal.LEAD.getLightPlate(), MEDIUM, 50f)
-    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(2), EnumMetal.TUNGSTEN.getLightPlate(), MEDIUM, 250f)
-    addHydraulicPressRecipe(EnumMetal.COBALT.getIngot().withSize(2), EnumMetal.COBALT.getLightPlate(), MEDIUM, 120f)
-    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(2), EnumMetal.STEEL.getLightPlate(), MEDIUM, 140f)
+    addHydraulicPressRecipe(IRON_INGOT.stack(1), IRON.getLightPlate(), MEDIUM, 120f)
+    addHydraulicPressRecipe(GOLD_INGOT.stack(1), GOLD.getLightPlate(), MEDIUM, 50f)
+    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(1), EnumMetal.COPPER.getLightPlate(), MEDIUM, 100f)
+    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(1), EnumMetal.LEAD.getLightPlate(), MEDIUM, 50f)
+    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(1), EnumMetal.TUNGSTEN.getLightPlate(), MEDIUM, 250f)
+    addHydraulicPressRecipe(EnumMetal.COBALT.getIngot().withSize(1), EnumMetal.COBALT.getLightPlate(), MEDIUM, 120f)
+    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(1), EnumMetal.STEEL.getLightPlate(), MEDIUM, 140f)
 
     // Light recipes
     listOf(

@@ -22,7 +22,6 @@ class HydraulicPressCraftingProcess(
     private var cacheMode: HydraulicPressMode? = null
     private var cacheValue: IHydraulicPressRecipe? = null
 
-    private fun getInput() = inventory.extractItem(inputSlot, 1, true)
 
     private fun getRecipe(input: ItemStack): IHydraulicPressRecipe? {
         if (ApiUtils.equalsIgnoreSize(cacheKey, input) && mode() == cacheMode) return cacheValue
@@ -46,14 +45,14 @@ class HydraulicPressCraftingProcess(
     }
 
     override fun canCraft(): Boolean {
-        val input = getInput()
+        val input = inventory.extractItem(inputSlot, 1, true)
         // check non empty and size >= 1
         if (input.isEmpty) return false
 
         //check recipe
         val recipe = getRecipe(input) ?: return false
 
-        if (recipe.input.count > input.count) {
+        if (recipe.input.count != inventory.extractItem(inputSlot, recipe.input.count, true).count) {
             return false
         }
 
@@ -66,5 +65,5 @@ class HydraulicPressCraftingProcess(
         return true
     }
 
-    override fun duration(): Float = getRecipe(getInput())?.duration ?: 100f
+    override fun duration(): Float = getRecipe(inventory.extractItem(inputSlot, 1, true))?.duration ?: 100f
 }

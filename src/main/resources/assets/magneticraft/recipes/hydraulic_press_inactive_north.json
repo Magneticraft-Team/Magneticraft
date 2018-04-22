@@ -1,0 +1,20 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AB"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "magneticraft:hydraulic_press",
+    "data": 0
+  }
+}

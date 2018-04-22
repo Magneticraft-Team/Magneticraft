@@ -638,6 +638,12 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
             )
     )
 
+    val itemExporterModule = ModuleItemExporter(
+            facing = { facing },
+            inventory = InventoryCapabilityFilter(inventory, listOf(1), listOf(1)),
+            ports = { listOf(BlockPos(0, 0, -3) to EnumFacing.SOUTH, BlockPos(0, 0, -3) to EnumFacing.UP) }
+    )
+
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
             facingGetter = { facing },
@@ -646,7 +652,7 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
 
     init {
         initModules(multiblockModule, invModule, energyModule, storageModule, ioModule,
-                openGuiModule, processModule, hydraulicPressModule)
+                openGuiModule, processModule, hydraulicPressModule, itemExporterModule)
     }
 
     @DoNotRemove

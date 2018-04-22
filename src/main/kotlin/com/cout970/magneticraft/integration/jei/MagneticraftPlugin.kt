@@ -163,8 +163,8 @@ class MagneticraftPlugin : IModPlugin {
                 backgroundTexture = "hydraulic_press",
                 unlocalizedTitle = "text.magneticraft.jei.hydraulic_press",
                 initFunc = { recipeLayout, recipeWrapper, _ ->
-                    recipeLayout.itemStacks.init(0, true, 48, 10)
-                    recipeLayout.itemStacks.init(1, false, 48, 46)
+                    recipeLayout.itemStacks.init(0, true, 49, 11)
+                    recipeLayout.itemStacks.init(1, false, 49, 42)
                     recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
                         addTooltip("${recipeWrapper.recipe.duration} ticks")

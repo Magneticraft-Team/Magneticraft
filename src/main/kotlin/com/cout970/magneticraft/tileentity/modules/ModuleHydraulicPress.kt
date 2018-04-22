@@ -1,6 +1,9 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SELECTED_OPTION
+import com.cout970.magneticraft.misc.network.IntSyncVariable
+import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.add
@@ -21,5 +24,11 @@ class ModuleHydraulicPress(
 
     override fun serializeNBT() = newNbt {
         add("mode", mode.ordinal)
+    }
+
+    override fun getGuiSyncVariables(): List<SyncVariable> {
+        return listOf(
+                IntSyncVariable(DATA_ID_SELECTED_OPTION, { mode.ordinal }, { mode = HydraulicPressMode.values()[it] })
+        )
     }
 }

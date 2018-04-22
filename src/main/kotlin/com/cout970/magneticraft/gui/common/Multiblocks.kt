@@ -1,11 +1,9 @@
 package com.cout970.magneticraft.gui.common
 
 import com.cout970.magneticraft.api.MagneticraftApi
+import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import com.cout970.magneticraft.gui.client.components.buttons.AbstractButton
-import com.cout970.magneticraft.gui.common.core.ContainerBase
-import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
-import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
-import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_SCROLL
+import com.cout970.magneticraft.gui.common.core.*
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandler
@@ -219,10 +217,16 @@ class ContainerHydraulicPress(val tile: TileHydraulicPress, player: EntityPlayer
             addSlotToContainer(SlotTakeOnly(inv, 1, 97, 48))
 
             inventoryRegions += InventoryRegion(0..0, filter = {
-                MagneticraftApi.getHydraulicPressRecipeManager().findRecipe(it) != null
+                MagneticraftApi.getHydraulicPressRecipeManager().findRecipe(it, tile.hydraulicPressModule.mode) != null
             })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
         }
         bindPlayerInventory(player.inventory)
+    }
+
+    override fun receiveDataFromClient(ibd: IBD) {
+        ibd.getInteger(DATA_ID_SELECTED_OPTION) {
+            tile.hydraulicPressModule.mode = HydraulicPressMode.values()[it]
+        }
     }
 }

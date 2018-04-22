@@ -7,6 +7,7 @@ import com.cout970.magneticraft.gui.client.components.buttons.*
 import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
+import com.cout970.magneticraft.gui.common.core.DATA_ID_SELECTED_OPTION
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_LEVEL
 import com.cout970.magneticraft.misc.network.IBD
@@ -169,7 +170,9 @@ fun guiPumpjack(gui: GuiBase, container: ContainerPumpjack) = gui.run {
 
 fun guiHydraulicPress(gui: GuiBase, container: ContainerHydraulicPress) = gui.run {
     val tile = container.tile
-    +CompBackground(guiTexture("hydraulic_press"))
+    val texture = guiTexture("hydraulic_press")
+
+    +CompBackground(texture)
     +CompElectricBar(tile.node, Vec2d(64, 16))
 
     val consumption = tile.processModule.consumption.toBarProvider(Config.hydraulicPressMaxConsumption)
@@ -177,4 +180,22 @@ fun guiHydraulicPress(gui: GuiBase, container: ContainerHydraulicPress) = gui.ru
 
     +CompVerticalBar(consumption, 3, Vec2d(75, 16), consumption.toEnergyText())
     +CompVerticalBar(process, 6, Vec2d(86, 16), process.toPercentText("Processing: "))
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onPress(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
+        val ibd = IBD().apply {
+            setInteger(DATA_ID_SELECTED_OPTION, button.id)
+        }
+        container.sendUpdate(ibd)
+        return true
+    }
+
+    val buttons = listOf(
+            MultiButton(0, texture, vec2Of(121, 10) to vec2Of(21, 20), uv = buttonUV(vec2Of(0, 166), vec2Of(21, 20))),
+            MultiButton(1, texture, vec2Of(121, 30) to vec2Of(21, 20), uv = buttonUV(vec2Of(24, 166), vec2Of(21, 20))),
+            MultiButton(2, texture, vec2Of(121, 50) to vec2Of(21, 20), uv = buttonUV(vec2Of(48, 166), vec2Of(21, 20)))
+    )
+    buttons.forEach { +it; it.listener = ::onPress; it.allButtons = buttons }
+
+    buttons[tile.hydraulicPressModule.mode.ordinal].state = ButtonState.PRESSED
 }
