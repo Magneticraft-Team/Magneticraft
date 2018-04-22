@@ -5,12 +5,14 @@ import com.cout970.magneticraft.computer.*
 import gnu.trove.map.hash.TIntObjectHashMap
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 /**
  * Number of bugs found when adding tests: 4
  * wait, does code not even run once count?, yes, then: 8
  */
+@Ignore
 class TestMipsCpu {
 
     lateinit var cpu: CPU_MIPS
@@ -21,7 +23,7 @@ class TestMipsCpu {
     @Before
     fun setUp() {
         cpu = CPU_MIPS()
-        memory = RAM(0x10000, true)
+        memory = RAM(0x20000, true)
         bus = Bus(memory, TIntObjectHashMap())
         motherboard = Motherboard(cpu, memory, ROM("assets/$MOD_ID/cpu/bios.bin"), bus)
         motherboard.reset()
@@ -30,7 +32,7 @@ class TestMipsCpu {
 
     fun registerOperation(input: Int, instr: Int): Int {
         cpu.setRegister(8, input)
-        memory.writeWord(0x09000, instr) // instruction to test
+        memory.writeWord(Motherboard.CPU_START_POINT, instr) // instruction to test
         cpu.iterate()
         return cpu.getRegister(9)
     }
@@ -38,7 +40,7 @@ class TestMipsCpu {
     fun register2Operation(input: Int, extra: Int, instr: Int): Int {
         cpu.setRegister(8, input)
         cpu.setRegister(10, extra)
-        memory.writeWord(0x09000, instr) // instruction to test
+        memory.writeWord(Motherboard.CPU_START_POINT, instr) // instruction to test
         cpu.iterate()
         return cpu.getRegister(9)
     }
@@ -91,7 +93,7 @@ class TestMipsCpu {
     fun testMULT() {
         cpu.setRegister(8, 2)
         cpu.setRegister(10, 0x8000_0000.toInt())
-        memory.writeWord(0x09000, 0x010a0018)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x010a0018)
         cpu.iterate()
         // 0x8000_0000.toInt() * 2 == 0xFFFF_FFFF_0000_0000
         assertEqualsHex("MULT failed", 0x0000_0000, cpu.regLO)
@@ -102,7 +104,7 @@ class TestMipsCpu {
     fun testMULTU() {
         cpu.setRegister(8, 2)
         cpu.setRegister(10, 0x8000_0000.toInt())
-        memory.writeWord(0x09000, 0x010a0019)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x010a0019)
         cpu.iterate()
         // 0x8000_0000.toInt() * 2 == 0x0000_0001_0000_0000
         assertEqualsHex("MULTU failed", 0x0000_0000, cpu.regLO)
@@ -113,7 +115,7 @@ class TestMipsCpu {
     fun testDIV() {
         cpu.setRegister(8, 13)
         cpu.setRegister(10, 5)
-        memory.writeWord(0x09000, 0x010a001a)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x010a001a)
         cpu.iterate()
         // 13 / 5 == 2
         // 13 % 5 == 3
@@ -125,7 +127,7 @@ class TestMipsCpu {
     fun testDIV2() {
         cpu.setRegister(8, -13)
         cpu.setRegister(10, 5)
-        memory.writeWord(0x09000, 0x010a001a)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x010a001a)
         cpu.iterate()
         // -13 / 5 == -2
         // -13 % 5 == -3
@@ -137,7 +139,7 @@ class TestMipsCpu {
     fun testDIVU() {
         cpu.setRegister(8, 13)
         cpu.setRegister(10, 5)
-        memory.writeWord(0x09000, 0x010a001b)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x010a001b)
         cpu.iterate()
         // 13 / 5 == 2
         // 13 % 5 == 3
@@ -149,7 +151,7 @@ class TestMipsCpu {
     fun testDIVU2() {
         cpu.setRegister(8, -13) // 0xfffffff3
         cpu.setRegister(10, 5)
-        memory.writeWord(0x09000, 0x010a001b)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x010a001b)
         cpu.iterate()
         // -13 / 5 == 858993456 (0x33333330)
         // -13 % 5 == 3
@@ -221,35 +223,35 @@ class TestMipsCpu {
     fun testBLTZ() {
         registerOperation(1, 0x0500fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLTZ failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BLTZ failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
     fun testBLTZ2() {
         registerOperation(-1, 0x0500fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLTZ failed", 0x9000 - 4, cpu.regPC)
+        assertEqualsHex("BLTZ failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
     }
 
     @Test
     fun testBGEZ() {
         registerOperation(1, 0x1d00fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGEZ failed", 0x9000 - 4, cpu.regPC)
+        assertEqualsHex("BGEZ failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
     }
 
     @Test
     fun testBGEZ2() {
         registerOperation(-1, 0x1d00fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGEZ failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BGEZ failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
     fun testBLTZAL() {
         registerOperation(1, 0x0510fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLTZAL failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BLTZAL failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
         assertEqualsHex("BLTZAL failed", 0, cpu.getRegister(31))
     }
 
@@ -257,23 +259,23 @@ class TestMipsCpu {
     fun testBLTZAL2() {
         registerOperation(-1, 0x0510fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLTZAL failed", 0x9000 - 4, cpu.regPC)
-        assertEqualsHex("BLTZAL failed", 0x9000 + 8, cpu.getRegister(31))
+        assertEqualsHex("BLTZAL failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
+        assertEqualsHex("BLTZAL failed", Motherboard.CPU_START_POINT + 8, cpu.getRegister(31))
     }
 
     @Test
     fun testBGEZAL() {
         registerOperation(1, 0x0511fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGEZAL failed", 0x9000 - 4, cpu.regPC)
-        assertEqualsHex("BGEZAL failed", 0x9000 + 8, cpu.getRegister(31))
+        assertEqualsHex("BGEZAL failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
+        assertEqualsHex("BGEZAL failed", Motherboard.CPU_START_POINT + 8, cpu.getRegister(31))
     }
 
     @Test
     fun testBGEZAL2() {
         registerOperation(-1, 0x0511fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGEZAL failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BGEZAL failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
         assertEqualsHex("BGEZAL failed", 0, cpu.getRegister(31))
     }
 
@@ -281,70 +283,70 @@ class TestMipsCpu {
     fun testBEQ() {
         register2Operation(1, 1, 0x110afffd) // jump back
         cpu.iterate()
-        assertEqualsHex("BEQ failed", 0x9000 - 8, cpu.regPC)
+        assertEqualsHex("BEQ failed", Motherboard.CPU_START_POINT - 8, cpu.regPC)
     }
 
     @Test
     fun testBEQ2() {
         register2Operation(1, 2, 0x110afffd) // jump back
         cpu.iterate()
-        assertEqualsHex("BEQ failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BEQ failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
     fun testBNE() {
         register2Operation(1, 2, 0x150afffd) // jump back
         cpu.iterate()
-        assertEqualsHex("BNE failed", 0x9000 - 8, cpu.regPC)
+        assertEqualsHex("BNE failed", Motherboard.CPU_START_POINT - 8, cpu.regPC)
     }
 
     @Test
     fun testBNE2() {
         register2Operation(1, 1, 0x150afffd) // jump back
         cpu.iterate()
-        assertEqualsHex("BNE failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BNE failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
     fun testBLEZ() {
         registerOperation(1, 0x1900fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLEZ failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BLEZ failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
     fun testBLEZ2() {
         registerOperation(-1, 0x1900fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLEZ failed", 0x9000 - 4, cpu.regPC)
+        assertEqualsHex("BLEZ failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
     }
 
     @Test
     fun testBLEZ3() {
         registerOperation(0, 0x1900fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BLEZ failed", 0x9000 - 4, cpu.regPC)
+        assertEqualsHex("BLEZ failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
     }
 
     @Test
     fun testBGTZ() {
         registerOperation(1, 0x1d00fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGTZ failed", 0x9000 - 4, cpu.regPC)
+        assertEqualsHex("BGTZ failed", Motherboard.CPU_START_POINT - 4, cpu.regPC)
     }
 
     @Test
     fun testBGTZ2() {
         registerOperation(-1, 0x1d00fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGTZ failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BGTZ failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
     fun testBGTZ3() {
         registerOperation(0, 0x1d00fffe) // jump back
         cpu.iterate()
-        assertEqualsHex("BGTZ failed", 0x9000 + 8, cpu.regPC)
+        assertEqualsHex("BGTZ failed", Motherboard.CPU_START_POINT + 8, cpu.regPC)
     }
 
     @Test
@@ -419,21 +421,21 @@ class TestMipsCpu {
 
     @Test
     fun testLUI() {
-        memory.writeWord(0x09000, 0x3c09FFFF)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x3c09FFFF)
         cpu.iterate()
         assertEqualsHex("LUI failed", 0xFFFF_0000, cpu.getRegister(9))
     }
 
     @Test
     fun testLLO() {
-        memory.writeWord(0x09000, 0x6009FFFF)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x6009FFFF)
         cpu.iterate()
         assertEqualsHex("LLO failed", 0x0000_FFFF, cpu.getRegister(9))
     }
 
     @Test
     fun testLHI() {
-        memory.writeWord(0x09000, 0x6409FFFF)
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x6409FFFF)
         cpu.iterate()
         assertEqualsHex("LHI failed", 0xFFFF_0000, cpu.getRegister(9))
     }
@@ -441,7 +443,7 @@ class TestMipsCpu {
     @Test
     fun testLB(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x81090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x81090004.toInt())
         cpu.iterate()
         assertEqualsHex("LB failed", 0x78, cpu.getRegister(9))
     }
@@ -449,7 +451,7 @@ class TestMipsCpu {
     @Test
     fun testLB2(){
         memory.writeWord(0x00004, 0x123456F8)
-        memory.writeWord(0x09000, 0x81090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x81090004.toInt())
         cpu.iterate()
         assertEqualsHex("LB failed", 0xFFFF_FFF8, cpu.getRegister(9))
     }
@@ -457,7 +459,7 @@ class TestMipsCpu {
     @Test
     fun testLH(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x85090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x85090004.toInt())
         cpu.iterate()
         assertEqualsHex("LH failed", 0x5678, cpu.getRegister(9))
     }
@@ -465,7 +467,7 @@ class TestMipsCpu {
     @Test
     fun testLH2(){
         memory.writeWord(0x00004, 0x1234F678)
-        memory.writeWord(0x09000, 0x85090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x85090004.toInt())
         cpu.iterate()
         assertEqualsHex("LH failed", 0xFFFF_F678, cpu.getRegister(9))
     }
@@ -473,7 +475,7 @@ class TestMipsCpu {
     @Test
     fun testLWL(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x89090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x89090004.toInt())
         cpu.iterate()
         assertEqualsHex("LWL failed", 0x78000000, cpu.getRegister(9))
     }
@@ -481,7 +483,7 @@ class TestMipsCpu {
     @Test
     fun testLWL2(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x89090005.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x89090005.toInt())
         cpu.iterate()
         assertEqualsHex("LWL failed", 0x56780000, cpu.getRegister(9))
     }
@@ -489,7 +491,7 @@ class TestMipsCpu {
     @Test
     fun testLWL3(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x89090006.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x89090006.toInt())
         cpu.iterate()
         assertEqualsHex("LWL failed", 0x34567800, cpu.getRegister(9))
     }
@@ -497,7 +499,7 @@ class TestMipsCpu {
     @Test
     fun testLWL4(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x89090007.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x89090007.toInt())
         cpu.iterate()
         assertEqualsHex("LWL failed", 0x12345678, cpu.getRegister(9))
     }
@@ -505,7 +507,7 @@ class TestMipsCpu {
     @Test
     fun testLW(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x8d090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x8d090004.toInt())
         cpu.iterate()
         assertEqualsHex("LW failed", 0x12345678, cpu.getRegister(9))
     }
@@ -513,7 +515,7 @@ class TestMipsCpu {
     @Test
     fun testLBU(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x91090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x91090004.toInt())
         cpu.iterate()
         assertEqualsHex("LBU failed", 0x78, cpu.getRegister(9))
     }
@@ -521,7 +523,7 @@ class TestMipsCpu {
     @Test
     fun testLBU2(){
         memory.writeWord(0x00004, 0x123456F8)
-        memory.writeWord(0x09000, 0x91090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x91090004.toInt())
         cpu.iterate()
         assertEqualsHex("LBU failed", 0xF8, cpu.getRegister(9))
     }
@@ -529,7 +531,7 @@ class TestMipsCpu {
     @Test
     fun testLHU(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x95090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x95090004.toInt())
         cpu.iterate()
         assertEqualsHex("LHU failed", 0x5678, cpu.getRegister(9))
     }
@@ -537,7 +539,7 @@ class TestMipsCpu {
     @Test
     fun testLHU2(){
         memory.writeWord(0x00004, 0x1234F678)
-        memory.writeWord(0x09000, 0x95090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x95090004.toInt())
         cpu.iterate()
         assertEqualsHex("LHU failed", 0xF678, cpu.getRegister(9))
     }
@@ -545,7 +547,7 @@ class TestMipsCpu {
     @Test
     fun testLWR(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x99090004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x99090004.toInt())
         cpu.iterate()
         assertEqualsHex("LWR failed", 0x12345678, cpu.getRegister(9))
     }
@@ -553,7 +555,7 @@ class TestMipsCpu {
     @Test
     fun testLWR2(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x99090005.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x99090005.toInt())
         cpu.iterate()
         assertEqualsHex("LWR failed", 0x00123456, cpu.getRegister(9))
     }
@@ -561,7 +563,7 @@ class TestMipsCpu {
     @Test
     fun testLWR3(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x99090006.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x99090006.toInt())
         cpu.iterate()
         assertEqualsHex("LWR failed", 0x00001234, cpu.getRegister(9))
     }
@@ -569,7 +571,7 @@ class TestMipsCpu {
     @Test
     fun testLWR4(){
         memory.writeWord(0x00004, 0x12345678)
-        memory.writeWord(0x09000, 0x99090007.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0x99090007.toInt())
         cpu.iterate()
         assertEqualsHex("LWR failed", 0x00000012, cpu.getRegister(9))
     }
@@ -578,7 +580,7 @@ class TestMipsCpu {
     fun testSB(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xa10a0004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xa10a0004.toInt())
         cpu.iterate()
         assertEqualsHex("SB failed", 0x0000_0078, memory.readWord(0x1004))
     }
@@ -587,7 +589,7 @@ class TestMipsCpu {
     fun testSH(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xa50a0004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xa50a0004.toInt())
         cpu.iterate()
         assertEqualsHex("SH failed", 0x0000_5678, memory.readWord(0x1004))
     }
@@ -596,7 +598,7 @@ class TestMipsCpu {
     fun testSWL(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xa90a0004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0004.toInt())
         cpu.iterate()
         assertEqualsHex("SWL failed", 0x0000_0012, memory.readWord(0x1004))
     }
@@ -605,7 +607,7 @@ class TestMipsCpu {
     fun testSWL2(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xa90a0005.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0005.toInt())
         cpu.iterate()
         assertEqualsHex("SWL failed", 0x0000_1234, memory.readWord(0x1004))
     }
@@ -614,7 +616,7 @@ class TestMipsCpu {
     fun testSWL3(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xa90a0006.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0006.toInt())
         cpu.iterate()
         assertEqualsHex("SWL failed", 0x0012_3456, memory.readWord(0x1004))
     }
@@ -623,7 +625,7 @@ class TestMipsCpu {
     fun testSWL4(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xa90a0007.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0007.toInt())
         cpu.iterate()
         assertEqualsHex("SWL failed", 0x1234_5678, memory.readWord(0x1004))
     }
@@ -632,7 +634,7 @@ class TestMipsCpu {
     fun testSW(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xad0a0004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xad0a0004.toInt())
         cpu.iterate()
         assertEqualsHex("SW failed", 0x12345678, memory.readWord(0x1004))
     }
@@ -641,7 +643,7 @@ class TestMipsCpu {
     fun testSWR(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xb90a0004.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0004.toInt())
         cpu.iterate()
         assertEqualsHex("SWR failed", 0x1234_5678, memory.readWord(0x1004))
     }
@@ -650,7 +652,7 @@ class TestMipsCpu {
     fun testSWR2(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xb90a0005.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0005.toInt())
         cpu.iterate()
         assertEqualsHex("SWR failed", 0x0012_3456, memory.readWord(0x1004))
     }
@@ -659,7 +661,7 @@ class TestMipsCpu {
     fun testSWR3(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xb90a0006.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0006.toInt())
         cpu.iterate()
         assertEqualsHex("SWR failed", 0x0000_1234, memory.readWord(0x1004))
     }
@@ -668,7 +670,7 @@ class TestMipsCpu {
     fun testSWR4(){
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
-        memory.writeWord(0x09000, 0xb90a0007.toInt())
+        memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0007.toInt())
         cpu.iterate()
         assertEqualsHex("SWR failed", 0x0000_0012, memory.readWord(0x1004))
     }

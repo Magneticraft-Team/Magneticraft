@@ -27,14 +27,15 @@
         "2.1.2": "Fixed nugget recipes, fixed FORTH",
         "2.2.0": "Added shipping containers and added pumpjack, removed plates from ore dictionary",
         "2.2.1": "Balanced recipes, added electric heater, made copper coil stack-able, fixed gui visual duplication glitch, fixed some small bugs"
-        "2.2.2": "Fixed copper coil not working, updated lip interpreter"
+        "2.2.2": "Fixed copper coil not working, updated lip interpreter",
+        "2.3.0": "Fixed world gen bugs, added hydraulic press"
     },
     "promos": {
         "1.12-latest": "2.1.2",
         "1.12-recommended": "2.1.2",
         "1.12.1-latest": "2.1.2",
         "1.12.1-recommended": "2.1.2",
-        "1.12.2-latest": "2.2.2",
-        "1.12.2-recommended": "2.2.2"
+        "1.12.2-latest": "2.3.0",
+        "1.12.2-recommended": "2.3.0"
     }
 }
