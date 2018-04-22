@@ -33,6 +33,7 @@
   },
   "result": {
     "item": "magneticraft:crafting",
-    "data": 2
+    "data": 2,
+    "count": 2
   }
 }

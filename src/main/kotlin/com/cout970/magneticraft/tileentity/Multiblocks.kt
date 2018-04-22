@@ -214,6 +214,11 @@ class TileSteamEngine : TileMultiblock(), ITickable {
                     pos = BlockPos(-2, 0, -2),
                     side = EnumFacing.UP,
                     getter = { if (active) energyModule else null }
+            ), ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(-2, 0, -2),
+                    side = EnumFacing.SOUTH,
+                    getter = { if (active) energyModule else null }
             ))
     )
 
