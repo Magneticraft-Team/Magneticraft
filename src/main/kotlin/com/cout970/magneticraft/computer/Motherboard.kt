@@ -13,7 +13,7 @@ class Motherboard(
 ) : IMotherboard {
 
     companion object {
-        val CPU_START_POINT = 0x9000
+        val CPU_START_POINT = 0xE000
     }
 
     var cyclesPerTick = 1_000_000 / 20 // 1MHz

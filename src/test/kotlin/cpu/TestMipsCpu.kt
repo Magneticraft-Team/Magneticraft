@@ -2,6 +2,7 @@ package cpu
 
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.computer.*
+import gnu.trove.map.hash.TIntObjectHashMap
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -21,7 +22,7 @@ class TestMipsCpu {
     fun setUp() {
         cpu = CPU_MIPS()
         memory = RAM(0x10000, true)
-        bus = Bus(memory, mutableMapOf())
+        bus = Bus(memory, TIntObjectHashMap())
         motherboard = Motherboard(cpu, memory, ROM("assets/$MOD_ID/cpu/bios.bin"), bus)
         motherboard.reset()
         motherboard.start()

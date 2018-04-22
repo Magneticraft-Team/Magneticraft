@@ -5,6 +5,7 @@ import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.computer.IROM
 import com.cout970.magneticraft.computer.*
 import com.cout970.magneticraft.misc.network.IBD
+import gnu.trove.map.hash.TIntObjectHashMap
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -27,7 +28,7 @@ fun main(args: Array<String>) {
     val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
     val monitor = DeviceMonitor(FakeRef)
-    val floppyDrive = DeviceFloppyDrive(FakeRef) { if (useOs) osDisk else programDisk }
+    val floppyDrive = DeviceFloppyDrive() { if (useOs) osDisk else programDisk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
     networkCard.debugLevel = 5
@@ -37,15 +38,14 @@ fun main(args: Array<String>) {
 
     val rom = if (args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
 
-    val bus = Bus(memory, mutableMapOf())
+    val bus = Bus(memory, TIntObjectHashMap())
     val motherboard = Motherboard(cpu, memory, rom, bus)
     val mbDevice = DeviceMotherboard(FakeRef, motherboard)
 
-    bus.devices[0xFF] = mbDevice
-    bus.devices[0x00] = monitor
-    bus.devices[0x01] = floppyDrive
-    bus.devices[0x02] = networkCard
-
+    bus.devices.put(0xFF, mbDevice)
+    bus.devices.put(0x00, monitor)
+    bus.devices.put(0x01, floppyDrive)
+    bus.devices.put(0x02, networkCard)
 
     val display = createDisplay(monitor)
 
