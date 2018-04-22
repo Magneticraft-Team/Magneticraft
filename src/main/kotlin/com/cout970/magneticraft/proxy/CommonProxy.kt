@@ -40,6 +40,10 @@ abstract class CommonProxy {
             registerRecipes()
         }
 
+        logTime("Task registerMisc:") {
+            registerMisc()
+        }
+
         //World generator
         logTime("Task registerWorldGenerator:") {
             WorldGenerator.init()

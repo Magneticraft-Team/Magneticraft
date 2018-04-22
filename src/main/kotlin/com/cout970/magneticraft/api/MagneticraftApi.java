@@ -5,12 +5,14 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry;
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipeManager;
+import com.cout970.magneticraft.api.registries.tool.hammer.IHammerRegistry;
 import com.cout970.magneticraft.multiblock.core.MultiblockManager;
 
 /**
@@ -18,8 +20,7 @@ import com.cout970.magneticraft.multiblock.core.MultiblockManager;
  */
 public class MagneticraftApi {
 
-    private MagneticraftApi() {
-    }
+    private MagneticraftApi() {}
 
 //    public static IHydraulicPressRecipeManager getHydraulicPressRecipeManager() {
 //        return HydraulicPressRecipeManager.INSTANCE;
@@ -41,7 +42,7 @@ public class MagneticraftApi {
         return SieveRecipeManager.INSTANCE;
     }
 
-    public static IMultiblockManager getMultiblockManager(){
+    public static IMultiblockManager getMultiblockManager() {
         return MultiblockManager.INSTANCE;
     }
 
@@ -53,7 +54,11 @@ public class MagneticraftApi {
         return CrushingTableRecipeManager.INSTANCE;
     }
 
-    public static IOreGenerationRegistry getOreGenerationRegistry(){
+    public static IOreGenerationRegistry getOreGenerationRegistry() {
         return OreGenerationRegistry.INSTANCE;
+    }
+
+    public static IHammerRegistry getHammerRegistry() {
+        return HammerRegistry.INSTANCE;
     }
 }

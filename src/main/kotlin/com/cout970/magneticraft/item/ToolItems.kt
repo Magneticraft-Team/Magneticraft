@@ -1,14 +1,16 @@
 package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.api.tool.IHammer
 import com.cout970.magneticraft.item.core.*
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.player.sendUnlocalizedMessage
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.registry.*
+import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
+import com.cout970.magneticraft.registry.fromBlock
+import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.util.checkNBT
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.hasKey
@@ -20,8 +22,6 @@ import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.common.capabilities.ICapabilityProvider
 
 /**
  * Created by cout970 on 2017/06/12.
@@ -43,19 +43,16 @@ object ToolItems : IItemMaker {
 
         stoneHammer = builder.withName("stone_hammer").copy {
             onHitEntity = createHitEntity(2.0f)
-            capabilityProvider = { Hammer(1, 8) }
             maxDamage = 130
         }.build()
 
         ironHammer = builder.withName("iron_hammer").copy {
             onHitEntity = createHitEntity(3.5f)
-            capabilityProvider = { Hammer(2, 10) }
             maxDamage = 250
         }.build()
 
         steelHammer = builder.withName("steel_hammer").copy {
             onHitEntity = createHitEntity(5.0f)
-            capabilityProvider = { Hammer(4, 15) }
             maxDamage = 750
         }.build()
 
@@ -95,29 +92,11 @@ object ToolItems : IItemMaker {
         }
     }
 
-    class Hammer(val level: Int, val damage: Int) : IHammer, ICapabilityProvider {
-
-        //(3 = DIAMOND, 2 = IRON, 1 = STONE, 0 = WOOD/GOLD)
-        override fun getMiningLevel(): Int = level
-
-        override fun getBreakingSpeed(): Int = damage
-
-        override fun applyDamage(item: ItemStack, player: EntityPlayer): ItemStack {
-            item.damageItem(1, player)
-            return item
-        }
-
-        override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-            @Suppress("UNCHECKED_CAST")
-            return if (capability == ITEM_HAMMER) this as T else null
-        }
-
-        override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean = capability == ITEM_HAMMER
-    }
-
     class CopperCoil : ItemBase() {
 
-        val POSITION_KEY = "Position"
+        companion object {
+            const val POSITION_KEY = "Position"
+        }
 
         override fun getItemStackDisplayName(stack: ItemStack): String {
             val name = super.getItemStackDisplayName(stack)

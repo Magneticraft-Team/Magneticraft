@@ -68,7 +68,7 @@ object Upgrades : IItemMaker {
 
         override fun getDurability(): Int = stack.itemDamage
 
-        override fun applyDamage(): ItemStack {
+        override fun applyDamage(stack: ItemStack): ItemStack {
             stack.attemptDamageItem(1, Random(), null)
             return stack
         }

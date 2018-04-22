@@ -13,5 +13,5 @@ public interface IGear {
 
     int getDurability();
 
-    ItemStack applyDamage();
+    ItemStack applyDamage(ItemStack item);
 }

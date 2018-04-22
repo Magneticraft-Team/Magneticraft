@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.registries.machines.sifter;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.List;
+import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by cout970 on 24/08/2016.
@@ -15,6 +15,7 @@ public interface ISieveRecipeManager {
      * @param input the input to check the recipes
      * @return the recipes that matches the input or null if none matches the input
      */
+    @Nullable
     ISieveRecipe findRecipe(ItemStack input);
 
     /**

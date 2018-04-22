@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
-import com.cout970.magneticraft.api.tool.IHammer
+import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.config.Config
@@ -9,8 +9,6 @@ import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.registry.ITEM_HAMMER
-import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.registry.sounds
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -43,7 +41,7 @@ class ModuleCrushingTable(
     override lateinit var container: IModuleContainer
 
     companion object {
-        val CRUSHING_DAMAGE = 40
+        const val CRUSHING_DAMAGE = 40
     }
 
     var damageTaken = 0
@@ -57,25 +55,25 @@ class ModuleCrushingTable(
     override fun onActivated(args: OnActivatedArgs): Boolean = args.run {
         if (side != EnumFacing.UP || hand == EnumHand.OFF_HAND) return false
 
-        if (storedItem.isNotEmpty) {
+        return if (storedItem.isNotEmpty) {
             useHammer(worldIn, pos, playerIn, heldItem)
-            return true
+            true
         } else {
-            return placeItemFromPlayer(playerIn, heldItem, hand)
+            placeItemFromPlayer(playerIn, heldItem, hand)
         }
     }
 
     fun placeItemFromPlayer(playerIn: EntityPlayer, heldItem: ItemStack, hand: EnumHand): Boolean {
         if (heldItem.isNotEmpty) {
-            val hammer = ITEM_HAMMER!!.fromItem(heldItem)
+            val hammer = HammerRegistry.findHammer(heldItem)
             if (hammer != null) {
                 if (lastItem.isNotEmpty) {
                     for (slot in 0 until playerIn.inventory.sizeInventory) {
                         val stack = playerIn.inventory.getStackInSlot(slot)
 
                         if (stack.isNotEmpty &&
-                            CrushingTableRecipeManager.findRecipe(stack) != null &&
-                            lastItem.isItemEqual(stack)) {
+                                CrushingTableRecipeManager.findRecipe(stack) != null &&
+                                lastItem.isItemEqual(stack)) {
 
                             storedItem = stack.withSize(1)
                             stack.count--
@@ -110,9 +108,9 @@ class ModuleCrushingTable(
 
     @Suppress("DEPRECATION")
     fun useHammer(world: World, pos: BlockPos, playerIn: EntityPlayer, heldItem: ItemStack) {
-        if (hasWork() && heldItem.hasCapability(ITEM_HAMMER!!, null)) {
+        val hammer = HammerRegistry.findHammer(heldItem)
+        if (hasWork() && hammer != null) {
 
-            val hammer = heldItem.getCapability(ITEM_HAMMER!!, null) as IHammer
             val item = storedItem.item
             if (item is ItemBlock) {
                 val blockState = item.block.getStateFromMeta(storedItem.metadata)
@@ -124,7 +122,8 @@ class ModuleCrushingTable(
             if (Config.crushingTableCausesFire && storedItem.isItemEqual(ItemStack(Items.BLAZE_ROD))) {
                 playerIn.setFire(5)
             }
-            hammer.applyDamage(heldItem, playerIn)
+
+            heldItem.damageItem(hammer.durabilityCost, playerIn)
         } else {
             if (playerIn.inventory.addItemStackToInventory(storedItem)) {
                 storedItem = ItemStack.EMPTY

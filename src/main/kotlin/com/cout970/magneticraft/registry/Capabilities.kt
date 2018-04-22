@@ -12,7 +12,6 @@ import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.tool.IGear
-import com.cout970.magneticraft.api.tool.IHammer
 import com.cout970.magneticraft.computer.FloppyDisk
 import com.cout970.magneticraft.item.ComputerItems
 import net.minecraft.block.Block
@@ -64,9 +63,6 @@ var FORGE_ENERGY: Capability<IEnergyStorage>? = null
 @CapabilityInject(IFloppyDisk::class)
 var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
 
-@CapabilityInject(IHammer::class)
-var ITEM_HAMMER: Capability<IHammer>? = null
-
 @CapabilityInject(IGear::class)
 var ITEM_GEAR: Capability<IGear>? = null
 
@@ -77,7 +73,6 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
-    CapabilityManager.INSTANCE.register(IHammer::class.java, EmptyStorage(), { DefaultHammer() })
     CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage(), { DefaultGear() })
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
         FloppyDisk(
@@ -166,17 +161,11 @@ class DefaultManualConnectionHandler : IManualConnectionHandler {
     override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
                              side: EnumFacing, stack: ItemStack): Boolean = false
 }
-class DefaultHammer : IHammer {
 
-    override fun getMiningLevel(): Int = 0
-    override fun getBreakingSpeed(): Int = 0
-    override fun applyDamage(item: ItemStack, player: EntityPlayer): ItemStack = item
-}
-
-class DefaultGear : IGear{
+class DefaultGear : IGear {
 
     override fun getSpeedMultiplier(): Float = 1f
     override fun getMaxDurability(): Int = 0
     override fun getDurability(): Int = 0
-    override fun applyDamage(): ItemStack = ItemStack.EMPTY
+    override fun applyDamage(stack: ItemStack): ItemStack = ItemStack.EMPTY
 }
