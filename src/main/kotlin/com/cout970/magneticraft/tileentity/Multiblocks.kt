@@ -17,6 +17,7 @@ import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
@@ -69,6 +70,10 @@ abstract class TileMultiblock : TileBase() {
         val normalizedBox = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), boxWithOffset)
         val alignedBox = facing.rotateBox(vec3Of(0.5), normalizedBox)
         return alignedBox.offset(pos)
+    }
+
+    fun multiblockContext(): MultiblockContext {
+        return MultiblockContext(getMultiblock(), world, pos, facing, null)
     }
 }
 
@@ -565,6 +570,60 @@ class TilePumpjack : TileMultiblock(), ITickable {
     init {
         initModules(multiblockModule, fluidModule, energyModule, storageModule, ioModule, pumpjackModule,
                 openGuiModule, fluidExportModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("hydraulic_hammer")
+class TileHydraulicHammer : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockHydraulicHammer
+
+    val inventory = Inventory(2)
+    val node = ElectricNode(ref)
+
+    val invModule = ModuleInventory(inventory)
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            connectableDirections = { emptyList() },
+            capabilityFilter = { false }
+    )
+
+    val storageModule = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10_000,
+            lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+    )
+
+    val openGuiModule = ModuleOpenGui()
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf(ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(0, 0, 0),
+                    side = EnumFacing.UP,
+                    getter = { if (active) energyModule else null }
+            ))
+    )
+
+//    val pumpjackModule = ModuleHydraulicPress()
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = ioModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, invModule, energyModule, storageModule, ioModule,
+                openGuiModule)
     }
 
     @DoNotRemove

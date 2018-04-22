@@ -24,7 +24,7 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != origin) {
-            if (Debug.DEBUG) {
+            if (Debug.DEBUG && context.player != null) {
                 context.world.setBlockState(pos, origin)
             }
             val keyStr = "text.magneticraft.multiblock.invalid_block"

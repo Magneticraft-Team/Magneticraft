@@ -23,7 +23,7 @@ object MultiblockManager : IMultiblockManager {
 
     fun registerMultiblock(mb: Multiblock) {
         if (mb.name in multiblocks) error("Multiblock with name: ${mb.name} is already registered")
-        multiblocks.put(mb.name, mb)
+        multiblocks[mb.name] = mb
     }
 
     override fun getMultiblock(name: String) = multiblocks[name] ?:
@@ -39,6 +39,7 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockSolarMirror)
         registerMultiblock(MultiblockContainer)
         registerMultiblock(MultiblockPumpjack)
+        registerMultiblock(MultiblockHydraulicHammer)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

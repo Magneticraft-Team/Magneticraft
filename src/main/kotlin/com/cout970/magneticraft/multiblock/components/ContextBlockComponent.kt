@@ -26,7 +26,7 @@ class ContextBlockComponent(
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != getter(context)) {
-            if (Debug.DEBUG) {
+            if (Debug.DEBUG && context.player != null) {
                 context.world.setBlockState(pos, getter(context))
             }
             val keyStr = "text.magneticraft.multiblock.invalid_block"

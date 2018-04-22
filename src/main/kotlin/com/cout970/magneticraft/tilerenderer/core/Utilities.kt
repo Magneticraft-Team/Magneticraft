@@ -7,6 +7,8 @@ import com.cout970.magneticraft.block.core.BlockMultiblock
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
+import com.cout970.magneticraft.multiblock.core.MultiblockContext
+import com.cout970.magneticraft.multiblock.core.MultiblockManager
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.split
@@ -46,32 +48,45 @@ object Utilities {
     val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
 
-    fun renderMultiblockBlueprint(multiblock: Multiblock) {
+    fun renderMultiblockBlueprint(ctx: MultiblockContext) {
+
+        GlStateManager.disableDepth()
+        val mb: Multiblock = ctx.multiblock
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-        for (j in 0 until multiblock.size.y) {
-            for (i in 0 until multiblock.size.x) {
-                for (k in 0 until multiblock.size.z) {
-                    val component = multiblock.scheme[i, j, k]
-                    val blocks = component.getBlueprintBlocks(multiblock, BlockPos(i, j, k))
-                    for (stack in blocks) {
-                        stack.item ?: continue
-                        pushMatrix()
-                        translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
-                        val pos = vec3Of(i, j, k) - multiblock.center.toVec3d()
-                        translate(pos.xd, pos.yd, pos.zd)
-                        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
-                            translate(0.0, -0.045, 0.125)
-                            rotate(90f, 1f, 0f, 0f)
-                        } else {
-                            translate(0.0, -0.125, 0.0625 * 3)
-                        }
-                        scale(2.0, 2.0, 2.0)
-                        renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.5f)
-                        popMatrix()
+
+        for (j in 0 until mb.size.y) {
+            for (i in 0 until mb.size.x) {
+                for (k in 0 until mb.size.z) {
+                    val component = mb.scheme[i, j, k]
+                    val relPos = BlockPos(i, j, k)
+                    val blockPos = MultiblockManager.applyFacing(ctx, relPos)
+
+                    if (component.checkBlock(blockPos, ctx).isEmpty()) {
+                        continue
                     }
+
+                    val blocks = component.getBlueprintBlocks(mb, relPos)
+                    val stack = blocks.firstOrNull() ?: continue
+
+                    pushMatrix()
+                    translate(PIXEL * 8, PIXEL * 5, PIXEL * 5)
+                    val pos = vec3Of(i, j, k) - mb.center.toVec3d()
+                    translate(pos.xd, pos.yd, pos.zd)
+
+                    if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
+                        translate(0.0, -0.045, 0.125)
+                        rotate(90f, 1f, 0f, 0f)
+                    } else {
+                        translate(0.0, -0.125, 0.0625 * 3)
+                    }
+
+                    scale(2.0, 2.0, 2.0)
+                    renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.5f)
+                    popMatrix()
                 }
             }
         }
+        GlStateManager.enableDepth()
     }
 
     fun renderMultiblockHitboxes(facing: EnumFacing, multiblock: Multiblock) {
@@ -134,6 +149,7 @@ object Utilities {
             val textureManager = Minecraft.getMinecraft().textureManager
             textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false)
+
             enableRescaleNormal()
             alphaFunc(516, 0.1f)
             color(1.0f, 1.0f, 1.0f, 1.0f)
@@ -149,6 +165,7 @@ object Utilities {
             popMatrix()
             disableRescaleNormal()
             disableBlend()
+
             textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap()
         }
@@ -233,12 +250,12 @@ object Utilities {
 
     fun rotateFromCenter(facing: EnumFacing, optional: Float = 0f) {
         val angle = when (facing) {
-                        EnumFacing.NORTH -> 0f
-                        EnumFacing.SOUTH -> 180f
-                        EnumFacing.WEST -> 90f
-                        EnumFacing.EAST -> -90f
-                        else -> 0f
-                    } + optional
+            EnumFacing.NORTH -> 0f
+            EnumFacing.SOUTH -> 180f
+            EnumFacing.WEST -> 90f
+            EnumFacing.EAST -> -90f
+            else -> 0f
+        } + optional
         translate(0.5, 0.5, 0.5)
         rotate(angle, 0f, 1f, 0f)
         translate(-0.5, -0.5, -0.5)
@@ -400,10 +417,10 @@ object Utilities {
         return fa + (fb - fa) * x
     }
 
-    fun multiblockPreview(facing: EnumFacing, multiblock: Multiblock) {
+    fun multiblockPreview(ctx: MultiblockContext) {
         pushMatrix()
-        Utilities.rotateFromCenter(facing.opposite, 0f)
-        Utilities.renderMultiblockBlueprint(multiblock)
+        Utilities.rotateFromCenter(ctx.facing.opposite, 0f)
+        Utilities.renderMultiblockBlueprint(ctx)
         popMatrix()
     }
 

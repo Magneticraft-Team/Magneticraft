@@ -4,7 +4,6 @@ package com.cout970.magneticraft.tilerenderer
 
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
@@ -26,7 +25,7 @@ private fun genNames(prefix: String): List<String> = (1..3).map { "$prefix-$it" 
 abstract class TileRendererMultiblock<T : TileBase>(
         modelLocation: (() -> ModelResourceLocation)?,
         filters: List<(String) -> Boolean> = listOf({ _ -> true })
-) : TileRendererSimple<T>(modelLocation, filters){
+) : TileRendererSimple<T>(modelLocation, filters) {
 
     override fun isGlobalRenderer(te: T): Boolean = true
 }
@@ -46,7 +45,7 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>(
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarPanel) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockSolarPanel)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
 
@@ -125,7 +124,7 @@ object TileRendererShelvingUnit : TileRendererMultiblock<TileShelvingUnit>(
 
     override fun renderModels(models: List<ModelCache>, te: TileShelvingUnit) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockShelvingUnit)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
 
@@ -152,7 +151,7 @@ object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>(
 
     override fun renderModels(models: List<ModelCache>, te: TileSteamEngine) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockSteamEngine)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
 
@@ -178,7 +177,7 @@ object TileRendererGrinder : TileRendererMultiblock<TileGrinder>(
 
     override fun renderModels(models: List<ModelCache>, te: TileGrinder) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockGrinder)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
         Utilities.rotateFromCenter(te.facing, 0f)
@@ -194,7 +193,7 @@ object TileRendererSieve : TileRendererMultiblock<TileSieve>(
 
     override fun renderModels(models: List<ModelCache>, te: TileSieve) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockSieve)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
         Utilities.rotateFromCenter(te.facing, 180f)
@@ -211,7 +210,7 @@ object TileRendererSolarTower : TileRendererMultiblock<TileSolarTower>(
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarTower) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockSolarTower)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
         Utilities.rotateFromCenter(te.facing, 0f)
@@ -281,7 +280,7 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>(
 
     override fun renderModels(models: List<ModelCache>, te: TileSolarMirror) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockSolarMirror)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
 
@@ -333,7 +332,7 @@ object TileRendererContainer : TileRendererMultiblock<TileContainer>(
 
     override fun renderModels(models: List<ModelCache>, te: TileContainer) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockContainer)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
         Utilities.rotateFromCenter(te.facing, 0f)
@@ -349,11 +348,28 @@ object TileRendererPumpjack : TileRendererMultiblock<TilePumpjack>(
 
     override fun renderModels(models: List<ModelCache>, te: TilePumpjack) {
         if (!te.active) {
-            Utilities.multiblockPreview(te.facing, MultiblockPumpjack)
+            Utilities.multiblockPreview(te.multiblockContext())
             return
         }
         Utilities.rotateFromCenter(te.facing, 90f)
         translate(1, 0, 0)
         models[0].renderTextured()
+    }
+}
+
+@RegisterRenderer(TileHydraulicHammer::class)
+object TileRendererHydraulicHammer : TileRendererMultiblock<TileHydraulicHammer>(
+        modelLocation = modelOf(Multiblocks.hydraulicHammer)
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileHydraulicHammer) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.multiblockContext())
+            return
+        }
+
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(0, 0, -1)
+        models.forEach { it.renderTextured() }
     }
 }
