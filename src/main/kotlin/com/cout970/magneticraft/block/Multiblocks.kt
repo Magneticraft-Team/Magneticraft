@@ -46,7 +46,7 @@ object Multiblocks : IBlockMaker {
     lateinit var solarMirror: BlockBase private set
     lateinit var container: BlockBase private set
     lateinit var pumpjack: BlockBase private set
-    lateinit var hydraulicHammer: BlockBase private set
+    lateinit var hydraulicPress: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -182,19 +182,19 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
-        hydraulicHammer = builder.withName("hydraulic_hammer").copy {
-            factory = factoryOf(::TileHydraulicHammer)
+        hydraulicPress = builder.withName("hydraulic_press").copy {
+            factory = factoryOf(::TileHydraulicPress)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/hydraulic_hammer.mcx")
+                    "model" to resource("models/block/mcx/hydraulic_press.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockHydraulicHammer })
+            onActivated = defaultOnActivated({ MultiblockHydraulicPress })
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
         return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
-                    container, pumpjack, hydraulicHammer) + blockListOf(gap)
+                    container, pumpjack, hydraulicPress) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

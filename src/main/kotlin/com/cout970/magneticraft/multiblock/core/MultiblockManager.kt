@@ -39,7 +39,7 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockSolarMirror)
         registerMultiblock(MultiblockContainer)
         registerMultiblock(MultiblockPumpjack)
-        registerMultiblock(MultiblockHydraulicHammer)
+        registerMultiblock(MultiblockHydraulicPress)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

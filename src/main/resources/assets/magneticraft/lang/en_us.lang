@@ -199,6 +199,7 @@ tile.magneticraft.solar_tower_inactive_north.name=Solar Tower
 tile.magneticraft.solar_mirror_inactive_north.name=Solar Mirror
 tile.magneticraft.container_inactive_north.name=Shipping container
 tile.magneticraft.pumpjack_inactive_north.name=Pumpjack
+tile.magneticraft.hydraulic_press_inactive_north.name=Hydraulic Press
 
 #tile.magneticraft.copper_block.name=Copper Block
 #tile.magneticraft.cobalt_block.name=Cobalt Block
@@ -230,7 +231,7 @@ text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
 text.magneticraft.jei.crushing_table=Crushing Table
 text.magneticraft.jei.sluice_box=Sluice Box
-#text.magneticraft.jei.hydraulic_press=Hydraulic Press
+text.magneticraft.jei.hydraulic_press=Hydraulic Press
 #text.magneticraft.jei.kiln=Beehive Kiln
 text.magneticraft.jei.grinder=Grinder
 text.magneticraft.jei.sieve=Sieve

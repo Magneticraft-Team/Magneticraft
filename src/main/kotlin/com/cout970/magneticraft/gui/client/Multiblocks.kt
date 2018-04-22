@@ -166,3 +166,15 @@ fun guiPumpjack(gui: GuiBase, container: ContainerPumpjack) = gui.run {
         )
     }
 }
+
+fun guiHydraulicPress(gui: GuiBase, container: ContainerHydraulicPress) = gui.run {
+    val tile = container.tile
+    +CompBackground(guiTexture("hydraulic_press"))
+    +CompElectricBar(tile.node, Vec2d(64, 16))
+
+    val consumption = tile.processModule.consumption.toBarProvider(Config.hydraulicPressMaxConsumption)
+    val process = tile.processModule.timedProcess.toBarProvider()
+
+    +CompVerticalBar(consumption, 3, Vec2d(75, 16), consumption.toEnergyText())
+    +CompVerticalBar(process, 6, Vec2d(86, 16), process.toPercentText("Processing: "))
+}

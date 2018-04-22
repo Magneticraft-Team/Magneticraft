@@ -4,6 +4,7 @@ import com.cout970.magneticraft.MOD_NAME
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
+import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.block.ManualMachines
@@ -25,6 +26,7 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration
 import mezz.jei.api.recipe.IRecipeWrapper
 import mezz.jei.gui.elements.DrawableResource
 import mezz.jei.util.Translator
+import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.oredict.OreDictionary
@@ -40,6 +42,7 @@ class MagneticraftPlugin : IModPlugin {
         val SLUICE_BOX_ID = "magneticraft.sluice_box"
         val GRINDER_ID = "magneticraft.grinder"
         val SIEVE_ID = "magneticraft.sieve"
+        val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
     }
 
     override fun register(registry: IModRegistry) {
@@ -59,6 +62,10 @@ class MagneticraftPlugin : IModPlugin {
         registry.handleRecipes(ISieveRecipe::class.java, ::SieveRecipeWrapper, SIEVE_ID)
         registry.addRecipeCatalyst(Multiblocks.sieve.stack(), SIEVE_ID)
         registry.addRecipes(MagneticraftApi.getSieveRecipeManager().recipes, SIEVE_ID)
+
+        registry.handleRecipes(IHydraulicPressRecipe::class.java, ::HydraulicPressRecipeWrapper, HYDRAULIC_PRESS_ID)
+        registry.addRecipeCatalyst(Multiblocks.hydraulicPress.stack(), HYDRAULIC_PRESS_ID)
+        registry.addRecipes(MagneticraftApi.getHydraulicPressRecipeManager().recipes, HYDRAULIC_PRESS_ID)
 
     }
 
@@ -150,6 +157,21 @@ class MagneticraftPlugin : IModPlugin {
                     }
                 }
         ))
+
+        registry.addRecipeCategories(RecipeCategory<HydraulicPressRecipeWrapper>(
+                id = HYDRAULIC_PRESS_ID,
+                backgroundTexture = "hydraulic_press",
+                unlocalizedTitle = "text.magneticraft.jei.hydraulic_press",
+                initFunc = { recipeLayout, recipeWrapper, _ ->
+                    recipeLayout.itemStacks.init(0, true, 48, 10)
+                    recipeLayout.itemStacks.init(1, false, 48, 46)
+                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
+                        addTooltip("${recipeWrapper.recipe.duration} ticks")
+                    })
+                },
+                extras = {}
+        ))
     }
 }
 
@@ -157,7 +179,8 @@ class RecipeCategory<T : IRecipeWrapper>(
         val id: String,
         backgroundTexture: String,
         val unlocalizedTitle: String,
-        val initFunc: (IRecipeLayout, T, IIngredients) -> Unit
+        val initFunc: (IRecipeLayout, T, IIngredients) -> Unit,
+        val extras: ((Minecraft) -> Unit)? = null
 ) : IRecipeCategory<T> {
 
     private val background = DrawableResource(
@@ -172,6 +195,10 @@ class RecipeCategory<T : IRecipeWrapper>(
 
     override fun setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: T, ingredients: IIngredients) {
         initFunc(recipeLayout, recipeWrapper, ingredients)
+    }
+
+    override fun drawExtras(minecraft: Minecraft) {
+        extras?.invoke(minecraft)
     }
 }
 
@@ -223,6 +250,19 @@ class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
             ingredients.setInput(ItemStack::class.java, recipe.input)
         }
         ingredients.setOutputs(ItemStack::class.java, listOf(recipe.primary, recipe.secondary, recipe.tertiary))
+    }
+}
+
+class HydraulicPressRecipeWrapper(val recipe: IHydraulicPressRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients) {
+
+        if (recipe.useOreDictionaryEquivalencies()) {
+            ingredients.setInputs(ItemStack::class.java, listOf(getOreDictEquivalents(recipe.input)))
+        } else {
+            ingredients.setInput(ItemStack::class.java, recipe.input)
+        }
+        ingredients.setOutput(ItemStack::class.java, recipe.output)
     }
 }
 

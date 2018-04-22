@@ -5,14 +5,18 @@ import com.cout970.magneticraft.api.internal.registries.generators.thermopile.Th
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeWithDecay
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
+import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
+import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode.*
 import com.cout970.magneticraft.block.Decoration
 import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.integration.ItemHolder
 import com.cout970.magneticraft.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
+import com.cout970.magneticraft.item.EnumMetal.*
 import com.cout970.magneticraft.item.MetallicItems
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.withSize
@@ -21,6 +25,8 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.COBBLESTONE
 import net.minecraft.init.Items
+import net.minecraft.init.Items.GOLD_INGOT
+import net.minecraft.init.Items.IRON_INGOT
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -48,10 +54,10 @@ fun registerRecipes() {
         }
     }
     ItemHolder.tinOre?.ifNonEmpty {
-        addGrinderRecipe(it, EnumMetal.TIN.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
+        addGrinderRecipe(it, TIN.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
     }
     ItemHolder.osmiumOre?.ifNonEmpty {
-        addGrinderRecipe(it, EnumMetal.OSMIUM.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
+        addGrinderRecipe(it, OSMIUM.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
     }
     ItemHolder.dimensionalShard?.ifNonEmpty { shard ->
         ItemHolder.dimensionalShardOre0?.ifNonEmpty {ore ->
@@ -140,10 +146,10 @@ fun registerRecipes() {
         }
     }
     ItemHolder.tinOre?.ifNonEmpty {
-        addCrushingTableRecipe(it, EnumMetal.TIN.getRockyChunk())
+        addCrushingTableRecipe(it, TIN.getRockyChunk())
     }
     ItemHolder.osmiumOre?.ifNonEmpty {
-        addCrushingTableRecipe(it, EnumMetal.OSMIUM.getRockyChunk())
+        addCrushingTableRecipe(it, OSMIUM.getRockyChunk())
     }
 
     addCrushingTableRecipe(Ores.OreType.PYRITE.stack(), CraftingItems.Type.SULFUR.stack(2))
@@ -256,7 +262,68 @@ fun registerRecipes() {
         }
     }
 
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                  HYDRAULIC PRESS RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //@formatter:on
+
+    // Heavy recipes
+    addHydraulicPressRecipe(IRON_INGOT.stack(4), IRON.getHeavyPlate(), HEAVY, 120f)
+    addHydraulicPressRecipe(GOLD_INGOT.stack(4), GOLD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(4), EnumMetal.COPPER.getHeavyPlate(), HEAVY, 100f)
+    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(4), EnumMetal.LEAD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(4), EnumMetal.TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
+    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(4), EnumMetal.STEEL.getHeavyPlate(), HEAVY, 140f)
+
+    // Medium recipes
+    addHydraulicPressRecipe(IRON_INGOT.stack(2), IRON.getLightPlate(), MEDIUM, 120f)
+    addHydraulicPressRecipe(GOLD_INGOT.stack(2), GOLD.getLightPlate(), MEDIUM, 50f)
+    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(2), EnumMetal.COPPER.getLightPlate(), MEDIUM, 100f)
+    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(2), EnumMetal.LEAD.getLightPlate(), MEDIUM, 50f)
+    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(2), EnumMetal.TUNGSTEN.getLightPlate(), MEDIUM, 250f)
+    addHydraulicPressRecipe(EnumMetal.COBALT.getIngot().withSize(2), EnumMetal.COBALT.getLightPlate(), MEDIUM, 120f)
+    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(2), EnumMetal.STEEL.getLightPlate(), MEDIUM, 140f)
+
+    // Light recipes
+    listOf(
+            IRON_INGOT.stack() to ItemHolder.ironPlate,
+            GOLD_INGOT.stack() to ItemHolder.goldPlate,
+            EnumMetal.COPPER.getIngot() to ItemHolder.copperPlate,
+            EnumMetal.TIN.getIngot() to ItemHolder.tinPlate,
+            EnumMetal.SILVER.getIngot() to ItemHolder.silverPlate,
+            EnumMetal.LEAD.getIngot() to ItemHolder.leadPlate,
+            EnumMetal.ALUMINIUM.getIngot() to ItemHolder.aluminiumPlate,
+            EnumMetal.NICKEL.getIngot() to ItemHolder.nickelPlate,
+            ItemHolder.platinumIngot to ItemHolder.platinumPlate,
+            ItemHolder.iridiumIngot to ItemHolder.iridiumPlate,
+            EnumMetal.MITHRIL.getIngot() to ItemHolder.mithilPlate,
+            EnumMetal.STEEL.getIngot() to ItemHolder.steelPlate,
+            ItemHolder.electrumIngot to ItemHolder.electrumPlate,
+            ItemHolder.invarIngot to ItemHolder.invarPlate,
+            ItemHolder.constantanIngot to ItemHolder.constantanPlate,
+            ItemHolder.signalumIngot to ItemHolder.signalumPlate,
+            ItemHolder.lumiumIngot to ItemHolder.lumiumPlate,
+            ItemHolder.enderiumIngot to ItemHolder.enderiumPlate
+    ).forEach { (a, b) ->
+        a?.ifNonEmpty {
+            b?.ifNonEmpty {
+                addHydraulicPressRecipe(a, b, LIGHT, 80f)
+            }
+        }
+    }
+
+    // utility
+    addHydraulicPressRecipe(Blocks.STONE.stack(), Blocks.COBBLESTONE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.STONE.stack(meta = 6), Blocks.STONE.stack(meta = 5), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.STONE.stack(meta = 4), Blocks.STONE.stack(meta = 3), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.STONE.stack(meta = 2), Blocks.STONE.stack(meta = 1), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.STONEBRICK.stack(meta = 1), Blocks.MOSSY_COBBLESTONE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.STONEBRICK.stack(), Blocks.STONEBRICK.stack(meta = 2), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.END_BRICKS.stack(), Blocks.END_STONE.stack(), LIGHT, 100f)
+    addHydraulicPressRecipe(Blocks.RED_SANDSTONE.stack(meta = 2), Blocks.RED_SANDSTONE.stack(), LIGHT, 40f)
+    addHydraulicPressRecipe(Blocks.SANDSTONE.stack(meta = 2), Blocks.SANDSTONE.stack(), LIGHT, 40f)
+    addHydraulicPressRecipe(Blocks.PRISMARINE.stack(meta = 1), Blocks.PRISMARINE.stack(), LIGHT, 50f)
+    addHydraulicPressRecipe(Blocks.ICE.stack(), Blocks.PACKED_ICE.stack(), LIGHT, 200f)
 }
 
 
@@ -309,6 +376,11 @@ private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: Item
     GrinderRecipeManager.registerRecipe(GrinderRecipeManager.createRecipe(input, output0, output1, prob, ticks, true))
 }
 
+private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, mode: HydraulicPressMode, ticks: Float) {
+    HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, mode, true))
+}
+
+
 /* OLD RECIPES
 
 //
@@ -318,38 +390,6 @@ private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: Item
 //    addIceboxRecipeWater(ItemStack(Blocks.ICE), 900, true)
 //    addIceboxRecipeWater(ItemStack(Blocks.PACKED_ICE), 1000, false)
 
-//    //HYDRAULIC PRESS RECIPES
-//    addHydraulicPressRecipe(ItemStack(IRON_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 0), 120f)
-//    addHydraulicPressRecipe(ItemStack(GOLD_INGOT, 2), ItemStack(ItemHeavyPlate, 1, 1), 50f)
-//    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 2), ItemStack(ItemHeavyPlate, 1, 2), 100f)
-//    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 3), ItemStack(ItemHeavyPlate, 1, 3), 50f)
-//    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 4), ItemStack(ItemHeavyPlate, 1, 4), 120f)
-//    addHydraulicPressRecipe(ItemStack(ItemIngot, 2, 5), ItemStack(ItemHeavyPlate, 1, 5), 150f)
-//    addHydraulicPressRecipe(ItemStack(BlockLimestone, 4, 2), ItemStack(BlockBurntLimestone, 4, 2), 50f)
-//
-//    //UTILITY HYDRAUILIC PRESS RECIPES - BLOCKS
-//    addHydraulicPressRecipe(ItemStack(Blocks.STONE), ItemStack(Blocks.COBBLESTONE), 55f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.STONE, 1, 6), ItemStack(Blocks.STONE, 1, 5), 55f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.STONE, 1, 4), ItemStack(Blocks.STONE, 1, 3), 55f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.STONE, 1, 2), ItemStack(Blocks.STONE, 1, 1), 55f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.STONEBRICK, 1, 1), ItemStack(Blocks.MOSSY_COBBLESTONE), 55f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.STONEBRICK), ItemStack(Blocks.STONEBRICK, 1, 2), 55f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.END_BRICKS), ItemStack(Blocks.END_STONE, 1, 2), 100f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.RED_SANDSTONE, 1, 2), ItemStack(Blocks.RED_SANDSTONE), 40f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.SANDSTONE, 1, 2), ItemStack(Blocks.SANDSTONE), 40f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.PRISMARINE, 1, 1), ItemStack(Blocks.PRISMARINE), 50f)
-//    addHydraulicPressRecipe(ItemStack(Blocks.ICE), ItemStack(Blocks.PACKED_ICE), 200f)
-//
-//    //UTILITY HYDRAUILIC PRESS RECIPES - ITEMS
-//    addHydraulicPressRecipe(ItemStack(Items.REEDS, 2), ItemStack(PAPER), 30f)
-//    addHydraulicPressRecipe(ItemStack(ItemPulpWood, 2), ItemStack(PAPER), 25f)
-//    addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 0), ItemStack(ItemLightPlate, 1, 0), 120f)
-//    addHydraulicPressRecipe(ItemStack(GOLD_NUGGET, 6), ItemStack(ItemLightPlate, 1, 1), 50f)
-//    addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 2), ItemStack(ItemLightPlate, 1, 2), 100f)
-//    addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 3), ItemStack(ItemLightPlate, 1, 3), 50f)
-//    addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 4), ItemStack(ItemLightPlate, 1, 4), 120f)
-//    addHydraulicPressRecipe(ItemStack(ItemNugget, 6, 5), ItemStack(ItemLightPlate, 1, 5), 150f)
-//    addHydraulicPressRecipe(ItemStack(BlockWoodChip), ItemStack(BlockFiberboard, 4), 50f)
 //
 //    //KILN RECIPES
 //    addKilnRecipe(ItemStack(COAL_BLOCK), BlockCoke.defaultState, 50, COKE_REACTION_TEMP, CARBON_SUBLIMATION_POINT)
@@ -365,10 +405,6 @@ private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: Item
 //    addKilnRecipe(ItemStack(CHORUS_FRUIT), ItemStack(CHORUS_FRUIT_POPPED, 1, 0), 25, DEFAULT_SMELTING_TEMPERATURE, QUARTZ_MELTING_POINT)
  */
 
-//private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, ticks: Float) {
-//    HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, true))
-//}
-//
 //private fun addKilnRecipe(input: ItemStack, output: ItemStack, duration: Int, minTemp: Double, maxTemp: Double) {
 //    KilnRecipeManager.registerRecipe(KilnRecipeManager.createRecipe(input, output, duration, minTemp, maxTemp, true))
 //}

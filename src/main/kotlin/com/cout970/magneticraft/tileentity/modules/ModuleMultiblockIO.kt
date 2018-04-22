@@ -52,7 +52,7 @@ class ModuleMultiblockIO(
 
         val valid = validCapability.find {
             direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos &&
-            direction.getRelative(it.side) == side
+                    direction.getRelative(it.side) == side
         } ?: return null
 
 

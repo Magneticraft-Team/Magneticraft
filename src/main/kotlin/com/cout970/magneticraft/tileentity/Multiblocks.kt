@@ -6,6 +6,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
+import com.cout970.magneticraft.misc.crafting.HydraulicPressCraftingProcess
 import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
@@ -530,12 +531,6 @@ class TilePumpjack : TileMultiblock(), ITickable {
     val fluidModule = ModuleFluidHandler(tank,
             capabilityFilter = { it, side -> if (side == facing.opposite) it else null })
 
-    val energyModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            connectableDirections = { emptyList() },
-            capabilityFilter = { false }
-    )
-
     val storageModule = ModuleInternalStorage(
             mainNode = node,
             capacity = 10_000,
@@ -557,6 +552,12 @@ class TilePumpjack : TileMultiblock(), ITickable {
                     side = EnumFacing.UP,
                     getter = { if (active) energyModule else null }
             ))
+    )
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
     )
 
     val pumpjackModule = ModulePumpjack(
@@ -583,21 +584,15 @@ class TilePumpjack : TileMultiblock(), ITickable {
     }
 }
 
-@RegisterTileEntity("hydraulic_hammer")
-class TileHydraulicHammer : TileMultiblock(), ITickable {
+@RegisterTileEntity("hydraulic_press")
+class TileHydraulicPress : TileMultiblock(), ITickable {
 
-    override fun getMultiblock(): Multiblock = MultiblockHydraulicHammer
+    override fun getMultiblock(): Multiblock = MultiblockHydraulicPress
 
     val inventory = Inventory(2)
     val node = ElectricNode(ref)
 
     val invModule = ModuleInventory(inventory)
-
-    val energyModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            connectableDirections = { emptyList() },
-            capabilityFilter = { false }
-    )
 
     val storageModule = ModuleInternalStorage(
             mainNode = node,
@@ -612,13 +607,36 @@ class TileHydraulicHammer : TileMultiblock(), ITickable {
             facing = { facing },
             connectionSpots = listOf(ConnectionSpot(
                     capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(0, 0, 0),
-                    side = EnumFacing.UP,
+                    pos = BlockPos(1, 1, -1),
+                    side = EnumFacing.EAST,
+                    getter = { if (active) energyModule else null }
+            ), ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(-1, 1, -1),
+                    side = EnumFacing.WEST,
                     getter = { if (active) energyModule else null }
             ))
     )
 
-//    val pumpjackModule = ModuleHydraulicPress()
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
+    )
+
+    val hydraulicPressModule = ModuleHydraulicPress()
+
+    val processModule = ModuleElectricProcessing(
+            costPerTick = Config.hydraulicPressMaxConsumption.toFloat(),
+            workingRate = 1f,
+            storage = storageModule,
+            craftingProcess = HydraulicPressCraftingProcess(
+                    inventory = inventory,
+                    inputSlot = 0,
+                    outputSlot = 1,
+                    mode = hydraulicPressModule::mode
+            )
+    )
 
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
@@ -628,7 +646,7 @@ class TileHydraulicHammer : TileMultiblock(), ITickable {
 
     init {
         initModules(multiblockModule, invModule, energyModule, storageModule, ioModule,
-                openGuiModule)
+                openGuiModule, processModule, hydraulicPressModule)
     }
 
     @DoNotRemove

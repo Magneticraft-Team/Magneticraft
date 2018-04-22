@@ -357,12 +357,12 @@ object TileRendererPumpjack : TileRendererMultiblock<TilePumpjack>(
     }
 }
 
-@RegisterRenderer(TileHydraulicHammer::class)
-object TileRendererHydraulicHammer : TileRendererMultiblock<TileHydraulicHammer>(
-        modelLocation = modelOf(Multiblocks.hydraulicHammer)
+@RegisterRenderer(TileHydraulicPress::class)
+object TileRendererHydraulicPress : TileRendererMultiblock<TileHydraulicPress>(
+        modelLocation = modelOf(Multiblocks.hydraulicPress)
 ) {
 
-    override fun renderModels(models: List<ModelCache>, te: TileHydraulicHammer) {
+    override fun renderModels(models: List<ModelCache>, te: TileHydraulicPress) {
         if (!te.active) {
             Utilities.multiblockPreview(te.multiblockContext())
             return

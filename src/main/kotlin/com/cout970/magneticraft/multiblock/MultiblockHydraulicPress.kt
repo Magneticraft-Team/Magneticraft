@@ -14,9 +14,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.text.ITextComponent
 
-object MultiblockHydraulicHammer : Multiblock() {
+object MultiblockHydraulicPress : Multiblock() {
 
-    override val name: String = "hydraulic_hammer"
+    override val name: String = "hydraulic_press"
     override val size: BlockPos = BlockPos(3, 5, 3)
     override val scheme: List<Multiblock.MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
@@ -55,9 +55,11 @@ object MultiblockHydraulicHammer : Multiblock() {
         )
     }
 
-    override fun getControllerBlock() = Multiblocks.hydraulicHammer
+    override fun getControllerBlock() = Multiblocks.hydraulicPress
 
-    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf(
+    override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitboxes
+
+    val hitboxes = listOf(
             Vec3d(-14.000, 4.000, 1.000) * PIXEL to Vec3d(-3.000, 20.000, 15.000) * PIXEL,
             Vec3d(2.000, 16.000, 2.000) * PIXEL to Vec3d(14.000, 30.000, 14.000) * PIXEL,
             Vec3d(2.000, 40.000, 13.000) * PIXEL to Vec3d(14.000, 58.000, 14.000) * PIXEL,

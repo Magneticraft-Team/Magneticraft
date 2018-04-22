@@ -209,3 +209,20 @@ class ContainerPumpjack(val tile: TilePumpjack, player: EntityPlayer, world: Wor
         bindPlayerInventory(player.inventory)
     }
 }
+
+class ContainerHydraulicPress(val tile: TileHydraulicPress, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        tile.invModule.inventory.let { inv ->
+            addSlotToContainer(SlotItemHandler(inv, 0, 97, 16))
+            addSlotToContainer(SlotTakeOnly(inv, 1, 97, 48))
+
+            inventoryRegions += InventoryRegion(0..0, filter = {
+                MagneticraftApi.getHydraulicPressRecipeManager().findRecipe(it) != null
+            })
+            inventoryRegions += InventoryRegion(1..1, filter = { false })
+        }
+        bindPlayerInventory(player.inventory)
+    }
+}
