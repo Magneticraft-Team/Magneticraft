@@ -130,8 +130,8 @@ tile.magneticraft.oil_source_full_70.name=含油地层（70%）
 tile.magneticraft.oil_source_full_60.name=含油地层（60%）
 tile.magneticraft.oil_source_full_50.name=含油地层（50%）
 tile.magneticraft.oil_source_full_40.name=含油地层（40%）
-tile.magneticraft.oil_source_full_30.name=含油地层（30%)
-tile.magneticraft.oil_source_full_20.name=含油地层（20%)
+tile.magneticraft.oil_source_full_30.name=含油地层（30%）
+tile.magneticraft.oil_source_full_20.name=含油地层（20%）
 tile.magneticraft.oil_source_full_10.name=含油地层（10%）
 tile.magneticraft.oil_source_empty.name=含油地层（空）
 
