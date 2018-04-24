@@ -111,7 +111,7 @@ item.magneticraft.floppy_disk_lisp.name=软盘（Lisp）
 item.magneticraft.floppy_disk_forth.name=软盘（FORTH）
 item.magneticraft.floppy_disk_js.name=软盘（JS）
 item.magneticraft.floppy_disk_basic.name=软盘（BASIC）
-item.magneticraft.floppy_disk_vim.name=软盘（VI?）
+item.magneticraft.floppy_disk_vim.name=软盘（VIM）
 item.magneticraft.floppy_disk_asm.name=软盘（ASM）
 
 item.magneticraft.iron_gear_normal.name=铁齿轮
