@@ -1,18 +1,20 @@
 package cpu
 
-import com.cout970.magneticraft.MOD_ID
-import com.cout970.magneticraft.computer.*
+import com.cout970.magneticraft.api.computer.IROM
+import com.cout970.magneticraft.computer.Bus
+import com.cout970.magneticraft.computer.CPU_MIPS
+import com.cout970.magneticraft.computer.Motherboard
+import com.cout970.magneticraft.computer.RAM
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
 import gnu.trove.map.hash.TIntObjectHashMap
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 /**
  * Number of bugs found when adding tests: 4
  * wait, does code not even run once count?, yes, then: 8
  */
-@Ignore
 class TestMipsCpu {
 
     lateinit var cpu: CPU_MIPS
@@ -25,7 +27,8 @@ class TestMipsCpu {
         cpu = CPU_MIPS()
         memory = RAM(0x20000, true)
         bus = Bus(memory, TIntObjectHashMap())
-        motherboard = Motherboard(cpu, memory, ROM("assets/$MOD_ID/cpu/bios.bin"), bus)
+        val rom = IROM { ByteInputStream() }
+        motherboard = Motherboard(cpu, memory, rom, bus)
         motherboard.reset()
         motherboard.start()
     }
@@ -441,7 +444,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLB(){
+    fun testLB() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x81090004.toInt())
         cpu.iterate()
@@ -449,7 +452,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLB2(){
+    fun testLB2() {
         memory.writeWord(0x00004, 0x123456F8)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x81090004.toInt())
         cpu.iterate()
@@ -457,7 +460,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLH(){
+    fun testLH() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x85090004.toInt())
         cpu.iterate()
@@ -465,7 +468,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLH2(){
+    fun testLH2() {
         memory.writeWord(0x00004, 0x1234F678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x85090004.toInt())
         cpu.iterate()
@@ -473,7 +476,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWL(){
+    fun testLWL() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x89090004.toInt())
         cpu.iterate()
@@ -481,7 +484,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWL2(){
+    fun testLWL2() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x89090005.toInt())
         cpu.iterate()
@@ -489,7 +492,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWL3(){
+    fun testLWL3() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x89090006.toInt())
         cpu.iterate()
@@ -497,7 +500,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWL4(){
+    fun testLWL4() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x89090007.toInt())
         cpu.iterate()
@@ -505,7 +508,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLW(){
+    fun testLW() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x8d090004.toInt())
         cpu.iterate()
@@ -513,7 +516,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLBU(){
+    fun testLBU() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x91090004.toInt())
         cpu.iterate()
@@ -521,7 +524,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLBU2(){
+    fun testLBU2() {
         memory.writeWord(0x00004, 0x123456F8)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x91090004.toInt())
         cpu.iterate()
@@ -529,7 +532,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLHU(){
+    fun testLHU() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x95090004.toInt())
         cpu.iterate()
@@ -537,7 +540,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLHU2(){
+    fun testLHU2() {
         memory.writeWord(0x00004, 0x1234F678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x95090004.toInt())
         cpu.iterate()
@@ -545,7 +548,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWR(){
+    fun testLWR() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x99090004.toInt())
         cpu.iterate()
@@ -553,7 +556,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWR2(){
+    fun testLWR2() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x99090005.toInt())
         cpu.iterate()
@@ -561,7 +564,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWR3(){
+    fun testLWR3() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x99090006.toInt())
         cpu.iterate()
@@ -569,7 +572,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testLWR4(){
+    fun testLWR4() {
         memory.writeWord(0x00004, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0x99090007.toInt())
         cpu.iterate()
@@ -577,7 +580,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSB(){
+    fun testSB() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xa10a0004.toInt())
@@ -586,7 +589,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSH(){
+    fun testSH() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xa50a0004.toInt())
@@ -595,7 +598,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWL(){
+    fun testSWL() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0004.toInt())
@@ -604,7 +607,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWL2(){
+    fun testSWL2() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0005.toInt())
@@ -613,7 +616,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWL3(){
+    fun testSWL3() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0006.toInt())
@@ -622,7 +625,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWL4(){
+    fun testSWL4() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xa90a0007.toInt())
@@ -631,7 +634,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSW(){
+    fun testSW() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xad0a0004.toInt())
@@ -640,7 +643,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWR(){
+    fun testSWR() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0004.toInt())
@@ -649,7 +652,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWR2(){
+    fun testSWR2() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0005.toInt())
@@ -658,7 +661,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWR3(){
+    fun testSWR3() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0006.toInt())
@@ -667,7 +670,7 @@ class TestMipsCpu {
     }
 
     @Test
-    fun testSWR4(){
+    fun testSWR4() {
         cpu.setRegister(8, 0x1000)
         cpu.setRegister(10, 0x12345678)
         memory.writeWord(Motherboard.CPU_START_POINT, 0xb90a0007.toInt())
