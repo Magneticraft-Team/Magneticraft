@@ -4,6 +4,7 @@ import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.tileentity.TileCombustionChamber
+import com.cout970.magneticraft.tileentity.TileSteamBoiler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.util.math.BlockPos
@@ -23,6 +24,15 @@ class ContainerCombustionChamber(val tile: TileCombustionChamber, player: Entity
             addSlotToContainer(SlotItemHandler(inv, 0, 91, 32))
             inventoryRegions += InventoryRegion(0..0, filter = { it.isNotEmpty && it.item == Items.COAL })
         }
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+
+class ContainerSteamBoiler(val tile: TileSteamBoiler, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
         bindPlayerInventory(player.inventory)
     }
 }

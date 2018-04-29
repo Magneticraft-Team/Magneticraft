@@ -28,6 +28,8 @@ object HydraulicPressRecipeManager : IHydraulicPressRecipeManager {
         return true
     }
 
+    override fun removeRecipe(recipe: IHydraulicPressRecipe?): Boolean = recipes.remove(recipe)
+
     override fun createRecipe(input: ItemStack, output: ItemStack, ticks: Float,
                               mode: HydraulicPressMode, oreDict: Boolean): IHydraulicPressRecipe {
 

@@ -26,8 +26,8 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
         val item = te.invModule.inventory[0]
 
         if (item.isNotEmpty) {
-            rotate(90, 1, 0, 0)
-            translate(3 * PIXEL, 7 * PIXEL, -4 * PIXEL)
+            translate(12.5 * PIXEL, 7 * PIXEL, 5.20 * PIXEL)
+            scale(1.5f, 1f, 1.5f)
             Utilities.renderItem(item)
         }
     }

@@ -13,7 +13,7 @@ import org.junit.Test
 
 /**
  * Number of bugs found when adding tests: 4
- * wait, does code not even run once count?, yes, then: 8
+ * wait, does 'code not even run once' count?, yes, then: 8
  */
 class TestMipsCpu {
 

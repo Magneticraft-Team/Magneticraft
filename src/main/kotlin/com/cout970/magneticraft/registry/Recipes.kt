@@ -281,7 +281,6 @@ fun registerRecipes() {
     addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(1), EnumMetal.COPPER.getLightPlate(), MEDIUM, 100f)
     addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(1), EnumMetal.LEAD.getLightPlate(), MEDIUM, 50f)
     addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(1), EnumMetal.TUNGSTEN.getLightPlate(), MEDIUM, 250f)
-    addHydraulicPressRecipe(EnumMetal.COBALT.getIngot().withSize(1), EnumMetal.COBALT.getLightPlate(), MEDIUM, 120f)
     addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(1), EnumMetal.STEEL.getLightPlate(), MEDIUM, 140f)
 
     // Light recipes

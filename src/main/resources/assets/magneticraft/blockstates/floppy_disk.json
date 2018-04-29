@@ -30,7 +30,7 @@
                 "layer0": "magneticraft:items/computer/floppy_disk_4"
             }
         }],
-        "vim": [{
+        "editor": [{
             "textures": {
                 "layer0": "magneticraft:items/computer/floppy_disk_5"
             }

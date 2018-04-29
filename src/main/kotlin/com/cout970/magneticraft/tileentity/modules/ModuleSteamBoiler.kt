@@ -19,7 +19,7 @@ class ModuleSteamBoiler(
         val inputTank: Tank,
         val outputTank: Tank,
         val heatCapacity: Float,
-        maxProduction: Int,
+        val maxProduction: Int,
         override val name: String = "module_steam_boiler"
 ) : IModule {
 
@@ -59,7 +59,7 @@ class ModuleSteamBoiler(
         inputTank.drainInternal(water, true)
         outputTank.fillInternal(FluidStack(fluid, steam), true)
         production += steam
-        heatUnits -= steam
+        heatUnits -= (steam / ConversionTable.HEAT_TO_STEAM).toInt()
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {

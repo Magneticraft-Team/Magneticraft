@@ -18,8 +18,13 @@ object ConversionTable {
     const val STEAM_TO_EU = 0.5       // 1mB = 0.5EU   | 1EU = 2mb (STEAM_TO_FE * FE_TO_EU)
     const val STEAM_TO_J = 2.0        // 1mB = 2.0J;   | 1J  = 0.5mB
 
-    const val HEAT_TO_STEAM = 1.0     // 1heat = 10mb  | 0.1heat = 1mb
-    const val HEAT_TO_FE = 2.0        // 1heat = 2 FE  | 0.5heat = 1FE
+    // Heat
+    const val HEAT_TO_STEAM = 1.0     // 1heat = 10mb  | 1mb = 0.1heat
+    const val HEAT_TO_FE = 2.0        // 1heat = 2FE  | 1FE = 0.5heat
+
+    // Fuel (minecraft furnace ticks per item)
+    const val FUEL_TO_FE = 10.0       // 1fuel = 10FE  | 1FE = 0.1fuel
+    const val FUEL_TO_HEAT = 5.0      // 1fuel = 5heat  | 1heat = 0.2fuel
 
     // Fluids
     const val WATER_TO_STEAM = 10.0   // 1mB Water = 10mB Steam | 1mB Steam = 0.1 mB Water

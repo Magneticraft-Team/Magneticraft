@@ -13,7 +13,7 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
     companion object {
         // Avoid loading the same floppy drive twice
-        private val cache = mutableMapOf<String, String>()
+        private val cache = mutableMapOf<Int, String>()
     }
 
     override fun getStorageFile(): File {
@@ -32,30 +32,28 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
             if (!parent.exists()) parent.mkdir()
 
 
-            val baseName = ComputerItems.defaultDisks
-                    .toList()
+            val baseName = ComputerItems.defaultDisks.toList()
                     .find { it.second == stack.itemDamage }
-                    ?.first
-                    ?: "bios"
+                    ?.first ?: "bios"
 
             val source = "$baseName.bin"
 
-            val bytes = ComputerItems::class.java
-                    .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
-                    ?.readBytes()
-                    ?: ByteArray(0)
-
             val file: File
-            if (stack.getString("label") in cache) {
-                file = File(cache[stack.getString("label")])
-                file.writeBytes(bytes)
+            val serial = serialNumber
+
+            if (serial in cache) {
+                file = File(cache[serial])
 
             } else {
+                val bytes = ComputerItems::class.java
+                        .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
+                        ?.readBytes()
+                        ?: ByteArray(0)
+
                 file = createTempFile(directory = parent)
                 file.writeBytes(bytes)
                 file.deleteOnExit()
-                cache[stack.getString("label")] = file.absolutePath
-
+                cache[serial] = file.absolutePath
             }
             return file
         }

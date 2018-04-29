@@ -4,11 +4,13 @@ import com.cout970.magneticraft.MOD_NAME
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
+import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.block.ManualMachines
 import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.util.add
@@ -165,12 +167,27 @@ class MagneticraftPlugin : IModPlugin {
                 initFunc = { recipeLayout, recipeWrapper, _ ->
                     recipeLayout.itemStacks.init(0, true, 49, 11)
                     recipeLayout.itemStacks.init(1, false, 49, 42)
+
                     recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
                         addTooltip("${recipeWrapper.recipe.duration} ticks")
                     })
+
+                    // mode indicator
+
+                    val modeItem = when (recipeWrapper.recipe.mode!!) {
+                        HydraulicPressMode.LIGHT -> EnumMetal.COPPER.getIngot()
+                        HydraulicPressMode.MEDIUM -> EnumMetal.COPPER.getLightPlate()
+                        HydraulicPressMode.HEAVY -> EnumMetal.COPPER.getHeavyPlate()
+                    }.apply { addTooltip("${recipeWrapper.recipe.mode.name.toLowerCase().capitalize()} mode") }
+
+                    recipeLayout.itemStacks.init(2, false, 78, 25)
+                    recipeLayout.itemStacks.set(2, modeItem)
                 },
-                extras = {}
+                extras = DrawableResource(resource("textures/gui/jei/slot.png"), 0, 0,
+                        24, 24, 22, 4, 75, 4,
+                        24, 24
+                ).let { res -> { it: Minecraft -> res.draw(it) } } // create the resource only when the gui opens
         ))
     }
 }

@@ -39,19 +39,21 @@ class TileSteamBoiler : TileBase(), ITickable {
             capacity = 1000,
             allowInput = true,
             allowOutput = false
-    )
+    ).apply { clientFluidName = "water" }
+
     val steamTank = Tank(
             capacity = 16000,
             allowInput = false,
             allowOutput = true
-    )
+    ).apply { clientFluidName = "steam" }
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank)
-    val boilerModule = ModuleSteamBoiler(waterTank, steamTank, 100f, 40)
+    val boilerModule = ModuleSteamBoiler(waterTank, steamTank, 100f, 20)
     val fluidExportModule = ModuleFluidExporter(steamTank, { listOf(BlockPos(0, 1, 0) to EnumFacing.DOWN) })
+    val openGui = ModuleOpenGui()
 
     init {
-        initModules(fluidModule, boilerModule, fluidExportModule)
+        initModules(fluidModule, boilerModule, fluidExportModule, openGui)
     }
 
     @DoNotRemove

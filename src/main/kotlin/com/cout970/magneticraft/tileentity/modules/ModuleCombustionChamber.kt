@@ -17,6 +17,7 @@ import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.util.ConversionTable.FUEL_TO_HEAT
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.WATER_BOILING_POINT
 import com.cout970.magneticraft.util.add
@@ -49,8 +50,6 @@ class ModuleCombustionChamber(
         val HEAT_RISING_SPEED = 1f
         @JvmStatic
         val HEAT_FALLING_SPEED = 0.25f
-        @JvmStatic
-        val HEAT_PER_BURNING_TICK = 0.5f
     }
 
     override fun onActivated(args: OnActivatedArgs): Boolean {
@@ -112,7 +111,7 @@ class ModuleCombustionChamber(
                 if (heat >= WATER_BOILING_POINT - 1) {
                     val speed = ((if (doorOpen) 0.5f else 1f) * Config.combustionChamberMaxSpeed.toFloat()).toInt()
                     burningTime += speed
-                    getBoiler()?.applyHeat(HEAT_PER_BURNING_TICK * speed)
+                    getBoiler()?.applyHeat(FUEL_TO_HEAT.toFloat() * speed)
                 } else {
                     heat += HEAT_RISING_SPEED
                 }

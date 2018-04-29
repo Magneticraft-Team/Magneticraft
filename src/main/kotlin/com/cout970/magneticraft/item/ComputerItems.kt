@@ -31,7 +31,7 @@ object ComputerItems : IItemMaker {
             "forth" to 2,
             "shell" to 3,
             "basic" to 4,
-            "vim" to 5,
+            "editor" to 5,
             "asm" to 6
     )
 

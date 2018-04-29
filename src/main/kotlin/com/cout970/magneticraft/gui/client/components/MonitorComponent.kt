@@ -51,6 +51,7 @@ class MonitorComponent(val tile: ITileRef, val monitor: DeviceMonitor, val conta
                     val pos = gui.pos + Vec2d(15 + column * scale, 15 + line * (scale + 2))
                     val x = character and 15
                     val y = character shr 4
+
                     gui.drawTexture(DrawableBox(pos, charSize, Vec2d(x, y) * 16, Vec2d(16, 16)))
                 }
             }

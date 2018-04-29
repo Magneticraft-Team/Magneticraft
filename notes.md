@@ -1,5 +1,14 @@
 ### TODO list
 
++ fix steam engine production bug
++ add craft tweaker for hydraulic press
++ add jei hydraulic press mode indicator
++ fix hydraulic press gui mode buttons
++ gui for steam boiler
++ recompile shell
++ fix guide book, wind turbine entry
+- add new computer model
+
 - add conveyor belt up/down blocks
 - add insert animation
 - add steam engine animation
@@ -9,7 +18,6 @@
 - fix pipes collision box and add auto-import
 - add heat system and remove all 'symbolic heat values'
 - add gears for steam engine tiers (and add a fucking GUI)
-- add gui to the steam boiler
 - change tank model and add auto-export
 - add conveyor belt end that drops stuff in chests
 - add wire coil durability and remove auto-connect (make lag)

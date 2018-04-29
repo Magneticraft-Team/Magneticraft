@@ -23,12 +23,12 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "lisp"
+    val img = "editor"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
     val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
     val monitor = DeviceMonitor(FakeRef)
-    val floppyDrive = DeviceFloppyDrive() { if (useOs) osDisk else programDisk }
+    val floppyDrive = DeviceFloppyDrive { if (useOs) osDisk else programDisk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
     networkCard.debugLevel = 5
@@ -58,7 +58,7 @@ fun main(args: Array<String>) {
     motherboard.start()
 
     timer = System.currentTimeMillis()
-    while (motherboard.isOnline()) {
+    while (motherboard.isOnline) {
         networkCard.update()
         floppyDrive.iterate()
         //run CPU
@@ -100,6 +100,7 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
     window.setSize(8 * 80 + 10 + 16, 16 * 35 + 3 + 39)
     window.isVisible = true
     window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+    window.focusTraversalKeysEnabled = false
 
     window.addKeyListener(object : KeyListener {
         override fun keyTyped(e: KeyEvent) {
@@ -114,17 +115,17 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
         }
 
         override fun keyPressed(e: KeyEvent) {
-            val code = when(e.keyCode){
-                37 -> 203
-                39 -> 205
-                else -> 0
+            val code = when (e.keyCode) {
+                37 -> 203 // left
+                38 -> 200 // up
+                39 -> 205 // right
+                40 -> 208 // down
+                else -> return
             }
-            if (code != 0) {
-                val ibd = IBD()
-                monitor.onKeyPressed(code)
-                monitor.saveToServer(ibd)
-                monitor.loadFromClient(ibd)
-            }
+            val ibd = IBD()
+            monitor.onKeyPressed(code)
+            monitor.saveToServer(ibd)
+            monitor.loadFromClient(ibd)
         }
 
         override fun keyReleased(e: KeyEvent?) = Unit
@@ -159,7 +160,7 @@ class MonitorWindow(val monitor: DeviceMonitor) : JPanel() {
         for (line in 0 until lines) {
             for (column in 0 until columns) {
                 val character = monitor.getChar(line * columns + column) and 0xFF
-                if (line == monitor.cursorLine && column == monitor.cursorColumn && lastTick % 20 >= 10) {
+                if (line == monitor.cursorLine && column == monitor.cursorColumn) {
                     selected = true
                 }
                 if (character != 0x20 || selected) {

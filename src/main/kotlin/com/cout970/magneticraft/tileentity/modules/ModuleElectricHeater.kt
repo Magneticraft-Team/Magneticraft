@@ -31,8 +31,6 @@ class ModuleElectricHeater(
         @JvmStatic
         val HEAT_FALLING_SPEED = 0.25f
         @JvmStatic
-        val HEAT_PER_BURNING_TICK = 0.5f
-        @JvmStatic
         val MAX_HEAT = 200.fromCelsiusToKelvin()
     }
 
