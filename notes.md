@@ -1,14 +1,4 @@
 ### TODO list
-
-+ fix steam engine production bug
-+ add craft tweaker for hydraulic press
-+ add jei hydraulic press mode indicator
-+ fix hydraulic press gui mode buttons
-+ gui for steam boiler
-+ recompile shell
-+ fix guide book, wind turbine entry
-- add new computer model
-
 - add conveyor belt up/down blocks
 - add insert animation
 - add steam engine animation
