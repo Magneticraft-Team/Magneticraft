@@ -373,3 +373,37 @@ object TileRendererHydraulicPress : TileRendererMultiblock<TileHydraulicPress>(
         models.forEach { it.renderTextured() }
     }
 }
+
+@RegisterRenderer(TileOilHeater::class)
+object TileRendererOilHeater : TileRendererMultiblock<TileOilHeater>(
+        modelLocation = modelOf(Multiblocks.oilHeater)
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileOilHeater) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.multiblockContext())
+            return
+        }
+
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(-1, 0, 0)
+        models.forEach { it.renderTextured() }
+    }
+}
+
+@RegisterRenderer(TileRefinery::class)
+object TileRendererRefinery : TileRendererMultiblock<TileRefinery>(
+        modelLocation = modelOf(Multiblocks.refinery)
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileRefinery) {
+        if (!te.active) {
+            Utilities.multiblockPreview(te.multiblockContext())
+            return
+        }
+
+        Utilities.rotateFromCenter(te.facing, 180f)
+        translate(-1, 0, 2)
+        models.forEach { it.renderTextured() }
+    }
+}

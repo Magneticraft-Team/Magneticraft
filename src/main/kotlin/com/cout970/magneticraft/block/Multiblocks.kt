@@ -47,6 +47,8 @@ object Multiblocks : IBlockMaker {
     lateinit var container: BlockBase private set
     lateinit var pumpjack: BlockBase private set
     lateinit var hydraulicPress: BlockBase private set
+    lateinit var oilHeater: BlockBase private set
+    lateinit var refinery: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -193,8 +195,30 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        oilHeater = builder.withName("oil_heater").copy {
+            factory = factoryOf(::TileOilHeater)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/oil_heater.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockOilHeater })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        refinery = builder.withName("refinery").copy {
+            factory = factoryOf(::TileRefinery)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/refinery.mcx")
+            )
+            onActivated = defaultOnActivated({ MultiblockRefinery })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
         return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
-                    container, pumpjack, hydraulicPress) + blockListOf(gap)
+                    container, pumpjack, hydraulicPress, oilHeater, refinery) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

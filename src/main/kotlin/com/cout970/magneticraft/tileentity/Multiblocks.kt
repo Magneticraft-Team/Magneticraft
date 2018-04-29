@@ -661,3 +661,85 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
     }
 }
 
+@RegisterTileEntity("oil_heater")
+class TileOilHeater : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockOilHeater
+
+    val node = ElectricNode(ref)
+    val openGuiModule = ModuleOpenGui()
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf()
+    )
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
+    )
+
+//    val processModule = ModuleElectricProcessing(
+//            costPerTick = Config.hydraulicPressMaxConsumption.toFloat(),
+//            workingRate = 1f,
+//            storage = node,
+//            craftingProcess = HydraulicPressCraftingProcess(
+//                    inventory = inventory,
+//                    inputSlot = 0,
+//                    outputSlot = 1,
+//                    mode = hydraulicPressModule::mode
+//            )
+//    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = ioModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, ioModule, energyModule, openGuiModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("refinery")
+class TileRefinery : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockRefinery
+
+    val node = ElectricNode(ref)
+    val openGuiModule = ModuleOpenGui()
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+            facing = { facing },
+            connectionSpots = listOf()
+    )
+
+    val energyModule = ModuleElectricity(
+            electricNodes = listOf(node),
+            canConnectAtSide = ioModule::canConnectAtSide,
+            connectableDirections = ioModule::getConnectableDirections
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+            multiblockStructure = getMultiblock(),
+            facingGetter = { facing },
+            capabilityGetter = ioModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, ioModule, energyModule, openGuiModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
