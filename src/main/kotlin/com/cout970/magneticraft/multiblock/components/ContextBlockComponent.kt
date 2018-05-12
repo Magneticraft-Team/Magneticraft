@@ -5,13 +5,13 @@ import com.cout970.magneticraft.multiblock.core.BlockData
 import com.cout970.magneticraft.multiblock.core.IMultiblockComponent
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
-import com.cout970.magneticraft.util.i18n
-import com.cout970.magneticraft.util.prettyFormat
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 28/08/2016.
@@ -19,20 +19,18 @@ import net.minecraft.util.text.ITextComponent
 class ContextBlockComponent(
         val getter: (MultiblockContext) -> IBlockState,
         val stack: ItemStack,
-        val replacement: IBlockState
+        val replacement: IBlockState,
+        val errorMsg: (MultiblockContext, IBlockState, BlockPos) -> ITextComponent
 ) : IMultiblockComponent {
 
     override fun checkBlock(relativePos: BlockPos, context: MultiblockContext): List<ITextComponent> {
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != getter(context)) {
-            if (Debug.DEBUG && context.player != null) {
+            if (Debug.DEBUG && context.player != null && FMLCommonHandler.instance().effectiveSide == Side.SERVER) {
                 context.world.setBlockState(pos, getter(context))
             }
-            val keyStr = "text.magneticraft.multiblock.invalid_block"
-            val vecStr = "[%d, %d, %d]".format(pos.x, pos.y, pos.z)
-
-            return listOf(keyStr.i18n(vecStr, state.prettyFormat(), getter(context).prettyFormat()))
+            return listOf(errorMsg(context, state, pos))
         }
         return emptyList()
     }

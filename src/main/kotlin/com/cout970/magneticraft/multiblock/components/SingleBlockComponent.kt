@@ -13,6 +13,8 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 20/08/2016.
@@ -24,7 +26,7 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != origin) {
-            if (Debug.DEBUG && context.player != null) {
+            if (Debug.DEBUG && context.player != null && FMLCommonHandler.instance().effectiveSide == Side.SERVER) {
                 context.world.setBlockState(pos, origin)
             }
             val keyStr = "text.magneticraft.multiblock.invalid_block"

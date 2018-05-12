@@ -12,6 +12,7 @@ import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.text.ITextComponent
 
 /**
  * Created by cout970 on 2017/07/03.
@@ -33,6 +34,8 @@ abstract class TileMultiblock : TileBase() {
         get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: EnumFacing.NORTH
     val active: Boolean
         get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.active ?: false
+
+    var clientErrors: List<ITextComponent> = emptyList()
 
     abstract fun getMultiblock(): Multiblock
 

@@ -5,7 +5,6 @@ item.magneticraft.iron_hammer_normal.name=Iron Hammer
 item.magneticraft.stone_hammer_normal.name=Stone Hammer
 item.magneticraft.steel_hammer_normal.name=Steel Hammer
 
-
 item.magneticraft.heavy_plates_iron.name=Heavy Iron Plate
 item.magneticraft.heavy_plates_gold.name=Heavy Gold Plate
 item.magneticraft.heavy_plates_copper.name=Heavy Copper Plate
@@ -236,7 +235,8 @@ text.magneticraft.jei.hydraulic_press=Hydraulic Press
 text.magneticraft.jei.grinder=Grinder
 text.magneticraft.jei.sieve=Sieve
 
-text.magneticraft.multiblock.invalid_block=Invalid block at %s, found: %s, expected: %s
+text.magneticraft.multiblock.invalid_block=Invalid block at %s\nFound: %s\nExpected: %s
+text.magneticraft.multiblock.invalid_column_orientation=Invalid block orientation at %s\nBlock found: %s\nExpected orientation: %s
 text.magneticraft.multiblock.activate=Successfully activated
 
 #death.attack.kiln=%1$s walked into an oven.

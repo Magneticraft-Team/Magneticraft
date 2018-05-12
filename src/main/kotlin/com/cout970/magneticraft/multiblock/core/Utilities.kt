@@ -7,6 +7,8 @@ import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.multiblock.components.ContextBlockComponent
 import com.cout970.magneticraft.multiblock.components.MainBlockComponent
 import com.cout970.magneticraft.multiblock.components.SingleBlockComponent
+import com.cout970.magneticraft.util.i18n
+import com.cout970.magneticraft.util.prettyFormat
 import com.cout970.magneticraft.util.vector.getRelative
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks
@@ -53,8 +55,22 @@ fun Multiblock.electricBlock(): SingleBlockComponent {
 fun Multiblock.columnBlock(dir: EnumFacing): ContextBlockComponent {
     val block = MultiblockParts.column
     return ContextBlockComponent(
-            { ctx -> ctx.facing.getRelative(dir).axis.toColumnAxis().getBlockState(block) },
-            block.defaultState.stack(), Multiblocks.gap.defaultState
+            getter = { ctx -> ctx.facing.getRelative(dir).axis.toColumnAxis().getBlockState(block) },
+            stack = block.defaultState.stack(),
+            replacement = Multiblocks.gap.defaultState,
+            errorMsg = { ctx, state, pos ->
+                val vecStr = "[%d, %d, %d]".format(pos.x, pos.y, pos.z)
+                val axis = ctx.facing.getRelative(dir).axis.toColumnAxis()
+                val expected = axis.getBlockState(block)
+
+                if (state.block == expected.block) {
+                    val keyStr = "text.magneticraft.multiblock.invalid_column_orientation"
+                    keyStr.i18n(vecStr, state.prettyFormat(), axis.name.toLowerCase().replace("_", " "))
+                } else {
+                    val keyStr = "text.magneticraft.multiblock.invalid_block"
+                    keyStr.i18n(vecStr, state.prettyFormat(), expected.prettyFormat())
+                }
+            }
     )
 }
 

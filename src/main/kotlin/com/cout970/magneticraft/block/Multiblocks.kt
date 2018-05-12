@@ -218,7 +218,7 @@ object Multiblocks : IBlockMaker {
         }.build()
 
         return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
-                    container, pumpjack, hydraulicPress, oilHeater, refinery) + blockListOf(gap)
+                container, pumpjack, hydraulicPress, oilHeater, refinery) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {
@@ -253,9 +253,7 @@ object Multiblocks : IBlockMaker {
     fun activateMultiblock(context: MultiblockContext) {
         val errors = MultiblockManager.checkMultiblockStructure(context)
         val playerIn = context.player!!
-        if (errors.isNotEmpty()) {
-            playerIn.sendStatusMessage(errors.first(), true)
-        } else {
+        if (errors.isEmpty()) {
             MultiblockManager.activateMultiblockStructure(context)
             playerIn.sendMessage("text.magneticraft.multiblock.activate", color = TextFormatting.GREEN)
         }
