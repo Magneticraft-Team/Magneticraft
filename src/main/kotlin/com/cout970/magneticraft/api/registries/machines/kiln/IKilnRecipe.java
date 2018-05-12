@@ -1,9 +1,8 @@
 package com.cout970.magneticraft.api.registries.machines.kiln;
 
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by cout970 on 22/08/2016.

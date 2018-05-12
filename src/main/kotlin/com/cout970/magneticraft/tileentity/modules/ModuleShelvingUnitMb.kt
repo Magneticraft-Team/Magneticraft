@@ -13,10 +13,10 @@ import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.multiblock.MultiblockShelvingUnit
 import com.cout970.magneticraft.registry.ITEM_HANDLER
-import com.cout970.magneticraft.tileentity.TileMultiblockGap
-import com.cout970.magneticraft.tileentity.TileShelvingUnit
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.tileentity.multiblock.TileMultiblockGap
+import com.cout970.magneticraft.tileentity.multiblock.TileShelvingUnit
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.newNbt

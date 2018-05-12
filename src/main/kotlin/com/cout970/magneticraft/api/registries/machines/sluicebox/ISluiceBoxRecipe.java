@@ -1,9 +1,8 @@
 package com.cout970.magneticraft.api.registries.machines.sluicebox;
 
+import java.util.List;
 import kotlin.Pair;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 /**
  * Created by cout970 on 24/08/2016.

@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.api.heat;
 
 import com.cout970.magneticraft.api.core.INodeHandler;
-
 import java.util.List;
 
 /**

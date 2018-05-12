@@ -1,9 +1,8 @@
 package com.cout970.magneticraft.api.registries.machines.grinder;
 
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.item.ItemStack;
 
 /**
  * Created by cout970 on 22/08/2016.

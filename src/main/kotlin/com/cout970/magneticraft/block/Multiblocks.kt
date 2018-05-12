@@ -13,8 +13,8 @@ import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
-import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleMultiblockGap
+import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.block.Block

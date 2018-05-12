@@ -6,6 +6,7 @@ import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
+import com.cout970.magneticraft.tileentity.multiblock.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

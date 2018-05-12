@@ -1,9 +1,8 @@
 package com.cout970.magneticraft.api.energy;
 
 import com.cout970.magneticraft.api.core.INodeHandler;
-import net.minecraft.util.EnumFacing;
-
 import java.util.List;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Created by cout970 on 18/07/2016.

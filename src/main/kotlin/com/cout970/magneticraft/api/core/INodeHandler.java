@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.core;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * Created by cout970 on 29/06/2016.

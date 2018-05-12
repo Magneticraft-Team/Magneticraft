@@ -1,8 +1,7 @@
 package com.cout970.magneticraft.api.registries.generators.thermopile;
 
-import net.minecraft.block.Block;
-
 import java.util.List;
+import net.minecraft.block.Block;
 
 /**
  * Created by cout970 on 2017/08/28.
