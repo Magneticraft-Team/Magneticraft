@@ -50,6 +50,11 @@ const val DATA_ID_MACHINE_PROGRESS = 42
 const val DATA_ID_MACHINE_CONSUMPTION = 43
 const val DATA_ID_MONITOR_CLIPBOARD = 44
 const val DATA_ID_SELECTED_OPTION = 45
+const val DATA_ID_FLUID_NAME_0 = 46 // Used by FluidHandlers
+const val DATA_ID_FLUID_NAME_1 = 47 // Used by FluidHandlers
+const val DATA_ID_FLUID_NAME_2 = 48 // Used by FluidHandlers
+const val DATA_ID_FLUID_NAME_3 = 49 // Used by FluidHandlers
+const val DATA_ID_FLUID_NAME_4 = 50 // Used by FluidHandlers
 
 val DATA_ID_VOLTAGE_LIST = listOf(
         DATA_ID_VOLTAGE_0,
@@ -64,4 +69,12 @@ val DATA_ID_FLUID_AMOUNT_LIST = listOf(
         DATA_ID_FLUID_AMOUNT_2,
         DATA_ID_FLUID_AMOUNT_3,
         DATA_ID_FLUID_AMOUNT_4
+)
+
+val DATA_ID_FLUID_NAME_LIST = listOf(
+        DATA_ID_FLUID_NAME_0,
+        DATA_ID_FLUID_NAME_1,
+        DATA_ID_FLUID_NAME_2,
+        DATA_ID_FLUID_NAME_3,
+        DATA_ID_FLUID_NAME_4
 )

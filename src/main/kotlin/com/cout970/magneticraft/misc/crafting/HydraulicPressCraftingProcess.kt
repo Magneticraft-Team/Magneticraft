@@ -22,7 +22,6 @@ class HydraulicPressCraftingProcess(
     private var cacheMode: HydraulicPressMode? = null
     private var cacheValue: IHydraulicPressRecipe? = null
 
-
     private fun getRecipe(input: ItemStack): IHydraulicPressRecipe? {
         if (ApiUtils.equalsIgnoreSize(cacheKey, input) && mode() == cacheMode) return cacheValue
 

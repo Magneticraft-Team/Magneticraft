@@ -68,42 +68,17 @@ open class ElectricNode(
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {
-//        if (power > 0) {
-////            val squared = voltage * voltage + Math.abs(power) * 2
-//            val diff: Double
-//            if (voltage < 60) {
-//                val squared = voltage * voltage + Math.abs(power) * 2
-//                diff = Math.sqrt(squared) - Math.abs(voltage)
-//            } else {
-//                diff = power / 60
-//            }
-//            if (!simulated) applyCurrent(diff)
-//            return power
-//        } else {
-//            if (voltage < 60) {
-//                val squared = voltage * voltage - Math.abs(power) * 2
-//                val powerUsed = if (squared > 0) -power else (voltage * voltage) / 2
-//                val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
-//                if (!simulated) applyCurrent(diff)
-//                return powerUsed
-//            } else {
-//                val diff = power / 60
-//                if (!simulated) applyCurrent(diff)
-//                return -power
-//            }
-//        }
-
-        if (power > 0) {
+        return if (power > 0) {
             val squared = voltage * voltage + Math.abs(power) * 2
             val diff = Math.sqrt(squared) - Math.abs(voltage)
             if (!simulated) applyCurrent(diff)
-            return power
+            power
         } else {
             val squared = voltage * voltage - Math.abs(power) * 2
             val powerUsed = if (squared > 0) -power else (voltage * voltage) / 2
             val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
             if (!simulated) applyCurrent(diff)
-            return powerUsed
+            powerUsed
         }
     }
 

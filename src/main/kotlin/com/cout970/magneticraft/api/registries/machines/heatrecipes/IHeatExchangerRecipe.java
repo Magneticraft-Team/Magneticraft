@@ -10,7 +10,7 @@ public interface IHeatExchangerRecipe {
     /**
      * The input stack of this recipe
      * The stacksize is ignored
-     * WARNING: this should return a COPY of the input not the original instance of the input
+     * WARNING: this must return a COPY of the input not the original instance of the input
      *
      * @return the stack used to find this recipe
      */
@@ -18,7 +18,7 @@ public interface IHeatExchangerRecipe {
 
     /**
      * The output of this recipe
-     * WARNING: this should return a COPY of the output not the original instance of the output
+     * WARNING: this must return a COPY of the output not the original instance of the output
      *
      * @return The primary output of this recipe
      */

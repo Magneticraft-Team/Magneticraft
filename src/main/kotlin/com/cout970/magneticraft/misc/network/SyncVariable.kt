@@ -23,6 +23,11 @@ class IntSyncVariable(id: Int, val getter: () -> Int, val setter: (Int) -> Unit)
     override fun write(ibd: IBD) = ibd.setInteger(id, getter())
 }
 
+class StringSyncVariable(id: Int, val getter: () -> String, val setter: (String) -> Unit) : SyncVariable(id) {
+    override fun read(ibd: IBD) = ibd.getString(id, setter)
+    override fun write(ibd: IBD) = ibd.setString(id, getter())
+}
+
 class AverageSyncVariable(id: Int, val valueAverage: ValueAverage) : SyncVariable(id) {
     override fun read(ibd: IBD) = ibd.getFloat(id) { valueAverage.storage = it }
     override fun write(ibd: IBD) = ibd.setFloat(id, valueAverage.average)

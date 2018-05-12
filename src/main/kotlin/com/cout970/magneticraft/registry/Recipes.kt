@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.internal.registries.generators.thermopile.Th
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.oilheater.OilHeaterRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
@@ -20,6 +21,7 @@ import com.cout970.magneticraft.item.EnumMetal.*
 import com.cout970.magneticraft.item.MetallicItems
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.withSize
+import com.cout970.magneticraft.util.info
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
@@ -29,6 +31,7 @@ import net.minecraft.init.Items.GOLD_INGOT
 import net.minecraft.init.Items.IRON_INGOT
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidRegistry
+import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 
@@ -323,6 +326,13 @@ fun registerRecipes() {
     addHydraulicPressRecipe(Blocks.SANDSTONE.stack(meta = 2), Blocks.SANDSTONE.stack(), LIGHT, 40f)
     addHydraulicPressRecipe(Blocks.PRISMARINE.stack(meta = 1), Blocks.PRISMARINE.stack(), LIGHT, 50f)
     addHydraulicPressRecipe(Blocks.ICE.stack(), Blocks.PACKED_ICE.stack(), LIGHT, 200f)
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                  OIL HEATER RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f)
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 10f)
 }
 
 
@@ -341,7 +351,7 @@ private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
 
 private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
                                otherOutput: List<Pair<ItemStack, Float>> = emptyList()) {
-    SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, output, otherOutput, true))
+    SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, (listOf(output to 1f) + otherOutput).toMutableList(), true))
 }
 
 private fun addThermopileRecipe(input: Block, heat: Int) {
@@ -377,6 +387,14 @@ private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: Item
 
 private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, mode: HydraulicPressMode, ticks: Float) {
     HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, mode, true))
+}
+
+private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: Float) {
+    if (input == null || output == null) {
+        info("Error trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks")
+        return
+    }
+    OilHeaterRecipeManager.registerRecipe(OilHeaterRecipeManager.createRecipe(input, output, ticks))
 }
 
 

@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.generation.OreGeneration
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.oilheater.OilHeaterRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry;
@@ -12,6 +13,7 @@ import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.registries.tool.hammer.IHammerRegistry;
@@ -23,6 +25,10 @@ import com.cout970.magneticraft.multiblock.core.MultiblockManager;
 public class MagneticraftApi {
 
     private MagneticraftApi() {}
+
+    public static IOilHeaterRecipeManager getOilHeaterRecipeManager() {
+        return OilHeaterRecipeManager.INSTANCE;
+    }
 
     public static IHydraulicPressRecipeManager getHydraulicPressRecipeManager() {
         return HydraulicPressRecipeManager.INSTANCE;

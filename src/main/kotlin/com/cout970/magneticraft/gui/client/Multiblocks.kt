@@ -199,3 +199,19 @@ fun guiHydraulicPress(gui: GuiBase, container: ContainerHydraulicPress) = gui.ru
 
     buttons[tile.hydraulicPressModule.mode.ordinal].state = ButtonState.PRESSED
 }
+
+fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) = gui.run {
+    val tile = container.tile
+
+    val texture = guiTexture("oil_heater")
+
+    +CompBackground(texture)
+    +CompElectricBar(tile.node, Vec2d(58, 16))
+
+    val prod = tile.processModule.consumption.toBarProvider(tile.processModule.costPerTick)
+
+    +CompVerticalBar(prod, 3, Vec2d(69, 16), prod.toEnergyText())
+
+    +CompFluidBar(vec2Of(80, 16), texture, vec2Of(0, 166), tile.inputTank)
+    +CompFluidBar(vec2Of(102, 16), texture, vec2Of(0, 166), tile.outputTank)
+}

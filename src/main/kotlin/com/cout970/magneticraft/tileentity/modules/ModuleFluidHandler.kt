@@ -1,8 +1,10 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_AMOUNT_LIST
+import com.cout970.magneticraft.gui.common.core.DATA_ID_FLUID_NAME_LIST
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.network.IntSyncVariable
+import com.cout970.magneticraft.misc.network.StringSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -22,6 +24,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties
 class ModuleFluidHandler(
         vararg val tanks: Tank,
         val capabilityFilter: (IFluidHandler, EnumFacing?) -> IFluidHandler? = ALLOW_ALL,
+        val guiSyncOffset: Int = 0,
         override val name: String = "module_fluid_handler"
 ) : IModule, IFluidHandler {
 
@@ -83,7 +86,13 @@ class ModuleFluidHandler(
         }
     }
 
-    override fun getGuiSyncVariables(): List<SyncVariable> = tanks.mapIndexed { index, tank ->
-        IntSyncVariable(DATA_ID_FLUID_AMOUNT_LIST[index], { tank.fluidAmount }, { tank.clientFluidAmount = it })
+    override fun getGuiSyncVariables(): List<SyncVariable> = tanks.withIndex().flatMap { (index, tank) ->
+        listOf(
+                IntSyncVariable(DATA_ID_FLUID_AMOUNT_LIST[index + guiSyncOffset],
+                        { tank.fluidAmount }, { tank.clientFluidAmount = it }),
+
+                StringSyncVariable(DATA_ID_FLUID_NAME_LIST[index + guiSyncOffset],
+                        { tank.fluid?.fluid?.name ?: "" }, { tank.clientFluidName = it })
+        )
     }
 }

@@ -46,7 +46,7 @@ class ModuleInternalStorage(
 
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), capacity - energy)
                 if (finalSpeed != 0) {
-                    mainNode.applyPower(-finalSpeed.toDouble() * ElectricConstants.SCALE, false)
+                    mainNode.applyPower(-finalSpeed.toDouble(), false)
                     energy += finalSpeed
                     chargeRate += finalSpeed
                 }
@@ -56,13 +56,17 @@ class ModuleInternalStorage(
 
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), energy)
                 if (finalSpeed != 0) {
-                    mainNode.applyPower(finalSpeed.toDouble() * ElectricConstants.SCALE, false)
+                    mainNode.applyPower(finalSpeed.toDouble(), false)
                     energy -= finalSpeed
                     chargeRate -= finalSpeed
                 }
             }
             chargeRate.tick()
         }
+    }
+
+    override fun getSpeed(): Double {
+        return energy.toDouble() / capacity
     }
 
     override fun hasEnergy(amount: Double): Boolean = energy >= amount

@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
+import com.cout970.magneticraft.misc.tileentity.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
@@ -19,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class ModuleElectricProcessing(
         val craftingProcess: ICraftingProcess,
-        val storage: ModuleInternalStorage,
+        val storage: IMachineEnergyInterface,
         val workingRate: Float,
         val costPerTick: Float,
         override val name: String = "module_electric_processing"
@@ -33,10 +34,10 @@ class ModuleElectricProcessing(
 
     override fun update() {
         if (world.isClient) return
-        val fullPercentage = storage.energy.toFloat() / storage.capacity
+        val fullPercentage = storage.getSpeed()
         val rate = workingRate * fullPercentage
         //making sure that (speed * costPerTick) is an integer
-        val speed = Math.floor((rate * costPerTick).toDouble()).toFloat() / costPerTick
+        val speed = Math.floor((rate * costPerTick)).toFloat() / costPerTick
         if (speed > 0) {
             timedProcess.tick(world, speed)
         }
@@ -50,7 +51,7 @@ class ModuleElectricProcessing(
 
     fun onWorkingTick(speed: Float) {
         consumption += speed * costPerTick
-        storage.energy = Math.max(0, storage.energy - (speed * costPerTick).toInt())
+        storage.useEnergy(speed * costPerTick.toDouble())
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {

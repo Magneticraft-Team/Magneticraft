@@ -1,32 +1,32 @@
-package com.cout970.magneticraft.api.registries.machines.crushingtable;
+package com.cout970.magneticraft.api.registries.machines.oilheater;
 
-import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
-/**
- * Created by cout970 on 24/08/2016.
- */
-public interface ICrushingTableRecipe {
-
-    boolean useOreDictionaryEquivalencies();
+public interface IOilHeaterRecipe {
 
     /**
      * The stack used to determine if an item can be used for this recipe or not
      * WARNING: this must return a COPY of the input not the original instance of the input
      * @return The input of the recipe
      */
-    ItemStack getInput();
+    FluidStack getInput();
 
     /**
      * The result of this recipe
      * WARNING: this must return a COPY of the output not the original instance of the output
      * @return The output of the recipe
      */
-    ItemStack getOutput();
+    FluidStack getOutput();
+
+    /**
+     * The amount of ticks needed to complete the recipe
+     */
+    float getDuration();
 
     /**
      * Checks if this recipes has the same input as the given argument
      * @param input the item to test if this recipe can be made from it
      * @return true if the item matches the input of this recipe, false otherwise
      */
-    boolean matches(ItemStack input);
+    boolean matches(FluidStack input);
 }

@@ -230,3 +230,11 @@ class ContainerHydraulicPress(val tile: TileHydraulicPress, player: EntityPlayer
         }
     }
 }
+
+class ContainerOilHeater(val tile: TileOilHeater, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        bindPlayerInventory(player.inventory)
+    }
+}

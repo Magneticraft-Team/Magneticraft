@@ -1,15 +1,19 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.crafting.OilHeaterCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
+import com.cout970.magneticraft.misc.tileentity.ElectricNodeWrapper
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.multiblock.MultiblockOilHeater
 import com.cout970.magneticraft.multiblock.MultiblockPumpjack
 import com.cout970.magneticraft.multiblock.MultiblockRefinery
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.vector.rotatePoint
 import net.minecraft.util.EnumFacing
@@ -87,11 +91,36 @@ class TileOilHeater : TileMultiblock(), ITickable {
     override fun getMultiblock(): Multiblock = MultiblockOilHeater
 
     val node = ElectricNode(ref)
+    val inputTank = Tank(16_000)
+    val outputTank = Tank(16_000)
+
     val openGuiModule = ModuleOpenGui()
+    val inputFluidModule = ModuleFluidHandler(inputTank)
+    val outputFluidModule = ModuleFluidHandler(outputTank, guiSyncOffset = 1)
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
-            connectionSpots = listOf()
+            connectionSpots = listOf(ConnectionSpot(
+                    capability = FLUID_HANDLER!!,
+                    pos = BlockPos(0, 1, -2),
+                    side = EnumFacing.NORTH,
+                    getter = { if (active) inputFluidModule else null }
+            ), ConnectionSpot(
+                    capability = FLUID_HANDLER!!,
+                    pos = BlockPos(0, 2, -1),
+                    side = EnumFacing.UP,
+                    getter = { if (active) outputFluidModule else null }
+            ), ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(-1, 0, -2),
+                    side = EnumFacing.NORTH,
+                    getter = { if (active) energyModule else null }
+            ), ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(1, 0, -2),
+                    side = EnumFacing.NORTH,
+                    getter = { if (active) energyModule else null }
+            ))
     )
 
     val energyModule = ModuleElectricity(
@@ -100,17 +129,15 @@ class TileOilHeater : TileMultiblock(), ITickable {
             connectableDirections = ioModule::getConnectableDirections
     )
 
-//    val processModule = ModuleElectricProcessing(
-//            costPerTick = Config.hydraulicPressMaxConsumption.toFloat(),
-//            workingRate = 1f,
-//            storage = node,
-//            craftingProcess = HydraulicPressCraftingProcess(
-//                    inventory = inventory,
-//                    inputSlot = 0,
-//                    outputSlot = 1,
-//                    mode = hydraulicPressModule::mode
-//            )
-//    )
+    val processModule = ModuleElectricProcessing(
+            costPerTick = Config.oilHeaterMaxConsumption.toFloat(),
+            workingRate = 1f,
+            storage = ElectricNodeWrapper(node),
+            craftingProcess = OilHeaterCraftingProcess(
+                    inputTank = inputTank,
+                    outputTank = outputTank
+            )
+    )
 
     override val multiblockModule = ModuleMultiblockCenter(
             multiblockStructure = getMultiblock(),
@@ -119,7 +146,8 @@ class TileOilHeater : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, ioModule, energyModule, openGuiModule)
+        initModules(multiblockModule, ioModule, energyModule, openGuiModule, inputFluidModule,
+                outputFluidModule, processModule)
     }
 
     @DoNotRemove
