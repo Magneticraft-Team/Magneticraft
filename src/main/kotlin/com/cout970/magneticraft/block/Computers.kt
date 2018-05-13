@@ -1,12 +1,18 @@
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.item.itemblock.blockListOf
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.tileentity.TileComputer
 import com.cout970.magneticraft.tileentity.TileMiningRobot
+import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.rotateBox
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -62,8 +68,8 @@ object Computers : IBlockMaker {
             //methods
             onBlockPlaced = Computers::placeWithRobotOrientation
             pickBlock = CommonMethods::pickDefaultBlock
-            onActivated = CommonMethods::openGui
             onActivated = CommonMethods::delegateToModule
+            boundingBox = { it.robotAABBs() }
         }.build()
 
         movingRobot = builder.withName("moving_robot").copy {
@@ -79,6 +85,17 @@ object Computers : IBlockMaker {
     fun placeWithRobotOrientation(it: OnBlockPlacedArgs): IBlockState {
         return it.defaultValue.withProperty(PROPERTY_ROBOT_ORIENTATION,
                 RobotOrientation.of(it.placer?.horizontalFacing ?: EnumFacing.NORTH))
+    }
+
+    fun BoundingBoxArgs.robotAABBs(): List<AABB> {
+        val ori = state[PROPERTY_ROBOT_ORIENTATION]
+                ?: return listOf(AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0))
+
+        return listOf(
+                vec3Of(4.px, 4.px, 6.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1 - 2.px), // center
+                vec3Of(5.px, 5.px, 1 - 2.px) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 1), // main thruster
+                vec3Of(5.px, 5.px, 0) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 6.px) // dill
+        ).map { ori.facing.rotateBox(vec3Of(0.5), it) }
     }
 
     enum class OrientationLevel {

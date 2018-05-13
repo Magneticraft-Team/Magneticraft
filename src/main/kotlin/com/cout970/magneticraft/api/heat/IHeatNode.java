@@ -15,8 +15,7 @@ public interface IHeatNode extends INode {
     /**
      * Returns the thermal conductivity of the block
      * Fraction of temperature difference between current and ambient temperature dissipated per second
-     * Small values cause fast heat transfer.
-     * Very large values can cause strange directional transfer behavior || why?? //TODO fix
+     *
      * default value: 1.0
      */
     double getConductivity();
