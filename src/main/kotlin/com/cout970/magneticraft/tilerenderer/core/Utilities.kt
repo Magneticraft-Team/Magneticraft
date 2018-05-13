@@ -261,6 +261,7 @@ object Utilities {
         translate(-0.5, -0.5, -0.5)
     }
 
+    // this doesn't work
     fun renderMultiblockBoundingBoxes(te: IMultiblockModule) {
         val mb = te.multiblock ?: return
         val facing = te.multiblockFacing ?: return
@@ -271,6 +272,7 @@ object Utilities {
         global.forEach { renderBox(it) }
     }
 
+    // this works
     fun renderMultiblockCollisionBoxes(world: World, blockPos: BlockPos, te: IMultiblockModule) {
 
         val global = BlockMultiblock.getBoxes(world, blockPos, te)

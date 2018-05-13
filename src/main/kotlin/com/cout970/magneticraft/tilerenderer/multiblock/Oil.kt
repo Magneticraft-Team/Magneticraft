@@ -40,8 +40,8 @@ object TileRendererRefinery : TileRendererMultiblock<TileRefinery>(
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileRefinery) {
-        Utilities.rotateFromCenter(te.facing, 180f)
-        translate(-1, 0, 2)
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(0, 0, -1)
         models.forEach { it.renderTextured() }
     }
 }

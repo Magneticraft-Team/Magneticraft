@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.WATER_BOILING_POINT
+import com.cout970.magneticraft.util.fromCelsiusToKelvin
 import com.cout970.magneticraft.util.resource
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidRegistry
@@ -32,6 +33,155 @@ fun initFluids() {
                     it.unlocalizedName = "magneticraft.oil"
                     it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
                     it.density = 1100
+                    it.viscosity = 2000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("hot_crude")) {
+        FluidRegistry.registerFluid(
+                Fluid("hot_crude", resource("fluids/hot_crude_still"), resource("fluids/hot_crude_flow")).also {
+                    it.unlocalizedName = "magneticraft.hot_crude"
+                    it.temperature = 600.fromCelsiusToKelvin().toInt()
+                    it.density = 10
+                    it.isGaseous = true
+                    it.viscosity = 20
+                }
+        )
+    }
+
+    // first stage oil processing
+    if (!FluidRegistry.isFluidRegistered("lpg")) {
+        FluidRegistry.registerFluid(
+                Fluid("lpg", resource("fluids/lpg_still"), resource("fluids/lpg_flow")).also {
+                    it.unlocalizedName = "magneticraft.lpg"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 300
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("light_oil")) {
+        FluidRegistry.registerFluid(
+                Fluid("light_oil", resource("fluids/light_oil_still"), resource("fluids/light_oil_flow")).also {
+                    it.unlocalizedName = "magneticraft.light_oil"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 700
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("heavy_oil")) {
+        FluidRegistry.registerFluid(
+                Fluid("heavy_oil", resource("fluids/heavy_oil_still"), resource("fluids/heavy_oil_flow")).also {
+                    it.unlocalizedName = "magneticraft.heavy_oil"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 800
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    // second state (lpg)
+    if (!FluidRegistry.isFluidRegistered("natural_gas")) {
+        FluidRegistry.registerFluid(
+                Fluid("natural_gas", resource("fluids/natural_gas_still"), resource("fluids/natural_gas_flow")).also {
+                    it.unlocalizedName = "magneticraft.natural_gas"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 1
+                    it.viscosity = 10
+                    it.isGaseous = true
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("naptha")) {
+        FluidRegistry.registerFluid(
+                Fluid("naptha", resource("fluids/naptha_still"), resource("fluids/naptha_flow")).also {
+                    it.unlocalizedName = "magneticraft.naptha"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 800
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("liquid_plastic")) {
+        FluidRegistry.registerFluid(
+                Fluid("liquid_plastic", resource("fluids/liquid_plastic_still"), resource("fluids/liquid_plastic_flow")).also {
+                    it.unlocalizedName = "magneticraft.liquid_plastic"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 900
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    // second state (light_oil)
+    if (!FluidRegistry.isFluidRegistered("gasoline")) {
+        FluidRegistry.registerFluid(
+                Fluid("gasoline", resource("fluids/gasoline_still"), resource("fluids/gasoline_flow")).also {
+                    it.unlocalizedName = "magneticraft.gasoline"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 500
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("kerosene")) {
+        FluidRegistry.registerFluid(
+                Fluid("kerosene", resource("fluids/kerosene_still"), resource("fluids/kerosene_flow")).also {
+                    it.unlocalizedName = "magneticraft.kerosene"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 600
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("diesel")) {
+        FluidRegistry.registerFluid(
+                Fluid("diesel", resource("fluids/diesel_still"), resource("fluids/diesel_flow")).also {
+                    it.unlocalizedName = "magneticraft.diesel"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 700
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    // second state (heavy_oil)
+    if (!FluidRegistry.isFluidRegistered("lubricant")) {
+        FluidRegistry.registerFluid(
+                Fluid("lubricant", resource("fluids/lubricant_still"), resource("fluids/lubricant_flow")).also {
+                    it.unlocalizedName = "magneticraft.lubricant"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 600
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("fuel")) { // heavy gas oil
+        FluidRegistry.registerFluid(
+                Fluid("fuel", resource("fluids/fuel_still"), resource("fluids/fuel_flow")).also {
+                    it.unlocalizedName = "magneticraft.fuel"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 700
+                    it.viscosity = 1000
+                }
+        )
+    }
+
+    if (!FluidRegistry.isFluidRegistered("oil_residue")) {
+        FluidRegistry.registerFluid(
+                Fluid("oil_residue", resource("fluids/oil_residue_still"), resource("fluids/oil_residue_flow")).also {
+                    it.unlocalizedName = "magneticraft.oil_residue"
+                    it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
+                    it.density = 800
                     it.viscosity = 2000
                 }
         )
