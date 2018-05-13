@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.C
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.oilheater.OilHeaterRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.refinery.RefineryRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
@@ -333,6 +334,37 @@ fun registerRecipes() {
 
     addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f)
     addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 10f)
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 10f)
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                   REFINERY RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    addRefineryRecipe(FluidRegistry.getFluidStack("steam", 10), FluidRegistry.getFluidStack("water", 1), null, null, 2f)
+
+    addRefineryRecipe(FluidRegistry.getFluidStack("hot_crude", 100),
+            FluidRegistry.getFluidStack("heavy_oil", 4),
+            FluidRegistry.getFluidStack("light_oil", 3),
+            FluidRegistry.getFluidStack("lpg", 3),
+            1f)
+
+    addRefineryRecipe(FluidRegistry.getFluidStack("heavy_oil", 10),
+            FluidRegistry.getFluidStack("oil_residue", 4),
+            FluidRegistry.getFluidStack("fuel", 5),
+            FluidRegistry.getFluidStack("lubricant", 1),
+            1f)
+
+    addRefineryRecipe(FluidRegistry.getFluidStack("light_oil", 10),
+            FluidRegistry.getFluidStack("diesel", 5),
+            FluidRegistry.getFluidStack("kerosene", 2),
+            FluidRegistry.getFluidStack("gasoline", 3),
+            1f)
+
+    addRefineryRecipe(FluidRegistry.getFluidStack("lpg", 10),
+            FluidRegistry.getFluidStack("plastic", 5),
+            FluidRegistry.getFluidStack("naptha", 2),
+            FluidRegistry.getFluidStack("natural_gas", 3),
+            1f)
 }
 
 
@@ -395,6 +427,15 @@ private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: F
         return
     }
     OilHeaterRecipeManager.registerRecipe(OilHeaterRecipeManager.createRecipe(input, output, ticks))
+}
+
+private fun addRefineryRecipe(input: FluidStack?, output0: FluidStack?, output1: FluidStack?, output2: FluidStack?, ticks: Float) {
+    if (input == null || (output0 == null && output1 == null && output2 == null)) {
+        info("Error trying to register a RefineryRecipe with params: input=$input, output0=$output0, " +
+                "output1=$output1, output2=$output2, duration=$ticks")
+        return
+    }
+    RefineryRecipeManager.registerRecipe(RefineryRecipeManager.createRecipe(input, output0, output1, output2, ticks))
 }
 
 

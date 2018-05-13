@@ -43,6 +43,8 @@ object GuiHandler : IGuiHandler {
             is ContainerHydraulicPress    -> guiOf(container, ::guiHydraulicPress)
             is ContainerSteamBoiler       -> guiOf(container, ::guiSteamBoiler)
             is ContainerOilHeater         -> guiOf(container, ::guiOilHeater)
+            is ContainerRefinery          -> guiOf(container, ::guiRefinery)
+            is ContainerRfHeater          -> guiOf(container, ::guiRfHeater)
             else -> null
         }
         // @formatter:on
@@ -77,6 +79,8 @@ object GuiHandler : IGuiHandler {
             is TileHydraulicPress    -> ContainerHydraulicPress(tile, player, world, pos)
             is TileSteamBoiler       -> ContainerSteamBoiler(tile, player, world, pos)
             is TileOilHeater         -> ContainerOilHeater(tile, player, world, pos)
+            is TileRefinery          -> ContainerRefinery(tile, player, world, pos)
+            is TileRfHeater          -> ContainerRfHeater(tile, player, world, pos)
             else -> null
         }
         // @formatter:on

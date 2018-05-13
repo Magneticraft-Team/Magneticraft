@@ -206,7 +206,7 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
     val inventory = Inventory(2)
     val node = ElectricNode(ref)
 
-    val invModule = ModuleInventory(inventory)
+    val invModule = ModuleInventory(inventory, capabilityFilter = ModuleInventory.ALLOW_NONE)
 
     val storageModule = ModuleInternalStorage(
             mainNode = node,
@@ -229,6 +229,16 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
                     pos = BlockPos(-1, 1, -1),
                     side = EnumFacing.WEST,
                     getter = { if (active) energyModule else null }
+            ), ConnectionSpot(
+                    capability = ITEM_HANDLER!!,
+                    pos = BlockPos(0, 0, 0),
+                    side = EnumFacing.SOUTH,
+                    getter = { if (active) InventoryCapabilityFilter(inventory, listOf(0), listOf()) else null }
+            ), ConnectionSpot(
+                    capability = ITEM_HANDLER!!,
+                    pos = BlockPos(0, 0, -2),
+                    side = EnumFacing.NORTH,
+                    getter = { if (active) InventoryCapabilityFilter(inventory, listOf(), listOf(1)) else null }
             ))
     )
 

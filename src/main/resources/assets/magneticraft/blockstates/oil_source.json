@@ -10,7 +10,15 @@
                 "test": "magneticraft:fluids/steam_still",
                 "test2": "magneticraft:fluids/steam_flow",
                 "test3": "magneticraft:fluids/oil_still",
-                "test4": "magneticraft:fluids/oil_flow"
+                "test4": "magneticraft:fluids/oil_flow",
+                "test5": "magneticraft:fluids/heavy_oil_still",
+                "test6": "magneticraft:fluids/heavy_oil_flow",
+                "test7": "magneticraft:fluids/light_oil_still",
+                "test8": "magneticraft:fluids/light_oil_flow",
+                "test9": "magneticraft:fluids/hot_crude_flow",
+                "test10": "magneticraft:fluids/hot_crude_still",
+                "test11": "magneticraft:fluids/natural_gas_flow",
+                "test12": "magneticraft:fluids/natural_gas_still"
             }
         }],
         "full_90": [{

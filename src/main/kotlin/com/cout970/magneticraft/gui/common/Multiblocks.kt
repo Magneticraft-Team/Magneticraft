@@ -238,3 +238,11 @@ class ContainerOilHeater(val tile: TileOilHeater, player: EntityPlayer, world: W
         bindPlayerInventory(player.inventory)
     }
 }
+
+class ContainerRefinery(val tile: TileRefinery, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        bindPlayerInventory(player.inventory)
+    }
+}

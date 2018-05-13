@@ -215,3 +215,21 @@ fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) = gui.run {
     +CompFluidBar(vec2Of(80, 16), texture, vec2Of(0, 166), tile.inputTank)
     +CompFluidBar(vec2Of(102, 16), texture, vec2Of(0, 166), tile.outputTank)
 }
+
+fun guiRefinery(gui: GuiBase, container: ContainerRefinery) = gui.run {
+    val tile = container.tile
+
+    val texture = guiTexture("refinery")
+
+    +CompBackground(texture)
+    +CompElectricBar(tile.node, Vec2d(41, 16))
+
+    val prod = tile.processModule.consumption.toBarProvider(tile.processModule.costPerTick)
+
+    +CompVerticalBar(prod, 3, Vec2d(52, 16), prod.toEnergyText())
+
+    +CompFluidBar(vec2Of(63, 16), texture, vec2Of(0, 166), tile.inputTank)
+    +CompFluidBar(vec2Of(85, 16), texture, vec2Of(0, 166), tile.outputTank0)
+    +CompFluidBar(vec2Of(107, 16), texture, vec2Of(0, 166), tile.outputTank1)
+    +CompFluidBar(vec2Of(129, 16), texture, vec2Of(0, 166), tile.outputTank2)
+}

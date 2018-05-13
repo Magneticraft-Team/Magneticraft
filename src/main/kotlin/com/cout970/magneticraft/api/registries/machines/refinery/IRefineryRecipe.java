@@ -1,9 +1,9 @@
-package com.cout970.magneticraft.api.registries.machines.oilheater;
+package com.cout970.magneticraft.api.registries.machines.refinery;
 
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
-public interface IOilHeaterRecipe {
+public interface IRefineryRecipe {
 
     /**
      * The stack used to determine if an item can be used for this recipe or not
@@ -17,7 +17,24 @@ public interface IOilHeaterRecipe {
      * WARNING: this must return a COPY of the output not the original instance of the output
      * @return The output of the recipe
      */
-    FluidStack getOutput();
+    @Nullable
+    FluidStack getOutput0();
+
+    /**
+     * The result of this recipe
+     * WARNING: this must return a COPY of the output not the original instance of the output
+     * @return The output of the recipe
+     */
+    @Nullable
+    FluidStack getOutput1();
+
+    /**
+     * The result of this recipe
+     * WARNING: this must return a COPY of the output not the original instance of the output
+     * @return The output of the recipe
+     */
+    @Nullable
+    FluidStack getOutput2();
 
     /**
      * The amount of ticks needed to complete the recipe

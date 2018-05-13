@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.misc.tileentity
+package com.cout970.magneticraft.misc.energy
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.ElectricConstants

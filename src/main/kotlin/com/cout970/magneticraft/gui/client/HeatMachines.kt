@@ -39,7 +39,7 @@ fun guiSteamBoiler(gui: GuiBase, container: ContainerSteamBoiler) = gui.run {
 
     val production = tile.boilerModule.production.toBarProvider(tile.boilerModule.maxProduction)
 
-    +CompVerticalBar(production, 3, Vec2d(69, 16), production.toEnergyText())
+    +CompVerticalBar(production, 3, Vec2d(69, 16), production.toIntText(postfix = " mB/t"))
 
     +CompFluidBar(vec2Of(80, 16), texture, vec2Of(0, 166), tile.waterTank)
     +CompFluidBar(vec2Of(102, 16), texture, vec2Of(0, 166), tile.steamTank)

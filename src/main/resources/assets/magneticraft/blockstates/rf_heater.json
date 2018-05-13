@@ -1,0 +1,33 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_column",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "off": [
+      {
+        "textures": {
+          "end": "magneticraft:blocks/electric_machines/rf_heater_off",
+          "side": "magneticraft:blocks/electric_machines/rf_heater"
+        }
+      }
+    ],
+    "on": [
+      {
+        "textures": {
+          "end": "magneticraft:blocks/electric_machines/rf_heater_on",
+          "side": "magneticraft:blocks/electric_machines/rf_heater"
+        }
+      }
+    ],
+    "inventory": [
+      {
+        "textures": {
+          "end": "magneticraft:blocks/electric_machines/rf_heater_off",
+          "side": "magneticraft:blocks/electric_machines/rf_heater"
+        }
+      }
+    ]
+  }
+}

@@ -4,9 +4,11 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.crafting.OilHeaterCraftingProcess
+import com.cout970.magneticraft.misc.crafting.RefineryCraftingProcess
+import com.cout970.magneticraft.misc.energy.ElectricNodeWrapper
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.ElectricNodeWrapper
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.multiblock.MultiblockOilHeater
 import com.cout970.magneticraft.multiblock.MultiblockPumpjack
@@ -95,8 +97,9 @@ class TileOilHeater : TileMultiblock(), ITickable {
     val outputTank = Tank(16_000)
 
     val openGuiModule = ModuleOpenGui()
-    val inputFluidModule = ModuleFluidHandler(inputTank)
-    val outputFluidModule = ModuleFluidHandler(outputTank, guiSyncOffset = 1)
+
+    val fluidModule = ModuleFluidHandler(inputTank, outputTank,
+            capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
@@ -104,12 +107,12 @@ class TileOilHeater : TileMultiblock(), ITickable {
                     capability = FLUID_HANDLER!!,
                     pos = BlockPos(0, 1, -2),
                     side = EnumFacing.NORTH,
-                    getter = { if (active) inputFluidModule else null }
+                    getter = { if (active) TankCapabilityFilter(inputTank) else null }
             ), ConnectionSpot(
                     capability = FLUID_HANDLER!!,
                     pos = BlockPos(0, 2, -1),
                     side = EnumFacing.UP,
-                    getter = { if (active) outputFluidModule else null }
+                    getter = { if (active) TankCapabilityFilter(outputTank) else null }
             ), ConnectionSpot(
                     capability = ELECTRIC_NODE_HANDLER!!,
                     pos = BlockPos(-1, 0, -2),
@@ -146,8 +149,7 @@ class TileOilHeater : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, ioModule, energyModule, openGuiModule, inputFluidModule,
-                outputFluidModule, processModule)
+        initModules(multiblockModule, ioModule, energyModule, openGuiModule, fluidModule, processModule)
     }
 
     @DoNotRemove
@@ -162,11 +164,63 @@ class TileRefinery : TileMultiblock(), ITickable {
     override fun getMultiblock(): Multiblock = MultiblockRefinery
 
     val node = ElectricNode(ref)
+    val inputTank = Tank(16_000)
+    val outputTank0 = Tank(16_000)
+    val outputTank1 = Tank(16_000)
+    val outputTank2 = Tank(16_000)
+
     val openGuiModule = ModuleOpenGui()
+
+    val fluidModule = ModuleFluidHandler(inputTank, outputTank0, outputTank1, outputTank2,
+            capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
-            connectionSpots = listOf()
+            connectionSpots = listOf(ConnectionSpot(
+                    capability = FLUID_HANDLER!!,
+                    pos = BlockPos(0, 1, -2),
+                    side = EnumFacing.NORTH,
+                    getter = { if (active) TankCapabilityFilter(inputTank) else null }
+
+            ), ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(1, 1, -1),
+                    side = EnumFacing.EAST,
+                    getter = { if (active) energyModule else null }
+
+            ), ConnectionSpot(
+                    capability = ELECTRIC_NODE_HANDLER!!,
+                    pos = BlockPos(-1, 1, -1),
+                    side = EnumFacing.WEST,
+                    getter = { if (active) energyModule else null }
+
+            )) + ModuleMultiblockIO.connectionCross(
+                    capability = FLUID_HANDLER!!,
+                    start = BlockPos(0, 3, -1), dist = 1,
+                    getter = { if (active) TankCapabilityFilter(outputTank0, canFill = false) else null }
+
+            ) + ModuleMultiblockIO.connectionCross(
+                    capability = FLUID_HANDLER!!,
+                    start = BlockPos(0, 5, -1), dist = 1,
+                    getter = { if (active) TankCapabilityFilter(outputTank1, canFill = false) else null }
+
+            ) + ModuleMultiblockIO.connectionCross(
+                    capability = FLUID_HANDLER!!,
+                    start = BlockPos(0, 7, -1), dist = 1,
+                    getter = { if (active) TankCapabilityFilter(outputTank2, canFill = false) else null }
+            )
+    )
+
+    val processModule = ModuleElectricProcessing(
+            costPerTick = Config.refineryMaxConsumption.toFloat(),
+            workingRate = 1f,
+            storage = ElectricNodeWrapper(node),
+            craftingProcess = RefineryCraftingProcess(
+                    inputTank = inputTank,
+                    outputTank0 = outputTank0,
+                    outputTank1 = outputTank1,
+                    outputTank2 = outputTank2
+            )
     )
 
     val energyModule = ModuleElectricity(
@@ -182,7 +236,7 @@ class TileRefinery : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, ioModule, energyModule, openGuiModule)
+        initModules(multiblockModule, ioModule, energyModule, openGuiModule, fluidModule, processModule)
     }
 
     @DoNotRemove

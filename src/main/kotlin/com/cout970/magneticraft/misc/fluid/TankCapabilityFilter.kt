@@ -6,7 +6,7 @@ import net.minecraftforge.fluids.capability.FluidTankProperties
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.fluids.capability.IFluidTankProperties
 
-class TankCapabilityFilter(val tank: Tank, val canFill: Boolean, val canDrain: Boolean) : IFluidHandler {
+class TankCapabilityFilter(val tank: Tank, val canFill: Boolean = true, val canDrain: Boolean = true) : IFluidHandler {
 
     override fun drain(resource: FluidStack, doDrain: Boolean): FluidStack? {
         if (!canDrain) return null
@@ -29,7 +29,7 @@ class TankCapabilityFilter(val tank: Tank, val canFill: Boolean, val canDrain: B
 }
 
 fun wrapWithFluidFilter(func: (FluidStack) -> Boolean): (IFluidHandler, EnumFacing?) -> IFluidHandler {
-    return { handler, _-> FilteredFluidHandler(handler, func) }
+    return { handler, _ -> FilteredFluidHandler(handler, func) }
 }
 
 class FilteredFluidHandler(val source: IFluidHandler, val filter: (FluidStack) -> Boolean) : IFluidHandler {

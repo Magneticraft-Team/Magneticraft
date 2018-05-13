@@ -4,10 +4,10 @@ import com.cout970.magneticraft.gui.common.core.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_CONSUMPTION
 import com.cout970.magneticraft.misc.crafting.ICraftingProcess
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
+import com.cout970.magneticraft.misc.energy.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
-import com.cout970.magneticraft.misc.tileentity.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer

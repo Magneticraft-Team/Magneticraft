@@ -3,10 +3,7 @@ package com.cout970.magneticraft.tileentity.modules
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.util.vector.getRelative
-import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.rotatePoint
-import com.cout970.magneticraft.util.vector.toBlockPos
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
@@ -40,8 +37,16 @@ class ModuleMultiblockIO(
             }
             return result
         }
-    }
 
+        fun connectionCross(capability: Capability<*>, start: BlockPos, dist: Int = 1, getter: () -> Any?): List<ConnectionSpot> {
+            val result = mutableListOf<ConnectionSpot>()
+
+            EnumFacing.HORIZONTALS.forEach {
+                result += ConnectionSpot(capability, start + it.toBlockPos() * dist, it, getter)
+            }
+            return result
+        }
+    }
 
     fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
         if (connectionSpots.isEmpty() || side == null) return null
@@ -59,7 +64,6 @@ class ModuleMultiblockIO(
         return valid.getter()
     }
 
-
     fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
         val connections = connectionSpots.filter { it.capability == ELECTRIC_NODE_HANDLER }
 
@@ -74,7 +78,6 @@ class ModuleMultiblockIO(
                 }
     }
 
-
     fun canConnectAtSide(facing: EnumFacing?): Boolean {
         val connections = connectionSpots.filter { it.capability == ELECTRIC_NODE_HANDLER }
 
@@ -83,5 +86,10 @@ class ModuleMultiblockIO(
         val direction = facing()
 
         return connections.any { direction.getRelative(it.side) == facing }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
+        return getCapability(cap, facing, BlockPos.ORIGIN) as? T?
     }
 }

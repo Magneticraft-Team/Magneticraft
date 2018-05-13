@@ -71,3 +71,11 @@ class ContainerElectricHeater(val tile: TileElectricHeater, player: EntityPlayer
         bindPlayerInventory(player.inventory)
     }
 }
+
+class ContainerRfHeater(val tile: TileRfHeater, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        bindPlayerInventory(player.inventory)
+    }
+}

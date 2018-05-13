@@ -60,6 +60,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Oil Heater Max Consumption")
     var oilHeaterMaxConsumption = 60.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Refinery Max Consumption")
+    var refineryMaxConsumption = 40.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: maintenance cost per Air Bubble every " +
             "40 ticks (2 sec)")
     var airlockBubbleCost = 1.0

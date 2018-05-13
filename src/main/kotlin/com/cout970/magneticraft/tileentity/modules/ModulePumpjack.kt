@@ -5,13 +5,13 @@ import com.cout970.magneticraft.block.Ores
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.core.*
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.energy.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.AverageSyncVariable
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
-import com.cout970.magneticraft.misc.tileentity.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule

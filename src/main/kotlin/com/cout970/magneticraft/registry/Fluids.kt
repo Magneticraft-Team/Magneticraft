@@ -108,10 +108,10 @@ fun initFluids() {
         )
     }
 
-    if (!FluidRegistry.isFluidRegistered("liquid_plastic")) {
+    if (!FluidRegistry.isFluidRegistered("plastic")) {
         FluidRegistry.registerFluid(
-                Fluid("liquid_plastic", resource("fluids/liquid_plastic_still"), resource("fluids/liquid_plastic_flow")).also {
-                    it.unlocalizedName = "magneticraft.liquid_plastic"
+                Fluid("plastic", resource("fluids/plastic_still"), resource("fluids/plastic_flow")).also {
+                    it.unlocalizedName = "magneticraft.plastic"
                     it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
                     it.density = 900
                     it.viscosity = 1000
@@ -165,7 +165,7 @@ fun initFluids() {
         )
     }
 
-    if (!FluidRegistry.isFluidRegistered("fuel")) { // heavy gas oil
+    if (!FluidRegistry.isFluidRegistered("fuel")) {
         FluidRegistry.registerFluid(
                 Fluid("fuel", resource("fluids/fuel_still"), resource("fluids/fuel_flow")).also {
                     it.unlocalizedName = "magneticraft.fuel"

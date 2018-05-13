@@ -37,6 +37,7 @@ object ElectricMachines : IBlockMaker {
     lateinit var windTurbine: BlockBase private set
     lateinit var windTurbineGap: BlockBase private set
     lateinit var electricHeater: BlockBase private set
+    lateinit var rfHeater: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -155,8 +156,16 @@ object ElectricMachines : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
+        rfHeater = builder.withName("rf_heater").copy {
+            states = WorkingMode.values().toList()
+            factory = factoryOf(::TileRfHeater)
+            alwaysDropDefault = true
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
         return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile,
-                windTurbine, electricHeater) + blockListOf(windTurbineGap)
+                windTurbine, electricHeater, rfHeater) + blockListOf(windTurbineGap)
     }
 
     enum class WorkingMode(
