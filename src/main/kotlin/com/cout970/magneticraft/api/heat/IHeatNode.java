@@ -4,63 +4,58 @@ import com.cout970.magneticraft.api.core.INode;
 
 /**
  * Created by Yurgen on 19/10/2016.
+ * Modified by Cout970 on 14/5/2018
  */
 public interface IHeatNode extends INode {
 
+    // Ideal gas constant
+    double R = 8.3144598;
+
     /**
-     * Returns the current temperature of the block
+     * Returns the current temperature of the block in kelvin
+     * <p>
+     * Calculated with T = (2/3 * U)/ (n * R) where n is the amount of moles in the node and U is the internal energy of
+     * the node
+     * <p>
+     * n will be calculated using the mass and the molar mass: <code>n = mass * 1000 / molar_mass</code> the 1000 comes
+     * from the fact that mass is expressed in kilograms but a mole is the amount of atoms in a gram so it needs to be
+     * converted from kilograms to grams
      */
     double getTemperature();
 
     /**
-     * Returns the thermal conductivity of the block
-     * Fraction of temperature difference between current and ambient temperature dissipated per second
+     * Returns the internal energy of this node
+     * <p>
+     * Represented as U in the first law of thermodynamics: <code>dU = dQ - dW</code> where dQ is the heat
+     * extracted/applied and dW id the work done/applied
+     */
+    double getInternalEnergy();
+
+    /**
+     * Returns the mass of the node in kilograms
+     */
+    double getMass();
+
+    /**
+     * Returns the heat conductivity of the node in watts / (meter * kelvin)
      *
-     * default value: 1.0
+     * Amount of watts transferred in a meter with a temperature difference of 1 kelvin
+     *
+     * The pure iron thermal conductivity is around 73 watts per meter kelvin
      */
     double getConductivity();
 
     /**
-     * Returns the heat dissipation of the block
-     * Fraction of temperature difference between current and ambient temperature dissipated per second
-     * Small values cause fast heat dissipation
-     * default value: 0.0
+     * Returns the molar mass of the node
+     * <p>
+     * The default value is the molar mass of iron: 55.845
      */
-    double getDissipation();
+    double getMolarMass();
 
     /**
-     * Returns the current heat content of the block
-     */
-    double getHeat();
-
-    /**
-     * Returns the maximum heat content of the block
-     */
-    double getMaxHeat();
-
-    /**
-     * Returns the heat capacity of the block
-     */
-    double getSpecificHeat();
-
-    /**
-     * Returns the maximum temperature of the block
-     * What happens on exceeding maximum temperature is implementation defined.
-     * Default should be refusing heat input
-     */
-    double getMaxTemperature();
-
-    /**
-     * Inserts heat or extracts heat from the node
+     * Increases or decreases the internal energy of the node using a heat exchange process
      *
-     * @param heatArg heat ti insert if positive, heat to extract if negative
-     * @param simulate true if the internal heat should not be modified
-     * @return heat inserted or extracted, always positive
+     * @param heat the amount of heat to apply/extract in Joules, must be negative for extraction
      */
-    double applyHeat(double heatArg, boolean simulate);
-
-    /**
-     * Called every tick to dissipate heat
-     */
-    void iterate();
+    void applyHeat(double heat);
 }

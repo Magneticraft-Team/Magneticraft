@@ -52,6 +52,7 @@ class BlockBuilder {
     var onUpdateTick: ((OnUpdateTickArgs) -> Unit)? = null
     var collisionBox: ((CollisionBoxArgs) -> AABB?)? = null
     var shouldSideBeRendered: ((ShouldSideBeRendererArgs) -> Boolean)? = null
+    var onEntityCollidedWithBlock: ((OnEntityCollidedWithBlockArgs) -> Unit)? = null
 
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
@@ -117,6 +118,7 @@ class BlockBuilder {
             collisionBox = this@BlockBuilder.collisionBox
             shouldSideBeRendered_ = this@BlockBuilder.shouldSideBeRendered
             tickRate_ = this@BlockBuilder.tickRate
+            onEntityCollidedWithBlock = this@BlockBuilder.onEntityCollidedWithBlock
         }
         return block
     }
@@ -157,6 +159,7 @@ class BlockBuilder {
         newBuilder.onUpdateTick = onUpdateTick
         newBuilder.shouldSideBeRendered = shouldSideBeRendered
         newBuilder.tickRate = tickRate
+        newBuilder.onEntityCollidedWithBlock = onEntityCollidedWithBlock
 
         func(newBuilder)
 

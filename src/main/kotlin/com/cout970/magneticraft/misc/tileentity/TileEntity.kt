@@ -2,7 +2,10 @@ package com.cout970.magneticraft.misc.tileentity
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
+import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
+import com.cout970.magneticraft.api.internal.heat.HeatConnection
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.tileentity.core.TileBase
 import net.minecraft.tileentity.TileEntity
@@ -42,8 +45,8 @@ inline fun <reified T : TileEntity> IBlockAccess.getTile(pos: BlockPos): T? {
 
 operator fun Pair<BlockPos, BlockPos>.contains(pos: BlockPos): Boolean {
     return pos.x >= first.x && pos.x <= second.x &&
-           pos.y >= first.y && pos.y <= second.y &&
-           pos.z >= first.z && pos.z <= second.z
+            pos.y >= first.y && pos.y <= second.y &&
+            pos.z >= first.z && pos.z <= second.z
 }
 
 @Suppress("LoopToCallChain")
@@ -70,10 +73,22 @@ fun tryConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
                otherHandler: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?) {
 
     if (thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
-        otherHandler.canConnect(otherNode, thisHandler, thisNode, side?.opposite)) {
+            otherHandler.canConnect(otherNode, thisHandler, thisNode, side?.opposite)) {
 
         val connection = ElectricConnection(thisNode, otherNode)
         thisHandler.addConnection(connection, side, true)
         otherHandler.addConnection(connection, side?.opposite, false)
+    }
+}
+
+fun tryConnect(thisHandler: IHeatNodeHandler, thisNode: IHeatNode,
+               otherHandler: IHeatNodeHandler, otherNode: IHeatNode, side: EnumFacing) {
+
+    if (thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
+            otherHandler.canConnect(otherNode, thisHandler, thisNode, side.opposite)) {
+
+        val connection = HeatConnection(thisNode, otherNode)
+        thisHandler.addConnection(connection, side, true)
+        otherHandler.addConnection(connection, side.opposite, false)
     }
 }

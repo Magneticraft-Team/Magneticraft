@@ -16,6 +16,12 @@ public interface IHeatConnection {
     IHeatNode getSecondNode();
 
     /**
+     * This distance is multiplied by the resistance of the nodes to get the resistance of this connection
+     * @return The distance between the two nodes
+     */
+    double getSeparationDistance();
+
+    /**
      * This function balances the heat between the two nodes
      * This should be called every tick and only in the server side
      */

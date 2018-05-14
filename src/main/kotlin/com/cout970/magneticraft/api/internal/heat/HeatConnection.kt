@@ -2,6 +2,8 @@ package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.util.vector.length
+import com.cout970.magneticraft.util.vector.minus
 
 /**
  * Created by cout970 on 11/06/2016.
@@ -14,22 +16,16 @@ open class HeatConnection(
     override fun getFirstNode() = firstNode
     override fun getSecondNode() = secondNode
 
+    override fun getSeparationDistance() = (firstNode.pos - secondNode.pos).length
+
     override fun iterate() {
-        //Use the lowest conductivity.
-        val minConductivity = Math.min(firstNode.conductivity, secondNode.conductivity)
-        if (minConductivity <= 0) return
-        //Heat moving in the other direction is handled in the other entity
-        if (firstNode.temperature > secondNode.temperature) {
-            val tempDiff = Math.abs(firstNode.temperature - secondNode.temperature)
-            var heatTransfer = Math.floor(tempDiff * minConductivity)
-            //simulated, this is used to get the min between
-            //the amount that 'second' can accept and the amount that 'first' can lose
-            heatTransfer = secondNode.applyHeat(heatTransfer, true)
-            heatTransfer = firstNode.applyHeat(-heatTransfer, true)
-            //no simulated
-            secondNode.applyHeat(heatTransfer, false)
-            firstNode.applyHeat(-heatTransfer, false)
-        }
+
+        val conductivity = 1 / (1 / firstNode.conductivity + 1 / secondNode.conductivity)
+        val tempDiff = firstNode.temperature - secondNode.temperature
+        val heatTransfer = -conductivity * tempDiff / separationDistance
+
+        secondNode.applyHeat(-heatTransfer)
+        firstNode.applyHeat(heatTransfer)
     }
 
     override fun equals(other: Any?): Boolean {

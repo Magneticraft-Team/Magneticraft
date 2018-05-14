@@ -66,6 +66,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var onUpdateTick: ((OnUpdateTickArgs) -> Unit)? = null
     var collisionBox: ((CollisionBoxArgs) -> AABB?)? = null
     var shouldSideBeRendered_: ((ShouldSideBeRendererArgs) -> Boolean)? = null
+    var onEntityCollidedWithBlock: ((OnEntityCollidedWithBlockArgs) -> Unit)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -163,7 +164,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         return onActivated?.invoke(
                 OnActivatedArgs(worldIn, pos, state, playerIn, hand, heldItem, side,
                         vec3Of(hitX, hitY, hitZ)))
-               ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ)
+                ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ)
     }
 
     override fun damageDropped(state: IBlockState): Int {
@@ -281,11 +282,15 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
                                       side: EnumFacing): Boolean {
 
         return shouldSideBeRendered_?.invoke(ShouldSideBeRendererArgs(state, blockAccess, pos, side))
-               ?: super.shouldSideBeRendered(state, blockAccess, pos, side)
+                ?: super.shouldSideBeRendered(state, blockAccess, pos, side)
     }
 
     override fun tickRate(worldIn: World?): Int {
         return tickRate_
+    }
+
+    override fun onEntityCollidedWithBlock(worldIn: World, pos: BlockPos, state: IBlockState, entityIn: Entity) {
+        onEntityCollidedWithBlock?.invoke(OnEntityCollidedWithBlockArgs(worldIn, pos, state, entityIn))
     }
 }
 
@@ -324,3 +329,6 @@ data class CollisionBoxArgs(val state: IBlockState, val world: IBlockAccess, val
 
 data class ShouldSideBeRendererArgs(val state: IBlockState, val blockAccess: IBlockAccess, val pos: BlockPos,
                                     val side: EnumFacing)
+
+data class OnEntityCollidedWithBlockArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState,
+                                         val entityIn: Entity)

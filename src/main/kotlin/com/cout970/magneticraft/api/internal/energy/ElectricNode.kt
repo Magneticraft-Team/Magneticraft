@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 
 
@@ -35,6 +36,7 @@ open class ElectricNode(
     }
 
     override fun getVoltage() = voltage
+
     fun setVoltage(v: Double) {
         voltage = v
     }
@@ -88,7 +90,7 @@ open class ElectricNode(
         amperage = nbt.getDouble("A")
     }
 
-    override fun serializeNBT() = NBTTagCompound().apply {
+    override fun serializeNBT() = newNbt {
         setDouble("V", voltage)
         setDouble("A", amperage)
     }

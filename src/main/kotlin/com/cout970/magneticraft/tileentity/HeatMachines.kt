@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
+import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -61,3 +63,25 @@ class TileSteamBoiler : TileBase(), ITickable {
         super.update()
     }
 }
+
+@RegisterTileEntity("heat_pipe")
+class TileHeatPipe : TileBase(), ITickable {
+
+    val heatNode = HeatNode(ref)
+
+    val heatModule = ModuleHeat(listOf(heatNode))
+
+    init {
+        initModules(heatModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+
+        if (Debug.DEBUG) {
+            sendUpdateToNearPlayers()
+        }
+    }
+}
+

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
@@ -274,8 +275,10 @@ class TileElectricHeater : TileBase(), ITickable {
 class TileRfHeater : TileBase(), ITickable {
 
     val storage = RfStorage(80_000)
+    val node = HeatNode(ref)
 
     val rfModule = ModuleRf(storage)
+    val heatModule = ModuleHeat(listOf(node))
 
     val electricHeaterModule = ModuleElectricHeater(object : IMachineEnergyInterface {
         override fun getSpeed(): Double = 1.0
@@ -285,6 +288,7 @@ class TileRfHeater : TileBase(), ITickable {
         }
 
         override fun useEnergy(amount: Double) {
+            node.applyHeat(amount)
             storage.extractEnergy(amount.toInt(), false)
         }
     })
@@ -297,7 +301,7 @@ class TileRfHeater : TileBase(), ITickable {
     }
 
     init {
-        initModules(electricHeaterModule, rfModule, updateBlockstate)
+        initModules(electricHeaterModule, rfModule, updateBlockstate, heatModule)
     }
 
     override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState, newSate: IBlockState): Boolean {

@@ -10,6 +10,7 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.heat.IHeatConnection
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.tool.IGear
 import com.cout970.magneticraft.computer.FloppyDisk
@@ -70,8 +71,8 @@ var ITEM_GEAR: Capability<IGear>? = null
  * This is called on the server and the client at preInit
  */
 fun registerCapabilities() {
-    CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
-    CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultNodeProvider() })
+    CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage(), { DefaultElectricNodeProvider() })
+    CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultHeatNodeProvider() })
     CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
     CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage(), { DefaultGear() })
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage(), {
@@ -130,7 +131,7 @@ class EmptyStorage<T> : Capability.IStorage<T> {
 /**
  * Default implementation of API interfaces, used to register Capabilities
  */
-class DefaultNodeProvider : INodeHandler, IElectricNodeHandler, IHeatNodeHandler {
+class DefaultElectricNodeProvider : INodeHandler, IElectricNodeHandler {
 
     override fun getNode(id: NodeID): INode? = null
     override fun getNodes(): List<INode> = listOf()
@@ -148,8 +149,24 @@ class DefaultNodeProvider : INodeHandler, IElectricNodeHandler, IHeatNodeHandler
 
     override fun addConnection(connection: IElectricConnection?, side: EnumFacing?, output: Boolean) = Unit
     override fun removeConnection(connection: IElectricConnection?) = Unit
-    override fun getConnections(): MutableList<IHeatConnection> = mutableListOf()
-    override fun addConnection(connection: IHeatConnection?) = Unit
+}
+
+class DefaultHeatNodeProvider : INodeHandler, IHeatNodeHandler {
+
+    override fun getNode(id: NodeID): INode? = null
+    override fun getNodes(): List<INode> = listOf()
+    override fun getRef(): ITileRef {
+        throw NotImplementedError("DefaultNodeProvider doesn't have a parent TileEntity")
+    }
+
+    override fun getInputConnections(): MutableList<IHeatConnection> = mutableListOf()
+    override fun getOutputConnections(): MutableList<IHeatConnection> = mutableListOf()
+
+    override fun canConnect(thisNode: IHeatNode?, other: IHeatNodeHandler?, otherNode: IHeatNode?, side: EnumFacing): Boolean {
+        return false
+    }
+
+    override fun addConnection(connection: IHeatConnection?, side: EnumFacing, output: Boolean) = Unit
     override fun removeConnection(connection: IHeatConnection?) = Unit
 }
 
