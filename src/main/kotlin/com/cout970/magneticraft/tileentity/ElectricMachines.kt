@@ -288,7 +288,6 @@ class TileRfHeater : TileBase(), ITickable {
         }
 
         override fun useEnergy(amount: Double) {
-            node.applyHeat(amount)
             storage.extractEnergy(amount.toInt(), false)
         }
     })

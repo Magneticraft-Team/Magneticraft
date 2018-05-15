@@ -88,8 +88,9 @@ object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
         GlStateManager.color(1f, 1f, 1f)
 
         if (Debug.DEBUG) {
-            Utilities.renderFloatingLabel("U: %.2f".format(te.heatNode.internalEnergy), vec3Of(0, 1, 0))
-            Utilities.renderFloatingLabel("%.2f".format(te.heatNode.temperature.toCelsius()), vec3Of(0, 1.25, 0))
+//            Utilities.renderFloatingLabel("U: %.2f".format(te.heatNode.internalEnergy), vec3Of(0, 1, 0))
+//            Utilities.renderFloatingLabel("%.2f".format(te.heatNode.temperature.toCelsius()), vec3Of(0, 1.25, 0))
+            Utilities.renderFloatingLabel(te.heatNode.temperature.toCelsius().toInt().toString(), vec3Of(0, 1.25, 0))
         }
     }
 

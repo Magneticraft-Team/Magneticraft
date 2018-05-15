@@ -35,6 +35,7 @@ object HeatMachines : IBlockMaker {
     lateinit var combustionChamber: BlockBase private set
     lateinit var steamBoiler: BlockBase private set
     lateinit var heatPipe: BlockBase private set
+    lateinit var insulatedHeatPipe: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -86,7 +87,7 @@ object HeatMachines : IBlockMaker {
                     "model" to resource("models/block/mcx/iron_pipe.mcx"),
                     "inventory" to resource("models/block/mcx/iron_pipe.mcx")
             )
-            boundingBox = { pipeBoundingBox(it.source, it.pos) }
+            boundingBox = { pipeBoundingBox(it.source, it.pos, 4) }
             onActivated = CommonMethods::delegateToModule
             onEntityCollidedWithBlock = func@{
                 val entity = it.entityIn as? EntityLivingBase ?: return@func
@@ -111,10 +112,23 @@ object HeatMachines : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe)
+        insulatedHeatPipe = builder.withName("heat_pipe").copy {
+            factory = factoryOf(::TileHeatPipe)
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/iron_pipe.mcx"),
+                    "inventory" to resource("models/block/mcx/iron_pipe.mcx")
+            )
+            boundingBox = { pipeBoundingBox(it.source, it.pos, 3) }
+            onActivated = CommonMethods::delegateToModule
+        }.build()
+
+        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe)
     }
 
-    fun pipeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {
+    // size is (8 - realSize)
+    fun pipeBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
         val (x, y, z) = pos
 
         val renderUp = checkPipe(world, BlockPos(x, y + 1, z), EnumFacing.DOWN)
@@ -126,16 +140,16 @@ object HeatMachines : IBlockMaker {
 
         val list = mutableListOf<AABB>()
 
-        list += vec3Of(4.px) toAABBWith vec3Of(1 - 4.px)
+        list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
 
-        if (renderDown) list += vec3Of(4.px, 0, 4.px) toAABBWith vec3Of(1 - 4.px, 4.px, 1 - 4.px)
-        if (renderUp) list += vec3Of(4.px, 1 - 4.px, 4.px) toAABBWith vec3Of(1 - 4.px, 1, 1 - 4.px)
+        if (renderDown) list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
+        if (renderUp) list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
 
-        if (renderNorth) list += vec3Of(4.px, 4.px, 0) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 4.px)
-        if (renderSouth) list += vec3Of(4.px, 4.px, 1 - 4.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1)
+        if (renderNorth) list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
+        if (renderSouth) list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
 
-        if (renderWest) list += vec3Of(0, 4.px, 4.px) toAABBWith vec3Of(4.px, 1 - 4.px, 1 - 4.px)
-        if (renderEast) list += vec3Of(1 - 4.px, 4.px, 4.px) toAABBWith vec3Of(1, 1 - 4.px, 1 - 4.px)
+        if (renderWest) list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
+        if (renderEast) list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
 
         return list
     }
