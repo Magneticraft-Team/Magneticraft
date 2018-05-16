@@ -1,11 +1,7 @@
 package com.cout970.magneticraft.gui.client.components.bars
 
-import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.gui.ValueAverage
-import com.cout970.magneticraft.misc.gui.formatHeat
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.WATER_BOILING_POINT
 import com.cout970.magneticraft.util.clamp
 
 val ZERO = { 0.0 }
@@ -30,8 +26,6 @@ class StaticBarProvider(val minVal: Double, val maxVal: Double, callback: () -> 
 fun TimedCraftingProcess.toBarProvider() = CallbackBarProvider(this::timer, this::limit, ZERO)
 fun ValueAverage.toBarProvider(max: Number) = CallbackBarProvider(this::storage, { max }, ZERO)
 
-fun IHeatNode.toBarProvider() = CallbackBarProvider(this::getTemperature, ::WATER_BOILING_POINT, ::STANDARD_AMBIENT_TEMPERATURE)
-
 
 fun CallbackBarProvider.toPercentText(prefix: String, postfix: String = "%") = {
     listOf("$prefix${(getLevel() * 100.0).toInt()}$postfix")
@@ -47,10 +41,6 @@ fun CallbackBarProvider.toFluidPerTick(prefix: String = "") = {
 
 fun CallbackBarProvider.toEnergyText(prefix: String = "", postfix: String = "") = {
     listOf("$prefix${String.format("%.2fW", callback())}$postfix")
-}
-
-fun CallbackBarProvider.toHeatText(prefix: String = "T: ", postfix: String = "") = {
-    listOf("$prefix${formatHeat(callback().toDouble())}$postfix")
 }
 
 fun CallbackBarProvider.toHeatPerTickText(prefix: String = "Heat: ", postfix: String = "W") = {

@@ -106,11 +106,10 @@ fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.ru
 
     val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
     val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
-    val heat = tile.heatNode.toBarProvider()
 
     +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toEnergyText())
     +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
-    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toHeatText())
+    +CompHeatBar(tile.heatNode, Vec2d(107, 17))
 }
 
 fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.run {
@@ -124,9 +123,8 @@ fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.run {
 
     val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
     val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
-    val heat = tile.node.toBarProvider()
 
     +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toIntText(postfix = " RF/t"))
     +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
-    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toHeatText())
+    +CompHeatBar(tile.node, Vec2d(107, 17))
 }

@@ -95,15 +95,14 @@ fun guiSolarTower(gui: GuiBase, container: ContainerSolarTower) = gui.run {
     val texture = guiTexture("solar_tower")
 
     +CompBackground(texture)
+    +CompHeatBar(tile.node, Vec2d(31, 17))
 
     +buttonOf(pos = vec2Of(108, 48), uv = vec2Of(16, 166), listener = container::onClick)
 
     val limit = tile.steamBoilerModule.maxSteamProduction
     val prod = tile.steamBoilerModule.production.toBarProvider(limit)
     val heatReceived = tile.solarTowerModule.production.toBarProvider(limit * ConversionTable.STEAM_TO_J)
-    val heat = tile.node.toBarProvider()
 
-    +CompVerticalBar(heat, 2, Vec2d(31, 17), heat.toHeatText())
     +CompVerticalBar(heatReceived, 2, Vec2d(42, 16), heatReceived.toIntText("Heat received: ", "W"))
     +CompVerticalBar(prod, 3, Vec2d(53, 16), prod.toIntText("Steam production: ", "mB/t"))
 
