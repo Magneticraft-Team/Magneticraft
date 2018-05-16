@@ -60,6 +60,7 @@ class ModuleHeat(
         if (container.shouldTick(40)) {
             updateNormalConnections()
             onUpdateConnections(this)
+            container.sendUpdateToNearPlayers()
         }
     }
 

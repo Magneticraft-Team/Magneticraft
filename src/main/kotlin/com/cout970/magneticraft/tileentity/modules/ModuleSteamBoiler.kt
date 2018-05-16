@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.api.internal.heat.tempToEnergy
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.ValueAverage
@@ -8,6 +10,7 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.ConversionTable
+import com.cout970.magneticraft.util.fromCelsiusToKelvin
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 
@@ -16,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack
  */
 
 class ModuleSteamBoiler(
+        val node: IHeatNode,
         val inputTank: Tank,
         val outputTank: Tank,
         val heatCapacity: Float,
@@ -26,14 +30,8 @@ class ModuleSteamBoiler(
     override lateinit var container: IModuleContainer
     val maxWaterPerTick = (maxProduction / ConversionTable.WATER_TO_STEAM).toInt()
     val production = ValueAverage()
-    var heatUnits = 0f
 
     val maxSteamProduction = (maxWaterPerTick * ConversionTable.WATER_TO_STEAM).toInt()
-
-    fun applyHeat(heat: Float) {
-        if (heat + heatUnits > heatCapacity) return
-        heatUnits += heat
-    }
 
     override fun update() {
         if (world.isClient) return
@@ -46,8 +44,10 @@ class ModuleSteamBoiler(
         val spaceLimit = (outputTank.capacity - outputTank.fluidAmount) / ConversionTable.WATER_TO_STEAM.toInt()
         if (spaceLimit <= 0) return
 
-        val heatLimit = (heatUnits * ConversionTable.HEAT_TO_STEAM / ConversionTable.WATER_TO_STEAM).toInt()
-        if (heatLimit <= 0) return
+        if (node.temperature < 100.fromCelsiusToKelvin()) return
+
+        val heatEnergy = tempToEnergy(node, node.temperature - 100.fromCelsiusToKelvin())
+        val heatLimit = (heatEnergy / ConversionTable.STEAM_TO_J / ConversionTable.WATER_TO_STEAM).toInt()
 
         val water = minOf(minOf(waterLimit, spaceLimit), minOf(maxWaterPerTick, heatLimit))
         if (water <= 0) return
@@ -59,7 +59,7 @@ class ModuleSteamBoiler(
         inputTank.drainInternal(water, true)
         outputTank.fillInternal(FluidStack(fluid, steam), true)
         production += steam
-        heatUnits -= (steam / ConversionTable.HEAT_TO_STEAM).toInt()
+        node.applyHeat(-steam * ConversionTable.STEAM_TO_J)
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {

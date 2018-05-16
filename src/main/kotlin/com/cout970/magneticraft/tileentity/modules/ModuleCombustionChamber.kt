@@ -1,27 +1,21 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.common.core.DATA_ID_BURNING_TIME
-import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MAX_BURNING_TIME
 import com.cout970.magneticraft.integration.ItemHolder
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.withSize
-import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
-import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.util.ConversionTable.FUEL_TO_HEAT
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.WATER_BOILING_POINT
-import com.cout970.magneticraft.util.add
-import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.util.*
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
@@ -35,6 +29,7 @@ import net.minecraft.util.EnumParticleTypes
  * Created by cout970 on 2017/07/13.
  */
 class ModuleCombustionChamber(
+        val node: IHeatNode,
         val inventory: Inventory,
         override val name: String = "module_combustion_chamber"
 ) : IModule, IOnActivated {
@@ -42,14 +37,11 @@ class ModuleCombustionChamber(
     override lateinit var container: IModuleContainer
     var burningTime = 0
     var maxBurningTime = 0
-    var heat = STANDARD_AMBIENT_TEMPERATURE.toFloat()
     var doorOpen = false
 
     companion object {
         @JvmStatic
-        val HEAT_RISING_SPEED = 1f
-        @JvmStatic
-        val HEAT_FALLING_SPEED = 0.25f
+        val MAX_HEAT = 600.fromCelsiusToKelvin()
     }
 
     override fun onActivated(args: OnActivatedArgs): Boolean {
@@ -62,10 +54,10 @@ class ModuleCombustionChamber(
 
         val index = boxes.indexOfFirst { it.isHitBy(args.hit) }
         if (index != 2) {
-            if (Config.allowCombustionChamberGui) {
-                return CommonMethods.openGui(args)
+            return if (Config.allowCombustionChamberGui) {
+                CommonMethods.openGui(args)
             } else {
-                return false
+                false
             }
         } else {
             if (doorOpen && isValidFuel(args.heldItem)) {
@@ -107,25 +99,22 @@ class ModuleCombustionChamber(
             if (burningTime > maxBurningTime) {
                 maxBurningTime = 0
                 burningTime = 0
+
             } else {
-                if (heat >= WATER_BOILING_POINT - 1) {
+                if (node.temperature < MAX_HEAT) {
                     val speed = ((if (doorOpen) 0.5f else 1f) * Config.combustionChamberMaxSpeed.toFloat()).toInt()
                     burningTime += speed
-                    getBoiler()?.applyHeat(FUEL_TO_HEAT.toFloat() * speed)
-                } else {
-                    heat += HEAT_RISING_SPEED
+                    node.applyHeat(ConversionTable.FUEL_TO_J * speed)
                 }
             }
         }
         if (maxBurningTime <= 0) {
             val consumed = consumeFuel()
-            if (!consumed && heat > STANDARD_AMBIENT_TEMPERATURE) {
-                heat -= HEAT_FALLING_SPEED
+            if (!consumed && node.temperature > STANDARD_AMBIENT_TEMPERATURE) {
+                node.applyHeat(-10.0)
             }
         }
     }
-
-    fun getBoiler(): ModuleSteamBoiler? = world.getModule<ModuleSteamBoiler>(pos.up())
 
     fun consumeFuel(): Boolean {
         maxBurningTime = 0
@@ -153,22 +142,19 @@ class ModuleCombustionChamber(
     override fun serializeNBT(): NBTTagCompound = newNbt {
         add("burningTime", burningTime)
         add("maxBurningTime", maxBurningTime)
-        add("heat", heat)
         add("doorOpen", doorOpen)
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         burningTime = nbt.getInteger("burningTime")
         maxBurningTime = nbt.getInteger("maxBurningTime")
-        heat = nbt.getFloat("heat")
         doorOpen = nbt.getBoolean("doorOpen")
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(
                 IntSyncVariable(DATA_ID_BURNING_TIME, { burningTime }, { burningTime = it }),
-                IntSyncVariable(DATA_ID_MAX_BURNING_TIME, { maxBurningTime }, { maxBurningTime = it }),
-                FloatSyncVariable(DATA_ID_MACHINE_HEAT, { heat }, { heat = it })
+                IntSyncVariable(DATA_ID_MAX_BURNING_TIME, { maxBurningTime }, { maxBurningTime = it })
         )
     }
 }

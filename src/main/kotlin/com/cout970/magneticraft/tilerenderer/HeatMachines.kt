@@ -9,13 +9,12 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileCombustionChamber
 import com.cout970.magneticraft.tileentity.TileHeatPipe
+import com.cout970.magneticraft.tileentity.TileHeatSink
 import com.cout970.magneticraft.tileentity.TileSteamBoiler
 import com.cout970.magneticraft.tilerenderer.core.*
-import com.cout970.magneticraft.util.fromCelsiusToKelvin
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumFacing
 
 /**
@@ -62,40 +61,39 @@ object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
     )
 
     override fun renderModels(models: List<ModelCache>, te: TileHeatPipe) {
+        Utilities.withHeatColor(te.heatNode.temperature, vec3Of(0.5)) {
+            models[0].renderTextured()
 
-        val (r, g, b) = Utilities.tempToRGB(te.heatNode.temperature.toFloat())
+            sides.forEach {
+                val tile = te.world.getTileEntity(te.pos + it.first) ?: return@forEach
 
-        val heatVisibility = (te.heatNode.temperature - 150.fromCelsiusToKelvin()) / 300
+                FLUID_HANDLER!!.fromTile(tile, it.first.opposite)?.let { _ ->
+                    models[it.second].render()
+                }
 
-        GlStateManager.color(
-                interpolate(heatVisibility, 0.5, r / 255.0).toFloat(),
-                interpolate(heatVisibility, 0.5, g / 255.0).toFloat(),
-                interpolate(heatVisibility, 0.5, b / 255.0).toFloat()
-        )
-        models[0].renderTextured()
-
-        sides.forEach {
-            val tile = te.world.getTileEntity(te.pos + it.first) ?: return@forEach
-
-            FLUID_HANDLER!!.fromTile(tile, it.first.opposite)?.let { _ ->
-                models[it.second].render()
-            }
-
-            if (tile.getOrNull(HEAT_NODE_HANDLER, it.first.opposite) != null) {
-                models[it.second].render()
+                if (tile.getOrNull(HEAT_NODE_HANDLER, it.first.opposite) != null) {
+                    models[it.second].render()
+                }
             }
         }
-        GlStateManager.color(1f, 1f, 1f)
-
         if (Debug.DEBUG) {
-//            Utilities.renderFloatingLabel("U: %.2f".format(te.heatNode.internalEnergy), vec3Of(0, 1, 0))
-//            Utilities.renderFloatingLabel("%.2f".format(te.heatNode.temperature.toCelsius()), vec3Of(0, 1.25, 0))
+//            Utilities.renderFloatingLabel("U: %.2f J".format(te.heatNode.internalEnergy), vec3Of(0, 1, 0))
+//            Utilities.renderFloatingLabel("T: %.2f C".format(te.heatNode.temperature.toCelsius()), vec3Of(0, 1.25, 0))
             Utilities.renderFloatingLabel(te.heatNode.temperature.toCelsius().toInt().toString(), vec3Of(0, 1.25, 0))
         }
     }
+}
 
-    fun interpolate(delta: Double, a: Double, b: Double): Double {
-        val d = delta.coerceIn(0.0, 1.0)
-        return b * d + a * (1 - d)
+
+@RegisterRenderer(TileHeatSink::class)
+object TileRendererHeatSink : TileRendererSimple<TileHeatSink>(
+        modelLocation = modelOf(HeatMachines.heatSink)
+) {
+
+    override fun renderModels(models: List<ModelCache>, te: TileHeatSink) {
+        Utilities.facingRotate(te.facing)
+        Utilities.withHeatColor(te.heatNode.temperature, vec3Of(0.5)) {
+            models[0].renderTextured()
+        }
     }
 }

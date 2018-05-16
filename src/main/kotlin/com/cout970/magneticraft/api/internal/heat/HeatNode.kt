@@ -35,12 +35,8 @@ class HeatNode(
     }
 
     fun setTemperature(temp: Double) {
-
         val temperature = max(0.0, temp)
-        val moles = mass * 1000 / molarMass
-
-        // U = T * 3/2 * nR
-        internalEnergy = (3.0 / 2.0) * temperature * moles * IHeatNode.R
+        internalEnergy = tempToEnergy(this, temperature)
     }
 
     override fun getInternalEnergy(): Double = internalEnergy
@@ -86,4 +82,11 @@ class HeatNode(
     override fun toString(): String {
         return "HeatNode(mass=$mass, internalEnergy=$internalEnergy)"
     }
+}
+
+fun tempToEnergy(node: IHeatNode, temp: Double): Double {
+    val moles = node.mass * 1000 / node.molarMass
+
+    // U = T * 3/2 * nR
+    return (3.0 / 2.0) * temp * moles * IHeatNode.R
 }

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.SyncVariable
@@ -13,8 +14,8 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 
 class ModuleSolarTower(
+        val node: IHeatNode,
         val facingGetter: () -> EnumFacing,
-        val steamBoilerModule: ModuleSteamBoiler,
         override val name: String = "module_solar_tower"
 ) : IModule {
 
@@ -35,7 +36,7 @@ class ModuleSolarTower(
 
     fun applyHeat(heat: Float) {
         production += heat
-        steamBoilerModule.applyHeat(heat)
+        node.applyHeat(heat.toDouble())
     }
 
     fun orientateNearMirrors() {

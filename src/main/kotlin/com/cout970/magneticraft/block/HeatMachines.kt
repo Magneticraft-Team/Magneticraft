@@ -7,11 +7,13 @@ import com.cout970.magneticraft.block.core.CommonMethods
 import com.cout970.magneticraft.block.core.IBlockMaker
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileCombustionChamber
 import com.cout970.magneticraft.tileentity.TileHeatPipe
+import com.cout970.magneticraft.tileentity.TileHeatSink
 import com.cout970.magneticraft.tileentity.TileSteamBoiler
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
@@ -36,6 +38,7 @@ object HeatMachines : IBlockMaker {
     lateinit var steamBoiler: BlockBase private set
     lateinit var heatPipe: BlockBase private set
     lateinit var insulatedHeatPipe: BlockBase private set
+    lateinit var heatSink: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -112,7 +115,7 @@ object HeatMachines : IBlockMaker {
             }
         }.build()
 
-        insulatedHeatPipe = builder.withName("heat_pipe").copy {
+        insulatedHeatPipe = builder.withName("insulated_heat_pipe").copy {
             factory = factoryOf(::TileHeatPipe)
             generateDefaultItemModel = false
             hasCustomModel = true
@@ -124,7 +127,25 @@ object HeatMachines : IBlockMaker {
             onActivated = CommonMethods::delegateToModule
         }.build()
 
-        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe)
+        heatSink = builder.withName("heat_sink").copy {
+            states = CommonMethods.Facing.values().toList()
+            factory = factoryOf(::TileHeatSink)
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/heat_sink.mcx"),
+                    "inventory" to resource("models/block/mcx/heat_sink.mcx")
+            )
+            alwaysDropDefault = true
+            onBlockPlaced = CommonMethods::placeWithOppositeFacing
+            pickBlock = CommonMethods::pickDefaultBlock
+            boundingBox = {
+                val f = it.state[CommonMethods.PROPERTY_FACING] ?: CommonMethods.Facing.DOWN
+                listOf(f.facing.rotateBox(vec3Of(0.5), AABB(0.0, 0.0, 0.0, 1.0, 1.0, 5f.px)))
+            }
+        }.build()
+
+        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe, heatSink)
     }
 
     // size is (8 - realSize)

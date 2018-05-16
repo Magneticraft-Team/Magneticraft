@@ -5,7 +5,6 @@ import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
-import com.cout970.magneticraft.util.ConversionTable
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -101,15 +100,14 @@ fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.ru
     val texture = guiTexture("wind_turbine")
 
     +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(64, 17))
+    +CompElectricBar(tile.electricNode, Vec2d(64, 17))
     +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), texture)
 
-    val maxProduction = Config.electricHeaterMaxHeatPerTick
-    val maxConsumption = maxProduction * ConversionTable.HEAT_TO_FE * ConversionTable.FE_TO_J
+    val limit = Config.electricHeaterMaxProduction
 
-    val consumption = StaticBarProvider(0.0, maxConsumption, tile.electricHeaterModule.consumption::storage)
-    val production = StaticBarProvider(0.0, maxProduction, tile.electricHeaterModule.production::storage)
-    val heat = StaticBarProvider(0.0, 100.0, tile.electricHeaterModule.heat::toCelsius)
+    val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
+    val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
+    val heat = StaticBarProvider(0.0, 100.0, tile.heatNode.temperature::toCelsius)
 
     +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toEnergyText())
     +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
@@ -123,14 +121,13 @@ fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.run {
     +CompBackground(texture)
     +CompRfBar(tile.storage, Vec2d(78, 17))
 
-    val maxProduction = Config.electricHeaterMaxHeatPerTick
-    val maxConsumption = maxProduction * ConversionTable.HEAT_TO_FE * ConversionTable.FE_TO_J
+    val limit = Config.electricHeaterMaxProduction
 
-    val consumption = StaticBarProvider(0.0, maxConsumption, tile.electricHeaterModule.consumption::storage)
-    val production = StaticBarProvider(0.0, maxProduction, tile.electricHeaterModule.production::storage)
-    val heat = StaticBarProvider(24.0, 100.0, tile.electricHeaterModule.heat::toCelsius)
+    val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
+    val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
+    val heat = tile.node.toBarProvider()
 
     +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toIntText(postfix = " RF/t"))
     +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
-    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toPercentText("", " Heat"))
+    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toHeatText())
 }

@@ -9,6 +9,7 @@ import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
+import com.cout970.magneticraft.util.fromCelsiusToKelvin
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.split
@@ -258,6 +259,26 @@ object Utilities {
         } + optional
         translate(0.5, 0.5, 0.5)
         rotate(angle, 0f, 1f, 0f)
+        translate(-0.5, -0.5, -0.5)
+    }
+
+    fun facingRotate(facing: EnumFacing) {
+        translate(0.5, 0.5, 0.5)
+        when (facing) {
+            EnumFacing.NORTH -> {
+                rotate(90f, 0f, 1f, 0f)
+                rotate(90f, 0f, 0f, 1f)
+            }
+            EnumFacing.SOUTH -> {
+                rotate(90f, 0f, 1f, 0f)
+                rotate(-90f, 0f, 0f, 1f)
+            }
+            EnumFacing.WEST -> rotate(-90f, 0f, 0f, 1f)
+            EnumFacing.EAST -> rotate(90f, 0f, 0f, 1f)
+            EnumFacing.UP -> rotate(180f, 1f, 0f, 0f)
+            EnumFacing.DOWN -> rotate(0f, 1f, 0f, 0f)
+        }
+
         translate(-0.5, -0.5, -0.5)
     }
 
@@ -517,5 +538,17 @@ object Utilities {
         }
 
         return Triple(Math.round(red).toFloat(), Math.round(green).toFloat(), Math.round(blue).toFloat())
+    }
+
+    fun withHeatColor(temp: Double, color: IVector3, func: () -> Unit) {
+        val (r, g, b) = Utilities.tempToRGB(temp.toFloat())
+        val heatVisibility = ((temp - 150.fromCelsiusToKelvin()) / 300).coerceIn(0.0, 1.0)
+        GlStateManager.color(
+                interpolate(color.x, r / 255.0, heatVisibility).toFloat(),
+                interpolate(color.y, g / 255.0, heatVisibility).toFloat(),
+                interpolate(color.z, b / 255.0, heatVisibility).toFloat()
+        )
+        func()
+        GlStateManager.color(1f, 1f, 1f)
     }
 }

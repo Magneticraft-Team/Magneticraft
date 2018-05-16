@@ -48,8 +48,8 @@ object Config {
             "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Heat produces per tick 1 Heat/t = 2W = 2FE ")
-    var electricHeaterMaxHeatPerTick = 20.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Production (in joules)")
+    var electricHeaterMaxProduction = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber max speed in Fuel per tick")
     var combustionChamberMaxSpeed = 4.0
@@ -91,8 +91,8 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Max Stable Production")
     var thermopileProduction = 20.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick, 1 Heat unit = 1mB/t of steam = 2 RF")
-    var solarMirrorHeatProduction = 8
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick (in Joules)")
+    var solarMirrorHeatProduction = 16
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Pumpjack Max Consumption")
     var pumpjackConsumption = 80.0

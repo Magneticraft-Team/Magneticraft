@@ -42,7 +42,8 @@ object CommonMethods {
             val pos = handler?.getBasePos(args.pos, args.worldIn, args.playerIn, args.side, args.heldItem) ?: args.pos
 
             val te = args.worldIn.getTile<TileBase>(pos) ?: return false
-            val electricModule = te.container.modules.find { it is ModuleElectricity } as? ModuleElectricity ?: return false
+            val electricModule = te.container.modules.find { it is ModuleElectricity } as? ModuleElectricity
+                    ?: return false
 
             electricModule.autoConnectWires = !electricModule.autoConnectWires
             if (!electricModule.autoConnectWires) {
@@ -62,6 +63,10 @@ object CommonMethods {
 
     fun placeWithFacing(it: OnBlockPlacedArgs): IBlockState {
         return it.defaultValue.withProperty(PROPERTY_FACING, Facing.of(it.facing))
+    }
+
+    fun placeWithOppositeFacing(it: OnBlockPlacedArgs): IBlockState {
+        return it.defaultValue.withProperty(PROPERTY_FACING, Facing.of(it.facing.opposite))
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

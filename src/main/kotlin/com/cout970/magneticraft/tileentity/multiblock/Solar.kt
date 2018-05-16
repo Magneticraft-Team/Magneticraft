@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
+import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
@@ -19,18 +20,21 @@ class TileSolarTower : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarTower
 
+    val node = HeatNode(ref)
+
     val waterTank = Tank(8000).apply { clientFluidName = "water" }
     val steamTank = Tank(32000).apply { clientFluidName = "steam" }
 
+    val heatModule = ModuleHeat(listOf(node))
     val fluidModule = ModuleFluidHandler(waterTank, steamTank, capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
 
     val openGuiModule = ModuleOpenGui()
 
-    val steamBoilerModule = ModuleSteamBoiler(waterTank, steamTank, 1200f, 1200)
+    val steamBoilerModule = ModuleSteamBoiler(node, waterTank, steamTank, 1200f, 1200)
 
     val solarTowerModule = ModuleSolarTower(
             facingGetter = { facing },
-            steamBoilerModule = steamBoilerModule
+            node = node
     )
 
     val fluidExportModule = ModuleFluidExporter(steamTank, {
@@ -58,7 +62,7 @@ class TileSolarTower : TileMultiblock(), ITickable {
 
     init {
         initModules(multiblockModule, fluidModule, ioModule, solarTowerModule, steamBoilerModule, openGuiModule,
-                fluidExportModule)
+                fluidExportModule, heatModule)
     }
 
     @DoNotRemove
