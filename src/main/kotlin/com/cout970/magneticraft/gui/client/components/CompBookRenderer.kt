@@ -21,6 +21,7 @@ class CompBookRenderer : IComponent {
     companion object {
         val BACKGROUND = resource("textures/gui/guide/book.png")
         val backgroundSize: IVector2 = vec2Of(280, 186)
+        // TODO
         val book: Book get() = loadBook() //by lazy { loadBook() }
         var currentSection: String = "index"
         var pageIndex = 0

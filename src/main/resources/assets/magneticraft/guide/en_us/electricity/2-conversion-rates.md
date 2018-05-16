@@ -12,4 +12,4 @@
 1 J = Steam 0.5mb 
 Water|1mb = Steam 10mb
 
-Radius of the sun = 695.700 km
+Radius of the sun: 695.700 km

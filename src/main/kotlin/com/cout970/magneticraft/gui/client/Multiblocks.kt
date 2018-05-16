@@ -14,6 +14,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack.Status.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
+import com.cout970.magneticraft.util.ConversionTable
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -97,11 +98,14 @@ fun guiSolarTower(gui: GuiBase, container: ContainerSolarTower) = gui.run {
 
     +buttonOf(pos = vec2Of(108, 48), uv = vec2Of(16, 166), listener = container::onClick)
 
-    val prod = tile.steamBoilerModule.production.toBarProvider(tile.steamBoilerModule.maxSteamProduction)
-    val heat = tile.solarTowerModule.production.toBarProvider(tile.steamBoilerModule.heatCapacity)
+    val limit = tile.steamBoilerModule.maxSteamProduction
+    val prod = tile.steamBoilerModule.production.toBarProvider(limit)
+    val heatReceived = tile.solarTowerModule.production.toBarProvider(limit * ConversionTable.STEAM_TO_J)
+    val heat = tile.node.toBarProvider()
 
-    +CompVerticalBar(prod, 3, Vec2d(53, 16), prod.toIntText("Steam consumption: ", "mB/t"))
-    +CompVerticalBar(heat, 2, Vec2d(42, 16), heat.toIntText("Heat received: ", " Heat/t"))
+    +CompVerticalBar(heat, 2, Vec2d(31, 17), heat.toHeatText())
+    +CompVerticalBar(heatReceived, 2, Vec2d(42, 16), heatReceived.toIntText("Heat received: ", "W"))
+    +CompVerticalBar(prod, 3, Vec2d(53, 16), prod.toIntText("Steam production: ", "mB/t"))
 
     +CompFluidBar(vec2Of(64, 16), texture, vec2Of(0, 166), tile.waterTank)
     +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.steamTank)

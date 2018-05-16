@@ -1,16 +1,18 @@
 ### TODO list
+- fix guide
 - add conveyor belt up/down blocks
 - add insert animation
 - add steam engine animation
 - add sieve animation, particles and sound
 - add grinder particles and sound
 - add flare stack
-- fix pipes collision box and add auto-import
-- add heat system and remove all 'symbolic heat values'
+- fix pipes and add auto-import
 - add gears for steam engine tiers (and add a fucking GUI)
 - change tank model and add auto-export
+- update thermopile
 - add conveyor belt end that drops stuff in chests
 - add wire coil durability and remove auto-connect (make lag)
+- change pumpjack mining mechanic for : amount of oil near = speed of extraction
 
 ### Ideas to add at some point
 - Realistic reactors

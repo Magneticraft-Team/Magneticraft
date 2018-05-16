@@ -9,6 +9,7 @@ This implementation of lisp has the following object types:
 - Function
 - Native Function
 - Cons (Pair/List)
+- Macros
 
 Cons ats as a pair of two values or as a list when the second value is another pair
 

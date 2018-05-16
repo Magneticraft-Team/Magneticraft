@@ -6,7 +6,6 @@ import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.util.guiTexture
-import com.cout970.magneticraft.util.toCelsius
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
 
@@ -107,11 +106,11 @@ fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.ru
 
     val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
     val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
-    val heat = StaticBarProvider(0.0, 100.0, tile.heatNode.temperature::toCelsius)
+    val heat = tile.heatNode.toBarProvider()
 
     +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toEnergyText())
     +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
-    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toPercentText("", " Heat"))
+    +CompVerticalBar(heat, 2, Vec2d(107, 17), heat.toHeatText())
 }
 
 fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.run {

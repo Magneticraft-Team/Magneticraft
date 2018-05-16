@@ -30,7 +30,7 @@ class TileSolarTower : TileMultiblock(), ITickable {
 
     val openGuiModule = ModuleOpenGui()
 
-    val steamBoilerModule = ModuleSteamBoiler(node, waterTank, steamTank, 1200f, 1200)
+    val steamBoilerModule = ModuleSteamBoiler(node, waterTank, steamTank, 1200)
 
     val solarTowerModule = ModuleSolarTower(
             facingGetter = { facing },

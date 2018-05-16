@@ -1,4 +1,5 @@
-*Electricity*
+# Electricity Fundamentals
+
 The mechanics of the energy system tries to imitate the real behaviour of electricity,
 so the formulas I = V/R and W = I*R work and can be used to predict the behaviour of the system
 

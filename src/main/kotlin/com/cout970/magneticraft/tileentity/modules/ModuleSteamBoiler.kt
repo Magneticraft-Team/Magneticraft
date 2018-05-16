@@ -22,7 +22,6 @@ class ModuleSteamBoiler(
         val node: IHeatNode,
         val inputTank: Tank,
         val outputTank: Tank,
-        val heatCapacity: Float,
         val maxProduction: Int,
         override val name: String = "module_steam_boiler"
 ) : IModule {

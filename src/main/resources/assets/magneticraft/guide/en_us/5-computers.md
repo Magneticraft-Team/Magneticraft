@@ -1,6 +1,8 @@
 # Computers
 
-there are computers and mining robots (more types are planned)
+if you are a noob at computers check out the quick [FAQ](computer/0-noobs.md).
+
+There are computers and mining robots (more types are planned)
 The computer is an emulator of a MIPS R3000 processor.
 
 The specs of the computer are:
@@ -16,6 +18,10 @@ and the third loads the bios into the RAM, so basically resets the computer.
 In order to start the computer you need a floppy disk with an operative system or a program, 
 the bios will load the data from the floppy and start the program/OS.
 
-Currently there are WIP programs, [FORTH](5.1-forth.md), [Lisp](5.2-lisp.md), Assembler and as a non-WIP program [Shell](5.3-shell.md.md).
-
+Available systems:
+- [FORTH](1-forth.md)
+- [Lisp](2-lisp.md)
+- [Shell](3-shell.md)
+- Assembler WIP
+- Editor WIP
 

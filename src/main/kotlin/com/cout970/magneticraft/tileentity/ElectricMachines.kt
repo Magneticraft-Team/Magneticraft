@@ -85,6 +85,7 @@ class TileElectricFurnace : TileBase(), ITickable {
     val invModule = ModuleInventory(Inventory(2), capabilityFilter = {
         InventoryCapabilityFilter(it, inputSlots = listOf(0), outputSlots = listOf(1))
     })
+
     val processModule = ModuleElectricProcessing(
             craftingProcess = FurnaceCraftingProcess(invModule, 0, 1),
             storage = storageModule,
