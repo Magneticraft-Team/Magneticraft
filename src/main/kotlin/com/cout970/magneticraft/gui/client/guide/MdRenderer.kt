@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextFormatting
 object MdRenderer {
 
     fun render(doc: MarkdownDocument, pageSize: IVector2, fontHeight: Int, fontWidth: (String) -> Int): List<Page> {
-        val ctx = Context(pageSize, fontHeight, fontWidth)
+        val ctx = Context(pageSize, fontHeight, fontWidth, location = doc.location)
         val txt = doc.root.flatMap { renderTag(ctx, it) }
 
         return txt.groupBy { it.page }.map {
@@ -30,12 +30,9 @@ object MdRenderer {
                 }
             }
             is MdLink -> {
-                val (linkSection, page) = parseUrl(url)
-                // we remove the ".md" suffix of the page Url because
-                // * with .md suffix, in github we can follow the links in the formatted Markdown
-                // * in game we register resources without ".md" suffixes (see removeSuffix(...) call in ./Chapters.kt)
+                val (linkSection, page) = parseUrl(ctx.location, url)
 
-                listOf(LinkTextBox(childs.flatMap { renderTag(ctx, it) }, linkSection.removeSuffix(".md"), page))
+                listOf(LinkTextBox(childs.flatMap { renderTag(ctx, it) }, linkSection, page))
             }
             is MdItalic -> {
                 ctx.prefix += TextFormatting.ITALIC
@@ -86,22 +83,32 @@ object MdRenderer {
         return list
     }
 
-    fun parseUrl(url: String): Pair<String, Int> {
+    fun parseUrl(location: String, url: String): Pair<String, Int> {
         val separator = url.indexOfLast { it == '#' }
 
         val page = if (separator != -1) {
             url.substringAfterLast('#').toIntOrNull() ?: 0
         } else 0
 
-        val urlWithoutPage = if (separator != -1) {
-            url.substringBeforeLast('#')
-        } else url
+        var urlWithoutPage = if (separator != -1) url.substringBeforeLast('#') else url
+        var baseLoc = location
 
-        val slashIndex = urlWithoutPage.indexOfLast { it == '/' }
+        while (urlWithoutPage.startsWith("../")) {
+            val parentIndex = baseLoc.lastIndexOf('/')
+            val index = urlWithoutPage.lastIndexOf("../")
 
-        val section = if (slashIndex == -1) {
-            urlWithoutPage
-        } else urlWithoutPage.substringAfterLast('/')
+            baseLoc = if (parentIndex == -1) "" else baseLoc.substring(0, parentIndex)
+            urlWithoutPage = urlWithoutPage.replaceRange(index, index + 3, "")
+        }
+
+        if (baseLoc.isNotEmpty()) {
+            baseLoc += '/'
+        }
+
+        // we remove the ".md" suffix of the page Url because
+        // * with .md suffix, in github we can follow the links in the formatted Markdown
+        // * in game we register resources without ".md" suffixes (see removeSuffix(...) call in Chapters#loadBook)
+        val section = baseLoc + urlWithoutPage.removeSuffix(".md")
 
         return section to page
     }
@@ -113,7 +120,8 @@ object MdRenderer {
             var lastPosX: Int = 0,
             var lastPosY: Int = 0,
             var prefix: String = "",
-            var page: Int = 0
+            var page: Int = 0,
+            var location: String = ""
     ) {
 
         fun newLine() {

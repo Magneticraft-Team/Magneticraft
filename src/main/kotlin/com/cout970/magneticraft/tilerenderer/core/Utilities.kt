@@ -551,4 +551,12 @@ object Utilities {
         func()
         GlStateManager.color(1f, 1f, 1f)
     }
+
+    fun colorFromRGB(r: Float, g: Float, b: Float): Int {
+        val red = (255 * r).toInt()
+        val green = (255 * g).toInt()
+        val blue = (255 * b).toInt()
+
+        return (0xFF shl 24) or ((red and 0xFF) shl 16) or ((green and 0xFF) shl 8) or (blue and 0xFF)
+    }
 }

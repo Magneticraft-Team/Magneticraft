@@ -8,7 +8,7 @@ The structure has 2 connectors, the blue connector is the water input and orange
 The max production of the tower is 1200 mB of steam per tick, equivalent to 2400 Watts.
 Every solar mirror linked to the tower generates 16 Watts in the form of heat.
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *3, 3, 3* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *3, 3, 3* (x, y, z).
 
 Materials needed:
 - 1 x Solar Tower Blueprint

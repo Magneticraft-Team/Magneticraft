@@ -6,12 +6,14 @@ import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.gui.client.guide.*
+import com.cout970.magneticraft.util.logError
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
 import com.cout970.magneticraft.util.vector.offset
 import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraft.client.renderer.GlStateManager
+import java.util.*
 
 /**
  * Created by cout970 on 2017/08/03.
@@ -21,11 +23,13 @@ class CompBookRenderer : IComponent {
     companion object {
         val BACKGROUND = resource("textures/gui/guide/book.png")
         val backgroundSize: IVector2 = vec2Of(280, 186)
-        // TODO
-        val book: Book get() = loadBook() //by lazy { loadBook() }
+        val scale get() = Config.guideBookScale
+
+        var book: Book = loadBook()
         var currentSection: String = "index"
         var pageIndex = 0
-        val scale get() = Config.guideBookScale
+        val sectionHistory = ArrayDeque<String>()
+        val undoHistory = ArrayDeque<String>()
     }
 
     override val pos: IVector2 = Vec2d.ZERO
@@ -37,6 +41,7 @@ class CompBookRenderer : IComponent {
     val pageOffset get() = 130 * scale
     val textOffset get() = vec2Of(22, 24) * scale
 
+
     override fun init() {
         openSection()
     }
@@ -47,9 +52,30 @@ class CompBookRenderer : IComponent {
         openSection()
     }
 
+    fun goBack() {
+        undoHistory.push(sectionHistory.pop())
+        currentSection = sectionHistory.peek()
+        pageIndex = 0
+        loadPages()
+    }
+
+    fun goForward() {
+        if (undoHistory.isEmpty()) return
+        currentSection = undoHistory.pop()
+        sectionHistory.push(currentSection)
+        pageIndex = 0
+        loadPages()
+    }
+
     fun openSection() {
-        val section = book.sections[currentSection] ?: Section("empty", MarkdownDocument(emptyList()))
-        val doc = section.document
+        sectionHistory.push(currentSection)
+        undoHistory.clear()
+        loadPages()
+    }
+
+    fun loadPages() {
+        book = loadBook()
+        val doc = book.sections[currentSection]?.document ?: errorDocument()
 
         pages = MdRenderer.render(doc, pageSize, gui.fontHelper.FONT_HEIGHT, gui.fontHelper::getStringWidth)
     }
@@ -73,13 +99,6 @@ class CompBookRenderer : IComponent {
         if (pageIndex + 1 in pages.indices) {
             renderPage(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
         }
-
-        if (pageIndex in pages.indices) {
-            checkLinkClick(pages[pageIndex], mouse, gui.pos + textOffset)
-        }
-        if ((pageIndex + 1) in pages.indices) {
-            checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
-        }
     }
 
     override fun onMouseClick(mouse: Vec2d, mouseButton: Int): Boolean {
@@ -94,6 +113,7 @@ class CompBookRenderer : IComponent {
         }
 
         if (currentSection != "index" && mouse in Arrow.INDEX.collisionBox.offset(gui.pos)) {
+            sectionHistory.clear()
             openPage("index", 0)
         }
 
@@ -103,12 +123,24 @@ class CompBookRenderer : IComponent {
                 link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
             }
             if (link != null) {
-                if (link.linkSection in book.sections)
+                if (link.linkSection in book.sections) {
                     openPage(link.linkSection, link.linkPage)
+                } else {
+                    logError("Unable to open page: {}", link.linkSection)
+                }
             }
         }
 
         return false
+    }
+
+    override fun onKeyTyped(typedChar: Char, keyCode: Int): Boolean {
+        when (keyCode) {
+            14 -> goBack()
+            28 -> goForward()
+            else -> return false
+        }
+        return true
     }
 
     fun checkLinkClick(page: Page, mouse: Vec2d, offset: IVector2): LinkTextBox? {

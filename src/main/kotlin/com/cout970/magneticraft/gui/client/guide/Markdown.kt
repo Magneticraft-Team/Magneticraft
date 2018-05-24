@@ -10,7 +10,7 @@ private val bold = """\*\*(.*)\*\*""".toRegex()
 private val italic = """\*(.*)\*""".toRegex()
 private val link = """\[([^\]]*)\]\(([^)]*)\)""".toRegex()
 
-data class MarkdownDocument(val root: List<MdTag>)
+data class MarkdownDocument(val root: List<MdTag>, val location: String)
 
 abstract class MdTag {
     abstract val childs: List<MdTag>

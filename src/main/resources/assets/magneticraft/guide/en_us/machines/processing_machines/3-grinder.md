@@ -6,7 +6,7 @@ ores automatically.
 Each recipe has different duration, for example grinding tungsten to chunks is a lot slower than grinding gold.
 The machine uses 40 Watts to work at full speed.
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *3, 4, 3* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *3, 4, 3* (x, y, z).
 
 Materials needed:
 - 1 x Grinder Blueprint

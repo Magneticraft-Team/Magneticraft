@@ -69,7 +69,7 @@ class TileSteamBoiler : TileBase(), ITickable {
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank)
 
-    val boilerModule = ModuleSteamBoiler(node, waterTank, steamTank, 100f, 20)
+    val boilerModule = ModuleSteamBoiler(node, waterTank, steamTank, 20)
 
     val fluidExportModule = ModuleFluidExporter(steamTank, { listOf(BlockPos(0, 1, 0) to EnumFacing.DOWN) })
     val openGui = ModuleOpenGui()

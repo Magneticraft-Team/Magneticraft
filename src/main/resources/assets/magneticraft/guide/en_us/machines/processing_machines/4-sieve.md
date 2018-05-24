@@ -5,7 +5,7 @@ for example you can filter sand to get golden nuggets and even quartz.
 
 The machine works at full speed with 40 Watts and every recipe has it's own duration.
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *3, 2, 5* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *3, 2, 5* (x, y, z).
 
 Materials needed:
 - 1 x Sieve Blueprint

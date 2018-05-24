@@ -7,7 +7,7 @@ the bottom part of the structure can be used to access the top layer of the bott
 
 To add more storage space right click the structure with chests in the hand.
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *5, 3, 2* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *5, 3, 2* (x, y, z).
 
 Materials needed:
 - 1  x Shelving Unit Blueprint

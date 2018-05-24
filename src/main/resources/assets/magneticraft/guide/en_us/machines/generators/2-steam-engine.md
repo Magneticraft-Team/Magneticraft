@@ -5,7 +5,7 @@ Uses steam to generate electricity, it produces 2 Watts per milibucket of steam 
 
 To generate the steam you will need a [Combustion Chamber](2.1-combustion-chamber.md) and a [Steam Boiler](2.2-steam-boiler.md).
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *3, 4, 4* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *3, 4, 4* (x, y, z).
 
 *NOTE*: it has blocks 1 level below the base block
 

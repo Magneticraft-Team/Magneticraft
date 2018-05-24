@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.gui.client.guide
 
 import com.cout970.magneticraft.util.ResourceList
+import com.cout970.magneticraft.util.logError
 import net.minecraft.client.Minecraft
 
 /**
@@ -29,8 +30,12 @@ fun loadBook(): Book {
             if (text.isEmpty()) return@mapNotNull null
             val name = loc.resourcePath.removePrefix("guide/$lang/").removeSuffix(".md")
 
-            Section(name, MarkdownDocument(parseChildren(text)))
+            val prefix = name.substringBeforeLast('/', "")
+
+            Section(name, MarkdownDocument(parseChildren(text), prefix))
         }
+
+        checkInvalidLinks(sections)
 
         val pages = sections.map { it.name to it }.toMap()
         return Book(pages["index"]!!, pages)
@@ -41,11 +46,34 @@ fun loadBook(): Book {
     }
 }
 
-private fun errorDocument(): MarkdownDocument {
+private fun checkInvalidLinks(sections: List<Section>) {
+
+    val names = sections.map { it.name }.toSet()
+
+    sections.forEach { sec ->
+        val links = getLinks(sec.document.root)
+        val loc = sec.document.location
+
+        links.forEach {
+            val url = MdRenderer.parseUrl(loc, it).first
+            if (url !in names) {
+                logError("Invalid link url: {} at {}", url, sec.name)
+            }
+        }
+    }
+}
+
+private fun getLinks(tags: List<MdTag>): List<String> {
+    val chinkLinks = tags.flatMap { getLinks(it.childs) }
+
+    return chinkLinks + tags.filterIsInstance<MdLink>().map { it.url }
+}
+
+fun errorDocument(): MarkdownDocument {
 
     val tags = listOf(
             MdText("An Error occurred loading the book, please report to the mod author")
     )
 
-    return MarkdownDocument(tags)
+    return MarkdownDocument(tags, "")
 }

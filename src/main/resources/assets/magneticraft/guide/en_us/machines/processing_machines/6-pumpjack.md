@@ -12,7 +12,7 @@ The pumpjack requires 80 Watts to work at full speed.
 
 The best way find oil is to search in places where the coordinates x and z are multiples of 2560.
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *3, 5, 6* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *3, 5, 6* (x, y, z).
 
 Materials needed:
 - 1 x Pumpjack Blueprint

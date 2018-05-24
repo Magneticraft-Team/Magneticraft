@@ -1,6 +1,6 @@
 # Computers
 
-if you are a noob at computers check out the quick [FAQ](computer/0-noobs.md).
+If you are a noob at computers check out the quick [FAQ](computer/0-noobs.md).
 
 There are computers and mining robots (more types are planned)
 The computer is an emulator of a MIPS R3000 processor.
@@ -19,9 +19,9 @@ In order to start the computer you need a floppy disk with an operative system o
 the bios will load the data from the floppy and start the program/OS.
 
 Available systems:
-- [FORTH](1-forth.md)
-- [Lisp](2-lisp.md)
-- [Shell](3-shell.md)
+- [FORTH](computer/1-forth.md)
+- [Lisp](computer/2-lisp.md)
+- [Shell](computer/3-shell.md)
 - Assembler WIP
 - Editor WIP
 

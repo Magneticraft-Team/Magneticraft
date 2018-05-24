@@ -5,7 +5,7 @@ It has 3 modes, normal plates, light plates and heavy plates.
 
 The machine uses 60 Watts to work at full speed.
 
-This structure is a [multiblock](../../6-multiblocks.md) of size *3, 5, 3* (x, y, z).
+This structure is a [multiblock](../../3-multiblocks.md) of size *3, 5, 3* (x, y, z).
 
 Materials needed:
 - 1 x Hydraulic Press Blueprint
