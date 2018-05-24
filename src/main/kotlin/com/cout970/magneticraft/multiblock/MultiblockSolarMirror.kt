@@ -21,23 +21,24 @@ object MultiblockSolarMirror : Multiblock() {
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
+        val N = airBlock()
         val B = baseBlock()
         val G = grateBlock()
         val I = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
-                zLayers(listOf(G, G, G), // y = 2
-                        listOf(G, I, G),
-                        listOf(G, G, G)),
+                zLayers(listOf(N, N, N), // y = 2
+                        listOf(N, I, N),
+                        listOf(N, N, N)),
 
-                zLayers(listOf(G, G, G), // y = 1
-                        listOf(G, I, G),
-                        listOf(G, G, G)),
+                zLayers(listOf(N, N, N), // y = 1
+                        listOf(N, I, N),
+                        listOf(N, N, N)),
 
-                zLayers(listOf(G, M, G), // y = 0
+                zLayers(listOf(N, M, N), // y = 0
                         listOf(B, B, B),
-                        listOf(G, B, G))
+                        listOf(N, B, N))
         )
     }
 
@@ -47,9 +48,9 @@ object MultiblockSolarMirror : Multiblock() {
             Vec3d(-9.000, 0.000, 6.000) * PIXEL to Vec3d(25.000, 2.000, 10.000) * PIXEL,
             Vec3d(6.000, 0.000, -10.000) * PIXEL to Vec3d(10.000, 2.000, 25.000) * PIXEL,
             Vec3d(7.000, 2.000, 7.000) * PIXEL to Vec3d(9.000, 28.000, 9.000) * PIXEL,
-            Vec3d(6.500, 27.500, 6.500) * PIXEL to Vec3d(9.500, 30.500, 9.500) * PIXEL,
+            Vec3d(6.500, 27.500, 6.500) * PIXEL to Vec3d(9.500, 30.500, 9.500) * PIXEL
 
-            Vec3d(-10.000, 12.000, -10.000) * PIXEL to Vec3d(26.000, 48.000, 26.000) * PIXEL
+//            Vec3d(-10.000, 12.000, -10.000) * PIXEL to Vec3d(26.000, 48.000, 26.000) * PIXEL
     ).map { EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it) + vec3Of(0, 0, 1) }
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox

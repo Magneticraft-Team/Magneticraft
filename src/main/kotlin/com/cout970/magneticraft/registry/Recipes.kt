@@ -1,8 +1,6 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager
-import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeNoDecay
-import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeWithDecay
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
@@ -20,10 +18,13 @@ import com.cout970.magneticraft.item.CraftingItems
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.item.EnumMetal.*
 import com.cout970.magneticraft.item.MetallicItems
+import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.misc.inventory.toBlockState
 import com.cout970.magneticraft.misc.inventory.withSize
-import com.cout970.magneticraft.util.info
+import com.cout970.magneticraft.util.*
 import net.minecraft.block.Block
+import net.minecraft.block.BlockSnow
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.init.Blocks.COBBLESTONE
@@ -134,6 +135,7 @@ fun registerRecipes() {
     addSieveRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), 1f, Items.FLINT.stack(), 0.15f, Items.FLINT.stack(), 0.05f, 50f)
     addSieveRecipe(Blocks.SAND.stack(), Items.GOLD_NUGGET.stack(), 0.04f, Items.GOLD_NUGGET.stack(), 0.02f, Items.QUARTZ.stack(), 0.01f, 80f)
     addSieveRecipe(Blocks.SOUL_SAND.stack(), Items.QUARTZ.stack(), 0.15f, Items.QUARTZ.stack(), 0.1f, Items.QUARTZ.stack(), 0.05f, 80f)
+//    addSieveRecipe(Blocks..stack(), Items.QUARTZ.stack(), 0.15f, Items.QUARTZ.stack(), 0.1f, Items.QUARTZ.stack(), 0.05f, 80f)
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                              CRUSHING TABLE RECIPES
@@ -238,33 +240,28 @@ fun registerRecipes() {
     //                                                  THERMOPILE RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    addThermopileRecipe(Blocks.AIR, -1)
-    addThermopileRecipe(Blocks.SNOW, -100)
-    addThermopileRecipe(Blocks.ICE, -100)
-    addThermopileRecipe(Blocks.PACKED_ICE, -80)
-    addThermopileRecipe(Blocks.SNOW_LAYER, -50)
-    addThermopileRecipe(Blocks.TORCH, 5)
-    addThermopileRecipe(Blocks.LIT_PUMPKIN, 3)
-    addThermopileRecipe(Blocks.FIRE, 25)
-    addThermopileRecipe(Blocks.MAGMA, 25)
+    addThermopileRecipe(Blocks.SNOW, WATER_FREEZING_POINT, 40.0)
+    addThermopileRecipe(Blocks.ICE, WATER_FREEZING_POINT, 60.0)
+    addThermopileRecipe(Blocks.PACKED_ICE, WATER_FREEZING_POINT, 80.0)
+    addThermopileRecipe(Blocks.TORCH, FIRE_TEMP, 4.0)
+    addThermopileRecipe(Blocks.LIT_PUMPKIN, FIRE_TEMP, 3.5)
+    addThermopileRecipe(Blocks.FIRE, FIRE_TEMP, 4.5)
+    addThermopileRecipe(Blocks.MAGMA, MAGMA_TEMP, 1.4)
 
-    addThermopileRecipe(Blocks.WATER, -25)
-    addThermopileRecipeWithDecay(Blocks.LAVA, 100, Blocks.OBSIDIAN.defaultState,-201, 0.00333f)
-
-    val fluids = FluidRegistry.getRegisteredFluids()
-            .values
-            .filter { it != FluidRegistry.WATER }
-            .filter { it != FluidRegistry.LAVA }
-            .filter { it.canBePlacedInWorld() }
-
-    fluids.forEach { fluid ->
-        when {
-            fluid.temperature < 310 -> {
-                addThermopileRecipe(fluid.block, -25 + (-100 * (1 - (fluid.temperature / 310f))).toInt())
-            }
-            fluid.temperature > 310 -> addThermopileRecipe(fluid.block, (100 * (fluid.temperature / 1300f)).toInt())
-        }
+    Blocks.SNOW_LAYER.blockState.validStates.forEach { state ->
+            addThermopileRecipe(state, WATER_FREEZING_POINT, state[BlockSnow.LAYERS]!!.toDouble() / 15.0 * 40.0)
     }
+
+    ItemHolder.uraniumBlock?.ifNonEmpty {
+        it.toBlockState()?.let { addThermopileRecipe(it, FIRE_TEMP, 1.5) }
+    }
+
+    FluidRegistry.getRegisteredFluids().values
+            .filter { it.canBePlacedInWorld() }
+            .forEach { fluid ->
+                val temp = fluid.temperature.toDouble()
+                addThermopileRecipe(fluid.block, temp, balancedConductivity(temp))
+            }
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  HYDRAULIC PRESS RECIPES
@@ -386,14 +383,26 @@ private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
     SluiceBoxRecipeManager.registerRecipe(SluiceBoxRecipeManager.createRecipe(input, (listOf(output to 1f) + otherOutput).toMutableList(), true))
 }
 
-private fun addThermopileRecipe(input: Block, heat: Int) {
-    ThermopileRecipeManager.registerRecipe(ThermopileRecipeNoDecay(input, heat))
+private fun addThermopileRecipe(input: IBlockState, temperature: Double, conductivity: Double) {
+    ThermopileRecipeManager.registerRecipe(
+            ThermopileRecipeManager.createRecipe(input, temperature.toFloat(), conductivity.toFloat())
+    )
 }
 
-private fun addThermopileRecipeWithDecay(input: Block, heat: Int, replacement: IBlockState, limit: Int, prob: Float) {
-    ThermopileRecipeManager.registerRecipe(ThermopileRecipeWithDecay(input, heat, replacement, limit, prob))
+private fun addThermopileRecipe(input: Block, temperature: Double, conductivity: Double) {
+    input.blockState.validStates.forEach { state ->
+        ThermopileRecipeManager.registerRecipe(
+                ThermopileRecipeManager.createRecipe(state, temperature.toFloat(), conductivity.toFloat())
+        )
+    }
 }
 
+private fun balancedConductivity(temp: Double): Double {
+    if (temp < STANDARD_AMBIENT_TEMPERATURE) {
+        return 2000.0 / ensureNonZero(STANDARD_AMBIENT_TEMPERATURE - temp)
+    }
+    return 1000.0 / ensureNonZero(temp - STANDARD_AMBIENT_TEMPERATURE)
+}
 
 private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, output1: ItemStack, prob1: Float,
                            output2: ItemStack,

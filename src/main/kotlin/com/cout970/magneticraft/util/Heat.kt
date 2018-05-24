@@ -16,8 +16,6 @@ val STANDARD_TEMPERATURE = 0.fromCelsiusToKelvin()
 val STANDARD_AMBIENT_TEMPERATURE = 25.fromCelsiusToKelvin()
 val DEFAULT_COOKING_TEMPERATURE = 180.fromCelsiusToKelvin()
 val DEFAULT_SMELTING_TEMPERATURE = 400.fromCelsiusToKelvin()
-val DEFAULT_CONDUCTIVITY = 0.05
-
 
 val MIN_EMISSION_TEMP = 480.fromCelsiusToKelvin()
 //val MAX_EMISSION_TEMP = 1400.fromCelsiusToKelvin()
@@ -31,22 +29,21 @@ val FURNACE_BRICK_TEMP = 550.fromCelsiusToKelvin()
 
 val COKE_REACTION_TEMP = 450.fromCelsiusToKelvin()
 val CARBON_SUBLIMATION_POINT = 4000.fromCelsiusToKelvin()
-
-val LIMESTONE_HEAT_CAPACITY = 2.3
 val LIMESTONE_MELTING_POINT = 1400.fromCelsiusToKelvin()
 
+val WATER_FREEZING_POINT = 0.fromCelsiusToKelvin()
 val WATER_MELTING_POINT = 0.fromCelsiusToKelvin()
 val WATER_BOILING_POINT = 100.fromCelsiusToKelvin()
-val WATER_HEAT_CAPACITY = 4.18
-val WATER_HEAT_OF_FUSION = 334
 
 val COPPER_MELTING_POINT = 1085.fromCelsiusToKelvin()
-val COPPER_HEAT_CAPACITY = 3.45
 val IRON_MELTING_POINT = 1538.fromCelsiusToKelvin()
-val IRON_HEAT_CAPACITY = 3.5
 
 val KILN_DAMAGE_TEMP = 125.fromCelsiusToKelvin()
 val KILN_FIRE_TEMP = 250.fromCelsiusToKelvin()
+
+val FIRE_TEMP = 250.fromCelsiusToKelvin()
+val MAGMA_TEMP = 800.fromCelsiusToKelvin()
+
 
 
 inline fun Number.fromCelsiusToKelvin(): Double = this.toDouble() + 273.15

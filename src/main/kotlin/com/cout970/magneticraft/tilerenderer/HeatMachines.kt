@@ -61,7 +61,7 @@ object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
     )
 
     override fun renderModels(models: List<ModelCache>, te: TileHeatPipe) {
-        Utilities.withHeatColor(te.heatNode.temperature, vec3Of(0.5)) {
+        Utilities.withHeatColor(te, te.heatNode.temperature, vec3Of(0.5)) {
             models[0].renderTextured()
 
             sides.forEach {
@@ -92,7 +92,7 @@ object TileRendererHeatSink : TileRendererSimple<TileHeatSink>(
 
     override fun renderModels(models: List<ModelCache>, te: TileHeatSink) {
         Utilities.facingRotate(te.facing)
-        Utilities.withHeatColor(te.heatNode.temperature, vec3Of(0.5)) {
+        Utilities.withHeatColor(te, te.heatNode.temperature, vec3Of(0.5)) {
             models[0].renderTextured()
         }
     }

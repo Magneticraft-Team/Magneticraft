@@ -2,7 +2,7 @@ package com.cout970.magneticraft.api.internal.registries.generators.thermopile
 
 import com.cout970.magneticraft.api.registries.generators.thermopile.IThermopileRecipe
 import com.cout970.magneticraft.api.registries.generators.thermopile.IThermopileRecipeManager
-import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 
 /**
  * Created by cout970 on 2017/08/28.
@@ -11,15 +11,15 @@ object ThermopileRecipeManager : IThermopileRecipeManager {
 
     private val recipeList = mutableListOf<IThermopileRecipe>()
 
-    override fun findRecipe(input: Block?): IThermopileRecipe? {
-        if(input == null) return null
-        return recipeList.find { it.recipeBlock == input }
+    override fun findRecipe(input: IBlockState?): IThermopileRecipe? {
+        if (input == null) return null
+        return recipeList.find { it.blockState == input }
     }
 
     override fun getRecipes(): MutableList<IThermopileRecipe> = recipeList.toMutableList()
 
     override fun registerRecipe(recipe: IThermopileRecipe): Boolean {
-        if(findRecipe(recipe.recipeBlock) == null){
+        if (findRecipe(recipe.blockState) == null) {
             recipeList += recipe
             return true
         }
@@ -27,4 +27,8 @@ object ThermopileRecipeManager : IThermopileRecipeManager {
     }
 
     override fun removeRecipe(recipe: IThermopileRecipe?): Boolean = recipeList.remove(recipe)
+
+    override fun createRecipe(state: IBlockState, temperature: Float, conductivity: Float): IThermopileRecipe {
+        return ThermopileRecipe(state, temperature, conductivity)
+    }
 }

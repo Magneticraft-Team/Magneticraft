@@ -3,6 +3,7 @@ package com.cout970.magneticraft.misc.inventory
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.Item
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.IItemHandlerModifiable
@@ -14,7 +15,13 @@ import net.minecraftforge.items.IItemHandlerModifiable
 fun Item.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
 
 fun Block.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
+
 fun IBlockState.stack(size: Int = 1) = ItemStack(block, size, block.getMetaFromState(this))
+
+fun ItemStack.toBlockState(): IBlockState? {
+    val itemBlock = item as? ItemBlock ?: return null
+    return itemBlock.block.getStateFromMeta(metadata)
+}
 
 fun ItemStack.consumeItem(amount: Int = 1): ItemStack {
     if (count > amount) {

@@ -68,11 +68,9 @@ fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.run {
 
     +CompVerticalBar(production, 3, Vec2d(89, 17), production.toEnergyText())
 
-    val source = StaticBarProvider(0.0, 300.0, tile.thermopileModule::heatSource)
-    val drain = StaticBarProvider(0.0, 300.0, tile.thermopileModule::heatDrain)
+    val source = StaticBarProvider(0.0, 10_000.0, tile.thermopileModule::totalFlux)
 
-    +CompVerticalBar(source, 2, Vec2d(98, 17), source.toIntText())
-    +CompVerticalBar(drain, 5, Vec2d(107, 17), drain.toIntText())
+    +CompVerticalBar(source, 2, Vec2d(98, 17), source.toIntText(postfix = " Flux/t"))
 }
 
 fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.run {

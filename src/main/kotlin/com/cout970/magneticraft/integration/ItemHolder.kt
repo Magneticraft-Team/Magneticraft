@@ -17,6 +17,10 @@ object ItemHolder {
     val coalCokeBlock: ItemStack? = null
 
     @JvmField
+    @GameRegistry.ItemStackHolder("immersiveengineering:storage", meta = 5)
+    val uraniumBlock: ItemStack? = null
+
+    @JvmField
     @GameRegistry.ItemStackHolder("thermalfoundation:material", meta = 800)
     val sawdust: ItemStack? = null
 

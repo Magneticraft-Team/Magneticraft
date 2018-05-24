@@ -3,6 +3,7 @@ package com.cout970.magneticraft.gui.client.components.bars
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.util.clamp
+import com.cout970.magneticraft.util.ensureNonZero
 
 val ZERO = { 0.0 }
 
@@ -16,8 +17,6 @@ open class CallbackBarProvider(val callback: () -> Number, val max: () -> Number
 
         return clamp((value - min) / ensureNonZero(max - min), 1.0, 0.0).toFloat()
     }
-
-    private fun ensureNonZero(x: Double): Double = if (x == 0.0) 1.0 else x
 }
 
 class StaticBarProvider(val minVal: Double, val maxVal: Double, callback: () -> Number)

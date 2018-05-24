@@ -88,7 +88,7 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Wind Turbine Production")
     var windTurbineMaxProduction = 100.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile Max Stable Production")
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Thermopile production (approximated)")
     var thermopileProduction = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Solar power heat generation per tick (in Joules)")

@@ -27,7 +27,7 @@ class CompRfBar(val node: IEnergyStorage, pos: Vec2d)
 }
 
 class CompHeatBar(val node: IHeatNode, pos: Vec2d)
-    : CompVerticalBar(HeatBarProvider(node), 3, pos, tooltip = { listOf(formatHeat(node.temperature)) }) {
+    : CompVerticalBar(HeatBarProvider(node), 2, pos, tooltip = { listOf(formatHeat(node.temperature)) }) {
     //CallbackBarProvider(this::getTemperature, ::WATER_BOILING_POINT, ::STANDARD_AMBIENT_TEMPERATURE)
 
     class HeatBarProvider(val node: IHeatNode) : IBarProvider {

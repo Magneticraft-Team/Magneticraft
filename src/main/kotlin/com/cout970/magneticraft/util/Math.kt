@@ -9,6 +9,8 @@ import com.cout970.magneticraft.util.vector.yd
 import com.cout970.magneticraft.util.vector.zd
 import net.minecraft.util.math.Vec3d
 
+fun ensureNonZero(x: Double, default: Double = 1.0): Double = if (x == 0.0) default else x
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun Number.toRads() = Math.toRadians(this.toDouble())
 

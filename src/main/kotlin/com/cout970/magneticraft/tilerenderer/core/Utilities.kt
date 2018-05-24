@@ -16,16 +16,15 @@ import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.BufferBuilder
-import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.GlStateManager.*
-import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.item.ItemSkull
 import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -34,6 +33,7 @@ import net.minecraft.world.World
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL14
+import kotlin.math.max
 
 /**
  * Created by cout970 on 2017/06/16.
@@ -540,16 +540,35 @@ object Utilities {
         return Triple(Math.round(red).toFloat(), Math.round(green).toFloat(), Math.round(blue).toFloat())
     }
 
-    fun withHeatColor(temp: Double, color: IVector3, func: () -> Unit) {
+    fun withHeatColor(te: TileEntity, temp: Double, color: IVector3, func: () -> Unit) {
         val (r, g, b) = Utilities.tempToRGB(temp.toFloat())
         val heatVisibility = ((temp - 150.fromCelsiusToKelvin()) / 300).coerceIn(0.0, 1.0)
+
+        val i = te.world.getCombinedLight(te.pos, 0)
+        val j = i % 65536
+        val k = i / 65536
+
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
+                max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
+                max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
+        )
+
         GlStateManager.color(
                 interpolate(color.x, r / 255.0, heatVisibility).toFloat(),
                 interpolate(color.y, g / 255.0, heatVisibility).toFloat(),
                 interpolate(color.z, b / 255.0, heatVisibility).toFloat()
         )
         func()
-        GlStateManager.color(1f, 1f, 1f)
+        setDefaultLight(te)
+    }
+
+    fun setDefaultLight(te: TileEntity) {
+        RenderHelper.enableStandardItemLighting()
+        val i = te.world.getCombinedLight(te.pos, 0)
+        val j = i % 65536
+        val k = i / 65536
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.toFloat(), k.toFloat())
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
     }
 
     fun colorFromRGB(r: Float, g: Float, b: Float): Int {
