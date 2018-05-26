@@ -34,6 +34,8 @@ interface IComponent {
     //returns true if this should block the event in others components
     fun onKeyTyped(typedChar: Char, keyCode: Int): Boolean = false
 
+    fun onKeyReleased(typedChar: Char, keyCode: Int): Boolean = false
+
     fun onWheel(amount: Int) = Unit
 
     fun isMouseInside(mouse: Vec2d): Boolean = mouse in (pos to size)

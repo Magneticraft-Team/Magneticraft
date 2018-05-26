@@ -26,10 +26,13 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
             ReadWriteByte("logByte", { logByte(it) }, { 0 }),
             LogShort("logShort", { logShort(it) }),
             LogInt("logInt", { logInt(it) }),
+            ReadOnlyIntArray("devices", { getDevices() }),
             ReadOnlyInt("*monitor", { 0xFF000000.toInt() }),
             ReadOnlyInt("*floppy", { 0xFF010000.toInt() }),
-            ReadOnlyIntArray("devices", { getDevices() })
+            ReadOnlyInt("*keyboard", { 0xFF020000.toInt() })
     )
+
+    override fun update() = Unit
 
     fun getDevices(): IntArray {
         val buffer = IntArray(16)

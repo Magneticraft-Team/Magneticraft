@@ -31,7 +31,7 @@ fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
     sizeY = 255
 
     +CompBackground(texture, textureSize = textureSize, size = Vec2d(350, 230))
-    +MonitorComponent(container.tile.ref, container.monitor, container, true)
+    +MonitorComponent(container.tile.ref, container.monitor, container.keyboard, container, true)
 
     listOf(
             buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 230)),
@@ -69,7 +69,7 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     sizeY = 317
 
     +CompBackground(texture, textureSize = textureSize, size = Vec2d(350, 317))
-    +MonitorComponent(tile.ref, container.monitor, container, false)
+    +MonitorComponent(tile.ref, container.monitor, container.keyboard, container, false)
     +CompElectricBar(tile.node, Vec2d(10, 238))
 
     listOf(

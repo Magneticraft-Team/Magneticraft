@@ -2,6 +2,7 @@ package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.block.Computers
+import com.cout970.magneticraft.computer.*
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getOrientation
@@ -33,20 +34,25 @@ class TileComputer : TileBase(), ITickable {
 
     val inventory = Inventory(1)
     val invModule = ModuleInventory(inventory)
-    val monitorModule = ModuleMonitor(ref)
+    val monitor = DeviceMonitor()
+    val keyboard = DeviceKeyboard()
     val floppyDriveModule = ModuleFloppyDrive(ref, inventory, 0)
-    val networkCardModule = ModuleNetworkCard(ref)
+    val networkCard = DeviceNetworkCard(ref)
+    val redstoneSensor = DeviceRedstoneSensor(ref)
+    val computerParts = ModuleComputerDevices(monitor, keyboard, networkCard, redstoneSensor)
 
     val computerModule = ModuleComputer(
             devices = mapOf(
-                    0x00 to monitorModule.monitor,
+                    0x00 to monitor,
                     0x01 to floppyDriveModule.drive,
-                    0x02 to networkCardModule.networkCard
+                    0x02 to keyboard,
+                    0x03 to networkCard,
+                    0x04 to redstoneSensor
             )
     )
 
     init {
-        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule)
+        initModules(computerModule, invModule, computerParts, floppyDriveModule)
     }
 
     @DoNotRemove
@@ -104,10 +110,13 @@ class TileMiningRobot : TileBase(), ITickable {
             upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
     )
 
-    //computer
-    val monitorModule = ModuleMonitor(ref)
     val floppyDriveModule = ModuleFloppyDrive(ref = ref, inventory = inventory, slot = 16)
-    val networkCardModule = ModuleNetworkCard(ref)
+    val keyboard = DeviceKeyboard()
+    val monitor = DeviceMonitor()
+    val networkCard = DeviceNetworkCard(ref)
+    val redstoneSensor = DeviceRedstoneSensor(ref)
+    val inventorySensor = DeviceInventorySensor(ref, inventory)
+    val computerParts = ModuleComputerDevices(monitor, keyboard, networkCard, redstoneSensor, inventorySensor)
 
     val robotControlModule = ModuleRobotControl(
             ref = ref,
@@ -120,15 +129,18 @@ class TileMiningRobot : TileBase(), ITickable {
 
     val computerModule = ModuleComputer(
             devices = mapOf(
-                    0x00 to monitorModule.monitor,
+                    0x00 to monitor,
                     0x01 to floppyDriveModule.drive,
-                    0x02 to networkCardModule.networkCard,
-                    0x03 to robotControlModule.device
+                    0x02 to keyboard,
+                    0x03 to networkCard,
+                    0x04 to robotControlModule.device,
+                    0x05 to redstoneSensor,
+                    0x06 to inventorySensor
             )
     )
 
     init {
-        initModules(computerModule, invModule, monitorModule, floppyDriveModule, networkCardModule, robotControlModule,
+        initModules(computerModule, invModule, computerParts, floppyDriveModule, robotControlModule,
                 energyModule, energyStorage)
     }
 

@@ -23,11 +23,12 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "editor"
+    val img = "drivers"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
     val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
-    val monitor = DeviceMonitor(FakeRef)
+    val monitor = DeviceMonitor()
+    val keyboard = DeviceKeyboard()
     val floppyDrive = DeviceFloppyDrive { if (useOs) osDisk else programDisk }
     val networkCard = DeviceNetworkCard(FakeRef)
 
@@ -45,9 +46,10 @@ fun main(args: Array<String>) {
     bus.devices.put(0xFF, mbDevice)
     bus.devices.put(0x00, monitor)
     bus.devices.put(0x01, floppyDrive)
-    bus.devices.put(0x02, networkCard)
+    bus.devices.put(0x02, keyboard)
+    bus.devices.put(0x03, networkCard)
 
-    val display = createDisplay(monitor)
+    val display = createDisplay(monitor, keyboard)
 
     println("Start")
 
@@ -60,7 +62,7 @@ fun main(args: Array<String>) {
     timer = System.currentTimeMillis()
     while (motherboard.isOnline) {
         networkCard.update()
-        floppyDrive.iterate()
+        floppyDrive.update()
         //run CPU
         motherboard.iterate()
 
@@ -83,7 +85,7 @@ fun main(args: Array<String>) {
     Thread.sleep(10)
 }
 
-private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
+private fun createDisplay(monitor: DeviceMonitor, keyboard: DeviceKeyboard): MonitorWindow {
     val display = MonitorWindow(monitor)
     val window = JFrame("Emulator")
 
@@ -109,9 +111,9 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
                 println("Disk changed!")
             }
             val ibd = IBD()
-            monitor.onKeyPressed(mapKey(e.keyChar.toInt()))
-            monitor.saveToServer(ibd)
-            monitor.loadFromClient(ibd)
+            keyboard.onKeyPress(mapKey(e.keyChar.toInt()))
+            keyboard.saveToServer(ibd)
+            keyboard.loadFromClient(ibd)
         }
 
         override fun keyPressed(e: KeyEvent) {
@@ -123,12 +125,17 @@ private fun createDisplay(monitor: DeviceMonitor): MonitorWindow {
                 else -> return
             }
             val ibd = IBD()
-            monitor.onKeyPressed(code)
-            monitor.saveToServer(ibd)
-            monitor.loadFromClient(ibd)
+            keyboard.onKeyPress(code)
+            keyboard.saveToServer(ibd)
+            keyboard.loadFromClient(ibd)
         }
 
-        override fun keyReleased(e: KeyEvent?) = Unit
+        override fun keyReleased(e: KeyEvent) {
+            val ibd = IBD()
+            keyboard.onKeyRelease(mapKey(e.keyChar.toInt()))
+            keyboard.saveToServer(ibd)
+            keyboard.loadFromClient(ibd)
+        }
     })
     return display
 }

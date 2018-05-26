@@ -53,6 +53,8 @@ class BlockBuilder {
     var collisionBox: ((CollisionBoxArgs) -> AABB?)? = null
     var shouldSideBeRendered: ((ShouldSideBeRendererArgs) -> Boolean)? = null
     var onEntityCollidedWithBlock: ((OnEntityCollidedWithBlockArgs) -> Unit)? = null
+    var canConnectRedstone: ((CanConnectRedstoneArgs) -> Boolean)? = null
+    var redstonePower: ((RedstonePowerArgs) -> Int)? = null
 
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
@@ -91,34 +93,40 @@ class BlockBuilder {
             registryName = this@BlockBuilder.registryName!!
             creativeTab?.let { setCreativeTab(it) }
             boundingBox?.let { aabb = it }
+            this@BlockBuilder.blockLayer?.let { blockLayer_ = it }
+
             setHardness(hardness)
             setResistance(explosionResistance)
-            unlocalizedName = "${registryName?.resourceDomain}.${registryName?.resourcePath}"
-            onActivated = this@BlockBuilder.onActivated
-            stateMapper = this@BlockBuilder.stateMapper
-            enableOcclusionOptimization = this@BlockBuilder.enableOcclusionOptimization
-            translucent_ = this@BlockBuilder.translucent
             setLightOpacity(if (translucent_) 0 else 255)
-            onBlockPlaced = this@BlockBuilder.onBlockPlaced
-            customModels = this@BlockBuilder.customModels
-            pickBlock = this@BlockBuilder.pickBlock
-            generateDefaultItemModel = this@BlockBuilder.generateDefaultItemModel
-            canPlaceBlockOnSide = this@BlockBuilder.canPlaceBlockOnSide
-            capabilityProvider = this@BlockBuilder.capabilityProvider
-            onNeighborChanged = this@BlockBuilder.onNeighborChanged
-            alwaysDropDefault = this@BlockBuilder.alwaysDropDefault
-            blockStatesToPlace = this@BlockBuilder.blockStatesToPlace
-            onBlockBreak = this@BlockBuilder.onBlockBreak
             setLightLevel(lightEmission)
-            onDrop = this@BlockBuilder.onDrop
-            onBlockPostPlaced = this@BlockBuilder.onBlockPostPlaced
-            tickRandomly = this@BlockBuilder.tickRandomly
-            this@BlockBuilder.blockLayer?.let { blockLayer_ = it }
-            onUpdateTick = this@BlockBuilder.onUpdateTick
-            collisionBox = this@BlockBuilder.collisionBox
-            shouldSideBeRendered_ = this@BlockBuilder.shouldSideBeRendered
-            tickRate_ = this@BlockBuilder.tickRate
-            onEntityCollidedWithBlock = this@BlockBuilder.onEntityCollidedWithBlock
+
+            // @formatter:off
+            unlocalizedName             = "${registryName?.resourceDomain}.${registryName?.resourcePath}"
+            onActivated                 = this@BlockBuilder.onActivated
+            stateMapper                 = this@BlockBuilder.stateMapper
+            enableOcclusionOptimization = this@BlockBuilder.enableOcclusionOptimization
+            translucent_                = this@BlockBuilder.translucent
+            onBlockPlaced               = this@BlockBuilder.onBlockPlaced
+            customModels                = this@BlockBuilder.customModels
+            pickBlock                   = this@BlockBuilder.pickBlock
+            generateDefaultItemModel    = this@BlockBuilder.generateDefaultItemModel
+            canPlaceBlockOnSide         = this@BlockBuilder.canPlaceBlockOnSide
+            capabilityProvider          = this@BlockBuilder.capabilityProvider
+            onNeighborChanged           = this@BlockBuilder.onNeighborChanged
+            alwaysDropDefault           = this@BlockBuilder.alwaysDropDefault
+            blockStatesToPlace          = this@BlockBuilder.blockStatesToPlace
+            onBlockBreak                = this@BlockBuilder.onBlockBreak
+            onDrop                      = this@BlockBuilder.onDrop
+            onBlockPostPlaced           = this@BlockBuilder.onBlockPostPlaced
+            tickRandomly                = this@BlockBuilder.tickRandomly
+            onUpdateTick                = this@BlockBuilder.onUpdateTick
+            collisionBox                = this@BlockBuilder.collisionBox
+            shouldSideBeRendered_       = this@BlockBuilder.shouldSideBeRendered
+            tickRate_                   = this@BlockBuilder.tickRate
+            onEntityCollidedWithBlock   = this@BlockBuilder.onEntityCollidedWithBlock
+            canConnectRedstone          = this@BlockBuilder.canConnectRedstone
+            redstonePower               = this@BlockBuilder.redstonePower
+            // @formatter:on
         }
         return block
     }
@@ -160,6 +168,8 @@ class BlockBuilder {
         newBuilder.shouldSideBeRendered = shouldSideBeRendered
         newBuilder.tickRate = tickRate
         newBuilder.onEntityCollidedWithBlock = onEntityCollidedWithBlock
+        newBuilder.canConnectRedstone = canConnectRedstone
+        newBuilder.redstonePower = redstonePower
 
         func(newBuilder)
 

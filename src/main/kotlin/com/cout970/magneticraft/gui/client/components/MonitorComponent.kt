@@ -2,6 +2,7 @@ package com.cout970.magneticraft.gui.client.components
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.computer.DeviceKeyboard
 import com.cout970.magneticraft.computer.DeviceMonitor
 import com.cout970.magneticraft.gui.client.core.*
 import com.cout970.magneticraft.gui.common.core.ContainerBase
@@ -16,15 +17,18 @@ import org.lwjgl.opengl.GL11
  * Created by cout970 on 20/05/2016.
  */
 
-class MonitorComponent(val tile: ITileRef, val monitor: DeviceMonitor, val container: ContainerBase, val green: Boolean) : IComponent {
+class MonitorComponent(
+        val tile: ITileRef,
+        val monitor: DeviceMonitor,
+        val keyboard: DeviceKeyboard,
+        val container: ContainerBase,
+        val green: Boolean
+) : IComponent {
 
     companion object {
         @JvmStatic
         val TEXTURE = resource("textures/gui/monitor_text.png")
     }
-
-    var pressedKeyNum = -1
-    var pressedKeyCode: Int = 0
 
     override val pos: IVector2 = Vec2d.ZERO
     override val size: IVector2 = Vec2d(350, 230)
@@ -61,9 +65,11 @@ class MonitorComponent(val tile: ITileRef, val monitor: DeviceMonitor, val conta
 
 
     override fun onKeyTyped(typedChar: Char, keyCode: Int): Boolean {
-        if (typedChar.toInt() == 27) return false
-        var shift = 0
+        // Ignore ESC, otherwise you cannot exit the gui
+        if (keyCode == 1) return false
 
+        // Paste from clipboard
+        // SHIFT + CTRL + ALT + V
         if (isShiftKeyDown() && isCtrlKeyDown() && isAltKeyDown() && keyCode == 47) {
 
             val str = GuiScreen.getClipboardString()
@@ -73,34 +79,87 @@ class MonitorComponent(val tile: ITileRef, val monitor: DeviceMonitor, val conta
             }
         }
 
-        if (isShiftKeyDown()) shift = shift or 64
-        if (isCtrlKeyDown()) shift = shift or 32
-        when (typedChar.toByte().toInt()) {
-            199 -> sendKey(132 or shift, keyCode)
-            200 -> sendKey(128 or shift, keyCode)
-            201, 202, 204, 206,
-            209 -> sendKey(typedChar.toInt(), keyCode)
-            203 -> sendKey(130 or shift, keyCode)
-            205 -> sendKey(131 or shift, keyCode)
-            207 -> sendKey(133 or shift, keyCode)
-            208 -> sendKey(129 or shift, keyCode)
-            210 -> sendKey(134 or shift, keyCode)
-            0 -> if (keyCode != 54 && keyCode != 42 && keyCode != 56 && keyCode != 184 && keyCode != 29 &&
-                    keyCode != 221 && keyCode != 157 && (keyCode < 59 || keyCode > 70) && keyCode != 87 &&
-                    keyCode != 88 && keyCode != 197 && keyCode != 183 && keyCode != 0) {
-                sendKey(keyCode, keyCode)
-            }
-            else -> if (typedChar.toInt() in 1..127) {
-                sendKey(typedChar.toInt(), keyCode)
-            }
-        }
+        sendKey(typedChar, keyCode, true)
         return true
     }
 
-    fun sendKey(key: Int, num: Int) {
-        pressedKeyNum = num
-        pressedKeyCode = key
-        monitor.onKeyPressed(key)
+    override fun onKeyReleased(typedChar: Char, keyCode: Int): Boolean {
+        sendKey(typedChar, keyCode, false)
+        return true
+    }
+
+    fun sendKey(typedChar: Char, keyCode: Int, press: Boolean) {
+
+        val key = when (typedChar.toInt()) {
+        // Unknown keys
+            202, 204, 206 -> typedChar.toInt()
+
+        // printable ascii chars
+            in 32..126 -> typedChar.toInt()
+
+            else -> when (keyCode) {
+                0 -> return // Unknown
+                1 -> return // ESC
+                58 -> return  // Caps lock
+
+                200 -> 1 // UP
+                208 -> 2 // DOWN
+                203 -> 3 // LEFT
+                205 -> 4 // RIGHT
+
+                199 -> 5 // HOME
+                201 -> 6 // PRIOR (re-pag)
+                207 -> 7 // END
+                209 -> 8 // NEXT (av-pag)
+                210 -> 10 // INSERT
+                211 -> 13 // DELETE
+
+                14 -> 11 // BACK
+                15 -> 9 // TAB
+                28 -> 10 // RETURN
+                29 -> 14 // LCONTROL
+
+                42 -> 15 // LSHIFT
+                54 -> 16 // RSHIFT
+                56 -> 17 // LMENU
+
+                59 -> 18 // F1
+                60 -> 19 // F2
+                61 -> 20 // F3
+                62 -> 21 // F4
+                63 -> 22 // F5
+                64 -> 23 // F6
+                65 -> 24 // F7
+                66 -> 25 // F8
+                67 -> 26 // F9
+                68 -> 27 // F10
+
+                157 -> 28 // RCONTROL
+                184 -> 29 // RMENU
+
+                219 -> 30 // LMETA
+                220 -> 31 // RMETA
+
+                else -> {
+                    return
+                }
+            }
+        }
+//        debug("sendKey: $key (${key.toChar()})")
+
+        sendKey(key, keyCode, press)
+    }
+
+    fun sendKey(key: Int, code: Int, press: Boolean) {
+        if (press) {
+            keyboard.onKeyPress(key, code)
+        } else {
+            keyboard.onKeyRelease(key, code)
+        }
         gui.container.detectAndSendChanges()
+    }
+
+    override fun onGuiClosed() {
+        keyboard.reset()
     }
 }

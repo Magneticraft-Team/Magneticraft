@@ -259,25 +259,25 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
     override fun deserialize(map: Map<String, Any>) = Unit
 }
 
-fun main(args: Array<String>) {
-    val socketFactory = SSLSocketFactory.getDefault()
-    val socket = socketFactory.createSocket("pastebin.com", 443)//"raw.githubusercontent.com", 443)//
-
-    socket.outputStream.apply {
-
-        //        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/cpu/bios.bin HTTP/1.1\r\n" +
-//               "Host: raw.githubusercontent.com\r\n" +
-//               "Connection: close\r\n" +
-//               "\r\n").toByteArray())
-
-        write(("GET /raw/pJwsc2XP HTTP/1.0\r\n" +
-                "Host: pastebin.com\r\n" +
-                "Connection: close\r\n" +
-                "\r\n").toByteArray())
-    }
-
-    val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)
-
-    println(str)
-    socket.close()
-}
+//fun main(args: Array<String>) {
+//    val socketFactory = SSLSocketFactory.getDefault()
+//    val socket = socketFactory.createSocket("pastebin.com", 443)//"raw.githubusercontent.com", 443)//
+//
+//    socket.outputStream.apply {
+//
+//        //        write(("GET /Magneticraft-Team/Magneticraft/1.12/src/main/resources/assets/magneticraft/cpu/bios.bin HTTP/1.1\r\n" +
+////               "Host: raw.githubusercontent.com\r\n" +
+////               "Connection: close\r\n" +
+////               "\r\n").toByteArray())
+//
+//        write(("GET /raw/pJwsc2XP HTTP/1.0\r\n" +
+//                "Host: pastebin.com\r\n" +
+//                "Connection: close\r\n" +
+//                "\r\n").toByteArray())
+//    }
+//
+//    val str = socket.inputStream.readBytes().toString(Charsets.UTF_8)
+//
+//    println(str)
+//    socket.close()
+//}

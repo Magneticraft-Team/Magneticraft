@@ -40,6 +40,8 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
         }
     }
 
+    override fun update() = Unit
+
     override fun readByte(addr: Int): Byte = memStruct.read(addr)
 
     override fun writeByte(addr: Int, data: Byte) = memStruct.write(addr, data)

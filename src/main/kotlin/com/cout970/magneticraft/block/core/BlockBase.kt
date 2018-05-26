@@ -67,6 +67,8 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var collisionBox: ((CollisionBoxArgs) -> AABB?)? = null
     var shouldSideBeRendered_: ((ShouldSideBeRendererArgs) -> Boolean)? = null
     var onEntityCollidedWithBlock: ((OnEntityCollidedWithBlockArgs) -> Unit)? = null
+    var canConnectRedstone: ((CanConnectRedstoneArgs) -> Boolean)? = null
+    var redstonePower: ((RedstonePowerArgs) -> Int)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -292,6 +294,21 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun onEntityCollidedWithBlock(worldIn: World, pos: BlockPos, state: IBlockState, entityIn: Entity) {
         onEntityCollidedWithBlock?.invoke(OnEntityCollidedWithBlockArgs(worldIn, pos, state, entityIn))
     }
+
+    override fun canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing?): Boolean {
+        return canConnectRedstone?.invoke(CanConnectRedstoneArgs(state, world, pos, side))
+                ?: super.canConnectRedstone(state, world, pos, side)
+    }
+
+    override fun getStrongPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
+        return redstonePower?.invoke(RedstonePowerArgs(blockState, blockAccess, pos, side))
+                ?: super.getStrongPower(blockState, blockAccess, pos, side)
+    }
+
+    override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
+        return redstonePower?.invoke(RedstonePowerArgs(blockState, blockAccess, pos, side))
+                ?: super.getWeakPower(blockState, blockAccess, pos, side)
+    }
 }
 
 data class BoundingBoxArgs(val state: IBlockState, val source: IBlockAccess, val pos: BlockPos)
@@ -332,3 +349,9 @@ data class ShouldSideBeRendererArgs(val state: IBlockState, val blockAccess: IBl
 
 data class OnEntityCollidedWithBlockArgs(val worldIn: World, val pos: BlockPos, val state: IBlockState,
                                          val entityIn: Entity)
+
+data class CanConnectRedstoneArgs(val state: IBlockState, val world: IBlockAccess, val pos: BlockPos,
+                                  val side: EnumFacing?)
+
+data class RedstonePowerArgs(val state: IBlockState, val world: IBlockAccess, val pos: BlockPos,
+                             val side: EnumFacing)

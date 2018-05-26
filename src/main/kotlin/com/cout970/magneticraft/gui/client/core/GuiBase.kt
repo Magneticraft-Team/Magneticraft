@@ -10,6 +10,7 @@ import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
+import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import java.io.IOException
 
@@ -88,6 +89,23 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         if (!block) {
             super.keyTyped(typedChar, keyCode)
         }
+    }
+
+    @Throws(IOException::class)
+    override fun handleKeyboardInput() {
+        val char = Keyboard.getEventCharacter()
+        val event = Keyboard.getEventKey()
+        val state = Keyboard.getEventKeyState()
+
+        if ((event == 0 && char >= ' ') || state) {
+            this.keyTyped(char, event)
+        }
+
+        if (!state) {
+            components.any { it -> it.onKeyReleased(char, event) }
+        }
+
+        this.mc.dispatchKeypresses()
     }
 
     override fun handleMouseInput() {

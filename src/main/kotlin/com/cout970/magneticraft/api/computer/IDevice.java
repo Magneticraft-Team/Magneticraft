@@ -5,6 +5,8 @@ package com.cout970.magneticraft.api.computer;
  */
 public interface IDevice extends IMapSerializable {
 
+    void update();
+
     byte readByte(int addr);
 
     void writeByte(int addr, byte data);

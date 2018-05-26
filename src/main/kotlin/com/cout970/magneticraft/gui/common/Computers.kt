@@ -25,7 +25,8 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
         player, world, blockPos) {
 
     val motherboard = tile.computerModule.motherboard
-    val monitor = tile.monitorModule.monitor
+    val monitor = tile.monitor
+    val keyboard = tile.keyboard
 
     init {
         addSlotToContainer(object : SlotTakeOnly(tile.invModule.inventory, 0, 64, 233) {
@@ -45,7 +46,7 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
 
     override fun sendDataToServer(): IBD {
         val ibd = IBD()
-        monitor.saveToServer(ibd)
+        keyboard.saveToServer(ibd)
         return ibd
     }
 
@@ -65,7 +66,7 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
                 2 -> motherboard.reset()
             }
         }
-        monitor.loadFromClient(ibd)
+        keyboard.loadFromClient(ibd)
         super.receiveDataFromClient(ibd)
     }
 }
@@ -75,7 +76,8 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
         player, world, blockPos) {
 
     val motherboard = tile.computerModule.motherboard
-    val monitor = tile.monitorModule.monitor
+    val monitor = tile.monitor
+    val keyboard = tile.keyboard
 
     init {
         tile.inventory.let {
@@ -110,7 +112,7 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
 
     override fun sendDataToServer(): IBD {
         val ibd = IBD()
-        monitor.saveToServer(ibd)
+        keyboard.saveToServer(ibd)
         return ibd
     }
 
@@ -130,7 +132,7 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
                 2 -> motherboard.reset()
             }
         }
-        monitor.loadFromClient(ibd)
+        keyboard.loadFromClient(ibd)
         super.receiveDataFromClient(ibd)
     }
 }

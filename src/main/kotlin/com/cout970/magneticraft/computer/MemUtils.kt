@@ -53,7 +53,7 @@ class ReadWriteStruct(val name: String, vararg val vars: IVariable) : IVariable 
     override fun toString(): String = toString(0)
 
     fun toString(indent: Int): String = buildString {
-        appendln("struct $name {")
+        appendln("struct {")
         vars.forEach { variable ->
             val pos = addresses[variable]
             if (variable is ReadWriteStruct) {
@@ -62,8 +62,8 @@ class ReadWriteStruct(val name: String, vararg val vars: IVariable) : IVariable 
                 appendln("/* %3d 0x%02x */    %s".format(pos, pos, variable.toString()))
             }
         }
-        append("};")
-    }.split('\n').map { (0 until indent).map { " " }.joinToString("") + it }.joinToString("\n")
+        append("} $name;")
+    }.split('\n').joinToString("\n") { (0 until indent).joinToString("") { " " } + it }
 }
 
 class ReadOnlyInt(val name: String, val setter: () -> Int) : IVariable {
@@ -73,7 +73,7 @@ class ReadOnlyInt(val name: String, val setter: () -> Int) : IVariable {
     override fun read(addr: Int): Byte = setter().split(addr)
     override fun write(addr: Int, value: Byte) = Unit
 
-    override fun toString(): String = "const i32 $name;"
+    override fun toString(): String = "const Int $name;"
 }
 
 class ReadWriteInt(val name: String, val setter: (Int) -> Unit, val getter: () -> Int) : IVariable {
@@ -86,7 +86,7 @@ class ReadWriteInt(val name: String, val setter: (Int) -> Unit, val getter: () -
         setter(getter().splitSet(addr, value))
     }
 
-    override fun toString(): String = "i32 $name;"
+    override fun toString(): String = "Int $name;"
 }
 
 class ReadOnlyShort(val name: String, val getter: () -> Short) : IVariable {
@@ -96,7 +96,7 @@ class ReadOnlyShort(val name: String, val getter: () -> Short) : IVariable {
     override fun read(addr: Int): Byte = getter().toInt().split(addr)
     override fun write(addr: Int, value: Byte) = Unit
 
-    override fun toString(): String = "const i16 $name;"
+    override fun toString(): String = "const Short $name;"
 }
 
 class ReadWriteShort(val name: String, val setter: (Short) -> Unit, val getter: () -> Short) : IVariable {
@@ -109,7 +109,7 @@ class ReadWriteShort(val name: String, val setter: (Short) -> Unit, val getter: 
         setter(getter().toInt().splitSet(addr, value).toShort())
     }
 
-    override fun toString(): String = "i16 $name;"
+    override fun toString(): String = "Short $name;"
 }
 
 class ReadOnlyByte(val name: String, val getter: () -> Byte) : IVariable {
@@ -119,7 +119,7 @@ class ReadOnlyByte(val name: String, val getter: () -> Byte) : IVariable {
     override fun read(addr: Int): Byte = getter().toInt().split(addr)
     override fun write(addr: Int, value: Byte) = Unit
 
-    override fun toString(): String = "const i8 $name;"
+    override fun toString(): String = "const Byte $name;"
 }
 
 class ReadWriteByte(val name: String, val setter: (Byte) -> Unit, val getter: () -> Byte) : IVariable {
@@ -132,7 +132,7 @@ class ReadWriteByte(val name: String, val setter: (Byte) -> Unit, val getter: ()
         setter(value)
     }
 
-    override fun toString(): String = "i8 $name;"
+    override fun toString(): String = "Byte $name;"
 }
 
 class ReadOnlyByteArray(
@@ -146,7 +146,7 @@ class ReadOnlyByteArray(
 
     override fun write(addr: Int, value: Byte) = Unit
 
-    override fun toString(): String = "const i8 $name[$size];"
+    override fun toString(): String = "const Byte $name[$size];"
 }
 
 class ReadOnlyIntArray(
@@ -160,7 +160,7 @@ class ReadOnlyIntArray(
 
     override fun write(addr: Int, value: Byte) = Unit
 
-    override fun toString(): String = "const i32 $name[${arrayGetter().size}];"
+    override fun toString(): String = "const Int $name[${arrayGetter().size}];"
 }
 
 class ReadWriteByteArray(
@@ -176,5 +176,5 @@ class ReadWriteByteArray(
         array[addr] = value
     }
 
-    override fun toString(): String = "i8 $name[$size];"
+    override fun toString(): String = "Byte $name[$size];"
 }

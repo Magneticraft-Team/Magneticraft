@@ -13,18 +13,16 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
 
     private var buffer: ByteArray? = null
     var sleep = 0
-    var status = 0
     var action = 0
     var currentSector = 0
 
     val isActive: Boolean = true
 
-    fun iterate() {
+    override fun update() {
         if (sleep > 0) {
             sleep--
             return
         }
-        status = 0
         if (action != 0) {
             when (action) {
                 1 -> read()
@@ -60,7 +58,6 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
                 e.printStackTrace()
             }
             sleep = floppy.accessTime
-            status = 1
         } else {
 //            debug("Read invalid sector: $currentSector")
         }
@@ -80,7 +77,6 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
                 e.printStackTrace()
             }
             sleep = floppy.accessTime
-            status = 2
         } else {
 //            debug("Write invalid sector: $currentSector")
         }
@@ -97,7 +93,6 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
                 e.printStackTrace()
             }
             sleep = floppy.accessTime
-            status = 1
         }
     }
 
@@ -110,22 +105,21 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
                 e.printStackTrace()
             }
             sleep = floppy.accessTime
-            status = 2
         }
     }
 
     val memStruct = ReadWriteStruct("disk_drive_header",
             ReadOnlyByte("online", { if (isActive) 1 else 0 }),
             ReadOnlyByte("type", { 0 }),
-            ReadOnlyShort("status", { status.toShort() }),
+            ReadOnlyShort("status", { 0 }),
 
             ReadWriteByte("signal", { action = it.toInt() }, { action.toByte() }),
             ReadOnlyByte("hasDisk", { if (getDisk() == null) 0 else 1 }),
             ReadOnlyByte("accessTime", { getDisk()?.accessTime?.toByte() ?: 0 }),
-            ReadOnlyByte("padding", { 0 }),
+            ReadOnlyByte("finished", { if (action == 0) 1 else 0 }),
 
             ReadOnlyInt("numSectors", { getDisk()?.sectorCount ?: 0 }),
-//            ReadOnlyInt("serialNumber", { getDisk()?.serialNumber ?: 0 }),
+            ReadOnlyInt("serialNumber", { getDisk()?.serialNumber ?: 0 }),
             ReadWriteInt("currentSector", { currentSector = it }, { currentSector }),
             ReadWriteByteArray("buffer", getBuffer())
     )
@@ -145,7 +139,6 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
 
     override fun serialize() = mapOf(
             "sleep" to sleep,
-            "status" to status,
             "action" to action,
             "sector" to currentSector,
             "buffer" to getBuffer().copyOf()
@@ -153,7 +146,6 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
 
     override fun deserialize(map: Map<String, Any>) {
         sleep = map["sleep"] as Int
-        status = map["status"] as Int
         action = map["action"] as Int
         currentSector = map["sector"] as Int
 

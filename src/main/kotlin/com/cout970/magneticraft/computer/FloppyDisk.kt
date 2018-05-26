@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.computer
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.item.ComputerItems
@@ -43,6 +44,15 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
             if (serial in cache) {
                 file = File(cache[serial])
+
+                if (Debug.DEBUG) {
+                    val bytes = ComputerItems::class.java
+                            .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
+                            ?.readBytes()
+                            ?: ByteArray(0)
+
+                    file.writeBytes(bytes)
+                }
 
             } else {
                 val bytes = ComputerItems::class.java

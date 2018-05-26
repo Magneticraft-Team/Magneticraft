@@ -6,6 +6,7 @@ import com.cout970.magneticraft.item.itemblock.blockListOf
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.tileentity.TileComputer
 import com.cout970.magneticraft.tileentity.TileMiningRobot
 import com.cout970.magneticraft.tilerenderer.core.px
@@ -27,7 +28,7 @@ import net.minecraft.util.IStringSerializable
  */
 object Computers : IBlockMaker {
 
-    val PROPERTY_ROBOT_ORIENTATION = PropertyEnum.create("robot_orientation", RobotOrientation::class.java)
+    val PROPERTY_ROBOT_ORIENTATION: PropertyEnum<RobotOrientation> = PropertyEnum.create("robot_orientation", RobotOrientation::class.java)
 
     lateinit var computer: BlockBase private set
     lateinit var miningRobot: BlockBase private set
@@ -52,8 +53,9 @@ object Computers : IBlockMaker {
             //methods
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
-            onActivated = CommonMethods::openGui
             onActivated = CommonMethods::delegateToModule
+            canConnectRedstone = { true }
+            redstonePower = { it.world.getTile<TileComputer>(it.pos)?.redstoneSensor?.outputs?.get(it.side.ordinal) ?: 0 }
         }.build()
 
         miningRobot = builder.withName("mining_robot").copy {
@@ -70,6 +72,9 @@ object Computers : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::delegateToModule
             boundingBox = { it.robotAABBs() }
+            canConnectRedstone = { true }
+            redstonePower = { it.world.getTile<TileMiningRobot>(it.pos)?.redstoneSensor?.outputs?.get(it.side.ordinal) ?: 0 }
+
         }.build()
 
         movingRobot = builder.withName("moving_robot").copy {

@@ -39,7 +39,7 @@ class ModuleFloppyDrive(
     }
 
     override fun update() {
-        drive.iterate()
+        drive.update()
     }
 
     override fun serializeNBT(): NBTTagCompound {
