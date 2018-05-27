@@ -208,14 +208,14 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         }
     }
 
-    override fun getStateForPlacement(world: World, pos: BlockPos, facing: EnumFacing,
+    override fun getStateForPlacement(world: World?, pos: BlockPos?, facing: EnumFacing,
                                       hitX: Float, hitY: Float, hitZ: Float, meta: Int,
-                                      placer: EntityLivingBase, hand: EnumHand): IBlockState {
+                                      placer: EntityLivingBase?, hand: EnumHand?): IBlockState {
 
         val state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand)
         onBlockPlaced?.let {
             return it.invoke(
-                    OnBlockPlacedArgs(world, pos, facing, vec3Of(hitX, hitY, hitZ), meta, placer, hand, defaultState)
+                    OnBlockPlacedArgs(world!!, pos!!, facing, vec3Of(hitX, hitY, hitZ), meta, placer!!, hand!!, defaultState)
             )
         }
         return state
