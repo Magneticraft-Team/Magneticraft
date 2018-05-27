@@ -102,6 +102,7 @@ item.magneticraft.crafting_magnet.name=Magnet
 item.magneticraft.crafting_mesh.name=Iron Mesh
 item.magneticraft.crafting_string_fabric.name=Fabric Mesh
 item.magneticraft.voltmeter_normal.name=Voltmeter
+item.magneticraft.thermometer_normal.name=Thermometer
 item.magneticraft.battery_item_low_normal.name=Small Battery
 item.magneticraft.battery_item_medium_normal.name=Medium Battery
 
@@ -185,6 +186,10 @@ tile.magneticraft.copper_tank_normal.name=Copper tank
 tile.magneticraft.thermopile_normal.name=Thermopile
 tile.magneticraft.iron_pipe_normal.name=Iron Pipe
 tile.magneticraft.wind_turbine_north.name=Wind turbine
+tile.magneticraft.heat_sink_down.name=Heat sink
+tile.magneticraft.heat_pipe_normal.name=Heat Pipe
+tile.magneticraft.insulated_heat_pipe_normal.name=Insulated Heat Pipe
+tile.magneticraft.rf_heater_off.name=RF Heater
 
 # Multiblocks
 #tile.magneticraft.hydraulic_press.name=Hydraulic Press
@@ -199,6 +204,8 @@ tile.magneticraft.solar_mirror_inactive_north.name=Solar Mirror
 tile.magneticraft.container_inactive_north.name=Shipping container
 tile.magneticraft.pumpjack_inactive_north.name=Pumpjack
 tile.magneticraft.hydraulic_press_inactive_north.name=Hydraulic Press
+tile.magneticraft.oil_heater_inactive_north.name=Oil Heater
+tile.magneticraft.refinery_inactive_north.name=Refinery
 
 #tile.magneticraft.copper_block.name=Copper Block
 #tile.magneticraft.cobalt_block.name=Cobalt Block
