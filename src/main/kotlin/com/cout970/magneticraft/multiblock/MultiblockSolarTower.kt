@@ -44,20 +44,18 @@ object MultiblockSolarTower : Multiblock() {
     override fun getControllerBlock() = Multiblocks.solarTower
 
     val hitbox = listOf(
-            Vec3d(-16.000, 3.000, 0.000) * PIXEL to Vec3d(0.000, 6.000, 16.000) * PIXEL,
-            Vec3d(16.000, 3.000, 0.000) * PIXEL to Vec3d(32.000, 6.000, 16.000) * PIXEL,
-            Vec3d(20.000, 0.000, 4.000) * PIXEL to Vec3d(28.000, 3.000, 12.000) * PIXEL,
-            Vec3d(-12.000, 0.000, 4.000) * PIXEL to Vec3d(-4.000, 3.000, 12.000) * PIXEL,
             Vec3d(-16.000, 0.000, -16.000) * PIXEL to Vec3d(32.000, 6.000, 0.000) * PIXEL,
             Vec3d(-16.000, 0.000, 16.000) * PIXEL to Vec3d(32.000, 6.000, 32.000) * PIXEL,
-            Vec3d(0.000, 0.000, 0.000) * PIXEL to Vec3d(16.000, 6.000, 16.000) * PIXEL,
             Vec3d(-16.000, 6.000, -16.000) * PIXEL to Vec3d(32.000, 7.000, 32.000) * PIXEL,
             Vec3d(-12.000, 44.000, -12.000) * PIXEL to Vec3d(28.000, 48.000, 28.000) * PIXEL,
             Vec3d(-6.000, 7.000, -10.000) * PIXEL to Vec3d(22.000, 44.000, -8.000) * PIXEL,
             Vec3d(-6.000, 7.000, 24.000) * PIXEL to Vec3d(22.000, 44.000, 26.000) * PIXEL,
             Vec3d(-10.000, 7.000, -6.000) * PIXEL to Vec3d(-8.000, 44.000, 22.000) * PIXEL,
             Vec3d(24.000, 7.000, -6.000) * PIXEL to Vec3d(26.000, 44.000, 22.000) * PIXEL,
-            Vec3d(-8.000, 7.000, -8.000) * PIXEL to Vec3d(24.000, 44.000, 24.000) * PIXEL
+            Vec3d(-8.000, 7.000, -8.000) * PIXEL to Vec3d(24.000, 44.000, 24.000) * PIXEL,
+            Vec3d(-16.000, 0.000, 0.000) * PIXEL to Vec3d(0.000, 6.000, 16.000) * PIXEL,
+            Vec3d(16.000, 0.000, 0.000) * PIXEL to Vec3d(32.000, 6.000, 16.000) * PIXEL,
+            Vec3d(4.000, 0.000, 4.000) * PIXEL to Vec3d(12.000, 6.000, 12.000) * PIXEL
     ).map { EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it) + vec3Of(0, 0, 1) }
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox

@@ -14,7 +14,6 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack.Status.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
-import com.cout970.magneticraft.util.ConversionTable
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -95,19 +94,13 @@ fun guiSolarTower(gui: GuiBase, container: ContainerSolarTower) = gui.run {
     val texture = guiTexture("solar_tower")
 
     +CompBackground(texture)
-    +CompHeatBar(tile.node, Vec2d(31, 17))
+    +buttonOf(pos = vec2Of(107, 43), uv = vec2Of(0, 166), listener = container::onClick)
 
-    +buttonOf(pos = vec2Of(108, 48), uv = vec2Of(16, 166), listener = container::onClick)
+    +CompHeatBar(tile.node, Vec2d(80, 16))
 
-    val limit = tile.steamBoilerModule.maxSteamProduction
-    val prod = tile.steamBoilerModule.production.toBarProvider(limit)
-    val heatReceived = tile.solarTowerModule.production.toBarProvider(limit * ConversionTable.STEAM_TO_J)
+    val heatReceived = tile.solarTowerModule.production.toBarProvider(500)
 
-    +CompVerticalBar(heatReceived, 2, Vec2d(42, 16), heatReceived.toIntText("Heat received: ", "W"))
-    +CompVerticalBar(prod, 3, Vec2d(53, 16), prod.toIntText("Steam production: ", "mB/t"))
-
-    +CompFluidBar(vec2Of(64, 16), texture, vec2Of(0, 166), tile.waterTank)
-    +CompFluidBar(vec2Of(86, 16), texture, vec2Of(0, 166), tile.steamTank)
+    +CompVerticalBar(heatReceived, 3, Vec2d(91, 16), heatReceived.toIntText("Heat received: ", "W"))
 }
 
 fun guiContainer(gui: GuiBase, container: ContainerContainer) = gui.run {
@@ -115,7 +108,7 @@ fun guiContainer(gui: GuiBase, container: ContainerContainer) = gui.run {
     val callback = CallbackBarProvider(mod::amount, mod::maxItems, ZERO)
 
     +CompBackground(guiTexture("container"))
-    +CompVerticalBar(callback, 7, Vec2d(74, 16), { listOf("Items: ${mod.amount}/${mod.maxItems}") })
+    +CompVerticalBar(callback, 7, Vec2d(74, 16)) { listOf("Items: ${mod.amount}/${mod.maxItems}") }
 }
 
 fun guiPumpjack(gui: GuiBase, container: ContainerPumpjack) = gui.run {

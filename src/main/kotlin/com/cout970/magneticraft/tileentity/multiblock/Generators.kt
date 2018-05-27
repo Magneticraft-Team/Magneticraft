@@ -95,7 +95,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSteamEngine
 
-    val tank = Tank(16000)
+    val tank = Tank(1000)
     val node = ElectricNode(ref, capacity = 8.0)
 
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })

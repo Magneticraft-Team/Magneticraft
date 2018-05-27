@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos
 
 class ModuleSolarMirror(
         val facingGetter: () -> EnumFacing,
+        val active: () -> Boolean,
         override val name: String = "module_solar_mirror"
 ) : IModule {
 
@@ -38,7 +39,7 @@ class ModuleSolarMirror(
 
     override fun update() {
         if (world.isClient) return
-        if (!world.isDaytime) return
+        if (!world.isDaytime || !active()) return
 
         if (container.shouldTick(TICKS_BETWEEN_OPERATIONS)) {
             solarTowerTilePos?.let { pos ->

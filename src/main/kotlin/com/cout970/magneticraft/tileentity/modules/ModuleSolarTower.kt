@@ -8,7 +8,6 @@ import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.util.fromCelsiusToKelvin
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotatePoint
 import com.cout970.magneticraft.util.vector.toBlockPos
@@ -36,7 +35,7 @@ class ModuleSolarTower(
             orientateNearMirrors()
         }
 
-        if (node.temperature > 2500.fromCelsiusToKelvin()) {
+        if (node.temperature > 4000f) {
             meltDown()
         }
     }
