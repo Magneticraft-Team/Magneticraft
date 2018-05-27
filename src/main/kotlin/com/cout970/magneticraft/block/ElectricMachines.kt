@@ -15,6 +15,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.properties.PropertyEnum
+import net.minecraft.block.state.BlockFaceShape
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemBlock
 import net.minecraft.util.BlockRenderLayer
@@ -146,8 +147,7 @@ object ElectricMachines : IBlockMaker {
                 }
                 it.worldIn.removeTileEntity(it.pos)
             }
-
-            canPlaceBlockOnSide = { false }
+            blockFaceShape = { BlockFaceShape.UNDEFINED }
         }.build()
 
         electricHeater = builder.withName("electric_heater").copy {

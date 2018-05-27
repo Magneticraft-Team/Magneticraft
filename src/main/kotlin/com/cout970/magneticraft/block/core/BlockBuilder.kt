@@ -3,6 +3,7 @@ package com.cout970.magneticraft.block.core
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.util.resource
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.BlockFaceShape
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
@@ -55,6 +56,7 @@ class BlockBuilder {
     var onEntityCollidedWithBlock: ((OnEntityCollidedWithBlockArgs) -> Unit)? = null
     var canConnectRedstone: ((CanConnectRedstoneArgs) -> Boolean)? = null
     var redstonePower: ((RedstonePowerArgs) -> Int)? = null
+    var blockFaceShape: ((GetBlockFaceShapeArgs) -> BlockFaceShape)? = null
 
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
@@ -126,6 +128,7 @@ class BlockBuilder {
             onEntityCollidedWithBlock   = this@BlockBuilder.onEntityCollidedWithBlock
             canConnectRedstone          = this@BlockBuilder.canConnectRedstone
             redstonePower               = this@BlockBuilder.redstonePower
+            getBlockFaceShape           = this@BlockBuilder.blockFaceShape
             // @formatter:on
         }
         return block

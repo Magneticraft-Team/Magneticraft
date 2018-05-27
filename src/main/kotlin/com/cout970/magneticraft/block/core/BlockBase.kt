@@ -12,6 +12,7 @@ import com.cout970.magneticraft.util.vector.cut
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.BlockFaceShape
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -19,7 +20,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMapperBase
 import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -70,6 +70,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var onEntityCollidedWithBlock: ((OnEntityCollidedWithBlockArgs) -> Unit)? = null
     var canConnectRedstone: ((CanConnectRedstoneArgs) -> Boolean)? = null
     var redstonePower: ((RedstonePowerArgs) -> Int)? = null
+    var getBlockFaceShape: ((GetBlockFaceShapeArgs) -> BlockFaceShape)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -311,8 +312,8 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
                 ?: super.getWeakPower(blockState, blockAccess, pos, side)
     }
 
-    override fun canCreatureSpawn(state: IBlockState?, world: IBlockAccess?, pos: BlockPos?, type: EntityLiving.SpawnPlacementType?): Boolean {
-        return super.canCreatureSpawn(state, world, pos, type)
+    override fun getBlockFaceShape(worldIn: IBlockAccess, state: IBlockState, pos: BlockPos, face: EnumFacing): BlockFaceShape {
+        return getBlockFaceShape?.invoke(GetBlockFaceShapeArgs(worldIn, state, pos, face)) ?: BlockFaceShape.SOLID
     }
 }
 
@@ -360,3 +361,6 @@ data class CanConnectRedstoneArgs(val state: IBlockState, val world: IBlockAcces
 
 data class RedstonePowerArgs(val state: IBlockState, val world: IBlockAccess, val pos: BlockPos,
                              val side: EnumFacing)
+
+data class GetBlockFaceShapeArgs(val worldIn: IBlockAccess, val state: IBlockState, val pos: BlockPos,
+                                 val face: EnumFacing)
