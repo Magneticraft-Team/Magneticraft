@@ -96,7 +96,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     override fun getMultiblock(): Multiblock = MultiblockSteamEngine
 
     val tank = Tank(1000)
-    val node = ElectricNode(ref, capacity = 8.0)
+    val node = ElectricNode(ref, capacity = 2.0)
 
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
 
@@ -106,16 +106,18 @@ class TileSteamEngine : TileMultiblock(), ITickable {
             capabilityFilter = { false }
     )
 
+    val guiModule = ModuleOpenGui()
+
     val storageModule = ModuleInternalStorage(
             mainNode = node,
             capacity = 10_000,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
+            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
     )
 
     val steamGeneratorModule = ModuleSteamGenerator(
             steamTank = tank,
-            storage = storageModule
+            node = node
     )
 
     val steamEngineMbModule = ModuleSteamEngineMb(
@@ -146,7 +148,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
+        initModules(multiblockModule, guiModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
                 steamEngineMbModule, ioModule)
     }
 

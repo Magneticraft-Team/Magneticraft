@@ -14,6 +14,7 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack
 import com.cout970.magneticraft.tileentity.modules.ModulePumpjack.Status.*
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
+import com.cout970.magneticraft.tileentity.modules.ModuleSteamGenerator
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -228,4 +229,20 @@ fun guiRefinery(gui: GuiBase, container: ContainerRefinery) = gui.run {
     +CompFluidBar(vec2Of(85, 16), texture, vec2Of(0, 166), tile.outputTank0)
     +CompFluidBar(vec2Of(107, 16), texture, vec2Of(0, 166), tile.outputTank1)
     +CompFluidBar(vec2Of(129, 16), texture, vec2Of(0, 166), tile.outputTank2)
+}
+
+fun guiSteamEngine(gui: GuiBase, container: ContainerSteamEngine) = gui.run {
+    val tile = container.tile
+
+    val texture = guiTexture("steam_engine")
+
+    +CompBackground(texture)
+    +CompElectricBar(tile.node, Vec2d(64, 17))
+    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(16, 166), texture)
+
+    val prod = tile.steamGeneratorModule.production.toBarProvider(ModuleSteamGenerator.MAX_ENERGY_PER_TICK)
+
+    +CompVerticalBar(prod, 3, Vec2d(89, 17), prod.toEnergyText())
+
+    +CompFluidBar(vec2Of(99, 17), texture, vec2Of(0, 166), tile.tank)
 }

@@ -244,3 +244,11 @@ class ContainerRefinery(val tile: TileRefinery, player: EntityPlayer, world: Wor
         bindPlayerInventory(player.inventory)
     }
 }
+
+class ContainerSteamEngine(val tile: TileSteamEngine, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        bindPlayerInventory(player.inventory)
+    }
+}

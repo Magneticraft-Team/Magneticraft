@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.world.isClient
@@ -12,14 +14,14 @@ import com.cout970.magneticraft.util.ConversionTable
  */
 class ModuleSteamGenerator(
         val steamTank: Tank,
-        val storage: ModuleInternalStorage,
+        val node: IElectricNode,
         override val name: String = "module_steam_generator"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
 
     companion object {
-        const val MAX_ENERGY_PER_TICK = 250
+        const val MAX_ENERGY_PER_TICK = 240
         const val STEAM_PER_OPERATION = 10
         const val ENERGY_PER_OPERATION = (STEAM_PER_OPERATION * ConversionTable.STEAM_TO_J).toInt()
         const val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_OPERATION
@@ -31,8 +33,12 @@ class ModuleSteamGenerator(
         if (steamTank.fluidAmount < STEAM_PER_OPERATION) return 0
 
         val fluidLimit = steamTank.fluidAmount / STEAM_PER_OPERATION
-        val energyLimit = (storage.capacity - storage.energy) / ENERGY_PER_OPERATION
-        return Math.min(Math.min(fluidLimit, energyLimit), MAX_OPERATIONS_PER_TICK)
+
+        if (node.voltage > ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE) {
+            return 0
+        }
+
+        return Math.min(fluidLimit, MAX_OPERATIONS_PER_TICK)
     }
 
     override fun update() {
@@ -40,8 +46,8 @@ class ModuleSteamGenerator(
         val operations = getAvailableOperations()
         if (operations > 0) {
             steamTank.drain(STEAM_PER_OPERATION * operations, true)
-            storage.energy += ENERGY_PER_OPERATION * operations
-            production += operations
+            node.applyPower(ENERGY_PER_OPERATION * operations.toDouble(), false)
+            production += ENERGY_PER_OPERATION * operations
         }
         production.tick()
     }

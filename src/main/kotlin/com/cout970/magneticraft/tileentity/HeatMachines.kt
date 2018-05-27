@@ -112,7 +112,7 @@ class TileHeatSink : TileBase(), ITickable {
 
     val heatNode = HeatNode(ref)
 
-    val heatModule = ModuleHeat(listOf(heatNode))
+    val heatModule = ModuleHeat(listOf(heatNode), capabilityFilter = { it != facing.opposite })
 
     init {
         initModules(heatModule)
