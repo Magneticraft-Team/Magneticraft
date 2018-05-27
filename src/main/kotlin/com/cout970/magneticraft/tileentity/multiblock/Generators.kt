@@ -49,7 +49,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
+            connectableDirections = ioModule::getElectricConnectPoints
     )
 
     override val multiblockModule = ModuleMultiblockCenter(

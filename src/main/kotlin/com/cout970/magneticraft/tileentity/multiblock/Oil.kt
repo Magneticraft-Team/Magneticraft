@@ -61,7 +61,7 @@ class TilePumpjack : TileMultiblock(), ITickable {
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
+            connectableDirections = ioModule::getElectricConnectPoints
     )
 
     val pumpjackModule = ModulePumpjack(
@@ -104,8 +104,6 @@ class TileOilHeater : TileMultiblock(), ITickable {
             capabilityFilter = ModuleFluidHandler.ALLOW_NONE
     )
 
-    val heatModule = ModuleHeat(listOf(node), capabilityFilter = { false })
-
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
             connectionSpots = listOf(ConnectionSpot(
@@ -121,10 +119,15 @@ class TileOilHeater : TileMultiblock(), ITickable {
             )) + ModuleMultiblockIO.connectionArea(
                     capability = HEAT_NODE_HANDLER!!,
                     side = EnumFacing.DOWN,
-                    start = BlockPos(-1, 0, 0),
-                    end = BlockPos(1, 0, 2),
+                    start = BlockPos(-1, 0, -2),
+                    end = BlockPos(1, 0, 0),
                     getter = { if (active) heatModule else null }
             )
+    )
+
+    val heatModule = ModuleHeat(listOf(node),
+            capabilityFilter = { false },
+            connectableDirections = ioModule::getHeatConnectPoints
     )
 
     val processModule = ModuleHeatProcessing(
@@ -221,7 +224,7 @@ class TileRefinery : TileMultiblock(), ITickable {
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
+            connectableDirections = ioModule::getElectricConnectPoints
     )
 
     override val multiblockModule = ModuleMultiblockCenter(

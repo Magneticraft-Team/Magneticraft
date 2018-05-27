@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.vector.*
@@ -55,21 +56,34 @@ class ModuleMultiblockIO(
 
         val validCapability = connectionSpots.filter { it.capability == cap }
 
-        val valid = validCapability.find {
-            direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos &&
-                    direction.getRelative(it.side) == side
-        } ?: return null
+        val validSide = validCapability.filter { direction.getRelative(it.side) == side }
 
+        val validPos = validSide.filter { direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos }
+
+        val valid = validPos.firstOrNull() ?: return null
 
         return valid.getter()
     }
 
-    fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
+    fun getElectricConnectPoints(): List<Pair<BlockPos, EnumFacing>> {
         val connections = connectionSpots.filter { it.capability == ELECTRIC_NODE_HANDLER }
 
         if (connections.isEmpty()) return emptyList()
         val direction = facing()
 
+        return getConnectPoints(connections, direction)
+    }
+
+    fun getHeatConnectPoints(): List<Pair<BlockPos, EnumFacing>> {
+        val connections = connectionSpots.filter { it.capability == HEAT_NODE_HANDLER }
+
+        if (connections.isEmpty()) return emptyList()
+        val direction = facing()
+
+        return getConnectPoints(connections, direction)
+    }
+
+    private fun getConnectPoints(connections: List<ConnectionSpot>, direction: EnumFacing): List<Pair<BlockPos, EnumFacing>> {
         return connections
                 .filter { direction.getRelative(it.side).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
                 .map {

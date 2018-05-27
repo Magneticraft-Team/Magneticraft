@@ -6,7 +6,7 @@ import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
-import com.cout970.magneticraft.misc.energy.IMachineEnergyInterface
+import com.cout970.magneticraft.misc.energy.RfNodeWrapper
 import com.cout970.magneticraft.misc.energy.RfStorage
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -138,7 +138,7 @@ class TileElectricHeater : TileBase(), ITickable {
 
     val electricModule = ModuleElectricity(listOf(electricNode))
 
-    val moduleHeat = ModuleHeat(listOf(heatNode))
+    val moduleHeat = ModuleHeat(listOf(heatNode), capabilityFilter = { it == EnumFacing.UP })
 
     val storageModule = ModuleInternalStorage(capacity = 10000, mainNode = electricNode)
 
@@ -172,19 +172,9 @@ class TileRfHeater : TileBase(), ITickable {
     val node = HeatNode(ref)
 
     val rfModule = ModuleRf(storage)
-    val heatModule = ModuleHeat(listOf(node))
+    val heatModule = ModuleHeat(listOf(node), capabilityFilter = { it == EnumFacing.UP })
 
-    val electricHeaterModule = ModuleElectricHeater(node, object : IMachineEnergyInterface {
-        override fun getSpeed(): Double = 1.0
-
-        override fun hasEnergy(amount: Double): Boolean {
-            return storage.energyStored > amount.toInt()
-        }
-
-        override fun useEnergy(amount: Double) {
-            storage.extractEnergy(amount.toInt(), false)
-        }
-    })
+    val electricHeaterModule = ModuleElectricHeater(node, RfNodeWrapper(storage))
 
     val updateBlockstate = ModuleUpdateBlockstate { currentState ->
         if (node.temperature > 90.fromCelsiusToKelvin())

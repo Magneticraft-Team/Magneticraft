@@ -58,7 +58,7 @@ class TileGrinder : TileMultiblock(), ITickable {
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
+            connectableDirections = ioModule::getElectricConnectPoints
     )
 
     val storageModule = ModuleInternalStorage(
@@ -159,7 +159,7 @@ class TileSieve : TileMultiblock(), ITickable {
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
+            connectableDirections = ioModule::getElectricConnectPoints
     )
 
     val storageModule = ModuleInternalStorage(
@@ -245,7 +245,7 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
     val energyModule = ModuleElectricity(
             electricNodes = listOf(node),
             canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
+            connectableDirections = ioModule::getElectricConnectPoints
     )
 
     val hydraulicPressModule = ModuleHydraulicPress()
