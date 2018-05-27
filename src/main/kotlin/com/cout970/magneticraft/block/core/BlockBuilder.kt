@@ -97,7 +97,7 @@ class BlockBuilder {
 
             setHardness(hardness)
             setResistance(explosionResistance)
-            setLightOpacity(if (translucent_) 0 else 255)
+            setLightOpacity(if (translucent) 0 else 255)
             setLightLevel(lightEmission)
 
             // @formatter:off

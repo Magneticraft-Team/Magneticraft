@@ -53,6 +53,9 @@ const val DATA_ID_FLUID_NAME_2 = 48 // Used by FluidHandlers
 const val DATA_ID_FLUID_NAME_3 = 49 // Used by FluidHandlers
 const val DATA_ID_FLUID_NAME_4 = 50 // Used by FluidHandlers
 const val DATA_ID_RF = 51
+const val DATA_ID_HEAT_1 = 52
+const val DATA_ID_HEAT_2 = 53
+const val DATA_ID_HEAT_3 = 54
 
 val DATA_ID_VOLTAGE_LIST = listOf(
         DATA_ID_VOLTAGE_0,
@@ -75,4 +78,10 @@ val DATA_ID_FLUID_NAME_LIST = listOf(
         DATA_ID_FLUID_NAME_2,
         DATA_ID_FLUID_NAME_3,
         DATA_ID_FLUID_NAME_4
+)
+
+val DATA_ID_HEAT_LIST = listOf(
+        DATA_ID_HEAT_1,
+        DATA_ID_HEAT_2,
+        DATA_ID_HEAT_3
 )

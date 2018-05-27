@@ -6,3 +6,5 @@ package com.cout970.magneticraft.tilerenderer.core
 
 
 inline val Number.px get() = toDouble() * PIXEL
+
+inline val Double.f get() = toFloat()

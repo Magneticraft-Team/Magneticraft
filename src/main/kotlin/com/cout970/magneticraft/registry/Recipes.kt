@@ -329,9 +329,9 @@ fun registerRecipes() {
     //                                                  OIL HEATER RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f)
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 10f)
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 10f)
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f, WATER_BOILING_POINT)
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 450.fromCelsiusToKelvin())
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 450.fromCelsiusToKelvin())
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   REFINERY RECIPES
@@ -430,12 +430,12 @@ private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, mode: H
     HydraulicPressRecipeManager.registerRecipe(HydraulicPressRecipeManager.createRecipe(input, output, ticks, mode, true))
 }
 
-private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: Float) {
+private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: Float, minTemp: Double) {
     if (input == null || output == null) {
-        info("Error trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks")
+        info("Error trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks, minTemp=$minTemp")
         return
     }
-    OilHeaterRecipeManager.registerRecipe(OilHeaterRecipeManager.createRecipe(input, output, ticks))
+    OilHeaterRecipeManager.registerRecipe(OilHeaterRecipeManager.createRecipe(input, output, ticks, minTemp.toFloat()))
 }
 
 private fun addRefineryRecipe(input: FluidStack?, output0: FluidStack?, output1: FluidStack?, output2: FluidStack?, ticks: Float) {

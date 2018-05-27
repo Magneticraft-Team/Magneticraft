@@ -1,10 +1,10 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.gui.common.core.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.gui.common.core.DATA_ID_MACHINE_CONSUMPTION
-import com.cout970.magneticraft.misc.crafting.ICraftingProcess
+import com.cout970.magneticraft.misc.crafting.IHeatCraftingProcess
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
-import com.cout970.magneticraft.misc.energy.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
@@ -18,9 +18,9 @@ import net.minecraft.nbt.NBTTagCompound
 /**
  * Created by cout970 on 2017/07/01.
  */
-class ModuleElectricProcessing(
-        val craftingProcess: ICraftingProcess,
-        val storage: IMachineEnergyInterface,
+class ModuleHeatProcessing(
+        val craftingProcess: IHeatCraftingProcess,
+        val node: IHeatNode,
         val workingRate: Float,
         val costPerTick: Float,
         override val name: String = "module_electric_processing"
@@ -35,7 +35,7 @@ class ModuleElectricProcessing(
     override fun update() {
         if (world.isClient) return
 
-        val rate = workingRate * storage.getSpeed()
+        val rate = (workingRate * getSpeed()).toDouble()
 
         //making sure that (speed * costPerTick) is an integer
         val speed = Math.floor((rate * costPerTick)).toFloat() / costPerTick
@@ -51,9 +51,14 @@ class ModuleElectricProcessing(
         consumption.tick()
     }
 
+    fun getSpeed(): Float{
+        val headDiff = node.temperature - craftingProcess.minTemperature()
+        return headDiff.toFloat().coerceIn(0.0f, 1.0f)
+    }
+
     fun onWorkingTick(speed: Float) {
         consumption += speed * costPerTick
-        storage.useEnergy(speed * costPerTick.toDouble())
+        node.applyHeat(-speed * costPerTick.toDouble())
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {

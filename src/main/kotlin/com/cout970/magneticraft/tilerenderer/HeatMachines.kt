@@ -3,9 +3,7 @@ package com.cout970.magneticraft.tilerenderer
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.block.HeatMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
-import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileCombustionChamber
 import com.cout970.magneticraft.tileentity.TileHeatPipe
@@ -61,15 +59,11 @@ object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
     )
 
     override fun renderModels(models: List<ModelCache>, te: TileHeatPipe) {
-        Utilities.withHeatColor(te, te.heatNode.temperature, vec3Of(0.5)) {
+        Utilities.withHeatColor(te, te.heatNode.temperature, vec3Of(0.25)) {
             models[0].renderTextured()
 
             sides.forEach {
                 val tile = te.world.getTileEntity(te.pos + it.first) ?: return@forEach
-
-                FLUID_HANDLER!!.fromTile(tile, it.first.opposite)?.let { _ ->
-                    models[it.second].render()
-                }
 
                 if (tile.getOrNull(HEAT_NODE_HANDLER, it.first.opposite) != null) {
                     models[it.second].render()

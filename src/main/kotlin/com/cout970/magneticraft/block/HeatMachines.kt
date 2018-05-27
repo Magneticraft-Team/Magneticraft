@@ -88,7 +88,7 @@ object HeatMachines : IBlockMaker {
             hasCustomModel = true
             customModels = listOf(
                     "model" to resource("models/block/mcx/iron_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/iron_pipe.mcx")
+                    "inventory" to resource("models/block/mcx/iron_pipe_dark.mcx")
             )
             boundingBox = { pipeBoundingBox(it.source, it.pos, 4) }
             onActivated = CommonMethods::delegateToModule
@@ -121,7 +121,7 @@ object HeatMachines : IBlockMaker {
             hasCustomModel = true
             customModels = listOf(
                     "model" to resource("models/block/mcx/iron_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/iron_pipe.mcx")
+                    "inventory" to resource("models/block/mcx/iron_pipe_dark.mcx")
             )
             boundingBox = { pipeBoundingBox(it.source, it.pos, 3) }
             onActivated = CommonMethods::delegateToModule

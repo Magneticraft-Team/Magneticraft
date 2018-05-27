@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMapperBase
 import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -308,6 +309,10 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         return redstonePower?.invoke(RedstonePowerArgs(blockState, blockAccess, pos, side))
                 ?: super.getWeakPower(blockState, blockAccess, pos, side)
+    }
+
+    override fun canCreatureSpawn(state: IBlockState?, world: IBlockAccess?, pos: BlockPos?, type: EntityLiving.SpawnPlacementType?): Boolean {
+        return super.canCreatureSpawn(state, world, pos, type)
     }
 }
 

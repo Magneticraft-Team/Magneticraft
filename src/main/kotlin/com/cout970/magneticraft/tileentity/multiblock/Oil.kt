@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity.multiblock
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.crafting.OilHeaterCraftingProcess
@@ -16,6 +17,7 @@ import com.cout970.magneticraft.multiblock.MultiblockRefinery
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
+import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.vector.rotatePoint
 import net.minecraft.util.EnumFacing
@@ -92,14 +94,17 @@ class TileOilHeater : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockOilHeater
 
-    val node = ElectricNode(ref)
+    val node = HeatNode(ref)
     val inputTank = Tank(16_000)
     val outputTank = Tank(16_000)
 
     val openGuiModule = ModuleOpenGui()
 
     val fluidModule = ModuleFluidHandler(inputTank, outputTank,
-            capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
+            capabilityFilter = ModuleFluidHandler.ALLOW_NONE
+    )
+
+    val heatModule = ModuleHeat(listOf(node), capabilityFilter = { false })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
             facing = { facing },
@@ -113,29 +118,19 @@ class TileOilHeater : TileMultiblock(), ITickable {
                     pos = BlockPos(0, 2, -1),
                     side = EnumFacing.UP,
                     getter = { if (active) TankCapabilityFilter(outputTank) else null }
-            ), ConnectionSpot(
-                    capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(-1, 0, -2),
-                    side = EnumFacing.NORTH,
-                    getter = { if (active) energyModule else null }
-            ), ConnectionSpot(
-                    capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(1, 0, -2),
-                    side = EnumFacing.NORTH,
-                    getter = { if (active) energyModule else null }
-            ))
+            )) + ModuleMultiblockIO.connectionArea(
+                    capability = HEAT_NODE_HANDLER!!,
+                    side = EnumFacing.DOWN,
+                    start = BlockPos(-1, 0, 0),
+                    end = BlockPos(1, 0, 2),
+                    getter = { if (active) heatModule else null }
+            )
     )
 
-    val energyModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getConnectableDirections
-    )
-
-    val processModule = ModuleElectricProcessing(
+    val processModule = ModuleHeatProcessing(
             costPerTick = Config.oilHeaterMaxConsumption.toFloat(),
             workingRate = 1f,
-            storage = ElectricNodeWrapper(node),
+            node = node,
             craftingProcess = OilHeaterCraftingProcess(
                     inputTank = inputTank,
                     outputTank = outputTank
@@ -149,7 +144,7 @@ class TileOilHeater : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, ioModule, energyModule, openGuiModule, fluidModule, processModule)
+        initModules(multiblockModule, ioModule, heatModule, openGuiModule, fluidModule, processModule)
     }
 
     @DoNotRemove

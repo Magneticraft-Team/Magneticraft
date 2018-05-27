@@ -111,7 +111,7 @@ private fun createDisplay(monitor: DeviceMonitor, keyboard: DeviceKeyboard): Mon
                 println("Disk changed!")
             }
             val ibd = IBD()
-            keyboard.onKeyPress(mapKey(e.keyChar.toInt()))
+            keyboard.onKeyPress(mapKey(e.keyChar.toInt()), e.keyCode)
             keyboard.saveToServer(ibd)
             keyboard.loadFromClient(ibd)
         }
@@ -125,14 +125,14 @@ private fun createDisplay(monitor: DeviceMonitor, keyboard: DeviceKeyboard): Mon
                 else -> return
             }
             val ibd = IBD()
-            keyboard.onKeyPress(code)
+            keyboard.onKeyPress(code, e.keyCode)
             keyboard.saveToServer(ibd)
             keyboard.loadFromClient(ibd)
         }
 
         override fun keyReleased(e: KeyEvent) {
             val ibd = IBD()
-            keyboard.onKeyRelease(mapKey(e.keyChar.toInt()))
+            keyboard.onKeyRelease(mapKey(e.keyChar.toInt()), e.keyCode)
             keyboard.saveToServer(ibd)
             keyboard.loadFromClient(ibd)
         }

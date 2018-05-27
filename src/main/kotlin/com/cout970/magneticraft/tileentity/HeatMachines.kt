@@ -34,7 +34,7 @@ class TileCombustionChamber : TileBase(), ITickable {
     val inventory = Inventory(1)
     val node = HeatNode(ref)
 
-    val heatModule = ModuleHeat(listOf(node))
+    val heatModule = ModuleHeat(listOf(node), capabilityFilter = { it == EnumFacing.UP })
     val invModule = ModuleInventory(inventory)
     val combustionChamberModule = ModuleCombustionChamber(node, inventory)
 

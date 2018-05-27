@@ -146,6 +146,8 @@ object ElectricMachines : IBlockMaker {
                 }
                 it.worldIn.removeTileEntity(it.pos)
             }
+
+            canPlaceBlockOnSide = { false }
         }.build()
 
         electricHeater = builder.withName("electric_heater").copy {

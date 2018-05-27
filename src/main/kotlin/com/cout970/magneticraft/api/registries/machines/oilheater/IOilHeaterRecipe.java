@@ -25,6 +25,11 @@ public interface IOilHeaterRecipe {
     float getDuration();
 
     /**
+     * The minimum temperature to start processing the fluids
+     */
+    float minTemperature();
+
+    /**
      * Checks if this recipes has the same input as the given argument
      * @param input the item to test if this recipe can be made from it
      * @return true if the item matches the input of this recipe, false otherwise

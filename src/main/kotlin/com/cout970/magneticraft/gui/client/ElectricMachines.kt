@@ -60,8 +60,7 @@ fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.run {
     val texture = guiTexture("thermopile")
 
     +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(64, 17))
-    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), texture)
+    +CompElectricBar(tile.node, Vec2d(80, 17))
 
     val production = StaticBarProvider(0.0, Config.thermopileProduction,
             tile.thermopileModule.production::storage)

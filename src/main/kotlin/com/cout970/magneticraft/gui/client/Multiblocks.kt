@@ -209,7 +209,7 @@ fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) = gui.run {
     val texture = guiTexture("oil_heater")
 
     +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(58, 16))
+    +CompHeatBar(tile.node, Vec2d(58, 16))
 
     val prod = tile.processModule.consumption.toBarProvider(tile.processModule.costPerTick)
 

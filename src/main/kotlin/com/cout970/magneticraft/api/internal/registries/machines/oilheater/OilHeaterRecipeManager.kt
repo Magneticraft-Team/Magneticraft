@@ -28,7 +28,7 @@ object OilHeaterRecipeManager : IOilHeaterRecipeManager {
         return false
     }
 
-    override fun createRecipe(input: FluidStack, output: FluidStack, duration: Float): IOilHeaterRecipe {
-        return OilHeaterRecipe(input, output, duration)
+    override fun createRecipe(input: FluidStack, output: FluidStack, duration: Float, minTemperature: Float): IOilHeaterRecipe {
+        return OilHeaterRecipe(input, output, duration, minTemperature)
     }
 }

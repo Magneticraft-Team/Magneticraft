@@ -47,5 +47,5 @@ public interface IOilHeaterRecipeManager {
      *
      * @return the new recipe
      */
-    IOilHeaterRecipe createRecipe(FluidStack input, FluidStack output, float duration);
+    IOilHeaterRecipe createRecipe(FluidStack input, FluidStack output, float duration, float minTemperature);
 }

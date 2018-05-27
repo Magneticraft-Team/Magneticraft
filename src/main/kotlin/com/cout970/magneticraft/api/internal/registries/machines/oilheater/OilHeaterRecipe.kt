@@ -6,7 +6,8 @@ import net.minecraftforge.fluids.FluidStack
 class OilHeaterRecipe(
         private val input: FluidStack,
         private val output: FluidStack,
-        private val duration: Float
+        private val duration: Float,
+        private val minTemperature: Float
 ) : IOilHeaterRecipe {
 
     override fun getInput(): FluidStack = input.copy()
@@ -14,6 +15,8 @@ class OilHeaterRecipe(
     override fun getOutput(): FluidStack = output.copy()
 
     override fun getDuration(): Float = duration
+
+    override fun minTemperature(): Float = minTemperature
 
     override fun matches(input: FluidStack?): Boolean {
         if (input == null) return false

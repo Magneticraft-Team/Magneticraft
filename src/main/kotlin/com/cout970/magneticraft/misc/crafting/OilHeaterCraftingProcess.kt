@@ -3,12 +3,13 @@ package com.cout970.magneticraft.misc.crafting
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterRecipe
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import net.minecraftforge.fluids.FluidStack
 
 class OilHeaterCraftingProcess(
         val inputTank: Tank,
         val outputTank: Tank
-) : ICraftingProcess {
+) : IHeatCraftingProcess {
 
     private var cacheKey: FluidStack? = null
     private var cacheValue: IOilHeaterRecipe? = null
@@ -43,6 +44,10 @@ class OilHeaterCraftingProcess(
         if ((outputTank.capacity - outputTank.fluidAmount) < recipe.output.amount) return false
 
         return true
+    }
+
+    override fun minTemperature(): Float {
+        return inputTank.fluid?.let { getRecipe(it) }?.minTemperature() ?: STANDARD_AMBIENT_TEMPERATURE.toFloat()
     }
 
     override fun duration(): Float = inputTank.fluid?.let { getRecipe(it) }?.duration ?: 10f

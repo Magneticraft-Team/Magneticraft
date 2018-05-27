@@ -7,7 +7,7 @@ import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.heat.HeatNode
-import com.cout970.magneticraft.gui.common.core.DATA_ID_VOLTAGE_LIST
+import com.cout970.magneticraft.gui.common.core.DATA_ID_HEAT_LIST
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.shouldTick
@@ -176,7 +176,7 @@ class ModuleHeat(
                 .filterIsInstance<HeatNode>()
                 .mapIndexed { index, node ->
                     FloatSyncVariable(
-                            id = DATA_ID_VOLTAGE_LIST[index],
+                            id = DATA_ID_HEAT_LIST[index],
                             getter = { node.internalEnergy.toFloat() },
                             setter = { node.internalEnergy = it.toDouble() }
                     )
