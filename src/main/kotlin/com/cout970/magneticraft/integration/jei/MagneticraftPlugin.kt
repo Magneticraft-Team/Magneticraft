@@ -14,6 +14,7 @@ import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.list
@@ -91,6 +92,19 @@ class MagneticraftPlugin : IModPlugin {
                     recipeLayout.itemStacks.init(1, false, 48, 51 - 5)
                     recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
+                },
+                extras = { it: Minecraft, r: CrushingTableRecipeWrapper ->
+                    val level = ModuleCrushingTable.getCrushingLevel(r.recipe.input)
+                    val name = when(level){
+                        -1 -> "Hand"
+                        0 -> "Wood"
+                        1 -> "Stone"
+                        2 -> "Iron"
+                        3 -> "Diamond"
+                        4 -> "Ardite"
+                        else -> level.toString()
+                    }
+                    it.fontRenderer.drawStringWithShadow("Mining Level: $name", 32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
                 }
         ))
 

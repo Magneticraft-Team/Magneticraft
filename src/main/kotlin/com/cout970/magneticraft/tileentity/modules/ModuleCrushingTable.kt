@@ -42,6 +42,15 @@ class ModuleCrushingTable(
 
     companion object {
         const val CRUSHING_DAMAGE = 40
+
+        fun getCrushingLevel(storedItem: ItemStack): Int {
+            val item = storedItem.item
+            if (item is ItemBlock) {
+                val blockState = item.block.getStateFromMeta(storedItem.metadata)
+                return item.block.getHarvestLevel(blockState)
+            }
+            return -1
+        }
     }
 
     var damageTaken = 0
@@ -111,12 +120,8 @@ class ModuleCrushingTable(
         val hammer = HammerRegistry.findHammer(heldItem)
         if (hasWork() && hammer != null) {
 
-            val item = storedItem.item
-            if (item is ItemBlock) {
-                val blockState = item.block.getStateFromMeta(storedItem.metadata)
-                if (item.block.getHarvestLevel(blockState) > hammer.miningLevel) {
-                    return
-                }
+            if (getCrushingLevel(storedItem) > hammer.miningLevel) {
+                return
             }
             crushItem(world, pos, playerIn, hammer.breakingSpeed)
             if (Config.crushingTableCausesFire && storedItem.isItemEqual(ItemStack(Items.BLAZE_ROD))) {

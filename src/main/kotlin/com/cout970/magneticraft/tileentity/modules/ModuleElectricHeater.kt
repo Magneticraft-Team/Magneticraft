@@ -25,7 +25,7 @@ class ModuleElectricHeater(
 
     companion object {
         @JvmStatic
-        val MAX_HEAT = 200.fromCelsiusToKelvin()
+        val MAX_HEAT = 600.fromCelsiusToKelvin()
     }
 
     override fun update() {
