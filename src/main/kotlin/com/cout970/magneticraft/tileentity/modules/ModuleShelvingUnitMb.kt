@@ -177,6 +177,11 @@ class ModuleShelvingUnitMb(
         return null
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
+        return getCapability(cap, facing, BlockPos.ORIGIN) as? T
+    }
+
     enum class Level(val levelIndex: Int) {
         TOP(2),
         MIDDLE(1),

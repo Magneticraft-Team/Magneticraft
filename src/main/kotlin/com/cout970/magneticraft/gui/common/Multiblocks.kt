@@ -11,7 +11,6 @@ import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandlerTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -188,13 +187,12 @@ class ContainerContainer(val tile: TileContainer, player: EntityPlayer, world: W
     : ContainerBase(player, world, blockPos) {
 
     init {
-        tile.stackInventoryModule.getCapability(ITEM_HANDLER!!, null)?.let { inv ->
-            addSlotToContainer(SlotUnmodifiableItemHandler(inv, 0, 85, 16))
-            addSlotToContainer(SlotUnmodifiableItemHandlerTakeOnly(inv, 1, 85, 48))
+        val inv = tile.stackInventoryModule.getGuiInventory()
+        addSlotToContainer(SlotUnmodifiableItemHandler(inv, 0, 85, 16))
+        addSlotToContainer(SlotUnmodifiableItemHandlerTakeOnly(inv, 1, 85, 48))
 
-            inventoryRegions += InventoryRegion(0..0, advFilter = { _, i -> i != 1 })
-            inventoryRegions += InventoryRegion(1..1, advFilter = { _, _ -> false })
-        }
+        inventoryRegions += InventoryRegion(0..0, advFilter = { _, i -> i != 1 })
+        inventoryRegions += InventoryRegion(1..1, advFilter = { _, _ -> false })
 
         bindPlayerInventory(player.inventory)
     }

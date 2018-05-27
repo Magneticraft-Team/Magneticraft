@@ -46,10 +46,7 @@ class ModuleStackInventory(
 
         if (cap == ITEM_HANDLER) {
             return object : IItemHandler {
-
                 override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-                    if (slot != 0 || stack.isEmpty) return stack
-
                     if (stackType.isEmpty) {
                         // This doesn't handle the case where maxItems is less than 64 items
                         if (!simulate) {
@@ -73,17 +70,17 @@ class ModuleStackInventory(
                     return stack
                 }
 
-                override fun getStackInSlot(slot: Int): ItemStack = when (slot) {
-                    0 -> ItemStack.EMPTY
-                    else -> stackType.withSize(min(amount, 64))
+                override fun getStackInSlot(slot: Int): ItemStack {
+                    if (stackType.isEmpty) return ItemStack.EMPTY
+                    return stackType.withSize(amount)
                 }
 
-                override fun getSlotLimit(slot: Int): Int = 64
+                override fun getSlotLimit(slot: Int): Int = maxItems
 
-                override fun getSlots(): Int = 2
+                override fun getSlots(): Int = 1
 
                 override fun extractItem(slot: Int, count: Int, simulate: Boolean): ItemStack {
-                    if (slot != 1 || stackType.isEmpty || amount == 0) return ItemStack.EMPTY
+                    if (stackType.isEmpty || amount == 0) return ItemStack.EMPTY
 
                     val toExtract = min(min(count, amount), 64)
 
@@ -102,6 +99,62 @@ class ModuleStackInventory(
             } as T
         }
         return null
+    }
+
+    fun getGuiInventory() = object : IItemHandler {
+
+        override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
+            if (slot != 0 || stack.isEmpty) return stack
+
+            if (stackType.isEmpty) {
+                // This doesn't handle the case where maxItems is less than 64 items
+                if (!simulate) {
+                    stackType = stack.withSize(1)
+                    amount = stack.count
+                    container.sendUpdateToNearPlayers()
+                }
+                return ItemStack.EMPTY
+            }
+
+            if (ItemHandlerHelper.canItemStacksStack(stackType, stack)) {
+                val space = maxItems - amount
+                val toAdd = min(space, stack.count)
+                val itemsLeft = stack.count - toAdd
+
+                if (!simulate) {
+                    amount += toAdd
+                }
+                return if (itemsLeft == 0) ItemStack.EMPTY else stack.withSize(itemsLeft)
+            }
+            return stack
+        }
+
+        override fun getStackInSlot(slot: Int): ItemStack = when (slot) {
+            0 -> ItemStack.EMPTY
+            else -> stackType.withSize(min(amount, 64))
+        }
+
+        override fun getSlotLimit(slot: Int): Int = 64
+
+        override fun getSlots(): Int = 2
+
+        override fun extractItem(slot: Int, count: Int, simulate: Boolean): ItemStack {
+            if (slot != 1 || stackType.isEmpty || amount == 0) return ItemStack.EMPTY
+
+            val toExtract = min(min(count, amount), 64)
+
+            if (toExtract <= 0) return ItemStack.EMPTY
+
+            val result = stackType.withSize(toExtract)
+            if (!simulate) {
+                amount -= toExtract
+                if (amount <= 0) {
+                    stackType = ItemStack.EMPTY
+                    container.sendUpdateToNearPlayers()
+                }
+            }
+            return result
+        }
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
