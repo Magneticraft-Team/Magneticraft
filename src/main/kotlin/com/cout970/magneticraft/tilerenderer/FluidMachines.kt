@@ -15,7 +15,6 @@ import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.fluids.FluidStack
 import org.lwjgl.opengl.GL11
@@ -28,7 +27,6 @@ import org.lwjgl.opengl.GL11
 object TileRendererCopperTank : TileRendererSimple<TileCopperTank>(
         modelLocation = modelOf(FluidMachines.copperTank)
 ) {
-
 
     override fun renderModels(models: List<ModelCache>, te: TileCopperTank) {
 
@@ -64,18 +62,9 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
         filters = filterOf(listOf("base", "up", "down", "north", "south", "west", "east"))
 ) {
 
-    val sides = listOf(
-            EnumFacing.UP to 1,
-            EnumFacing.DOWN to 2,
-            EnumFacing.NORTH to 3,
-            EnumFacing.SOUTH to 4,
-            EnumFacing.WEST to 5,
-            EnumFacing.EAST to 6
-    )
-
     override fun renderModels(models: List<ModelCache>, te: TileIronPipe) {
         models[0].renderTextured()
-        sides.forEach {
+        sidesToIndices.forEach {
             val tile = te.world.getTileEntity(te.pos + it.first) ?: return@forEach
 
             FLUID_HANDLER!!.fromTile(tile, it.first.opposite)?.let { _ ->

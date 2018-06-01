@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.block
 
+import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.core.*
@@ -15,14 +16,13 @@ import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileConnector
+import com.cout970.magneticraft.tileentity.TileElectricCable
 import com.cout970.magneticraft.tileentity.TileElectricPole
 import com.cout970.magneticraft.tileentity.TileElectricPoleTransformer
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.times
-import com.cout970.magneticraft.util.vector.toAABBWith
-import com.cout970.magneticraft.util.vector.toVec3d
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -36,6 +36,7 @@ import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 /**
@@ -49,6 +50,7 @@ object ElectricConductors : IBlockMaker {
     lateinit var connector: BlockBase private set
     lateinit var electric_pole: BlockBase private set
     lateinit var electric_pole_transformer: BlockBase private set
+    lateinit var electric_cable: BlockBase private set
 
     // hacky way to avoid power pole drops and break particles
     var air = false
@@ -140,8 +142,50 @@ object ElectricConductors : IBlockMaker {
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
-        return itemBlockListOf(connector, electric_pole)+
-               (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
+        electric_cable = builder.withName("electric_cable").copy {
+            factory = factoryOf(::TileElectricCable)
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/electric_cable.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_cable.mcx")
+            )
+            boundingBox = { pipeBoundingBox(it.source, it.pos, 6) }
+        }.build()
+
+        return itemBlockListOf(connector, electric_pole, electric_cable) +
+                (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
+    }
+
+    fun pipeBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
+        val (x, y, z) = pos
+
+        val renderUp = checkPipe(world, BlockPos(x, y + 1, z), EnumFacing.DOWN)
+        val renderDown = checkPipe(world, BlockPos(x, y - 1, z), EnumFacing.UP)
+        val renderSouth = checkPipe(world, BlockPos(x, y, z + 1), EnumFacing.NORTH)
+        val renderNorth = checkPipe(world, BlockPos(x, y, z - 1), EnumFacing.SOUTH)
+        val renderEast = checkPipe(world, BlockPos(x + 1, y, z), EnumFacing.WEST)
+        val renderWest = checkPipe(world, BlockPos(x - 1, y, z), EnumFacing.EAST)
+
+        val list = mutableListOf<AABB>()
+
+        list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
+
+        if (renderDown) list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
+        if (renderUp) list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
+
+        if (renderNorth) list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
+        if (renderSouth) list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+
+        if (renderWest) list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
+        if (renderEast) list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+
+        return list
+    }
+
+    fun checkPipe(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Boolean {
+        val tile = world.getTileEntity(pos) ?: return false
+        return tile.getOrNull(ELECTRIC_NODE_HANDLER!!, facing) != null
     }
 
     fun breakElectricPole(args: BreakBlockArgs): Unit = args.run {

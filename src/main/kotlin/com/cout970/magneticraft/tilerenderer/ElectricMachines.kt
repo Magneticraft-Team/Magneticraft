@@ -65,14 +65,3 @@ object TileRendererWindTurbine : TileRendererSimple<TileWindTurbine>(
         models[0].renderTextured()
     }
 }
-
-
-
-
-
-
-
-
-
-
-

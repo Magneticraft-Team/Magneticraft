@@ -11,10 +11,7 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
-import com.cout970.magneticraft.tileentity.TileCombustionChamber
-import com.cout970.magneticraft.tileentity.TileHeatPipe
-import com.cout970.magneticraft.tileentity.TileHeatSink
-import com.cout970.magneticraft.tileentity.TileSteamBoiler
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
@@ -116,12 +113,12 @@ object HeatMachines : IBlockMaker {
         }.build()
 
         insulatedHeatPipe = builder.withName("insulated_heat_pipe").copy {
-            factory = factoryOf(::TileHeatPipe)
+            factory = factoryOf(::TileInsulatedHeatPipe)
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/iron_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/iron_pipe_dark.mcx")
+                    "model" to resource("models/block/mcx/insulated_heat_pipe.mcx"),
+                    "inventory" to resource("models/block/mcx/insulated_heat_pipe.mcx")
             )
             boundingBox = { pipeBoundingBox(it.source, it.pos, 3) }
             onActivated = CommonMethods::delegateToModule

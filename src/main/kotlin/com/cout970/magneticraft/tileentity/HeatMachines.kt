@@ -105,6 +105,27 @@ class TileHeatPipe : TileBase(), ITickable {
     }
 }
 
+@RegisterTileEntity("insulated_heat_pipe")
+class TileInsulatedHeatPipe : TileBase(), ITickable {
+
+    val heatNode = HeatNode(ref)
+
+    val heatModule = ModuleHeat(listOf(heatNode))
+
+    init {
+        initModules(heatModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+
+        if (Debug.DEBUG) {
+            sendUpdateToNearPlayers()
+        }
+    }
+}
+
 @RegisterTileEntity("heat_sink")
 class TileHeatSink : TileBase(), ITickable {
 

@@ -1,115 +1,115 @@
 {
   "useAmbientOcclusion": true,
   "use3dInGui": true,
-  "particleTexture": "magneticraft:blocks/electric_machines/electric_pole",
+  "particleTexture": "magneticraft:blocks/electric_connectors/electric_pole",
   "parts": [
     {
       "name": "Shape1",
       "from": 0,
       "to": 6,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape2",
       "from": 6,
       "to": 12,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape3",
       "from": 12,
       "to": 18,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape4",
       "from": 18,
       "to": 24,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape5",
       "from": 24,
       "to": 30,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape6",
       "from": 30,
       "to": 36,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape7",
       "from": 36,
       "to": 42,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape8",
       "from": 42,
       "to": 48,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape9",
       "from": 48,
       "to": 54,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape10",
       "from": 54,
       "to": 60,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape11",
       "from": 60,
       "to": 66,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape12",
       "from": 66,
       "to": 72,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape14",
       "from": 72,
       "to": 78,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape15",
       "from": 78,
       "to": 84,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape16",
       "from": 84,
       "to": 90,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape17",
       "from": 90,
       "to": 96,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape18",
       "from": 96,
       "to": 102,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     },
     {
       "name": "Shape19",
       "from": 102,
       "to": 108,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole"
     }
   ],
   "quads": {

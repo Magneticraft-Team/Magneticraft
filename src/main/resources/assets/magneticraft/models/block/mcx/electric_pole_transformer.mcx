@@ -1,13 +1,13 @@
 {
   "useAmbientOcclusion": true,
   "use3dInGui": true,
-  "particleTexture": "magneticraft:blocks/electric_machines/electric_pole_transformer",
+  "particleTexture": "magneticraft:blocks/electric_connectors/electric_pole_transformer",
   "parts": [
     {
       "name": "pole_adapter",
       "from": 0,
       "to": 132,
-      "texture": "magneticraft:blocks/electric_machines/electric_pole_transformer"
+      "texture": "magneticraft:blocks/electric_connectors/electric_pole_transformer"
     }
   ],
   "quads": {

@@ -211,3 +211,22 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
 
     override fun getRenderBoundingBox(): AxisAlignedBB = INFINITE_EXTENT_AABB
 }
+
+@RegisterTileEntity("electric_cable")
+class TileElectricCable : TileBase(), ITickable {
+
+    val node = ElectricNode(ref, capacity = 0.5)
+    val electricModule = ModuleElectricity(listOf(node))
+
+    init {
+        initModules(electricModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+        if (Debug.DEBUG) {
+            sendUpdateToNearPlayers()
+        }
+    }
+}

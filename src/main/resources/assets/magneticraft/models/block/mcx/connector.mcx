@@ -1,37 +1,37 @@
 {
   "useAmbientOcclusion": true,
   "use3dInGui": true,
-  "particleTexture": "magneticraft:blocks/electric_machines/connector",
+  "particleTexture": "magneticraft:blocks/electric_connectors/connector",
   "parts": [
     {
       "name": "Shape1",
       "from": 0,
       "to": 6,
-      "texture": "magneticraft:blocks/electric_machines/connector"
+      "texture": "magneticraft:blocks/electric_connectors/connector"
     },
     {
       "name": "Shape2",
       "from": 6,
       "to": 12,
-      "texture": "magneticraft:blocks/electric_machines/connector"
+      "texture": "magneticraft:blocks/electric_connectors/connector"
     },
     {
       "name": "Shape3",
       "from": 12,
       "to": 18,
-      "texture": "magneticraft:blocks/electric_machines/connector"
+      "texture": "magneticraft:blocks/electric_connectors/connector"
     },
     {
       "name": "Shape4",
       "from": 18,
       "to": 24,
-      "texture": "magneticraft:blocks/electric_machines/connector"
+      "texture": "magneticraft:blocks/electric_connectors/connector"
     },
     {
       "name": "Base",
       "from": 24,
       "to": 30,
-      "texture": "magneticraft:blocks/electric_machines/connector"
+      "texture": "magneticraft:blocks/electric_connectors/connector"
     }
   ],
   "quads": {
