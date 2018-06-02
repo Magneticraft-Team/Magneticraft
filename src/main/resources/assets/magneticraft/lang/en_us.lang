@@ -1,5 +1,4 @@
-itemGroup.magneticraft=Magneticraft
-item.magneticraft.guide_book_normal.name=Magneticraft Guide Book
+item.magneticraft.guide_book_normal.name=Magneticraft Manual
 
 item.magneticraft.iron_hammer_normal.name=Iron Hammer
 item.magneticraft.stone_hammer_normal.name=Stone Hammer
@@ -164,15 +163,6 @@ tile.magneticraft.pumpjack_drill_normal.name=Pumpjack Pipe
 tile.magneticraft.electric_heater_off.name=Electric Heater
 tile.magneticraft.electric_heater_on.name=Electric Heater (On)
 
-#tile.magneticraft.heat_pipe.name=Heat Pipe
-#tile.magneticraft.redstone_heat_pipe.name=Redstone Heat Pipe
-#tile.magneticraft.firebox.name=Firebox
-#tile.magneticraft.icebox.name=Icebox
-#tile.magneticraft.heat_sink.name=Heat sink
-#tile.magneticraft.heat_reservoir.name=Heat Reservoir
-#tile.magneticraft.thermometer_block.name=Thermocouple
-#tile.magneticraft.brick_furnace.name=Brick Furnace
-
 tile.magneticraft.water_generator_normal.name=Water Generator
 tile.magneticraft.infinite_energy_normal.name=Infinite Energy
 
@@ -192,8 +182,6 @@ tile.magneticraft.insulated_heat_pipe_normal.name=Insulated Heat Pipe
 tile.magneticraft.rf_heater_off.name=RF Heater
 
 # Multiblocks
-#tile.magneticraft.hydraulic_press.name=Hydraulic Press
-#tile.magneticraft.kiln.name=Beehive Kiln
 tile.magneticraft.sieve_inactive_north.name=Sieve
 tile.magneticraft.solar_panel_inactive_north.name=Solar Panel
 tile.magneticraft.grinder_inactive_north.name=Grinder
@@ -207,11 +195,13 @@ tile.magneticraft.hydraulic_press_inactive_north.name=Hydraulic Press
 tile.magneticraft.oil_heater_inactive_north.name=Oil Heater
 tile.magneticraft.refinery_inactive_north.name=Refinery
 
+# Ingot blocks
 #tile.magneticraft.copper_block.name=Copper Block
 #tile.magneticraft.cobalt_block.name=Cobalt Block
 #tile.magneticraft.lead_block.name=Lead Block
 #tile.magneticraft.tungsten_block.name=Tungsten Block
 
+# Multiblock parts
 tile.magneticraft.multiblock_parts_base.name=Machine Block
 tile.magneticraft.multiblock_parts_mesh.name=Filter Machine Block
 tile.magneticraft.multiblock_parts_electric.name=Electrical Machine Block
@@ -225,8 +215,10 @@ tile.magneticraft.multiblock_column_axis_z.name=Support Column (Z axis)
 tile.magneticraft.multiblock_gap_normal.name=Multiblock
 tile.magneticraft.multiblock_gap.name=Multiblock
 
+# Creative tab
 itemGroup.magneticraft=Magneticraft
 
+# Connection messages
 text.magneticraft.wire_connect.success=Wire attached
 text.magneticraft.wire_connect.fail=Unable to connect wire
 text.magneticraft.wire_connect.same_block=Unable to connect wire to the same block
@@ -235,24 +227,33 @@ text.magneticraft.wire_connect.updated_position=Position updated %s
 text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
+# JEI
 text.magneticraft.jei.crushing_table=Crushing Table
 text.magneticraft.jei.sluice_box=Sluice Box
 text.magneticraft.jei.hydraulic_press=Hydraulic Press
-#text.magneticraft.jei.kiln=Beehive Kiln
 text.magneticraft.jei.grinder=Grinder
 text.magneticraft.jei.sieve=Sieve
 
+#Mining level
+text.magneticraft.jei.mining_level.-1=Mining Level: Hand
+text.magneticraft.jei.mining_level.0=Mining Level: Wood
+text.magneticraft.jei.mining_level.1=Mining Level: Stone
+text.magneticraft.jei.mining_level.2=Mining Level: Iron
+text.magneticraft.jei.mining_level.3=Mining Level: Diamond
+text.magneticraft.jei.mining_level.4=Mining Level: Ardite
+text.magneticraft.jei.mining_level.other=Mining Level: %s
+
+text.magneticraft.jei.time=%s ticks
+
+# Multiblock messages
 text.magneticraft.multiblock.invalid_block=Invalid block at %s\nFound: %s\nExpected: %s
 text.magneticraft.multiblock.invalid_column_orientation=Invalid block orientation at %s\nBlock found: %s\nExpected orientation: %s
 text.magneticraft.multiblock.activate=Successfully activated
 
-#death.attack.kiln=%1$s walked into an oven.
-#death.attack.kiln.player=%1$s walked into an oven trying to escape %2$s.
-#death.attack.kiln=%1$s fed themselves into a blender.
-#death.attack.kiln.player=%2$s pushed %1s$ into a blender.
-
+# Item tooltips
 tooltip.magneticraft.item_storage.energy=%f/%fJ
 tooltip.magneticraft.multiblock.blueprint=Place down this blueprint to see the multiblock pattern
 
+# Fluids
 fluid.magneticraft.steam=Steam
 fluid.magneticraft.oil=Oil

@@ -32,6 +32,7 @@ import mezz.jei.api.recipe.IRecipeWrapper
 import mezz.jei.gui.elements.DrawableResource
 import mezz.jei.util.Translator
 import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fluids.FluidStack
@@ -95,16 +96,17 @@ class MagneticraftPlugin : IModPlugin {
                 },
                 extras = { it: Minecraft, r: CrushingTableRecipeWrapper ->
                     val level = ModuleCrushingTable.getCrushingLevel(r.recipe.input)
-                    val name = when(level){
-                        -1 -> "Hand"
-                        0 -> "Wood"
-                        1 -> "Stone"
-                        2 -> "Iron"
-                        3 -> "Diamond"
-                        4 -> "Ardite"
-                        else -> level.toString()
+
+                    val name = when (level) {
+                        -1 -> I18n.format("text.magneticraft.jei.mining_level.-1")
+                        0 -> I18n.format("text.magneticraft.jei.mining_level.0")
+                        1 -> I18n.format("text.magneticraft.jei.mining_level.1")
+                        2 -> I18n.format("text.magneticraft.jei.mining_level.2")
+                        3 -> I18n.format("text.magneticraft.jei.mining_level.3")
+                        4 -> I18n.format("text.magneticraft.jei.mining_level.4")
+                        else -> I18n.format("text.magneticraft.jei.mining_level.other", level.toString())
                     }
-                    it.fontRenderer.drawStringWithShadow("Mining Level: $name", 32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
+                    it.fontRenderer.drawStringWithShadow(name, 32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
                 }
         ))
 
@@ -193,7 +195,7 @@ class MagneticraftPlugin : IModPlugin {
 
                     recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
-                        addTooltip("${recipeWrapper.recipe.duration} ticks")
+                        addTooltip(I18n.format("text.magneticraft.jei.time", recipeWrapper.recipe.duration.toString()))
                     })
 
                     // mode indicator
@@ -229,7 +231,9 @@ class MagneticraftPlugin : IModPlugin {
                     recipeLayout.fluidStacks.set(1, recipeWrapper.recipe.output)
                 },
                 extras = { it: Minecraft, r: OilHeaterRecipeWrapper ->
-                    it.fontRenderer.drawStringWithShadow("${r.recipe.duration} ticks", 32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
+                    it.fontRenderer.drawStringWithShadow(
+                            I18n.format("text.magneticraft.jei.time", r.recipe.duration.toString()),
+                            32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
                 }
         ))
     }
