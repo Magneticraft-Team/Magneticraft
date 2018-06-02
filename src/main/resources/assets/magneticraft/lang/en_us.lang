@@ -180,6 +180,7 @@ tile.magneticraft.heat_sink_down.name=Heat sink
 tile.magneticraft.heat_pipe_normal.name=Heat Pipe
 tile.magneticraft.insulated_heat_pipe_normal.name=Insulated Heat Pipe
 tile.magneticraft.rf_heater_off.name=RF Heater
+tile.magneticraft.electric_cable_normal.name=Electric cable
 
 # Multiblocks
 tile.magneticraft.sieve_inactive_north.name=Sieve
@@ -233,9 +234,11 @@ text.magneticraft.jei.sluice_box=Sluice Box
 text.magneticraft.jei.hydraulic_press=Hydraulic Press
 text.magneticraft.jei.grinder=Grinder
 text.magneticraft.jei.sieve=Sieve
+text.magneticraft.jei.oil_heater=Oil Heater
+text.magneticraft.jei.refinery=Refinery
 
 #Mining level
-text.magneticraft.jei.mining_level.-1=Mining Level: Hand
+text.magneticraft.jei.mining_level.-1=Mining Level: Any
 text.magneticraft.jei.mining_level.0=Mining Level: Wood
 text.magneticraft.jei.mining_level.1=Mining Level: Stone
 text.magneticraft.jei.mining_level.2=Mining Level: Iron
@@ -244,6 +247,10 @@ text.magneticraft.jei.mining_level.4=Mining Level: Ardite
 text.magneticraft.jei.mining_level.other=Mining Level: %s
 
 text.magneticraft.jei.time=%s ticks
+
+text.magneticraft.jei.hydraulic_hammer.light=Light Model
+text.magneticraft.jei.hydraulic_hammer.medium=Medium Mode
+text.magneticraft.jei.hydraulic_hammer.heavy=Heavy Mode
 
 # Multiblock messages
 text.magneticraft.multiblock.invalid_block=Invalid block at %s\nFound: %s\nExpected: %s

@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterRecipe
+import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.block.ManualMachines
@@ -45,12 +46,13 @@ import net.minecraftforge.oredict.OreDictionary
 class MagneticraftPlugin : IModPlugin {
 
     companion object {
-        val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
-        val SLUICE_BOX_ID = "magneticraft.sluice_box"
-        val GRINDER_ID = "magneticraft.grinder"
-        val SIEVE_ID = "magneticraft.sieve"
-        val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
-        val OIL_HEATER_ID = "magneticraft.oil_heater"
+        const val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
+        const val SLUICE_BOX_ID = "magneticraft.sluice_box"
+        const val GRINDER_ID = "magneticraft.grinder"
+        const val SIEVE_ID = "magneticraft.sieve"
+        const val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
+        const val OIL_HEATER_ID = "magneticraft.oil_heater"
+        const val REFINERY_ID = "magneticraft.refinery"
     }
 
     override fun register(registry: IModRegistry) {
@@ -79,12 +81,16 @@ class MagneticraftPlugin : IModPlugin {
         registry.addRecipeCatalyst(Multiblocks.oilHeater.stack(), OIL_HEATER_ID)
         registry.addRecipes(MagneticraftApi.getOilHeaterRecipeManager().recipes, OIL_HEATER_ID)
 
+        registry.handleRecipes(IRefineryRecipe::class.java, ::RefineryRecipeWrapper, REFINERY_ID)
+        registry.addRecipeCatalyst(Multiblocks.refinery.stack(), REFINERY_ID)
+        registry.addRecipes(MagneticraftApi.getRefineryRecipeManager().recipes, REFINERY_ID)
+
 //        registry.addRecipeClickArea(...) fuck
     }
 
     override fun registerCategories(registry: IRecipeCategoryRegistration) {
 
-        registry.addRecipeCategories(RecipeCategory<CrushingTableRecipeWrapper>(
+        registry.addRecipeCategories(RecipeCategory(
                 id = CRUSHING_TABLE_ID,
                 backgroundTexture = "crushing_table",
                 unlocalizedTitle = "text.magneticraft.jei.crushing_table",
@@ -185,7 +191,7 @@ class MagneticraftPlugin : IModPlugin {
                 }
         ))
 
-        registry.addRecipeCategories(RecipeCategory<HydraulicPressRecipeWrapper>(
+        registry.addRecipeCategories(RecipeCategory(
                 id = HYDRAULIC_PRESS_ID,
                 backgroundTexture = "hydraulic_press",
                 unlocalizedTitle = "text.magneticraft.jei.hydraulic_press",
@@ -204,7 +210,10 @@ class MagneticraftPlugin : IModPlugin {
                         HydraulicPressMode.LIGHT -> EnumMetal.COPPER.getIngot()
                         HydraulicPressMode.MEDIUM -> EnumMetal.COPPER.getLightPlate()
                         HydraulicPressMode.HEAVY -> EnumMetal.COPPER.getHeavyPlate()
-                    }.apply { addTooltip("${recipeWrapper.recipe.mode.name.toLowerCase().capitalize()} mode") }
+                    }
+
+                    modeItem.addTooltip(I18n.format("text.magneticraft.jei.hydraulic_hammer." +
+                            recipeWrapper.recipe.mode.name.toLowerCase()))
 
                     recipeLayout.itemStacks.init(2, false, 78, 25)
                     recipeLayout.itemStacks.set(2, modeItem)
@@ -215,7 +224,7 @@ class MagneticraftPlugin : IModPlugin {
                 ).let { res -> { it: Minecraft, _: HydraulicPressRecipeWrapper -> res.draw(it) } } // create the resource only when the gui opens
         ))
 
-        registry.addRecipeCategories(RecipeCategory<OilHeaterRecipeWrapper>(
+        registry.addRecipeCategories(RecipeCategory(
                 id = OIL_HEATER_ID,
                 backgroundTexture = "oil_heater",
                 unlocalizedTitle = "text.magneticraft.jei.oil_heater",
@@ -231,6 +240,34 @@ class MagneticraftPlugin : IModPlugin {
                     recipeLayout.fluidStacks.set(1, recipeWrapper.recipe.output)
                 },
                 extras = { it: Minecraft, r: OilHeaterRecipeWrapper ->
+                    it.fontRenderer.drawStringWithShadow(
+                            I18n.format("text.magneticraft.jei.time", r.recipe.duration.toString()),
+                            32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
+                }
+        ))
+
+        registry.addRecipeCategories(RecipeCategory(
+                id = REFINERY_ID,
+                backgroundTexture = "refinery",
+                unlocalizedTitle = "text.magneticraft.jei.refinery",
+                initFunc = { recipeLayout, recipeWrapper, _ ->
+
+                    val cap1 = recipeWrapper.recipe.input.amount
+                    val cap2 = recipeWrapper.recipe.output0?.amount ?: 10
+                    val cap3 = recipeWrapper.recipe.output1?.amount ?: 10
+                    val cap4 = recipeWrapper.recipe.output2?.amount ?: 10
+
+                    recipeLayout.fluidStacks.init(0, true, 40, 48, 16, 16, cap1, false, null)
+                    recipeLayout.fluidStacks.init(1, false, 60, 48, 16, 16, cap2, false, null)
+                    recipeLayout.fluidStacks.init(2, false, 60, 30, 16, 16, cap3, false, null)
+                    recipeLayout.fluidStacks.init(3, false, 60, 12, 16, 16, cap4, false, null)
+
+                    recipeLayout.fluidStacks.set(0, recipeWrapper.recipe.input)
+                    recipeWrapper.recipe.output0?.let { recipeLayout.fluidStacks.set(1, it) }
+                    recipeWrapper.recipe.output1?.let { recipeLayout.fluidStacks.set(2, it) }
+                    recipeWrapper.recipe.output2?.let { recipeLayout.fluidStacks.set(3, it) }
+                },
+                extras = { it: Minecraft, r: RefineryRecipeWrapper ->
                     it.fontRenderer.drawStringWithShadow(
                             I18n.format("text.magneticraft.jei.time", r.recipe.duration.toString()),
                             32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
@@ -341,6 +378,16 @@ class OilHeaterRecipeWrapper(val recipe: IOilHeaterRecipe) : IRecipeWrapper {
     override fun getIngredients(ingredients: IIngredients) {
         ingredients.setInput(FluidStack::class.java, recipe.input)
         ingredients.setOutput(FluidStack::class.java, recipe.output)
+    }
+}
+
+class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients) {
+        ingredients.setInput(FluidStack::class.java, recipe.input)
+        recipe.output0?.let { ingredients.setOutput(FluidStack::class.java, it) }
+        recipe.output1?.let { ingredients.setOutput(FluidStack::class.java, it) }
+        recipe.output2?.let { ingredients.setOutput(FluidStack::class.java, it) }
     }
 }
 
