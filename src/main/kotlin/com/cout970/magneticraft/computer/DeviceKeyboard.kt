@@ -65,12 +65,12 @@ class DeviceKeyboard : IDevice, IResettable {
     }
 
     fun onKeyPress(key: Int, code: Int) {
-        keyStates[code] = 1
+        keyStates[code and 0xFF] = 1
         events.addLast(KeyEvent(key, code))
     }
 
     fun onKeyRelease(key: Int, code: Int) {
-        keyStates[code] = 0
+        keyStates[code and 0xFF] = 0
     }
 
     //Client to Server sync

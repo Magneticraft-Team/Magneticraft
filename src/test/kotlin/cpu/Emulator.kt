@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.computer.IROM
 import com.cout970.magneticraft.computer.*
 import com.cout970.magneticraft.misc.network.IBD
 import gnu.trove.map.hash.TIntObjectHashMap
+import org.lwjgl.input.Keyboard
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -23,7 +24,7 @@ private var useOs = true
 
 fun main(args: Array<String>) {
 
-    val img = "drivers"
+    val img = "editor"
     val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
     val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
@@ -110,29 +111,31 @@ private fun createDisplay(monitor: DeviceMonitor, keyboard: DeviceKeyboard): Mon
                 useOs = false
                 println("Disk changed!")
             }
-            val ibd = IBD()
-            keyboard.onKeyPress(mapKey(e.keyChar.toInt()), e.keyCode)
-            keyboard.saveToServer(ibd)
-            keyboard.loadFromClient(ibd)
+
+            if (e.modifiers and java.awt.event.InputEvent.CTRL_MASK > 0 && e.keyCode != 17) {
+                e.keyChar += 96
+            }
+
+            if (e.keyChar.toInt() in 32..126) {
+                val ibd = IBD()
+                keyboard.onKeyPress(e.keyChar.toInt(), 0)
+                keyboard.saveToServer(ibd)
+                keyboard.loadFromClient(ibd)
+            }
         }
 
         override fun keyPressed(e: KeyEvent) {
-            val code = when (e.keyCode) {
-                37 -> 203 // left
-                38 -> 200 // up
-                39 -> 205 // right
-                40 -> 208 // down
-                else -> return
+            if (e.keyChar.toInt() !in 32..126) {
+                val ibd = IBD()
+                keyboard.onKeyPress(mapKey(e.keyCode), mapKeyCode(e.keyCode))
+                keyboard.saveToServer(ibd)
+                keyboard.loadFromClient(ibd)
             }
-            val ibd = IBD()
-            keyboard.onKeyPress(code, e.keyCode)
-            keyboard.saveToServer(ibd)
-            keyboard.loadFromClient(ibd)
         }
 
         override fun keyReleased(e: KeyEvent) {
             val ibd = IBD()
-            keyboard.onKeyRelease(mapKey(e.keyChar.toInt()), e.keyCode)
+            keyboard.onKeyRelease(mapKey(e.keyCode), mapKeyCode(e.keyCode))
             keyboard.saveToServer(ibd)
             keyboard.loadFromClient(ibd)
         }
@@ -141,7 +144,88 @@ private fun createDisplay(monitor: DeviceMonitor, keyboard: DeviceKeyboard): Mon
 }
 
 fun mapKey(code: Int): Int = when (code) {
-    10 -> 13
+    20 -> 0 // caps lock
+
+    38 -> 1 // UP
+    40 -> 2 // DOWN
+    37 -> 3 // LEFT
+    39 -> 4 // RIGHT
+
+    36 -> 5 // HOME
+    33 -> 6 // PRIOR (re-pag)
+    35 -> 7 // END
+    34 -> 8 // NEXT (av-pag)
+    155 -> 10 // INSERT
+    127 -> 13 // DELETE
+
+    8 -> 11 // BACK
+    9 -> 9 // TAB
+    10 -> 10 // RETURN
+    17 -> 14 // LCONTROL
+
+    16 -> 15 // LSHIFT
+//    16 -> 16 // RSHIFT
+    18 -> 17 // LMENU
+
+    112 -> 18 // F1
+    113 -> 19 // F2
+    114 -> 20 // F3
+    115 -> 21 // F4
+    116 -> 22 // F5
+    117 -> 23 // F6
+    118 -> 24 // F7
+    119 -> 25 // F8
+    120 -> 26 // F9
+    121 -> 27 // F10
+
+//    17 -> 28 // RCONTROL
+//    18 -> 29 // RMENU
+
+    524 -> 30 // LMETA
+    525 -> 31 // RMETA
+    else -> code
+}
+
+fun mapKeyCode(code: Int): Int = when (code) {
+    20 -> 0 // caps lock
+
+    38 -> Keyboard.KEY_UP // UP
+    40 -> Keyboard.KEY_DOWN // DOWN
+    37 -> Keyboard.KEY_LEFT // LEFT
+    39 -> Keyboard.KEY_RIGHT // RIGHT
+
+    36 -> Keyboard.KEY_HOME // HOME
+    33 -> Keyboard.KEY_PRIOR // PRIOR (re-pag)
+    35 -> Keyboard.KEY_END // END
+    34 -> Keyboard.KEY_NEXT // NEXT (av-pag)
+    155 -> Keyboard.KEY_INSERT // INSERT
+    127 -> Keyboard.KEY_DELETE // DELETE
+
+    8 -> Keyboard.KEY_BACK // BACK
+    9 -> Keyboard.KEY_TAB // TAB
+    10 -> Keyboard.KEY_RETURN // RETURN
+    17 -> Keyboard.KEY_LCONTROL // LCONTROL
+
+    16 -> Keyboard.KEY_LSHIFT // LSHIFT
+//    16 -> 16 // RSHIFT
+    18 -> Keyboard.KEY_LMENU // LMENU
+
+    112 -> Keyboard.KEY_F1 // F1
+    113 -> Keyboard.KEY_F2 // F2
+    114 -> Keyboard.KEY_F3 // F3
+    115 -> Keyboard.KEY_F4 // F4
+    116 -> Keyboard.KEY_F5 // F5
+    117 -> Keyboard.KEY_F6 // F6
+    118 -> Keyboard.KEY_F7 // F7
+    119 -> Keyboard.KEY_F8 // F8
+    120 -> Keyboard.KEY_F8 // F9
+    121 -> Keyboard.KEY_F10 // F10
+
+//    17 -> 28 // RCONTROL
+//    18 -> 29 // RMENU
+
+    524 -> Keyboard.KEY_LMETA // LMETA
+    525 -> Keyboard.KEY_RMETA // RMETA
     else -> code
 }
 

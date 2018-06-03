@@ -385,9 +385,7 @@ class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
 
     override fun getIngredients(ingredients: IIngredients) {
         ingredients.setInput(FluidStack::class.java, recipe.input)
-        recipe.output0?.let { ingredients.setOutput(FluidStack::class.java, it) }
-        recipe.output1?.let { ingredients.setOutput(FluidStack::class.java, it) }
-        recipe.output2?.let { ingredients.setOutput(FluidStack::class.java, it) }
+        ingredients.setOutputs(FluidStack::class.java, listOfNotNull(recipe.output0, recipe.output1, recipe.output2))
     }
 }
 
