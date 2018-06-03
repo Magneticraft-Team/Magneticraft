@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.gui.client.components
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.core.DrawableBox
@@ -74,7 +75,9 @@ class CompBookRenderer : IComponent {
     }
 
     fun loadPages() {
-        book = loadBook()
+        if(Debug.DEBUG) {
+            book = loadBook()
+        }
         val doc = book.sections[currentSection]?.document ?: errorDocument()
 
         pages = MdRenderer.render(doc, pageSize, gui.fontHelper.FONT_HEIGHT, gui.fontHelper::getStringWidth)

@@ -32,7 +32,9 @@
                 "test23": "magneticraft:fluids/kerosene_flow",
                 "test24": "magneticraft:fluids/kerosene_still",
                 "test25": "magneticraft:fluids/naphtha_flow",
-                "test26": "magneticraft:fluids/naphtha_still"
+                "test26": "magneticraft:fluids/naphtha_still",
+                "test27": "magneticraft:fluids/fuel_flow",
+                "test28": "magneticraft:fluids/fuel_still"
             }
         }],
         "full_90": [{

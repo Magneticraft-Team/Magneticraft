@@ -32,7 +32,7 @@ fun loadBook(): Book {
 
             val prefix = name.substringBeforeLast('/', "")
 
-            Section(name, MarkdownDocument(parseChildren(text), prefix))
+            Section(name, parseMarkdownDocument(text, prefix))
         }
 
         checkInvalidLinks(sections)

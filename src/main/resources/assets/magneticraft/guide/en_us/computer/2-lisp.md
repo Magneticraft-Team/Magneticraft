@@ -1,18 +1,9 @@
 # Lisp
 
-Lisp is an old programing language, I decided to add it because it simple and has garbage collection.
+Lisp is an old programing language, it was created around 1958, but it introduced a lot of features that 
+modern programing languages still use like immutable lists, garbage collection, closures, lambdas, even metaprograming macros.
 
 ### Bases
-This implementation of lisp has the following object types:
-- Number
-- Symbol
-- Function
-- Native Function
-- Cons (Pair/List)
-- Macros
-
-Cons ats as a pair of two values or as a list when the second value is another pair
-
 To run a function just place the name of the function between parents, for example: (free)
 add arguments placing them inside the parents after the function name: (print 5)
 

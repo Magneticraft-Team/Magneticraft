@@ -97,10 +97,10 @@ fun initFluids() {
         )
     }
 
-    if (!FluidRegistry.isFluidRegistered("naptha")) {
+    if (!FluidRegistry.isFluidRegistered("naphtha")) {
         FluidRegistry.registerFluid(
-                Fluid("naptha", resource("fluids/naptha_still"), resource("fluids/naptha_flow")).also {
-                    it.unlocalizedName = "magneticraft.naptha"
+                Fluid("naphtha", resource("fluids/naphtha_still"), resource("fluids/naphtha_flow")).also {
+                    it.unlocalizedName = "magneticraft.naphtha"
                     it.temperature = STANDARD_AMBIENT_TEMPERATURE.toInt()
                     it.density = 800
                     it.viscosity = 1000

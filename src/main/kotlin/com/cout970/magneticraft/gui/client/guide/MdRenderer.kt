@@ -56,6 +56,15 @@ object MdRenderer {
                 ctx.newLine()
                 emptyList()
             }
+            is MdListItem -> {
+                val children = childs.flatMap { renderTag(ctx, it) }
+                ctx.newLine()
+                children
+            }
+            is MdUnsortedList -> {
+                ctx.newLine()
+                childs.flatMap { renderText(ctx, "* ") + renderTag(ctx, it) }
+            }
             else -> emptyList()
         }
     }
@@ -106,8 +115,8 @@ object MdRenderer {
         }
 
         // we remove the ".md" suffix of the page Url because
-        // * with .md suffix, in github we can follow the links in the formatted Markdown
-        // * in game we register resources without ".md" suffixes (see removeSuffix(...) call in Chapters#loadBook)
+        // with .md suffix, in github we can follow the links in the formatted Markdown
+        // in game we register resources without ".md" suffixes (see removeSuffix(...) call in Chapters#loadBook)
         val section = baseLoc + urlWithoutPage.removeSuffix(".md")
 
         return section to page

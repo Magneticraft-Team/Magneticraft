@@ -3,123 +3,143 @@ package com.cout970.magneticraft.gui.client.guide
 import java.util.*
 
 fun main(args: Array<String>) {
-    MarkdownParser("""
-        # Title
-        ## Header 2
-        ### Header 3
-        #### Header 4
-        ##### Header 5
-        ###### Header 6
-        ####### Header 7
+    val parser = MarkdownParser("""# World Generation
 
-        First       line
+**Copper Ore**
 
-        - list
-        - list2
-        + also list
+A common ore that is used in lots of recipes, it's found in the form of Chalcopyrite
+Default config values:
+- Max veins per chunk: 11
+- Max blocks per vein: 8
+- Min Y level: 10
+- Max Y level: 70
 
-        *bold*
-        **italics**
-        ***bold_italics***
-        _underline_
+**Lead Ore**
 
-        Title and line
-        ---
+A common ore that is used in lots of recipes, it's found in the form of Galena, a compound of lead and silver.
+Default config values:
+- Max veins per chunk: 10
+- Max blocks per vein: 8
+- Min Y level: 2
+- Max Y level: 80
 
-        title and line
-        ===
+**Tungsten Ore**
 
-        [Link](url)
+A strong, rarer ore that is used in large amounts of industrial machinery, it's found in the form of Wolframite
+Default config values:
+- Max veins per chunk: 8
+- Max blocks per vein: 8
+- Min Y level: 20
+- Max Y level: 60
 
 
+**Pyrite Ore**
 
+A compound of iron and sulfur (iron sulfide) also known as fool's gold, looks exactly like gold, but it's used to get sulfur.
+Default config values:
+- Max veins per chunk: 9
+- Max blocks per vein: 9
+- Min Y level: 30
+- Max Y level: 100
 
-        Text
-        in
-        only
-        one
-        paragraph
+**Limestone**
 
-        Another paragraph
+A common rock type that generates in large veins
+- Max veins per chunk: 2
+- Max blocks per vein: 50
+- Min Y level: 16
+- Max Y level: 50""".trimIndent())
 
-        """.trimIndent()).parse()
+    println(parser.parse())
+
 }
 
-const val EOF = -1
-const val H1 = 255
-const val H2 = 256
-const val H3 = 257
-const val H4 = 258
-const val H5 = 259
-const val H6 = 260
-const val SPACE = ' '.toInt()
-const val UNUSED2 = 262
-const val ASTERISK1 = '*'.toInt()
-const val ASTERISK2 = 263
-const val ASTERISK3 = 264
-const val LINE_END = '\n'.toInt()
-const val PARAGRAPH_END = 265
-const val WORD = 266
+private const val EOF = -1
+private const val H1 = 255
+private const val H2 = 256
+private const val H3 = 257
+private const val H4 = 258
+private const val H5 = 259
+private const val H6 = 260
+private const val SPACE = ' '.toInt()
+private const val ASTERISK1 = '*'.toInt()
+private const val ASTERISK2 = 263
+private const val ASTERISK3 = 264
+private const val LINE_END = '\n'.toInt()
+private const val PARAGRAPH_END = 265
+private const val WORD = 266
+private const val LEFT_BRACE = '['.toInt()
+private const val RIGHT_BRACE = ']'.toInt()
+private const val LEFT_PAREN = '('.toInt()
+private const val RIGHT_PAREN = ')'.toInt()
 
-typealias Token = Pair<Int, String>
+private typealias Token = Pair<Int, String>
 
 data class Document(val paragraphs: List<Paragraph>) {
     override fun toString(): String {
-        return paragraphs.joinToString("\n")
+        return paragraphs.joinToString("\n\n")
     }
 }
 
-sealed class Paragraph
-
-data class Header(val level: Int, val line: Line) : Paragraph() {
+data class Paragraph(val lines: List<Line>) {
     override fun toString(): String {
-        return "${"#" * level} $line"
+        return lines.joinToString("\n") { "Line('$it')" }
     }
 }
 
-data class LargeText(val lines: List<Line>) : Paragraph() {
+data class Header(val level: Int, val content: List<LineContent>) : LineContent() {
     override fun toString(): String {
-        return lines.joinToString("\n")
+        return "Header($level, '${content.joinToString("")}')"
     }
 }
 
-object EmptyParagraph : Paragraph()
-
-data class Line(val lineContent: List<LineContent>) {
+data class Line(val content: List<LineContent>) {
     override fun toString(): String {
-        return lineContent.joinToString("")
+        return content.joinToString("")
     }
 }
 
 sealed class LineContent
 
-data class Text(val str: String) : LineContent() {
+data class Text(val txt: String) : LineContent() {
     override fun toString(): String {
-        return str
+        return txt
     }
 }
 
-data class Bold(val txt: Text) : LineContent() {
+data class Bold(val txt: String) : LineContent() {
     override fun toString(): String {
-        return "Bold($txt)"
+        return "Bold('$txt')"
     }
 }
 
-data class Italic(val txt: Text) : LineContent() {
+data class Italic(val txt: String) : LineContent() {
     override fun toString(): String {
-        return "Italic($txt)"
+        return "Italic('$txt')"
     }
 }
 
-data class BoldItalic(val txt: Text) : LineContent() {
+data class BoldItalic(val txt: String) : LineContent() {
     override fun toString(): String {
-        return "BoldItalic($txt)"
+        return "BoldItalic('$txt')"
     }
 }
 
-data class Link(val txt: Text, val url: String) : LineContent() {
+data class Link(val txt: String, val url: String) : LineContent() {
     override fun toString(): String {
-        return "[$txt]($url)"
+        return "Link('$txt', '$url')"
+    }
+}
+
+data class ListItem(val content: List<LineContent>) : LineContent() {
+    override fun toString(): String {
+        return "ListItem('${content.joinToString("")}')"
+    }
+}
+
+data class ListGroup(val items: List<ListItem>) : LineContent() {
+    override fun toString(): String {
+        return "ListGroup(${items.joinToString()})"
     }
 }
 
@@ -127,305 +147,239 @@ class MarkdownParser(str: String) {
 
     val buff = TokenBuffer(StringBuilder(str))
 
-    fun parse() {
-        println(readDocument())
-    }
+    fun parse() = readDocument()
 
-    /* Basic Grammar
+    private val Token.id: Int get() = first
+    private val Token.content: String get() = second
 
-    document = paragraph*
-
-    paragraph = header
-              | large_text
-              | list
-              | dash
-              | SPACE*
-              ;
-
-    header_mark = H1 | H2 | H3 | H4 | H5 | H6
-
-    header = header_mark SPACE* line
-
-    large_text = line* (PARAGRAPH_END | EOF)
-
-    list = list_line* (PARAGRAPH_END | EOF)
-
-    list_line = ('-' | '+' | '*') SPACE line
-
-    line = line_content* END_LINE
-
-    line_content = text | italic | bold | bold_italic | link
-
-    text = header_mark | WORD | SPACE*
-
-    phrase = WORD (SPACE* WORD)*
-
-    bold = ASTERISK1 phrase ASTERISK1
-    italic = ASTERISK2 phrase ASTERISK2
-    bold_italic = ASTERISK3 phraseASTERISK3
-
-    link = '[' phrase ']' '(' WORD ')'
-
-     */
-
-    fun readDocument(): Document {
-        val list = readList(this::readParagraph)
-        return Document(list)
-    }
-
-    fun readParagraph(): Paragraph? {
-        readAll(SPACE)
-
-        val header = readHeader()
-        if (header != null) return header
-
-        val largeText = readLargeText()
-        if (largeText != null) return largeText
-
-        val tk = buff.read()
-
-        if (tk.first == EOF) return null
-
-        return EmptyParagraph
-    }
-
-    fun readHeader(): Header? {
-        val tk1 = buff.read()
-
-        when (tk1.first) {
-            H1, H2, H3, H4, H5, H6 -> Unit
-            else -> {
-                buff.returnToken(tk1)
-                return null
-            }
-        }
-
-        val level = tk1.first - H1 + 1
-
-        val tk2 = buff.read()
-
-        if (tk2.first != SPACE) {
-            buff.returnToken(tk2)
-            buff.returnToken(tk1)
-            return null
-        }
-
-        readAll(SPACE)
-
-        val line = readLine() ?: error("Expected line: $buff")
-
-        return Header(level, line)
-    }
-
-    fun readLargeText(): LargeText? {
-        val list = readList(this::readLine)
-        if (list.isEmpty()) return null
-        return LargeText(list)
-    }
-
-    fun readLine(): Line? {
-
-        val content = readLineContent()
-
-        val list =
-                if (content != null)
-                    listOf(content) + readList(this::readLineContent)
-                else
-                    emptyList()
-
-        val tk = buff.read()
-
-        if (tk.first != LINE_END && tk.first != PARAGRAPH_END) {
-            if (content == null) {
-                return null
-            } else {
-                error("Unfinished line: tk: $tk, buff: \n${buff.buff}")
-            }
-        }
-
-        return Line(list)
-    }
-
-    fun readLineContent(): LineContent? {
-        return readBold()
-                ?: readItalic()
-                ?: readBoldItalic()
-                ?: readLink()
-                ?: readText()
-    }
-
-    fun readBold(): Bold? {
-        val tk = buff.read()
-
-        if (tk.first != ASTERISK1) {
-            buff.returnToken(tk)
-            return null
-        }
-
-        val phrase = readPhrase()
-
-        if (phrase == null) {
-            buff.returnToken(tk)
-            return null
-        }
-        buff.expect(ASTERISK1)
-        return Bold(phrase)
-    }
-
-    fun readItalic(): Italic? {
-        val tk = buff.read()
-
-        if (tk.first != ASTERISK2) {
-            buff.returnToken(tk)
-            return null
-        }
-
-        val phrase = readPhrase()
-
-        if (phrase == null) {
-            buff.returnToken(tk)
-            return null
-        }
-        buff.expect(ASTERISK2)
-        return Italic(phrase)
-    }
-
-    fun readBoldItalic(): BoldItalic? {
-        val tk = buff.read()
-
-        if (tk.first != ASTERISK3) {
-            buff.returnToken(tk)
-            return null
-        }
-
-        val phrase = readPhrase()
-
-        if (phrase == null) {
-            buff.returnToken(tk)
-            return null
-        }
-        buff.expect(ASTERISK3)
-        return BoldItalic(phrase)
-    }
-
-    fun readPhrase(): Text? {
-        var str = ""
-        buff.save()
-        val tk = buff.read()
-
-        if (tk.first != WORD) {
-            buff.load()
-            return null
-        }
-
-        str += tk.second
-
-        while (true) {
-            val tk1 = buff.read()
-
-            if (tk1.first != SPACE) {
-                buff.returnToken(tk1)
-                break
-            }
-
-            val spaces = readAll(SPACE)
-
-            val tk2 = buff.read()
-
-            if (tk2.first != WORD) {
-                TODO()
-//                buff.load()
-//                return
-                break
-            }
-
-            str += tk1.second
-            str += tk2.second
-        }
-
-        return Text(str)
-    }
-
-    fun readLink(): LineContent? {
-        val tk1 = buff.read()
-
-        if (tk1.second != "[") {
-            buff.returnToken(tk1)
-            return null
-        }
-
-        val text = readPhrase()
-
-        if (text == null) {
-            buff.returnToken(tk1)
-            return null
-        }
-
-        val tk2 = buff.expect(WORD)
-
-        if (tk2.second != "]") {
-            buff.returnToken(tk2)
-            return Text("[${text.str}")
-        }
-
-        val tk3 = buff.read()
-
-        if (tk3.second != "(") {
-            buff.returnToken(tk3)
-            return Text("[${text.str}]")
-        }
-
-        val tk4 = buff.expect(WORD)
-
-        val tk5 = buff.read()
-
-        if (tk5.second != ")") {
-            buff.returnToken(tk5)
-            return Text("[${text.str}](${tk4.second}")
-        }
-
-        return Link(text, tk4.second)
-    }
-
-    fun readText(): Text? {
-        val tk = buff.read()
-
-        return when (tk.first) {
-            H1, H2, H3, H4, H5, H6, WORD, ASTERISK1, ASTERISK2, ASTERISK3 -> Text(tk.second)
-            SPACE -> {
-                readAll(SPACE)
-                Text(" ")
-            }
-            else -> {
-                buff.returnToken(tk)
-                null
-            }
-        }
-    }
-
-    fun readAll(kind: Int) {
-        var tk: Token
+    private fun readDocument(): Document {
+        val list = mutableListOf<Paragraph>()
 
         do {
-            tk = buff.read()
-        } while (tk.first == kind)
-
-        buff.returnToken(tk)
-    }
-
-    inline fun <T> readList(func: () -> T?): List<T> {
-        val list = mutableListOf<T>()
-
-        do {
-            val p = func() ?: break
+            val p = readParagraph() ?: break
             list.add(p)
         } while (true)
 
-        return list
+        return Document(list)
+    }
+
+    private fun readParagraph(): Paragraph? {
+        var tk: Token
+
+        // ignore initial spaces
+        do {
+            tk = buff.read()
+        } while (tk.first == SPACE)
+        buff.returnToken(tk)
+
+        val tokens = mutableListOf<Token>()
+        var token: Token
+
+        do {
+            token = buff.read()
+            tokens.add(token)
+        } while (token.id != PARAGRAPH_END && token.id != EOF)
+
+        if (tokens.size == 1 && tokens[0].id == EOF) return null
+        return processParagraph(tokens.dropLast(1))
+    }
+
+    private fun processParagraph(tokens: List<Token>): Paragraph {
+        if (tokens.isEmpty()) return Paragraph(emptyList())
+
+        val lines = readLines(tokens)
+
+        if (lines.any { it.content.size == 1 && it.content[0] is ListItem }) {
+            val newLines = mutableListOf<Line>()
+            val items = mutableListOf<ListItem>()
+            var inList = false
+
+            lines.forEach { line ->
+                val isItem = line.content.size == 1 && line.content[0] is ListItem
+                val item = if (isItem) line.content[0] as ListItem else null
+
+                if (isItem) {
+                    inList = true
+                    items.add(item!!)
+                } else {
+                    if (inList) {
+                        inList = false
+                        newLines.add(Line(listOf(
+                                ListGroup(items.toList())
+                        )))
+                        items.clear()
+                    }
+                    newLines.add(line)
+                }
+            }
+
+            if (inList) {
+                newLines.add(Line(listOf(
+                        ListGroup(items)
+                )))
+            }
+
+            return Paragraph(newLines)
+        }
+
+        return Paragraph(lines)
+    }
+
+    private fun readLines(tokens: List<Token>): List<Line> {
+        val lines = mutableListOf<Line>()
+        var tokenList = tokens
+
+        while (true) {
+            val index = tokenList.indexOfFirst { it.id == LINE_END }
+
+            if (index == -1) {
+                lines += processLine(tokenList)
+                break
+            } else {
+                val line = tokenList.subList(0, index)
+                lines += processLine(line)
+                tokenList = tokenList.subList(index + 1, tokenList.size)
+            }
+        }
+
+        return lines
+    }
+
+    private fun processLine(tokens: List<Token>): Line {
+        if (tokens.size > 2 && isHeader(tokens[0]) && tokens[1].id == SPACE) {
+            return Line(listOf(
+                    readHeader(tokens)
+            ))
+        }
+
+        if (tokens.size > 2 && isList(tokens[0]) && tokens[1].id == SPACE) {
+            val rest = tokens.drop(1).dropWhile { it.id == SPACE }
+            return Line(listOf(
+                    ListItem(processText(rest))
+            ))
+        }
+
+        // TODO check for ---, etc
+        val content = processText(tokens)
+
+        return Line(content)
+    }
+
+    private fun isList(tk: Token) = when (tk.id) {
+        '-'.toInt() -> true
+        ASTERISK1 -> true
+        WORD -> tk.second == "+"
+        else -> false
+    }
+
+    private fun isHeader(tk: Token) = when (tk.id) {
+        H1, H2, H3, H4, H5, H6 -> true
+        else -> false
+    }
+
+    private fun readHeader(tokens: List<Token>): Header {
+        val level = tokens[0].id - H1 + 1
+        val content = tokens.drop(1).dropWhile { it.id == SPACE }
+
+        return Header(level, processText(content))
+    }
+
+    private fun processText(tokens: List<Token>): List<LineContent> {
+        val content = mutableListOf<LineContent>()
+        val tokensLeft = ArrayDeque(tokens)
+
+        while (tokensLeft.isNotEmpty()) {
+            val tk = tokensLeft.first
+
+            when (tk.id) {
+                ASTERISK1, ASTERISK2, ASTERISK3 -> {
+                    tokensLeft.removeFirst()
+                    val res = readTag(tk.id, tokensLeft.toList())
+
+                    if (res == null) {
+                        content.add(Text(tk.second))
+                    } else {
+                        content += res.first
+                        repeat(res.second) {
+                            tokensLeft.removeFirst()
+                        }
+                    }
+                }
+
+                LEFT_BRACE -> {
+                    tokensLeft.removeFirst()
+                    val res = readLink(tokensLeft.toList())
+
+                    if (res == null) {
+                        content.add(Text(tk.second))
+                    } else {
+                        content += res.first
+                        repeat(res.second) {
+                            tokensLeft.removeFirst()
+                        }
+                    }
+                }
+
+                else -> {
+                    content.add(Text(tk.second))
+                    tokensLeft.removeFirst()
+                }
+            }
+        }
+
+
+        return content
+    }
+
+    private fun readTag(tag: Int, tokens: List<Token>): Pair<LineContent, Int>? {
+        val index = tokens.indexOfFirst { it.id == tag }
+        if (index == -1) return null
+
+        repeat(index) {
+            when (tokens[it].id) {
+                SPACE, WORD -> Unit
+                else -> return null
+            }
+        }
+
+        val content = tokens.subList(0, index).joinToString("") { it.content }
+
+        val lineContent = when (tag) {
+            ASTERISK1 -> Bold(content)
+            ASTERISK2 -> Italic(content)
+            ASTERISK3 -> BoldItalic(content)
+            else -> Bold(content)
+        }
+        return lineContent to index + 1
+    }
+
+    private fun readLink(tokens: List<Token>): Pair<LineContent, Int>? {
+        val txtIndex = tokens.indexOfFirst { it.id == RIGHT_BRACE }
+        if (txtIndex == -1) return null
+
+        repeat(txtIndex) {
+            when (tokens[it].id) {
+                SPACE, WORD -> Unit
+                else -> return null
+            }
+        }
+
+        if (tokens[txtIndex + 1].id != LEFT_PAREN) return null
+
+        val rest = tokens.subList(txtIndex + 2, tokens.size)
+
+        val urlIndex = rest.indexOfFirst { it.id == RIGHT_PAREN }
+        if (urlIndex == -1) return null
+
+        val text = tokens.subList(0, txtIndex).joinToString("") { it.content }
+        val url = rest.subList(0, urlIndex).joinToString("") { it.content }
+
+        return Link(text, url) to txtIndex + urlIndex + 3
     }
 }
 
 object MarkdownLexer {
+
     fun nextToken(buff: StringBuilder): Token {
         if (buff.isEmpty()) return EOF to "EOF"
 
@@ -436,13 +390,17 @@ object MarkdownLexer {
             '#' -> readHeader(buff)
             '-' -> '-'.toInt() to "-"
             '=' -> '='.toInt() to "="
+            '[' -> '['.toInt() to "["
+            ']' -> ']'.toInt() to "]"
+            '(' -> '('.toInt() to "("
+            ')' -> ')'.toInt() to ")"
             '*' -> readAsterisk(buff)
             '\n' -> readEndLine(buff)
             else -> readWord(char, buff)
         }
     }
 
-    fun readWord(firstChar: Char, buff: StringBuilder): Token {
+    private fun readWord(firstChar: Char, buff: StringBuilder): Token {
         val acc = StringBuilder()
         var shouldBreak = false
 
@@ -452,7 +410,7 @@ object MarkdownLexer {
             val char = buff[0]
 
             when (char) {
-                ' ', '#', '-', '=', '*', '\n' -> shouldBreak = true
+                ' ', '#', '-', '=', '*', '\n', '[', ']', '(', ')' -> shouldBreak = true
                 else -> {
                     buff.pop()
                     acc.append(char)
@@ -462,7 +420,7 @@ object MarkdownLexer {
         return WORD to acc.toString()
     }
 
-    fun readAsterisk(buff: StringBuilder): Token {
+    private fun readAsterisk(buff: StringBuilder): Token {
         if (buff[0] == '*' && buff[1] == '*') {
             buff.pop(2)
             return ASTERISK3 to "***"
@@ -476,7 +434,7 @@ object MarkdownLexer {
         return ASTERISK1 to "*"
     }
 
-    fun readEndLine(buff: StringBuilder): Token {
+    private fun readEndLine(buff: StringBuilder): Token {
 
         if (buff.isNotEmpty() && buff[0] == '\n') {
             while (buff.isNotEmpty() && buff[0] == '\n') {
@@ -488,14 +446,14 @@ object MarkdownLexer {
         return LINE_END to "\n"
     }
 
-    fun trimSpaces(buff: StringBuilder): Token {
+    private fun trimSpaces(buff: StringBuilder): Token {
         while (buff.isNotEmpty() && buff[0] == ' ') {
             buff.pop()
         }
         return ' '.toInt() to " "
     }
 
-    fun readHeader(buff: StringBuilder): Token {
+    private fun readHeader(buff: StringBuilder): Token {
         var level = 1
         for (i in 0..4) {
             if (buff[i] != '#') {
@@ -510,9 +468,8 @@ object MarkdownLexer {
 }
 
 class TokenBuffer(startBuff: StringBuilder) {
-    private val stack = ArrayDeque<Pair<StringBuilder, ArrayDeque<Token>>>()
-    var buff: StringBuilder = startBuff
-    var buffered = ArrayDeque<Token>()
+    val buff: StringBuilder = startBuff
+    val buffered = ArrayDeque<Token>()
 
     fun read(): Token {
         return if (buffered.isEmpty()) {
@@ -525,31 +482,9 @@ class TokenBuffer(startBuff: StringBuilder) {
     fun returnToken(tk: Token) {
         buffered.addFirst(tk)
     }
-
-    fun expect(expected: Int): Token {
-        val tk = read()
-        if (tk.first != expected) {
-            error("Expected: $expected but found: $tk\nRemaining Buffer:\n$buff")
-        }
-        return tk
-    }
-
-    fun save(){
-        val newBuilder = StringBuilder(buff.toString())
-        val newTokenBuffer = ArrayDeque(buffered)
-
-        stack.push(newBuilder to newTokenBuffer)
-    }
-
-    fun load(){
-        val (builder, buffer) = stack.pop()
-
-        buff = builder
-        buffered = buffer
-    }
 }
 
-fun StringBuilder.pop(amount: Int = 1): Char {
+private fun StringBuilder.pop(amount: Int = 1): Char {
     val char = this[0]
     delete(0, amount)
     return char
