@@ -1,9 +1,8 @@
-Fix lang names
 
-Register buckets/block for fluids
 
-Fix markdown parser
 Dynamic gui system?
+
+Fix recipes
 Expand container size
 
 # release requirements
