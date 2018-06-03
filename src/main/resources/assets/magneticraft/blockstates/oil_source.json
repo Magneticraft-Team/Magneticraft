@@ -18,7 +18,21 @@
                 "test9": "magneticraft:fluids/hot_crude_flow",
                 "test10": "magneticraft:fluids/hot_crude_still",
                 "test11": "magneticraft:fluids/natural_gas_flow",
-                "test12": "magneticraft:fluids/natural_gas_still"
+                "test12": "magneticraft:fluids/natural_gas_still",
+                "test13": "magneticraft:fluids/diesel_flow",
+                "test14": "magneticraft:fluids/diesel_still",
+                "test15": "magneticraft:fluids/gasoline_flow",
+                "test16": "magneticraft:fluids/gasoline_still",
+                "test17": "magneticraft:fluids/lpg_flow",
+                "test18": "magneticraft:fluids/lpg_still",
+                "test19": "magneticraft:fluids/lubricant_flow",
+                "test20": "magneticraft:fluids/lubricant_still",
+                "test21": "magneticraft:fluids/plastic_flow",
+                "test22": "magneticraft:fluids/plastic_still",
+                "test23": "magneticraft:fluids/kerosene_flow",
+                "test24": "magneticraft:fluids/kerosene_still",
+                "test25": "magneticraft:fluids/naphtha_flow",
+                "test26": "magneticraft:fluids/naphtha_still"
             }
         }],
         "full_90": [{

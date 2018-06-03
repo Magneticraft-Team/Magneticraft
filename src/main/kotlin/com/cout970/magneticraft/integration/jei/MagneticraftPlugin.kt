@@ -13,10 +13,10 @@ import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxReci
 import com.cout970.magneticraft.block.ManualMachines
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.item.EnumMetal
+import com.cout970.magneticraft.misc.gui.formatHeat
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
-import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.list
 import com.cout970.magneticraft.util.newNbt
@@ -38,6 +38,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
+import java.awt.Color
 
 /**
  * Created by cout970 on 23/07/2016.
@@ -90,7 +91,7 @@ class MagneticraftPlugin : IModPlugin {
 
     override fun registerCategories(registry: IRecipeCategoryRegistration) {
 
-        registry.addRecipeCategories(RecipeCategory(
+        registry.addRecipeCategories(RecipeCategory<CrushingTableRecipeWrapper>(
                 id = CRUSHING_TABLE_ID,
                 backgroundTexture = "crushing_table",
                 unlocalizedTitle = "text.magneticraft.jei.crushing_table",
@@ -99,20 +100,6 @@ class MagneticraftPlugin : IModPlugin {
                     recipeLayout.itemStacks.init(1, false, 48, 51 - 5)
                     recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
                     recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
-                },
-                extras = { it: Minecraft, r: CrushingTableRecipeWrapper ->
-                    val level = ModuleCrushingTable.getCrushingLevel(r.recipe.input)
-
-                    val name = when (level) {
-                        -1 -> I18n.format("text.magneticraft.jei.mining_level.-1")
-                        0 -> I18n.format("text.magneticraft.jei.mining_level.0")
-                        1 -> I18n.format("text.magneticraft.jei.mining_level.1")
-                        2 -> I18n.format("text.magneticraft.jei.mining_level.2")
-                        3 -> I18n.format("text.magneticraft.jei.mining_level.3")
-                        4 -> I18n.format("text.magneticraft.jei.mining_level.4")
-                        else -> I18n.format("text.magneticraft.jei.mining_level.other", level.toString())
-                    }
-                    it.fontRenderer.drawStringWithShadow(name, 32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
                 }
         ))
 
@@ -191,7 +178,7 @@ class MagneticraftPlugin : IModPlugin {
                 }
         ))
 
-        registry.addRecipeCategories(RecipeCategory(
+        registry.addRecipeCategories(RecipeCategory<HydraulicPressRecipeWrapper>(
                 id = HYDRAULIC_PRESS_ID,
                 backgroundTexture = "hydraulic_press",
                 unlocalizedTitle = "text.magneticraft.jei.hydraulic_press",
@@ -217,14 +204,10 @@ class MagneticraftPlugin : IModPlugin {
 
                     recipeLayout.itemStacks.init(2, false, 78, 25)
                     recipeLayout.itemStacks.set(2, modeItem)
-                },
-                extras = DrawableResource(resource("textures/gui/jei/slot.png"), 0, 0,
-                        24, 24, 22, 4, 75, 4,
-                        24, 24
-                ).let { res -> { it: Minecraft, _: HydraulicPressRecipeWrapper -> res.draw(it) } } // create the resource only when the gui opens
+                }
         ))
 
-        registry.addRecipeCategories(RecipeCategory(
+        registry.addRecipeCategories(RecipeCategory<OilHeaterRecipeWrapper>(
                 id = OIL_HEATER_ID,
                 backgroundTexture = "oil_heater",
                 unlocalizedTitle = "text.magneticraft.jei.oil_heater",
@@ -238,15 +221,10 @@ class MagneticraftPlugin : IModPlugin {
 
                     recipeLayout.fluidStacks.set(0, recipeWrapper.recipe.input)
                     recipeLayout.fluidStacks.set(1, recipeWrapper.recipe.output)
-                },
-                extras = { it: Minecraft, r: OilHeaterRecipeWrapper ->
-                    it.fontRenderer.drawStringWithShadow(
-                            I18n.format("text.magneticraft.jei.time", r.recipe.duration.toString()),
-                            32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
                 }
         ))
 
-        registry.addRecipeCategories(RecipeCategory(
+        registry.addRecipeCategories(RecipeCategory<RefineryRecipeWrapper>(
                 id = REFINERY_ID,
                 backgroundTexture = "refinery",
                 unlocalizedTitle = "text.magneticraft.jei.refinery",
@@ -266,11 +244,6 @@ class MagneticraftPlugin : IModPlugin {
                     recipeWrapper.recipe.output0?.let { recipeLayout.fluidStacks.set(1, it) }
                     recipeWrapper.recipe.output1?.let { recipeLayout.fluidStacks.set(2, it) }
                     recipeWrapper.recipe.output2?.let { recipeLayout.fluidStacks.set(3, it) }
-                },
-                extras = { it: Minecraft, r: RefineryRecipeWrapper ->
-                    it.fontRenderer.drawStringWithShadow(
-                            I18n.format("text.magneticraft.jei.time", r.recipe.duration.toString()),
-                            32f, 64f + 8f, Utilities.colorFromRGB(1f, 1f, 1f))
                 }
         ))
     }
@@ -280,15 +253,12 @@ class RecipeCategory<T : IRecipeWrapper>(
         val id: String,
         backgroundTexture: String,
         val unlocalizedTitle: String,
-        val initFunc: (IRecipeLayout, T, IIngredients) -> Unit,
-        val extras: ((Minecraft, T) -> Unit)? = null
+        val initFunc: (IRecipeLayout, T, IIngredients) -> Unit
 ) : IRecipeCategory<T> {
 
     private val background = DrawableResource(
             resource("textures/gui/jei/$backgroundTexture.png"),
             0, 0, 64, 64, 5, 5, 25, 25, 64, 64)
-
-    var recipe: T? = null
 
     override fun getUid(): String = id
     override fun getBackground(): IDrawable = background
@@ -297,15 +267,6 @@ class RecipeCategory<T : IRecipeWrapper>(
 
     override fun setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: T, ingredients: IIngredients) {
         initFunc(recipeLayout, recipeWrapper, ingredients)
-        recipe = recipeWrapper
-    }
-
-    override fun drawExtras(minecraft: Minecraft) {
-        val e = extras
-        val r = recipe
-        if (e != null && r != null) {
-            e(minecraft, r)
-        }
     }
 }
 
@@ -320,6 +281,22 @@ class CrushingTableRecipeWrapper(val recipe: ICrushingTableRecipe) : IRecipeWrap
         }
         ingredients.setOutput(ItemStack::class.java, recipe.output)
     }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        val level = ModuleCrushingTable.getCrushingLevel(recipe.input)
+
+        val name = when (level) {
+            -1 -> I18n.format("text.magneticraft.jei.mining_level.-1")
+            0 -> I18n.format("text.magneticraft.jei.mining_level.0")
+            1 -> I18n.format("text.magneticraft.jei.mining_level.1")
+            2 -> I18n.format("text.magneticraft.jei.mining_level.2")
+            3 -> I18n.format("text.magneticraft.jei.mining_level.3")
+            4 -> I18n.format("text.magneticraft.jei.mining_level.4")
+            else -> I18n.format("text.magneticraft.jei.mining_level.other", level.toString())
+        }
+
+        minecraft.fontRenderer.drawString(name, 16, 64 + 8, Color.gray.rgb)
+    }
 }
 
 class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
@@ -331,6 +308,10 @@ class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
             ingredients.setInput(ItemStack::class.java, recipe.input)
         }
         ingredients.setOutputs(ItemStack::class.java, recipe.outputs.map { it.first })
+    }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.drawString(I18n.format("text.magneticraft.jei.require_water"), 0, 64 + 8, Color.gray.rgb)
     }
 }
 
@@ -345,6 +326,12 @@ class GrinderRecipeWrapper(val recipe: IGrinderRecipe) : IRecipeWrapper {
         }
         ingredients.setOutputs(ItemStack::class.java, listOf(recipe.primaryOutput, recipe.secondaryOutput))
     }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.drawString(
+                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+                32, 64 + 8, Color.gray.rgb)
+    }
 }
 
 class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
@@ -358,9 +345,22 @@ class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
         }
         ingredients.setOutputs(ItemStack::class.java, listOf(recipe.primary, recipe.secondary, recipe.tertiary))
     }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.drawString(
+                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+                32, 64 + 8, Color.gray.rgb)
+    }
 }
 
 class HydraulicPressRecipeWrapper(val recipe: IHydraulicPressRecipe) : IRecipeWrapper {
+
+    companion object {
+        val slot = DrawableResource(resource("textures/gui/jei/slot.png"), 0, 0,
+                24, 24, 22, 4, 75, 4,
+                24, 24
+        )
+    }
 
     override fun getIngredients(ingredients: IIngredients) {
 
@@ -371,6 +371,13 @@ class HydraulicPressRecipeWrapper(val recipe: IHydraulicPressRecipe) : IRecipeWr
         }
         ingredients.setOutput(ItemStack::class.java, recipe.output)
     }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        slot.draw(minecraft)
+        minecraft.fontRenderer.drawString(
+                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+                32, 64 + 8, Color.gray.rgb)
+    }
 }
 
 class OilHeaterRecipeWrapper(val recipe: IOilHeaterRecipe) : IRecipeWrapper {
@@ -379,6 +386,15 @@ class OilHeaterRecipeWrapper(val recipe: IOilHeaterRecipe) : IRecipeWrapper {
         ingredients.setInput(FluidStack::class.java, recipe.input)
         ingredients.setOutput(FluidStack::class.java, recipe.output)
     }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.drawString(
+                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+                32, 64 + 4, Color.gray.rgb)
+
+        minecraft.fontRenderer.drawString(formatHeat(recipe.minTemperature().toDouble()),
+                32, 64 + 8 + 8, Color.gray.rgb)
+    }
 }
 
 class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
@@ -386,6 +402,12 @@ class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
     override fun getIngredients(ingredients: IIngredients) {
         ingredients.setInput(FluidStack::class.java, recipe.input)
         ingredients.setOutputs(FluidStack::class.java, listOfNotNull(recipe.output0, recipe.output1, recipe.output2))
+    }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.drawString(
+                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+                32, 64 + 8, Color.gray.rgb)
     }
 }
 

@@ -123,6 +123,10 @@ object Magneticraft {
         logTime("Post-init done in") {
             proxy.postInit()
         }
+
+        if(Debug.DEBUG){
+            Debug.printBlockWithoutRecipe()
+        }
     }
 
     @Mod.EventHandler

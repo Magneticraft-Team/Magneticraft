@@ -1,4 +1,5 @@
 ### TODO list
+- expand container
 - fix guide
 - add conveyor belt up/down blocks
 - add insert animation
@@ -13,6 +14,8 @@
 - add conveyor belt end that drops stuff in chests
 - add wire coil durability and remove auto-connect (make lag)
 - change pumpjack mining mechanic for : amount of oil near = speed of extraction
+- mid-game combustion engine
+- fix recipe progression
 
 ### Ideas to add at some point
 - Realistic reactors

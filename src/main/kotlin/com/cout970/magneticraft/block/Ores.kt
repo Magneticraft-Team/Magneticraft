@@ -22,6 +22,7 @@ object Ores : IBlockMaker {
 
     lateinit var ores: BlockBase private set
     lateinit var oilSource: BlockBase private set
+    lateinit var storageBlocks: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -39,13 +40,17 @@ object Ores : IBlockMaker {
             onDrop = { listOf(ItemStack.EMPTY) }
         }.build()
 
+        storageBlocks = builder.withName("storage_blocks").copy {
+            states = OreType.values().toList()
+        }.build()
+
         ores.setHarvestLevel("pickaxe", 1, OreType.COPPER.getBlockState(ores))
         ores.setHarvestLevel("pickaxe", 1, OreType.LEAD.getBlockState(ores))
         ores.setHarvestLevel("pickaxe", 2, OreType.COBALT.getBlockState(ores))
         ores.setHarvestLevel("pickaxe", 2, OreType.TUNGSTEN.getBlockState(ores))
         ores.setHarvestLevel("pickaxe", 1, OreType.PYRITE.getBlockState(ores))
 
-        return itemBlockListOf(ores, oilSource)
+        return itemBlockListOf(ores, oilSource, storageBlocks)
     }
 
     enum class OilAmount(override val stateName: String,

@@ -197,10 +197,11 @@ tile.magneticraft.oil_heater_inactive_north.name=Oil Heater
 tile.magneticraft.refinery_inactive_north.name=Refinery
 
 # Ingot blocks
-#tile.magneticraft.copper_block.name=Copper Block
-#tile.magneticraft.cobalt_block.name=Cobalt Block
-#tile.magneticraft.lead_block.name=Lead Block
-#tile.magneticraft.tungsten_block.name=Tungsten Block
+tile.magneticraft.storage_blocks_copper.name=Copper Block
+tile.magneticraft.storage_blocks_cobalt.name=Cobalt Block
+tile.magneticraft.storage_blocks_lead.name=Lead Block
+tile.magneticraft.storage_blocks_tungsten.name=Tungsten Block
+tile.magneticraft.storage_blocks_pyrite.name=Sulfur Block
 
 # Multiblock parts
 tile.magneticraft.multiblock_parts_base.name=Machine Block
@@ -247,6 +248,7 @@ text.magneticraft.jei.mining_level.4=Mining Level: Ardite
 text.magneticraft.jei.mining_level.other=Mining Level: %s
 
 text.magneticraft.jei.time=%s ticks
+text.magneticraft.jei.require_water=Requires 1 Water bucket
 
 text.magneticraft.jei.hydraulic_hammer.light=Light Model
 text.magneticraft.jei.hydraulic_hammer.medium=Medium Mode
@@ -263,4 +265,21 @@ tooltip.magneticraft.multiblock.blueprint=Place down this blueprint to see the m
 
 # Fluids
 fluid.magneticraft.steam=Steam
-fluid.magneticraft.oil=Oil
+fluid.magneticraft.oil=Crude Oil
+fluid.magneticraft.hot_crude=Hot Crude
+
+fluid.magneticraft.light_oil=Light Oil
+fluid.magneticraft.heavy_oil=Heavy Oil
+fluid.magneticraft.lpg=Liquid Petroleum Gas
+
+fluid.magneticraft.natural_gas=Natural Gas
+fluid.magneticraft.naphtha=Naphtha
+fluid.magneticraft.plastic=Liquid Plastic
+
+fluid.magneticraft.diesel=Diesel
+fluid.magneticraft.kerosene=Kerosene
+fluid.magneticraft.gasoline=Gasoline
+
+fluid.magneticraft.lubricant=Lubricant
+fluid.magneticraft.fuel=Fuel
+fluid.magneticraft.oil_residue=Oil Residue

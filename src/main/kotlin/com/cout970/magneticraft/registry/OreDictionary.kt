@@ -38,7 +38,7 @@ fun registerOreDictionaryEntries() {
         }
     }
 
-    //oreAluminum has two names!
+    //oreAluminium has two names!
     EnumMetal.ALUMINIUM.let {
         OreDictionary.registerOre("ingotAluminum", it.getIngot())
         OreDictionary.registerOre("nuggetAluminum", it.getNugget())
@@ -55,6 +55,13 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))
     OreDictionary.registerOre("oreCobalt", Ores.ores.stack(1, 2))
     OreDictionary.registerOre("oreTungsten", Ores.ores.stack(1, 3))
+    OreDictionary.registerOre("orePyrite", Ores.ores.stack(1, 4))
+
+    OreDictionary.registerOre("blockCopper", Ores.storageBlocks.stack(1, 0))
+    OreDictionary.registerOre("blockGalena", Ores.storageBlocks.stack(1, 1))
+    OreDictionary.registerOre("blockCobalt", Ores.storageBlocks.stack(1, 2))
+    OreDictionary.registerOre("blockTungsten", Ores.storageBlocks.stack(1, 3))
+    OreDictionary.registerOre("blockSulfur", Ores.storageBlocks.stack(1, 4))
 
     OreDictionary.registerOre("blockLimestone", Decoration.limestone.stack(1, 0))
     OreDictionary.registerOre("brickLimestone", Decoration.limestone.stack(1, 1))

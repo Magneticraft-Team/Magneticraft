@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "A"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "blockTungsten",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:ingots",
+    "count": 9,
+    "data": 5
+  }
+}

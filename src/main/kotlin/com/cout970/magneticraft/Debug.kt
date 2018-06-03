@@ -1,6 +1,8 @@
 package com.cout970.magneticraft
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.registry.blocks
+import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.util.*
 import com.cout970.modelloader.ModelSerializer
@@ -13,7 +15,9 @@ import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.InventoryCrafting
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
+import net.minecraft.item.crafting.CraftingManager
 import net.minecraft.launchwrapper.Launch
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.EnumHand
@@ -93,6 +97,39 @@ object Debug {
         }
     }
 
+    fun printBlockWithoutRecipe() {
+
+        val allBlocks = blocks.map { it.first }.toMutableSet()
+        val allItems = items.map { it }.toMutableSet()
+
+        CraftingManager.REGISTRY.forEach {
+            val stack = it.recipeOutput
+            if (stack.isEmpty) return@forEach
+
+            val item = stack.item
+
+            allItems.remove(item)
+
+            if (item is ItemBlock) {
+                allBlocks.remove(item.block)
+            }
+        }
+
+        if (allItems.isNotEmpty()) {
+            println("==========================================")
+            println("Items without crafting recipe: ")
+            allItems.forEach { println("- $it") }
+            println("==========================================")
+        }
+
+        if (allBlocks.isNotEmpty()) {
+            println("==========================================")
+            println("Blocks without crafting recipe: ")
+            allBlocks.forEach { println("- $it") }
+            println("==========================================")
+        }
+    }
+
     // To use this, add breakpoint in
     // net.minecraft.inventory.ContainerWorkbench#onCraftMatrixChanged
     // and set the breakpoint condition to:
@@ -108,9 +145,12 @@ object Debug {
 
             val map = mutableMapOf<JsonObject, String>()
             val slots = Array(9, { " " })
+
             for (y in 0 until inv.height) {
                 for (x in 0 until inv.width) {
+
                     val stack = inv.getStackInRowAndColumn(x, y)
+
                     if (stack.isNotEmpty) {
                         val itemJson = deserializeToJson(stack)
                         val char = map.getOrPut(itemJson) { chars[map.size] }
@@ -160,7 +200,7 @@ object Debug {
             obj.addProperty("type", "forge:ore_shaped")
             obj.add("pattern", pattern)
             obj.add("key", key)
-            obj.add("result", deserializeToJson(handItem))
+            obj.add("result", deserializeToJson2(handItem))
 
             val gson = GsonBuilder().setPrettyPrinting().create()
             val jsonStr = gson.toJson(obj)
@@ -168,7 +208,8 @@ object Debug {
             if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
                 val folder = File(srcDir, "src/main/resources/assets/magneticraft/recipes")
                 val fileName = handItem.unlocalizedName.replace(".name", "").replaceBeforeLast(".", "").substring(1)
-                val file = File(folder, fileName + ".json")
+                val file = File(folder, "${fileName}_from_block.json")
+
                 file.writeText(jsonStr)
                 println("saved: ${file.exists()}, path: ${file.absolutePath}")
             }
@@ -178,21 +219,32 @@ object Debug {
         return false
     }
 
-    fun deserializeToJson(stack: ItemStack) = JsonObject().apply {
+    fun deserializeToJson2(stack: ItemStack) = JsonObject().apply {
         if (stack.isEmpty) return@apply
+
+        addProperty("item", stack.item.registryName.toString())
+        addProperty("count", stack.count)
+
+        if (stack.hasSubtypes) {
+            addProperty("data", stack.itemDamage)
+        }
+        if (stack.tagCompound != null) {
+            addProperty("nbt", stack.tagCompound.toString())
+        }
+    }
+
+    fun deserializeToJson(stack: ItemStack) = JsonObject().run {
+        if (stack.isEmpty) return this
         val ids = OreDictionary.getOreIDs(stack)
+
         if (ids.isNotEmpty()) {
             val name = OreDictionary.getOreName(ids.first())
             addProperty("type", "forge:ore_dict")
             addProperty("ore", name)
+            addProperty("count", stack.count)
+            this
         } else {
-            addProperty("item", stack.item.registryName.toString())
-            if (stack.hasSubtypes) {
-                addProperty("data", stack.itemDamage)
-            }
-            if (stack.tagCompound != null) {
-                addProperty("nbt", stack.tagCompound.toString())
-            }
+            deserializeToJson2(stack)
         }
     }
 
