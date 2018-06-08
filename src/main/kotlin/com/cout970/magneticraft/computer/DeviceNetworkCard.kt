@@ -4,7 +4,6 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.util.debug
-import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.net.Socket
@@ -14,7 +13,7 @@ import javax.net.ssl.SSLSocketFactory
 /**
  * Created by cout970 on 2016/10/31.
  */
-class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by parent {
+class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     val status = 0
     var isActive: Boolean = true
@@ -57,20 +56,20 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITickable, ITileRef by 
 
     val memStruct = ReadWriteStruct("network_header",
             ReadWriteStruct("device_header",
-                    ReadOnlyByte("online", { if (isActive) 1 else 0 }),
-                    ReadOnlyByte("type", { 2 }),
-                    ReadOnlyShort("status", { status.toShort() })
+                    ReadOnlyByte("online") { if (isActive) 1 else 0 },
+                    ReadOnlyByte("type") { 2 },
+                    ReadOnlyShort("status") { status.toShort() }
             ),
-            ReadOnlyByte("internetAllowed", { if (internetAllowed) 1 else 0 }),
-            ReadOnlyByte("maxSockets", { maxSockets.toByte() }),
-            ReadOnlyByte("activeSockets", { activeSockets.toByte() }),
+            ReadOnlyByte("internetAllowed") { if (internetAllowed) 1 else 0 },
+            ReadOnlyByte("maxSockets") { maxSockets.toByte() },
+            ReadOnlyByte("activeSockets") { activeSockets.toByte() },
             ReadWriteByte("signal", { signal(it.toInt()) }, { 0 }),
-            ReadOnlyInt("macAddress", { getMacAddress() }),
+            ReadOnlyInt("macAddress") { getMacAddress() },
             ReadWriteInt("targetMac", { targetMac = it }, { targetMac }),
             ReadWriteInt("targetPort", { targetPort = it }, { targetPort }),
             ReadWriteByteArray("targetIp", targetIp),
-            ReadOnlyInt("connectionOpen", { if (socket?.isClosed != false) 0 else 1 }),
-            ReadOnlyInt("connectionError", { connectionError }),
+            ReadOnlyInt("connectionOpen") { if (socket?.isClosed != false) 0 else 1 },
+            ReadOnlyInt("connectionError") { connectionError },
             ReadWriteInt("inputBufferPtr", { inputBufferPtr = it }, { inputBufferPtr }),
             ReadWriteInt("outputBufferPtr", { outputBufferPtr = it }, { outputBufferPtr }),
             ReadWriteInt("hardwareLock", { hardwareLock = it }, { hardwareLock }),

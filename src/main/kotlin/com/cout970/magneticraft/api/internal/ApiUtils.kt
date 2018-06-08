@@ -11,8 +11,6 @@ object ApiUtils {
         return a == b || !(a.isEmpty || b.isEmpty)
                 && a.item == b.item
                 && (!a.item.hasSubtypes || a.metadata == b.metadata)
-                && equals(a.tagCompound, b.tagCompound)
+                && a.tagCompound == b.tagCompound
     }
-
-    fun equals(a: Any?, b: Any?): Boolean = a == b
 }

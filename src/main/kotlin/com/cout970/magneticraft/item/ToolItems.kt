@@ -14,6 +14,7 @@ import com.cout970.magneticraft.util.checkNBT
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.hasKey
 import com.cout970.magneticraft.util.setBlockPos
+import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -33,6 +34,7 @@ object ToolItems : IItemMaker {
     lateinit var copperCoil: ItemBase private set
     lateinit var voltmeter: ItemBase private set
     lateinit var thermometer: ItemBase private set
+    lateinit var wrench: ItemBase private set
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
@@ -70,7 +72,9 @@ object ToolItems : IItemMaker {
             onItemUse = ToolItems::onUseThermometer
         }.build()
 
-        return listOf(stoneHammer, ironHammer, steelHammer, copperCoil, voltmeter, thermometer)
+        wrench = builder.withName("wrench").build()
+
+        return listOf(stoneHammer, ironHammer, steelHammer, copperCoil, voltmeter, thermometer, wrench)
     }
 
     fun onUseVoltmeter(args: OnItemUseArgs): EnumActionResult {
@@ -97,7 +101,7 @@ object ToolItems : IItemMaker {
             val msg = handler.nodes
                     .filterIsInstance<IHeatNode>()
                     .joinToString("\n") {
-                        "Temp: ${formatHeat(it.temperature)}"
+                        I18n.format("text.magneticraft.thermometer.temp", formatHeat(it.temperature))
                     }
 
             args.player.sendUnlocalizedMessage(msg)
@@ -122,7 +126,8 @@ object ToolItems : IItemMaker {
             val name = super.getItemStackDisplayName(stack)
             if (stack.hasKey(POSITION_KEY)) {
                 val basePos = stack.getBlockPos(POSITION_KEY)
-                return name + " [${TextFormatting.AQUA}Position: ${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
+                return name + " [${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
+                        "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
             }
             return name
         }
@@ -151,7 +156,8 @@ object ToolItems : IItemMaker {
                     if (basePos != null) {
                         stack.setBlockPos(POSITION_KEY, basePos)
                         player.sendMessage("text.magneticraft.wire_connect.updated_position",
-                                "[${TextFormatting.AQUA}Position: ${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
+                                "[${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
+                                        "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
                         return EnumActionResult.SUCCESS
                     }
                 } else {

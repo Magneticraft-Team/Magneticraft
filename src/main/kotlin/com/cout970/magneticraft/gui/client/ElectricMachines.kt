@@ -2,6 +2,7 @@ package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
+import com.cout970.magneticraft.gui.client.components.CompDynamicBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.*
@@ -93,19 +94,18 @@ fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.run {
 
 fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.run {
     val tile = container.tile
-    val texture = guiTexture("wind_turbine")
 
-    +CompBackground(texture)
+    +CompDynamicBackground()
     +CompElectricBar(tile.electricNode, Vec2d(64, 17))
-    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), texture)
+    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), guiTexture("wind_turbine"))
 
     val limit = Config.electricHeaterMaxProduction
 
     val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
     val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
 
-    +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toEnergyText())
-    +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
+    +CompDynamicBar(consumption, 3, Vec2d(88, 16), consumption.toEnergyText())
+    +CompDynamicBar(production, 6, Vec2d(97, 16), production.toHeatPerTickText())
     +CompHeatBar(tile.heatNode, Vec2d(107, 17))
 }
 

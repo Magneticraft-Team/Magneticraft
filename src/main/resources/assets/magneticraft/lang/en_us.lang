@@ -172,7 +172,7 @@ tile.magneticraft.air_bubble_off.name=Air Bubble
 tile.magneticraft.computer_north.name=Computer
 tile.magneticraft.mining_robot_north.name=Mining Robot
 tile.magneticraft.moving_robot_normal.name=Robot
-tile.magneticraft.copper_tank_normal.name=Copper tank
+tile.magneticraft.small_tank_normal.name=Small tank
 tile.magneticraft.thermopile_normal.name=Thermopile
 tile.magneticraft.iron_pipe_normal.name=Iron Pipe
 tile.magneticraft.wind_turbine_north.name=Wind turbine
@@ -229,6 +229,9 @@ text.magneticraft.wire_connect.updated_position=Position updated %s
 text.magneticraft.auto_connect.activate=Auto connect wires activated
 text.magneticraft.auto_connect.deactivate=Auto connect wires deactivated
 
+text.magneticraft.wire_connect.position=Position
+text.magneticraft.thermometer.temp=Temp: %s
+
 # JEI
 text.magneticraft.jei.crushing_table=Crushing Table
 text.magneticraft.jei.sluice_box=Sluice Box
@@ -262,6 +265,7 @@ text.magneticraft.multiblock.activate=Successfully activated
 # Item tooltips
 tooltip.magneticraft.item_storage.energy=%f/%fJ
 tooltip.magneticraft.multiblock.blueprint=Place down this blueprint to see the multiblock pattern
+
 
 # Fluids
 fluid.magneticraft.steam=Steam

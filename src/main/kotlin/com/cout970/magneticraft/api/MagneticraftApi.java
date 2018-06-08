@@ -9,6 +9,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.refinery.Refine
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry;
+import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry;
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
@@ -19,6 +20,7 @@ import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.registries.tool.hammer.IHammerRegistry;
+import com.cout970.magneticraft.api.registries.tool.wrench.IWrenchRegistry;
 import com.cout970.magneticraft.multiblock.core.MultiblockManager;
 
 /**
@@ -74,5 +76,9 @@ public class MagneticraftApi {
 
     public static IHammerRegistry getHammerRegistry() {
         return HammerRegistry.INSTANCE;
+    }
+
+    public static IWrenchRegistry getWrenchRegistry() {
+        return WrenchRegistry.INSTANCE;
     }
 }

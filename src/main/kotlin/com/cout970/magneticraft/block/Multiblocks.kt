@@ -13,6 +13,7 @@ import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
+import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleMultiblockGap
 import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.util.resource
@@ -228,20 +229,21 @@ object Multiblocks : IBlockMaker {
     }
 
     fun defaultOnActivated(multiblock: () -> Multiblock): (OnActivatedArgs) -> Boolean {
-        return func@{
-            val state = it.state[PROPERTY_MULTIBLOCK_ORIENTATION] ?: return@func false
+        return func@{ args ->
+            val state = args.state[PROPERTY_MULTIBLOCK_ORIENTATION] ?: return@func false
             if (state.active) {
-                val actionable = it.worldIn.getModule<IOnActivated>(it.pos) ?: return@func false
-                return@func actionable.onActivated(it)
+                val tile = args.worldIn.getTile<TileBase>(args.pos) ?: return@func false
+                val actionables = tile.container.modules.filterIsInstance<IOnActivated>()
+                return@func actionables.any { it.onActivated(args) }
             } else {
-                if (it.hand != EnumHand.MAIN_HAND) return@func false
-                if (it.worldIn.isServer) {
+                if (args.hand != EnumHand.MAIN_HAND) return@func false
+                if (args.worldIn.isServer) {
                     val context = MultiblockContext(
                             multiblock = multiblock(),
-                            world = it.worldIn,
-                            center = it.pos,
+                            world = args.worldIn,
+                            center = args.pos,
                             facing = state.facing,
-                            player = it.playerIn
+                            player = args.playerIn
                     )
                     activateMultiblock(context)
                 }

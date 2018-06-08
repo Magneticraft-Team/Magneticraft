@@ -10,12 +10,11 @@ import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
-import com.cout970.magneticraft.tileentity.TileCopperTank
 import com.cout970.magneticraft.tileentity.TileIronPipe
+import com.cout970.magneticraft.tileentity.TileSmallTank
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
 import com.cout970.magneticraft.tileentity.modules.pipe.PipeType
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
@@ -32,7 +31,7 @@ import net.minecraft.world.IBlockAccess
  */
 object FluidMachines : IBlockMaker {
 
-    lateinit var copperTank: BlockBase private set
+    lateinit var smallTank: BlockBase private set
     lateinit var ironPipe: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
@@ -41,16 +40,15 @@ object FluidMachines : IBlockMaker {
             creativeTab = CreativeTabMg
         }
 
-        copperTank = builder.withName("copper_tank").copy {
-            factory = factoryOf(::TileCopperTank)
+        smallTank = builder.withName("small_tank").copy {
+            factory = factoryOf(::TileSmallTank)
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/copper_tank.mcx"),
-                    "inventory" to resource("models/block/mcx/copper_tank.mcx")
+                    "model" to resource("models/block/mcx/small_tank.mcx"),
+                    "inventory" to resource("models/block/mcx/small_tank.mcx")
             )
             onActivated = CommonMethods::delegateToModule
-            boundingBox = { listOf((vec3Of(2, 0, 2) toAABBWith vec3Of(14, 16, 14)).scale(PIXEL)) }
         }.build()
 
         ironPipe = builder.withName("iron_pipe").copy {
@@ -58,14 +56,14 @@ object FluidMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/iron_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/iron_pipe.mcx")
+                    "model" to resource("models/block/mcx/fluid_pipe.mcx"),
+                    "inventory" to resource("models/block/mcx/fluid_pipe.mcx")
             )
             boundingBox = { pipeBoundingBox(it.source, it.pos) }
             onActivated = CommonMethods::delegateToModule
         }.build()
 
-        return itemBlockListOf(copperTank, ironPipe)
+        return itemBlockListOf(smallTank, ironPipe)
     }
 
     fun pipeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {

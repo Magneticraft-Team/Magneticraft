@@ -9,16 +9,19 @@ import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModuleBucketIO
 import com.cout970.magneticraft.tileentity.modules.ModuleFluidHandler
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
+import com.cout970.magneticraft.tileentity.modules.ModuleToggleFluidExporter
 import com.cout970.magneticraft.tileentity.modules.pipe.PipeType
 import com.cout970.magneticraft.tilerenderer.core.MutableCubeCache
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
+import net.minecraft.util.math.BlockPos
 
 /**
  * Created by cout970 on 2017/08/28.
  */
 
-@RegisterTileEntity("copper_tank")
-class TileCopperTank : TileBase(), ITickable {
+@RegisterTileEntity("small_tank")
+class TileSmallTank : TileBase(), ITickable {
 
     val tank = Tank(32_000)
 
@@ -28,8 +31,12 @@ class TileCopperTank : TileBase(), ITickable {
     val bucketIoModule = ModuleBucketIO(tank)
     val fluidRenderer = MutableCubeCache()
 
+    val toggleExportModule = ModuleToggleFluidExporter(tank, {
+        listOf(BlockPos(0, -1, 0) to EnumFacing.UP)
+    })
+
     init {
-        initModules(fluidModule, bucketIoModule)
+        initModules(fluidModule, bucketIoModule, toggleExportModule)
     }
 
     @DoNotRemove

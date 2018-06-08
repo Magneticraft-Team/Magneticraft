@@ -99,8 +99,8 @@ object CommonMethods {
         } else args.pos
 
         val tile = args.worldIn.getTile<TileBase>(pos) ?: return false
-        val method = tile.container.modules.find { it is IOnActivated } as? IOnActivated ?: return false
-        return method.onActivated(args)
+        val methods = tile.container.modules.filterIsInstance<IOnActivated>()
+        return methods.any { it.onActivated(args) }
     }
 
     fun openGui(args: OnActivatedArgs): Boolean {

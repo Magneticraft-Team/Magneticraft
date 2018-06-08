@@ -29,6 +29,7 @@ import net.minecraft.world.gen.ChunkProviderServer
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.oredict.OreDictionary
 import org.lwjgl.input.Keyboard
+import org.lwjgl.input.Mouse
 import java.io.File
 
 @Suppress("unused")
@@ -271,6 +272,12 @@ object Debug {
                         sender.sendMessage("Item: $stack".toTextComponent())
                         sender.sendMessage("NBT: ${stack.tagCompound}".toTextComponent())
                         sender.sendMessage("OreDict: ${OreDictionary.getOreIDs(stack).map { OreDictionary.getOreName(it) }}".toTextComponent())
+                    }
+                    "reload" -> {
+                        Minecraft.getMinecraft().addScheduledTask {
+                            Mouse.setGrabbed(false)
+                            Minecraft.getMinecraft().refreshResources()
+                        }
                     }
                     else -> {
                         sender.sendMessage("Unknown arg: '${args[0]}'".toTextComponent())
