@@ -92,6 +92,28 @@ object FluidMachines : IBlockMaker {
         return list
     }
 
+    fun pipeBoundingBox2(world: IBlockAccess, pos: BlockPos): List<Pair<EnumFacing, AABB>> {
+        val (x, y, z) = pos
+
+        val renderUp = checkPipeOrTank(world, BlockPos(x, y + 1, z), EnumFacing.DOWN)
+        val renderDown = checkPipeOrTank(world, BlockPos(x, y - 1, z), EnumFacing.UP)
+        val renderSouth = checkPipeOrTank(world, BlockPos(x, y, z + 1), EnumFacing.NORTH)
+        val renderNorth = checkPipeOrTank(world, BlockPos(x, y, z - 1), EnumFacing.SOUTH)
+        val renderEast = checkPipeOrTank(world, BlockPos(x + 1, y, z), EnumFacing.WEST)
+        val renderWest = checkPipeOrTank(world, BlockPos(x - 1, y, z), EnumFacing.EAST)
+
+        val list = mutableListOf<Pair<EnumFacing, AABB>>()
+
+        if (renderDown) list += EnumFacing.DOWN to (vec3Of(4.px, 0, 4.px) toAABBWith vec3Of(1 - 4.px, 4.px, 1 - 4.px))
+        if (renderUp) list += EnumFacing.UP to (vec3Of(4.px, 1 - 4.px, 4.px) toAABBWith vec3Of(1 - 4.px, 1, 1 - 4.px))
+        if (renderNorth) list += EnumFacing.NORTH to (vec3Of(4.px, 4.px, 0) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 4.px))
+        if (renderSouth) list += EnumFacing.SOUTH to (vec3Of(4.px, 4.px, 1 - 4.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1))
+        if (renderWest) list += EnumFacing.WEST to (vec3Of(0, 4.px, 4.px) toAABBWith vec3Of(4.px, 1 - 4.px, 1 - 4.px))
+        if (renderEast) list += EnumFacing.EAST to (vec3Of(1 - 4.px, 4.px, 4.px) toAABBWith vec3Of(1, 1 - 4.px, 1 - 4.px))
+
+        return list
+    }
+
     fun checkPipeOrTank(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Boolean {
         val tile = world.getTileEntity(pos) ?: return false
         return tile.getOrNull(FLUID_HANDLER!!, facing) != null ||

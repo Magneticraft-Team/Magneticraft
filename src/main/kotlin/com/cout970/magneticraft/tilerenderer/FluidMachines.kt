@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tilerenderer
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.block.FluidMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
@@ -98,12 +99,13 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileIronPipe) {
-        models[map["center"]!!].renderTextured()
-
         val pipeMap = BooleanArray(6)
         val tankMap = BooleanArray(6)
 
         enumValues<EnumFacing>().forEach {
+            val state = te.pipeModule.connectionStates[it.ordinal]
+            if (state == ModulePipe.ConnectionState.DISABLE) return@forEach
+
             val tile = te.world.getTileEntity(te.pos + it) ?: return@forEach
 
             (tile as? TileBase)?.getModule<ModulePipe>()?.let { mod ->
@@ -113,17 +115,33 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
             }
 
             FLUID_HANDLER!!.fromTile(tile, it.opposite)?.let { _ ->
+                if (!pipeMap[it.ordinal]) {
+                    tankMap[it.ordinal] = true
+                }
                 pipeMap[it.ordinal] = true
-                tankMap[it.ordinal] = true
             }
         }
 
+        if (Debug.DEBUG) {
+            Utilities.renderFloatingLabel("${te.tank.fluidAmount}", vec3Of(0, 1, 0))
+        }
+
+        models[map["center"]!!].renderTextured()
         enumValues<EnumFacing>().forEach {
+
             if (pipeMap[it.ordinal]) {
                 models[map[it.name.toLowerCase()]!!].render()
             }
             if (tankMap[it.ordinal]) {
+                val state = te.pipeModule.connectionStates[it.ordinal]
+                val color = when (state) {
+                    ModulePipe.ConnectionState.DISABLE -> return@forEach
+                    ModulePipe.ConnectionState.PASSIVE -> -1
+                    ModulePipe.ConnectionState.ACTIVE -> Utilities.colorFromRGB(1f, 0.6f, 0.1f)
+                }
+                Utilities.setColor(color)
                 models[map["c" + it.name.toLowerCase()]!!].render()
+                Utilities.setColor(-1)
             }
         }
 

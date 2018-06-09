@@ -330,8 +330,8 @@ fun registerRecipes() {
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f, WATER_BOILING_POINT)
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 450.fromCelsiusToKelvin())
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 450.fromCelsiusToKelvin())
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 350.fromCelsiusToKelvin())
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 350.fromCelsiusToKelvin())
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   REFINERY RECIPES
@@ -359,7 +359,7 @@ fun registerRecipes() {
 
     addRefineryRecipe(FluidRegistry.getFluidStack("lpg", 10),
             FluidRegistry.getFluidStack("plastic", 5),
-            FluidRegistry.getFluidStack("naptha", 2),
+            FluidRegistry.getFluidStack("naphtha", 2),
             FluidRegistry.getFluidStack("natural_gas", 3),
             1f)
 }

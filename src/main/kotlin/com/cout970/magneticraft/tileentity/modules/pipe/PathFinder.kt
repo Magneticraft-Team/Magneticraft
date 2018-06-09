@@ -21,7 +21,7 @@ class NearestFirstSearch(start: IPathFindingNode, val getter: InspectFunc) {
     private val scanned = linkedSetOf<BlockPos>()
     private val toScanSet = linkedSetOf<BlockPos>()
     private val toScanList = LinkedList<Pair<BlockPos, EnumFacing>>()
-    private val resultList = LinkedList<IPathFindingNode>()
+    private val resultList = linkedSetOf<IPathFindingNode>()
 
     val world: World = start.ref.world
 

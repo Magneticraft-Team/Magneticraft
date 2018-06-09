@@ -73,10 +73,10 @@ abstract class TileBase : TileEntity() {
     }
 
     override fun invalidate() {
+        super.invalidate()
         if (world.isClient) {
             onBreak()
         }
-        super.invalidate()
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {

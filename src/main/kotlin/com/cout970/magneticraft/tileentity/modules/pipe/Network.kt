@@ -15,7 +15,7 @@ abstract class Network<T : INetworkNode>(
         val factory: (T) -> Network<T>
 ) {
 
-    val members = mutableListOf(mainNode)
+    val members = mutableSetOf(mainNode)
 
     fun add(node: T) {
         setNetwork(node, this)

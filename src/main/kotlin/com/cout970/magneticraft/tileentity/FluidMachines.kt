@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.tileentity
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
@@ -58,15 +59,19 @@ class TileSmallTank : TileBase(), ITickable {
 @RegisterTileEntity("iron_pipe")
 class TileIronPipe : TileBase(), ITickable {
 
-    val pipeModule = ModulePipe(PipeType.IRON)
-
+    val tank = Tank(PipeType.IRON.maxRate)
+    val fluidModuleHeat = ModuleFluidHandler(tank, capabilityFilter = { _, _ -> null })
+    val pipeModule = ModulePipe(tank, PipeType.IRON)
 
     init {
-        initModules(pipeModule)
+        initModules(pipeModule, fluidModuleHeat)
     }
 
     @DoNotRemove
     override fun update() {
         super.update()
+        if (Debug.DEBUG) {
+            container.sendUpdateToNearPlayers()
+        }
     }
 }
