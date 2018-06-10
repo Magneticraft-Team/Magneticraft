@@ -14,6 +14,7 @@ import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
+import com.cout970.magneticraft.misc.tileentity.canConnect
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
@@ -228,5 +229,20 @@ class TileElectricCable : TileBase(), ITickable {
         if (Debug.DEBUG) {
             sendUpdateToNearPlayers()
         }
+    }
+
+    fun canConnect(side: EnumFacing): Boolean {
+        val tile = world.getTileEntity(pos + side) ?: return false
+        val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side)
+        if (handler === null || handler === electricModule) return false
+
+        val electricNodes = handler.nodes.filterIsInstance<IElectricNode>()
+
+        electricNodes.forEach { otherNode ->
+            if (canConnect(electricModule, node, handler, otherNode, side.opposite)) {
+                return true
+            }
+        }
+        return false
     }
 }

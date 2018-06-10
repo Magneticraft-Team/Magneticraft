@@ -2,13 +2,12 @@
   "type": "forge:ore_shaped",
   "pattern": [
     "AAA",
-    "ABA",
-    "AAA"
+    "BBB"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper",
+      "ore": "ingotIron",
       "count": 1
     },
     "B": {
@@ -18,8 +17,8 @@
     }
   },
   "result": {
-    "item": "magneticraft:crafting",
-    "count": 8,
-    "data": 3
+    "item": "magneticraft:heat_sink",
+    "count": 1,
+    "data": 0
   }
 }

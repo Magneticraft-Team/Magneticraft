@@ -209,7 +209,7 @@ object Debug {
             if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
                 val folder = File(srcDir, "src/main/resources/assets/magneticraft/recipes")
                 val fileName = handItem.unlocalizedName.replace(".name", "").replaceBeforeLast(".", "").substring(1)
-                val file = File(folder, "${fileName}_from_block.json")
+                val file = File(folder, "${fileName}.json")
 
                 file.writeText(jsonStr)
                 println("saved: ${file.exists()}, path: ${file.absolutePath}")

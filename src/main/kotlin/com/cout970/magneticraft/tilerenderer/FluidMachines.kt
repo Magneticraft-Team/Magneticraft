@@ -4,16 +4,11 @@ import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.block.FluidMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.misc.tileentity.getModule
-import com.cout970.magneticraft.registry.FLUID_HANDLER
-import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileIronPipe
 import com.cout970.magneticraft.tileentity.TileSmallTank
-import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureMap
@@ -99,70 +94,57 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
 ) {
 
     override fun renderModels(models: List<ModelCache>, te: TileIronPipe) {
-        val pipeMap = BooleanArray(6)
-        val tankMap = BooleanArray(6)
-
-        enumValues<EnumFacing>().forEach {
-            val state = te.pipeModule.connectionStates[it.ordinal]
-            if (state == ModulePipe.ConnectionState.DISABLE) return@forEach
-
-            val tile = te.world.getTileEntity(te.pos + it) ?: return@forEach
-
-            (tile as? TileBase)?.getModule<ModulePipe>()?.let { mod ->
-                if (mod.type == te.pipeModule.type) {
-                    pipeMap[it.ordinal] = true
-                }
-            }
-
-            FLUID_HANDLER!!.fromTile(tile, it.opposite)?.let { _ ->
-                if (!pipeMap[it.ordinal]) {
-                    tankMap[it.ordinal] = true
-                }
-                pipeMap[it.ordinal] = true
-            }
-        }
 
         if (Debug.DEBUG) {
             Utilities.renderFloatingLabel("${te.tank.fluidAmount}", vec3Of(0, 1, 0))
         }
 
+        val pipeMap = enumValues<EnumFacing>().map { te.pipeModule.getConnectionType(it, true) }
+
         models[map["center"]!!].renderTextured()
         enumValues<EnumFacing>().forEach {
 
-            if (pipeMap[it.ordinal]) {
-                models[map[it.name.toLowerCase()]!!].render()
-            }
-            if (tankMap[it.ordinal]) {
-                val state = te.pipeModule.connectionStates[it.ordinal]
-                val color = when (state) {
-                    ModulePipe.ConnectionState.DISABLE -> return@forEach
-                    ModulePipe.ConnectionState.PASSIVE -> -1
-                    ModulePipe.ConnectionState.ACTIVE -> Utilities.colorFromRGB(1f, 0.6f, 0.1f)
+            when (pipeMap[it.ordinal]) {
+                ModulePipe.ConnectionType.PIPE -> models[map[it.name.toLowerCase()]!!].render()
+                ModulePipe.ConnectionType.TANK -> {
+                    models[map[it.name.toLowerCase()]!!].render()
+
+                    val state = te.pipeModule.connectionStates[it.ordinal]
+                    val color = when (state) {
+                        ModulePipe.ConnectionState.DISABLE -> return@forEach
+                        ModulePipe.ConnectionState.PASSIVE -> -1
+                        ModulePipe.ConnectionState.ACTIVE -> Utilities.colorFromRGB(1f, 0.6f, 0.0f)
+                    }
+                    Utilities.setColor(color)
+                    models[map["c" + it.name.toLowerCase()]!!].render()
+                    Utilities.setColor(-1)
                 }
-                Utilities.setColor(color)
-                models[map["c" + it.name.toLowerCase()]!!].render()
-                Utilities.setColor(-1)
+                ModulePipe.ConnectionType.NONE -> {
+                    // Ingored
+                }
             }
         }
 
-        val count = pipeMap.count { it }
+        val count = pipeMap.count { it != ModulePipe.ConnectionType.NONE }
 
         if (count == 2) {
-            if (pipeMap[0] && pipeMap[1]) {
+            val none = ModulePipe.ConnectionType.NONE
+
+            if (pipeMap[0] != none && pipeMap[1] != none) {
                 models[map["nw"]!!].render()
                 models[map["sw"]!!].render()
                 models[map["ne"]!!].render()
                 models[map["se"]!!].render()
                 return
 
-            } else if (pipeMap[2] && pipeMap[3]) {
+            } else if (pipeMap[2] != none && pipeMap[3] != none) {
                 models[map["wt"]!!].render()
                 models[map["wb"]!!].render()
                 models[map["et"]!!].render()
                 models[map["eb"]!!].render()
                 return
 
-            } else if (pipeMap[4] && pipeMap[5]) {
+            } else if (pipeMap[4] != none && pipeMap[5] != none) {
                 models[map["nt"]!!].render()
                 models[map["nb"]!!].render()
                 models[map["st"]!!].render()

@@ -88,11 +88,11 @@ class TileSteamBoiler : TileBase(), ITickable {
 class TileHeatPipe : TileBase(), ITickable {
 
     val heatNode = HeatNode(ref)
-
     val heatModule = ModuleHeat(listOf(heatNode))
+    val heatPipeConnections = ModuleHeatPipeConnections(heatModule)
 
     init {
-        initModules(heatModule)
+        initModules(heatModule, heatPipeConnections)
     }
 
     @DoNotRemove
@@ -109,11 +109,11 @@ class TileHeatPipe : TileBase(), ITickable {
 class TileInsulatedHeatPipe : TileBase(), ITickable {
 
     val heatNode = HeatNode(ref)
-
     val heatModule = ModuleHeat(listOf(heatNode))
+    val heatPipeConnections = ModuleHeatPipeConnections(heatModule)
 
     init {
-        initModules(heatModule)
+        initModules(heatModule, heatPipeConnections)
     }
 
     @DoNotRemove
@@ -130,9 +130,7 @@ class TileInsulatedHeatPipe : TileBase(), ITickable {
 class TileHeatSink : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getFacing()
-
     val heatNode = HeatNode(ref)
-
     val heatModule = ModuleHeat(listOf(heatNode), capabilityFilter = { it != facing.opposite })
 
     init {
@@ -146,7 +144,7 @@ class TileHeatSink : TileBase(), ITickable {
         // Dissipate heat
         if (world.isServer && heatNode.temperature > STANDARD_AMBIENT_TEMPERATURE) {
             val diff = heatNode.temperature - STANDARD_AMBIENT_TEMPERATURE
-            heatNode.applyHeat(-(1 / 20.0) * diff)
+            heatNode.applyHeat(-(1 / 10.0) * diff)
         }
     }
 }

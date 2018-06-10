@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AB",
+    "C "
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "paper",
+      "count": 1
+    },
+    "B": {
+      "item": "magneticraft:crafting",
+      "count": 1,
+      "data": 5
+    },
+    "C": {
+      "item": "minecraft:bucket",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:refinery",
+    "count": 1,
+    "data": 0
+  }
+}

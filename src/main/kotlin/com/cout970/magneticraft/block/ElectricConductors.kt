@@ -150,42 +150,40 @@ object ElectricConductors : IBlockMaker {
                     "model" to resource("models/block/mcx/electric_cable.mcx"),
                     "inventory" to resource("models/block/mcx/electric_cable.mcx")
             )
-            boundingBox = { pipeBoundingBox(it.source, it.pos, 6) }
+            boundingBox = { cableBoundingBox(it.source, it.pos, 6) }
         }.build()
 
         return itemBlockListOf(connector, electric_pole, electric_cable) +
                 (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
     }
 
-    fun pipeBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
-        val (x, y, z) = pos
-
-        val renderUp = checkPipe(world, BlockPos(x, y + 1, z), EnumFacing.DOWN)
-        val renderDown = checkPipe(world, BlockPos(x, y - 1, z), EnumFacing.UP)
-        val renderSouth = checkPipe(world, BlockPos(x, y, z + 1), EnumFacing.NORTH)
-        val renderNorth = checkPipe(world, BlockPos(x, y, z - 1), EnumFacing.SOUTH)
-        val renderEast = checkPipe(world, BlockPos(x + 1, y, z), EnumFacing.WEST)
-        val renderWest = checkPipe(world, BlockPos(x - 1, y, z), EnumFacing.EAST)
-
+    fun cableBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
+        val mod = world.getTile<TileElectricCable>(pos)
         val list = mutableListOf<AABB>()
 
         list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
 
-        if (renderDown) list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
-        if (renderUp) list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
+        if (mod != null) {
+            if (mod.canConnect(EnumFacing.DOWN))
+                list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
 
-        if (renderNorth) list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
-        if (renderSouth) list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+            if (mod.canConnect(EnumFacing.UP))
+                list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
 
-        if (renderWest) list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
-        if (renderEast) list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+            if (mod.canConnect(EnumFacing.NORTH))
+                list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
+
+            if (mod.canConnect(EnumFacing.SOUTH))
+                list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+
+            if (mod.canConnect(EnumFacing.WEST))
+                list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
+
+            if (mod.canConnect(EnumFacing.EAST))
+                list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+        }
 
         return list
-    }
-
-    fun checkPipe(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Boolean {
-        val tile = world.getTileEntity(pos) ?: return false
-        return tile.getOrNull(ELECTRIC_NODE_HANDLER!!, facing) != null
     }
 
     fun breakElectricPole(args: BreakBlockArgs): Unit = args.run {

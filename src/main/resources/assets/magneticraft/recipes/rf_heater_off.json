@@ -3,7 +3,7 @@
   "pattern": [
     "ABA",
     "ACA",
-    "DDD"
+    "DED"
   ],
   "key": {
     "A": {
@@ -22,13 +22,18 @@
       "data": 2
     },
     "D": {
-      "item": "magneticraft:crafting",
-      "count": 1,
-      "data": 3
+      "type": "forge:ore_dict",
+      "ore": "alloyBasic",
+      "count": 1
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold",
+      "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:electric_heater",
+    "item": "magneticraft:rf_heater",
     "count": 1,
     "data": 0
   }

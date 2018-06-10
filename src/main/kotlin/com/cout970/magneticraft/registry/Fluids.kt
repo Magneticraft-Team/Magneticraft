@@ -186,4 +186,16 @@ fun initFluids() {
                 }
         )
     }
+
+    if (!FluidRegistry.isFluidRegistered("wood_gas")) {
+        FluidRegistry.registerFluid(
+                Fluid("wood_gas", resource("fluids/wood_gas_still"), resource("fluids/wood_gas_flow")).also {
+                    it.unlocalizedName = "magneticraft.wood_gas"
+                    it.temperature = WATER_BOILING_POINT.toInt()
+                    it.density = 1
+                    it.viscosity = 10
+                    it.isGaseous = true
+                }
+        )
+    }
 }

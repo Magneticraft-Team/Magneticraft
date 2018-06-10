@@ -7,12 +7,14 @@ import com.cout970.magneticraft.block.FluidMachines
 import com.cout970.magneticraft.block.core.IOnActivated
 import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.pipe.INetworkNode
 import com.cout970.magneticraft.tileentity.modules.pipe.Network
 import com.cout970.magneticraft.tileentity.modules.pipe.PipeNetwork
@@ -38,7 +40,8 @@ class ModulePipe(
 
     override lateinit var container: IModuleContainer
 
-    enum class ConnectionState { DISABLE, PASSIVE, ACTIVE }
+    enum class ConnectionState { PASSIVE, DISABLE, ACTIVE }
+    enum class ConnectionType { NONE, PIPE, TANK }
 
     val connectionStates = Array(6) { ConnectionState.PASSIVE }
     var pipeNetwork: PipeNetwork? = null
@@ -51,10 +54,34 @@ class ModulePipe(
 
     override val ref: ITileRef get() = container.ref
 
-    override val sides: List<EnumFacing> = EnumFacing
-            .values()
-            .filter { connectionStates[it.ordinal] != ConnectionState.DISABLE }
-            .toList()
+    override val sides: List<EnumFacing> = EnumFacing.values()
+            .filter { connectionStates[it.ordinal] != ConnectionState.DISABLE }.toList()
+
+    fun getConnectionType(side: EnumFacing, render: Boolean): ConnectionType {
+        val tile = world.getTileEntity(pos + side) ?: return ConnectionType.NONE
+
+        if (tile is TileBase && tile.getModule<ModulePipe>() != null) {
+            val mod = tile.getModule<ModulePipe>()
+
+            if (mod != null && mod.type == type) {
+                if (render && (connectionStates[side.ordinal] == ConnectionState.DISABLE
+                                || mod.connectionStates[side.opposite.ordinal] == ConnectionState.DISABLE)) {
+                    return ConnectionType.NONE
+                }
+                return ConnectionType.PIPE
+            }
+        } else {
+            val handler = FLUID_HANDLER!!.fromTile(tile, side.opposite)
+            if (handler != null) {
+                if (render && connectionStates[side.ordinal] == ConnectionState.DISABLE) {
+                    return ConnectionType.NONE
+                }
+                return ConnectionType.TANK
+            }
+        }
+
+        return ConnectionType.NONE
+    }
 
     override fun update() {
         if (world.isClient) return
@@ -65,16 +92,16 @@ class ModulePipe(
 
         enumValues<EnumFacing>().forEach { side ->
             val state = connectionStates[side.ordinal]
-            if (state == ConnectionState.DISABLE) return@forEach
+            if (state == ModulePipe.ConnectionState.DISABLE) return@forEach
 
             val tile = world.getTileEntity(pos + side) ?: return@forEach
             val handler = FLUID_HANDLER!!.fromTile(tile, side.opposite) ?: return@forEach
 
-            if (state == ConnectionState.PASSIVE) {
+            if (state == ModulePipe.ConnectionState.PASSIVE) {
                 if (FluidUtil.tryFluidTransfer(handler, getNetworkTank(), type.maxRate, false) != null) {
                     FluidUtil.tryFluidTransfer(handler, getNetworkTank(), type.maxRate, true)
                 }
-            } else if (state == ConnectionState.ACTIVE) {
+            } else if (state == ModulePipe.ConnectionState.ACTIVE) {
                 if (FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, false) != null) {
                     FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, true)
                 }
@@ -85,12 +112,12 @@ class ModulePipe(
     override fun onActivated(args: OnActivatedArgs): Boolean {
         if (args.heldItem.isEmpty || !WrenchRegistry.isWrench(args.heldItem)) return false
 
-        val boxes = FluidMachines.pipeBoundingBox2(args.worldIn, args.pos)
+        val boxes = FluidMachines.fluidPipeSides(args.worldIn, args.pos)
         val side = boxes.find { it.second.containsPoint(args.hit) }?.first ?: return false
 
         if (args.worldIn.isServer) {
             val current = connectionStates[side.ordinal].ordinal
-            connectionStates[side.ordinal] = ConnectionState.values()[(current + 1) % ConnectionState.values().size]
+            connectionStates[side.ordinal] = ModulePipe.ConnectionState.values()[(current + 1) % ModulePipe.ConnectionState.values().size]
             container.sendUpdateToNearPlayers()
         }
         return true
@@ -115,7 +142,6 @@ class ModulePipe(
     override fun onBreak() {
         if (world.isServer) {
             container.tile.invalidate()
-
         }
         pipeNetwork?.split(this)
     }

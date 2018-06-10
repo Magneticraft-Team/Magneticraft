@@ -1,22 +1,25 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AAA",
-    "A A",
-    "ABA"
+    " A ",
+    "ABA",
+    " A "
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockGlass"
+      "ore": "leather",
+      "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateCopper"
+      "ore": "ingotCopper",
+      "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:copper_tank",
+    "item": "magneticraft:electric_cable",
+    "count": 8,
     "data": 0
   }
 }

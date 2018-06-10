@@ -69,7 +69,6 @@ open class ElectricNode(
         updateAmperage()
         amperageCount += Math.abs(current)
         voltage += current / getCapacity()
-        voltage = 0.0
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {

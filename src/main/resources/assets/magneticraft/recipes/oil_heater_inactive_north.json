@@ -1,25 +1,28 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AAA",
-    "ABA",
-    "AAA"
+    "AB",
+    "C "
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper",
+      "ore": "paper",
       "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron",
+      "ore": "lightPlateCopper",
+      "count": 1
+    },
+    "C": {
+      "item": "minecraft:bucket",
       "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:crafting",
-    "count": 8,
-    "data": 3
+    "item": "magneticraft:oil_heater",
+    "count": 1,
+    "data": 0
   }
 }

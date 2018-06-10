@@ -103,6 +103,7 @@ class ModuleElectricity(
     fun updateNormalConnections() {
         clearNormalConnections()
         if (world.isClient) return
+
         electricNodes.forEach { thisNode ->
 
             val conDir = connectableDirections()
@@ -174,7 +175,7 @@ class ModuleElectricity(
 
     fun defaultCanConnectImpl(thisNode: IElectricNode, other: IElectricNodeHandler, otherNode: IElectricNode,
                               side: EnumFacing?): Boolean {
-        if (other == this || otherNode == thisNode) return false
+        if (other === this || otherNode === thisNode) return false
         if (!canConnectAtSide(side)) return false
         if (side == null) {
             if (thisNode !is IWireConnector || otherNode !is IWireConnector) return false

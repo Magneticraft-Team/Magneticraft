@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "BBB",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBrick",
+      "count": 1
+    },
+    "B": {
+      "item": "magneticraft:heat_pipe",
+      "count": 1,
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:insulated_heat_pipe",
+    "count": 5,
+    "data": 0
+  }
+}

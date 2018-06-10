@@ -5,8 +5,6 @@ import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.ElectricConductors
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
-import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.TileConnector
 import com.cout970.magneticraft.tileentity.TileElectricCable
 import com.cout970.magneticraft.tileentity.TileElectricPole
@@ -17,7 +15,6 @@ import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.tilerenderer.core.modelOf
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.minus
-import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.EnumFacing
 
@@ -133,9 +130,7 @@ object TileRendererElectricCable : TileRendererSimple<TileElectricCable>(
         var count = 0
 
         sidesToIndices.forEach { (side, index) ->
-            val tile = te.world.getTileEntity(te.pos + side) ?: return@forEach
-
-            if (tile.getOrNull(ELECTRIC_NODE_HANDLER, side.opposite) != null) {
+            if (te.canConnect(side)) {
                 models[index].renderTextured()
                 conn = conn ?: side.opposite
                 count++
@@ -150,9 +145,9 @@ object TileRendererElectricCable : TileRendererSimple<TileElectricCable>(
         models[0].render()
 
         if (Debug.DEBUG) {
-//            Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
+            Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
 //            Utilities.renderFloatingLabel("I: %.2f".format(te.node.amperage), vec3Of(0, 1.25, 0))
-            Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
+//            Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
         }
     }
 }

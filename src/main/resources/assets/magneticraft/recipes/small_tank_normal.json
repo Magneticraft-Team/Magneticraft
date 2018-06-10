@@ -8,18 +8,18 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper",
+      "ore": "blockGlassColorless",
       "count": 1
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "lightPlateIron",
-      "count": 1
+      "item": "magneticraft:multiblock_parts",
+      "count": 1,
+      "data": 2
     }
   },
   "result": {
-    "item": "magneticraft:crafting",
-    "count": 8,
-    "data": 3
+    "item": "magneticraft:small_tank",
+    "count": 1,
+    "data": 0
   }
 }

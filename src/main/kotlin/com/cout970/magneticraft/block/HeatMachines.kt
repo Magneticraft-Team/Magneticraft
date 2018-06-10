@@ -8,15 +8,19 @@ import com.cout970.magneticraft.block.core.IBlockMaker
 import com.cout970.magneticraft.item.itemblock.itemBlockListOf
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
-import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
-import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.*
+import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.tileentity.modules.ModuleHeatPipeConnections
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.toCelsius
-import com.cout970.magneticraft.util.vector.*
+import com.cout970.magneticraft.util.vector.rotateBox
+import com.cout970.magneticraft.util.vector.scale
+import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.entity.EntityLivingBase
@@ -87,7 +91,7 @@ object HeatMachines : IBlockMaker {
                     "model" to resource("models/block/mcx/iron_pipe.mcx"),
                     "inventory" to resource("models/block/mcx/iron_pipe_dark.mcx")
             )
-            boundingBox = { pipeBoundingBox(it.source, it.pos, 4) }
+            boundingBox = { heatPipeBoundingBox(it.source, it.pos, 4) }
             onActivated = CommonMethods::delegateToModule
             onEntityCollidedWithBlock = func@{
                 val entity = it.entityIn as? EntityLivingBase ?: return@func
@@ -120,7 +124,7 @@ object HeatMachines : IBlockMaker {
                     "model" to resource("models/block/mcx/insulated_heat_pipe.mcx"),
                     "inventory" to resource("models/block/mcx/insulated_heat_pipe.mcx")
             )
-            boundingBox = { pipeBoundingBox(it.source, it.pos, 3) }
+            boundingBox = { heatPipeBoundingBox(it.source, it.pos, 3) }
             onActivated = CommonMethods::delegateToModule
         }.build()
 
@@ -146,34 +150,32 @@ object HeatMachines : IBlockMaker {
     }
 
     // size is (8 - realSize)
-    fun pipeBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
-        val (x, y, z) = pos
-
-        val renderUp = checkPipe(world, BlockPos(x, y + 1, z), EnumFacing.DOWN)
-        val renderDown = checkPipe(world, BlockPos(x, y - 1, z), EnumFacing.UP)
-        val renderSouth = checkPipe(world, BlockPos(x, y, z + 1), EnumFacing.NORTH)
-        val renderNorth = checkPipe(world, BlockPos(x, y, z - 1), EnumFacing.SOUTH)
-        val renderEast = checkPipe(world, BlockPos(x + 1, y, z), EnumFacing.WEST)
-        val renderWest = checkPipe(world, BlockPos(x - 1, y, z), EnumFacing.EAST)
-
+    fun heatPipeBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
+        val pipe = world.getTile<TileBase>(pos)?.getModule<ModuleHeatPipeConnections>()
         val list = mutableListOf<AABB>()
 
         list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
 
-        if (renderDown) list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
-        if (renderUp) list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
+        if (pipe != null) {
+            if (pipe.canConnect(EnumFacing.UP))
+                list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
 
-        if (renderNorth) list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
-        if (renderSouth) list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+            if (pipe.canConnect(EnumFacing.DOWN))
+                list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
 
-        if (renderWest) list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
-        if (renderEast) list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+            if (pipe.canConnect(EnumFacing.NORTH))
+                list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
 
+            if (pipe.canConnect(EnumFacing.SOUTH))
+                list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+
+            if (pipe.canConnect(EnumFacing.WEST))
+                list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
+
+            if (pipe.canConnect(EnumFacing.EAST))
+                list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+        }
         return list
     }
 
-    fun checkPipe(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Boolean {
-        val tile = world.getTileEntity(pos) ?: return false
-        return tile.getOrNull(HEAT_NODE_HANDLER!!, facing) != null
-    }
 }

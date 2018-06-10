@@ -1,9 +1,11 @@
 package com.cout970.magneticraft.tileentity
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
+import com.cout970.magneticraft.block.core.CommonMethods
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.block.getOrientation
+import com.cout970.magneticraft.misc.block.getOrientationActive
 import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
@@ -15,12 +17,14 @@ import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.vector.toAABBWith
+import net.minecraft.block.state.IBlockState
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2017/06/29.
@@ -72,7 +76,7 @@ class TileBattery : TileBase(), ITickable {
 @RegisterTileEntity("electric_furnace")
 class TileElectricFurnace : TileBase(), ITickable {
 
-    val facing: EnumFacing get() = getBlockState().getOrientation()
+    val facing: EnumFacing get() = getBlockState().getOrientationActive()
     val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
@@ -86,6 +90,11 @@ class TileElectricFurnace : TileBase(), ITickable {
         InventoryCapabilityFilter(it, inputSlots = listOf(0), outputSlots = listOf(1))
     })
 
+    val updateBlockModule = ModuleUpdateBlockstate { oldState ->
+        val state = CommonMethods.OrientationActive.of(facing, processModule.working)
+        oldState.withProperty(CommonMethods.PROPERTY_ORIENTATION_ACTIVE, state)
+    }
+
     val processModule = ModuleElectricProcessing(
             craftingProcess = FurnaceCraftingProcess(invModule, 0, 1),
             storage = storageModule,
@@ -94,12 +103,16 @@ class TileElectricFurnace : TileBase(), ITickable {
     )
 
     init {
-        initModules(electricModule, storageModule, invModule, processModule)
+        initModules(electricModule, storageModule, invModule, processModule, updateBlockModule)
     }
 
     @DoNotRemove
     override fun update() {
         super.update()
+    }
+
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
+        return oldState.block != newSate.block
     }
 }
 

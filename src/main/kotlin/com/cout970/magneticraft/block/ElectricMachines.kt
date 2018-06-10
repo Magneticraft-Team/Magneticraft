@@ -64,17 +64,12 @@ object ElectricMachines : IBlockMaker {
 
         electricFurnace = builder.withName("electric_furnace").copy {
             material = Material.ROCK
-            states = CommonMethods.Orientation.values().toList()
+            states = CommonMethods.OrientationActive.values().toList()
             factory = factoryOf(::TileElectricFurnace)
             alwaysDropDefault = true
-            generateDefaultItemModel = false
             hasCustomModel = true
-            customModels = listOf(
-                    "model" to resource("models/block/mcx/electric_furnace.mcx"),
-                    "inventory" to resource("models/block/mcx/electric_furnace.mcx")
-            )
             //methods
-            onBlockPlaced = CommonMethods::placeWithOrientation
+            onBlockPlaced = CommonMethods::placeInactiveWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
         }.build()

@@ -34,7 +34,11 @@
                 "test25": "magneticraft:fluids/naphtha_flow",
                 "test26": "magneticraft:fluids/naphtha_still",
                 "test27": "magneticraft:fluids/fuel_flow",
-                "test28": "magneticraft:fluids/fuel_still"
+                "test28": "magneticraft:fluids/fuel_still",
+                "test29": "magneticraft:fluids/oil_residue_flow",
+                "test30": "magneticraft:fluids/oil_residue_still",
+                "test31": "magneticraft:fluids/wood_gas_flow",
+                "test32": "magneticraft:fluids/wood_gas_still"
             }
         }],
         "full_90": [{

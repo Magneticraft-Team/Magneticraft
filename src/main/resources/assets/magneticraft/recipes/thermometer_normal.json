@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "ABA",
+    "ACA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlassColorless",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "alloyBasic",
+      "count": 1
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:thermometer",
+    "count": 1
+  }
+}

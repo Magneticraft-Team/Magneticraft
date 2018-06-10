@@ -1,25 +1,25 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AAA",
+    " A ",
     "ABA",
-    "AAA"
+    " A "
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper",
+      "ore": "ingotIron",
       "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron",
+      "ore": "lightPlateCopper",
       "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:crafting",
-    "count": 8,
-    "data": 3
+    "item": "magneticraft:heat_pipe",
+    "count": 5,
+    "data": 0
   }
 }

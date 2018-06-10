@@ -3,13 +3,10 @@ package com.cout970.magneticraft.tilerenderer
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.block.HeatMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
-import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.toCelsius
-import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.EnumFacing
 
@@ -60,11 +57,9 @@ object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
         Utilities.withHeatColor(te, te.heatNode.temperature, vec3Of(0.25)) {
             models[0].renderTextured()
 
-            sidesToIndices.forEach {
-                val tile = te.world.getTileEntity(te.pos + it.first) ?: return@forEach
-
-                if (tile.getOrNull(HEAT_NODE_HANDLER, it.first.opposite) != null) {
-                    models[it.second].render()
+            sidesToIndices.forEach { (side, index) ->
+                if (te.heatPipeConnections.canConnect(side)) {
+                    models[index].render()
                 }
             }
         }
@@ -86,9 +81,7 @@ object TileRendererInsulatedHeatPipe : TileRendererSimple<TileInsulatedHeatPipe>
         var count = 0
 
         sidesToIndices.forEach { (side, index) ->
-            val tile = te.world.getTileEntity(te.pos + side) ?: return@forEach
-
-            if (tile.getOrNull(HEAT_NODE_HANDLER, side.opposite) != null) {
+            if (te.heatPipeConnections.canConnect(side)) {
                 models[index].renderTextured()
                 conn = conn ?: side.opposite
                 count++

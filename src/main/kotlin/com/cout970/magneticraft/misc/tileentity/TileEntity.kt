@@ -72,23 +72,33 @@ fun World.getTileEntitiesIn(start: BlockPos, end: BlockPos,
 fun tryConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
                otherHandler: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?) {
 
-    if (thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
-            otherHandler.canConnect(otherNode, thisHandler, thisNode, side?.opposite)) {
-
+    if (canConnect(thisHandler, thisNode, otherHandler, otherNode, side)) {
         val connection = ElectricConnection(thisNode, otherNode)
         thisHandler.addConnection(connection, side, true)
         otherHandler.addConnection(connection, side?.opposite, false)
     }
 }
 
+fun canConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
+               otherHandler: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?): Boolean {
+
+    return thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
+            otherHandler.canConnect(otherNode, thisHandler, thisNode, side?.opposite)
+}
+
 fun tryConnect(thisHandler: IHeatNodeHandler, thisNode: IHeatNode,
                otherHandler: IHeatNodeHandler, otherNode: IHeatNode, side: EnumFacing) {
 
-    if (thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
-            otherHandler.canConnect(otherNode, thisHandler, thisNode, side.opposite)) {
-
+    if (canConnect(thisHandler, thisNode, otherHandler, otherNode, side)) {
         val connection = HeatConnection(thisNode, otherNode)
         thisHandler.addConnection(connection, side, true)
         otherHandler.addConnection(connection, side.opposite, false)
     }
+}
+
+fun canConnect(thisHandler: IHeatNodeHandler, thisNode: IHeatNode,
+               otherHandler: IHeatNodeHandler, otherNode: IHeatNode, side: EnumFacing): Boolean {
+
+    return thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
+            otherHandler.canConnect(otherNode, thisHandler, thisNode, side.opposite)
 }

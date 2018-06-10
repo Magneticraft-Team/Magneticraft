@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " AB",
+    "CB ",
+    "BC "
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron",
+      "count": 1
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "alloyBasic",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:wrench",
+    "count": 1
+  }
+}

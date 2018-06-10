@@ -12,7 +12,6 @@ import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.tileentity.tryConnect
-import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -66,7 +65,6 @@ class ModuleHeat(
 
     fun updateNormalConnections() {
         clearNormalConnections()
-        if (world.isClient) return
         heatNodes.forEach { thisNode ->
 
             val conDir = connectableDirections()
@@ -89,7 +87,6 @@ class ModuleHeat(
             }
         }
     }
-
 
     fun iterate() {
         outputNormalConnections.forEach(IHeatConnection::iterate)
@@ -116,7 +113,6 @@ class ModuleHeat(
 
     override fun onBreak() {
         clearNormalConnections()
-
         inputNormalConnections.removeAll { con ->
             val handler = getHandler(con.firstNode)
             handler?.removeConnection(con)

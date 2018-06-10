@@ -102,6 +102,7 @@ item.magneticraft.crafting_mesh.name=Iron Mesh
 item.magneticraft.crafting_string_fabric.name=Fabric Mesh
 item.magneticraft.voltmeter_normal.name=Voltmeter
 item.magneticraft.thermometer_normal.name=Thermometer
+item.magneticraft.wrench_normal.name=Wrench
 item.magneticraft.battery_item_low_normal.name=Small Battery
 item.magneticraft.battery_item_medium_normal.name=Medium Battery
 
@@ -156,7 +157,7 @@ tile.magneticraft.connector_down.name=Electric Connector
 tile.magneticraft.battery_north.name=Battery Block
 tile.magneticraft.electric_pole_north.name=Electric Pole
 tile.magneticraft.electric_pole_transformer_north.name=Electric Pole Transformer
-tile.magneticraft.electric_furnace_north.name=Electric furnace
+tile.magneticraft.electric_furnace_off_north.name=Electric furnace
 tile.magneticraft.combustion_chamber_north.name=Combustion Chamber
 tile.magneticraft.steam_boiler_normal.name=Boiler
 tile.magneticraft.pumpjack_drill_normal.name=Pumpjack Pipe
@@ -287,3 +288,5 @@ fluid.magneticraft.gasoline=Gasoline
 fluid.magneticraft.lubricant=Lubricant
 fluid.magneticraft.fuel=Fuel
 fluid.magneticraft.oil_residue=Oil Residue
+
+fluid.magneticraft.wood_gas=Wood Gas
