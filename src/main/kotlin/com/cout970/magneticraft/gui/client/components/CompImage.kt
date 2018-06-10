@@ -18,7 +18,6 @@ class CompImage(val texture: ResourceLocation, val box: DrawableBox) : IComponen
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(texture)
-//        gui.drawColor(gui.pos + box.screen.pos to box.screen.size, 0xFF00FF00.toInt())
         gui.drawTexture(box.offset(gui.pos))
     }
 }

@@ -28,7 +28,30 @@ class CompRfBar(val node: IEnergyStorage, pos: Vec2d)
 
 class CompHeatBar(val node: IHeatNode, pos: Vec2d)
     : CompVerticalBar(HeatBarProvider(node), 2, pos, tooltip = { listOf(formatHeat(node.temperature)) }) {
-    //CallbackBarProvider(this::getTemperature, ::WATER_BOILING_POINT, ::STANDARD_AMBIENT_TEMPERATURE)
+
+    class HeatBarProvider(val node: IHeatNode) : IBarProvider {
+        override fun getLevel(): Float = node.temperature.toFloat() / 4000f
+    }
+}
+
+class CompElectricBar2(val node: IElectricNode, pos: Vec2d)
+    : CompDynamicBar(ElectricBarProvider(node), 0, pos, tooltip = { listOf(String.format("%.2fV", node.voltage)) }) {
+
+    class ElectricBarProvider(val node: IElectricNode) : IBarProvider {
+        override fun getLevel(): Float = clamp(node.voltage / 120.0, 1.0, 0.0).toFloat()
+    }
+}
+
+class CompRfBar2(val node: IEnergyStorage, pos: Vec2d)
+    : CompDynamicBar(RfBarProvider(node), 7, pos, tooltip = { listOf("${node.energyStored}RF") }) {
+
+    class RfBarProvider(val node: IEnergyStorage) : IBarProvider {
+        override fun getLevel(): Float = node.energyStored / node.maxEnergyStored.toFloat()
+    }
+}
+
+class CompHeatBar2(val node: IHeatNode, pos: Vec2d)
+    : CompDynamicBar(HeatBarProvider(node), 2, pos, tooltip = { listOf(formatHeat(node.temperature)) }) {
 
     class HeatBarProvider(val node: IHeatNode) : IBarProvider {
         override fun getLevel(): Float = node.temperature.toFloat() / 4000f

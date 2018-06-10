@@ -34,38 +34,19 @@ class CompBackground(
 }
 
 class CompDynamicBackground(
-        override val size: Vec2d = Vec2d(176, 166)
+        override val pos: IVector2,
+        override val size: IVector2
 ) : IComponent {
-
-    override val pos: IVector2 = Vec2d.ZERO
 
     override lateinit var gui: IGui
 
-    lateinit var back: DrawableBox
     lateinit var dynamicBack: List<DrawableBox>
 
     override fun init() {
-        back = DrawableBox(gui.pos, size, Vec2d.ZERO, size, Vec2d(256, 256))
-
-        val pos = gui.components.filter { it != this }.map { it.pos }
-        val size = gui.components.filter { it != this }.map { it.pos + it.size }
-
-        val min = vec2Of(
-                pos.map { it.xi }.min() ?: 0,
-                pos.map { it.yi }.min() ?: 0
-        ) - vec2Of(7, 7)
-
-        val max = vec2Of(
-                size.map { it.xi }.max() ?: 0,
-                size.map { it.yi }.max() ?: 0
-        ) + vec2Of(7, 7)
-
-        dynamicBack = createTextureBox(gui.pos + min, max - min)
+        dynamicBack = createTextureBox(gui.pos + pos, size)
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        gui.bindTexture(guiTexture("base"))
-        gui.drawTexture(back)
         gui.bindTexture(guiTexture("misc"))
         dynamicBack.forEach { gui.drawTexture(it) }
     }

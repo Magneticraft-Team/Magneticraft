@@ -38,7 +38,7 @@ import net.minecraft.util.math.Vec3d
 @RegisterTileEntity("connector")
 class TileConnector : TileBase(), ITickable {
 
-    val node = ElectricNode(ref, capacity = 0.5)
+    val node = ElectricNode(ref, capacity = 0.25)
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "connector")
 
     val electricModule = ModuleElectricity(
@@ -136,7 +136,7 @@ class TileConnector : TileBase(), ITickable {
 
 @RegisterTileEntity("electric_pole")
 class TileElectricPole : TileBase(), ITickable {
-    val node = ElectricNode(ref, capacity = 0.5)
+    val node = ElectricNode(ref, capacity = 0.25)
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
 
     val electricModule = ModuleElectricity(
@@ -171,7 +171,7 @@ class TileElectricPole : TileBase(), ITickable {
 
 @RegisterTileEntity("electric_pole_transformer")
 class TileElectricPoleTransformer : TileBase(), ITickable {
-    val node = ElectricNode(ref, capacity = 1.0)
+    val node = ElectricNode(ref, capacity = 0.5)
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
     val wrapper2 = WireConnectorWrapper(node, this::getConnectors2, "transformer_connector")
 
@@ -215,7 +215,7 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
 @RegisterTileEntity("electric_cable")
 class TileElectricCable : TileBase(), ITickable {
 
-    val node = ElectricNode(ref, capacity = 0.5)
+    val node = ElectricNode(ref, capacity = 0.25)
     val electricModule = ModuleElectricity(listOf(node))
 
     init {

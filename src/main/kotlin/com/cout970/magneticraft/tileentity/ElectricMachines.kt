@@ -156,10 +156,17 @@ class TileThermopile : TileBase(), ITickable {
             electricNodes = listOf(node)
     )
 
+    val storage = ModuleInternalStorage(
+            mainNode = node,
+            capacity = 10_000,
+            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
+            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
+    )
+
     val thermopileModule = ModuleThermopile(node)
 
     init {
-        initModules(electricModule, thermopileModule)
+        initModules(electricModule, thermopileModule, storage)
     }
 
     @DoNotRemove

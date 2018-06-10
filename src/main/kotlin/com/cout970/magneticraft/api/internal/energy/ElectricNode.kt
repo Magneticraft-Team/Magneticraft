@@ -14,8 +14,8 @@ import net.minecraft.nbt.NBTTagCompound
 @Suppress("unused")
 open class ElectricNode(
         val ref: ITileRef,
-        private val resistance: Double = 0.0001,
-        private val capacity: Double = 2.0,
+        private val capacity: Double = 1.0,
+        private val resistance: Double = 0.001,
         private val name: String = "electric_node_1"
 ) : IElectricNode {
 
@@ -49,17 +49,19 @@ open class ElectricNode(
 
     fun updateAmperage() {
         val tick = world.totalWorldTime
-        if (tick == lastTick) {
-            return
-        } else if (tick == lastTick + 1) {
-            lastTick = tick
-            amperage = amperageCount * 0.5
-            amperageCount = 0.0
-        } else {
-            if (world.isClient) return
-            amperage = 0.0
-            amperageCount = 0.0
-            lastTick = tick
+        when (tick) {
+            lastTick -> return
+            lastTick + 1 -> {
+                lastTick = tick
+                amperage = amperageCount * 0.5
+                amperageCount = 0.0
+            }
+            else -> {
+                if (world.isClient) return
+                amperage = 0.0
+                amperageCount = 0.0
+                lastTick = tick
+            }
         }
     }
 
@@ -67,17 +69,18 @@ open class ElectricNode(
         updateAmperage()
         amperageCount += Math.abs(current)
         voltage += current / getCapacity()
+        voltage = 0.0
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {
         return if (power > 0) {
-            val squared = voltage * voltage + Math.abs(power) * 2
+            val squared = voltage * voltage + Math.abs(power) * getCapacity()
             val diff = Math.sqrt(squared) - Math.abs(voltage)
             if (!simulated) applyCurrent(diff)
             power
         } else {
-            val squared = voltage * voltage - Math.abs(power) * 2
-            val powerUsed = if (squared > 0) -power else (voltage * voltage) / 2
+            val squared = voltage * voltage - Math.abs(power) * getCapacity()
+            val powerUsed = if (squared > 0) -power else (voltage * voltage) / getCapacity()
             val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
             if (!simulated) applyCurrent(diff)
             powerUsed

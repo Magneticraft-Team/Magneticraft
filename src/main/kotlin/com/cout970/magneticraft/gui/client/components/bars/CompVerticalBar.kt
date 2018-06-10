@@ -3,6 +3,7 @@ package com.cout970.magneticraft.gui.client.components.bars
 import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
+import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -68,6 +69,9 @@ open class CompDynamicBar(
     override lateinit var gui: IGui
     lateinit var back: DrawableBox
     lateinit var color: DrawableBox
+
+    constructor(pos: Vec2d, index: Int, va: ValueAverage, limit: Number, tooltip: (CallbackBarProvider) -> (() -> List<String>))
+            : this(va.toBarProvider(limit), index, pos, tooltip(va.toBarProvider(limit)))
 
     override fun init() {
         back = DrawableBox(

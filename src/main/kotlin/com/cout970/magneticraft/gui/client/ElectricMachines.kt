@@ -2,13 +2,12 @@ package com.cout970.magneticraft.gui.client
 
 import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
-import com.cout970.magneticraft.gui.client.components.CompDynamicBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
+import com.cout970.magneticraft.gui.client.core.sdl
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
-import com.cout970.magneticraft.util.vector.vec2Of
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -56,72 +55,62 @@ fun guiBattery(gui: GuiBase, container: ContainerBattery) = gui.run {
     )
 }
 
-fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.run {
+fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.sdl {
     val tile = container.tile
-    val texture = guiTexture("thermopile")
 
-    +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(80, 17))
+    bars {
+        electricBar(tile.node)
+        storageBar(tile.storage)
+    }
 
-    val production = StaticBarProvider(0.0, Config.thermopileProduction,
-            tile.thermopileModule.production::storage)
+    bars {
+        electricProduction(tile.thermopileModule.production, Config.thermopileProduction)
 
-    +CompVerticalBar(production, 3, Vec2d(89, 17), production.toEnergyText())
-
-    val source = StaticBarProvider(0.0, 10_000.0, tile.thermopileModule::totalFlux)
-
-    +CompVerticalBar(source, 2, Vec2d(98, 17), source.toIntText(postfix = " Flux/t"))
+        StaticBarProvider(0.0, 10_000.0, tile.thermopileModule::totalFlux).let { prov ->
+            genericBar(2, 4, prov, prov.toIntText(postfix = " Flux/t"))
+        }
+    }
 }
 
-fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.run {
+fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.sdl {
     val tile = container.tile
-    val texture = guiTexture("wind_turbine")
 
-    +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(64, 17))
-    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), texture)
+    bars {
+        electricBar(tile.node)
+        storageBar(tile.storageModule)
+    }
 
-    val production = StaticBarProvider(0.0, Config.windTurbineMaxProduction,
-            tile.windTurbineModule.production::storage)
+    bars {
+        electricProduction(tile.windTurbineModule.production, Config.windTurbineMaxProduction)
 
-    val openSpace = StaticBarProvider(0.0, 1.0, tile.windTurbineModule::openSpace)
-    val wind = StaticBarProvider(0.0, 1.0, tile.windTurbineModule::currentWind)
+        StaticBarProvider(0.0, 1.0, tile.windTurbineModule::openSpace).let { prov ->
+            genericBar(8, 5, prov, prov.toPercentText("Wind not blocked: "))
+        }
 
-    +CompVerticalBar(production, 3, Vec2d(89, 17), production.toEnergyText())
-    +CompVerticalBar(openSpace, 3, Vec2d(98, 17), openSpace.toPercentText("Wind not blocked: "))
-    +CompVerticalBar(wind, 2, Vec2d(107, 17), wind.toPercentText("Wind: ", "%"))
+        StaticBarProvider(0.0, 1.0, tile.windTurbineModule::currentWind).let { prov ->
+            genericBar(9, 7, prov, prov.toPercentText("Wind: ", "%"))
+        }
+    }
 }
 
-fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.run {
+fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.sdl {
     val tile = container.tile
 
-    +CompDynamicBackground()
-    +CompElectricBar(tile.electricNode, Vec2d(64, 17))
-    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(0, 166), guiTexture("wind_turbine"))
-
-    val limit = Config.electricHeaterMaxProduction
-
-    val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
-    val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
-
-    +CompDynamicBar(consumption, 3, Vec2d(88, 16), consumption.toEnergyText())
-    +CompDynamicBar(production, 6, Vec2d(97, 16), production.toHeatPerTickText())
-    +CompHeatBar(tile.heatNode, Vec2d(107, 17))
+    bars {
+        electricBar(tile.electricNode)
+        heatBar(tile.heatNode)
+        electricConsumption(tile.electricHeaterModule.consumption, Config.electricHeaterMaxProduction)
+        heatProduction(tile.electricHeaterModule.production, Config.electricHeaterMaxProduction)
+    }
 }
 
-fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.run {
+fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.sdl {
     val tile = container.tile
-    val texture = guiTexture("rf_heater")
 
-    +CompBackground(texture)
-    +CompRfBar(tile.storage, Vec2d(78, 17))
-
-    val limit = Config.electricHeaterMaxProduction
-
-    val consumption = StaticBarProvider(0.0, limit, tile.electricHeaterModule.consumption::storage)
-    val production = StaticBarProvider(0.0, limit, tile.electricHeaterModule.production::storage)
-
-    +CompVerticalBar(consumption, 3, Vec2d(89, 17), consumption.toIntText(postfix = " RF/t"))
-    +CompVerticalBar(production, 6, Vec2d(98, 17), production.toHeatPerTickText())
-    +CompHeatBar(tile.node, Vec2d(107, 17))
+    bars {
+        rfBar(tile.storage)
+        heatBar(tile.node)
+        rfConsumption(tile.electricHeaterModule.consumption, Config.electricHeaterMaxProduction)
+        heatProduction(tile.electricHeaterModule.production, Config.electricHeaterMaxProduction)
+    }
 }
