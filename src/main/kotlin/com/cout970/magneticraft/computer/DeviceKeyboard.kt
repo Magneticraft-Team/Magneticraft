@@ -69,6 +69,7 @@ class DeviceKeyboard : IDevice, IResettable {
         events.addLast(KeyEvent(key, code))
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onKeyRelease(key: Int, code: Int) {
         keyStates[code and 0xFF] = 0
     }

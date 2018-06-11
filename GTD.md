@@ -1,14 +1,12 @@
-Dynamic gui system?
-Expand container size
-
-Fix recipes
-Wood gasifier
+# new features
 wood gas filter to get creosote oil
-
-Fix, cable/heat pipe/fluid pipe connections
-Update electric cable texture
+Expand container size
+Update remaining guis to the Dynamic system
+Add brick furnace
+infinite heat
+add support for other mods wrenches
 
 # release requirements
 Update manual
 Fix recipes
-Fix lang issues (fluid names)
+Fix lang issues
