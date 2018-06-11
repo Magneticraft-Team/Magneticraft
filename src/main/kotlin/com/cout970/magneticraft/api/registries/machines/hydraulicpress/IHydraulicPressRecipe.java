@@ -21,14 +21,14 @@ public interface IHydraulicPressRecipe {
     /**
      * The item, metadata and nbt used to determine if an item can be used for this recipe or not
      * Note: stacksize is used to check the recipe
-     * WARNING: this must return a COPY of the input not the original instance of the input
+     * Note: this will return a COPY of the input not the original instance of the input
      * @return The input of the recipe
      */
     ItemStack getInput();
 
     /**
      * The result of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      * @return The output of the recipe
      */
     ItemStack getOutput();

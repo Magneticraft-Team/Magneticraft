@@ -4,7 +4,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
-import com.cout970.magneticraft.gui.client.core.sdl
+import com.cout970.magneticraft.gui.client.core.dsl
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -55,7 +55,7 @@ fun guiBattery(gui: GuiBase, container: ContainerBattery) = gui.run {
     )
 }
 
-fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.sdl {
+fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.dsl {
     val tile = container.tile
 
     bars {
@@ -72,7 +72,7 @@ fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.sdl {
     }
 }
 
-fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.sdl {
+fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.dsl {
     val tile = container.tile
 
     bars {
@@ -93,7 +93,7 @@ fun guiWindTurbine(gui: GuiBase, container: ContainerWindTurbine) = gui.sdl {
     }
 }
 
-fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.sdl {
+fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.dsl {
     val tile = container.tile
 
     bars {
@@ -104,7 +104,7 @@ fun guiElectricHeater(gui: GuiBase, container: ContainerElectricHeater) = gui.sd
     }
 }
 
-fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.sdl {
+fun guiRfHeater(gui: GuiBase, container: ContainerRfHeater) = gui.dsl {
     val tile = container.tile
 
     bars {

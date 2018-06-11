@@ -7,14 +7,14 @@ public interface IRefineryRecipe {
 
     /**
      * The stack used to determine if an item can be used for this recipe or not
-     * WARNING: this must return a COPY of the input not the original instance of the input
+     * Note: this will return a COPY of the input not the original instance of the input
      * @return The input of the recipe
      */
     FluidStack getInput();
 
     /**
      * The result of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      * @return The output of the recipe
      */
     @Nullable
@@ -22,7 +22,7 @@ public interface IRefineryRecipe {
 
     /**
      * The result of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      * @return The output of the recipe
      */
     @Nullable
@@ -30,7 +30,7 @@ public interface IRefineryRecipe {
 
     /**
      * The result of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      * @return The output of the recipe
      */
     @Nullable

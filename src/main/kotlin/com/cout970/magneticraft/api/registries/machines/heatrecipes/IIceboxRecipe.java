@@ -11,7 +11,7 @@ public interface IIceboxRecipe {
     /**
      * The input stack of this recipe
      * The stacksize is ignored
-     * WARNING: this must return a COPY of the input not the original instance of the input
+     * Note: this will return a COPY of the input not the original instance of the input
      *
      * @return the stack used to find this recipe
      */
@@ -19,7 +19,7 @@ public interface IIceboxRecipe {
 
     /**
      * The output of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      *
      * @return The primary output of this recipe
      */

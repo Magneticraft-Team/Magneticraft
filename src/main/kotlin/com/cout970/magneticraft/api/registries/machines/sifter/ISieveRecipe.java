@@ -16,7 +16,7 @@ public interface ISieveRecipe {
     /**
      * The input stack of this recipe
      * The stacksize is ignored
-     * WARNING: this must return a COPY of the input not the original instance of the input
+     * Note: this will return a COPY of the input not the original instance of the input
      *
      * @return the stack used to find this recipe
      */
@@ -25,7 +25,7 @@ public interface ISieveRecipe {
     /**
      * The primary output of this recipe
      * The recipe will always return this stack as output
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      *
      * @return The primary output of this recipe
      */
@@ -35,7 +35,7 @@ public interface ISieveRecipe {
      * The secondary output of this recipe
      * The recipe will return this stack as output if, and only if, a Random number between 0 and 1 is less
      * that the probability of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      *
      * @return The secondary output of this recipe
      */
@@ -45,7 +45,7 @@ public interface ISieveRecipe {
      * The tertiary output of this recipe
      * The recipe will return this stack as output if, and only if, a Random number between 0 and 1 is less
      * that the probability of this recipe
-     * WARNING: this must return a COPY of the output not the original instance of the output
+     * Note: this will return a COPY of the output not the original instance of the output
      *
      * @return The secondary output of this recipe
      */

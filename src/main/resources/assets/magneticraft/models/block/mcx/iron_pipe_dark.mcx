@@ -1,49 +1,49 @@
 {
   "useAmbientOcclusion": true,
   "use3dInGui": true,
-  "particleTexture": "magneticraft:blocks/fluid_machines/iron_pipe_dark",
+  "particleTexture": "magneticraft:blocks/fluid_machines/iron_pipe",
   "parts": [
     {
       "name": "base",
       "from": 0,
       "to": 6,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     },
     {
       "name": "up",
       "from": 6,
       "to": 12,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     },
     {
       "name": "east",
       "from": 12,
       "to": 18,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     },
     {
       "name": "down",
       "from": 18,
       "to": 24,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     },
     {
       "name": "north",
       "from": 24,
       "to": 30,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     },
     {
       "name": "south",
       "from": 30,
       "to": 36,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     },
     {
       "name": "west",
       "from": 36,
       "to": 42,
-      "texture": "magneticraft:blocks/fluid_machines/iron_pipe_dark"
+      "texture": "magneticraft:blocks/fluid_machines/iron_pipe"
     }
   ],
   "quads": {

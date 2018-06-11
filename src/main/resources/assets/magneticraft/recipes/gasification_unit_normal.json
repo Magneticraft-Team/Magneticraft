@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateTungsten",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:gasification_unit",
+    "count": 1,
+    "data": 0
+  }
+}

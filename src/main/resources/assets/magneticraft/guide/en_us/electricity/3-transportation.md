@@ -1,6 +1,6 @@
 # Electricity Transportation
 
-Electricity can be transmitted through electrical connectors and electrical poles.
+Electricity can be transmitted through electrical connectors, electric cables and electric poles.
 
 **Connecting**
 

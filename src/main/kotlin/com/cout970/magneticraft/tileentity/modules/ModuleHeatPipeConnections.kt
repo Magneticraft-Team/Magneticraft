@@ -18,7 +18,7 @@ class ModuleHeatPipeConnections(
 
     fun canConnect(side: EnumFacing): Boolean {
         val tile = world.getTileEntity(pos + side) ?: return false
-        val handler = tile.getOrNull(HEAT_NODE_HANDLER, side) ?: return false
+        val handler = tile.getOrNull(HEAT_NODE_HANDLER, side.opposite) ?: return false
         if (handler === heatModule) return false
         val heatNodes = handler.nodes.filterIsInstance<IHeatNode>()
 

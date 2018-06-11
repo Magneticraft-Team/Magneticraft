@@ -40,6 +40,7 @@ object HeatMachines : IBlockMaker {
     lateinit var heatPipe: BlockBase private set
     lateinit var insulatedHeatPipe: BlockBase private set
     lateinit var heatSink: BlockBase private set
+    lateinit var gasificationUnit: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -146,7 +147,20 @@ object HeatMachines : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe, heatSink)
+        gasificationUnit = builder.withName("gasification_unit").copy {
+            factory = factoryOf(::TileGasificationUnit)
+            customModels = listOf(
+                    "model" to resource("models/block/mcx/gasification_unit.mcx"),
+                    "inventory" to resource("models/block/mcx/gasification_unit.mcx")
+            )
+            generateDefaultItemModel = false
+            hasCustomModel = true
+            boundingBox = { listOf((vec3Of(1, 0, 1) toAABBWith vec3Of(15, 16, 15)).scale(PIXEL)) }
+            onActivated = CommonMethods::delegateToModule
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe, heatSink, gasificationUnit)
     }
 
     // size is (8 - realSize)
@@ -157,10 +171,10 @@ object HeatMachines : IBlockMaker {
         list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
 
         if (pipe != null) {
-            if (pipe.canConnect(EnumFacing.UP))
+            if (pipe.canConnect(EnumFacing.DOWN))
                 list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
 
-            if (pipe.canConnect(EnumFacing.DOWN))
+            if (pipe.canConnect(EnumFacing.UP))
                 list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
 
             if (pipe.canConnect(EnumFacing.NORTH))

@@ -5,6 +5,7 @@ import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.IComponent
 import com.cout970.magneticraft.gui.client.core.IGui
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
 import com.cout970.magneticraft.util.vector.vec2Of
@@ -64,7 +65,83 @@ class CompFluidBar(
 
     override fun drawSecondLayer(mouse: Vec2d) {
         if (mouse in (gui.pos + pos to size)) {
-            val list = when (tank.clientFluidAmount != 0 && tank.clientFluidName.isEmpty()) {
+            val list = when (tank.clientFluidAmount == 0) {
+                true -> listOf("Fluid: Empty")
+                else -> listOf("Fluid: ${tank.clientFluidName}", "Amount: ${tank.clientFluidAmount}")
+            }
+
+            gui.drawHoveringText(list, mouse)
+        }
+    }
+}
+
+class CompFluidBar2(
+        override val pos: IVector2,
+        val tank: Tank
+) : IComponent {
+
+    override val size = vec2Of(18, 50)
+    override lateinit var gui: IGui
+
+    lateinit var back: DrawableBox
+    lateinit var front: DrawableBox
+
+    override fun init() {
+        back = DrawableBox(
+                screenPos = gui.pos + pos,
+                screenSize = vec2Of(18, 50),
+                texturePos = vec2Of(102, 61),
+                textureSize = vec2Of(18, 50),
+                textureScale = vec2Of(256)
+        )
+        front = DrawableBox(
+                screenPos = gui.pos + pos + vec2Of(1),
+                screenSize = vec2Of(16, 48),
+                texturePos = vec2Of(121, 61),
+                textureSize = vec2Of(16, 48),
+                textureScale = vec2Of(256)
+        )
+    }
+
+    fun getFluidTexture(): TextureAtlasSprite? {
+        if (tank.clientFluidName.isEmpty()) return null
+
+        val fluid = FluidRegistry.getFluid(tank.clientFluidName) ?: return null
+        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+
+        return textureMap.getAtlasSprite(fluid.still.toString())
+    }
+
+    override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        gui.bindTexture(guiTexture("misc"))
+        gui.drawTexture(back)
+
+        if (tank.clientFluidAmount > 0) {
+            val texture = getFluidTexture()
+            if (texture != null) {
+                val level = (tank.clientFluidAmount * 48 / tank.capacity)
+
+                gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+
+                GlStateManager.enableBlend()
+                val height = level / 16
+                for (h in 0..height) {
+                    val heightLevel = Math.min(level - h * 16, 16)
+
+                    gui.drawSprite(gui.pos + vec2Of(pos.x + 1, pos.y + 48 - heightLevel - h * 16), vec2Of(16, heightLevel),
+                            texture)
+                }
+                GlStateManager.disableBlend()
+            }
+        }
+
+        gui.bindTexture(guiTexture("misc"))
+        gui.drawTexture(front)
+    }
+
+    override fun drawSecondLayer(mouse: Vec2d) {
+        if (mouse in (gui.pos + pos to size)) {
+            val list = when (tank.clientFluidAmount == 0) {
                 true -> listOf("Fluid: Empty")
                 else -> listOf("Fluid: ${tank.clientFluidName}", "Amount: ${tank.clientFluidAmount}")
             }

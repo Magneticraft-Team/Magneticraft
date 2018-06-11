@@ -540,7 +540,7 @@ object Utilities {
         return Triple(Math.round(red).toFloat(), Math.round(green).toFloat(), Math.round(blue).toFloat())
     }
 
-    fun withHeatColor(te: TileEntity, temp: Double, color: IVector3, func: () -> Unit) {
+    fun withHeatColor(te: TileEntity, temp: Double, func: () -> Unit) {
         val (r, g, b) = Utilities.tempToRGB(temp.toFloat())
         val heatVisibility = ((temp - 150.fromCelsiusToKelvin()) / 300).coerceIn(0.0, 1.0)
 
@@ -553,12 +553,19 @@ object Utilities {
                 max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
         )
 
+        // Set additive color
+        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD)
         GlStateManager.color(
-                interpolate(color.x, r / 255.0, heatVisibility).toFloat(),
-                interpolate(color.y, g / 255.0, heatVisibility).toFloat(),
-                interpolate(color.z, b / 255.0, heatVisibility).toFloat()
+                interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
+                interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
+                interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
+                1f
         )
         func()
+
+        // Reset color
+        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE)
+        GlStateManager.color(1f, 1f, 1f, 1f)
         setDefaultLight(te)
     }
 

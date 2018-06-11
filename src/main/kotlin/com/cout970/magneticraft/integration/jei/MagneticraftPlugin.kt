@@ -3,6 +3,7 @@ package com.cout970.magneticraft.integration.jei
 import com.cout970.magneticraft.MOD_NAME
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
+import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasificationUnitRecipe
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
@@ -10,8 +11,10 @@ import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterReci
 import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
+import com.cout970.magneticraft.block.HeatMachines
 import com.cout970.magneticraft.block.ManualMachines
 import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.gui.formatHeat
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -54,6 +57,7 @@ class MagneticraftPlugin : IModPlugin {
         const val HYDRAULIC_PRESS_ID = "magneticraft.hydraulic_press"
         const val OIL_HEATER_ID = "magneticraft.oil_heater"
         const val REFINERY_ID = "magneticraft.refinery"
+        const val GASIFICATION_UNIT_ID = "magneticraft.gasification_unit"
     }
 
     override fun register(registry: IModRegistry) {
@@ -85,6 +89,10 @@ class MagneticraftPlugin : IModPlugin {
         registry.handleRecipes(IRefineryRecipe::class.java, ::RefineryRecipeWrapper, REFINERY_ID)
         registry.addRecipeCatalyst(Multiblocks.refinery.stack(), REFINERY_ID)
         registry.addRecipes(MagneticraftApi.getRefineryRecipeManager().recipes, REFINERY_ID)
+
+        registry.handleRecipes(IGasificationUnitRecipe::class.java, ::GasificationUnitRecipeWrapper, GASIFICATION_UNIT_ID)
+        registry.addRecipeCatalyst(HeatMachines.gasificationUnit.stack(), GASIFICATION_UNIT_ID)
+        registry.addRecipes(MagneticraftApi.getGasificationUnitRecipeManager().recipes, GASIFICATION_UNIT_ID)
 
 //        registry.addRecipeClickArea(...) fuck
     }
@@ -244,6 +252,24 @@ class MagneticraftPlugin : IModPlugin {
                     recipeWrapper.recipe.output0?.let { recipeLayout.fluidStacks.set(1, it) }
                     recipeWrapper.recipe.output1?.let { recipeLayout.fluidStacks.set(2, it) }
                     recipeWrapper.recipe.output2?.let { recipeLayout.fluidStacks.set(3, it) }
+                }
+        ))
+
+
+        registry.addRecipeCategories(RecipeCategory<GasificationUnitRecipeWrapper>(
+                id = GASIFICATION_UNIT_ID,
+                backgroundTexture = "gasification_unit",
+                unlocalizedTitle = "text.magneticraft.jei.gasification_unit",
+                initFunc = { recipeLayout, recipeWrapper, _ ->
+                    val cap = recipeWrapper.recipe.fluidOutput?.amount ?: 10
+
+                    recipeLayout.itemStacks.init(0, true, 48, 10)
+                    recipeLayout.itemStacks.init(1, false, 48, 46)
+                    recipeLayout.fluidStacks.init(2, true, 48 + 18 + 4, 46, 16, 16, cap, false, null)
+
+                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                    recipeWrapper.recipe.itemOutput.ifNonEmpty { recipeLayout.itemStacks.set(1, it) }
+                    recipeWrapper.recipe.fluidOutput?.let { recipeLayout.fluidStacks.set(2, it) }
                 }
         ))
     }
@@ -408,6 +434,28 @@ class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
         minecraft.fontRenderer.drawString(
                 I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
                 32, 64 + 8, Color.gray.rgb)
+    }
+}
+
+class GasificationUnitRecipeWrapper(val recipe: IGasificationUnitRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients) {
+        if (recipe.useOreDictionaryEquivalencies()) {
+            ingredients.setInputs(ItemStack::class.java, listOf(getOreDictEquivalents(recipe.input)))
+        } else {
+            ingredients.setInput(ItemStack::class.java, recipe.input)
+        }
+        recipe.itemOutput.ifNonEmpty { ingredients.setOutput(ItemStack::class.java, it) }
+        recipe.fluidOutput?.let { ingredients.setOutput(FluidStack::class.java, it) }
+    }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.drawString(
+                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+                32, 64 + 4, Color.gray.rgb)
+
+        minecraft.fontRenderer.drawString(formatHeat(recipe.minTemperature().toDouble()),
+                32, 64 + 8 + 8, Color.gray.rgb)
     }
 }
 

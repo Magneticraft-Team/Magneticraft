@@ -12,6 +12,7 @@ import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.tileentity.tryConnect
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -50,6 +51,7 @@ class ModuleHeat(
     val outputNormalConnections = mutableListOf<IHeatConnection>()
 
     override fun update() {
+        if (world.isClient) return
         updateConnections()
         iterate()
     }

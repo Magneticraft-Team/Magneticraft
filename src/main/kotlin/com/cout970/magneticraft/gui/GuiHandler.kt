@@ -46,6 +46,7 @@ object GuiHandler : IGuiHandler {
             is ContainerRefinery          -> guiOf(container, ::guiRefinery)
             is ContainerRfHeater          -> guiOf(container, ::guiRfHeater)
             is ContainerSteamEngine       -> guiOf(container, ::guiSteamEngine)
+            is ContainerGasificationUnit  -> guiOf(container, ::guiGasificationUnit)
             else -> null
         }
         // @formatter:on
@@ -83,6 +84,7 @@ object GuiHandler : IGuiHandler {
             is TileRefinery          -> ContainerRefinery(tile, player, world, pos)
             is TileRfHeater          -> ContainerRfHeater(tile, player, world, pos)
             is TileSteamEngine       -> ContainerSteamEngine(tile, player, world, pos)
+            is TileGasificationUnit  -> ContainerGasificationUnit(tile, player, world, pos)
             else -> null
         }
         // @formatter:on

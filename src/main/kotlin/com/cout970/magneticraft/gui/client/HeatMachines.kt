@@ -1,9 +1,12 @@
 package com.cout970.magneticraft.gui.client
 
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
+import com.cout970.magneticraft.gui.client.core.dsl
 import com.cout970.magneticraft.gui.common.ContainerCombustionChamber
+import com.cout970.magneticraft.gui.common.ContainerGasificationUnit
 import com.cout970.magneticraft.gui.common.ContainerSteamBoiler
 import com.cout970.magneticraft.util.guiTexture
 import com.cout970.magneticraft.util.vector.Vec2d
@@ -39,4 +42,16 @@ fun guiSteamBoiler(gui: GuiBase, container: ContainerSteamBoiler) = gui.run {
 
     +CompFluidBar(vec2Of(80, 16), texture, vec2Of(0, 166), tile.waterTank)
     +CompFluidBar(vec2Of(102, 16), texture, vec2Of(0, 166), tile.steamTank)
+}
+
+fun guiGasificationUnit(gui: GuiBase, container: ContainerGasificationUnit) = gui.dsl {
+    val tile = container.tile
+
+    bars {
+        heatBar(tile.heatNode)
+        electricConsumption(tile.process.consumption, Config.gasificationUnitConsumption)
+        progressBar(tile.process.timedProcess)
+        slotPair()
+        tank(tile.tank)
+    }
 }

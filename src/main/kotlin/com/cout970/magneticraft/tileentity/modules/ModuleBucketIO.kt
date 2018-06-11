@@ -16,6 +16,8 @@ import net.minecraftforge.fluids.FluidUtil
  */
 class ModuleBucketIO(
         val tank: Tank,
+        val input: Boolean = true,
+        val output: Boolean = true,
         override val name: String = "module_bucket_io"
 ) : IModule, IOnActivated {
 
@@ -26,23 +28,27 @@ class ModuleBucketIO(
 
         if (worldIn.isServer) {
             handler.tankProperties.forEach { prop ->
-                val result0 = FluidUtil.tryFillContainer(heldItem, tank, prop.capacity, playerIn, true)
-                if (result0.isSuccess) {
-                    heldItem.shrink(1)
-                    if (!playerIn.inventory.addItemStackToInventory(result0.result)) {
-                        worldIn.dropItem(result0.result, playerIn.position, false)
+                if (output) {
+                    val result0 = FluidUtil.tryFillContainer(heldItem, tank, prop.capacity, playerIn, true)
+                    if (result0.isSuccess) {
+                        heldItem.shrink(1)
+                        if (!playerIn.inventory.addItemStackToInventory(result0.result)) {
+                            worldIn.dropItem(result0.result, playerIn.position, false)
+                        }
+                        container.sendUpdateToNearPlayers()
+                        return@forEach
                     }
-                    container.sendUpdateToNearPlayers()
-                    return@forEach
                 }
-                val result1 = FluidUtil.tryEmptyContainer(heldItem, tank, prop.capacity, playerIn, true)
-                if (result1.isSuccess) {
-                    heldItem.shrink(1)
-                    if (!playerIn.inventory.addItemStackToInventory(result1.result)) {
-                        worldIn.dropItem(result1.result, playerIn.position, false)
+                if (input) {
+                    val result1 = FluidUtil.tryEmptyContainer(heldItem, tank, prop.capacity, playerIn, true)
+                    if (result1.isSuccess) {
+                        heldItem.shrink(1)
+                        if (!playerIn.inventory.addItemStackToInventory(result1.result)) {
+                            worldIn.dropItem(result1.result, playerIn.position, false)
+                        }
+                        container.sendUpdateToNearPlayers()
+                        return@forEach
                     }
-                    container.sendUpdateToNearPlayers()
-                    return@forEach
                 }
             }
         }

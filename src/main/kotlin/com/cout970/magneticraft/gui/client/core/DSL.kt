@@ -7,6 +7,8 @@ import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.CompDynamicBackground
 import com.cout970.magneticraft.gui.client.components.CompImage
 import com.cout970.magneticraft.gui.client.components.bars.*
+import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
+import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.tileentity.modules.ModuleInternalStorage
 import com.cout970.magneticraft.util.guiTexture
@@ -15,7 +17,7 @@ import com.cout970.magneticraft.util.vector.vec2Of
 import net.minecraftforge.energy.IEnergyStorage
 import kotlin.math.max
 
-fun GuiBase.sdl(func: GuiSdl.() -> Unit) {
+fun GuiBase.dsl(func: GuiSdl.() -> Unit) {
     val dsl = GuiSdl()
     dsl.func()
     dsl.build(this)
@@ -91,6 +93,32 @@ class GuiDslBars {
 
     fun heatProduction(va: ValueAverage, limit: Number) {
         components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(pos + ICON_SIZE, 6, va, limit) { it.toHeatPerTickText() }, iconOf(4, pos)) }
+    }
+
+    fun progressBar(timed: TimedCraftingProcess) {
+        components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(pos + ICON_SIZE, 6, timed) { it.toPercentText() }, iconOf(3, pos)) }
+    }
+
+    fun tank(tank: Tank) {
+        components += Vec2d(18, 50) to { pos -> listOf(CompFluidBar2(pos + ICON_SIZE, tank)) }
+    }
+
+    fun slotPair() {
+        components += Vec2d(18, 50) to { pos ->
+            listOf(CompImage(guiTexture("misc"), DrawableBox(
+                    screenPos = pos + ICON_SIZE,
+                    screenSize = vec2Of(18, 18),
+                    texturePos = vec2Of(55, 81),
+                    textureSize = vec2Of(18, 18),
+                    textureScale = vec2Of(256)
+            )), CompImage(guiTexture("misc"), DrawableBox(
+                    screenPos = pos + vec2Of(0, 42),
+                    screenSize = vec2Of(18, 18),
+                    texturePos = vec2Of(36, 81),
+                    textureSize = vec2Of(18, 18),
+                    textureScale = vec2Of(256)
+            )))
+        }
     }
 
     private fun iconOf(index: Int, pos: IVector2): CompImage = CompImage(guiTexture("misc"), DrawableBox(

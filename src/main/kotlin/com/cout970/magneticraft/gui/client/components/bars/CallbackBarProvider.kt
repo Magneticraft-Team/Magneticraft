@@ -23,10 +23,11 @@ class StaticBarProvider(val minVal: Double, val maxVal: Double, callback: () -> 
     : CallbackBarProvider(callback = callback, max = { maxVal }, min = { minVal })
 
 fun TimedCraftingProcess.toBarProvider() = CallbackBarProvider(this::timer, this::limit, ZERO)
+
 fun ValueAverage.toBarProvider(max: Number) = CallbackBarProvider(this::storage, { max }, ZERO)
 
 
-fun CallbackBarProvider.toPercentText(prefix: String, postfix: String = "%") = {
+fun CallbackBarProvider.toPercentText(prefix: String = "", postfix: String = "%") = {
     listOf("$prefix${(getLevel() * 100.0).toInt()}$postfix")
 }
 

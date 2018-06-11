@@ -2,6 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.oilheater.OilHeaterRecipeManager
@@ -362,8 +363,71 @@ fun registerRecipes() {
             FluidRegistry.getFluidStack("naphtha", 2),
             FluidRegistry.getFluidStack("natural_gas", 3),
             1f)
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                   GASIFIER RECIPES
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    addGasifierRecipe(Blocks.PLANKS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.LOG.stack(), Items.COAL.stack(meta = 1), fluidOf("wood_gas", 150), 300f, 300f)
+    addGasifierRecipe(Blocks.LOG2.stack(), Items.COAL.stack(meta = 1), fluidOf("wood_gas", 150), 300f, 300f)
+    addGasifierRecipe(Blocks.OAK_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.ACACIA_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.BIRCH_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.JUNGLE_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.SPRUCE_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.DARK_OAK_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Items.OAK_DOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 250f)
+    addGasifierRecipe(Items.ACACIA_DOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 250f)
+    addGasifierRecipe(Items.BIRCH_DOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 250f)
+    addGasifierRecipe(Items.JUNGLE_DOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 250f)
+    addGasifierRecipe(Items.SPRUCE_DOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 250f)
+    addGasifierRecipe(Items.DARK_OAK_DOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 250f)
+    addGasifierRecipe(Blocks.OAK_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.ACACIA_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.BIRCH_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.JUNGLE_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.SPRUCE_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.DARK_OAK_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 250f)
+    addGasifierRecipe(Blocks.WOODEN_SLAB.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 150f, 200f)
+    addGasifierRecipe(Blocks.WOODEN_PRESSURE_PLATE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 150f, 200f)
+    addGasifierRecipe(Blocks.TRAPDOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 150f, 200f)
+    addGasifierRecipe(Blocks.HAY_BLOCK.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 100), 150f, 250f)
+    addGasifierRecipe(Blocks.SAPLING.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 180f)
+    addGasifierRecipe(Blocks.LEAVES.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 180f)
+    addGasifierRecipe(Blocks.LEAVES2.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 180f)
+    addGasifierRecipe(Blocks.VINE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 180f)
+    addGasifierRecipe(Blocks.WATERLILY.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 180f)
+    addGasifierRecipe(Blocks.RED_FLOWER.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Blocks.YELLOW_FLOWER.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Blocks.BROWN_MUSHROOM.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Blocks.RED_MUSHROOM.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Blocks.CACTUS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 180f)
+    addGasifierRecipe(Blocks.DOUBLE_PLANT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Blocks.CHEST.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 300f, 200f)
+    addGasifierRecipe(Items.BOWL.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 150f, 150f)
+    addGasifierRecipe(Items.SIGN.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Items.STICK.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 100f, 150f)
+    addGasifierRecipe(Items.WHEAT_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 150f)
+    addGasifierRecipe(Items.BEETROOT_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 150f)
+    addGasifierRecipe(Items.MELON_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 150f)
+    addGasifierRecipe(Items.PUMPKIN_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 150f)
+    addGasifierRecipe(Items.WHEAT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 200f, 200f)
+    addGasifierRecipe(Items.REEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 100f, 200f)
+    addGasifierRecipe(Items.NETHER_WART.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 100f, 200f)
+    addGasifierRecipe(Items.CARROT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 100f, 200f)
+    addGasifierRecipe(Items.POTATO.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 100f, 200f)
+    addGasifierRecipe(Items.BEETROOT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 100f, 200f)
+
+    ItemHolder.coalCoke?.ifNonEmpty {
+        addGasifierRecipe(Items.COAL.stack(), it, fluidOf("wood_gas", 15), 300f, 300f)
+    }
+    ItemHolder.sawdust?.ifNonEmpty {
+        addGasifierRecipe(it, ItemStack.EMPTY, fluidOf("wood_gas", 10), 300f, 300f)
+    }
 }
 
+private fun fluidOf(name: String, amount: Int) = FluidRegistry.getFluidStack(name, amount)
 
 private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
     if (input.isEmpty)
@@ -445,6 +509,13 @@ private fun addRefineryRecipe(input: FluidStack?, output0: FluidStack?, output1:
         return
     }
     RefineryRecipeManager.registerRecipe(RefineryRecipeManager.createRecipe(input, output0, output1, output2, ticks))
+}
+
+private fun addGasifierRecipe(input: ItemStack, output0: ItemStack, output1: FluidStack?, ticks: Float, minTemp: Float) {
+    GasificationUnitRecipeManager.registerRecipe(
+            GasificationUnitRecipeManager.createRecipe(input, output0, output1,
+                    ticks, minTemp.fromCelsiusToKelvin().toFloat(), true)
+    )
 }
 
 

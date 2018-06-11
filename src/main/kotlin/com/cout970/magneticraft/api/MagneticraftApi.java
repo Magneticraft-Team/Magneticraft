@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api;
 
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry;
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
+import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.oilheater.OilHeaterRecipeManager;
@@ -13,6 +14,7 @@ import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegist
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
+import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasificationUnitRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterRecipeManager;
@@ -28,7 +30,8 @@ import com.cout970.magneticraft.multiblock.core.MultiblockManager;
  */
 public class MagneticraftApi {
 
-    private MagneticraftApi() {}
+    private MagneticraftApi() {
+    }
 
     public static IRefineryRecipeManager getRefineryRecipeManager() {
         return RefineryRecipeManager.INSTANCE;
@@ -68,6 +71,10 @@ public class MagneticraftApi {
 
     public static ICrushingTableRecipeManager getCrushingTableRecipeManager() {
         return CrushingTableRecipeManager.INSTANCE;
+    }
+
+    public static IGasificationUnitRecipeManager getGasificationUnitRecipeManager() {
+        return GasificationUnitRecipeManager.INSTANCE;
     }
 
     public static IOreGenerationRegistry getOreGenerationRegistry() {

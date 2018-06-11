@@ -4,12 +4,15 @@ import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.block.ElectricMachines
+import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
+import com.cout970.magneticraft.misc.crafting.GasificationCraftingProcess
 import com.cout970.magneticraft.misc.energy.RfNodeWrapper
 import com.cout970.magneticraft.misc.energy.RfStorage
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isServer
@@ -144,7 +147,7 @@ class TileHeatSink : TileBase(), ITickable {
         // Dissipate heat
         if (world.isServer && heatNode.temperature > STANDARD_AMBIENT_TEMPERATURE) {
             val diff = heatNode.temperature - STANDARD_AMBIENT_TEMPERATURE
-            heatNode.applyHeat(-(1 / 10.0) * diff)
+            heatNode.applyHeat(-diff)
         }
     }
 }
@@ -208,6 +211,38 @@ class TileRfHeater : TileBase(), ITickable {
 
     override fun shouldRefresh(world: World?, pos: BlockPos?, oldState: IBlockState, newSate: IBlockState): Boolean {
         return oldState.block !== newSate.block
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("gasification_unit")
+class TileGasificationUnit : TileBase(), ITickable {
+
+    val tank = Tank(4_000)
+    val heatNode = HeatNode(ref)
+    val inv = Inventory(2)
+
+    val fluidModule = ModuleFluidHandler(tank)
+    val heatModule = ModuleHeat(listOf(heatNode))
+    val inventoryModule = ModuleInventory(inv, capabilityFilter = { InventoryCapabilityFilter(it, listOf(0), listOf(1)) })
+
+    val exporter = ModuleFluidExporter(tank, { listOf(BlockPos(0, 1, 0) to EnumFacing.UP) })
+    val bucketModule = ModuleBucketIO(tank, input = false, output = true)
+
+    val openGui = ModuleOpenGui()
+    val process = ModuleHeatProcessing(
+            craftingProcess = GasificationCraftingProcess(tank, inv, 0, 1),
+            node = heatNode,
+            costPerTick = Config.gasificationUnitConsumption.toFloat(),
+            workingRate = 1f
+    )
+
+    init {
+        initModules(heatModule, fluidModule, exporter, bucketModule, process, inventoryModule, openGui)
     }
 
     @DoNotRemove
