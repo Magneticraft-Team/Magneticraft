@@ -152,13 +152,14 @@ class BlockMultiblock(
                 val tile = worldIn.getTile<TileBase>(pos)
                 val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule
                 if (module?.multiblock != null) {
-                    if (module.multiblock != null && module.multiblockFacing != null) {
+                    val facing = state[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: module.multiblockFacing
+                    if (module.multiblock != null && facing != null) {
                         MultiblockManager.deactivateMultiblockStructure(
                                 MultiblockContext(
                                         multiblock = module.multiblock!!,
                                         world = worldIn,
                                         center = pos.subtract(module.centerPos!!),
-                                        facing = module.multiblockFacing!!,
+                                        facing = facing,
                                         player = null
                                 )
                         )
