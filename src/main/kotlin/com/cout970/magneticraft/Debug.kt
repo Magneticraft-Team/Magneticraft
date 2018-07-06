@@ -18,6 +18,7 @@ import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.CraftingManager
+import net.minecraft.item.crafting.IRecipe
 import net.minecraft.launchwrapper.Launch
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.EnumHand
@@ -103,7 +104,7 @@ object Debug {
         val allBlocks = blocks.map { it.first }.toMutableSet()
         val allItems = items.map { it }.toMutableSet()
 
-        CraftingManager.REGISTRY.forEach {
+        CraftingManager.REGISTRY.filterIsInstance<IRecipe>().forEach {
             val stack = it.recipeOutput
             if (stack.isEmpty) return@forEach
 

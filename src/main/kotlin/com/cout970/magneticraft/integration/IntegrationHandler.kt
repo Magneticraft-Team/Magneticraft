@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.integration
 
+import com.blamejared.mtlib.helpers.InputHelper
 import com.cout970.magneticraft.integration.crafttweaker.CraftTweakerPlugin
 import com.cout970.magneticraft.integration.tinkersconstruct.TinkersConstruct
 import com.cout970.magneticraft.util.info
@@ -25,23 +26,37 @@ object IntegrationHandler {
     }
 
     fun init() {
-        if (craftTweaker) {
-            info("Starting CraftTweaker integration")
-            try {
-                CraftTweakerPlugin.runActions()
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
-            info("CraftTweaker integration done")
-        }
+        if (craftTweaker) craftTweaker()
         if (tconstruct) {
             info("Starting tinkers construct integration")
             try {
                 TinkersConstruct.registerOres()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
             info("Tinkers construct integration done")
         }
+    }
+
+    private fun craftTweaker(){
+        info("Starting CraftTweaker integration")
+        try {
+            InputHelper::class.java
+        } catch (e: NoClassDefFoundError) {
+            info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            info("++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!++")
+            info("++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTICE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!++")
+            info("++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!++")
+            info("++ Unable to find InputHelper from MtLib, this lib is required in order to use the CraftTweaker API ++")
+            info("++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!++")
+            info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            return
+        }
+        try {
+            CraftTweakerPlugin.runActions()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        info("CraftTweaker integration done")
     }
 }
