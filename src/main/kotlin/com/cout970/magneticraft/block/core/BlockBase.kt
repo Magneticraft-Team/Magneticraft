@@ -32,6 +32,8 @@ import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import java.util.*
 
 @Suppress("OverridingDeprecatedMember")
@@ -200,6 +202,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
     override fun toString(): String = "BlockBase($registryName)"
 
+    @SideOnly(Side.CLIENT)
     fun getCustomStateMapper(): IStateMapper? = object : StateMapperBase() {
         override fun getModelResourceLocation(state: IBlockState): ModelResourceLocation {
             stateMapper?.let { return it.invoke(state) }
