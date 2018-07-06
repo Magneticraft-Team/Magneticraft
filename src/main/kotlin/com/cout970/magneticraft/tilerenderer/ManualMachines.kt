@@ -56,6 +56,15 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
 
     override fun renderModels(models: List<ModelCache>, te: TileSluiceBox) {
         Utilities.rotateFromCenter(te.facing, 180f)
+
+        if (MinecraftForgeClient.getRenderPass() == 1) {
+            if (te.sluiceBoxModule.progressLeft > 0) {
+                bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+                waterModel?.render()
+            }
+            return
+        }
+
         if (te.invModule.inventory[0].isNotEmpty) {
             val p = te.sluiceBoxModule.progressLeft
             val progress = if (p == 0) 1.0 else p / ModuleSluiceBox.MAX_PROGRESS.toDouble()
@@ -67,12 +76,7 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
                 models.last().render()
             }
         }
-        if (te.sluiceBoxModule.progressLeft > 0 && MinecraftForgeClient.getRenderPass() == 1) {
-            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-            waterModel?.render()
-        } else {
-            models.forEach { it.renderTextured() }
-        }
+        models.forEach { it.renderTextured() }
     }
 
     override fun onModelRegistryReload() {
