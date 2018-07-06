@@ -10,3 +10,12 @@ add support for other mods wrenches
 Update manual
 Fix recipes
 Fix lang issues
+
+Fix render lag
+Fix refinery blueprint
+Fix multiblock costs
+Add polymerizer
+Fix steam engine input
+Add tooltips
+Change multiblock formation
+RF heater multiblock
