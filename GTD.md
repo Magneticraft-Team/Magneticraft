@@ -1,4 +1,4 @@
-# new features
+## new features
 wood gas filter to get creosote oil
 Expand container size
 Update remaining guis to the Dynamic system
@@ -15,7 +15,8 @@ Fix models errors (hydraulic press, pumpjack, refinery)
 Add refinery effect of hiding the outputs
 Fx manual entry for solar boiler
 
-# release requirements
+### release requirements
 Update manual
 Fix recipes
 Fix lang issues
+Check crafttweaker documentation
