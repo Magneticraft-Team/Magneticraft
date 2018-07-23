@@ -142,9 +142,9 @@ fun registerRecipes() {
     //                                              CRUSHING TABLE RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // skulls
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8))    // creeper
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15)) // skeleton
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4)) // zombie
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8), true)    // creeper
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15), true) // skeleton
+    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4), true) // zombie
 
     // ores
     EnumMetal.values().forEach { metal ->
@@ -210,16 +210,16 @@ fun registerRecipes() {
 
     EnumMetal.values()
             .filter { it.isOre }
-            .forEach {
+            .forEach { metal ->
 
         val subComponents =
-                if(it.isComposite) {
-                    it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
+                if(metal.isComposite) {
+                    metal.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
                 } else {
-                    EnumMetal.subProducts[it]?.map { it.getDust() to 0.15f } ?: emptyList()
+                    EnumMetal.subProducts[metal]?.map { it.getDust() to 0.15f } ?: emptyList()
                 }
 
-        addSluiceBoxRecipe(it.getRockyChunk(), it.getChunk(), subComponents + listOf(COBBLESTONE.stack() to 0.15f))
+        addSluiceBoxRecipe(metal.getRockyChunk(), metal.getChunk(), subComponents + listOf(COBBLESTONE.stack() to 0.15f))
     }
 
     addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))
@@ -438,8 +438,8 @@ private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
     GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
 }
 
-private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack) {
-    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, true))
+private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack, strict: Boolean = false) {
+    CrushingTableRecipeManager.registerRecipe(CrushingTableRecipeManager.createRecipe(input, output, !strict))
 }
 
 private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
