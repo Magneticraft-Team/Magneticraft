@@ -4,6 +4,7 @@ import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.tilerenderer.core.MutableCubeCache
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -21,6 +22,9 @@ class ModuleMultiblockIO(
         val connectionSpots: List<ConnectionSpot>,
         override val name: String = "module_multiblock_io"
 ) : IModule {
+
+    // Client side only, for debug purposes
+    var clientCache: MutableList<MutableCubeCache>? = null
 
     override lateinit var container: IModuleContainer
 

@@ -19,7 +19,7 @@ import java.io.File
 
 @Suppress("UNUSED_PARAMETER", "unused")
 //Basic mod information for Forge
-@Mod(
+@net.minecraftforge.fml.common.Mod(
         modid = MOD_ID,
         name = MOD_NAME,
         version = "2.4.0",

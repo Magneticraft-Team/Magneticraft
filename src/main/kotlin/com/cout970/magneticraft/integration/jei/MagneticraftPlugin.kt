@@ -14,10 +14,33 @@ import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxReci
 import com.cout970.magneticraft.block.HeatMachines
 import com.cout970.magneticraft.block.ManualMachines
 import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.item.EnumMetal
 import com.cout970.magneticraft.misc.gui.formatHeat
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.tileentity.modules.ModuleCrushingTable
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.list
+import com.cout970.magneticraft.util.newNbt
 import com.cout970.magneticraft.util.resource
+import mezz.jei.api.IModPlugin
+import mezz.jei.api.IModRegistry
+import mezz.jei.api.JEIPlugin
+import mezz.jei.api.gui.IDrawable
+import mezz.jei.api.gui.IRecipeLayout
+import mezz.jei.api.ingredients.IIngredients
+import mezz.jei.api.recipe.IRecipeCategory
+import mezz.jei.api.recipe.IRecipeCategoryRegistration
+import mezz.jei.api.recipe.IRecipeWrapper
+import mezz.jei.gui.elements.DrawableResource
+import mezz.jei.util.Translator
+import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.I18n
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagString
+import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.oredict.OreDictionary
 import java.awt.Color
 
 /**

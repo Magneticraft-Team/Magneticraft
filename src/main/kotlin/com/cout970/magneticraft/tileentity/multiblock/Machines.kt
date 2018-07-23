@@ -221,12 +221,12 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
             facing = { facing },
             connectionSpots = listOf(ConnectionSpot(
                     capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(1, 1, -1),
+                    pos = BlockPos(-1, 1, -1),
                     side = EnumFacing.EAST,
                     getter = { if (active) energyModule else null }
             ), ConnectionSpot(
                     capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(-1, 1, -1),
+                    pos = BlockPos(1, 1, -1),
                     side = EnumFacing.WEST,
                     getter = { if (active) energyModule else null }
             ), ConnectionSpot(

@@ -9,11 +9,14 @@ import com.cout970.magneticraft.multiblock.core.IMultiblockModule
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.multiblock.core.MultiblockContext
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
+import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.tileentity.modules.ModuleMultiblockIO
 import com.cout970.magneticraft.util.fromCelsiusToKelvin
 import com.cout970.magneticraft.util.get
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.split
 import com.cout970.magneticraft.util.vector.*
+import com.cout970.vector.extensions.Vector3
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.*
@@ -584,5 +587,28 @@ object Utilities {
         val blue = (255 * b).toInt()
 
         return (0xFF shl 24) or ((red and 0xFF) shl 16) or ((green and 0xFF) shl 8) or (blue and 0xFF)
+    }
+
+    fun renderIO(te: TileBase, ioModule: ModuleMultiblockIO) {
+        val cache = ioModule.clientCache ?: mutableListOf<MutableCubeCache>().also { ioModule.clientCache = it }
+
+        while (cache.size < ioModule.connectionSpots.size) {
+            cache.add(MutableCubeCache())
+        }
+
+        ioModule.connectionSpots.forEachIndexed { index, spot ->
+            val box = cache[index]
+            val sprite = Minecraft.getMinecraft().textureMapBlocks.getAtlasSprite("minecraft:blocks/water_still")
+            val finalPos = spot.pos
+
+            box.sprites = listOf(sprite)
+            box.pos = finalPos.toVec3d()
+            box.size = Vector3.ONE
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            setColor(spot.capability.hashCode() or 0xFF000000.toInt())
+            box.render()
+            GL11.glColor4f(1f, 1f, 1f, 1f)
+            GlStateManager.color(1f, 1f, 1f)
+        }
     }
 }
