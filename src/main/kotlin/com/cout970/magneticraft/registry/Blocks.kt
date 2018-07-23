@@ -33,11 +33,8 @@ fun initBlocks(registry: IForgeRegistry<Block>) {
 }
 
 //listOf<Block>(
-//        BlockHydraulicPress,
 //        BlockKiln,
 //        BlockKilnShelf,
-//        BlockGrinder,
-//        BlockSifter,
 //        BlockCompactedCopper,
 //        BlockCompactedCobalt,
 //        BlockCompactedLead,
@@ -50,8 +47,4 @@ fun initBlocks(registry: IForgeRegistry<Block>) {
 //        BlockInfiniteHeat,
 //        BlockBrickFurnace,
 //        BlockFirebox,
-//        BlockHeatSink,
 //        BlockHeatReservoir,
-//        BlockHeatPipe,
-//        BlockRedstoneHeatPipe,
-//        BlockElectricHeater

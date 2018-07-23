@@ -9,8 +9,12 @@ import com.cout970.magneticraft.network.MessageTileUpdate
 import com.cout970.magneticraft.registry.*
 import com.cout970.magneticraft.util.logTime
 import com.cout970.magneticraft.world.WorldGenerator
+import net.minecraft.block.Block
+import net.minecraft.item.Item
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.event.RegistryEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
-import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.relauncher.Side
 
@@ -21,17 +25,32 @@ import net.minecraftforge.fml.relauncher.Side
  */
 abstract class CommonProxy {
 
-    open fun preInit() {
+    @SubscribeEvent
+    fun initBlocksEvent(event: RegistryEvent.Register<Block>){
+        initBlocks(event.registry)
+    }
+
+    @SubscribeEvent
+    fun initItemsEvent(event: RegistryEvent.Register<Item>){
+        initItems(event.registry)
+        postItemRegister()
+    }
+
+    open fun postItemRegister() {
+        // There are no registries for this stuff and there are no events between the item registration and init
+        // so this shit need be here
         // @formatter:off
         logTime("Task registerCapabilities:")         { registerCapabilities() }
-        logTime("Task initBlocks:")                   { initBlocks(ForgeRegistries.BLOCKS) }
-        logTime("Task initItems:")                    { initItems(ForgeRegistries.ITEMS) }
         logTime("Task initTileEntities:")             { initTileEntities() }
         logTime("Task initFluids:")                   { initFluids() }
         logTime("Task registerOreDictionaryEntries:") { registerOreDictionaryEntries() }
         logTime("Task registerOreGenerations:")       { registerOreGenerations() }
         logTime("Task registerMultiblocks:")          { MultiblockManager.registerDefaults() }
         // @formatter:on
+    }
+
+    open fun preInit() {
+        MinecraftForge.EVENT_BUS.register(this)
     }
 
     open fun init() {
