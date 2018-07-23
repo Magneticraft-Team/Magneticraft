@@ -16,7 +16,7 @@ import net.minecraft.util.text.ITextComponent
 object MultiblockRefinery : Multiblock() {
 
     override val name: String = "refinery"
-    override val size: BlockPos = BlockPos(3, 16, 3)
+    override val size: BlockPos = BlockPos(3, 9, 3)
     override val scheme: List<Multiblock.MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
@@ -27,41 +27,6 @@ object MultiblockRefinery : Multiblock() {
         val M = mainBlockOf(controllerBlock)
 
         scheme = Multiblock.yLayers(
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 15
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 14
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 13
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 12
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 11
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 10
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
-                Multiblock.zLayers(
-                        listOf(U, U, U), // y = 9
-                        listOf(I, I, I),
-                        listOf(I, I, I)),
-
                 Multiblock.zLayers(
                         listOf(U, U, U), // y = 8
                         listOf(I, I, I),
