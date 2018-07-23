@@ -12,7 +12,7 @@ import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.registry.sounds
+import com.cout970.magneticraft.registry.Sounds
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.add
@@ -140,7 +140,7 @@ class ModuleSluiceBox(
 
     fun playSounds() {
         if (world.isClient) {
-            val sound = (if (getNextSluice() == null) sounds["water_flow_end"] else sounds["water_flow"]) ?: return
+            val sound = if (getNextSluice() == null) Sounds.WATER_FLOW_END.soundEvent else Sounds.WATER_FLOW.soundEvent
             world.playSound(pos.xd, pos.yd, pos.zd, sound, SoundCategory.BLOCKS, 1F, 1F, false)
         }
     }

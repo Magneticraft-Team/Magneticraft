@@ -9,7 +9,7 @@ import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.registry.sounds
+import com.cout970.magneticraft.registry.Sounds
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.vector.*
@@ -145,7 +145,7 @@ class ModuleCrushingTable(
 
         if (damageTaken >= CRUSHING_DAMAGE) {
             if (world.isClient) {
-                world.playSound(pos.xd, pos.yd, pos.zd, sounds["crushing_final"]!!, SoundCategory.BLOCKS, 1F, 1F, false)
+                world.playSound(pos.xd, pos.yd, pos.zd, Sounds.CRUSHING_FINAL.soundEvent, SoundCategory.BLOCKS, 1F, 1F, false)
                 spawnParticles(world, pos)
             }
 
@@ -153,7 +153,7 @@ class ModuleCrushingTable(
             storedItem = recipe.output
             damageTaken = 0
         } else if (world.isClient) {
-            world.playSound(pos.xd, pos.yd, pos.zd, sounds["crushing_hit"]!!, SoundCategory.BLOCKS, 1F, 1F, false)
+            world.playSound(pos.xd, pos.yd, pos.zd, Sounds.CRUSHING_HIT.soundEvent, SoundCategory.BLOCKS, 1F, 1F, false)
             spawnParticles(world, pos)
         }
         container.sendUpdateToNearPlayers()

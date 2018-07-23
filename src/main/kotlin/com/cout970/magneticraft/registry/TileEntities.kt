@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.Debug
-import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.tileentity.core.TileBase
@@ -33,10 +32,7 @@ fun initTileEntities() {
         }
     }
 
-    info("Registering TileEntities with the old method (To avoid world breaks)")
     map.forEach { clazz, name ->
-        // TODO deprecate in future releases
-        GameRegistry.registerTileEntity(clazz, "${MOD_ID}_$name")
         GameRegistry.registerTileEntity(clazz, resource(name))
     }
 }
