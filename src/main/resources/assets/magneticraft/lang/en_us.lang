@@ -254,7 +254,7 @@ text.magneticraft.jei.mining_level.4=Mining Level: Ardite
 text.magneticraft.jei.mining_level.other=Mining Level: %s
 
 text.magneticraft.jei.time=%s ticks
-text.magneticraft.jei.require_water=Requires 1 Water bucket
+text.magneticraft.jei.require_water=Needs 1 Water Bucket
 
 text.magneticraft.jei.hydraulic_hammer.light=Light Model
 text.magneticraft.jei.hydraulic_hammer.medium=Medium Mode
