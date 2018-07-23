@@ -3,7 +3,9 @@ package com.cout970.magneticraft.integration.crafttweaker
 import com.blamejared.mtlib.helpers.InputHelper
 import crafttweaker.CraftTweakerAPI
 import crafttweaker.api.item.IItemStack
+import crafttweaker.api.liquid.ILiquidStack
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidStack
 
 /**
  * Created by cout970 on 2017/08/11.
@@ -31,3 +33,4 @@ fun ctLogError(msg: String) {
 }
 
 fun IItemStack.toStack(): ItemStack = InputHelper.toStack(this)
+fun ILiquidStack.toStack(): FluidStack? = InputHelper.toFluid(this)
