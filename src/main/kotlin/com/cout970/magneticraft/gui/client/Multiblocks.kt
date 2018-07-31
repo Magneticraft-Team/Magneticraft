@@ -199,20 +199,14 @@ fun guiHydraulicPress(gui: GuiBase, container: ContainerHydraulicPress) = gui.ru
     buttons[tile.hydraulicPressModule.mode.ordinal].state = ButtonState.PRESSED
 }
 
-fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) = gui.run {
+fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) =  gui.dsl {
     val tile = container.tile
-
-    val texture = guiTexture("oil_heater")
-
-    +CompBackground(texture)
-    +CompHeatBar(tile.node, Vec2d(58, 16))
-
-    val prod = tile.processModule.consumption.toBarProvider(tile.processModule.costPerTick)
-
-    +CompVerticalBar(prod, 3, Vec2d(69, 16), prod.toEnergyText())
-
-    +CompFluidBar(vec2Of(80, 16), texture, vec2Of(0, 166), tile.inputTank)
-    +CompFluidBar(vec2Of(102, 16), texture, vec2Of(0, 166), tile.outputTank)
+    bars {
+        heatBar(tile.node)
+        electricConsumption(tile.processModule.consumption, tile.processModule.costPerTick)
+        tank(tile.inputTank, TankIO.IN)
+        tank(tile.outputTank, TankIO.OUT)
+    }
 }
 
 fun guiRefinery(gui: GuiBase, container: ContainerRefinery) = gui.dsl {
@@ -228,18 +222,12 @@ fun guiRefinery(gui: GuiBase, container: ContainerRefinery) = gui.dsl {
     }
 }
 
-fun guiSteamEngine(gui: GuiBase, container: ContainerSteamEngine) = gui.run {
+fun guiSteamEngine(gui: GuiBase, container: ContainerSteamEngine) = gui.dsl {
     val tile = container.tile
-
-    val texture = guiTexture("steam_engine")
-
-    +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(64, 17))
-    +CompStorageBar(tile.storageModule, Vec2d(73, 17), vec2Of(16, 166), texture)
-
-    val prod = tile.steamGeneratorModule.production.toBarProvider(ModuleSteamGenerator.MAX_ENERGY_PER_TICK)
-
-    +CompVerticalBar(prod, 3, Vec2d(89, 17), prod.toEnergyText())
-
-    +CompFluidBar(vec2Of(99, 17), texture, vec2Of(0, 166), tile.tank)
+    bars {
+        electricBar(tile.node)
+        storageBar(tile.storageModule)
+        electricProduction(tile.steamGeneratorModule.production, ModuleSteamGenerator.MAX_ENERGY_PER_TICK)
+        tank(tile.tank, TankIO.IN)
+    }
 }

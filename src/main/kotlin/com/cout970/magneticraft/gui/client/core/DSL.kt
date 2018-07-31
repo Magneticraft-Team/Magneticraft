@@ -32,7 +32,6 @@ class GuiSdl {
     fun bars(func: GuiDslBars.() -> Unit) {
         val dsl = GuiDslBars()
         dsl.func()
-        dsl.getInternalSize()
         bars += dsl
     }
 

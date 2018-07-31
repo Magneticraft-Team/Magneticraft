@@ -331,8 +331,8 @@ fun registerRecipes() {
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f, WATER_BOILING_POINT)
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 350.fromCelsiusToKelvin())
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 5f, 350.fromCelsiusToKelvin())
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 2f, 350.fromCelsiusToKelvin())
+    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 5), FluidRegistry.getFluidStack("hot_crude", 50), 2f, 350.fromCelsiusToKelvin())
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   REFINERY RECIPES
