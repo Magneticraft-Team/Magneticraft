@@ -97,11 +97,14 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
 
         if (Debug.DEBUG) {
             Utilities.renderFloatingLabel("${te.tank.fluidAmount}", vec3Of(0, 1, 0))
+            Utilities.setColor((te.pipeModule.pipeNetwork?.hashCode() ?: 0) or 0xFF000000.toInt())
         }
 
         val pipeMap = enumValues<EnumFacing>().map { te.pipeModule.getConnectionType(it, true) }
 
         models[map["center"]!!].renderTextured()
+        if (Debug.DEBUG) GL11.glColor4f(1f, 1f, 1f, 1f)
+
         enumValues<EnumFacing>().forEach {
 
             when (pipeMap[it.ordinal]) {

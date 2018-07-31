@@ -49,7 +49,7 @@ object Config {
     var wattsToFE = 1.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Production (in joules)")
-    var electricHeaterMaxProduction = 20.0
+    var electricHeaterMaxProduction = 80.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber max speed in Fuel per tick")
     var combustionChamberMaxSpeed = 4.0
@@ -60,8 +60,8 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Oil Heater Max Consumption")
     var oilHeaterMaxConsumption = 60.0
 
-    @ConfigValue(category = CATEGORY_ENERGY, comment = "Refinery Max Consumption")
-    var refineryMaxConsumption = 40.0
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Refinery Max Consumption in Steam mB")
+    var refineryMaxConsumption = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Gasification Unit Max Consumption")
     var gasificationUnitConsumption = 40.0

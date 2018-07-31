@@ -198,4 +198,12 @@ fun initFluids() {
                 }
         )
     }
+
+    val names = listOf("steam", "oil", "hot_crude", "lpg", "light_oil", "heavy_oil", "natural_gas", "naphtha",
+            "plastic", "gasoline", "kerosene", "diesel", "lubricant", "fuel", "oil_residue", "wood_gas")
+
+    names.forEach {
+        val fluid = FluidRegistry.getFluid(it)
+        FluidRegistry.addBucketForFluid(fluid)
+    }
 }

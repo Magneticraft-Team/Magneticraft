@@ -119,7 +119,7 @@ class CompFluidBar2(
         if (tank.clientFluidAmount > 0) {
             val texture = getFluidTexture()
             if (texture != null) {
-                val level = (tank.clientFluidAmount * 48 / tank.capacity)
+                val level = tank.clientFluidAmount * 48 / tank.capacity
 
                 gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
@@ -128,7 +128,7 @@ class CompFluidBar2(
                 for (h in 0..height) {
                     val heightLevel = Math.min(level - h * 16, 16)
 
-                    gui.drawSprite(gui.pos + vec2Of(pos.x + 1, pos.y + 48 - heightLevel - h * 16), vec2Of(16, heightLevel),
+                    gui.drawSprite(gui.pos + vec2Of(pos.x + 1, pos.y + 1 + 48 - heightLevel - h * 16), vec2Of(16, heightLevel),
                             texture)
                 }
                 GlStateManager.disableBlend()

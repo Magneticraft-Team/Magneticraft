@@ -52,6 +52,8 @@ class GuiSdl {
 
 private val ICON_SIZE = vec2Of(0, 10)
 
+enum class TankIO { IN, OUT, INOUT, NONE }
+
 class GuiDslBars {
     private val components = mutableListOf<Pair<IVector2, (IVector2) -> List<IComponent>>>()
     var marginX = 6
@@ -99,8 +101,16 @@ class GuiDslBars {
         components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(pos + ICON_SIZE, 6, timed) { it.toPercentText() }, iconOf(3, pos)) }
     }
 
-    fun tank(tank: Tank) {
-        components += Vec2d(18, 50) to { pos -> listOf(CompFluidBar2(pos + ICON_SIZE, tank)) }
+    fun tank(tank: Tank, use: TankIO) {
+        components += Vec2d(18, 50) to { pos ->
+            val icons = when (use) {
+                TankIO.IN -> listOf(iconOf(5, pos + vec2Of(6, 0)))
+                TankIO.OUT -> listOf(iconOf(3, pos + vec2Of(6, 0)))
+                TankIO.INOUT -> listOf(iconOf(5, pos + vec2Of(2, 0)), iconOf(3, pos + vec2Of(9, 0)))
+                TankIO.NONE -> emptyList()
+            }
+            listOf(CompFluidBar2(pos + ICON_SIZE, tank)) + icons
+        }
     }
 
     fun slotPair() {

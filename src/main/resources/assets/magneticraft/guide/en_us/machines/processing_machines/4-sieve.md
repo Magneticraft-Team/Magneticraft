@@ -1,6 +1,6 @@
 # Sieve
 
-It's an automatic version of the sluice box, allow to automate ore processing and can be used to filter stuff, 
+It's an automatic version of the sluice box, allows to automate ore processing and can be used to filter stuff, 
 for example you can filter sand to get golden nuggets and even quartz.
 
 The machine works at full speed with 40 Watts and every recipe has it's own duration.

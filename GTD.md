@@ -14,6 +14,7 @@ RF heater multiblock
 Fix models errors (hydraulic press, pumpjack, refinery)
 Add refinery effect of hiding the outputs
 Fx manual entry for solar boiler
+Conveyor belt extration with AE2
 
 ### release requirements
 Update manual

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry
 import com.cout970.magneticraft.block.FluidMachines
@@ -84,11 +85,13 @@ class ModulePipe(
     }
 
     override fun update() {
-        if (world.isClient) return
+        if (world.isClient && !Debug.DEBUG) return
 
         if (pipeNetwork == null) {
             pipeNetwork = PipeNetwork.createNetwork(this).apply { expand() }
         }
+
+        if (world.isClient) return
 
         enumValues<EnumFacing>().forEach { side ->
             val state = connectionStates[side.ordinal]
@@ -103,6 +106,7 @@ class ModulePipe(
                 }
             } else if (state == ModulePipe.ConnectionState.ACTIVE) {
                 if (FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, false) != null) {
+                    // This line doesn't work after using hotswap, for some reason
                     FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, true)
                 }
             }
@@ -116,11 +120,16 @@ class ModulePipe(
         val side = boxes.find { it.second.containsPoint(args.hit) }?.first ?: return false
 
         if (args.worldIn.isServer) {
-            val current = connectionStates[side.ordinal].ordinal
-            connectionStates[side.ordinal] = ModulePipe.ConnectionState.values()[(current + 1) % ModulePipe.ConnectionState.values().size]
+            connectionStates[side.ordinal] = connectionStates[side.ordinal].next()
             container.sendUpdateToNearPlayers()
         }
         return true
+    }
+
+    fun ModulePipe.ConnectionState.next(): ModulePipe.ConnectionState = when (this) {
+        ConnectionState.PASSIVE -> ConnectionState.ACTIVE
+        ConnectionState.ACTIVE -> ConnectionState.DISABLE
+        ConnectionState.DISABLE -> ConnectionState.PASSIVE
     }
 
     private fun AABB.containsPoint(vec: Vec3d): Boolean {

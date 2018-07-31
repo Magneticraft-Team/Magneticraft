@@ -6,6 +6,8 @@ import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.components.buttons.*
 import com.cout970.magneticraft.gui.client.core.DrawableBox
 import com.cout970.magneticraft.gui.client.core.GuiBase
+import com.cout970.magneticraft.gui.client.core.TankIO
+import com.cout970.magneticraft.gui.client.core.dsl
 import com.cout970.magneticraft.gui.common.*
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SELECTED_OPTION
 import com.cout970.magneticraft.gui.common.core.DATA_ID_SHELVING_UNIT_FILTER
@@ -213,22 +215,17 @@ fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) = gui.run {
     +CompFluidBar(vec2Of(102, 16), texture, vec2Of(0, 166), tile.outputTank)
 }
 
-fun guiRefinery(gui: GuiBase, container: ContainerRefinery) = gui.run {
+fun guiRefinery(gui: GuiBase, container: ContainerRefinery) = gui.dsl {
     val tile = container.tile
 
-    val texture = guiTexture("refinery")
-
-    +CompBackground(texture)
-    +CompElectricBar(tile.node, Vec2d(41, 16))
-
-    val prod = tile.processModule.consumption.toBarProvider(tile.processModule.costPerTick)
-
-    +CompVerticalBar(prod, 3, Vec2d(52, 16), prod.toEnergyText())
-
-    +CompFluidBar(vec2Of(63, 16), texture, vec2Of(0, 166), tile.inputTank)
-    +CompFluidBar(vec2Of(85, 16), texture, vec2Of(0, 166), tile.outputTank0)
-    +CompFluidBar(vec2Of(107, 16), texture, vec2Of(0, 166), tile.outputTank1)
-    +CompFluidBar(vec2Of(129, 16), texture, vec2Of(0, 166), tile.outputTank2)
+    bars {
+        electricConsumption(tile.processModule.consumption, Config.refineryMaxConsumption)
+        tank(tile.steamTank, TankIO.IN)
+        tank(tile.inputTank, TankIO.IN)
+        tank(tile.outputTank0, TankIO.OUT)
+        tank(tile.outputTank1, TankIO.OUT)
+        tank(tile.outputTank2, TankIO.OUT)
+    }
 }
 
 fun guiSteamEngine(gui: GuiBase, container: ContainerSteamEngine) = gui.run {

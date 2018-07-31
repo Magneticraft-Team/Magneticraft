@@ -4,6 +4,7 @@ import com.cout970.magneticraft.config.Config
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
+import com.cout970.magneticraft.gui.client.core.TankIO
 import com.cout970.magneticraft.gui.client.core.dsl
 import com.cout970.magneticraft.gui.common.ContainerCombustionChamber
 import com.cout970.magneticraft.gui.common.ContainerGasificationUnit
@@ -52,6 +53,6 @@ fun guiGasificationUnit(gui: GuiBase, container: ContainerGasificationUnit) = gu
         electricConsumption(tile.process.consumption, Config.gasificationUnitConsumption)
         progressBar(tile.process.timedProcess)
         slotPair()
-        tank(tile.tank)
+        tank(tile.tank, TankIO.OUT)
     }
 }
