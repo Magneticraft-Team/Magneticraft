@@ -39,7 +39,7 @@ fun initTileEntities() {
     }
 
 
-    val datafixer = FMLCommonHandler.instance().dataFixer.init(MOD_ID, 1)
+    val datafixer = FMLCommonHandler.instance().dataFixer.init(MOD_ID, 2)
 
     datafixer.registerFix(FixTypes.BLOCK_ENTITY, FixTileEntityId)
 
@@ -50,13 +50,13 @@ fun initTileEntities() {
 
 object FixTileEntityId : IFixableData {
 
-    override fun getFixVersion(): Int = 1
+    override fun getFixVersion(): Int = 2
 
     override fun fixTagCompound(compound: NBTTagCompound): NBTTagCompound {
         val oldId = compound.getString("id")
         val loc = ResourceLocation(oldId)
 
-        if (loc.resourceDomain != MOD_ID) {
+        if (loc.resourceDomain != MOD_ID && loc.resourcePath.startsWith("${MOD_ID}_")) {
             val newId = resource(loc.resourcePath.replaceFirst("${MOD_ID}_", ""))
 
             compound.setString("id", newId.toString())
