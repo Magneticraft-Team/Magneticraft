@@ -14,3 +14,5 @@ Available multiblocks:
 - [Pumpjack](machines/processing_machines/6-pumpjack.md)
 - [Shelving unit](machines/utilities/1-shelving-unit.md)
 - [Shipping Container](machines/utilities/2-shipping-container.md)
+- [Oil Heater](machines/processing_machines/8-oil-heater.md)
+- [Refinery](machines/processing_machines/9-refinery.md)

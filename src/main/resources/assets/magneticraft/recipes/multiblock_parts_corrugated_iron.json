@@ -13,6 +13,7 @@
   },
   "result": {
     "item": "magneticraft:multiblock_parts",
-    "data": 5
+    "data": 5,
+    "count": 4
   }
 }

@@ -1,12 +1,12 @@
 # Solar Tower
 
-This multiblock creates steam using the heat provided by [Solar Mirrors](6.1-solar-mirror.md).
-The steam can be used for energy in a [Steam engine](2-steam-engine.md).
+This multiblock collects heat from [Solar Mirrors](6.1-solar-mirror.md).
+The heat can be used to power machines that use heat or to get electricity using boilers and a [Steam engine](2-steam-engine.md).
 
-The structure has 2 connectors, the blue connector is the water input and orange connector the expels steam.
+The structure has 1 connector at the bottom, you can use heat pipes to transfer the heat to a more convenient location.
 
-The max production of the tower is 1200 mB of steam per tick, equivalent to 2400 Watts.
-Every solar mirror linked to the tower generates 16 Watts in the form of heat.
+Every solar mirror linked to the tower generates 16 Watts in the form of heat. 
+If the tower gets too hot it will melt (by default 4000C)
 
 This structure is a [multiblock](../../3-multiblocks.md) of size *3, 3, 3* (x, y, z).
 
