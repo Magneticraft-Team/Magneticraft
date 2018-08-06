@@ -30,14 +30,15 @@
         "2.2.2": "Fixed copper coil not working, updated lip interpreter",
         "2.3.0": "Fixed world gen bugs, added hydraulic press",
         "2.3.1": "Finished hydraulic press gui, changed computer model",
-        "2.4.0": "Added heat system and oil processing"
+        "2.4.0": "Added heat system and oil processing",
+        "2.4.1": "Hotfix: fix documentation, crafttweaker and cable issues"
     },
     "promos": {
         "1.12-latest": "2.1.2",
         "1.12-recommended": "2.1.2",
         "1.12.1-latest": "2.1.2",
         "1.12.1-recommended": "2.1.2",
-        "1.12.2-latest": "2.4.0",
-        "1.12.2-recommended": "2.4.0"
+        "1.12.2-latest": "2.4.1",
+        "1.12.2-recommended": "2.4.1"
     }
 }
