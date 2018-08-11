@@ -124,13 +124,13 @@ object CommonMethods {
         } else false
     }
 
-    fun <T> providerFor(cap: Capability<T>?, handler: T): ICapabilityProvider? {
+    fun <T> providerFor(cap: () ->Capability<T>?, handler: T): ICapabilityProvider? {
         return object : ICapabilityProvider {
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? = handler as? T
 
-            override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean = capability == cap
+            override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean = capability == cap()
         }
     }
 

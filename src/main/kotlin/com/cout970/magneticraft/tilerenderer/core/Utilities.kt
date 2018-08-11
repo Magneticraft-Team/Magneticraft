@@ -590,6 +590,9 @@ object Utilities {
     }
 
     fun renderIO(te: TileBase, ioModule: ModuleMultiblockIO) {
+        pushMatrix()
+        Utilities.rotateFromCenter(ioModule.facing(), 0f)
+
         val cache = ioModule.clientCache ?: mutableListOf<MutableCubeCache>().also { ioModule.clientCache = it }
 
         while (cache.size < ioModule.connectionSpots.size) {
@@ -610,5 +613,6 @@ object Utilities {
             GL11.glColor4f(1f, 1f, 1f, 1f)
             GlStateManager.color(1f, 1f, 1f)
         }
+        popMatrix()
     }
 }

@@ -93,9 +93,9 @@ class ClientProxy : CommonProxy() {
     fun registerBlockAndItemBlockModels() {
         blocks.forEach { (block, itemBlock) ->
             if (itemBlock == null) return@forEach
-            (block as? BlockBase)?.let { block ->
-                if (block.generateDefaultItemModel) {
-                    block.inventoryVariants.forEach {
+            (block as? BlockBase)?.let { blockBase ->
+                if (blockBase.generateDefaultItemModel) {
+                    blockBase.inventoryVariants.forEach {
                         ModelLoader.setCustomModelResourceLocation(
                                 itemBlock,
                                 it.key,
@@ -109,13 +109,13 @@ class ClientProxy : CommonProxy() {
                             itemBlock.registryName!!.toModel("inventory")
                     )
                 }
-                val mapper = block.getCustomStateMapper()
+                val mapper = blockBase.getCustomStateMapper()
                 if (mapper != null) {
-                    ModelLoader.setCustomStateMapper(block, mapper)
+                    ModelLoader.setCustomStateMapper(blockBase, mapper)
                 }
-                block.customModels.forEach { (state, location) ->
+                blockBase.customModels.forEach { (state, location) ->
                     ModelLoaderApi.registerModelWithDecorator(
-                            ModelResourceLocation(block.registryName!!, state),
+                            ModelResourceLocation(blockBase.registryName!!, state),
                             location,
                             DefaultBlockDecorator
                     )

@@ -79,7 +79,7 @@ object ElectricConductors : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::enableAutoConnectWires
             canPlaceBlockOnSide = { it.default && canStayInSide(it.worldIn, it.pos, it.side) }
-            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER, ConnectorManualConnectionHandler)
+            capabilityProvider = CommonMethods.providerFor({MANUAL_CONNECTION_HANDLER}, ConnectorManualConnectionHandler)
             onNeighborChanged = {
                 if (!canStayInSide(it.worldIn, it.pos, it.state.getFacing())) {
                     it.worldIn.destroyBlock(it.pos, true)
@@ -111,8 +111,7 @@ object ElectricConductors : IBlockMaker {
                 else
                     emptyList()
             }
-            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER,
-                    ElectricPoleManualConnectionHandler)
+            capabilityProvider = CommonMethods.providerFor({MANUAL_CONNECTION_HANDLER}, ElectricPoleManualConnectionHandler)
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
@@ -137,7 +136,7 @@ object ElectricConductors : IBlockMaker {
                 if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() == true) it.default + electric_pole.stack()
                 else emptyList()
             }
-            capabilityProvider = CommonMethods.providerFor(MANUAL_CONNECTION_HANDLER,
+            capabilityProvider = CommonMethods.providerFor({MANUAL_CONNECTION_HANDLER},
                     ElectricPoleManualConnectionHandler)
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()

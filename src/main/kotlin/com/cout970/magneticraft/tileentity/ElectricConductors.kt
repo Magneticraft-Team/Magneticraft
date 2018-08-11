@@ -233,13 +233,13 @@ class TileElectricCable : TileBase(), ITickable {
 
     fun canConnect(side: EnumFacing): Boolean {
         val tile = world.getTileEntity(pos + side) ?: return false
-        val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side)
+        val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side.opposite)
         if (handler === null || handler === electricModule) return false
 
         val electricNodes = handler.nodes.filterIsInstance<IElectricNode>()
 
         electricNodes.forEach { otherNode ->
-            if (canConnect(electricModule, node, handler, otherNode, side.opposite)) {
+            if (canConnect(electricModule, node, handler, otherNode, side)) {
                 return true
             }
         }
