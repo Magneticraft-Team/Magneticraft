@@ -43,9 +43,6 @@ fun registerOreDictionaryEntries() {
         OreDictionary.registerOre("ingotAluminum", it.getIngot())
         OreDictionary.registerOre("nuggetAluminum", it.getNugget())
         OreDictionary.registerOre("dustAluminum", it.getDust())
-        OreDictionary.registerOre("lightPlateAluminum", it.getLightPlate())
-        OreDictionary.registerOre("plateAluminum", it.getLightPlate())
-        OreDictionary.registerOre("heavyPlateAluminum", it.getHeavyPlate())
         OreDictionary.registerOre("chunkAluminum", it.getChunk())
         OreDictionary.registerOre("rockyChunkAluminum", it.getRockyChunk())
     }
