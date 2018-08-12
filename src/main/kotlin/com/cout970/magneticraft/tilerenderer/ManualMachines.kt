@@ -94,3 +94,31 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
         }
     }
 }
+
+//object DebugTileEntityRenderer : TileEntitySpecialRenderer<TileEntityBed>() {
+//
+//    private var model: IAnimatedModel? = null
+//
+//    override fun render(te: TileEntityBed, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int, alpha: Float) {
+//        te.world = world
+//        val time = te.world.totalWorldTime.toDouble()
+//
+//        if (!te.isHeadPiece) return
+//
+//        GlStateManager.pushMatrix()
+//        GlStateManager.translate(x, y, z)
+//        bindTexture(ResourceLocation("modelloader:textures/blocks/multiblocks/steam_engine.png"))
+//        model?.render(time + partialTicks)
+//        GlStateManager.popMatrix()
+//    }
+//
+//    fun initModels() {
+//        val loc = ModelResourceLocation("minecraft:gold_block", "normal")
+//        val entry = ModelLoaderApi.getModelEntry(loc) ?: return
+//        val model = entry.raw
+//
+//        if (model is Model.Gltf) {
+//            this.model = GltfAnimationBuilder().build(model.data).firstOrNull()?.second
+//        }
+//    }
+//}
