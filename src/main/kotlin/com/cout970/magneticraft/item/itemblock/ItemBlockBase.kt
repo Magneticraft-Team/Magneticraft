@@ -26,7 +26,7 @@ open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
     }
 
     override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
-        if (itemIn == this.creativeTab) {
+        if (isInCreativeTab(itemIn)) {
             blockBase.inventoryVariants.forEach { meta, _ -> tab.add(ItemStack(this, 1, meta)) }
         }
     }

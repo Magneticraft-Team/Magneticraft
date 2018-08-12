@@ -4,9 +4,8 @@ import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.util.*
-import com.cout970.modelloader.ModelSerializer
-import com.cout970.modelloader.api.ModelUtilties
+import com.cout970.magneticraft.util.logError
+import com.cout970.magneticraft.util.toTextComponent
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -65,17 +64,17 @@ object Debug {
     var cache = emptyList<ModelCache>()
     var last = -1L
 
-    fun getOrLoad(loc: ResourceLocation = resource("models/block/mcx/test.mcx")): List<ModelCache> {
-        val locLasModified = lastModified(loc)
-        if (last != locLasModified) {
-            try {
-                cache = loadModel(loc)
-                last = locLasModified
-            } catch (e: Exception) {
-            }
-        }
-        return cache
-    }
+//    fun getOrLoad(loc: ResourceLocation = resource("models/block/mcx/test.mcx")): List<ModelCache> {
+//        val locLasModified = lastModified(loc)
+//        if (last != locLasModified) {
+//            try {
+//                cache = loadModel(loc)
+//                last = locLasModified
+//            } catch (e: Exception) {
+//            }
+//        }
+//        return cache
+//    }
 
     fun lastModified(loc: ResourceLocation): Long {
         val path = "assets/${loc.resourceDomain}/${loc.resourcePath}"
@@ -84,20 +83,20 @@ object Debug {
         return File(url.file).lastModified()
     }
 
-    fun loadModel(loc: ResourceLocation): List<ModelCache> {
-        val resourceManager = Minecraft.getMinecraft().resourceManager
-        val res = resourceManager.getResource(loc)
-//        Thread.sleep(100)
-        val data = ModelSerializer.load(res.inputStream)
-        println("loading")
-
-        val textureGrouped = data.parts.groupBy { it.texture }
-        return textureGrouped.map {
-            ModelCache {
-                ModelUtilties.renderModelParts(data, it.value)
-            }.apply { texture = it.key.addPrefix("textures/").addPostfix(".png") }
-        }
-    }
+//    fun loadModel(loc: ResourceLocation): List<ModelCache> {
+//        val resourceManager = Minecraft.getMinecraft().resourceManager
+//        val res = resourceManager.getResource(loc)
+////        Thread.sleep(100)
+//        val data = ModelSerializer.load(res.inputStream)
+//        println("loading")
+//
+//        val textureGrouped = data.parts.groupBy { it.texture }
+//        return textureGrouped.map {
+//            ModelCache {
+//                ModelUtilties.renderModelParts(data, it.value)
+//            }.apply { texture = it.key.addPrefix("textures/").addPostfix(".png") }
+//        }
+//    }
 
     fun printBlockWithoutRecipe() {
 

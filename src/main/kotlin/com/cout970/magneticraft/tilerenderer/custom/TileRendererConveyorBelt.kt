@@ -6,9 +6,10 @@ import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
-import com.cout970.modelloader.QuadProvider
+import com.cout970.modelloader.api.Model
+import com.cout970.modelloader.api.ModelEntry
 import com.cout970.modelloader.api.ModelLoaderApi
-import com.cout970.modelloader.api.ModelUtilties
+import com.cout970.modelloader.api.ModelUtilities
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.texture.TextureMap
@@ -190,7 +191,7 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
 
         rest = ModelCacheFactory.createCache(base) {
             !it.startsWith("lateral_left") && !it.startsWith("lateral_right") && !it.startsWith("panel_left") &&
-            !it.startsWith("panel_right") && !it.startsWith("back_leg") && !it.startsWith("front_leg")
+                    !it.startsWith("panel_right") && !it.startsWith("back_leg") && !it.startsWith("front_leg")
         }
         lateralLeft = ModelCacheFactory.createCache(base) { it.startsWith("lateral_left") }
         lateralRight = ModelCacheFactory.createCache(base) { it.startsWith("lateral_right") }
@@ -200,17 +201,18 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
         frontLegs = ModelCacheFactory.createCache(base) { it.startsWith("front_leg") }
         corner = ModelCacheFactory.createCache(cornerBase)
 
-        val beltModel = ModelLoaderApi.getModel(anim) ?: return
-        val cornerBeltModel = ModelLoaderApi.getModel(cornerAnim) ?: return
+        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
+        val cornerBeltModel = ModelLoaderApi.getModelEntry(cornerAnim) ?: return
 
         belt = updateTexture(beltModel, resource("blocks/machines/conveyor_belt_anim"))
         cornerBelt = updateTexture(cornerBeltModel, resource("blocks/machines/conveyor_belt_anim"))
     }
 
-    private fun updateTexture(model: QuadProvider, texture: ResourceLocation): ModelCache {
+    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): ModelCache {
+        val raw = model.raw as Model.Mcx
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val animTexture = textureMap.getAtlasSprite(texture.toString())
-        val finalModel = ModelTransform.updateModelUvs(model, animTexture)
-        return ModelCache { ModelUtilties.renderModelParts(finalModel.modelData, finalModel.modelData.parts) }
+        val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+        return ModelCache { ModelUtilities.renderModel(raw.data) }
     }
 }

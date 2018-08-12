@@ -38,7 +38,7 @@ open class ItemBase : Item() {
     override fun getHasSubtypes() = variants.size > 1
 
     override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
-        if (itemIn == this.creativeTab) {
+        if (isInCreativeTab(itemIn)) {
             variants.keys.forEach {
                 tab.add(createStack?.invoke(this, 1, it) ?: ItemStack(this, 1, it))
             }

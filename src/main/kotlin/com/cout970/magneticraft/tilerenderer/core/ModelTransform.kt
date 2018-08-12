@@ -1,30 +1,24 @@
 package com.cout970.magneticraft.tilerenderer.core
 
 import com.cout970.magneticraft.Sprite
-import com.cout970.modelloader.ModelData
-import com.cout970.modelloader.QuadProvider
-import com.cout970.modelloader.QuadStorage
+import com.cout970.modelloader.api.formats.mcx.McxModel
+import com.cout970.modelloader.api.formats.mcx.Mesh
 import com.cout970.vector.api.IVector2
 
 object ModelTransform {
 
-    fun updateModelUvs(provider: QuadProvider, sprite: Sprite): QuadProvider {
-        val quads = QuadStorage(
-                provider.modelData.quads.pos,
-                provider.modelData.quads.tex.map { sprite.mapUv(it) },
-                provider.modelData.quads.indices
+    fun updateModelUvs(provider: McxModel, sprite: Sprite): McxModel {
+        val quads = Mesh(
+                provider.quads.pos,
+                provider.quads.tex.map { sprite.mapUv(it) },
+                provider.quads.indices
         )
-        val modelData = ModelData(
-                provider.modelData.useAmbientOcclusion,
-                provider.modelData.use3dInGui,
-                provider.modelData.particleTexture,
-                provider.modelData.parts,
+        return McxModel(
+                provider.useAmbientOcclusion,
+                provider.use3dInGui,
+                provider.particleTexture,
+                provider.parts,
                 quads
-        )
-        return QuadProvider(
-                modelData,
-                provider.particles,
-                provider.bakedQuads.flatMap { it.value }
         )
     }
 

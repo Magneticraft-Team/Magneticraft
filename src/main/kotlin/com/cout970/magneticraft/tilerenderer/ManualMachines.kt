@@ -9,8 +9,9 @@ import com.cout970.magneticraft.tileentity.TileSluiceBox
 import com.cout970.magneticraft.tileentity.modules.ModuleSluiceBox
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
+import com.cout970.modelloader.api.Model
 import com.cout970.modelloader.api.ModelLoaderApi
-import com.cout970.modelloader.api.ModelUtilties
+import com.cout970.modelloader.api.ModelUtilities
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
@@ -83,14 +84,16 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
         super.onModelRegistryReload()
         waterModel?.close()
         val loc = modelOf(ManualMachines.sluiceBox, "water")()
-        val model = ModelLoaderApi.getModel(loc) ?: return
+        val model = ModelLoaderApi.getModelEntry(loc) ?: return
 
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val waterFlow = textureMap.getAtlasSprite("minecraft:blocks/water_flow")
-        val finalModel = ModelTransform.updateModelUvs(model, waterFlow)
+
+        val raw = model.raw as? Model.Mcx ?: return
+        val finalModel = ModelTransform.updateModelUvs(raw.data, waterFlow)
 
         waterModel = ModelCache {
-            ModelUtilties.renderModelParts(finalModel.modelData, finalModel.modelData.parts)
+            ModelUtilities.renderModel(finalModel)
         }
     }
 }

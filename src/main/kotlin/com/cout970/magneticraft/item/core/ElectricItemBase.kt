@@ -35,7 +35,7 @@ class ElectricItemBase : ItemBase() {
     }
 
     override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
-        if (itemIn == this.creativeTab) {
+        if (isInCreativeTab(itemIn)) {
             tab.add(ItemStack(this, 1, 0))
             tab.add(ItemStack(this, 1, 0).apply {
                 setInteger(ENERGY_KEY, getCapacityInternal(this))
