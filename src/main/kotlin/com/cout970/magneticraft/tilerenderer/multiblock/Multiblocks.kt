@@ -4,31 +4,21 @@ package com.cout970.magneticraft.tilerenderer.multiblock
 
 import com.cout970.magneticraft.multiblock.core.MultiblockManager
 import com.cout970.magneticraft.tileentity.multiblock.TileMultiblock
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
+import com.cout970.magneticraft.tilerenderer.core.BaseTileRenderer
 import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 /**
  * Created by cout970 on 2017/08/10.
  */
-internal fun genNames(prefix: String): List<String> = (1..3).map { "$prefix-$it" }
-
 private val BREAK_LINES_REGEX = """(\\n)|(\n)""".toRegex()
 
-abstract class TileRendererMultiblock<T : TileMultiblock>(
-        modelLocation: (() -> ModelResourceLocation)?,
-        filters: List<(String) -> Boolean> = listOf({ _ -> true })
-) : TileRendererSimple<T>(modelLocation, filters) {
+abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>() {
 
-    override fun renderTileEntityAt(te: T, x: Double, y: Double, z: Double, partialTicks: Float,
-                                    destroyStage: Int) {
-        // error loading the model
-        if (caches.isEmpty()) return
+    override fun renderTileEntityAt(te: T, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
         stackMatrix {
             translate(x, y, z)
-            ticks = partialTicks
 
             if (!te.active) {
                 Utilities.multiblockPreview(te.multiblockContext())
@@ -46,7 +36,9 @@ abstract class TileRendererMultiblock<T : TileMultiblock>(
                     }
                 }
             } else {
-                renderModels(caches, te)
+                ticks = partialTicks
+                time = (te.world.totalWorldTime and 0xFF_FFFF).toDouble() + partialTicks
+                render(te)
             }
         }
     }

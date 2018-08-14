@@ -9,11 +9,12 @@ import com.cout970.magneticraft.tileentity.TileConnector
 import com.cout970.magneticraft.tileentity.TileElectricCable
 import com.cout970.magneticraft.tileentity.TileElectricPole
 import com.cout970.magneticraft.tileentity.TileElectricPoleTransformer
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.TileRendererSimple
+import com.cout970.magneticraft.tilerenderer.core.BaseTileRenderer
+import com.cout970.magneticraft.tilerenderer.core.FilterRegex
+import com.cout970.magneticraft.tilerenderer.core.ModelSelector
 import com.cout970.magneticraft.tilerenderer.core.Utilities
-import com.cout970.magneticraft.tilerenderer.core.modelOf
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.lowercaseName
 import com.cout970.magneticraft.util.vector.minus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.EnumFacing
@@ -22,14 +23,14 @@ import net.minecraft.util.EnumFacing
  * Created by cout970 on 2017/08/10.
  */
 
-
 @RegisterRenderer(TileConnector::class)
-object TileRendererConnector : TileRendererSimple<TileConnector>(
-        modelLocation = modelOf(ElectricConductors.connector),
-        filters = listOf<(String) -> Boolean>({ !it.startsWith("Base") }, { it.startsWith("Base") })
-) {
+object TileRendererConnector : BaseTileRenderer<TileConnector>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileConnector) {
+    override fun init() {
+        createModel(ElectricConductors.connector, ModelSelector("base", FilterRegex("Base")))
+    }
+
+    override fun render(te: TileConnector) {
         //updated the cache for rendering wires
         te.wireRender.update {
             te.electricModule.outputWiredConnections.forEach { i ->
@@ -37,7 +38,7 @@ object TileRendererConnector : TileRendererSimple<TileConnector>(
             }
         }
 
-        bindTexture(Utilities.WIRE_TEXTURE)
+        TileRendererConnector.bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
         if (Debug.DEBUG) {
@@ -48,19 +49,21 @@ object TileRendererConnector : TileRendererSimple<TileConnector>(
         }
 
         Utilities.rotateAroundCenter(te.facing)
-        models[0].renderTextured()
+        renderModel("default")
         if (te.hasBase) {
-            models[1].renderTextured()
+            renderModel("base")
         }
     }
 }
 
 @RegisterRenderer(TileElectricPole::class)
-object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
-        modelLocation = modelOf(ElectricConductors.electric_pole)
-) {
+object TileRendererElectricPole : BaseTileRenderer<TileElectricPole>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileElectricPole) {
+    override fun init() {
+        createModel(ElectricConductors.electric_pole)
+    }
+
+    override fun render(te: TileElectricPole) {
 
         te.wireRender.update {
             for (i in te.electricModule.outputWiredConnections) {
@@ -82,16 +85,18 @@ object TileRendererElectricPole : TileRendererSimple<TileElectricPole>(
 
         val orientation = te.getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
-        models.forEach { it.renderTextured() }
+        renderModel("default")
     }
 }
 
 @RegisterRenderer(TileElectricPoleTransformer::class)
-object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPoleTransformer>(
-        modelLocation = modelOf(ElectricConductors.electric_pole_transformer)
-) {
+object TileRendererElectricPoleTransformer : BaseTileRenderer<TileElectricPoleTransformer>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileElectricPoleTransformer) {
+    override fun init() {
+        createModel(ElectricConductors.electric_pole_transformer)
+    }
+
+    override fun render(te: TileElectricPoleTransformer) {
 
         te.wireRender.update {
 
@@ -115,23 +120,35 @@ object TileRendererElectricPoleTransformer : TileRendererSimple<TileElectricPole
 
         val orientation = te.getBlockState()[ElectricConductors.PROPERTY_POLE_ORIENTATION]
         Utilities.rotateFromCenter(EnumFacing.UP, (orientation?.angle ?: 0f) + 90f)
-        models.forEach { it.renderTextured() }
+        renderModel("default")
     }
 }
 
 @RegisterRenderer(TileElectricCable::class)
-object TileRendererElectricCable : TileRendererSimple<TileElectricCable>(
-        modelLocation = modelOf(ElectricConductors.electric_cable),
-        filters = filterOf(listOf("center", "up", "down", "north", "south", "west", "east"))
-) {
+object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileElectricCable) {
+    override fun init() {
+        createModel(ElectricConductors.electric_cable,
+                ModelSelector("up", FilterRegex("up")),
+                ModelSelector("down", FilterRegex("down")),
+                ModelSelector("north", FilterRegex("north")),
+                ModelSelector("south", FilterRegex("south")),
+                ModelSelector("west", FilterRegex("west")),
+                ModelSelector("east", FilterRegex("east"))
+        )
+
+        createModelWithoutTexture(ElectricConductors.electric_cable,
+                ModelSelector("center", FilterRegex("center"))
+        )
+    }
+
+    override fun render(te: TileElectricCable) {
         var conn: EnumFacing? = null
         var count = 0
 
-        sidesToIndices.forEach { (side, index) ->
+        EnumFacing.values().forEach { side ->
             if (te.canConnect(side)) {
-                models[index].renderTextured()
+                renderModel(side.lowercaseName)
                 conn = conn ?: side.opposite
                 count++
             }
@@ -142,7 +159,7 @@ object TileRendererElectricCable : TileRendererSimple<TileElectricCable>(
         } else {
             bindTexture(resource("textures/blocks/electric_connectors/electric_cable_center.png"))
         }
-        models[0].render()
+        renderModel("center")
 
         if (Debug.DEBUG) {
             Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))

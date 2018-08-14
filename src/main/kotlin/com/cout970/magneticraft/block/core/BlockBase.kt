@@ -45,6 +45,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     }
 
     val states: List<IStatesEnum> = states_!!
+    var forceModelBake = false
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
     var enableOcclusionOptimization = true
     var translucent_ = false

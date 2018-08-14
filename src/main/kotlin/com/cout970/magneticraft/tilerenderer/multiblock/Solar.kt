@@ -4,34 +4,34 @@ import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarMirror
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarTower
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
+import com.cout970.magneticraft.tilerenderer.core.FilterRegex
+import com.cout970.magneticraft.tilerenderer.core.ModelSelector
 import com.cout970.magneticraft.tilerenderer.core.Utilities
-import com.cout970.magneticraft.tilerenderer.core.modelOf
 import com.cout970.magneticraft.util.toRads
 import com.cout970.magneticraft.util.vector.*
 import com.cout970.vector.extensions.rotateZ
 import net.minecraft.util.math.BlockPos
 
 @RegisterRenderer(TileSolarTower::class)
-object TileRendererSolarTower : TileRendererMultiblock<TileSolarTower>(
-        modelLocation = modelOf(Multiblocks.solarTower)
-) {
+object TileRendererSolarTower : TileRendererMultiblock<TileSolarTower>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileSolarTower) {
+    override fun init() {
+        createModel(Multiblocks.solarTower)
+    }
+
+    override fun render(te: TileSolarTower) {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -1)
-        models[0].renderTextured()
+        renderModel("default")
     }
 }
 
 @RegisterRenderer(TileSolarMirror::class)
-object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>(
-        modelLocation = modelOf(Multiblocks.solarMirror),
-        filters = listOf<(String) -> Boolean>(
-                { !it.contains("mirror") },
-                { it.contains("mirror") }
-        )
-) {
+object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
+
+    override fun init() {
+        createModel(Multiblocks.solarMirror, ModelSelector("mirror", FilterRegex("mirror")))
+    }
 
     fun getAngles(from: BlockPos, to: BlockPos): Pair<Float, Float> {
 
@@ -47,13 +47,14 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>(
         }
 
         val dirToSun = vec3Of(0, 1, 0).rotateZ(sunAngle.toRads()).normalize()
-
         val normal = (dirToSun + dirToTower).normalize()
 
         val plane = vec3Of(normal.x, 0, normal.z)
         val normPlane = plane.normalize()
+
         val angleY = Math.atan2(normPlane.x, normPlane.z) + 90.0.toRads()
         val realAngle = Math.atan2(plane.length, normal.y)
+
         val angleX = when {
             realAngle > 90.toRads() -> 0.0
             else -> realAngle
@@ -83,14 +84,14 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>(
         return Math.toDegrees(Math.atan2(Math.sin(src.toRads() - dst.toRads()), Math.cos(src.toRads() - dst.toRads()))).toFloat()
     }
 
-    override fun renderModels(models: List<ModelCache>, te: TileSolarMirror) {
+    override fun render(te: TileSolarMirror) {
         stackMatrix {
             Utilities.rotateFromCenter(te.facing, 180f)
             translate(0, 0, 1)
-            models[0].renderTextured()
+            renderModel("default")
         }
-        val rot = te.facing.toBlockPos().toVec3d()
-        translate(rot)
+
+        translate(te.facing.toBlockPos().toVec3d())
 
         val dst = te.solarMirrorModule.solarTowerPos
         val angleX: Float
@@ -120,7 +121,7 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>(
                 rotate(angleY, 0, 1, 0)
                 rotate(angleX, 0f, 0f, 1f)
             }
-            models[1].renderTextured()
+            renderModel("mirror")
         }
     }
 }

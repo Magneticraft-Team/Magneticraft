@@ -19,45 +19,47 @@ import net.minecraft.util.ResourceLocation
  * Created by cout970 on 2017/06/16.
  */
 @RegisterRenderer(TileConveyorBelt::class)
-object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
+object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
 
-    val texture = resource("textures/blocks/machines/conveyor_belt.png")
-    val cornerTexture = resource("textures/blocks/machines/conveyor_belt_corner.png")
-
-    var rest: ModelCache? = null
     var belt: ModelCache? = null
-    var backLegs: ModelCache? = null
-    var frontLegs: ModelCache? = null
-    var lateralLeft: ModelCache? = null
-    var lateralRight: ModelCache? = null
-    var panelLeft: ModelCache? = null
-    var panelRight: ModelCache? = null
-    var corner: ModelCache? = null
     var cornerBelt: ModelCache? = null
 
-    override fun renderTileEntityAt(te: TileConveyorBelt, x: Double, y: Double, z: Double, partialTicks: Float,
-                                    destroyStage: Int) {
+    override fun init() {
+        createModel(AutomaticMachines.conveyorBelt, listOf(
+                ModelSelector("back_legs", FilterRegex("back_leg.*")),
+                ModelSelector("front_legs", FilterRegex("front_leg.*")),
+                ModelSelector("lateral_left", FilterRegex("lateral_left")),
+                ModelSelector("lateral_right", FilterRegex("lateral_right")),
+                ModelSelector("panel_left", FilterRegex("panel_left")),
+                ModelSelector("panel_right", FilterRegex("panel_right"))
+        ), "base")
 
-        // error loading the model
-        rest ?: return
+        createModel(AutomaticMachines.conveyorBelt,
+                listOf(ModelSelector("corner", FilterAlways)), "corner_base")
 
-        stackMatrix {
-            translate(x, y, z)
-            Utilities.rotateFromCenter(te.facing)
-            renderStaticParts(te)
-            renderDynamicParts(te, partialTicks)
-            translate(0f, 12.5 * PIXEL, 0f)
-            //debug hitboxes
-//            renderHitboxes(te)
-        }
+        val anim = modelOf(AutomaticMachines.conveyorBelt, "anim")()
+        val cornerAnim = modelOf(AutomaticMachines.conveyorBelt, "corner_anim")()
 
-//        if (te.pos.xi == -391 && te.pos.zi == -280 ||
-//            te.pos.xi == -392 && te.pos.zi == -280 ||
-//            te.pos.xi == -392 && te.pos.zi == -281 ||
-//            te.pos.xi == -391 && te.pos.zi == -281 ||
-//            te.pos.xi == -391 && te.pos.zi == -280) {
-//            renderBitmap(te, x, y, z)
-//        }
+        //cleaning
+        cornerBelt?.close()
+        belt?.close()
+
+        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
+        val cornerBeltModel = ModelLoaderApi.getModelEntry(cornerAnim) ?: return
+
+        belt = updateTexture(beltModel, resource("blocks/machines/conveyor_belt_anim"))
+        cornerBelt = updateTexture(cornerBeltModel, resource("blocks/machines/conveyor_belt_anim"))
+    }
+
+
+    override fun render(te: TileConveyorBelt) {
+        Utilities.rotateFromCenter(te.facing)
+        renderStaticParts(te)
+        renderDynamicParts(te, ticks)
+        translate(0f, 12.5 * PIXEL, 0f)
+
+        //debug hitboxes
+//        renderHitboxes(te)
     }
 
     // debug
@@ -123,8 +125,7 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
                     bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
                     cornerBelt?.render()
 
-                    bindTexture(cornerTexture)
-                    corner?.render()
+                    renderModel("corner")
 
                     GlStateManager.cullFace(GlStateManager.CullFace.BACK)
                 } else {
@@ -134,8 +135,7 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
                     bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
                     cornerBelt?.render()
 
-                    bindTexture(cornerTexture)
-                    corner?.render()
+                    renderModel("corner")
                 }
             }
 
@@ -143,69 +143,33 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             belt?.render()
 
-            bindTexture(texture)
-            rest?.render()
+            renderModel("default")
 
             if (mod.hasBack()) {
                 stackMatrix {
                     translate(0f, 0f, PIXEL)
-                    backLegs?.render()
+                    renderModel("back_legs")
                 }
             } else {
-                backLegs?.render()
+                renderModel("back_legs")
             }
 
             if (!mod.hasFront()) {
-                frontLegs?.render()
+                renderModel("front_legs")
             }
 
             if (mod.hasLeft()) {
-                lateralLeft?.render()
+                renderModel("lateral_left")
             } else {
-                panelLeft?.render()
+                renderModel("panel_left")
             }
 
             if (mod.hasRight()) {
-                lateralRight?.render()
+                renderModel("lateral_right")
             } else {
-                panelRight?.render()
+                renderModel("panel_right")
             }
         }
-    }
-
-    override fun onModelRegistryReload() {
-        val base = modelOf(AutomaticMachines.conveyorBelt, "base")()
-        val anim = modelOf(AutomaticMachines.conveyorBelt, "anim")()
-        val cornerBase = modelOf(AutomaticMachines.conveyorBelt, "corner_base")()
-        val cornerAnim = modelOf(AutomaticMachines.conveyorBelt, "corner_anim")()
-        //cleaning
-
-        corner?.close()
-        cornerBelt?.close()
-        rest?.close()
-        belt?.close()
-        backLegs?.close()
-        frontLegs?.close()
-        lateralLeft?.close()
-        lateralRight?.close()
-
-        rest = ModelCacheFactory.createCache(base) {
-            !it.startsWith("lateral_left") && !it.startsWith("lateral_right") && !it.startsWith("panel_left") &&
-                    !it.startsWith("panel_right") && !it.startsWith("back_leg") && !it.startsWith("front_leg")
-        }
-        lateralLeft = ModelCacheFactory.createCache(base) { it.startsWith("lateral_left") }
-        lateralRight = ModelCacheFactory.createCache(base) { it.startsWith("lateral_right") }
-        panelLeft = ModelCacheFactory.createCache(base) { it.startsWith("panel_left") }
-        panelRight = ModelCacheFactory.createCache(base) { it.startsWith("panel_right") }
-        backLegs = ModelCacheFactory.createCache(base) { it.startsWith("back_leg") }
-        frontLegs = ModelCacheFactory.createCache(base) { it.startsWith("front_leg") }
-        corner = ModelCacheFactory.createCache(cornerBase)
-
-        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
-        val cornerBeltModel = ModelLoaderApi.getModelEntry(cornerAnim) ?: return
-
-        belt = updateTexture(beltModel, resource("blocks/machines/conveyor_belt_anim"))
-        cornerBelt = updateTexture(cornerBeltModel, resource("blocks/machines/conveyor_belt_anim"))
     }
 
     private fun updateTexture(model: ModelEntry, texture: ResourceLocation): ModelCache {
@@ -213,6 +177,6 @@ object TileRendererConveyorBelt : TileRenderer<TileConveyorBelt>() {
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val animTexture = textureMap.getAtlasSprite(texture.toString())
         val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
-        return ModelCache { ModelUtilities.renderModel(raw.data) }
+        return ModelCache { ModelUtilities.renderModel(finalModel) }
     }
 }

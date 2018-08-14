@@ -4,7 +4,9 @@ import com.cout970.magneticraft.block.ElectricMachines
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileBattery
 import com.cout970.magneticraft.tileentity.TileWindTurbine
-import com.cout970.magneticraft.tilerenderer.core.*
+import com.cout970.magneticraft.tilerenderer.core.BaseTileRenderer
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.tilerenderer.core.Utilities
 import net.minecraft.util.EnumFacing
 
 /**
@@ -12,22 +14,26 @@ import net.minecraft.util.EnumFacing
  */
 
 @RegisterRenderer(TileBattery::class)
-object TileRendererBattery : TileRendererSimple<TileBattery>(
-        modelLocation = modelOf(ElectricMachines.battery)
-) {
+object TileRendererBattery : BaseTileRenderer<TileBattery>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileBattery) {
+    override fun init() {
+        createModel(ElectricMachines.battery)
+    }
+
+    override fun render(te: TileBattery) {
         Utilities.rotateFromCenter(te.facing, 180f)
-        models.forEach { it.renderTextured() }
+        renderModel("default")
     }
 }
 
 @RegisterRenderer(TileWindTurbine::class)
-object TileRendererWindTurbine : TileRendererSimple<TileWindTurbine>(
-        modelLocation = modelOf(ElectricMachines.windTurbine)
-) {
+object TileRendererWindTurbine : BaseTileRenderer<TileWindTurbine>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileWindTurbine) {
+    override fun init() {
+        createModel(ElectricMachines.windTurbine)
+    }
+
+    override fun render(te: TileWindTurbine) {
         if (!te.windTurbineModule.hasTurbineHitbox) return
         Utilities.rotateFromCenter(te.facing, 180f)
         translate(0, -5, 1)
@@ -42,6 +48,6 @@ object TileRendererWindTurbine : TileRendererSimple<TileWindTurbine>(
         translate(0.5, 5.5, 0)
         rotate(angle, 0, 0, 1)
         translate(-0.5, -5.5 + 2 * PIXEL, 0)
-        models[0].renderTextured()
+        renderModel("default")
     }
 }

@@ -8,7 +8,6 @@ import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tileentity.TileSluiceBox
 import com.cout970.magneticraft.tileentity.modules.ModuleSluiceBox
 import com.cout970.magneticraft.tilerenderer.core.*
-import com.cout970.magneticraft.util.resource
 import com.cout970.modelloader.api.Model
 import com.cout970.modelloader.api.ModelLoaderApi
 import com.cout970.modelloader.api.ModelUtilities
@@ -23,15 +22,15 @@ import net.minecraftforge.client.MinecraftForgeClient
  */
 
 @RegisterRenderer(TileCrushingTable::class)
-object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
+object TileRendererCrushingTable : BaseTileRenderer<TileCrushingTable>() {
 
-    override fun renderTileEntityAt(te: TileCrushingTable, x: Double, y: Double, z: Double, partialTicks: Float,
-                                    destroyStage: Int) {
+    override fun init() = Unit
+
+    override fun render(te: TileCrushingTable) {
         val stack = te.crushingModule.storedItem
 
         if (stack.isNotEmpty) {
-            pushMatrix()
-            translate(x + 0.5, y + 0.9375, z + 0.3125)
+            translate(0.5, 0.9375, 0.3125)
             if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
                 translate(0.0, -0.045, 1 * PIXEL)
                 rotate(90f, 1f, 0f, 0f)
@@ -40,22 +39,23 @@ object TileRendererCrushingTable : TileRenderer<TileCrushingTable>() {
             }
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
-            popMatrix()
         }
     }
 }
 
 
 @RegisterRenderer(TileSluiceBox::class)
-object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
-        modelLocation = modelOf(ManualMachines.sluiceBox),
-        filters = listOf<(String) -> Boolean>({ it != "Shape17" }, { it == "Shape17" })
-) {
+object TileRendererSluiceBox : BaseTileRenderer<TileSluiceBox>() {
 
-    val gravelTexture = resource("textures/blocks/machines/sluice_box_gravel.png")
     var waterModel: ModelCache? = null
 
-    override fun renderModels(models: List<ModelCache>, te: TileSluiceBox) {
+    override fun init() {
+        createModel(ManualMachines.sluiceBox,
+                ModelSelector("gravel", FilterString("gravel"))
+        )
+    }
+
+    override fun render(te: TileSluiceBox) {
         Utilities.rotateFromCenter(te.facing, 180f)
 
         if (MinecraftForgeClient.getRenderPass() == 1) {
@@ -73,11 +73,10 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
 
             stackMatrix {
                 translate(0, y, 0)
-                bindTexture(gravelTexture)
-                models.last().render()
+                renderModel("gravel")
             }
         }
-        models.forEach { it.renderTextured() }
+        renderModel("default")
     }
 
     override fun onModelRegistryReload() {
@@ -97,31 +96,3 @@ object TileRendererSluiceBox : TileRendererSimple<TileSluiceBox>(
         }
     }
 }
-
-//object DebugTileEntityRenderer : TileEntitySpecialRenderer<TileEntityBed>() {
-//
-//    private var model: IAnimatedModel? = null
-//
-//    override fun render(te: TileEntityBed, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int, alpha: Float) {
-//        te.world = world
-//        val time = te.world.totalWorldTime.toDouble()
-//
-//        if (!te.isHeadPiece) return
-//
-//        GlStateManager.pushMatrix()
-//        GlStateManager.translate(x, y, z)
-//        bindTexture(ResourceLocation("modelloader:textures/blocks/multiblocks/steam_engine.png"))
-//        model?.render(time + partialTicks)
-//        GlStateManager.popMatrix()
-//    }
-//
-//    fun initModels() {
-//        val loc = ModelResourceLocation("minecraft:gold_block", "normal")
-//        val entry = ModelLoaderApi.getModelEntry(loc) ?: return
-//        val model = entry.raw
-//
-//        if (model is Model.Gltf) {
-//            this.model = GltfAnimationBuilder().build(model.data).firstOrNull()?.second
-//        }
-//    }
-//}

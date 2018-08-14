@@ -34,8 +34,8 @@ import net.minecraft.util.text.TextFormatting
  */
 object Multiblocks : IBlockMaker {
 
-    val PROPERTY_MULTIBLOCK_ORIENTATION = PropertyEnum.create("multiblock_orientation",
-            MultiblockOrientation::class.java)
+    val PROPERTY_MULTIBLOCK_ORIENTATION: PropertyEnum<MultiblockOrientation> = PropertyEnum.create(
+            "multiblock_orientation", MultiblockOrientation::class.java)
 
     lateinit var gap: BlockBase private set
     lateinit var solarPanel: BlockBase private set
@@ -134,7 +134,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSieve)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/sieve.mcx")
+                    "model" to resource("models/block/gltf/sieve.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockSieve })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -189,7 +189,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileHydraulicPress)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/hydraulic_press.mcx")
+                    "model" to resource("models/block/gltf/hydraulic_press.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockHydraulicPress })
             onBlockPlaced = Multiblocks::placeWithOrientation

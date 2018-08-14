@@ -112,6 +112,12 @@
       "texture": "magneticraft:blocks/machines/table_sieve_filter"
     },
     {
+      "name": "gravel",
+      "from": 53,
+      "to": 59,
+      "texture": "magneticraft:blocks/machines/sluice_box_gravel"
+    },
+    {
       "name": "Shape_18",
       "from": 59,
       "to": 61,

@@ -13,7 +13,7 @@ class ModelCache(val func: () -> Unit) : IRenderCache {
     var texture: ResourceLocation? = null
 
     override fun render() {
-        if(id == -1){
+        if (id == -1) {
             id = GlStateManager.glGenLists(1)
             GlStateManager.glNewList(id, GL11.GL_COMPILE)
             func()
@@ -22,8 +22,8 @@ class ModelCache(val func: () -> Unit) : IRenderCache {
         GlStateManager.callList(id)
     }
 
-    override fun close(){
-        if(id != -1){
+    override fun close() {
+        if (id != -1) {
             GlStateManager.glDeleteLists(id, 1)
         }
         id = -1

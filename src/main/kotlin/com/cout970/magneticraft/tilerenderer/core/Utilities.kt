@@ -51,7 +51,6 @@ object Utilities {
 
     val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
-
     fun renderMultiblockBlueprint(ctx: MultiblockContext) {
 
         GlStateManager.disableDepth()

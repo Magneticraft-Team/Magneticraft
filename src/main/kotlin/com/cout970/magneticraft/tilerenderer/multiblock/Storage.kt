@@ -5,35 +5,43 @@ import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.modules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.tileentity.multiblock.TileContainer
 import com.cout970.magneticraft.tileentity.multiblock.TileShelvingUnit
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
+import com.cout970.magneticraft.tilerenderer.core.FilterString
+import com.cout970.magneticraft.tilerenderer.core.ModelSelector
 import com.cout970.magneticraft.tilerenderer.core.Utilities
-import com.cout970.magneticraft.tilerenderer.core.modelOf
 
 @RegisterRenderer(TileShelvingUnit::class)
-object TileRendererShelvingUnit : TileRendererMultiblock<TileShelvingUnit>(
-        modelLocation = modelOf(Multiblocks.shelvingUnit),
-        filters = filterOf((1..24).map { "Crate$it" })
-) {
+object TileRendererShelvingUnit : TileRendererMultiblock<TileShelvingUnit>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileShelvingUnit) {
+    private val crateMap = (1..24).map { "crate-$it" }
+
+    override fun init() {
+        createModel(Multiblocks.shelvingUnit,
+                (1..24).map { ModelSelector("crate-$it", FilterString("Crate$it")) }
+        )
+    }
+
+    override fun render(te: TileShelvingUnit) {
         Utilities.rotateFromCenter(te.facing, 0f)
-        models[0].renderTextured()
+        renderModel("default")
         te.shelvingUnitModule.chestCount.forEachIndexed { level, count ->
             (0 until count).forEach {
-                models[1 + level * ModuleShelvingUnitMb.CHESTS_PER_LEVEL + it].renderTextured()
+                val crate = level * ModuleShelvingUnitMb.CHESTS_PER_LEVEL + it
+                renderModel(crateMap[crate])
             }
         }
     }
 }
 
 @RegisterRenderer(TileContainer::class)
-object TileRendererContainer : TileRendererMultiblock<TileContainer>(
-        modelLocation = modelOf(Multiblocks.container)
-) {
+object TileRendererContainer : TileRendererMultiblock<TileContainer>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileContainer) {
+    override fun init() {
+        createModel(Multiblocks.container)
+    }
+
+    override fun render(te: TileContainer) {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -3)
-        models[0].renderTextured()
+        renderModel("default")
     }
 }

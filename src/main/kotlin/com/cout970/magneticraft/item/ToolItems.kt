@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.item
 
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.energy.IManualConnectionHandler.Result.*
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.item.core.*
 import com.cout970.magneticraft.misc.CreativeTabMg
@@ -163,15 +164,20 @@ object ToolItems : IItemMaker {
                 } else {
                     if (stack.hasKey(POSITION_KEY)) {
                         val basePos = stack.getBlockPos(POSITION_KEY)
-                        if (handler.connectWire(basePos, pos, worldIn, player, facing, stack)) {
-                            if (worldIn.isServer) {
-                                player.sendMessage("text.magneticraft.wire_connect.success")
-                            }
-                        } else {
-                            if (worldIn.isServer) {
-                                player.sendMessage("text.magneticraft.wire_connect.fail")
+                        val result = handler.connectWire(basePos, pos, worldIn, player, facing, stack)
+
+                        if (worldIn.isServer) {
+                            when (result) {
+                                SUCCESS -> player.sendMessage("text.magneticraft.wire_connect.success")
+                                TOO_FAR -> player.sendMessage("text.magneticraft.wire_connect.too_far")
+                                NOT_A_CONNECTOR -> player.sendMessage("text.magneticraft.wire_connect.not_a_connector")
+                                INVALID_CONNECTOR -> player.sendMessage("text.magneticraft.wire_connect.invalid_connector")
+                                SAME_CONNECTOR -> player.sendMessage("text.magneticraft.wire_connect.same_connector")
+                                ALREADY_CONNECTED -> player.sendMessage("text.magneticraft.wire_connect.already_connected")
+                                ERROR, null -> player.sendMessage("text.magneticraft.wire_connect.fail")
                             }
                         }
+
                         return EnumActionResult.SUCCESS
                     } else {
                         if (worldIn.isServer) {

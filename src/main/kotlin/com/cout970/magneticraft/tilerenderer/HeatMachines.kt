@@ -7,6 +7,7 @@ import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.toCelsius
+import com.cout970.magneticraft.util.vector.lowercaseName
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.EnumFacing
 
@@ -14,52 +15,53 @@ import net.minecraft.util.EnumFacing
  * Created by cout970 on 2017/08/10.
  */
 
-val sidesToIndices = listOf(
-        EnumFacing.UP to 1,
-        EnumFacing.DOWN to 2,
-        EnumFacing.NORTH to 3,
-        EnumFacing.SOUTH to 4,
-        EnumFacing.WEST to 5,
-        EnumFacing.EAST to 6
-)
-
 @RegisterRenderer(TileCombustionChamber::class)
-object TileRendererCombustionChamber : TileRendererSimple<TileCombustionChamber>(
-        modelLocation = modelOf(HeatMachines.combustionChamber),
-        filters = listOf<(String) -> Boolean>({ it != "Door" }, { it == "Door" })
-) {
-    override fun renderModels(models: List<ModelCache>, te: TileCombustionChamber) {
+object TileRendererCombustionChamber : BaseTileRenderer<TileCombustionChamber>() {
+
+    override fun init() {
+        createModel(HeatMachines.combustionChamber,
+                ModelSelector("door", FilterString("Door"))
+        )
+    }
+
+    override fun render(te: TileCombustionChamber) {
         Utilities.rotateFromCenter(te.facing, 180f)
-        models.take(models.size - 1).forEach { it.renderTextured() }
+        renderModel("default")
+
         if (te.combustionChamberModule.doorOpen) {
             Utilities.customRotate(vec3Of(0, -135, 0), vec3Of(13.5 * PIXEL, 0.0, 0.5 * PIXEL))
         }
-        models.last().renderTextured()
+        renderModel("door")
     }
 }
 
 @RegisterRenderer(TileSteamBoiler::class)
-object TileRendererSteamBoiler : TileRendererSimple<TileSteamBoiler>(
-        modelLocation = modelOf(HeatMachines.steamBoiler)
-) {
-    override fun renderModels(models: List<ModelCache>, te: TileSteamBoiler) {
-        models.forEach { it.renderTextured() }
+object TileRendererSteamBoiler : BaseTileRenderer<TileSteamBoiler>() {
+
+    override fun init() {
+        createModel(HeatMachines.steamBoiler)
+    }
+
+    override fun render(te: TileSteamBoiler) {
+        renderModel("default")
     }
 }
 
 @RegisterRenderer(TileHeatPipe::class)
-object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
-        modelLocation = modelOf(HeatMachines.heatPipe),
-        filters = filterOf(listOf("base", "up", "down", "north", "south", "west", "east"))
-) {
+object TileRendererHeatPipe : BaseTileRenderer<TileHeatPipe>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileHeatPipe) {
+    override fun init() {
+        val parts = listOf("up", "down", "north", "south", "west", "east")
+        createModel(HeatMachines.heatPipe, parts.map { ModelSelector(it, FilterRegex(it)) })
+    }
+
+    override fun render(te: TileHeatPipe) {
         Utilities.withHeatColor(te, te.heatNode.temperature) {
-            models[0].renderTextured()
+            renderModel("default")
 
-            sidesToIndices.forEach { (side, index) ->
+            EnumFacing.values().forEach { side ->
                 if (te.heatPipeConnections.canConnect(side)) {
-                    models[index].render()
+                    renderModel(side.lowercaseName)
                 }
             }
         }
@@ -70,19 +72,22 @@ object TileRendererHeatPipe : TileRendererSimple<TileHeatPipe>(
 }
 
 @RegisterRenderer(TileInsulatedHeatPipe::class)
-object TileRendererInsulatedHeatPipe : TileRendererSimple<TileInsulatedHeatPipe>(
-        modelLocation = modelOf(HeatMachines.insulatedHeatPipe),
-        filters = filterOf(listOf("base", "up", "down", "north", "south", "west", "east"))
-) {
+object TileRendererInsulatedHeatPipe : BaseTileRenderer<TileInsulatedHeatPipe>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileInsulatedHeatPipe) {
+    override fun init() {
+        val parts = listOf("up", "down", "north", "south", "west", "east")
+        createModel(HeatMachines.insulatedHeatPipe, parts.map { ModelSelector(it, FilterRegex(it)) })
+        createModelWithoutTexture(HeatMachines.insulatedHeatPipe, ModelSelector("base", FilterRegex("center")))
+    }
+
+    override fun render(te: TileInsulatedHeatPipe) {
 
         var conn: EnumFacing? = null
         var count = 0
 
-        sidesToIndices.forEach { (side, index) ->
+        EnumFacing.values().forEach { side ->
             if (te.heatPipeConnections.canConnect(side)) {
-                models[index].renderTextured()
+                renderModel(side.lowercaseName)
                 conn = conn ?: side.opposite
                 count++
             }
@@ -93,30 +98,35 @@ object TileRendererInsulatedHeatPipe : TileRendererSimple<TileInsulatedHeatPipe>
         } else {
             bindTexture(resource("textures/blocks/fluid_machines/insulated_heat_pipe_center.png"))
         }
-        models[0].render()
+        renderModel("base")
     }
 }
 
 @RegisterRenderer(TileHeatSink::class)
-object TileRendererHeatSink : TileRendererSimple<TileHeatSink>(
-        modelLocation = modelOf(HeatMachines.heatSink)
-) {
+object TileRendererHeatSink : BaseTileRenderer<TileHeatSink>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileHeatSink) {
+    override fun init() {
+        createModel(HeatMachines.heatSink)
+    }
+
+    override fun render(te: TileHeatSink) {
         Utilities.facingRotate(te.facing)
         Utilities.withHeatColor(te, te.heatNode.temperature) {
-            models[0].renderTextured()
+            renderModel("default")
         }
     }
 }
 
 @RegisterRenderer(TileGasificationUnit::class)
-object TileRendererGasificationUnit : TileRendererSimple<TileGasificationUnit>(
-        modelLocation = modelOf(HeatMachines.gasificationUnit)
-) {
-    override fun renderModels(models: List<ModelCache>, te: TileGasificationUnit) {
+object TileRendererGasificationUnit : BaseTileRenderer<TileGasificationUnit>() {
+
+    override fun init() {
+        createModel(HeatMachines.gasificationUnit)
+    }
+
+    override fun render(te: TileGasificationUnit) {
         Utilities.withHeatColor(te, te.heatNode.temperature) {
-            models.forEach { it.renderTextured() }
+            renderModel("default")
         }
     }
 }

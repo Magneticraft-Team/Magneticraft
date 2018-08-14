@@ -37,7 +37,6 @@ import net.minecraftforge.common.capabilities.Capability
  */
 class ModuleElectricity(
         val electricNodes: List<IElectricNode>,
-        val canConnect: (ModuleElectricity, IElectricNode, IElectricNodeHandler, IElectricNode, EnumFacing?) -> Boolean = ModuleElectricity::defaultCanConnectImpl,
         val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
         val onWireChange: (EnumFacing?) -> Unit = {},
         val onUpdateConnections: (ModuleElectricity) -> Unit = {},
@@ -171,7 +170,7 @@ class ModuleElectricity(
     }
 
     override fun canConnect(thisNode: IElectricNode, other: IElectricNodeHandler, otherNode: IElectricNode,
-                            side: EnumFacing?): Boolean = canConnect(this, thisNode, other, otherNode, side)
+                            side: EnumFacing?): Boolean = defaultCanConnectImpl(thisNode, other, otherNode, side)
 
     fun defaultCanConnectImpl(thisNode: IElectricNode, other: IElectricNodeHandler, otherNode: IElectricNode,
                               side: EnumFacing?): Boolean {

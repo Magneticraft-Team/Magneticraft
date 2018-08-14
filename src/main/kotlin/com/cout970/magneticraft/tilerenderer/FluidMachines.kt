@@ -9,6 +9,7 @@ import com.cout970.magneticraft.tileentity.TileSmallTank
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.lowercaseName
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureMap
@@ -22,19 +23,25 @@ import org.lwjgl.opengl.GL11
  */
 
 @RegisterRenderer(TileSmallTank::class)
-object TileRendererSmallTank : TileRendererSimple<TileSmallTank>(
-        modelLocation = modelOf(FluidMachines.smallTank),
-        filters = listOf<(String) -> Boolean>({ it != "base" }, { it == "base" })
-) {
+object TileRendererSmallTank : BaseTileRenderer<TileSmallTank>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileSmallTank) {
+    override fun init() {
+        createModel(FluidMachines.smallTank,
+                ModelSelector("shell", FilterNot(FilterString("base")))
+        )
+        createModelWithoutTexture(FluidMachines.smallTank,
+                ModelSelector("base", FilterString("base"))
+        )
+    }
+
+    override fun render(te: TileSmallTank) {
 
         if (MinecraftForgeClient.getRenderPass() == 0) {
             val loc = if (te.toggleExportModule.enable) "out" else "in"
             bindTexture(resource("textures/blocks/fluid_machines/small_tank_$loc.png"))
-            models.last().render()
+            renderModel("base")
 
-            models.first().renderTextured()
+            renderModel("shell")
         } else {
             if (te.tank.isNonEmpty()) {
                 val fluidStack = te.tank.fluid ?: return
@@ -59,41 +66,18 @@ object TileRendererSmallTank : TileRendererSimple<TileSmallTank>(
     }
 }
 
-private val map = mapOf(
-        "center" to 0,
-        "up" to 1,
-        "down" to 2,
-        "north" to 3,
-        "south" to 4,
-        "east" to 5,
-        "west" to 6,
-        "wt" to 7,
-        "wb" to 8,
-        "et" to 9,
-        "eb" to 10,
-        "nt" to 11,
-        "nb" to 12,
-        "st" to 13,
-        "sb" to 14,
-        "nw" to 15,
-        "sw" to 16,
-        "ne" to 17,
-        "se" to 18,
-        "cdown" to 19,
-        "cup" to 20,
-        "cnorth" to 21,
-        "csouth" to 22,
-        "cwest" to 23,
-        "ceast" to 24
-)
-
 @RegisterRenderer(TileIronPipe::class)
-object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
-        modelLocation = modelOf(FluidMachines.ironPipe),
-        filters = map.keys.sortedBy { map[it] }.map { name -> { it: String -> it == name } }
-) {
+object TileRendererIronPipe : BaseTileRenderer<TileIronPipe>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileIronPipe) {
+    override fun init() {
+        val parts = listOf(
+                "center", "up", "down", "north", "south", "east", "west", "wt", "wb", "et", "eb", "nt",
+                "nb", "st", "sb", "nw", "sw", "ne", "se", "cdown", "cup", "cnorth", "csouth", "cwest", "ceast"
+        )
+        createModel(FluidMachines.ironPipe, parts.map { ModelSelector(it, FilterString(it)) })
+    }
+
+    override fun render(te: TileIronPipe) {
 
         if (Debug.DEBUG) {
             Utilities.renderFloatingLabel("${te.tank.fluidAmount}", vec3Of(0, 1, 0))
@@ -102,28 +86,26 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
 
         val pipeMap = enumValues<EnumFacing>().map { te.pipeModule.getConnectionType(it, true) }
 
-        models[map["center"]!!].renderTextured()
+        renderModel("center")
         if (Debug.DEBUG) GL11.glColor4f(1f, 1f, 1f, 1f)
 
-        enumValues<EnumFacing>().forEach {
+        enumValues<EnumFacing>().forEach { facing ->
 
-            when (pipeMap[it.ordinal]) {
-                ModulePipe.ConnectionType.PIPE -> models[map[it.name.toLowerCase()]!!].render()
+            when (pipeMap[facing.ordinal]) {
+                ModulePipe.ConnectionType.PIPE -> renderModel(facing.lowercaseName)
+                ModulePipe.ConnectionType.NONE -> Unit
                 ModulePipe.ConnectionType.TANK -> {
-                    models[map[it.name.toLowerCase()]!!].render()
+                    renderModel(facing.lowercaseName)
 
-                    val state = te.pipeModule.connectionStates[it.ordinal]
+                    val state = te.pipeModule.connectionStates[facing.ordinal]
                     val color = when (state) {
                         ModulePipe.ConnectionState.DISABLE -> return@forEach
                         ModulePipe.ConnectionState.PASSIVE -> -1
                         ModulePipe.ConnectionState.ACTIVE -> Utilities.colorFromRGB(1f, 0.6f, 0.0f)
                     }
                     Utilities.setColor(color)
-                    models[map["c" + it.name.toLowerCase()]!!].render()
+                    renderModel("c" + facing.lowercaseName)
                     Utilities.setColor(-1)
-                }
-                ModulePipe.ConnectionType.NONE -> {
-                    // Ingored
                 }
             }
         }
@@ -134,40 +116,40 @@ object TileRendererIronPipe : TileRendererSimple<TileIronPipe>(
             val none = ModulePipe.ConnectionType.NONE
 
             if (pipeMap[0] != none && pipeMap[1] != none) {
-                models[map["nw"]!!].render()
-                models[map["sw"]!!].render()
-                models[map["ne"]!!].render()
-                models[map["se"]!!].render()
+                renderModel("nw")
+                renderModel("sw")
+                renderModel("ne")
+                renderModel("se")
                 return
 
             } else if (pipeMap[2] != none && pipeMap[3] != none) {
-                models[map["wt"]!!].render()
-                models[map["wb"]!!].render()
-                models[map["et"]!!].render()
-                models[map["eb"]!!].render()
+                renderModel("wt")
+                renderModel("wb")
+                renderModel("et")
+                renderModel("eb")
                 return
 
             } else if (pipeMap[4] != none && pipeMap[5] != none) {
-                models[map["nt"]!!].render()
-                models[map["nb"]!!].render()
-                models[map["st"]!!].render()
-                models[map["sb"]!!].render()
+                renderModel("nt")
+                renderModel("nb")
+                renderModel("st")
+                renderModel("sb")
                 return
             }
         }
-        models[map["wt"]!!].render()
-        models[map["wb"]!!].render()
-        models[map["et"]!!].render()
-        models[map["eb"]!!].render()
+        renderModel("wt")
+        renderModel("wb")
+        renderModel("et")
+        renderModel("eb")
 
-        models[map["nt"]!!].render()
-        models[map["nb"]!!].render()
-        models[map["st"]!!].render()
-        models[map["sb"]!!].render()
+        renderModel("nt")
+        renderModel("nb")
+        renderModel("st")
+        renderModel("sb")
 
-        models[map["nw"]!!].render()
-        models[map["sw"]!!].render()
-        models[map["ne"]!!].render()
-        models[map["se"]!!].render()
+        renderModel("nw")
+        renderModel("sw")
+        renderModel("ne")
+        renderModel("se")
     }
 }

@@ -71,10 +71,10 @@ var ITEM_GEAR: Capability<IGear>? = null
  * This is called on the server and the client at preInit
  */
 fun registerCapabilities() {
-    CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage(), { DefaultElectricNodeProvider() })
-    CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage(), { DefaultHeatNodeProvider() })
-    CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage(), { DefaultManualConnectionHandler() })
-    CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage(), { DefaultGear() })
+    CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage()) { DefaultElectricNodeProvider() }
+    CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage()) { DefaultHeatNodeProvider() }
+    CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage()) { DefaultManualConnectionHandler() }
+    CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage()) { DefaultGear() }
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage()) {
         FloppyDisk(
                 ItemStack(ComputerItems.floppyDisk, 1, 0,
@@ -176,7 +176,7 @@ class DefaultManualConnectionHandler : IManualConnectionHandler {
                             stack: ItemStack): BlockPos? = thisBlock
 
     override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
-                             side: EnumFacing, stack: ItemStack): Boolean = false
+                             side: EnumFacing, stack: ItemStack) = IManualConnectionHandler.Result.ERROR
 }
 
 class DefaultGear : IGear {

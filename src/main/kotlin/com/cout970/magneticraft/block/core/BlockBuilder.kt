@@ -30,6 +30,7 @@ class BlockBuilder {
         BlockBase.states_ = b
         BlockTileBase(c, d, a)
     }
+    var forceModelBake = false
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
 
     var factory: ((World, IBlockState) -> TileEntity?)? = null
@@ -110,6 +111,7 @@ class BlockBuilder {
             translucent_                = this@BlockBuilder.translucent
             onBlockPlaced               = this@BlockBuilder.onBlockPlaced
             customModels                = this@BlockBuilder.customModels
+            forceModelBake              = this@BlockBuilder.forceModelBake
             pickBlock                   = this@BlockBuilder.pickBlock
             generateDefaultItemModel    = this@BlockBuilder.generateDefaultItemModel
             canPlaceBlockOnSide         = this@BlockBuilder.canPlaceBlockOnSide

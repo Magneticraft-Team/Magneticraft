@@ -11,16 +11,15 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
  */
 abstract class TileRenderer<T : TileBase> : TileEntitySpecialRenderer<T>() {
 
-    override fun render(tile: T, x: Double, y: Double, z: Double, tick: Float, destroyStage: Int,
-                        alpha: Float) {
+    override fun render(tile: T, x: Double, y: Double, z: Double, tick: Float,
+                        destroyStage: Int, alpha: Float) {
+
         renderTileEntityAt(tile, x, y, z, tick, destroyStage)
     }
 
     abstract fun renderTileEntityAt(te: T, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int)
 
-    open fun onModelRegistryReload() {
-
-    }
+    open fun onModelRegistryReload() = Unit
 
     inline fun stackMatrix(func: () -> Unit) {
         pushMatrix()
@@ -74,6 +73,7 @@ abstract class TileRenderer<T : TileBase> : TileEntitySpecialRenderer<T>() {
 
     @Suppress("NOTHING_TO_INLINE")
     inline fun scale(x: Number, y: Number, z: Number) = GlStateManager.scale(x.toFloat(), y.toFloat(), z.toFloat())
+
     fun scale(x: Double, y: Double, z: Double) = GlStateManager.scale(x, y, z)
     fun scale(x: Float, y: Float, z: Float) = GlStateManager.scale(x, y, z)
     fun scale(vec: IVector3) = GlStateManager.scale(vec.xd, vec.yd, vec.zd)

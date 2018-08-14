@@ -93,7 +93,7 @@ fun registerRecipes() {
     addGrinderRecipe(Blocks.COBBLESTONE.stack(), Blocks.GRAVEL.stack(1), Blocks.SAND.stack(1), 0.5f, 60f)
     addGrinderRecipe(Blocks.QUARTZ_BLOCK.stack(), Items.QUARTZ.stack(4), ItemStack.EMPTY, 0.0f, 50f)
 
-    addGrinderRecipe(Ores.OreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), Blocks.GRAVEL.stack(), 0.01f, 40f)
+    addGrinderRecipe(Ores.OreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), EnumMetal.IRON.getDust(), 0.01f, 40f)
 
     ItemHolder.sawdust?.ifNonEmpty { sawdust ->
         addGrinderRecipe(Blocks.LOG.stack(), sawdust.withSize(8), sawdust.withSize(4), 0.5f, 100f)

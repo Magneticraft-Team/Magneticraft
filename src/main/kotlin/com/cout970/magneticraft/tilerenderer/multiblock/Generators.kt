@@ -4,27 +4,26 @@ import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.multiblock.TileSolarPanel
 import com.cout970.magneticraft.tileentity.multiblock.TileSteamEngine
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.tilerenderer.core.Utilities
-import com.cout970.magneticraft.tilerenderer.core.modelOf
+import com.cout970.magneticraft.tilerenderer.core.*
 import net.minecraft.util.EnumFacing
 
 @RegisterRenderer(TileSteamEngine::class)
-object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>(
-        modelLocation = modelOf(Multiblocks.steamEngine),
-        filters = listOf<(String) -> Boolean>(
-                { it !in TileRendererSteamEngine.partsNames },
-                { it in TileRendererSteamEngine.partsNames }
+object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>() {
+
+    override fun init() {
+        createModel(Multiblocks.steamEngine,
+                ModelSelector("gears", FilterOr(
+                        FilterString("gearbox_lid_side"),
+                        FilterString("gear_box_lid_top"),
+                        FilterString("gearbox_lid_lock")
+                ))
         )
-) {
+    }
 
-    val partsNames = listOf("gearbox_lid_side", "gear_box_lid_top", "gearbox_lid_lock")
-
-    override fun renderModels(models: List<ModelCache>, te: TileSteamEngine) {
+    override fun render(te: TileSteamEngine) {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(-1, 0, -1)
-        models[0].renderTextured()
+        renderModel("default")
 
         val step = Math.max(0.0, (te.steamEngineMbModule.auxTime - ticks) / 20.0)
         val clock = if (te.steamEngineMbModule.lidOpen) 1 - step else step
@@ -33,27 +32,25 @@ object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>(
         translate(-4 * PIXEL, 1, 0)
         rotate(-120 * clock, 0, 0, 1)
         translate(4 * PIXEL, -1, 0)
-        models[1].renderTextured()
+        renderModel("gears")
     }
 }
 
 @RegisterRenderer(TileSolarPanel::class)
-object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>(
-        modelLocation = modelOf(Multiblocks.solarPanel),
-        filters = filtersOf(
-                genNames("Panel1"),
-                genNames("Panel2"),
-                genNames("Panel3"),
-                genNames("Panel4"),
-                genNames("Panel5"),
-                genNames("Panel6")
-        )
-) {
+object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileSolarPanel) {
+    override fun init() {
+        val parts = listOf("Panel1", "Panel2", "Panel3", "Panel4", "Panel5", "Panel6")
+                .flatMap { prefix -> (1..3).map { "$prefix-$it" } }
+
+        createModel(Multiblocks.solarPanel,
+                parts.map { ModelSelector(it.toLowerCase(), FilterString(it)) })
+    }
+
+    override fun render(te: TileSolarPanel) {
         Utilities.rotateFromCenter(te.facing, -90f)
         translate(-1.0, 0.0, 0.0)
-        models[0].renderTextured()
+        renderModel("default")
 
         val worldTime = te.world.worldTime
         val time = (worldTime % 24000L).toInt()
@@ -81,22 +78,38 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>(
                     translate(1.5f, 11f / 16f, 0.5f)
                     rotate(angle, 0f, 0f, 1f)
                     translate(-1.5f, -11f / 16f, -0.5f)
-                    (1..3).forEach { models[it].renderTextured() }
-                    (10..12).forEach { models[it].renderTextured() }
+                    renderModel("panel1-1")
+                    renderModel("panel1-2")
+                    renderModel("panel1-3")
+
+                    renderModel("panel4-1")
+                    renderModel("panel4-2")
+                    renderModel("panel4-3")
                 }
                 stackMatrix {
                     translate(0.5f, 11f / 16f, 0.5f)
                     rotate(angle, 0f, 0f, 1f)
                     translate(-0.5f, -11f / 16f, -0.5f)
-                    (4..6).forEach { models[it].renderTextured() }
-                    (13..15).forEach { models[it].renderTextured() }
+
+                    renderModel("panel2-1")
+                    renderModel("panel2-2")
+                    renderModel("panel2-3")
+
+                    renderModel("panel5-1")
+                    renderModel("panel5-2")
+                    renderModel("panel5-3")
                 }
                 stackMatrix {
                     translate(-0.5f, 11f / 16f, 0.5f)
                     rotate(angle, 0f, 0f, 1f)
                     translate(0.5f, -11f / 16f, -0.5f)
-                    (7..9).forEach { models[it].renderTextured() }
-                    (16..18).forEach { models[it].renderTextured() }
+                    renderModel("panel3-1")
+                    renderModel("panel3-2")
+                    renderModel("panel3-3")
+
+                    renderModel("panel6-1")
+                    renderModel("panel6-2")
+                    renderModel("panel6-3")
                 }
             }
             EnumFacing.Axis.Z -> {
@@ -104,13 +117,29 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>(
                     translate(0f, 0.75f, 1.25f)
                     rotate(angle, 1f, 0f, 0f)
                     translate(0f, -0.75f + 0.1f, -1.25f)
-                    (1..9).forEach { models[it].renderTextured() }
+                    renderModel("panel1-1")
+                    renderModel("panel1-2")
+                    renderModel("panel1-3")
+                    renderModel("panel2-1")
+                    renderModel("panel2-2")
+                    renderModel("panel2-3")
+                    renderModel("panel3-1")
+                    renderModel("panel3-2")
+                    renderModel("panel3-3")
                 }
                 stackMatrix {
                     translate(0f, 0.75f, -0.25f)
                     rotate(angle, 1f, 0f, 0f)
                     translate(0f, -0.75f + 0.1f, 0.25f)
-                    (10..18).forEach { models[it].renderTextured() }
+                    renderModel("panel4-1")
+                    renderModel("panel4-2")
+                    renderModel("panel4-3")
+                    renderModel("panel5-1")
+                    renderModel("panel5-2")
+                    renderModel("panel5-3")
+                    renderModel("panel6-1")
+                    renderModel("panel6-2")
+                    renderModel("panel6-3")
                 }
             }
             else -> Unit

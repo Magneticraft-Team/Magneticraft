@@ -45,6 +45,7 @@ object ManualMachines : IBlockMaker {
         crushingTable = builder.withName("crushing_table").copy {
             factory = factoryOf(::TileCrushingTable)
             material = Material.ROCK
+            forceModelBake = true
             customModels = listOf("normal" to resource("models/block/mcx/crushing_table.mcx"))
             hasCustomModel = true
             //methods

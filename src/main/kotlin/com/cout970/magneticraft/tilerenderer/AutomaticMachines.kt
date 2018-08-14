@@ -4,7 +4,9 @@ import com.cout970.magneticraft.block.AutomaticMachines
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.TileFeedingTrough
-import com.cout970.magneticraft.tilerenderer.core.*
+import com.cout970.magneticraft.tilerenderer.core.BaseTileRenderer
+import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.tilerenderer.core.Utilities
 import com.cout970.magneticraft.util.vector.xd
 import com.cout970.magneticraft.util.vector.yd
 import com.cout970.magneticraft.util.vector.zd
@@ -20,11 +22,13 @@ import net.minecraft.util.math.Vec3d
  */
 
 @RegisterRenderer(TileFeedingTrough::class)
-object TileRendererFeedingTrough : TileRendererSimple<TileFeedingTrough>(
-        modelLocation = modelOf(AutomaticMachines.feedingTrough)
-) {
+object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileFeedingTrough) {
+    override fun init() {
+        createModel(AutomaticMachines.feedingTrough)
+    }
+
+    override fun render(te: TileFeedingTrough) {
 
         val item = te.invModule.inventory[0]
         val level = when {
@@ -36,7 +40,7 @@ object TileRendererFeedingTrough : TileRendererSimple<TileFeedingTrough>(
         }
 
         Utilities.rotateFromCenter(te.facing, 90f)
-        models.forEach { it.renderTextured() }
+        renderModel("default")
         if (level > 0) {
             Utilities.rotateFromCenter(EnumFacing.NORTH, 90f)
             stackMatrix {

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft
 
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.proxy.ClientProxy
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.tilerenderer.core.ModelCache
@@ -275,8 +276,21 @@ object Debug {
                     }
                     "reload" -> {
                         Minecraft.getMinecraft().addScheduledTask {
-                            Mouse.setGrabbed(false)
+                            ug()
                             Minecraft.getMinecraft().refreshResources()
+                        }
+                    }
+                    "r" -> {
+                        val client = Magneticraft.proxy as? ClientProxy ?: return
+                        Minecraft.getMinecraft().addScheduledTask {
+                            ug()
+                            client.tileRenderers.forEach {
+                                try {
+                                    it.onModelRegistryReload()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
                         }
                     }
                     else -> {
@@ -317,4 +331,8 @@ object Debug {
 
         override fun getUsage(sender: ICommandSender?): String = "Magneticraft debug command, is you see this please report to the mod author"
     }
+}
+
+fun ug() {
+    Mouse.setGrabbed(false)
 }

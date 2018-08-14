@@ -5,42 +5,46 @@ import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
 import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
 import com.cout970.magneticraft.tileentity.multiblock.TileSieve
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
-import com.cout970.magneticraft.tilerenderer.core.Utilities
-import com.cout970.magneticraft.tilerenderer.core.modelOf
+import com.cout970.magneticraft.tilerenderer.core.*
 
 @RegisterRenderer(TileGrinder::class)
-object TileRendererGrinder : TileRendererMultiblock<TileGrinder>(
-        modelLocation = modelOf(Multiblocks.grinder)
-) {
+object TileRendererGrinder : TileRendererMultiblock<TileGrinder>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileGrinder) {
+    override fun init() {
+        createModel(Multiblocks.grinder, ModelSelector("animation", FilterAlways, FilterRegex("animation", FilterTarget.ANIMATION)))
+    }
+
+    override fun render(te: TileGrinder) {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -1)
-        models[0].renderTextured()
+        if (te.processModule.working) renderModel("animation") else renderModel("default")
     }
 }
 
 @RegisterRenderer(TileSieve::class)
-object TileRendererSieve : TileRendererMultiblock<TileSieve>(
-        modelLocation = modelOf(Multiblocks.sieve)
-) {
+object TileRendererSieve : TileRendererMultiblock<TileSieve>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileSieve) {
+    override fun init() {
+        createModel(Multiblocks.sieve, ModelSelector("animation", FilterAlways, FilterRegex("animation", FilterTarget.ANIMATION)))
+    }
+
+    override fun render(te: TileSieve) {
         Utilities.rotateFromCenter(te.facing, 180f)
         translate(0, 0, 2)
-        models[0].renderTextured()
+        if (te.processModule.working) renderModel("animation") else renderModel("default")
     }
 }
 
 @RegisterRenderer(TileHydraulicPress::class)
-object TileRendererHydraulicPress : TileRendererMultiblock<TileHydraulicPress>(
-        modelLocation = modelOf(Multiblocks.hydraulicPress)
-) {
+object TileRendererHydraulicPress : TileRendererMultiblock<TileHydraulicPress>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileHydraulicPress) {
+    override fun init() {
+        createModel(Multiblocks.hydraulicPress, ModelSelector("animation", FilterAlways, FilterRegex("animation", FilterTarget.ANIMATION)))
+    }
+
+    override fun render(te: TileHydraulicPress) {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -1)
-        models.forEach { it.renderTextured() }
+        if (te.processModule.working) renderModel("animation") else renderModel("default")
     }
 }

@@ -114,11 +114,19 @@ class ClientProxy : CommonProxy() {
                     ModelLoader.setCustomStateMapper(blockBase, mapper)
                 }
                 blockBase.customModels.forEach { (state, location) ->
-                    ModelLoaderApi.registerModelWithDecorator(
-                            ModelResourceLocation(blockBase.registryName!!, state),
-                            location,
-                            DefaultBlockDecorator
-                    )
+                    if(state == "inventory" || blockBase.forceModelBake){
+                        ModelLoaderApi.registerModelWithDecorator(
+                                modelId = ModelResourceLocation(blockBase.registryName!!, state),
+                                modelLocation = location,
+                                decorator = DefaultBlockDecorator
+                        )
+                    }else {
+                        ModelLoaderApi.registerModel(
+                                modelId = ModelResourceLocation(blockBase.registryName!!, state),
+                                modelLocation = location,
+                                bake = false
+                        )
+                    }
                 }
             }
         }

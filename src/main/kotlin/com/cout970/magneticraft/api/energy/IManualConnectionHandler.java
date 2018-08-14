@@ -37,5 +37,15 @@ public interface IManualConnectionHandler {
      *                   can have data from <code>IManualConnectionHandler.getBasePos()</code>
      * @return true if the connection has been set, false otherwise
      */
-    boolean connectWire(BlockPos otherBlock, BlockPos thisBlock, World world, EntityPlayer player, EnumFacing side, ItemStack stack);
+    Result connectWire(BlockPos otherBlock, BlockPos thisBlock, World world, EntityPlayer player, EnumFacing side, ItemStack stack);
+
+    enum Result {
+        SUCCESS,
+        TOO_FAR,
+        NOT_A_CONNECTOR,
+        INVALID_CONNECTOR,
+        SAME_CONNECTOR,
+        ALREADY_CONNECTED,
+        ERROR
+    }
 }

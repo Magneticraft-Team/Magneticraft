@@ -1,7 +1,10 @@
 package com.cout970.magneticraft.block
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
+import com.cout970.magneticraft.api.energy.IManualConnectionHandler.Result.*
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.block.core.*
 import com.cout970.magneticraft.item.itemblock.ItemBlockElectricPoleTransformer
@@ -19,6 +22,7 @@ import com.cout970.magneticraft.tileentity.TileConnector
 import com.cout970.magneticraft.tileentity.TileElectricCable
 import com.cout970.magneticraft.tileentity.TileElectricPole
 import com.cout970.magneticraft.tileentity.TileElectricPoleTransformer
+import com.cout970.magneticraft.tileentity.modules.ModuleElectricity
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
@@ -38,6 +42,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
+import kotlin.math.min
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -79,7 +84,7 @@ object ElectricConductors : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::enableAutoConnectWires
             canPlaceBlockOnSide = { it.default && canStayInSide(it.worldIn, it.pos, it.side) }
-            capabilityProvider = CommonMethods.providerFor({MANUAL_CONNECTION_HANDLER}, ConnectorManualConnectionHandler)
+            capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER }, ConnectorManualConnectionHandler)
             onNeighborChanged = {
                 if (!canStayInSide(it.worldIn, it.pos, it.state.getFacing())) {
                     it.worldIn.destroyBlock(it.pos, true)
@@ -111,7 +116,7 @@ object ElectricConductors : IBlockMaker {
                 else
                     emptyList()
             }
-            capabilityProvider = CommonMethods.providerFor({MANUAL_CONNECTION_HANDLER}, ElectricPoleManualConnectionHandler)
+            capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER }, ElectricPoleManualConnectionHandler)
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
@@ -136,7 +141,7 @@ object ElectricConductors : IBlockMaker {
                 if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() == true) it.default + electric_pole.stack()
                 else emptyList()
             }
-            capabilityProvider = CommonMethods.providerFor({MANUAL_CONNECTION_HANDLER},
+            capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER },
                     ElectricPoleManualConnectionHandler)
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
@@ -288,21 +293,19 @@ object ElectricConductors : IBlockMaker {
         }
 
         override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
-                                 side: EnumFacing, stack: ItemStack): Boolean {
+                                 side: EnumFacing, stack: ItemStack): IManualConnectionHandler.Result {
 
             val tile = world.getTile<TileConnector>(thisBlock)
             val other = world.getTileEntity(otherBlock)
             if (tile == null || other == null) {
-                return false
+                return ERROR
             }
-            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return false
+            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side)
+                    ?: return NOT_A_CONNECTOR
             val otherNodes = handler.nodes.filterIsInstance(IWireConnector::class.java)
 
-            val size = tile.electricModule.outputWiredConnections.size
-            otherNodes.forEach { otherNode ->
-                tryConnect(tile.electricModule, tile.wrapper, handler, otherNode, null)
-            }
-            return size != tile.electricModule.outputWiredConnections.size
+
+            return inferResult(tile.electricModule, listOf(tile.wrapper), otherNodes, handler)
         }
     }
 
@@ -316,33 +319,68 @@ object ElectricConductors : IBlockMaker {
         }
 
         override fun connectWire(otherBlock: BlockPos, thisBlock: BlockPos, world: World, player: EntityPlayer,
-                                 side: EnumFacing, stack: ItemStack): Boolean {
+                                 side: EnumFacing, stack: ItemStack): IManualConnectionHandler.Result {
 
             val pos = getBasePos(thisBlock, world, player, side, stack)
             val tile = world.getTileEntity(pos)
             val other = world.getTileEntity(otherBlock)
             if (tile == null || other == null) {
-                return false
+                return ERROR
             }
-            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return false
+            val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side) ?: return NOT_A_CONNECTOR
+
             val otherNodes = handler.nodes.filterIsInstance(IWireConnector::class.java)
 
             val module = when (tile) {
                 is TileElectricPole -> tile.electricModule
                 is TileElectricPoleTransformer -> tile.electricModule
-                else -> return false
+                else -> return INVALID_CONNECTOR
             }
-            val size = module.outputWiredConnections.size
-            module.electricNodes.forEach { thisNode ->
-                otherNodes.forEach { otherNode ->
-                    tryConnect(module, thisNode, handler, otherNode, null)
+
+            return inferResult(module, module.electricNodes, otherNodes, handler)
+        }
+    }
+
+    private fun inferResult(module: ModuleElectricity, thisNodes: List<IElectricNode>, otherNodes: List<IElectricNode>, handler: IElectricNodeHandler): IManualConnectionHandler.Result {
+        var same = false
+        var tooFar = false
+        var already = false
+        val size = module.outputWiredConnections.size
+        thisNodes.forEach { thisNode ->
+            otherNodes.forEach { otherNode ->
+                val dist = Math.sqrt(otherNode.pos.distanceSq(thisNode.pos))
+                if (thisNode === otherNode || module === handler) same = true
+                if (handler is ModuleElectricity) {
+                    if (module.inputWiredConnections.any { it.firstNode == otherNode } || handler.inputWiredConnections.any { it.firstNode == thisNode }) {
+                        already = true
+                    }
+
+                    if (module.outputWiredConnections.any { it.secondNode == otherNode } || handler.outputWiredConnections.any { it.secondNode == thisNode }) {
+                        already = true
+                    }
+
+                    if (min(module.maxWireDistance, handler.maxWireDistance) < dist) tooFar = true
                 }
+
+                tryConnect(module, thisNode, handler, otherNode, null)
             }
-            return size != module.outputWiredConnections.size
+        }
+
+        return if (size != module.outputWiredConnections.size) {
+            SUCCESS
+        } else {
+            when {
+                already -> ALREADY_CONNECTED
+                tooFar -> TOO_FAR
+                same -> SAME_CONNECTOR
+                else -> ERROR
+            }
         }
     }
 
     fun canStayInSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
+        if (worldIn.getBlockState(pos.offset(side.opposite)).block == electric_cable) return true
+
         if (worldIn.isSideSolid(pos.offset(side.opposite), side.opposite, false)) return true
 
         var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) toAABBWith Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)

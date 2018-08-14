@@ -16,13 +16,18 @@ import com.cout970.magneticraft.tilerenderer.core.*
  * Created by cout970 on 2017/08/10.
  */
 
+
 @RegisterRenderer(TileComputer::class)
-object TileRendererComputer : TileRendererSimple<TileComputer>(
-        modelLocation = modelOf(Computers.computer)
-) {
-    override fun renderModels(models: List<ModelCache>, te: TileComputer) {
+object DebugTileRenderer : BaseTileRenderer<TileComputer>() {
+
+    override fun init() {
+        createModel(Computers.computer)
+    }
+
+    override fun render(te: TileComputer) {
         Utilities.rotateFromCenter(te.facing, 0f)
-        models.forEach { it.renderTextured() }
+        renderModel("default")
+
         val item = te.invModule.inventory[0]
 
         if (item.isNotEmpty) {
@@ -34,16 +39,16 @@ object TileRendererComputer : TileRendererSimple<TileComputer>(
 }
 
 @RegisterRenderer(TileMiningRobot::class)
-object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
-        modelLocation = modelOf(Computers.miningRobot),
-        filters = listOf<(String) -> Boolean>(
-                { !it.contains("drill") && !it.contains("prop") },
-                { it.contains("drill") },
-                { it.contains("prop") }
-        )
-) {
+object TileRendererMiningRobot : BaseTileRenderer<TileMiningRobot>() {
 
-    override fun renderModels(models: List<ModelCache>, te: TileMiningRobot) {
+    override fun init() {
+        createModel(Computers.miningRobot,
+                ModelSelector("drill", FilterRegex("drill")),
+                ModelSelector("prop", FilterRegex("prop"))
+        )
+    }
+
+    override fun render(te: TileMiningRobot) {
 
         val mod = te.robotControlModule
         val task = mod.task
@@ -87,7 +92,7 @@ object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
         }
 
         // Render engines
-        models[2].renderTextured()
+        renderModel("prop")
 
         // Rotate up/down (only when rotating)
         task?.let {
@@ -121,7 +126,7 @@ object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
             else -> Unit
         }
 
-        models[0].renderTextured()
+        renderModel("default")
 
         // Move drill
         (task as? MineBlockTask)?.let {
@@ -131,6 +136,6 @@ object TileRendererMiningRobot : TileRendererSimple<TileMiningRobot>(
             translate(-0.5f, -0.5f, -0.5f)
         }
 
-        models[1].renderTextured()
+        renderModel("drill")
     }
 }
