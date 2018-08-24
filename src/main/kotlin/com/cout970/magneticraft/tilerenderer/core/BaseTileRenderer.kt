@@ -56,4 +56,6 @@ abstract class BaseTileRenderer<T : TileBase> : TileRenderer<T>() {
     fun renderModel(key: String) {
         models[key]?.render()
     }
+
+    fun getModel(key: String) = models[key]
 }

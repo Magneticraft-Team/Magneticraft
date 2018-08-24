@@ -74,6 +74,7 @@ abstract class TileRenderer<T : TileBase> : TileEntitySpecialRenderer<T>() {
     @Suppress("NOTHING_TO_INLINE")
     inline fun scale(x: Number, y: Number, z: Number) = GlStateManager.scale(x.toFloat(), y.toFloat(), z.toFloat())
 
+    fun scale(n: Double) = GlStateManager.scale(n, n, n)
     fun scale(x: Double, y: Double, z: Double) = GlStateManager.scale(x, y, z)
     fun scale(x: Float, y: Float, z: Float) = GlStateManager.scale(x, y, z)
     fun scale(vec: IVector3) = GlStateManager.scale(vec.xd, vec.yd, vec.zd)

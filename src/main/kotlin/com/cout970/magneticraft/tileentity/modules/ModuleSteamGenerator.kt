@@ -8,6 +8,9 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.ConversionTable
+import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.newNbt
+import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2017/07/18.
@@ -28,6 +31,8 @@ class ModuleSteamGenerator(
     }
 
     val production = ValueAverage()
+    var working = false
+    var lastWorkTick = 0L
 
     fun getAvailableOperations(): Int {
         if (steamTank.fluidAmount < STEAM_PER_OPERATION) return 0
@@ -45,10 +50,25 @@ class ModuleSteamGenerator(
         if (world.isClient) return
         val operations = getAvailableOperations()
         if (operations > 0) {
+            lastWorkTick = world.totalWorldTime
             steamTank.drain(STEAM_PER_OPERATION * operations, true)
             node.applyPower(ENERGY_PER_OPERATION * operations.toDouble(), false)
             production += ENERGY_PER_OPERATION * operations
         }
         production.tick()
+
+        val isWorking = world.totalWorldTime - lastWorkTick < 20
+        if (isWorking != working) {
+            working = isWorking
+            container.sendUpdateToNearPlayers()
+        }
+    }
+
+    override fun deserializeNBT(nbt: NBTTagCompound) {
+        working = nbt.getBoolean("working")
+    }
+
+    override fun serializeNBT(): NBTTagCompound = newNbt {
+        add("working", working)
     }
 }

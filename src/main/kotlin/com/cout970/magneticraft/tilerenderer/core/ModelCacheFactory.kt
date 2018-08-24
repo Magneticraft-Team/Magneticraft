@@ -5,6 +5,7 @@ import com.cout970.magneticraft.util.addPrefix
 import com.cout970.magneticraft.util.logError
 import com.cout970.modelloader.api.*
 import com.cout970.modelloader.api.ModelUtilities.renderModelParts
+import com.cout970.modelloader.api.animation.AnimatedModel
 import com.cout970.modelloader.api.formats.gltf.GltfAnimationBuilder
 import com.cout970.modelloader.api.formats.gltf.GltfStructure
 import com.cout970.modelloader.api.formats.mcx.McxModel
@@ -99,7 +100,7 @@ object ModelCacheFactory {
         }
 
         val sections = filters.map { (name, filter, animation) ->
-            Triple(name, scene.nodes.recursiveFilter(filter), animation)
+            Triple(name, scene.nodes.flatMap { it.recursiveFilter(filter) }.toSet(), animation)
         }
 
         val allNodes = (0 until model.data.definition.nodes.size).toSet()
@@ -118,10 +119,7 @@ object ModelCacheFactory {
                 builder.build(model.data).first { it.first in validAnimations }.second
             }
 
-            val obj = object : IRenderCache {
-                override fun render() = newModel.render(time())
-                override fun close() = Unit
-            }
+            val obj = AnimationRenderCache(newModel, time)
 
             if (name in models) {
                 val old = models[name]!!
@@ -137,20 +135,25 @@ object ModelCacheFactory {
         }
 
         sections.forEach { store(it.first, it.second, it.third) }
-        store("default", allNodes, FilterNot(FilterAlways))
+        store("default", allNodes, IGNORE_ANIMATION)
     }
 
-    private fun List<GltfStructure.Node>.recursiveFilter(filter: Filter): Set<Int> {
-        return flatMap { node ->
-            val children = node.children.recursiveFilter(filter)
-            val name = node.name ?: return@flatMap children + setOf(node.index)
-            val type = if (node.mesh != null) FilterTarget.BRANCH else FilterTarget.LEAF
+    private fun GltfStructure.Node.recursiveFilter(filter: Filter): Set<Int> {
+        val children = children.flatMap { it.recursiveFilter(filter) }.toSet()
+        val all = children + setOf(index)
+        val name = name ?: return all
+        val type = if (mesh == null) FilterTarget.BRANCH else FilterTarget.LEAF
 
-            if (filter(name, type)) {
-                children + setOf(node.index)
-            } else {
-                children
-            }
-        }.toSet()
+        return if (filter(name, type)) all else emptySet()
+    }
+}
+
+class AnimationRenderCache(val model: AnimatedModel, val time: () -> Double) : IRenderCache {
+    override fun render() = model.render(time())
+    override fun close() = model.rootNodes.close()
+
+    private fun List<AnimatedModel.Node>.close(): Unit = forEach {
+        it.cache.close()
+        it.children.close()
     }
 }

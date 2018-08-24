@@ -58,10 +58,6 @@ class TileConveyorBelt : TileBase(), ITickable {
     val facing: EnumFacing get() = getBlockState().getOrientation()
     val conveyorModule = ModuleConveyorBelt({ facing })
 
-    // Client data
-    var rotation = 0f
-    var deltaTimer = System.currentTimeMillis()
-
     init {
         initModules(conveyorModule)
     }

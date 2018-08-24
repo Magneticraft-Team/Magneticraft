@@ -112,7 +112,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSteamEngine)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/steam_engine.mcx")
+                    "model" to resource("models/block/gltf/steam_engine.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockSteamEngine })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -123,7 +123,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileGrinder)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/grinder.mcx")
+                    "model" to resource("models/block/gltf/grinder.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockGrinder })
             onBlockPlaced = Multiblocks::placeWithOrientation

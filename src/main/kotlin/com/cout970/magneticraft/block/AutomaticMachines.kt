@@ -12,6 +12,7 @@ import com.cout970.magneticraft.tileentity.TileFeedingTrough
 import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.tileentity.TileWaterGenerator
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
+import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
 import net.minecraft.block.Block
@@ -59,14 +60,15 @@ object AutomaticMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileInserter)
             customModels = listOf(
-                    "model" to resource("models/block/mcx/inserter.mcx"),
-                    "inventory" to resource("models/block/mcx/inserter.mcx")
+                    "model" to resource("models/block/gltf/inserter.gltf"),
+                    "inventory" to resource("models/block/gltf/inserter.gltf")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
             alwaysDropDefault = true
+            boundingBox = { listOf(vec3Of(0, 0, 0) toAABBWith vec3Of(16.px, 3.px, 16.px)) }
             //methods
-            onBlockPlaced = CommonMethods::placeWithOrientation
+            onBlockPlaced = CommonMethods::placeWithOppositeOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
         }.build()

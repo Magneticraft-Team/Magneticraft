@@ -22,11 +22,19 @@ class FilterRegex(val expression: String, val target: FilterTarget = FilterTarge
     }
 }
 
-class FilterString(val value: String, val target: FilterTarget = FilterTarget.LEAF) : Filter() {
+class FilterString(val value: String, vararg val target: FilterTarget = arrayOf(FilterTarget.LEAF)) : Filter() {
 
     override operator fun invoke(name: String, type: FilterTarget): Boolean {
-        if (type != target) return true
+        if (type !in target) return true
         return value == name
+    }
+}
+
+class FilterNotString(val value: String, vararg val target: FilterTarget = arrayOf(FilterTarget.LEAF)) : Filter() {
+
+    override operator fun invoke(name: String, type: FilterTarget): Boolean {
+        if (type !in target) return true
+        return value != name
     }
 }
 
