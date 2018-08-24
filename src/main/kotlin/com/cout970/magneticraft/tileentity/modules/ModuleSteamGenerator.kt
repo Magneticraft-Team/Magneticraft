@@ -4,12 +4,11 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.tileentity.WorkingIndicator
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.ConversionTable
-import com.cout970.magneticraft.util.add
-import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -31,8 +30,7 @@ class ModuleSteamGenerator(
     }
 
     val production = ValueAverage()
-    var working = false
-    var lastWorkTick = 0L
+    var working = WorkingIndicator(this)
 
     fun getAvailableOperations(): Int {
         if (steamTank.fluidAmount < STEAM_PER_OPERATION) return 0
@@ -50,25 +48,18 @@ class ModuleSteamGenerator(
         if (world.isClient) return
         val operations = getAvailableOperations()
         if (operations > 0) {
-            lastWorkTick = world.totalWorldTime
+            working.onWork()
             steamTank.drain(STEAM_PER_OPERATION * operations, true)
             node.applyPower(ENERGY_PER_OPERATION * operations.toDouble(), false)
             production += ENERGY_PER_OPERATION * operations
         }
         production.tick()
-
-        val isWorking = world.totalWorldTime - lastWorkTick < 20
-        if (isWorking != working) {
-            working = isWorking
-            container.sendUpdateToNearPlayers()
-        }
+        working.tick()
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        working = nbt.getBoolean("working")
+        working.deserializeNBT(nbt)
     }
 
-    override fun serializeNBT(): NBTTagCompound = newNbt {
-        add("working", working)
-    }
+    override fun serializeNBT(): NBTTagCompound = working.serializeNBT()
 }

@@ -4,20 +4,16 @@ Expand container size
 Update remaining guis to the Dynamic system
 Add brick furnace
 infinite heat
-Fix render lag
-Fix multiblock costs
 Add polymerizer
-Fix steam engine input
 Add tooltips
 Change multiblock formation
 RF heater multiblock
-Fix models errors (hydraulic press, pumpjack, refinery)
+Fix models errors (pumpjack, refinery)
 Add refinery effect of hiding the outputs
-Fx manual entry for solar boiler
-Conveyor belt extration with AE2
+Conveyor belt extration with AE2?
 
 ### release requirements
 Update manual
 Fix recipes
 Fix lang issues
-Check crafttweaker documentation
+Check CraftTweaker documentation

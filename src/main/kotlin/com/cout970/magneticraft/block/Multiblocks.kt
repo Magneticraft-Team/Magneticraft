@@ -35,7 +35,7 @@ import net.minecraft.util.text.TextFormatting
 object Multiblocks : IBlockMaker {
 
     val PROPERTY_MULTIBLOCK_ORIENTATION: PropertyEnum<MultiblockOrientation> = PropertyEnum.create(
-            "multiblock_orientation", MultiblockOrientation::class.java)
+        "multiblock_orientation", MultiblockOrientation::class.java)
 
     lateinit var gap: BlockBase private set
     lateinit var solarPanel: BlockBase private set
@@ -50,6 +50,7 @@ object Multiblocks : IBlockMaker {
     lateinit var hydraulicPress: BlockBase private set
     lateinit var oilHeater: BlockBase private set
     lateinit var refinery: BlockBase private set
+    lateinit var bigCombustionChamber: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -90,7 +91,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSolarPanel)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/solar_panel.mcx")
+                "model" to resource("models/block/mcx/solar_panel.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockSolarPanel })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -101,7 +102,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileShelvingUnit)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/shelving_unit.mcx")
+                "model" to resource("models/block/mcx/shelving_unit.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockShelvingUnit })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -112,7 +113,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSteamEngine)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/gltf/steam_engine.gltf")
+                "model" to resource("models/block/gltf/steam_engine.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockSteamEngine })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -123,7 +124,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileGrinder)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/gltf/grinder.gltf")
+                "model" to resource("models/block/gltf/grinder.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockGrinder })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -134,7 +135,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSieve)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/gltf/sieve.gltf")
+                "model" to resource("models/block/gltf/sieve.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockSieve })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -145,7 +146,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSolarTower)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/solar_tower.mcx")
+                "model" to resource("models/block/mcx/solar_tower.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockSolarTower })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -156,7 +157,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileSolarMirror)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/solar_mirror.mcx")
+                "model" to resource("models/block/mcx/solar_mirror.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockSolarMirror })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -167,7 +168,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileContainer)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/container.mcx")
+                "model" to resource("models/block/mcx/container.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockContainer })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -178,7 +179,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TilePumpjack)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/pumpjack.mcx")
+                "model" to resource("models/block/mcx/pumpjack.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockPumpjack })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -189,7 +190,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileHydraulicPress)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/gltf/hydraulic_press.gltf")
+                "model" to resource("models/block/gltf/hydraulic_press.gltf")
             )
             onActivated = defaultOnActivated({ MultiblockHydraulicPress })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -200,7 +201,7 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileOilHeater)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/oil_heater.mcx")
+                "model" to resource("models/block/mcx/oil_heater.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockOilHeater })
             onBlockPlaced = Multiblocks::placeWithOrientation
@@ -211,21 +212,33 @@ object Multiblocks : IBlockMaker {
             factory = factoryOf(::TileRefinery)
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/refinery.mcx")
+                "model" to resource("models/block/mcx/refinery.mcx")
             )
             onActivated = defaultOnActivated({ MultiblockRefinery })
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
-        return itemBlockListOf(solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
-                container, pumpjack, hydraulicPress, oilHeater, refinery) + blockListOf(gap)
+        bigCombustionChamber = builder.withName("big_combustion_chamber").copy {
+            factory = factoryOf(::TileBigCombustionChamber)
+            generateDefaultItemModel = false
+            customModels = listOf(
+                "model" to resource("models/block/gltf/big_combustion_chamber.gltf")
+            )
+            onActivated = defaultOnActivated({ MultiblockBigCombustionChamber })
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(
+            solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
+            container, pumpjack, hydraulicPress, oilHeater, refinery, bigCombustionChamber) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
         return it.defaultValue.withProperty(PROPERTY_MULTIBLOCK_ORIENTATION,
-                MultiblockOrientation.of(placer.horizontalFacing, false))
+            MultiblockOrientation.of(placer.horizontalFacing, false))
     }
 
     fun defaultOnActivated(multiblock: () -> Multiblock): (OnActivatedArgs) -> Boolean {
@@ -239,11 +252,11 @@ object Multiblocks : IBlockMaker {
                 if (args.hand != EnumHand.MAIN_HAND) return@func false
                 if (args.worldIn.isServer) {
                     val context = MultiblockContext(
-                            multiblock = multiblock(),
-                            world = args.worldIn,
-                            center = args.pos,
-                            facing = state.facing,
-                            player = args.playerIn
+                        multiblock = multiblock(),
+                        world = args.worldIn,
+                        center = args.pos,
+                        facing = state.facing,
+                        player = args.playerIn
                     )
                     activateMultiblock(context)
                 }
@@ -262,10 +275,10 @@ object Multiblocks : IBlockMaker {
     }
 
     enum class MultiblockOrientation(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val active: Boolean,
-            val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val active: Boolean,
+        val facing: EnumFacing) : IStatesEnum, IStringSerializable {
 
         INACTIVE_NORTH("inactive_north", true, false, EnumFacing.NORTH),
         INACTIVE_SOUTH("inactive_south", false, false, EnumFacing.SOUTH),
@@ -280,7 +293,7 @@ object Multiblocks : IBlockMaker {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_MULTIBLOCK_ORIENTATION)
 
         override fun getBlockState(block: Block): IBlockState =
-                block.defaultState.withProperty(PROPERTY_MULTIBLOCK_ORIENTATION, this)
+            block.defaultState.withProperty(PROPERTY_MULTIBLOCK_ORIENTATION, this)
 
         companion object {
             fun of(facing: EnumFacing, active: Boolean) = when {

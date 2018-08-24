@@ -252,3 +252,15 @@ class ContainerSteamEngine(val tile: TileSteamEngine, player: EntityPlayer, worl
         bindPlayerInventory(player.inventory)
     }
 }
+
+class ContainerBigCombustionChamber(val tile: TileBigCombustionChamber, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        tile.invModule.inventory.let { inv ->
+            addSlotToContainer(SlotItemHandler(inv, 0, 99, 17))
+            inventoryRegions += InventoryRegion(0..0)
+        }
+        bindPlayerInventory(player.inventory)
+    }
+}

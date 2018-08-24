@@ -6,6 +6,7 @@ import com.cout970.magneticraft.gui.client.components.bars.*
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.client.core.TankIO
 import com.cout970.magneticraft.gui.client.core.dsl
+import com.cout970.magneticraft.gui.common.ContainerBigCombustionChamber
 import com.cout970.magneticraft.gui.common.ContainerCombustionChamber
 import com.cout970.magneticraft.gui.common.ContainerGasificationUnit
 import com.cout970.magneticraft.gui.common.ContainerSteamBoiler
@@ -23,8 +24,8 @@ fun guiCombustionChamber(gui: GuiBase, container: ContainerCombustionChamber) = 
     +CompBackground(guiTexture("combustion_chamber"))
 
     val burningCallback = CallbackBarProvider(
-            { tile.combustionChamberModule.maxBurningTime - tile.combustionChamberModule.burningTime.toDouble() },
-            tile.combustionChamberModule::maxBurningTime, { 0.0 })
+        { tile.combustionChamberModule.maxBurningTime - tile.combustionChamberModule.burningTime.toDouble() },
+        tile.combustionChamberModule::maxBurningTime, { 0.0 })
 
     +CompVerticalBar(burningCallback, 1, Vec2d(69, 16), burningCallback.toPercentText("Fuel: "))
     +CompHeatBar(tile.node, Vec2d(80, 16))
@@ -54,5 +55,20 @@ fun guiGasificationUnit(gui: GuiBase, container: ContainerGasificationUnit) = gu
         progressBar(tile.process.timedProcess)
         slotPair()
         tank(tile.tank, TankIO.OUT)
+    }
+}
+
+fun guiBigCombustionChamber(gui: GuiBase, container: ContainerBigCombustionChamber) = gui.dsl {
+    val tile = container.tile
+
+    val burningCallback = CallbackBarProvider(
+        { tile.bigCombustionChamberModule.maxBurningTime - tile.bigCombustionChamberModule.burningTime.toDouble() },
+        tile.bigCombustionChamberModule::maxBurningTime, { 0.0 })
+
+    bars {
+        heatBar(tile.node)
+        genericBar(1, 6, burningCallback, burningCallback.toPercentText("Fuel: "))
+        tank(tile.tank, TankIO.IN)
+        slotPair()
     }
 }

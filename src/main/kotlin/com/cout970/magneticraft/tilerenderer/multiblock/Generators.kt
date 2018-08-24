@@ -37,7 +37,7 @@ object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>() {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(-1, 0, -1)
 
-        if (te.steamGeneratorModule.working) {
+        if (te.steamGeneratorModule.working()) {
             renderModel("animation")
         } else {
             renderModel("base")

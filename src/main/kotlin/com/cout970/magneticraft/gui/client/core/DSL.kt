@@ -76,7 +76,7 @@ class GuiDslBars {
         components += Vec2d(7, 60) to { pos -> listOf(CompRfBar2(node, pos + ICON_SIZE), iconOf(8, pos)) }
     }
 
-    fun genericBar(index: Int, icon: Int, prov: StaticBarProvider, tooltip: () -> List<String>) {
+    fun genericBar(index: Int, icon: Int, prov: IBarProvider, tooltip: () -> List<String>) {
         components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(prov, index, pos + ICON_SIZE, tooltip), iconOf(icon, pos)) }
     }
 

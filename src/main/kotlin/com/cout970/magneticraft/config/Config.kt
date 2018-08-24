@@ -54,6 +54,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber max speed in Fuel per tick")
     var combustionChamberMaxSpeed = 4.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Big combustion chamber max speed in Fuel per tick")
+    var bigCombustionChamberMaxSpeed = 40.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0
 
