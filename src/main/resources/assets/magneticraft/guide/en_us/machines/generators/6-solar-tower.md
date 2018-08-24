@@ -14,4 +14,4 @@ Materials needed:
 - 1 x Solar Tower Blueprint
 - 16 x Machine Blocks
 - 2 x Copper Coil Machine Blocks
-- 7 x Corrugated Iron Machine BLock
+- 8 x Corrugated Iron Machine Block

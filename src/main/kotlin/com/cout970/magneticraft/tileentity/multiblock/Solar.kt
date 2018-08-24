@@ -22,28 +22,29 @@ class TileSolarTower : TileMultiblock(), ITickable {
     val openGuiModule = ModuleOpenGui()
 
     val solarTowerModule = ModuleSolarTower(
-            facingGetter = { facing },
-            node = node
+        facingGetter = { facing },
+        active = { active },
+        node = node
     )
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
-            facing = { facing },
-            connectionSpots = listOf(
-                    ConnectionSpot(HEAT_NODE_HANDLER!!, BlockPos(0, 0, -1), EnumFacing.DOWN) {
-                        if (active) heatModule else null
-                    }
-            )
+        facing = { facing },
+        connectionSpots = listOf(
+            ConnectionSpot(HEAT_NODE_HANDLER!!, BlockPos(0, 0, -1), EnumFacing.DOWN) {
+                if (active) heatModule else null
+            }
+        )
     )
 
     val heatModule = ModuleHeat(listOf(node),
-            capabilityFilter = { false },
-            connectableDirections = ioModule::getHeatConnectPoints
+        capabilityFilter = { false },
+        connectableDirections = ioModule::getHeatConnectPoints
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = ioModule::getCapability
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = ioModule::getCapability
     )
 
     init {
@@ -62,14 +63,14 @@ class TileSolarMirror : TileMultiblock(), ITickable {
     override fun getMultiblock(): Multiblock = MultiblockSolarMirror
 
     val solarMirrorModule = ModuleSolarMirror(
-            facingGetter = { facing },
-            active = { active}
+        facingGetter = { facing },
+        active = { active }
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = ModuleMultiblockCenter.emptyCapabilityGetter
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = ModuleMultiblockCenter.emptyCapabilityGetter
     )
 
     init {

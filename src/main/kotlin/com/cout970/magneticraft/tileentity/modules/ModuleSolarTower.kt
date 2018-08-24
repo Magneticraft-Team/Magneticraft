@@ -9,6 +9,7 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.fromCelsiusToKelvin
+import com.cout970.magneticraft.util.iterateVolume
 import com.cout970.magneticraft.util.vector.plus
 import com.cout970.magneticraft.util.vector.rotatePoint
 import com.cout970.magneticraft.util.vector.toBlockPos
@@ -17,9 +18,10 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 
 class ModuleSolarTower(
-        val node: IHeatNode,
-        val facingGetter: () -> EnumFacing,
-        override val name: String = "module_solar_tower"
+    val node: IHeatNode,
+    val facingGetter: () -> EnumFacing,
+    val active: () -> Boolean,
+    override val name: String = "module_solar_tower"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -44,22 +46,20 @@ class ModuleSolarTower(
     fun meltDown() {
         val dir = facingGetter().opposite
 
-        for (i in -1..1) {
-            for (j in 0..2) {
-                for (k in 0..2) {
-                    if (i == 0 && j == 0 && k == 0) continue
-                    val relPos = dir.rotatePoint(BlockPos.ORIGIN, BlockPos(i, j, k))
-                    world.setBlockState(pos + relPos, Blocks.LAVA.defaultState)
-                }
-            }
+        iterateVolume(-1..1, 0..2, 0..2){ i, j, k ->
+            if (i == 0 && j == 0 && k == 0) return@iterateVolume
+            val relPos = dir.rotatePoint(BlockPos.ORIGIN, BlockPos(i, j, k))
+            world.setBlockState(pos + relPos, Blocks.LAVA.defaultState)
         }
 
         world.setBlockState(pos, Blocks.LAVA.defaultState)
     }
 
     fun applyHeat(heat: Float) {
-        production += heat
-        node.applyHeat(heat.toDouble())
+        if (active()) {
+            production += heat
+            node.applyHeat(heat.toDouble())
+        }
     }
 
     fun orientateNearMirrors() {

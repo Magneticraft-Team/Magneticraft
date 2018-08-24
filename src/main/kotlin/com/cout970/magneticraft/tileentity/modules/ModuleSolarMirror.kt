@@ -16,9 +16,9 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 
 class ModuleSolarMirror(
-        val facingGetter: () -> EnumFacing,
-        val active: () -> Boolean,
-        override val name: String = "module_solar_mirror"
+    val facingGetter: () -> EnumFacing,
+    val active: () -> Boolean,
+    override val name: String = "module_solar_mirror"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -45,10 +45,8 @@ class ModuleSolarMirror(
             solarTowerTilePos?.let { pos ->
                 val mod = world.getModule<ModuleSolarTower>(pos)
 
-                if (mod == null) {
-                    solarTowerTilePos = null
-                    solarTowerPos = null
-                    container.sendUpdateToNearPlayers()
+                if (mod == null || !mod.active()) {
+                    clearTargetTower()
                 } else {
                     mod.applyHeat(Config.solarMirrorHeatProduction.toFloat() * TICKS_BETWEEN_OPERATIONS)
                 }
@@ -59,6 +57,12 @@ class ModuleSolarMirror(
     fun setTargetTower(center: BlockPos, tilePos: BlockPos) {
         solarTowerPos = center
         solarTowerTilePos = tilePos
+        container.sendUpdateToNearPlayers()
+    }
+
+    fun clearTargetTower() {
+        solarTowerTilePos = null
+        solarTowerPos = null
         container.sendUpdateToNearPlayers()
     }
 
