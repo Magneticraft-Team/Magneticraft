@@ -11,16 +11,25 @@ import net.minecraft.util.EnumFacing
 object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>() {
 
     override fun init() {
-        createModel(Multiblocks.steamEngine,
-                ModelSelector("gears", FilterOr(
-                        FilterString("gearbox_lid_side"),
-                        FilterString("gear_box_lid_top"),
-                        FilterString("gearbox_lid_lock")
-                ), FilterRegex("animation", FilterTarget.ANIMATION)),
+        val gears = FilterOr(
+            FilterString("gearbox_lid_side"),
+            FilterString("gear_box_lid_top"),
+            FilterString("gearbox_lid_lock")
+        )
 
-                ModelSelector("animation", FilterAlways,
-                        FilterRegex("animation", FilterTarget.ANIMATION)
-                )
+        val notGears = FilterAnd(
+            FilterNotString("gearbox_lid_side"),
+            FilterNotString("gear_box_lid_top"),
+            FilterNotString("gearbox_lid_lock")
+        )
+
+        createModel(Multiblocks.steamEngine,
+            ModelSelector("base", notGears),
+            ModelSelector("gears", gears),
+
+            ModelSelector("animation", notGears,
+                FilterRegex("animation", FilterTarget.ANIMATION)
+            )
         )
     }
 
@@ -31,17 +40,17 @@ object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>() {
         if (te.steamGeneratorModule.working) {
             renderModel("animation")
         } else {
-            renderModel("default")
+            renderModel("base")
         }
 
-//        val step = Math.max(0.0, (te.steamEngineMbModule.auxTime - ticks) / 20.0)
-//        val clock = if (te.steamEngineMbModule.lidOpen) 1 - step else step
-//
-//        translate(-0.5 * PIXEL * clock, -2.5 * PIXEL * clock, 0)
-//        translate(-4 * PIXEL, 1, 0)
-//        rotate(-120 * clock, 0, 0, 1)
-//        translate(4 * PIXEL, -1, 0)
-//        renderModel("gears")
+        val step = Math.max(0.0, (te.steamEngineMbModule.auxTime - ticks) / 20.0)
+        val clock = if (te.steamEngineMbModule.lidOpen) 1 - step else step
+
+        translate(-0.5 * PIXEL * clock, -2.5 * PIXEL * clock, 0)
+        translate(-4 * PIXEL, 1, 0)
+        rotate(-120 * clock, 0, 0, 1)
+        translate(4 * PIXEL, -1, 0)
+        renderModel("gears")
     }
 }
 
@@ -50,10 +59,10 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>() {
 
     override fun init() {
         val parts = listOf("Panel1", "Panel2", "Panel3", "Panel4", "Panel5", "Panel6")
-                .flatMap { prefix -> (1..3).map { "$prefix-$it" } }
+            .flatMap { prefix -> (1..3).map { "$prefix-$it" } }
 
         createModel(Multiblocks.solarPanel,
-                parts.map { ModelSelector(it.toLowerCase(), FilterString(it)) })
+            parts.map { ModelSelector(it.toLowerCase(), FilterString(it)) })
     }
 
     override fun render(te: TileSolarPanel) {

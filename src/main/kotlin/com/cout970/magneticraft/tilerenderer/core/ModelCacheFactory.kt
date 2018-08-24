@@ -110,8 +110,8 @@ object ModelCacheFactory {
             val validAnimations = namedAnimations.filter { filter(it, FilterTarget.ANIMATION) }
 
             val builder = GltfAnimationBuilder()
-                    .also { it.excludedNodes = exclusions }
-                    .also { it.transformTexture = { tex -> tex.addPrefix("textures/").addPostfix(".png") } }
+                .also { it.excludedNodes = exclusions }
+                .also { it.transformTexture = { tex -> tex.addPrefix("textures/").addPostfix(".png") } }
 
             val newModel = if (validAnimations.isEmpty()) {
                 builder.buildPlain(model.data)

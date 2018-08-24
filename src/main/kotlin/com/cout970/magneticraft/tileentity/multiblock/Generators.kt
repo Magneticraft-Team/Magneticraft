@@ -29,33 +29,33 @@ class TileSolarPanel : TileMultiblock(), ITickable {
     val node = ElectricNode(ref, capacity = 8.0)
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
-            facing = { facing },
-            connectionSpots = listOf(
-                    ConnectionSpot(
-                            capability = ELECTRIC_NODE_HANDLER!!,
-                            pos = BlockPos(0, 0, -5),
-                            side = EnumFacing.NORTH,
-                            getter = { energyModule }
-                    ),
-                    ConnectionSpot(
-                            capability = ELECTRIC_NODE_HANDLER!!,
-                            pos = BlockPos(0, 0, 0),
-                            side = EnumFacing.SOUTH,
-                            getter = { energyModule }
-                    )
+        facing = { facing },
+        connectionSpots = listOf(
+            ConnectionSpot(
+                capability = ELECTRIC_NODE_HANDLER!!,
+                pos = BlockPos(0, 0, -5),
+                side = EnumFacing.NORTH,
+                getter = { energyModule }
+            ),
+            ConnectionSpot(
+                capability = ELECTRIC_NODE_HANDLER!!,
+                pos = BlockPos(0, 0, 0),
+                side = EnumFacing.SOUTH,
+                getter = { energyModule }
             )
+        )
     )
 
     val energyModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getElectricConnectPoints
+        electricNodes = listOf(node),
+        canConnectAtSide = ioModule::canConnectAtSide,
+        connectableDirections = ioModule::getElectricConnectPoints
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = { _, _, _ -> null }
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = { _, _, _ -> null }
     )
 
 
@@ -82,7 +82,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
                 }
                 if (count > 0) {
                     val limit = interpolate(node.voltage, ElectricConstants.TIER_1_MAX_VOLTAGE,
-                            ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE)
+                        ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE)
                     node.applyPower((1 - limit) * Config.solarPanelMaxProduction * (count / 9f), false)
                 }
             }
@@ -100,56 +100,57 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
 
-    val energyModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            connectableDirections = { emptyList() },
-            capabilityFilter = { false }
-    )
-
     val guiModule = ModuleOpenGui()
 
     val storageModule = ModuleInternalStorage(
-            mainNode = node,
-            capacity = 10_000,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
+        mainNode = node,
+        capacity = 10_000,
+        lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
+        upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
     )
 
     val steamGeneratorModule = ModuleSteamGenerator(
-            steamTank = tank,
-            node = node
+        steamTank = tank,
+        node = node
     )
 
     val steamEngineMbModule = ModuleSteamEngineMb(
-            facingGetter = { facing },
-            steamProduction = steamGeneratorModule.production
+        facingGetter = { facing },
+        steamProduction = steamGeneratorModule.production,
+        guiModule = guiModule
     )
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
-            facing = { facing },
-            connectionSpots = listOf(ConnectionSpot(
-                    capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(-2, 0, -2),
-                    side = EnumFacing.UP,
-                    getter = { if (active) energyModule else null }
-            ), ConnectionSpot(
-                    capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(-2, 0, -2),
-                    side = EnumFacing.SOUTH,
-                    getter = { if (active) energyModule else null }
-            ))
+        facing = { facing },
+        connectionSpots = listOf(ConnectionSpot(
+            capability = ELECTRIC_NODE_HANDLER!!,
+            pos = BlockPos(-2, 0, -2),
+            side = EnumFacing.UP,
+            getter = { if (active) energyModule else null }
+        ), ConnectionSpot(
+            capability = ELECTRIC_NODE_HANDLER!!,
+            pos = BlockPos(-2, 0, -2),
+            side = EnumFacing.SOUTH,
+            getter = { if (active) energyModule else null }
+        ))
+    )
+
+    val energyModule = ModuleElectricity(
+        electricNodes = listOf(node),
+        connectableDirections = ioModule::getElectricConnectPoints,
+        capabilityFilter = { false }
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = ioModule::getCapability,
-            dynamicCollisionBoxes = steamEngineMbModule::getDynamicCollisionBoxes
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = ioModule::getCapability,
+        dynamicCollisionBoxes = steamEngineMbModule::getDynamicCollisionBoxes
     )
 
     init {
-        initModules(multiblockModule, guiModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
-                steamEngineMbModule, ioModule)
+        initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
+            steamEngineMbModule, ioModule, guiModule)
     }
 
     @DoNotRemove

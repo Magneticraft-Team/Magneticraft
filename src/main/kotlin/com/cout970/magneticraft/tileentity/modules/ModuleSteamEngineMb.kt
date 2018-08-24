@@ -29,6 +29,7 @@ import net.minecraft.util.math.Vec3d
 class ModuleSteamEngineMb(
         val facingGetter: () -> EnumFacing,
         val steamProduction: ValueAverage,
+        val guiModule: ModuleOpenGui,
         override val name: String = "module_steam_engine_mb"
 ) : IModule, IOnActivated {
 
@@ -100,7 +101,7 @@ class ModuleSteamEngineMb(
             }
             return true
         }
-        return false
+        return guiModule.onActivated(args)
     }
 
     fun getBoxFromHit(args: OnActivatedArgs): Int {
