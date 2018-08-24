@@ -42,7 +42,6 @@ class CompBookRenderer : IComponent {
     val pageOffset get() = 130 * scale
     val textOffset get() = vec2Of(22, 24) * scale
 
-
     override fun init() {
         openSection()
     }
@@ -54,6 +53,7 @@ class CompBookRenderer : IComponent {
     }
 
     fun goBack() {
+        if (sectionHistory.size <= 1) return
         undoHistory.push(sectionHistory.pop())
         currentSection = sectionHistory.peek()
         pageIndex = 0
@@ -75,7 +75,7 @@ class CompBookRenderer : IComponent {
     }
 
     fun loadPages() {
-        if(Debug.DEBUG) {
+        if (Debug.DEBUG) {
             book = loadBook()
         }
         val doc = book.sections[currentSection]?.document ?: errorDocument()
@@ -165,18 +165,18 @@ class CompBookRenderer : IComponent {
         page.text.forEach {
             renderTextBox(it, pos, 0x303030)
         }
-        page.links.forEach {
-            val color = if (it.contains(mouse, gui, pos)) 0x0b99ff else 0x1d3fee
-            it.words.forEach { renderTextBox(it, pos, color) }
+        page.links.forEach { link ->
+            val color = if (link.contains(mouse, gui, pos)) 0x0b99ff else 0x1d3fee
+            link.words.forEach { renderTextBox(it, pos, color) }
         }
     }
 
     fun renderTextBox(it: TextBox, pos: IVector2, color: Int) {
 
         gui.drawShadelessString(
-                text = it.txt,
-                pos = pos + it.pos,
-                color = color
+            text = it.txt,
+            pos = pos + it.pos,
+            color = color
         )
     }
 
