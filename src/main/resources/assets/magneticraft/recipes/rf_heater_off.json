@@ -23,7 +23,7 @@
     },
     "D": {
       "type": "forge:ore_dict",
-      "ore": "alloyBasic",
+      "ore": "dustRedstone",
       "count": 1
     },
     "E": {

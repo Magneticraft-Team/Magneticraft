@@ -8,12 +8,12 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockGlassColorless",
+      "ore": "blockGlass",
       "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "alloyBasic",
+      "ore": "dustRedstone",
       "count": 1
     },
     "C": {

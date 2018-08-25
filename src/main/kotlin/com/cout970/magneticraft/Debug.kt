@@ -29,6 +29,7 @@ import net.minecraft.world.World
 import net.minecraft.world.gen.ChunkProviderServer
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.oredict.OreDictionary
+import net.minecraftforge.oredict.OreIngredient
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import java.io.File
@@ -104,16 +105,30 @@ object Debug {
         val allBlocks = blocks.map { it.first }.toMutableSet()
         val allItems = items.map { it }.toMutableSet()
 
-        CraftingManager.REGISTRY.filterIsInstance<IRecipe>().forEach {
+        CraftingManager.REGISTRY.filterIsInstance<IRecipe>().forEach { it ->
             val stack = it.recipeOutput
             if (stack.isEmpty) return@forEach
 
             val item = stack.item
 
-            allItems.remove(item)
+            // check that the recipe doesn't use ore dictionary entries that are empty
+
+            val valid = it.ingredients.all { ing ->
+                (ing as? OreIngredient)?.matchingStacks?.isNotEmpty() ?: true
+            }
+
+            if (valid) {
+                allItems.remove(item)
+            } else if (item in allItems) {
+                println("Invalid recipe for: ${item.registryName}")
+            }
 
             if (item is ItemBlock) {
-                allBlocks.remove(item.block)
+                if (valid) {
+                    allBlocks.remove(item.block)
+                } else if (item.block in allBlocks) {
+                    println("Invalid recipe for: ${item.registryName}")
+                }
             }
         }
 
@@ -140,9 +155,9 @@ object Debug {
 
         try {
             val chars = listOf(
-                    "A", "B", "C",
-                    "D", "E", "F",
-                    "G", "H", "I"
+                "A", "B", "C",
+                "D", "E", "F",
+                "G", "H", "I"
             )
 
             val map = mutableMapOf<JsonObject, String>()
