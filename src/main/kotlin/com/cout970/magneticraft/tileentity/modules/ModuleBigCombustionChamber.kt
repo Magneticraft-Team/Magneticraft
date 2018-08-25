@@ -42,7 +42,7 @@ class ModuleBigCombustionChamber(
     override lateinit var container: IModuleContainer
     var working = WorkingIndicator(this)
     var burningTime = 0
-    var burningPower = 1.0
+    var burningPower = ConversionTable.FUEL_TO_J
     var maxBurningTime = 0
 
     override fun update() {
@@ -58,7 +58,7 @@ class ModuleBigCombustionChamber(
                 if (heatNode.temperature < maxHeat) {
                     val speed = Config.bigCombustionChamberMaxSpeed.toInt()
                     burningTime += speed
-                    heatNode.applyHeat(ConversionTable.FUEL_TO_J * speed * burningPower)
+                    heatNode.applyHeat(speed * burningPower)
                     working.onWork()
                 }
             }
@@ -115,7 +115,7 @@ class ModuleBigCombustionChamber(
         val time = TileEntityFurnace.getItemBurnTime(stack)
         if (time > 0) {
             stack.shrink(1)
-            burningPower = 1.0
+            burningPower = ConversionTable.FUEL_TO_J
             maxBurningTime = time
             return true
         }
