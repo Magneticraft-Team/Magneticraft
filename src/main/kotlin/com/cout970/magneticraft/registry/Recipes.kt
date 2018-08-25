@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager
@@ -223,7 +224,6 @@ fun registerRecipes() {
     }
 
     addSluiceBoxRecipe(Blocks.GRAVEL.stack(), Items.FLINT.stack(), listOf(Items.FLINT.stack() to 0.15f))
-
     addSluiceBoxRecipe(Blocks.SAND.stack(), ItemStack.EMPTY,
             listOf(
                     Items.GOLD_NUGGET.stack() to 0.01f,
@@ -287,24 +287,24 @@ fun registerRecipes() {
 
     // Light recipes
     listOf(
-            IRON_INGOT.stack() to ItemHolder.ironPlate,
-            GOLD_INGOT.stack() to ItemHolder.goldPlate,
-            EnumMetal.COPPER.getIngot() to ItemHolder.copperPlate,
-            EnumMetal.TIN.getIngot() to ItemHolder.tinPlate,
-            EnumMetal.SILVER.getIngot() to ItemHolder.silverPlate,
-            EnumMetal.LEAD.getIngot() to ItemHolder.leadPlate,
-            EnumMetal.ALUMINIUM.getIngot() to ItemHolder.aluminiumPlate,
-            EnumMetal.NICKEL.getIngot() to ItemHolder.nickelPlate,
-            ItemHolder.platinumIngot to ItemHolder.platinumPlate,
-            ItemHolder.iridiumIngot to ItemHolder.iridiumPlate,
-            EnumMetal.MITHRIL.getIngot() to ItemHolder.mithilPlate,
-            EnumMetal.STEEL.getIngot() to ItemHolder.steelPlate,
-            ItemHolder.electrumIngot to ItemHolder.electrumPlate,
-            ItemHolder.invarIngot to ItemHolder.invarPlate,
-            ItemHolder.constantanIngot to ItemHolder.constantanPlate,
-            ItemHolder.signalumIngot to ItemHolder.signalumPlate,
-            ItemHolder.lumiumIngot to ItemHolder.lumiumPlate,
-            ItemHolder.enderiumIngot to ItemHolder.enderiumPlate
+        IRON_INGOT.stack() to ItemHolder.ironPlate,
+        GOLD_INGOT.stack() to ItemHolder.goldPlate,
+        EnumMetal.COPPER.getIngot() to ItemHolder.copperPlate,
+        EnumMetal.TIN.getIngot() to ItemHolder.tinPlate,
+        EnumMetal.SILVER.getIngot() to ItemHolder.silverPlate,
+        EnumMetal.LEAD.getIngot() to ItemHolder.leadPlate,
+        EnumMetal.ALUMINIUM.getIngot() to ItemHolder.aluminiumPlate,
+        EnumMetal.NICKEL.getIngot() to ItemHolder.nickelPlate,
+        ItemHolder.platinumIngot to ItemHolder.platinumPlate,
+        ItemHolder.iridiumIngot to ItemHolder.iridiumPlate,
+        EnumMetal.MITHRIL.getIngot() to ItemHolder.mithilPlate,
+        EnumMetal.STEEL.getIngot() to ItemHolder.steelPlate,
+        ItemHolder.electrumIngot to ItemHolder.electrumPlate,
+        ItemHolder.invarIngot to ItemHolder.invarPlate,
+        ItemHolder.constantanIngot to ItemHolder.constantanPlate,
+        ItemHolder.signalumIngot to ItemHolder.signalumPlate,
+        ItemHolder.lumiumIngot to ItemHolder.lumiumPlate,
+        ItemHolder.enderiumIngot to ItemHolder.enderiumPlate
     ).forEach { (a, b) ->
         a?.ifNonEmpty {
             b?.ifNonEmpty {
@@ -341,28 +341,28 @@ fun registerRecipes() {
     addRefineryRecipe(FluidRegistry.getFluidStack("steam", 10), FluidRegistry.getFluidStack("water", 1), null, null, 2f)
 
     addRefineryRecipe(FluidRegistry.getFluidStack("hot_crude", 100),
-            FluidRegistry.getFluidStack("heavy_oil", 4),
-            FluidRegistry.getFluidStack("light_oil", 3),
-            FluidRegistry.getFluidStack("lpg", 3),
-            1f)
+        FluidRegistry.getFluidStack("heavy_oil", 4),
+        FluidRegistry.getFluidStack("light_oil", 3),
+        FluidRegistry.getFluidStack("lpg", 3),
+        1f)
 
     addRefineryRecipe(FluidRegistry.getFluidStack("heavy_oil", 10),
-            FluidRegistry.getFluidStack("oil_residue", 4),
-            FluidRegistry.getFluidStack("fuel", 5),
-            FluidRegistry.getFluidStack("lubricant", 1),
-            1f)
+        FluidRegistry.getFluidStack("oil_residue", 4),
+        FluidRegistry.getFluidStack("fuel", 5),
+        FluidRegistry.getFluidStack("lubricant", 1),
+        1f)
 
     addRefineryRecipe(FluidRegistry.getFluidStack("light_oil", 10),
-            FluidRegistry.getFluidStack("diesel", 5),
-            FluidRegistry.getFluidStack("kerosene", 2),
-            FluidRegistry.getFluidStack("gasoline", 3),
-            1f)
+        FluidRegistry.getFluidStack("diesel", 5),
+        FluidRegistry.getFluidStack("kerosene", 2),
+        FluidRegistry.getFluidStack("gasoline", 3),
+        1f)
 
     addRefineryRecipe(FluidRegistry.getFluidStack("lpg", 10),
-            FluidRegistry.getFluidStack("plastic", 5),
-            FluidRegistry.getFluidStack("naphtha", 2),
-            FluidRegistry.getFluidStack("natural_gas", 3),
-            1f)
+        FluidRegistry.getFluidStack("plastic", 5),
+        FluidRegistry.getFluidStack("naphtha", 2),
+        FluidRegistry.getFluidStack("natural_gas", 3),
+        1f)
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   GASIFIER RECIPES
@@ -425,6 +425,29 @@ fun registerRecipes() {
     ItemHolder.sawdust?.ifNonEmpty {
         addGasifierRecipe(it, ItemStack.EMPTY, fluidOf("wood_gas", 10), 300f, 300f)
     }
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //                                                   FLUID FUELS
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // TODO
+    //                                                         1 coal = 16_000 J
+    addFluidFuel("oil", 10_000, 30.0)       // 300_000 J/B
+    addFluidFuel("crude_oil", 10_000, 30.0) // 300_000 J/B
+    addFluidFuel("wood_gas", 2_500, 20.0)   // 50_000 J/B
+//    addFluidFuel("heavy_oil", 100, 60.0)   //
+//    addFluidFuel("light_oil", 100, 80.0)   //
+//    addFluidFuel("fuel", 100, 60.0)        //
+//    addFluidFuel("diesel", 100, 100.0)      //
+//    addFluidFuel("kerosene", 100, 100.0)    //
+//    addFluidFuel("gasoline", 100, 100.0)    //
+//    addFluidFuel("naphtha", 100, 100.0)     //
+
+//    BuildcraftFuelRegistry.fuel.addFuel(lightOil, 80, 25000);
+//    BuildcraftFuelRegistry.fuel.addFuel(heavyOil, 60, 25000);
+//    BuildcraftFuelRegistry.fuel.addFuel(naturalGas, 40, 75000);
+//    BuildcraftFuelRegistry.fuel.addFuel(oil, 30, 5000);
+//}
 }
 
 private fun fluidOf(name: String, amount: Int) = FluidRegistry.getFluidStack(name, amount)
@@ -449,14 +472,14 @@ private fun addSluiceBoxRecipe(input: ItemStack, output: ItemStack,
 
 private fun addThermopileRecipe(input: IBlockState, temperature: Double, conductivity: Double) {
     ThermopileRecipeManager.registerRecipe(
-            ThermopileRecipeManager.createRecipe(input, temperature.toFloat(), conductivity.toFloat())
+        ThermopileRecipeManager.createRecipe(input, temperature.toFloat(), conductivity.toFloat())
     )
 }
 
 private fun addThermopileRecipe(input: Block, temperature: Double, conductivity: Double) {
     input.blockState.validStates.forEach { state ->
         ThermopileRecipeManager.registerRecipe(
-                ThermopileRecipeManager.createRecipe(state, temperature.toFloat(), conductivity.toFloat())
+            ThermopileRecipeManager.createRecipe(state, temperature.toFloat(), conductivity.toFloat())
         )
     }
 }
@@ -472,18 +495,18 @@ private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, o
                            output2: ItemStack,
                            prob2: Float, duration: Float) {
     SieveRecipeManager.registerRecipe(
-            SieveRecipeManager.createRecipe(input, output0, prob0, output1, prob1, output2, prob2, duration, true))
+        SieveRecipeManager.createRecipe(input, output0, prob0, output1, prob1, output2, prob2, duration, true))
 }
 
 private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, output1: ItemStack, prob1: Float,
                            duration: Float) {
     SieveRecipeManager.registerRecipe(
-            SieveRecipeManager.createRecipe(input, output0, prob0, output1, prob1, output1, 0f, duration, true))
+        SieveRecipeManager.createRecipe(input, output0, prob0, output1, prob1, output1, 0f, duration, true))
 }
 
 private fun addSieveRecipe(input: ItemStack, output0: ItemStack, prob0: Float, duration: Float) {
     SieveRecipeManager.registerRecipe(
-            SieveRecipeManager.createRecipe(input, output0, prob0, output0, 0f, output0, 0f, duration, true))
+        SieveRecipeManager.createRecipe(input, output0, prob0, output0, 0f, output0, 0f, duration, true))
 }
 
 private fun addGrinderRecipe(input: ItemStack, output0: ItemStack, output1: ItemStack, prob: Float, ticks: Float) {
@@ -496,7 +519,7 @@ private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, mode: H
 
 private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: Float, minTemp: Double) {
     if (input == null || output == null) {
-        info("Error trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks, minTemp=$minTemp")
+        warn("Error trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks, minTemp=$minTemp")
         return
     }
     OilHeaterRecipeManager.registerRecipe(OilHeaterRecipeManager.createRecipe(input, output, ticks, minTemp.toFloat()))
@@ -504,8 +527,8 @@ private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: F
 
 private fun addRefineryRecipe(input: FluidStack?, output0: FluidStack?, output1: FluidStack?, output2: FluidStack?, ticks: Float) {
     if (input == null || (output0 == null && output1 == null && output2 == null)) {
-        info("Error trying to register a RefineryRecipe with params: input=$input, output0=$output0, " +
-                "output1=$output1, output2=$output2, duration=$ticks")
+        warn("Error trying to register a RefineryRecipe with params: input=$input, output0=$output0, " +
+            "output1=$output1, output2=$output2, duration=$ticks")
         return
     }
     RefineryRecipeManager.registerRecipe(RefineryRecipeManager.createRecipe(input, output0, output1, output2, ticks))
@@ -513,11 +536,25 @@ private fun addRefineryRecipe(input: FluidStack?, output0: FluidStack?, output1:
 
 private fun addGasifierRecipe(input: ItemStack, output0: ItemStack, output1: FluidStack?, ticks: Float, minTemp: Float) {
     GasificationUnitRecipeManager.registerRecipe(
-            GasificationUnitRecipeManager.createRecipe(input, output0, output1,
-                    ticks, minTemp.fromCelsiusToKelvin().toFloat(), true)
+        GasificationUnitRecipeManager.createRecipe(input, output0, output1,
+            ticks, minTemp.fromCelsiusToKelvin().toFloat(), true)
     )
 }
 
+private fun addFluidFuel(name: String, ticks: Int, value: Double) {
+    val fluid = fluidOf(name, 1)
+
+    if (fluid == null) {
+        warn("Error trying to add a fuel for fluid: $name, fluid not found")
+        return
+    }
+
+    val manager = MagneticraftApi.getFluidFuelManager()
+
+    manager.registerFuel(
+        manager.createFuel(fluid, ticks, value)
+    )
+}
 
 /* OLD RECIPES
 

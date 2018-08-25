@@ -18,9 +18,9 @@ object GasificationUnitRecipeManager : IGasificationUnitRecipeManager {
     override fun getRecipes(): MutableList<IGasificationUnitRecipe> = recipes.toMutableList()
 
     override fun registerRecipe(recipe: IGasificationUnitRecipe): Boolean {
-        if (findRecipe(recipe.input) != null) {
-            return false
-        }
+        if (findRecipe(recipe.input) != null) return false
+        if (recipe.itemOutput.isEmpty && recipe.fluidOutput == null) return false
+
         recipes += recipe
         return true
     }

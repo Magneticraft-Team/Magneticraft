@@ -21,18 +21,17 @@ import net.minecraft.nbt.NBTTagCompound
  * Created by cout970 on 2017/06/30.
  */
 class ModuleInternalStorage(
-        val mainNode: IElectricNode,
-        val capacity: Int,
-        val maxChargeSpeed: Double = 200.0,
-        val upperVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-        val lowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-        override val name: String = "module_electric_storage"
+    val mainNode: IElectricNode,
+    val capacity: Int,
+    val maxChargeSpeed: Double = 200.0,
+    val upperVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+    val lowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+    override val name: String = "module_electric_storage"
 ) : IModule, IMachineEnergyInterface {
     override lateinit var container: IModuleContainer
 
     companion object {
-        @JvmStatic
-        val INTERVAL = 5
+        const val INTERVAL = 10
     }
 
     var energy: Int = 0
@@ -42,7 +41,7 @@ class ModuleInternalStorage(
         if (world.isServer) {
             if (mainNode.voltage > upperVoltageLimit) {
                 val speed = interpolate(mainNode.voltage, upperVoltageLimit,
-                        upperVoltageLimit + INTERVAL) * maxChargeSpeed
+                    upperVoltageLimit + INTERVAL) * maxChargeSpeed
 
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), capacity - energy)
                 if (finalSpeed != 0) {
@@ -52,7 +51,7 @@ class ModuleInternalStorage(
                 }
             } else if (mainNode.voltage < lowerVoltageLimit) {
                 val speed = (1 - interpolate(mainNode.voltage, lowerVoltageLimit,
-                        lowerVoltageLimit + INTERVAL)) * maxChargeSpeed
+                    lowerVoltageLimit + INTERVAL)) * maxChargeSpeed
 
                 val finalSpeed = Math.min(Math.floor(speed).toInt(), energy)
                 if (finalSpeed != 0) {
@@ -84,8 +83,8 @@ class ModuleInternalStorage(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-            IntSyncVariable(DATA_ID_STORAGE, getter = { energy }, setter = { energy = it }),
-            FloatSyncVariable(DATA_ID_CHARGE_RATE, getter = { chargeRate.average },
-                    setter = { chargeRate.storage = it })
+        IntSyncVariable(DATA_ID_STORAGE, getter = { energy }, setter = { energy = it }),
+        FloatSyncVariable(DATA_ID_CHARGE_RATE, getter = { chargeRate.average },
+            setter = { chargeRate.storage = it })
     )
 }

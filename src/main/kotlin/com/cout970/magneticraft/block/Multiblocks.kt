@@ -93,7 +93,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_panel.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockSolarPanel })
+            onActivated = defaultOnActivated { MultiblockSolarPanel }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -104,7 +104,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/shelving_unit.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockShelvingUnit })
+            onActivated = defaultOnActivated { MultiblockShelvingUnit }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -115,7 +115,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/gltf/steam_engine.gltf")
             )
-            onActivated = defaultOnActivated({ MultiblockSteamEngine })
+            onActivated = defaultOnActivated { MultiblockSteamEngine }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -126,7 +126,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/gltf/grinder.gltf")
             )
-            onActivated = defaultOnActivated({ MultiblockGrinder })
+            onActivated = defaultOnActivated { MultiblockGrinder }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -137,7 +137,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/gltf/sieve.gltf")
             )
-            onActivated = defaultOnActivated({ MultiblockSieve })
+            onActivated = defaultOnActivated { MultiblockSieve }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -148,7 +148,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_tower.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockSolarTower })
+            onActivated = defaultOnActivated { MultiblockSolarTower }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -159,7 +159,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_mirror.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockSolarMirror })
+            onActivated = defaultOnActivated { MultiblockSolarMirror }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -170,7 +170,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/container.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockContainer })
+            onActivated = defaultOnActivated { MultiblockContainer }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -181,7 +181,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/pumpjack.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockPumpjack })
+            onActivated = defaultOnActivated { MultiblockPumpjack }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -192,7 +192,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/gltf/hydraulic_press.gltf")
             )
-            onActivated = defaultOnActivated({ MultiblockHydraulicPress })
+            onActivated = defaultOnActivated { MultiblockHydraulicPress }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -203,7 +203,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/oil_heater.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockOilHeater })
+            onActivated = defaultOnActivated { MultiblockOilHeater }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -214,7 +214,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/mcx/refinery.mcx")
             )
-            onActivated = defaultOnActivated({ MultiblockRefinery })
+            onActivated = defaultOnActivated { MultiblockRefinery }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -225,7 +225,7 @@ object Multiblocks : IBlockMaker {
             customModels = listOf(
                 "model" to resource("models/block/gltf/big_combustion_chamber.gltf")
             )
-            onActivated = defaultOnActivated({ MultiblockBigCombustionChamber })
+            onActivated = defaultOnActivated { MultiblockBigCombustionChamber }
             onBlockPlaced = Multiblocks::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()

@@ -69,6 +69,6 @@ fun guiBigCombustionChamber(gui: GuiBase, container: ContainerBigCombustionChamb
         heatBar(tile.node)
         genericBar(1, 6, burningCallback, burningCallback.toPercentText("Fuel: "))
         tank(tile.tank, TankIO.IN)
-        slotPair()
+        singleSlot()
     }
 }

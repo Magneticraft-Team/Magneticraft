@@ -115,27 +115,39 @@ class GuiDslBars {
     fun slotPair() {
         components += Vec2d(18, 50) to { pos ->
             listOf(CompImage(guiTexture("misc"), DrawableBox(
-                    screenPos = pos + ICON_SIZE,
-                    screenSize = vec2Of(18, 18),
-                    texturePos = vec2Of(55, 81),
-                    textureSize = vec2Of(18, 18),
-                    textureScale = vec2Of(256)
+                screenPos = pos + ICON_SIZE,
+                screenSize = vec2Of(18, 18),
+                texturePos = vec2Of(55, 81),
+                textureSize = vec2Of(18, 18),
+                textureScale = vec2Of(256)
             )), CompImage(guiTexture("misc"), DrawableBox(
-                    screenPos = pos + vec2Of(0, 42),
-                    screenSize = vec2Of(18, 18),
-                    texturePos = vec2Of(36, 81),
-                    textureSize = vec2Of(18, 18),
-                    textureScale = vec2Of(256)
+                screenPos = pos + vec2Of(0, 42),
+                screenSize = vec2Of(18, 18),
+                texturePos = vec2Of(36, 81),
+                textureSize = vec2Of(18, 18),
+                textureScale = vec2Of(256)
+            )))
+        }
+    }
+
+    fun singleSlot(input: Boolean = true) {
+        components += Vec2d(18, 50) to { pos ->
+            listOf(CompImage(guiTexture("misc"), DrawableBox(
+                screenPos = pos + vec2Of(0, 26),
+                screenSize = vec2Of(18, 18),
+                texturePos = if (input) vec2Of(55, 81) else vec2Of(36, 81),
+                textureSize = vec2Of(18, 18),
+                textureScale = vec2Of(256)
             )))
         }
     }
 
     private fun iconOf(index: Int, pos: IVector2): CompImage = CompImage(guiTexture("misc"), DrawableBox(
-            screenPos = pos,
-            screenSize = vec2Of(7, 8),
-            texturePos = vec2Of(37 + (index % 8) * 8, 62 + (index / 8) * 9),
-            textureSize = vec2Of(7, 8),
-            textureScale = vec2Of(256)
+        screenPos = pos,
+        screenSize = vec2Of(7, 8),
+        texturePos = vec2Of(37 + (index % 8) * 8, 62 + (index / 8) * 9),
+        textureSize = vec2Of(7, 8),
+        textureScale = vec2Of(256)
     ))
 
     fun getInternalSize(): IVector2 {

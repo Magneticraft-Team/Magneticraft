@@ -11,6 +11,7 @@ RF heater multiblock
 Fix models errors (pumpjack, refinery)
 Add refinery effect of hiding the outputs
 Conveyor belt extration with AE2?
+Manual bookmark button
 
 ### release requirements
 Update manual

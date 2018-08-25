@@ -34,29 +34,29 @@ import net.minecraft.world.World
 class TileBattery : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val node = ElectricNode(ref, capacity = 8.0)
+    val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            canConnectAtSide = this::canConnectAtSide
+        electricNodes = listOf(node),
+        canConnectAtSide = this::canConnectAtSide
     )
     val storageModule = ModuleInternalStorage(
-            capacity = Config.blockBatteryCapacity,
-            mainNode = node,
-            maxChargeSpeed = 640.0,
-            upperVoltageLimit = ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE,
-            lowerVoltageLimit = ElectricConstants.TIER_1_BATTERY_DISCHARGE_VOLTAGE
+        capacity = Config.blockBatteryCapacity,
+        mainNode = node,
+        maxChargeSpeed = 640.0,
+        upperVoltageLimit = ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE,
+        lowerVoltageLimit = ElectricConstants.TIER_1_BATTERY_DISCHARGE_VOLTAGE
     )
 
     val inventory = Inventory(2)
     val invModule = ModuleInventory(inventory)
 
     val itemChargeModule = ModuleChargeItems(
-            inventory = inventory,
-            storage = storageModule,
-            chargeSlot = 0,
-            dischargeSlot = 1,
-            transferRate = Config.blockBatteryTransferRate
+        inventory = inventory,
+        storage = storageModule,
+        chargeSlot = 0,
+        dischargeSlot = 1,
+        transferRate = Config.blockBatteryTransferRate
     )
 
     init {
@@ -80,11 +80,11 @@ class TileElectricFurnace : TileBase(), ITickable {
     val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(node)
+        electricNodes = listOf(node)
     )
     val storageModule = ModuleInternalStorage(
-            capacity = 10000,
-            mainNode = node
+        capacity = 10000,
+        mainNode = node
     )
     val invModule = ModuleInventory(Inventory(2), capabilityFilter = {
         InventoryCapabilityFilter(it, inputSlots = listOf(0), outputSlots = listOf(1))
@@ -96,10 +96,10 @@ class TileElectricFurnace : TileBase(), ITickable {
     }
 
     val processModule = ModuleElectricProcessing(
-            craftingProcess = FurnaceCraftingProcess(invModule, 0, 1),
-            storage = storageModule,
-            workingRate = 1f,
-            costPerTick = Config.electricFurnaceMaxConsumption.toFloat()
+        craftingProcess = FurnaceCraftingProcess(invModule, 0, 1),
+        storage = storageModule,
+        workingRate = 1f,
+        costPerTick = Config.electricFurnaceMaxConsumption.toFloat()
     )
 
     init {
@@ -122,7 +122,7 @@ class TileInfiniteEnergy : TileBase(), ITickable {
     val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
-            listOf(node)
+        listOf(node)
     )
 
     init {
@@ -144,7 +144,7 @@ class TileAirLock : TileBase(), ITickable {
     val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(node)
+        electricNodes = listOf(node)
     )
 
     val airlockModule = ModuleAirlock(node)
@@ -166,14 +166,14 @@ class TileThermopile : TileBase(), ITickable {
     val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(node)
+        electricNodes = listOf(node)
     )
 
     val storage = ModuleInternalStorage(
-            mainNode = node,
-            capacity = 10_000,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
+        mainNode = node,
+        capacity = 10_000,
+        lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
+        upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
     )
 
     val thermopileModule = ModuleThermopile(node)
@@ -195,18 +195,18 @@ class TileWindTurbine : TileBase(), ITickable {
     val node = ElectricNode(ref)
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(node)
+        electricNodes = listOf(node)
     )
     val storageModule = ModuleInternalStorage(
-            capacity = 10000,
-            mainNode = node,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 10
+        capacity = 10000,
+        mainNode = node,
+        upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5,
+        lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 10
     )
 
     val windTurbineModule = ModuleWindTurbine(
-            electricNode = node,
-            facingGetter = { facing }
+        electricNode = node,
+        facingGetter = { facing }
     )
 
     init {

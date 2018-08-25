@@ -18,6 +18,7 @@ import com.cout970.magneticraft.multiblock.MultiblockHydraulicPress
 import com.cout970.magneticraft.multiblock.MultiblockSieve
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.tileentity.modules.*
@@ -31,7 +32,7 @@ class TileGrinder : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockGrinder
 
-    val node = ElectricNode(ref, capacity = 8.0)
+    val node = ElectricNode(ref)
 
     val inventory = Inventory(3)
 
@@ -107,8 +108,7 @@ class TileSieve : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSieve
 
-    val node = ElectricNode(ref, capacity = 8.0)
-
+    val node = ElectricNode(ref)
     val inventory = Inventory(4)
 
     val itemExporterModule0 = ModuleItemExporter(
@@ -298,10 +298,10 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
     val inventory = Inventory(1)
     val node = HeatNode(ref)
     val tank = Tank(4000)
-    val openGuiModule = ModuleOpenGui()
 
+    val openGuiModule = ModuleOpenGui()
+    val fluidModule = ModuleFluidHandler(tank)
     val invModule = ModuleInventory(inventory)
-    val bigCombustionChamberModule = ModuleBigCombustionChamber(node, inventory, 1400.fromCelsiusToKelvin())
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
         facing = { facing },
@@ -309,18 +309,29 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
             capability = ITEM_HANDLER!!,
             pos = BlockPos(-1, 0, -1),
             side = EnumFacing.WEST,
-            getter = { if (active) invModule else null }
+            getter = { if (active) inventory else null }
         ), ConnectionSpot(
             capability = ITEM_HANDLER!!,
             pos = BlockPos(1, 0, -1),
             side = EnumFacing.EAST,
-            getter = { if (active) invModule else null }
+            getter = { if (active) inventory else null }
+        ), ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(-1, 0, -1),
+            side = EnumFacing.WEST,
+            getter = { if (active) tank else null }
+        ), ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(1, 0, -1),
+            side = EnumFacing.EAST,
+            getter = { if (active) tank else null }
         )) + ModuleMultiblockIO.connectionArea(HEAT_NODE_HANDLER!!,
             BlockPos(-1, 1, -2), BlockPos(1, 1, 0), EnumFacing.UP
         ) { if (active) heatModule else null }
     )
 
     val heatModule = ModuleHeat(listOf(node), connectableDirections = ioModule::getHeatConnectPoints)
+    val bigCombustionChamberModule = ModuleBigCombustionChamber(this::facing, node, inventory, tank,  2000.fromCelsiusToKelvin())
 
     override val multiblockModule = ModuleMultiblockCenter(
         multiblockStructure = getMultiblock(),
@@ -329,7 +340,7 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, invModule, bigCombustionChamberModule, heatModule, openGuiModule)
+        initModules(multiblockModule, invModule, fluidModule, bigCombustionChamberModule, heatModule, openGuiModule)
     }
 
     @DoNotRemove

@@ -59,15 +59,17 @@ class TileSteamBoiler : TileBase(), ITickable {
     val heatModule = ModuleHeat(listOf(node))
 
     val waterTank = Tank(
-            capacity = 1000,
-            allowInput = true,
-            allowOutput = false
+        capacity = 1000,
+        allowInput = true,
+        allowOutput = false,
+        fluidFilter = { it.fluid.name == "water" }
     ).apply { clientFluidName = "water" }
 
     val steamTank = Tank(
-            capacity = 16000,
-            allowInput = false,
-            allowOutput = true
+        capacity = 16000,
+        allowInput = false,
+        allowOutput = true,
+        fluidFilter = { it.fluid.name == "steam" }
     ).apply { clientFluidName = "steam" }
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank)
@@ -235,10 +237,10 @@ class TileGasificationUnit : TileBase(), ITickable {
 
     val openGui = ModuleOpenGui()
     val process = ModuleHeatProcessing(
-            craftingProcess = GasificationCraftingProcess(tank, inv, 0, 1),
-            node = heatNode,
-            costPerTick = Config.gasificationUnitConsumption.toFloat(),
-            workingRate = 1f
+        craftingProcess = GasificationCraftingProcess(tank, inv, 0, 1),
+        node = heatNode,
+        costPerTick = Config.gasificationUnitConsumption.toFloat(),
+        workingRate = 1f
     )
 
     init {

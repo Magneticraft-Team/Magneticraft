@@ -20,6 +20,10 @@ fun info(str: String, vararg args: Any) {
     Magneticraft.log.info(str, *args)
 }
 
+fun warn(str: String, vararg args: Any) {
+    Magneticraft.log.warn(str, *args)
+}
+
 fun debug(vararg obj: Any?) {
     if (!Debug.DEBUG) return
     obj.joinToString().forEach {

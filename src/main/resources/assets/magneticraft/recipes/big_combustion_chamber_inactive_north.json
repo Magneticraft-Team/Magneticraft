@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AB",
+    "  "
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "paper",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBrick",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:big_combustion_chamber",
+    "count": 1,
+    "data": 0
+  }
+}

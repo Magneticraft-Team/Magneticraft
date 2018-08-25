@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.api;
 
+import com.cout970.magneticraft.api.internal.registries.fuel.FluidFuelManager;
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry;
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager;
@@ -12,6 +13,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.Sluic
 import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry;
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry;
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
+import com.cout970.magneticraft.api.registries.fuel.IFluidFuelManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasificationUnitRecipeManager;
@@ -30,8 +32,7 @@ import com.cout970.magneticraft.multiblock.core.MultiblockManager;
  */
 public class MagneticraftApi {
 
-    private MagneticraftApi() {
-    }
+    private MagneticraftApi() {}
 
     public static IRefineryRecipeManager getRefineryRecipeManager() {
         return RefineryRecipeManager.INSTANCE;
@@ -48,14 +49,6 @@ public class MagneticraftApi {
     public static IGrinderRecipeManager getGrinderRecipeManager() {
         return GrinderRecipeManager.INSTANCE;
     }
-
-//    public static IIceboxRecipeManager getIceboxRecipeManager() {
-//        return IceboxRecipeManager.INSTANCE;
-//    }
-
-//    public static IKilnRecipeManager getKilnRecipeManager() {
-//        return KilnRecipeManager.INSTANCE;
-//    }
 
     public static ISieveRecipeManager getSieveRecipeManager() {
         return SieveRecipeManager.INSTANCE;
@@ -87,5 +80,9 @@ public class MagneticraftApi {
 
     public static IWrenchRegistry getWrenchRegistry() {
         return WrenchRegistry.INSTANCE;
+    }
+
+    public static IFluidFuelManager getFluidFuelManager() {
+        return FluidFuelManager.FLUID_FUEL_MANAGER;
     }
 }

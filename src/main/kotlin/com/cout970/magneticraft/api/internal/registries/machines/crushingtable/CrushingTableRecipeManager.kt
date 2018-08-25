@@ -19,7 +19,7 @@ object CrushingTableRecipeManager : ICrushingTableRecipeManager {
         return recipes.firstOrNull { it.matches(input) }
     }
 
-    override fun getRecipes(): MutableList<ICrushingTableRecipe> = Collections.synchronizedList(recipes)
+    override fun getRecipes(): MutableList<ICrushingTableRecipe> = Collections.unmodifiableList(recipes)
 
     override fun registerRecipe(recipe: ICrushingTableRecipe): Boolean {
         if (findRecipe(recipe.input) != null) return false

@@ -61,7 +61,6 @@ object TileRendererBigCombustionChamber : TileRendererMultiblock<TileBigCombusti
     }
 
     override fun render(te: TileBigCombustionChamber) {
-        Utilities.renderIO(te, te.ioModule)
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -1)
         renderModel("default")

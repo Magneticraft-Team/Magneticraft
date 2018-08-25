@@ -26,7 +26,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarPanel
 
-    val node = ElectricNode(ref, capacity = 8.0)
+    val node = ElectricNode(ref)
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
         facing = { facing },
@@ -96,7 +96,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     override fun getMultiblock(): Multiblock = MultiblockSteamEngine
 
     val tank = Tank(1000)
-    val node = ElectricNode(ref, capacity = 2.0)
+    val node = ElectricNode(ref)
 
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
 

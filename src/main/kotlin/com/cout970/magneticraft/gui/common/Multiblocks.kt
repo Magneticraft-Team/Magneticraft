@@ -258,7 +258,7 @@ class ContainerBigCombustionChamber(val tile: TileBigCombustionChamber, player: 
 
     init {
         tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 99, 17))
+            addSlotToContainer(SlotItemHandler(inv, 0, 99, 33))
             inventoryRegions += InventoryRegion(0..0)
         }
         bindPlayerInventory(player.inventory)

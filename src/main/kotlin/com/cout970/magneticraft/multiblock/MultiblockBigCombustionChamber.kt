@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.multiblock
 
 import com.cout970.magneticraft.block.Multiblocks
+import com.cout970.magneticraft.multiblock.components.IgnoreBlockComponent
 import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.vector.plus
@@ -22,7 +23,7 @@ object MultiblockBigCombustionChamber : Multiblock() {
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
-        val A = airBlock()
+        val A = IgnoreBlockComponent
         val C = corrugatedIronBlock()
         val B = ofBlock(Blocks.BRICK_BLOCK)
         val M = mainBlockOf(controllerBlock)

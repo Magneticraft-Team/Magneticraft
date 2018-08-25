@@ -161,7 +161,7 @@ object Debug {
             )
 
             val map = mutableMapOf<JsonObject, String>()
-            val slots = Array(9, { " " })
+            val slots = Array(9) { " " }
 
             for (y in 0 until inv.height) {
                 for (x in 0 until inv.width) {
