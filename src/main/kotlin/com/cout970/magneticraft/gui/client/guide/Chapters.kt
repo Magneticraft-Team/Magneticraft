@@ -72,7 +72,7 @@ private fun getLinks(tags: List<MdTag>): List<String> {
 fun errorDocument(): MarkdownDocument {
 
     val tags = listOf(
-            MdText("An Error occurred loading the book, please report to the mod author")
+        MdText("An Error occurred loading the book, please report to the mod author")
     )
 
     return MarkdownDocument(tags, "")

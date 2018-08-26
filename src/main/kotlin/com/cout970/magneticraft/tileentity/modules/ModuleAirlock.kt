@@ -18,8 +18,8 @@ import net.minecraft.world.World
  * Created by cout970 on 2017/08/11.
  */
 class ModuleAirlock(
-        val node: IElectricNode,
-        override val name: String = "module_airlock"
+    val node: IElectricNode,
+    override val name: String = "module_airlock"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

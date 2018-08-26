@@ -22,14 +22,14 @@ object SluiceBox {
 
     @ZenMethod
     @JvmStatic
-    fun addRecipe(input: IItemStack, extp0: Float,  exti0: IItemStack, extp1: Float, exti1: IItemStack, useOreDict: Boolean) {
+    fun addRecipe(input: IItemStack, extp0: Float, exti0: IItemStack, extp1: Float, exti1: IItemStack, useOreDict: Boolean) {
         addRecipe(input, listOf(extp0 to exti0, extp1 to exti1), useOreDict)
     }
 
     @ZenMethod
     @JvmStatic
     fun addRecipe(input: IItemStack,
-                  extp0: Float,  exti0: IItemStack,
+                  extp0: Float, exti0: IItemStack,
                   extp1: Float, exti1: IItemStack,
                   extp2: Float, exti2: IItemStack, useOreDict: Boolean) {
         addRecipe(input, listOf(extp0 to exti0, extp1 to exti1, extp2 to exti2), useOreDict)
@@ -38,7 +38,7 @@ object SluiceBox {
     @ZenMethod
     @JvmStatic
     fun addRecipe(input: IItemStack,
-                  extp0: Float,  exti0: IItemStack,
+                  extp0: Float, exti0: IItemStack,
                   extp1: Float, exti1: IItemStack,
                   extp2: Float, exti2: IItemStack,
                   extp3: Float, exti3: IItemStack, useOreDict: Boolean) {
@@ -48,24 +48,24 @@ object SluiceBox {
     @ZenMethod
     @JvmStatic
     fun addRecipe(input: IItemStack,
-                  extp0: Float,  exti0: IItemStack,
+                  extp0: Float, exti0: IItemStack,
                   extp1: Float, exti1: IItemStack,
                   extp2: Float, exti2: IItemStack,
                   extp3: Float, exti3: IItemStack,
                   extp4: Float, exti4: IItemStack, useOreDict: Boolean) {
 
         addRecipe(input, listOf(
-                extp0 to exti0,
-                extp1 to exti1,
-                extp2 to exti2,
-                extp3 to exti3,
-                extp4 to exti4), useOreDict)
+            extp0 to exti0,
+            extp1 to exti1,
+            extp2 to exti2,
+            extp3 to exti3,
+            extp4 to exti4), useOreDict)
     }
 
     @ZenMethod
     @JvmStatic
     fun addRecipe(input: IItemStack,
-                  extp0: Float,  exti0: IItemStack,
+                  extp0: Float, exti0: IItemStack,
                   extp1: Float, exti1: IItemStack,
                   extp2: Float, exti2: IItemStack,
                   extp3: Float, exti3: IItemStack,
@@ -73,12 +73,12 @@ object SluiceBox {
                   extp5: Float, exti5: IItemStack, useOreDict: Boolean) {
 
         addRecipe(input, listOf(
-                extp0 to exti0,
-                extp1 to exti1,
-                extp2 to exti2,
-                extp3 to exti3,
-                extp4 to exti4,
-                extp5 to exti5), useOreDict)
+            extp0 to exti0,
+            extp1 to exti1,
+            extp2 to exti2,
+            extp3 to exti3,
+            extp4 to exti4,
+            extp5 to exti5), useOreDict)
     }
 
     @ZenMethod

@@ -17,8 +17,8 @@ interface IModule : INBTSerializable<NBTTagCompound> {
 
     var container: IModuleContainer
 
-    val world : World get() = container.world
-    val pos : BlockPos get() = container.pos
+    val world: World get() = container.world
+    val pos: BlockPos get() = container.pos
 
     fun init() = Unit
     fun update() = Unit
@@ -33,5 +33,5 @@ interface IModule : INBTSerializable<NBTTagCompound> {
 
     fun receiveSyncData(ibd: IBD, otherSide: Side) = Unit
 
-    fun getGuiSyncVariables() : List<SyncVariable> = emptyList()
+    fun getGuiSyncVariables(): List<SyncVariable> = emptyList()
 }

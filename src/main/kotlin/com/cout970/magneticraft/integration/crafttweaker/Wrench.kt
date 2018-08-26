@@ -12,7 +12,7 @@ object Wrench {
 
     @ZenMethod
     @JvmStatic
-    fun addWrench(item: IItemStack){
+    fun addWrench(item: IItemStack) {
         CraftTweakerPlugin.delayExecution {
             val inStack = item.toStack()
 
@@ -21,7 +21,7 @@ object Wrench {
                 return@delayExecution
             }
 
-            applyAction("Adding $item as Wrench"){
+            applyAction("Adding $item as Wrench") {
                 WrenchRegistry.registerWrench(inStack)
             }
         }
@@ -29,7 +29,7 @@ object Wrench {
 
     @ZenMethod
     @JvmStatic
-    fun removeWrench(item: IItemStack){
+    fun removeWrench(item: IItemStack) {
         CraftTweakerPlugin.delayExecution {
             val inStack = item.toStack()
 
@@ -38,7 +38,7 @@ object Wrench {
                 return@delayExecution
             }
 
-            applyAction("Removing Wrench $item"){
+            applyAction("Removing Wrench $item") {
                 WrenchRegistry.removeWrench(inStack)
             }
         }

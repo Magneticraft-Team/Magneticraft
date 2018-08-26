@@ -3,8 +3,7 @@ package com.cout970.magneticraft.api.heat;
 import com.cout970.magneticraft.api.core.INode;
 
 /**
- * Created by Yurgen on 19/10/2016.
- * Modified by Cout970 on 14/5/2018
+ * Created by Yurgen on 19/10/2016. Modified by Cout970 on 14/5/2018
  */
 public interface IHeatNode extends INode {
 
@@ -38,9 +37,9 @@ public interface IHeatNode extends INode {
 
     /**
      * Returns the heat conductivity of the node in watts / (meter * kelvin)
-     *
+     * <p>
      * Amount of watts transferred in a meter with a temperature difference of 1 kelvin
-     *
+     * <p>
      * The pure iron thermal conductivity is around 73 watts per meter kelvin
      */
     double getConductivity();

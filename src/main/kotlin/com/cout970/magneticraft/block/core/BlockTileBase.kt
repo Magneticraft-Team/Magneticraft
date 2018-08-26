@@ -7,9 +7,9 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 
 open class BlockTileBase(
-        val factory: (World, IBlockState) -> TileEntity?,
-        val filter: ((IBlockState) -> Boolean)?,
-        material: Material
+    val factory: (World, IBlockState) -> TileEntity?,
+    val filter: ((IBlockState) -> Boolean)?,
+    material: Material
 ) : BlockBase(material), ITileEntityProvider {
 
     @Suppress("DEPRECATION")

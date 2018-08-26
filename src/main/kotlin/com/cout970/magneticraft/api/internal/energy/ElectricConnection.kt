@@ -11,8 +11,8 @@ import com.cout970.magneticraft.util.vector.minus
  * Created by cout970 on 11/06/2016.
  */
 open class ElectricConnection(
-        private val firstNode: IElectricNode,
-        private val secondNode: IElectricNode
+    private val firstNode: IElectricNode,
+    private val secondNode: IElectricNode
 ) : IElectricConnection {
 
     override fun getFirstNode() = firstNode

@@ -11,9 +11,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fluids.FluidStack
 
 class ModuleFluidExporter(
-        val tank: Tank,
-        val ports: () ->List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
-        override val name: String = "module_fluid_exporter"
+    val tank: Tank,
+    val ports: () -> List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
+    override val name: String = "module_fluid_exporter"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

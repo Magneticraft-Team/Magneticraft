@@ -45,8 +45,8 @@ inline fun <reified T : TileEntity> IBlockAccess.getTile(pos: BlockPos): T? {
 
 operator fun Pair<BlockPos, BlockPos>.contains(pos: BlockPos): Boolean {
     return pos.x >= first.x && pos.x <= second.x &&
-            pos.y >= first.y && pos.y <= second.y &&
-            pos.z >= first.z && pos.z <= second.z
+        pos.y >= first.y && pos.y <= second.y &&
+        pos.z >= first.z && pos.z <= second.z
 }
 
 @Suppress("LoopToCallChain")
@@ -83,7 +83,7 @@ fun canConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
                otherHandler: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?): Boolean {
 
     return thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
-            otherHandler.canConnect(otherNode, thisHandler, thisNode, side?.opposite)
+        otherHandler.canConnect(otherNode, thisHandler, thisNode, side?.opposite)
 }
 
 fun tryConnect(thisHandler: IHeatNodeHandler, thisNode: IHeatNode,
@@ -100,5 +100,5 @@ fun canConnect(thisHandler: IHeatNodeHandler, thisNode: IHeatNode,
                otherHandler: IHeatNodeHandler, otherNode: IHeatNode, side: EnumFacing): Boolean {
 
     return thisHandler.canConnect(thisNode, otherHandler, otherNode, side) &&
-            otherHandler.canConnect(otherNode, thisHandler, thisNode, side.opposite)
+        otherHandler.canConnect(otherNode, thisHandler, thisNode, side.opposite)
 }

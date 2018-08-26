@@ -129,16 +129,16 @@ object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
 
     override fun init() {
         createModel(ElectricConductors.electric_cable,
-                ModelSelector("up", FilterRegex("up")),
-                ModelSelector("down", FilterRegex("down")),
-                ModelSelector("north", FilterRegex("north")),
-                ModelSelector("south", FilterRegex("south")),
-                ModelSelector("west", FilterRegex("west")),
-                ModelSelector("east", FilterRegex("east"))
+            ModelSelector("up", FilterRegex("up")),
+            ModelSelector("down", FilterRegex("down")),
+            ModelSelector("north", FilterRegex("north")),
+            ModelSelector("south", FilterRegex("south")),
+            ModelSelector("west", FilterRegex("west")),
+            ModelSelector("east", FilterRegex("east"))
         )
 
         createModelWithoutTexture(ElectricConductors.electric_cable,
-                ModelSelector("center", FilterRegex("center"))
+            ModelSelector("center", FilterRegex("center"))
         )
     }
 

@@ -32,13 +32,13 @@ class TilePumpjack : TileMultiblock(), ITickable {
     val node = ElectricNode(ref)
 
     val fluidModule = ModuleFluidHandler(tank,
-            capabilityFilter = { it, side -> if (side == facing.opposite) it else null })
+        capabilityFilter = { it, side -> if (side == facing.opposite) it else null })
 
     val storageModule = ModuleInternalStorage(
-            mainNode = node,
-            capacity = 10_000,
-            lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        mainNode = node,
+        capacity = 10_000,
+        lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
     )
 
     val openGuiModule = ModuleOpenGui()
@@ -48,37 +48,37 @@ class TilePumpjack : TileMultiblock(), ITickable {
     })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
-            facing = { facing },
-            connectionSpots = listOf(ConnectionSpot(
-                    capability = ELECTRIC_NODE_HANDLER!!,
-                    pos = BlockPos(-1, 0, 0),
-                    side = EnumFacing.UP,
-                    getter = { if (active) energyModule else null }
-            ))
+        facing = { facing },
+        connectionSpots = listOf(ConnectionSpot(
+            capability = ELECTRIC_NODE_HANDLER!!,
+            pos = BlockPos(-1, 0, 0),
+            side = EnumFacing.UP,
+            getter = { if (active) energyModule else null }
+        ))
     )
 
     val energyModule = ModuleElectricity(
-            electricNodes = listOf(node),
-            canConnectAtSide = ioModule::canConnectAtSide,
-            connectableDirections = ioModule::getElectricConnectPoints
+        electricNodes = listOf(node),
+        canConnectAtSide = ioModule::canConnectAtSide,
+        connectableDirections = ioModule::getElectricConnectPoints
     )
 
     val pumpjackModule = ModulePumpjack(
-            energy = storageModule,
-            tank = tank,
-            ref = { pos.offset(facing, 5) },
-            active = ::active
+        energy = storageModule,
+        tank = tank,
+        ref = { pos.offset(facing, 5) },
+        active = ::active
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = ioModule::getCapability
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = ioModule::getCapability
     )
 
     init {
         initModules(multiblockModule, fluidModule, energyModule, storageModule, ioModule, pumpjackModule,
-                openGuiModule, fluidExportModule)
+            openGuiModule, fluidExportModule)
     }
 
     @DoNotRemove
@@ -100,49 +100,49 @@ class TileOilHeater : TileMultiblock(), ITickable {
     val openGuiModule = ModuleOpenGui()
 
     val fluidModule = ModuleFluidHandler(inputTank, outputTank,
-            capabilityFilter = ModuleFluidHandler.ALLOW_NONE
+        capabilityFilter = ModuleFluidHandler.ALLOW_NONE
     )
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
-            facing = { facing },
-            connectionSpots = listOf(ConnectionSpot(
-                    capability = FLUID_HANDLER!!,
-                    pos = BlockPos(0, 1, -2),
-                    side = EnumFacing.NORTH,
-                    getter = { if (active) TankCapabilityFilter(inputTank) else null }
-            ), ConnectionSpot(
-                    capability = FLUID_HANDLER!!,
-                    pos = BlockPos(0, 2, -1),
-                    side = EnumFacing.UP,
-                    getter = { if (active) TankCapabilityFilter(outputTank) else null }
-            )) + ModuleMultiblockIO.connectionArea(
-                    capability = HEAT_NODE_HANDLER!!,
-                    side = EnumFacing.DOWN,
-                    start = BlockPos(-1, 0, -2),
-                    end = BlockPos(1, 0, 0),
-                    getter = { if (active) heatModule else null }
-            )
+        facing = { facing },
+        connectionSpots = listOf(ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(0, 1, -2),
+            side = EnumFacing.NORTH,
+            getter = { if (active) TankCapabilityFilter(inputTank) else null }
+        ), ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(0, 2, -1),
+            side = EnumFacing.UP,
+            getter = { if (active) TankCapabilityFilter(outputTank) else null }
+        )) + ModuleMultiblockIO.connectionArea(
+            capability = HEAT_NODE_HANDLER!!,
+            side = EnumFacing.DOWN,
+            start = BlockPos(-1, 0, -2),
+            end = BlockPos(1, 0, 0),
+            getter = { if (active) heatModule else null }
+        )
     )
 
     val heatModule = ModuleHeat(listOf(node),
-            capabilityFilter = { false },
-            connectableDirections = ioModule::getHeatConnectPoints
+        capabilityFilter = { false },
+        connectableDirections = ioModule::getHeatConnectPoints
     )
 
     val processModule = ModuleHeatProcessing(
-            costPerTick = Config.oilHeaterMaxConsumption.toFloat(),
-            workingRate = 1f,
-            node = node,
-            craftingProcess = OilHeaterCraftingProcess(
-                    inputTank = inputTank,
-                    outputTank = outputTank
-            )
+        costPerTick = Config.oilHeaterMaxConsumption.toFloat(),
+        workingRate = 1f,
+        node = node,
+        craftingProcess = OilHeaterCraftingProcess(
+            inputTank = inputTank,
+            outputTank = outputTank
+        )
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = ioModule::getCapability
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = ioModule::getCapability
     )
 
     init {
@@ -169,61 +169,61 @@ class TileRefinery : TileMultiblock(), ITickable {
     val openGuiModule = ModuleOpenGui()
 
     val fluidModule = ModuleFluidHandler(inputTank, outputTank0, outputTank1, outputTank2, steamTank,
-            capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
+        capabilityFilter = ModuleFluidHandler.ALLOW_NONE)
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
-            facing = { facing },
-            connectionSpots = listOf(ConnectionSpot(
-                    capability = FLUID_HANDLER!!,
-                    pos = BlockPos(0, 1, -2),
-                    side = EnumFacing.NORTH,
-                    getter = { if (active) TankCapabilityFilter(inputTank) else null }
+        facing = { facing },
+        connectionSpots = listOf(ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(0, 1, -2),
+            side = EnumFacing.NORTH,
+            getter = { if (active) TankCapabilityFilter(inputTank) else null }
 
-            ), ConnectionSpot(
-                    capability = FLUID_HANDLER!!,
-                    pos = BlockPos(1, 1, -1),
-                    side = EnumFacing.EAST,
-                    getter = { if (active) TankCapabilityFilter(steamTank) else null }
+        ), ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(1, 1, -1),
+            side = EnumFacing.EAST,
+            getter = { if (active) TankCapabilityFilter(steamTank) else null }
 
-            ), ConnectionSpot(
-                    capability = FLUID_HANDLER!!,
-                    pos = BlockPos(-1, 1, -1),
-                    side = EnumFacing.WEST,
-                    getter = { if (active) TankCapabilityFilter(steamTank) else null }
+        ), ConnectionSpot(
+            capability = FLUID_HANDLER!!,
+            pos = BlockPos(-1, 1, -1),
+            side = EnumFacing.WEST,
+            getter = { if (active) TankCapabilityFilter(steamTank) else null }
 
-            )) + ModuleMultiblockIO.connectionCross(
-                    capability = FLUID_HANDLER!!,
-                    start = BlockPos(0, 3, -1), dist = 1,
-                    getter = { if (active) TankCapabilityFilter(outputTank0, canFill = false) else null }
+        )) + ModuleMultiblockIO.connectionCross(
+            capability = FLUID_HANDLER!!,
+            start = BlockPos(0, 3, -1), dist = 1,
+            getter = { if (active) TankCapabilityFilter(outputTank0, canFill = false) else null }
 
-            ) + ModuleMultiblockIO.connectionCross(
-                    capability = FLUID_HANDLER!!,
-                    start = BlockPos(0, 5, -1), dist = 1,
-                    getter = { if (active) TankCapabilityFilter(outputTank1, canFill = false) else null }
+        ) + ModuleMultiblockIO.connectionCross(
+            capability = FLUID_HANDLER!!,
+            start = BlockPos(0, 5, -1), dist = 1,
+            getter = { if (active) TankCapabilityFilter(outputTank1, canFill = false) else null }
 
-            ) + ModuleMultiblockIO.connectionCross(
-                    capability = FLUID_HANDLER!!,
-                    start = BlockPos(0, 7, -1), dist = 1,
-                    getter = { if (active) TankCapabilityFilter(outputTank2, canFill = false) else null }
-            )
+        ) + ModuleMultiblockIO.connectionCross(
+            capability = FLUID_HANDLER!!,
+            start = BlockPos(0, 7, -1), dist = 1,
+            getter = { if (active) TankCapabilityFilter(outputTank2, canFill = false) else null }
+        )
     )
 
     val processModule = ModuleSteamProcessing(
-            costPerTick = Config.refineryMaxConsumption.toFloat(),
-            workingRate = 1f,
-            storage = steamTank,
-            craftingProcess = RefineryCraftingProcess(
-                    inputTank = inputTank,
-                    outputTank0 = outputTank0,
-                    outputTank1 = outputTank1,
-                    outputTank2 = outputTank2
-            )
+        costPerTick = Config.refineryMaxConsumption.toFloat(),
+        workingRate = 1f,
+        storage = steamTank,
+        craftingProcess = RefineryCraftingProcess(
+            inputTank = inputTank,
+            outputTank0 = outputTank0,
+            outputTank1 = outputTank1,
+            outputTank2 = outputTank2
+        )
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = ioModule::getCapability
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = ioModule::getCapability
     )
 
     init {

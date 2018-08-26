@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11
  * Created by cout970 on 2017/07/29.
  */
 class CompShelvingUnit(
-        val container: ContainerShelvingUnit,
-        val scrollBar: CompScrollBar,
-        val textInput: CompTextInput
+    val container: ContainerShelvingUnit,
+    val scrollBar: CompScrollBar,
+    val textInput: CompTextInput
 ) : IComponent {
 
     override val pos: IVector2 = Vec2d.ZERO
@@ -55,7 +55,7 @@ class CompShelvingUnit(
         if (container.currentSlots.isEmpty() && (container.filterText.isEmpty() || container.filterText.isBlank())) {
             gui.drawColor(Pair(gui.pos + vec2Of(6, 56), vec2Of(164, 17)), 0xF0000000.toInt())
             gui.drawCenteredString("Add Chests to increase storage", gui.pos + vec2Of(88, 61),
-                    0xFFFFFFFF.toInt())
+                0xFFFFFFFF.toInt())
         }
         GlStateManager.disableBlend()
         GL11.glColor4f(1f, 1f, 1f, 1f)

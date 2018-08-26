@@ -13,8 +13,8 @@ import net.minecraft.nbt.NBTTagCompound
  * Created by cout970 on 2017/07/07.
  */
 class ModuleComputerDevices(
-        vararg val parts: IDevice,
-        override val name: String = "module_monitor"
+    vararg val parts: IDevice,
+    override val name: String = "module_monitor"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

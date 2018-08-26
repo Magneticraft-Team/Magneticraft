@@ -21,9 +21,9 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
     val shelvingUnitModule = ModuleShelvingUnitMb(inventory)
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = shelvingUnitModule::getCapability
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = shelvingUnitModule::getCapability
     )
 
     init {
@@ -45,9 +45,9 @@ class TileContainer : TileMultiblock(), ITickable {
     val openGui = ModuleOpenGui()
 
     override val multiblockModule = ModuleMultiblockCenter(
-            multiblockStructure = getMultiblock(),
-            facingGetter = { facing },
-            capabilityGetter = { cap, side, _ -> stackInventoryModule.getCapability(cap, side) }
+        multiblockStructure = getMultiblock(),
+        facingGetter = { facing },
+        capabilityGetter = { cap, side, _ -> stackInventoryModule.getCapability(cap, side) }
     )
 
     init {

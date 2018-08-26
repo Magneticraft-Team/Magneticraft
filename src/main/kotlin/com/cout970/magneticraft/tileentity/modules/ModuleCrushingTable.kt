@@ -34,8 +34,8 @@ import java.util.*
  * Created by cout970 on 2017/06/12.
  */
 class ModuleCrushingTable(
-        val inventory: Inventory,
-        override val name: String = "module_crushing_table"
+    val inventory: Inventory,
+    override val name: String = "module_crushing_table"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer
@@ -81,8 +81,8 @@ class ModuleCrushingTable(
                         val stack = playerIn.inventory.getStackInSlot(slot)
 
                         if (stack.isNotEmpty &&
-                                CrushingTableRecipeManager.findRecipe(stack) != null &&
-                                lastItem.isItemEqual(stack)) {
+                            CrushingTableRecipeManager.findRecipe(stack) != null &&
+                            lastItem.isItemEqual(stack)) {
 
                             storedItem = stack.withSize(1)
                             stack.count--
@@ -171,9 +171,9 @@ class ModuleCrushingTable(
 
             for (i in 0..5) {
                 val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
-                        center.xd, center.yd, center.zd,
-                        (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
-                        Block.getStateId(state))!!
+                    center.xd, center.yd, center.zd,
+                    (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
+                    Block.getStateId(state))!!
 
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }
@@ -183,9 +183,9 @@ class ModuleCrushingTable(
 
             for (i in 0..5) {
                 val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
-                        center.xd, center.yd, center.zd,
-                        (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
-                        Item.getIdFromItem(item), storedItem.itemDamage)!!
+                    center.xd, center.yd, center.zd,
+                    (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
+                    Item.getIdFromItem(item), storedItem.itemDamage)!!
 
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }

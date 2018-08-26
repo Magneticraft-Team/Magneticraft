@@ -12,9 +12,9 @@ object MdRenderer {
 
         return txt.groupBy { it.page }.map {
             Page(
-                    text = it.value.filterIsInstance<NormalTextBox>(),
-                    links = it.value.filterIsInstance<LinkTextBox>(),
-                    index = it.key
+                text = it.value.filterIsInstance<NormalTextBox>(),
+                links = it.value.filterIsInstance<LinkTextBox>(),
+                index = it.key
             )
         }
     }
@@ -123,14 +123,14 @@ object MdRenderer {
     }
 
     data class Context(
-            val pageSize: IVector2,
-            val fontHeight: Int,
-            val fontWidth: (String) -> Int,
-            var lastPosX: Int = 0,
-            var lastPosY: Int = 0,
-            var prefix: String = "",
-            var page: Int = 0,
-            var location: String = ""
+        val pageSize: IVector2,
+        val fontHeight: Int,
+        val fontWidth: (String) -> Int,
+        var lastPosX: Int = 0,
+        var lastPosY: Int = 0,
+        var prefix: String = "",
+        var page: Int = 0,
+        var location: String = ""
     ) {
 
         fun newLine() {

@@ -10,9 +10,9 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 16/06/2016.
  */
 data class SluiceBoxRecipe(
-        private val input: ItemStack,
-        private val outputs: List<Pair<ItemStack, Float>>,
-        val oreDict: Boolean
+    private val input: ItemStack,
+    private val outputs: List<Pair<ItemStack, Float>>,
+    val oreDict: Boolean
 ) : ISluiceBoxRecipe {
 
     init {

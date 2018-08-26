@@ -24,10 +24,10 @@ import net.minecraft.util.EnumHand
  * Created by cout970 on 2017/08/10.
  */
 class ModuleFloppyDrive(
-        val ref: ITileRef,
-        val inventory: Inventory,
-        val slot: Int,
-        override val name: String = "module_monitor"
+    val ref: ITileRef,
+    val inventory: Inventory,
+    val slot: Int,
+    override val name: String = "module_monitor"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer
@@ -82,7 +82,7 @@ class ModuleFloppyDrive(
             if (worldIn.isServer && hand == EnumHand.MAIN_HAND && heldItem.isEmpty) {
                 if (inventory[slot].isNotEmpty) {
                     playerIn.inventory.addItemStackToInventory(
-                            inventory.extractItem(slot, 64, false)
+                        inventory.extractItem(slot, 64, false)
                     )
                     container.sendUpdateToNearPlayers()
                 }

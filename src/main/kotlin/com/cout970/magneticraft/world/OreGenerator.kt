@@ -17,13 +17,13 @@ import java.util.*
  */
 
 open class OreGenerator(
-        val ore: IBlockState,
-        val predicate: Predicate<IBlockState>,
-        val config: OreConfig
+    val ore: IBlockState,
+    val predicate: Predicate<IBlockState>,
+    val config: OreConfig
 ) : IWorldGenerator {
 
     constructor(ore: IBlockState, config: OreConfig)
-            : this(ore, Predicate { input -> input?.block == Blocks.STONE }, config)
+        : this(ore, Predicate { input -> input?.block == Blocks.STONE }, config)
 
     override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?,
                           chunkProvider: IChunkProvider?) {

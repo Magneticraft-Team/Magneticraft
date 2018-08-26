@@ -34,9 +34,9 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate
  * Created by cout970 on 2017/08/28.
  */
 class ModulePipe(
-        val tank: Tank,
-        val type: PipeType,
-        override val name: String = "module_pipe"
+    val tank: Tank,
+    val type: PipeType,
+    override val name: String = "module_pipe"
 ) : IModule, INetworkNode, IOnActivated {
 
     override lateinit var container: IModuleContainer
@@ -56,7 +56,7 @@ class ModulePipe(
     override val ref: ITileRef get() = container.ref
 
     override val sides: List<EnumFacing> = EnumFacing.values()
-            .filter { connectionStates[it.ordinal] != ConnectionState.DISABLE }.toList()
+        .filter { connectionStates[it.ordinal] != ConnectionState.DISABLE }.toList()
 
     fun getConnectionType(side: EnumFacing, render: Boolean): ConnectionType {
         val tile = world.getTileEntity(pos + side) ?: return ConnectionType.NONE
@@ -66,7 +66,7 @@ class ModulePipe(
 
             if (mod != null && mod.type == type) {
                 if (render && (connectionStates[side.ordinal] == ConnectionState.DISABLE
-                                || mod.connectionStates[side.opposite.ordinal] == ConnectionState.DISABLE)) {
+                        || mod.connectionStates[side.opposite.ordinal] == ConnectionState.DISABLE)) {
                     return ConnectionType.NONE
                 }
                 return ConnectionType.PIPE
@@ -134,8 +134,8 @@ class ModulePipe(
 
     private fun AABB.containsPoint(vec: Vec3d): Boolean {
         return vec.x >= this.minX && vec.x <= this.maxX &&
-                vec.y >= this.minY && vec.y <= this.maxY &&
-                vec.z >= this.minZ && vec.z <= this.maxZ
+            vec.y >= this.minY && vec.y <= this.maxY &&
+            vec.z >= this.minZ && vec.z <= this.maxZ
     }
 
     fun getNetworkTank() = FluidHandlerConcatenate(pipeNetwork?.members?.map { it.tank } ?: emptyList())

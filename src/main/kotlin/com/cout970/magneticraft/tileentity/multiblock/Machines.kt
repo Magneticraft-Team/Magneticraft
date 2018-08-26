@@ -331,7 +331,7 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
     )
 
     val heatModule = ModuleHeat(listOf(node), connectableDirections = ioModule::getHeatConnectPoints)
-    val bigCombustionChamberModule = ModuleBigCombustionChamber(this::facing, node, inventory, tank,  2000.fromCelsiusToKelvin())
+    val bigCombustionChamberModule = ModuleBigCombustionChamber(this::facing, node, inventory, tank, 2000.fromCelsiusToKelvin())
 
     override val multiblockModule = ModuleMultiblockCenter(
         multiblockStructure = getMultiblock(),

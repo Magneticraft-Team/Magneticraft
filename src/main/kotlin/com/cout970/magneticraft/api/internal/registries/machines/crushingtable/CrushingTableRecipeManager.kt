@@ -28,7 +28,7 @@ object CrushingTableRecipeManager : ICrushingTableRecipeManager {
     }
 
     override fun removeRecipe(recipe: ICrushingTableRecipe): Boolean {
-        if (findRecipe(recipe.input) != null){
+        if (findRecipe(recipe.input) != null) {
             return recipes.remove(recipe)
         }
         return false

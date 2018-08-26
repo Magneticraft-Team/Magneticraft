@@ -19,7 +19,7 @@ interface IMultiblockComponent {
     fun getBlockData(relativePos: BlockPos, context: MultiblockContext): BlockData
 
     //called when the multiblock is activated
-    fun activateBlock(relativePos: BlockPos, context: MultiblockContext){
+    fun activateBlock(relativePos: BlockPos, context: MultiblockContext) {
         val pos = context.center + relativePos
         val tile = context.world.getTile<TileBase>(pos) ?: return
         val module = tile.container.modules.find { it is IMultiblockModule } as? IMultiblockModule ?: return
@@ -31,7 +31,7 @@ interface IMultiblockComponent {
     }
 
     //called when the multiblock is destroyed
-    fun deactivateBlock(relativePos: BlockPos, context: MultiblockContext){
+    fun deactivateBlock(relativePos: BlockPos, context: MultiblockContext) {
         val pos = context.center + relativePos
         val tile = context.world.getTile<TileBase>(pos)
         val module = tile?.container?.modules?.find { it is IMultiblockModule } as? IMultiblockModule

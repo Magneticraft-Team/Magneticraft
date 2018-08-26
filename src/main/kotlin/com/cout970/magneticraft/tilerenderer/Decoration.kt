@@ -18,8 +18,8 @@ object TileRendererTubeLight : BaseTileRenderer<TileTubeLight>() {
 
     override fun init() {
         createModel(Decoration.tubeLight,
-                ModelSelector("left", FilterRegex("Left\\d")),
-                ModelSelector("right", FilterRegex("Right\\d"))
+            ModelSelector("left", FilterRegex("Left\\d")),
+            ModelSelector("right", FilterRegex("Right\\d"))
         )
     }
 

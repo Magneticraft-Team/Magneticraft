@@ -41,11 +41,11 @@ class ClientProxy : CommonProxy() {
 
 
     @SubscribeEvent
-    fun initSoundsEvent(event: RegistryEvent.Register<SoundEvent>){
+    fun initSoundsEvent(event: RegistryEvent.Register<SoundEvent>) {
         logTime("Task registerSounds:") { registerSounds(event.registry) }
     }
 
-    override fun postItemRegister(){
+    override fun postItemRegister() {
         super.postItemRegister()
 
         //Item renders
@@ -73,17 +73,17 @@ class ClientProxy : CommonProxy() {
             (i as? ItemBase)?.let { item ->
                 item.variants.forEach { variant ->
                     ModelLoader.setCustomModelResourceLocation(
-                            item,
-                            variant.key,
-                            item.registryName!!.toModel(variant.value)
+                        item,
+                        variant.key,
+                        item.registryName!!.toModel(variant.value)
                     )
                 }
 
                 item.customModels.forEach { (state, location) ->
                     ModelLoaderApi.registerModelWithDecorator(
-                            ModelResourceLocation(item.registryName!!, state),
-                            location,
-                            DefaultBlockDecorator
+                        ModelResourceLocation(item.registryName!!, state),
+                        location,
+                        DefaultBlockDecorator
                     )
                 }
             }
@@ -97,16 +97,16 @@ class ClientProxy : CommonProxy() {
                 if (blockBase.generateDefaultItemModel) {
                     blockBase.inventoryVariants.forEach {
                         ModelLoader.setCustomModelResourceLocation(
-                                itemBlock,
-                                it.key,
-                                itemBlock.registryName!!.toModel(it.value)
+                            itemBlock,
+                            it.key,
+                            itemBlock.registryName!!.toModel(it.value)
                         )
                     }
                 } else {
                     ModelLoader.setCustomModelResourceLocation(
-                            itemBlock,
-                            0,
-                            itemBlock.registryName!!.toModel("inventory")
+                        itemBlock,
+                        0,
+                        itemBlock.registryName!!.toModel("inventory")
                     )
                 }
                 val mapper = blockBase.getCustomStateMapper()
@@ -114,17 +114,17 @@ class ClientProxy : CommonProxy() {
                     ModelLoader.setCustomStateMapper(blockBase, mapper)
                 }
                 blockBase.customModels.forEach { (state, location) ->
-                    if(state == "inventory" || blockBase.forceModelBake){
+                    if (state == "inventory" || blockBase.forceModelBake) {
                         ModelLoaderApi.registerModelWithDecorator(
-                                modelId = ModelResourceLocation(blockBase.registryName!!, state),
-                                modelLocation = location,
-                                decorator = DefaultBlockDecorator
+                            modelId = ModelResourceLocation(blockBase.registryName!!, state),
+                            modelLocation = location,
+                            decorator = DefaultBlockDecorator
                         )
-                    }else {
+                    } else {
                         ModelLoaderApi.registerModel(
-                                modelId = ModelResourceLocation(blockBase.registryName!!, state),
-                                modelLocation = location,
-                                bake = false
+                            modelId = ModelResourceLocation(blockBase.registryName!!, state),
+                            modelLocation = location,
+                            bake = false
                         )
                     }
                 }

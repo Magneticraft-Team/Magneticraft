@@ -26,13 +26,13 @@ import net.minecraftforge.items.IItemHandler
  * Created by cout970 on 2017/08/22.
  */
 class ModuleRobotControl(
-        val ref: ITileRef,
-        val inventory: IItemHandler,
-        val storage: ModuleInternalStorage,
-        val node: ElectricNode,
-        val orientationGetter: () -> Computers.RobotOrientation,
-        val orientationSetter: (Computers.RobotOrientation) -> Unit,
-        override val name: String = "module_network_card"
+    val ref: ITileRef,
+    val inventory: IItemHandler,
+    val storage: ModuleInternalStorage,
+    val node: ElectricNode,
+    val orientationGetter: () -> Computers.RobotOrientation,
+    val orientationSetter: (Computers.RobotOrientation) -> Unit,
+    override val name: String = "module_network_card"
 ) : IModule, IMiningRobot {
 
     override lateinit var container: IModuleContainer

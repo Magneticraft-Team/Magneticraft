@@ -27,16 +27,16 @@ class DeviceKeyboard : IDevice, IResettable {
     val clipboardToPaste = StringBuilder()
 
     val memStruct = ReadWriteStruct("monitor_header",
-            ReadWriteStruct("device_header",
-                    ReadOnlyByte("online", { 1 }),
-                    ReadOnlyByte("type", { 1 }),
-                    ReadOnlyShort("status", { 0 })
-            ),
-            ReadWriteByte("keyBufferPtr", { regKeyBufferPtr = it.toInt() and 0xFF }, { regKeyBufferPtr.toByte() }),
-            ReadWriteByte("keyBufferSize", { regKeyBufferSize = it.toInt() and 0xFF }, { regKeyBufferSize.toByte() }),
-            ReadWriteByte("key", { currentKey = it.toInt() and 0xFF }, { currentKey.toByte() }),
-            ReadOnlyByte("isPressed", { keyStates[currentKey] }),
-            ReadWriteByteArray("keyBuffer", keyBuffer)
+        ReadWriteStruct("device_header",
+            ReadOnlyByte("online", { 1 }),
+            ReadOnlyByte("type", { 1 }),
+            ReadOnlyShort("status", { 0 })
+        ),
+        ReadWriteByte("keyBufferPtr", { regKeyBufferPtr = it.toInt() and 0xFF }, { regKeyBufferPtr.toByte() }),
+        ReadWriteByte("keyBufferSize", { regKeyBufferSize = it.toInt() and 0xFF }, { regKeyBufferSize.toByte() }),
+        ReadWriteByte("key", { currentKey = it.toInt() and 0xFF }, { currentKey.toByte() }),
+        ReadOnlyByte("isPressed", { keyStates[currentKey] }),
+        ReadWriteByteArray("keyBuffer", keyBuffer)
     )
 
     override fun update() {
@@ -115,10 +115,10 @@ class DeviceKeyboard : IDevice, IResettable {
     }
 
     override fun serialize(): MutableMap<String, Any> = mutableMapOf(
-            "KeyBufferPtr" to regKeyBufferPtr,
-            "KeyBufferSize" to regKeyBufferSize,
-            "currentKey" to currentKey,
-            "KeyBuffer" to keyBuffer.copyOf()
+        "KeyBufferPtr" to regKeyBufferPtr,
+        "KeyBufferSize" to regKeyBufferSize,
+        "currentKey" to currentKey,
+        "KeyBuffer" to keyBuffer.copyOf()
     )
 
     override fun deserialize(map: MutableMap<String, Any>) {

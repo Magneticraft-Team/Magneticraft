@@ -43,7 +43,7 @@ object CommonMethods {
 
             val te = args.worldIn.getTile<TileBase>(pos) ?: return false
             val electricModule = te.container.modules.find { it is ModuleElectricity } as? ModuleElectricity
-                    ?: return false
+                ?: return false
 
             electricModule.autoConnectWires = !electricModule.autoConnectWires
             if (!electricModule.autoConnectWires) {
@@ -124,7 +124,7 @@ object CommonMethods {
         } else false
     }
 
-    fun <T> providerFor(cap: () ->Capability<T>?, handler: T): ICapabilityProvider? {
+    fun <T> providerFor(cap: () -> Capability<T>?, handler: T): ICapabilityProvider? {
         return object : ICapabilityProvider {
 
             @Suppress("UNCHECKED_CAST")
@@ -138,7 +138,7 @@ object CommonMethods {
      * The base value is associated to the NORTH direction
      */
     fun updateBoundingBoxWithFacing(
-            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+        base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
@@ -151,7 +151,7 @@ object CommonMethods {
      * The base value is associated to the NORTH direction
      */
     fun updateBoundingBoxWithOrientation(
-            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+        base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
@@ -224,10 +224,10 @@ object CommonMethods {
     }
 
     enum class CenterOrientation(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val center: Boolean,
-            val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val center: Boolean,
+        val facing: EnumFacing) : IStatesEnum, IStringSerializable {
 
         CENTER_NORTH("center_north", true, false, EnumFacing.NORTH),
         CENTER_SOUTH("center_south", false, false, EnumFacing.SOUTH),
@@ -261,10 +261,10 @@ object CommonMethods {
     }
 
     enum class OrientationActive(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val center: Boolean,
-            val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val center: Boolean,
+        val facing: EnumFacing) : IStatesEnum, IStringSerializable {
 
         OFF_NORTH("off_north", true, false, EnumFacing.NORTH),
         OFF_SOUTH("off_south", false, false, EnumFacing.SOUTH),

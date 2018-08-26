@@ -15,12 +15,13 @@ public interface IWireConnector extends IElectricNode {
 
     /**
      * Size of the list of connector to avoid creating a list only for checking connectivity
+     *
      * @return Amount of connectors in this node
      */
     int getConnectorsSize();
 
     //this method return the order of the connectors in an specific connection, this is used to avoid crossed wires
-    default int getConnectorIndex(int index, IWireConnector connector, IElectricConnection connection){
+    default int getConnectorIndex(int index, IWireConnector connector, IElectricConnection connection) {
         return index;
     }
 }

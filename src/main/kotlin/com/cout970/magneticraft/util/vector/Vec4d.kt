@@ -12,7 +12,7 @@ data class Vec4d(val x: Double, val y: Double, val z: Double, val w: Double) {
         val ZERO = Vec4d(0, 0, 0, 0)
     }
 
-    val lengthSquared get () =  x * x + y * y + z * z + w * w
+    val lengthSquared get () = x * x + y * y + z * z + w * w
 
     val length get () = Math.sqrt(lengthSquared)
 

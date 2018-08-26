@@ -19,7 +19,7 @@ fun EnumFacing.getRelative(other: EnumFacing): EnumFacing = when (this) {
     EnumFacing.EAST -> other.safeRotateY()
 }
 
-fun EnumFacing.safeRotateYCCW(): EnumFacing{
+fun EnumFacing.safeRotateYCCW(): EnumFacing {
     return when (this) {
         NORTH -> WEST
         EAST -> NORTH
@@ -29,7 +29,7 @@ fun EnumFacing.safeRotateYCCW(): EnumFacing{
     }
 }
 
-fun EnumFacing.safeRotateY(): EnumFacing{
+fun EnumFacing.safeRotateY(): EnumFacing {
     return when (this) {
         NORTH -> EAST
         EAST -> SOUTH

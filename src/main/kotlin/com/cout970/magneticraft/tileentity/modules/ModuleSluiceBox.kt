@@ -30,9 +30,9 @@ import net.minecraftforge.fluids.FluidUtil
  * Created by cout970 on 2017/07/11.
  */
 class ModuleSluiceBox(
-        val facingGetter: () -> EnumFacing,
-        val inventory: Inventory,
-        override val name: String = "module_sluice_box"
+    val facingGetter: () -> EnumFacing,
+    val inventory: Inventory,
+    override val name: String = "module_sluice_box"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer

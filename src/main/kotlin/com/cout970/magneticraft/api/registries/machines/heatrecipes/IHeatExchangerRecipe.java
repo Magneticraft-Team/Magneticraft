@@ -8,17 +8,15 @@ import net.minecraftforge.fluids.FluidStack;
 public interface IHeatExchangerRecipe {
 
     /**
-     * The input stack of this recipe
-     * The stacksize is ignored
-     * Note: this will return a COPY of the input not the original instance of the input
+     * The input stack of this recipe The stacksize is ignored Note: this will return a COPY of the input not the
+     * original instance of the input
      *
      * @return the stack used to find this recipe
      */
     FluidStack getInput();
 
     /**
-     * The output of this recipe
-     * Note: this will return a COPY of the output not the original instance of the output
+     * The output of this recipe Note: this will return a COPY of the output not the original instance of the output
      *
      * @return The primary output of this recipe
      */
@@ -63,6 +61,7 @@ public interface IHeatExchangerRecipe {
      * Checks if this recipes has the same input as the given argument
      *
      * @param input the fluid to test if this recipe can be made from it
+     *
      * @return true if the fluid matches the input of this recipe, false otherwise
      */
     boolean matches(FluidStack input);
@@ -72,6 +71,7 @@ public interface IHeatExchangerRecipe {
      * Checks if this recipes has the same input as the given argument
      *
      * @param output the fluid to test if this recipe can be made from it
+     *
      * @return true if the fluid matches the input of this recipe, false otherwise
      */
     boolean matchesReverse(FluidStack output);

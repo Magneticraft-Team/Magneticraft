@@ -17,8 +17,8 @@ import net.minecraft.util.text.ITextComponent
  * Created by cout970 on 20/08/2016.
  */
 class MainBlockComponent(
-        val block: Block,
-        val getter: (context: MultiblockContext, activate: Boolean) -> IBlockState
+    val block: Block,
+    val getter: (context: MultiblockContext, activate: Boolean) -> IBlockState
 ) : IMultiblockComponent {
 
     override fun checkBlock(relativePos: BlockPos, context: MultiblockContext): List<ITextComponent> {

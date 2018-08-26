@@ -17,10 +17,10 @@ import net.minecraftforge.items.IItemHandler
  * Created by cout970 on 2017/06/12.
  */
 open class ModuleInventory(
-        val inventory: Inventory,
-        override val name: String = "module_inventory",
-        val capabilityFilter: (IItemHandler) -> IItemHandler? = ALLOW_ALL,
-        val onContentChange: (IItemHandler, Int) -> Unit = { _, _ -> Unit }
+    val inventory: Inventory,
+    override val name: String = "module_inventory",
+    val capabilityFilter: (IItemHandler) -> IItemHandler? = ALLOW_ALL,
+    val onContentChange: (IItemHandler, Int) -> Unit = { _, _ -> Unit }
 ) : IModule {
 
     companion object {

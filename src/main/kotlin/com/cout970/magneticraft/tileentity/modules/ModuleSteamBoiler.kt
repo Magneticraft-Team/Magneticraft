@@ -19,11 +19,11 @@ import net.minecraftforge.fluids.FluidStack
  */
 
 class ModuleSteamBoiler(
-        val node: IHeatNode,
-        val inputTank: Tank,
-        val outputTank: Tank,
-        val maxProduction: Int,
-        override val name: String = "module_steam_boiler"
+    val node: IHeatNode,
+    val inputTank: Tank,
+    val outputTank: Tank,
+    val maxProduction: Int,
+    override val name: String = "module_steam_boiler"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

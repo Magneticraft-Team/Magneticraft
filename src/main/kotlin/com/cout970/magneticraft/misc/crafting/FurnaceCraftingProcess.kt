@@ -9,9 +9,9 @@ import net.minecraft.item.crafting.FurnaceRecipes
  * Created by cout970 on 2017/07/01.
  */
 class FurnaceCraftingProcess(
-        val invModule: ModuleInventory,
-        val inputSlot: Int,
-        val outputSlot: Int
+    val invModule: ModuleInventory,
+    val inputSlot: Int,
+    val outputSlot: Int
 ) : ICraftingProcess {
 
     private var cacheKey: ItemStack = ItemStack.EMPTY

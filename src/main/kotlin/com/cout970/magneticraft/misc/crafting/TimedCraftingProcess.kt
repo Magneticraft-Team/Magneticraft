@@ -10,8 +10,8 @@ import net.minecraftforge.common.util.INBTSerializable
  * Created by cout970 on 22/08/2016.
  */
 class TimedCraftingProcess(
-        var process: ICraftingProcess,
-        var onWorkingTick: (Float) -> Unit
+    var process: ICraftingProcess,
+    var onWorkingTick: (Float) -> Unit
 ) : INBTSerializable<NBTTagCompound> {
 
     var timer = 0f

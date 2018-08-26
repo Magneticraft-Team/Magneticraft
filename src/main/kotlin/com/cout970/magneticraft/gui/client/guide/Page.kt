@@ -22,9 +22,9 @@ class NormalTextBox(txt: String, pos: IVector2, page: Int) : TextBox(txt, pos, p
 }
 
 class LinkTextBox(
-        val words: List<TextBox>,
-        val linkSection: String,
-        val linkPage: Int
+    val words: List<TextBox>,
+    val linkSection: String,
+    val linkPage: Int
 ) : TextBox(words.joinToString(), words[0].pos, words[0].page) {
 
     override fun contains(mouse: IVector2, gui: IGui, offset: IVector2): Boolean {

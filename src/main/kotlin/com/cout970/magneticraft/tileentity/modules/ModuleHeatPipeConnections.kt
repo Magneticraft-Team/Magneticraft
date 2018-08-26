@@ -10,8 +10,8 @@ import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.util.EnumFacing
 
 class ModuleHeatPipeConnections(
-        val heatModule: ModuleHeat,
-        override val name: String = "module_heat_pipe_connections"
+    val heatModule: ModuleHeat,
+    override val name: String = "module_heat_pipe_connections"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

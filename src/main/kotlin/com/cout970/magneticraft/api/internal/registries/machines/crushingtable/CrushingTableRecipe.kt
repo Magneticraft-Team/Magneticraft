@@ -10,9 +10,9 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 24/08/2016.
  */
 data class CrushingTableRecipe(
-        private val input: ItemStack,
-        private val output: ItemStack,
-        private val oreDict: Boolean
+    private val input: ItemStack,
+    private val output: ItemStack,
+    private val oreDict: Boolean
 ) : ICrushingTableRecipe {
 
     init {
@@ -26,8 +26,8 @@ data class CrushingTableRecipe(
     override fun getOutput(): ItemStack = output.copy()
 
     override fun matches(input: ItemStack): Boolean {
-        if(ApiUtils.equalsIgnoreSize(input, this.input))return true
-        if(oreDict){
+        if (ApiUtils.equalsIgnoreSize(input, this.input)) return true
+        if (oreDict) {
             val ids = OreDictionary.getOreIDs(this.input)
             return OreDictionary.getOreIDs(input).any { it in ids }
         }

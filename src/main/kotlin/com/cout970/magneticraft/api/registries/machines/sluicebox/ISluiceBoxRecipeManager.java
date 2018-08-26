@@ -49,14 +49,14 @@ public interface ISluiceBoxRecipeManager {
     /**
      * Creates a default recipe
      *
-     *
-     * @deprecated Use any of the versions bellow
      * @param input the input stack
      * @param primaryOutput the output stack that is always returned by the recipe
      * @param secondaryOutput the output stacks and probability of every item to be created by the sluice box
      * @param oreDict if ore dictionary should be used to check the inputs
      *
      * @return the new recipe
+     *
+     * @deprecated Use any of the versions bellow
      */
     @Deprecated(message = "primaryOutput now can have a percentage too", level = DeprecationLevel.HIDDEN)
     ISluiceBoxRecipe createRecipe(ItemStack input, ItemStack primaryOutput,
@@ -64,7 +64,7 @@ public interface ISluiceBoxRecipeManager {
 
     /**
      * Creates a default recipe
-     *
+     * <p>
      * If you are using java, use the version bellow
      *
      * @param input the input stack

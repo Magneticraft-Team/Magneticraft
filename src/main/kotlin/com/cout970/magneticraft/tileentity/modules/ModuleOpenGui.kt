@@ -11,7 +11,7 @@ import com.cout970.magneticraft.util.vector.yi
 import com.cout970.magneticraft.util.vector.zi
 
 class ModuleOpenGui(
-        override val name: String = "module_open_gui"
+    override val name: String = "module_open_gui"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer

@@ -44,8 +44,8 @@ object FluidMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/small_tank.mcx"),
-                    "inventory" to resource("models/block/mcx/small_tank.mcx")
+                "model" to resource("models/block/mcx/small_tank.mcx"),
+                "inventory" to resource("models/block/mcx/small_tank.mcx")
             )
             onActivated = CommonMethods::delegateToModule
         }.build()
@@ -55,8 +55,8 @@ object FluidMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/fluid_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/fluid_pipe.mcx")
+                "model" to resource("models/block/mcx/fluid_pipe.mcx"),
+                "inventory" to resource("models/block/mcx/fluid_pipe.mcx")
             )
             boundingBox = { fluidPipeBoundingBox(it.source, it.pos) }
             onActivated = CommonMethods::delegateToModule

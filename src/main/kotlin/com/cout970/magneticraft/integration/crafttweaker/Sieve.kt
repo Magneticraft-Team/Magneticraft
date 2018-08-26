@@ -29,30 +29,30 @@ object Sieve {
                 return@delayExecution
             }
 
-            if(probOut1 > 1 || probOut1 < 0) {
+            if (probOut1 > 1 || probOut1 < 0) {
                 ctLogError("[Sieve] Invalid output probability 1: $probOut1, bounds [1, 0]")
                 return@delayExecution
             }
-            if(probOut2 > 1 || probOut2 < 0) {
+            if (probOut2 > 1 || probOut2 < 0) {
                 ctLogError("[Sieve] Invalid output probability 2: $probOut2, bounds [1, 0]")
                 return@delayExecution
             }
-            if(probOut3 > 1 || probOut3 < 0) {
+            if (probOut3 > 1 || probOut3 < 0) {
                 ctLogError("[Sieve] Invalid output probability 3: $probOut3, bounds [1, 0]")
                 return@delayExecution
             }
-            if(ticks < 0) {
+            if (ticks < 0) {
                 ctLogError("[Sieve] Invalid processing time: $ticks, must be positive")
                 return@delayExecution
             }
 
             val recipe = SieveRecipeManager.createRecipe(inStack,
-                    outStack1, probOut1,
-                    outStack2, probOut2,
-                    outStack3, probOut3,
-                    ticks, useOreDict)
+                outStack1, probOut1,
+                outStack2, probOut2,
+                outStack3, probOut3,
+                ticks, useOreDict)
 
-            applyAction("Adding $recipe"){
+            applyAction("Adding $recipe") {
                 SieveRecipeManager.registerRecipe(recipe)
             }
         }
@@ -60,7 +60,7 @@ object Sieve {
 
     @ZenMethod
     @JvmStatic
-    fun removeRecipe(input: IItemStack){
+    fun removeRecipe(input: IItemStack) {
         CraftTweakerPlugin.delayExecution {
             val inStack = input.toStack()
 
@@ -71,12 +71,12 @@ object Sieve {
 
             val recipe = SieveRecipeManager.findRecipe(inStack)
 
-            if(recipe == null) {
+            if (recipe == null) {
                 ctLogError("[Sieve] Cannot remove recipe: No recipe found for $input")
                 return@delayExecution
             }
 
-            applyAction("Removing $recipe"){
+            applyAction("Removing $recipe") {
                 SieveRecipeManager.removeRecipe(recipe)
             }
         }

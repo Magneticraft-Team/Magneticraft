@@ -40,11 +40,11 @@ object AutomaticMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileConveyorBelt)
             customModels = listOf(
-                    "base" to resource("models/block/mcx/conveyor_belt_base.mcx"),
-                    "anim" to resource("models/block/mcx/conveyor_belt_anim.mcx"),
-                    "corner_base" to resource("models/block/mcx/conveyor_belt_corner_base.mcx"),
-                    "corner_anim" to resource("models/block/mcx/conveyor_belt_corner_anim.mcx"),
-                    "inventory" to resource("models/block/mcx/conveyor_belt.mcx")
+                "base" to resource("models/block/mcx/conveyor_belt_base.mcx"),
+                "anim" to resource("models/block/mcx/conveyor_belt_anim.mcx"),
+                "corner_base" to resource("models/block/mcx/conveyor_belt_corner_base.mcx"),
+                "corner_anim" to resource("models/block/mcx/conveyor_belt_corner_anim.mcx"),
+                "inventory" to resource("models/block/mcx/conveyor_belt.mcx")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
@@ -60,8 +60,8 @@ object AutomaticMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileInserter)
             customModels = listOf(
-                    "model" to resource("models/block/gltf/inserter.gltf"),
-                    "inventory" to resource("models/block/gltf/inserter.gltf")
+                "model" to resource("models/block/gltf/inserter.gltf"),
+                "inventory" to resource("models/block/gltf/inserter.gltf")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
@@ -77,15 +77,15 @@ object AutomaticMachines : IBlockMaker {
             factory = factoryOf(::TileWaterGenerator)
             onActivated = CommonMethods::delegateToModule
         }.build()
-        
+
         feedingTrough = builder.withName("feeding_trough").copy {
             material = Material.WOOD
             states = CommonMethods.CenterOrientation.values().toList()
             factory = factoryOf(::TileFeedingTrough)
             factoryFilter = { it[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false }
             customModels = listOf(
-                    "model" to resource("models/block/mcx/feeding_trough.mcx"),
-                    "inventory" to resource("models/block/mcx/feeding_trough_inv.mcx")
+                "model" to resource("models/block/mcx/feeding_trough.mcx"),
+                "inventory" to resource("models/block/mcx/feeding_trough_inv.mcx")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
@@ -103,7 +103,7 @@ object AutomaticMachines : IBlockMaker {
 
                 listOf(BlockPos.ORIGIN to thisState, facing.toBlockPos() to otherState)
             }
-            onBlockBreak = func@ {
+            onBlockBreak = func@{
                 val facing = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: return@func
                 it.worldIn.destroyBlock(it.pos + facing.toBlockPos(), true)
             }

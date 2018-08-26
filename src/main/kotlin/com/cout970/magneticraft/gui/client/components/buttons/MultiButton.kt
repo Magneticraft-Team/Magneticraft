@@ -5,11 +5,11 @@ import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.ResourceLocation
 
 class MultiButton(
-        id: Int = 0,
-        texture: ResourceLocation? = null,
-        box: Pair<IVector2, IVector2>,
-        textureSize: IVector2 = vec2Of(256),
-        uv: (ButtonState) -> Pair<IVector2, IVector2>
+    id: Int = 0,
+    texture: ResourceLocation? = null,
+    box: Pair<IVector2, IVector2>,
+    textureSize: IVector2 = vec2Of(256),
+    uv: (ButtonState) -> Pair<IVector2, IVector2>
 ) : AbstractButton(id, texture, box, textureSize, uv) {
 
     lateinit var allButtons: List<MultiButton>

@@ -84,10 +84,10 @@ object ToolItems : IItemMaker {
             val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, args.facing) ?: return EnumActionResult.PASS
 
             val msg = handler.nodes
-                    .filterIsInstance<IElectricNode>()
-                    .joinToString("\n") {
-                        "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage)
-                    }
+                .filterIsInstance<IElectricNode>()
+                .joinToString("\n") {
+                    "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage)
+                }
 
             args.player.sendUnlocalizedMessage(msg)
         }
@@ -100,10 +100,10 @@ object ToolItems : IItemMaker {
             val handler = tile.getOrNull(HEAT_NODE_HANDLER, args.facing) ?: return EnumActionResult.PASS
 
             val msg = handler.nodes
-                    .filterIsInstance<IHeatNode>()
-                    .joinToString("\n") {
-                        I18n.format("text.magneticraft.thermometer.temp", formatHeat(it.temperature))
-                    }
+                .filterIsInstance<IHeatNode>()
+                .joinToString("\n") {
+                    I18n.format("text.magneticraft.thermometer.temp", formatHeat(it.temperature))
+                }
 
             args.player.sendUnlocalizedMessage(msg)
         }
@@ -128,7 +128,7 @@ object ToolItems : IItemMaker {
             if (stack.hasKey(POSITION_KEY)) {
                 val basePos = stack.getBlockPos(POSITION_KEY)
                 return name + " [${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
-                        "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
+                    "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
             }
             return name
         }
@@ -157,8 +157,8 @@ object ToolItems : IItemMaker {
                     if (basePos != null) {
                         stack.setBlockPos(POSITION_KEY, basePos)
                         player.sendMessage("text.magneticraft.wire_connect.updated_position",
-                                "[${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
-                                        "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
+                            "[${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
+                                "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
                         return EnumActionResult.SUCCESS
                     }
                 } else {

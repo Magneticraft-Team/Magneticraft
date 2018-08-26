@@ -14,9 +14,9 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 
 class ModuleToggleFluidExporter(
-        tank: Tank,
-        ports: () -> List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
-        override val name: String = "module_toggle_fluid_exporter"
+    tank: Tank,
+    ports: () -> List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
+    override val name: String = "module_toggle_fluid_exporter"
 ) : IModule, IOnActivated {
 
     val exporter = ModuleFluidExporter(tank, ports)

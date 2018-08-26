@@ -9,7 +9,7 @@ import com.cout970.magneticraft.util.toFahrenheit
  */
 
 fun formatHeat(amount: Double): String {
-    val value = if(Config.heatUnitCelsius) amount.toCelsius() else amount.toFahrenheit()
-    val symbol = if(Config.heatUnitCelsius) "C" else "F"
+    val value = if (Config.heatUnitCelsius) amount.toCelsius() else amount.toFahrenheit()
+    val symbol = if (Config.heatUnitCelsius) "C" else "F"
     return "%.1f%s".format(value, symbol)
 }

@@ -28,7 +28,7 @@ class BatteryStorageBar(val parent: GuiBase, val texture: ResourceLocation,
 
         gui.bindTexture(texture)
         gui.drawTexture(DrawableBox(pos + vec2Of(0, 48 - level), vec2Of(size.x, level),
-                vec2Of(0, 166 + 48 - level)))
+            vec2Of(0, 166 + 48 - level)))
     }
 
     override fun drawSecondLayer(mouse: Vec2d) {

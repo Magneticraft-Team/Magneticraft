@@ -32,7 +32,8 @@ import com.cout970.magneticraft.multiblock.core.MultiblockManager;
  */
 public class MagneticraftApi {
 
-    private MagneticraftApi() {}
+    private MagneticraftApi() {
+    }
 
     public static IRefineryRecipeManager getRefineryRecipeManager() {
         return RefineryRecipeManager.INSTANCE;

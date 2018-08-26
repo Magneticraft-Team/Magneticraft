@@ -49,7 +49,7 @@ public final class NodeID implements INBTSerializable<NBTTagCompound> {
         return nbt;
     }
 
-    public static NodeID deserializeFromNBT(NBTTagCompound nbt){
+    public static NodeID deserializeFromNBT(NBTTagCompound nbt) {
         String name = nbt.getString("name");
         int dimension = nbt.getInteger("dimension");
         int posX = nbt.getInteger("posX");
@@ -67,10 +67,10 @@ public final class NodeID implements INBTSerializable<NBTTagCompound> {
     @Override
     public String toString() {
         return "NodeID{" +
-                "name='" + name + '\'' +
-                ", pos=" + pos +
-                ", dimension=" + dimension +
-                '}';
+            "name='" + name + '\'' +
+            ", pos=" + pos +
+            ", dimension=" + dimension +
+            '}';
     }
 
     @Override

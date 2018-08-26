@@ -47,15 +47,17 @@ object Computers : IBlockMaker {
             hasCustomModel = true
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/computer.mcx"),
-                    "inventory" to resource("models/block/mcx/computer.mcx")
+                "model" to resource("models/block/mcx/computer.mcx"),
+                "inventory" to resource("models/block/mcx/computer.mcx")
             )
             //methods
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::delegateToModule
             canConnectRedstone = { true }
-            redstonePower = { it.world.getTile<TileComputer>(it.pos)?.redstoneSensor?.outputs?.get(it.side.ordinal) ?: 0 }
+            redstonePower = {
+                it.world.getTile<TileComputer>(it.pos)?.redstoneSensor?.outputs?.get(it.side.ordinal) ?: 0
+            }
         }.build()
 
         miningRobot = builder.withName("mining_robot").copy {
@@ -64,8 +66,8 @@ object Computers : IBlockMaker {
             hasCustomModel = true
             generateDefaultItemModel = false
             customModels = listOf(
-                    "model" to resource("models/block/mcx/mining_robot.mcx"),
-                    "inventory" to resource("models/block/mcx/mining_robot.mcx")
+                "model" to resource("models/block/mcx/mining_robot.mcx"),
+                "inventory" to resource("models/block/mcx/mining_robot.mcx")
             )
             //methods
             onBlockPlaced = Computers::placeWithRobotOrientation
@@ -73,7 +75,9 @@ object Computers : IBlockMaker {
             onActivated = CommonMethods::delegateToModule
             boundingBox = { it.robotAABBs() }
             canConnectRedstone = { true }
-            redstonePower = { it.world.getTile<TileMiningRobot>(it.pos)?.redstoneSensor?.outputs?.get(it.side.ordinal) ?: 0 }
+            redstonePower = {
+                it.world.getTile<TileMiningRobot>(it.pos)?.redstoneSensor?.outputs?.get(it.side.ordinal) ?: 0
+            }
 
         }.build()
 
@@ -89,17 +93,17 @@ object Computers : IBlockMaker {
 
     fun placeWithRobotOrientation(it: OnBlockPlacedArgs): IBlockState {
         return it.defaultValue.withProperty(PROPERTY_ROBOT_ORIENTATION,
-                RobotOrientation.of(it.placer?.horizontalFacing ?: EnumFacing.NORTH))
+            RobotOrientation.of(it.placer?.horizontalFacing ?: EnumFacing.NORTH))
     }
 
     fun BoundingBoxArgs.robotAABBs(): List<AABB> {
         val ori = state[PROPERTY_ROBOT_ORIENTATION]
-                ?: return listOf(AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0))
+            ?: return listOf(AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0))
 
         return listOf(
-                vec3Of(4.px, 4.px, 6.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1 - 2.px), // center
-                vec3Of(5.px, 5.px, 1 - 2.px) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 1), // main thruster
-                vec3Of(5.px, 5.px, 0) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 6.px) // dill
+            vec3Of(4.px, 4.px, 6.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1 - 2.px), // center
+            vec3Of(5.px, 5.px, 1 - 2.px) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 1), // main thruster
+            vec3Of(5.px, 5.px, 0) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 6.px) // dill
         ).map { ori.facing.rotateBox(vec3Of(0.5), it) }
     }
 

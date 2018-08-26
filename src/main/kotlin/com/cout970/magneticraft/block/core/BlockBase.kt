@@ -94,7 +94,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun getStateFromMeta(meta: Int): IBlockState = states[meta].getBlockState(this)
 
     override fun createBlockState(): BlockStateContainer =
-            BlockStateContainer(this, *states_!![0].properties.toTypedArray())
+        BlockStateContainer(this, *states_!![0].properties.toTypedArray())
 
     // event stuff
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AABB {
@@ -126,18 +126,18 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
             val look = player.getLook(0f)
             val blockReachDistance = Minecraft.getMinecraft().playerController!!.blockReachDistance
             val end = start.addVector(
-                    look.x * blockReachDistance,
-                    look.y * blockReachDistance,
-                    look.z * blockReachDistance
+                look.x * blockReachDistance,
+                look.y * blockReachDistance,
+                look.z * blockReachDistance
             )
 
             val res = rel
-                    .mapNotNull { it.cut(FULL_BLOCK_AABB) }
-                    .associate { it to rayTrace(pos, start, end, it) }
-                    .filter { it.value != null }
-                    .map { it.key to it.value }
-                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
-                    .firstOrNull()?.first
+                .mapNotNull { it.cut(FULL_BLOCK_AABB) }
+                .associate { it to rayTrace(pos, start, end, it) }
+                .filter { it.value != null }
+                .map { it.key to it.value }
+                .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                .firstOrNull()?.first
 
             return res?.offset(pos) ?: EMPTY_AABB
         }
@@ -151,12 +151,12 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         aabb?.let {
             val rel = it.invoke(BoundingBoxArgs(blockState, worldIn, pos))
             val res = rel
-                    .mapNotNull { it.cut(FULL_BLOCK_AABB) }
-                    .associate { it to rayTrace(pos, start, end, it) }
-                    .filter { it.value != null }
-                    .map { it.key to it.value }
-                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
-                    .firstOrNull()?.second
+                .mapNotNull { it.cut(FULL_BLOCK_AABB) }
+                .associate { it to rayTrace(pos, start, end, it) }
+                .filter { it.value != null }
+                .map { it.key to it.value }
+                .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                .firstOrNull()?.second
 
             return res
         }
@@ -169,9 +169,9 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         val heldItem = playerIn.getHeldItem(hand)
 
         return onActivated?.invoke(
-                OnActivatedArgs(worldIn, pos, state, playerIn, hand, heldItem, side,
-                        vec3Of(hitX, hitY, hitZ)))
-                ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ)
+            OnActivatedArgs(worldIn, pos, state, playerIn, hand, heldItem, side,
+                vec3Of(hitX, hitY, hitZ)))
+            ?: super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ)
     }
 
     override fun damageDropped(state: IBlockState): Int {
@@ -219,7 +219,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         val state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand)
         onBlockPlaced?.let {
             return it.invoke(
-                    OnBlockPlacedArgs(world, pos, facing, vec3Of(hitX, hitY, hitZ), meta, placer, hand, defaultState)
+                OnBlockPlacedArgs(world, pos, facing, vec3Of(hitX, hitY, hitZ), meta, placer, hand, defaultState)
             )
         }
         return state
@@ -240,10 +240,10 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun isFullCube(state: IBlockState?) = !translucent_
 
     override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? =
-            capabilityProvider?.getCapability(capability, facing)
+        capabilityProvider?.getCapability(capability, facing)
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean =
-            capabilityProvider?.hasCapability(capability, facing) ?: false
+        capabilityProvider?.hasCapability(capability, facing) ?: false
 
     fun getBlockStatesToPlace(worldIn: World, pos: BlockPos,
                               facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float,
@@ -251,7 +251,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
         val default = getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, player, hand)
         return blockStatesToPlace?.invoke(
-                BlockStatesToPlaceArgs(worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), meta, player, hand, default)
+            BlockStatesToPlaceArgs(worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), meta, player, hand, default)
         ) ?: listOf(BlockPos.ORIGIN to default)
     }
 
@@ -290,7 +290,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
                                       side: EnumFacing): Boolean {
 
         return shouldSideBeRendered_?.invoke(ShouldSideBeRendererArgs(state, blockAccess, pos, side))
-                ?: super.shouldSideBeRendered(state, blockAccess, pos, side)
+            ?: super.shouldSideBeRendered(state, blockAccess, pos, side)
     }
 
     override fun tickRate(worldIn: World?): Int {
@@ -303,17 +303,17 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
     override fun canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing?): Boolean {
         return canConnectRedstone?.invoke(CanConnectRedstoneArgs(state, world, pos, side))
-                ?: super.canConnectRedstone(state, world, pos, side)
+            ?: super.canConnectRedstone(state, world, pos, side)
     }
 
     override fun getStrongPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         return redstonePower?.invoke(RedstonePowerArgs(blockState, blockAccess, pos, side))
-                ?: super.getStrongPower(blockState, blockAccess, pos, side)
+            ?: super.getStrongPower(blockState, blockAccess, pos, side)
     }
 
     override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         return redstonePower?.invoke(RedstonePowerArgs(blockState, blockAccess, pos, side))
-                ?: super.getWeakPower(blockState, blockAccess, pos, side)
+            ?: super.getWeakPower(blockState, blockAccess, pos, side)
     }
 
     override fun getBlockFaceShape(worldIn: IBlockAccess, state: IBlockState, pos: BlockPos, face: EnumFacing): BlockFaceShape {

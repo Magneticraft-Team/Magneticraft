@@ -44,7 +44,7 @@ class CPU_MIPS : ICPU {
         }
         if (debugLevel > 3) {
             log("Reg: %s, change from 0x%08x (%d) to 0x%08x (%d)", registerNames[s], registers[s], registers[s], value,
-                    value)
+                value)
         }
         registers[s] = value
     }
@@ -252,20 +252,20 @@ class CPU_MIPS : ICPU {
 
                 when (opcode) {
                     0x1 -> when (rt) {
-                    //bltz
+                        //bltz
                         0b00000 -> if (getRegister(rs) < 0) {
                             jump = regPC + (inmed shl 2)
                         }
-                    //bgez
+                        //bgez
                         0b00001 -> if (getRegister(rs) >= 0) {
                             jump = regPC + (inmed shl 2)
                         }
-                    //bltzal
+                        //bltzal
                         0b10000 -> if (getRegister(rs) < 0) {
                             setRegister(31, regPC + 4)
                             jump = regPC + (inmed shl 2)
                         }
-                    //bgezal
+                        //bgezal
                         0b10001 -> if (getRegister(rs) >= 0) {
                             setRegister(31, regPC + 4)
                             jump = regPC + (inmed shl 2)
@@ -441,24 +441,24 @@ class CPU_MIPS : ICPU {
     companion object {
 
         val registerNames = arrayOf("z0", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3",
-                "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp",
-                "sp", "fp", "ra")
+            "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp",
+            "sp", "fp", "ra")
 
         val TYPE_R = arrayOf("SLL  ", "UNKNOW", "SRL  ", "SRA  ", "SLLV ", "UNKNOW", "SRLV ", "SRAV ", "JR   ", "JALR ",
-                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ",
-                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "ADD  ", "ADDU ", "SUB  ", "SUBU ", "AND  ", "OR   ", "XOR  ", "NOR  ", "UNKNOW",
-                "UNKNOW", "SLT  ", "SLTU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "UNKNOW")
+            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ",
+            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "ADD  ", "ADDU ", "SUB  ", "SUBU ", "AND  ", "OR   ", "XOR  ", "NOR  ", "UNKNOW",
+            "UNKNOW", "SLT  ", "SLTU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "UNKNOW")
 
         val TYPE_I = arrayOf("UNKNOW", "BGEZ ", "UNKNOW", "UNKNOW", "BEQ  ", "BNE  ", "BLEZ ", "BGTZ ", "ADDI ",
-                "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LLO  ", "LHI  ", "TRAP ", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "LB   ", "LH   ", "LWL  ", "LW   ", "LBU  ", "LHU  ", "LWR   ", "UNKNOW", "SB   ",
-                "SH   ", "SWL  ", "SW   ", "UNKNOW", "UNKNOW", "SWR  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-                "UNKNOW", "UNKNOW", "UNKNOW")
+            "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "LLO  ", "LHI  ", "TRAP ", "UNKNOW", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "LB   ", "LH   ", "LWL  ", "LW   ", "LBU  ", "LHU  ", "LWR   ", "UNKNOW", "SB   ",
+            "SH   ", "SWL  ", "SW   ", "UNKNOW", "UNKNOW", "SWR  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
+            "UNKNOW", "UNKNOW", "UNKNOW")
 
         private fun log(s: String, vararg objs: Any) {
             debug(String.format(s, *objs))
@@ -504,15 +504,15 @@ class CPU_MIPS : ICPU {
                 val shamt: Int = getBitsFromInt(instruct, 6, 10, false)
                 val func: Int = getBitsFromInt(instruct, 0, 5, false)
                 return "%s $%s, $%s, $%s (%05d) \t Type R: inst: 0x%08x"
-                        .format(TYPE_R[func], registerNames[rd], registerNames[rs], registerNames[rt], shamt,
-                                instruct)
+                    .format(TYPE_R[func], registerNames[rd], registerNames[rs], registerNames[rt], shamt,
+                        instruct)
 
             } else if (opcode == 0x2 || opcode == 0x3) {//type J
 
                 val names = arrayOf("UNKNOW", "UNKNOW", "J    ", "JAL  ")
                 val dir = getBitsFromInt(instruct, 0, 25, false)
                 return "%s 0x%08x (0x%08x) \t Type J: inst: 0x%08x"
-                        .format(names[opcode], dir, dir and 0xF0000000.toInt() or (dir shl 2), instruct)
+                    .format(names[opcode], dir, dir and 0xF0000000.toInt() or (dir shl 2), instruct)
 
             } else {//type I
 
@@ -521,8 +521,8 @@ class CPU_MIPS : ICPU {
                 val inmed: Int = getBitsFromInt(instruct, 0, 15, true)
                 val inmedU: Int = getBitsFromInt(instruct, 0, 15, false)
                 return "%s $%s, $%s, %05d (%05d) \t Type I: inst: 0x%08x (opcode: 0x%x %d)"
-                        .format(TYPE_I[opcode], registerNames[rs], registerNames[rt], inmed, inmedU, instruct, opcode,
-                                opcode)
+                    .format(TYPE_I[opcode], registerNames[rs], registerNames[rt], inmed, inmedU, instruct, opcode,
+                        opcode)
             }
         }
     }
@@ -536,7 +536,7 @@ class CPU_MIPS : ICPU {
         if (debugLevel > 0) {
             val bus = motherboard?.bus!!
             log("Exception: %d (%s), regPC: 0x%08x, pfPC: 0x%08x, Description: %s", exception.code, exception.name,
-                    regPC, pfPC, exception.description)
+                regPC, pfPC, exception.description)
             val inst = bus.readWord(pfPC)
             debugInst(inst)
 
@@ -561,7 +561,7 @@ class CPU_MIPS : ICPU {
             println("Stack Pointer: 0x%08x".format(getRegister(29)))
             for (i in 0..50) {
                 println("(0x%08x) 0x%08x".format(getRegister(29) + i * 4,
-                        bus.readWord(getRegister(29) + i * 4)))
+                    bus.readWord(getRegister(29) + i * 4)))
             }
         } else {
 //            val flag = exception.code
@@ -582,14 +582,14 @@ class CPU_MIPS : ICPU {
 
     override fun serialize(): Map<String, Any> {
         return mapOf(
-                "Regs" to registers.copyOf(),
-                "PC" to regPC,
-                "regHI" to regHI,
-                "regLO" to regLO,
-                "Status" to regStatus,
-                "Cause" to regCause,
-                "EPC" to regEPC,
-                "Jump" to jump
+            "Regs" to registers.copyOf(),
+            "PC" to regPC,
+            "regHI" to regHI,
+            "regLO" to regLO,
+            "Status" to regStatus,
+            "Cause" to regCause,
+            "EPC" to regEPC,
+            "Jump" to jump
         )
     }
 

@@ -4,10 +4,10 @@ import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterReci
 import net.minecraftforge.fluids.FluidStack
 
 class OilHeaterRecipe(
-        private val input: FluidStack,
-        private val output: FluidStack,
-        private val duration: Float,
-        private val minTemperature: Float
+    private val input: FluidStack,
+    private val output: FluidStack,
+    private val duration: Float,
+    private val minTemperature: Float
 ) : IOilHeaterRecipe {
 
     override fun getInput(): FluidStack = input.copy()

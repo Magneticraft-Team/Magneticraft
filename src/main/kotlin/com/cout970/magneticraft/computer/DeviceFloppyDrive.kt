@@ -109,19 +109,19 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
     }
 
     val memStruct = ReadWriteStruct("disk_drive_header",
-            ReadOnlyByte("online", { if (isActive) 1 else 0 }),
-            ReadOnlyByte("type", { 0 }),
-            ReadOnlyShort("status", { 0 }),
+        ReadOnlyByte("online", { if (isActive) 1 else 0 }),
+        ReadOnlyByte("type", { 0 }),
+        ReadOnlyShort("status", { 0 }),
 
-            ReadWriteByte("signal", { action = it.toInt() }, { action.toByte() }),
-            ReadOnlyByte("hasDisk", { if (getDisk() == null) 0 else 1 }),
-            ReadOnlyByte("accessTime", { getDisk()?.accessTime?.toByte() ?: 0 }),
-            ReadOnlyByte("finished", { if (action == 0) 1 else 0 }),
+        ReadWriteByte("signal", { action = it.toInt() }, { action.toByte() }),
+        ReadOnlyByte("hasDisk", { if (getDisk() == null) 0 else 1 }),
+        ReadOnlyByte("accessTime", { getDisk()?.accessTime?.toByte() ?: 0 }),
+        ReadOnlyByte("finished", { if (action == 0) 1 else 0 }),
 
-            ReadOnlyInt("numSectors", { getDisk()?.sectorCount ?: 0 }),
-            ReadOnlyInt("serialNumber", { getDisk()?.serialNumber ?: 0 }),
-            ReadWriteInt("currentSector", { currentSector = it }, { currentSector }),
-            ReadWriteByteArray("buffer", getBuffer())
+        ReadOnlyInt("numSectors", { getDisk()?.sectorCount ?: 0 }),
+        ReadOnlyInt("serialNumber", { getDisk()?.serialNumber ?: 0 }),
+        ReadWriteInt("currentSector", { currentSector = it }, { currentSector }),
+        ReadWriteByteArray("buffer", getBuffer())
     )
 
     override fun readByte(addr: Int): Byte {
@@ -138,10 +138,10 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
     }
 
     override fun serialize() = mapOf(
-            "sleep" to sleep,
-            "action" to action,
-            "sector" to currentSector,
-            "buffer" to getBuffer().copyOf()
+        "sleep" to sleep,
+        "action" to action,
+        "sector" to currentSector,
+        "buffer" to getBuffer().copyOf()
     )
 
     override fun deserialize(map: Map<String, Any>) {

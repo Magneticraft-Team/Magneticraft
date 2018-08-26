@@ -46,7 +46,7 @@ open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
         val meta = getMetadata(itemstack.metadata)
 
         val posStatePair = blockBase.getBlockStatesToPlace(worldIn, basePos, facing,
-                hitX, hitY, hitZ, meta, player, hand)
+            hitX, hitY, hitZ, meta, player, hand)
         val posList = posStatePair.map { it.first.add(basePos) }
 
         val canEdit = posList.all { player.canPlayerEdit(it, facing, itemstack) }
@@ -62,12 +62,12 @@ open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
 
                     val soundType = statePlaced.block.getSoundType(statePlaced, worldIn, toPlace, player)
                     worldIn.playSound(player, toPlace, soundType.placeSound,
-                            SoundCategory.BLOCKS,
-                            (soundType.getVolume() + 1.0f) / 2.0f,
-                            soundType.getPitch() * 0.8f
+                        SoundCategory.BLOCKS,
+                        (soundType.getVolume() + 1.0f) / 2.0f,
+                        soundType.getPitch() * 0.8f
                     )
                     blockBase.onBlockPostPlaced?.invoke(OnBlockPostPlacedArgs(
-                            worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), player, hand, pos0
+                        worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), player, hand, pos0
                     ))
                     success = true
                 }

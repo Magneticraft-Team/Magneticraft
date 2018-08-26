@@ -8,13 +8,13 @@ import net.minecraftforge.fluids.FluidStack
  * Created by Yurgen on 16/06/2016.
  */
 data class IceboxRecipe(
-        private val input: ItemStack,
-        private val output: FluidStack,
-        private val heat: Long,
-        private val specificHeat: Double,
-        private val minTemp: Double,
-        private val maxTemp: Double,
-        private val reverse: Boolean
+    private val input: ItemStack,
+    private val output: FluidStack,
+    private val heat: Long,
+    private val specificHeat: Double,
+    private val minTemp: Double,
+    private val maxTemp: Double,
+    private val reverse: Boolean
 ) : IIceboxRecipe {
 
     override fun getInput(): ItemStack = input.copy()

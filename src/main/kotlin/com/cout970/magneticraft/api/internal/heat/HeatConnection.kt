@@ -9,8 +9,8 @@ import com.cout970.magneticraft.util.vector.minus
  * Created by cout970 on 11/06/2016.
  */
 open class HeatConnection(
-        private val firstNode: IHeatNode,
-        private val secondNode: IHeatNode
+    private val firstNode: IHeatNode,
+    private val secondNode: IHeatNode
 ) : IHeatConnection {
 
     override fun getFirstNode() = firstNode

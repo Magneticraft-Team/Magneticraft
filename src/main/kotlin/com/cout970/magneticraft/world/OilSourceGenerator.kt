@@ -18,8 +18,8 @@ import java.util.*
  * Created by cout970 on 2017/09/29.
  */
 class OilSourceGenerator(
-        val blockstate: IBlockState,
-        val config: OilGenConfig
+    val blockstate: IBlockState,
+    val config: OilGenConfig
 ) : IWorldGenerator {
 
     companion object {

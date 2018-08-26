@@ -14,9 +14,9 @@ import net.minecraft.util.math.Vec3d
  * Created by cout970 on 2017/06/29.
  */
 class WireConnectorWrapper(
-        val node: IElectricNode,
-        val connectors: () -> List<IVector3>,
-        val name: String
+    val node: IElectricNode,
+    val connectors: () -> List<IVector3>,
+    val name: String
 ) : IElectricNode by node, IWireConnector {
 
     override fun getId(): NodeID = NodeID(name, pos, world)
@@ -30,10 +30,10 @@ class WireConnectorWrapper(
         val points = connectors()
         if (points.size == 3) {
             val intersects = hasIntersection(
-                    aFirst = points.first().add(pos.toVec3d()),
-                    aSecond = connector.connectors.first().add(connector.pos.toVec3d()),
-                    bFirst = points.last().add(pos.toVec3d()),
-                    bSecond = connector.connectors.last().add(connector.pos.toVec3d())
+                aFirst = points.first().add(pos.toVec3d()),
+                aSecond = connector.connectors.first().add(connector.pos.toVec3d()),
+                bFirst = points.last().add(pos.toVec3d()),
+                bSecond = connector.connectors.last().add(connector.pos.toVec3d())
             )
             return if (intersects) 2 - index else index
         }

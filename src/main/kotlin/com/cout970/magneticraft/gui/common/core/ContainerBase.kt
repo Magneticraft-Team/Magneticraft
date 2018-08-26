@@ -32,16 +32,16 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
         for (i in 0..2) {
             for (j in 0..8) {
                 this.addSlotToContainer(Slot(playerInventory, j + i * 9 + 9,
-                        8 + j * 18 + offset.xi,
-                        84 + i * 18 + offset.yi))
+                    8 + j * 18 + offset.xi,
+                    84 + i * 18 + offset.yi))
             }
         }
 
         val hotBarIndex = inventorySlots.size
         for (i in 0..8) {
             this.addSlotToContainer(Slot(playerInventory, i,
-                    8 + i * 18 + offset.xi,
-                    142 + offset.yi))
+                8 + i * 18 + offset.xi,
+                142 + offset.yi))
         }
         inventoryRegions += InventoryRegion(startIndex..startIndex + 26)
         inventoryRegions += InventoryRegion(hotBarIndex..hotBarIndex + 8)
@@ -91,7 +91,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
     protected fun tryMergeItemStack(stack: ItemStack, index: Int, regions: List<InventoryRegion>): Boolean {
         regions.forEach {
             if (it.advFilter(stack, index) && mergeItemStack(stack, it.region.start,
-                            it.region.endInclusive + 1, it.inverseDirection)) {
+                    it.region.endInclusive + 1, it.inverseDirection)) {
                 return true
             }
         }

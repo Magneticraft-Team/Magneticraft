@@ -8,20 +8,18 @@ import java.io.File;
 public interface IFloppyDisk {
 
     /**
-     * Gets the file used to store all the data in this floppy disk,
-     * this can change using setLabel(...)
+     * Gets the file used to store all the data in this floppy disk, this can change using setLabel(...)
      */
     File getStorageFile();
 
     /**
-     * Gets the name of the disk, this can be changed by the computer
-     * This is used to display the name of the disk in the MC item
+     * Gets the name of the disk, this can be changed by the computer This is used to display the name of the disk in
+     * the MC item
      */
     String getLabel();
 
     /**
-     * Sets the name of the disk, this will try to change the name of the file
-     * where the data is stored
+     * Sets the name of the disk, this will try to change the name of the file where the data is stored
      */
     void setLabel(String str);
 
@@ -31,8 +29,7 @@ public interface IFloppyDisk {
     int getSerialNumber();
 
     /**
-     * Gets tha number of sector of the disk, every sector has 1Kb (1024B), this
-     * is used to get the size of the disk
+     * Gets tha number of sector of the disk, every sector has 1Kb (1024B), this is used to get the size of the disk
      */
     int getSectorCount();
 

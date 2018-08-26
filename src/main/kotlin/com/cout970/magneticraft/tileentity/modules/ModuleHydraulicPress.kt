@@ -11,7 +11,7 @@ import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 
 class ModuleHydraulicPress(
-        override val name: String = "module_hydraulic_press"
+    override val name: String = "module_hydraulic_press"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -28,7 +28,7 @@ class ModuleHydraulicPress(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(
-                IntSyncVariable(DATA_ID_SELECTED_OPTION, { mode.ordinal }, { mode = HydraulicPressMode.values()[it] })
+            IntSyncVariable(DATA_ID_SELECTED_OPTION, { mode.ordinal }, { mode = HydraulicPressMode.values()[it] })
         )
     }
 }

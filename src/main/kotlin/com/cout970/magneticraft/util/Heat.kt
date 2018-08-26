@@ -45,7 +45,6 @@ val FIRE_TEMP = 250.fromCelsiusToKelvin()
 val MAGMA_TEMP = 800.fromCelsiusToKelvin()
 
 
-
 inline fun Number.fromCelsiusToKelvin(): Double = this.toDouble() + 273.15
 
 inline fun Number.fromMinecraftToKelvin(): Double = fromMinecraftToCelsius().fromCelsiusToKelvin()

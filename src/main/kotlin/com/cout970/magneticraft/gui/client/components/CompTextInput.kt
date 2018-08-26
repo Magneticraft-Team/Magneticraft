@@ -15,11 +15,11 @@ import org.lwjgl.opengl.GL11
  * Created by cout970 on 2017/08/01.
  */
 class CompTextInput(
-        fontRenderer: FontRenderer,
-        override val pos: IVector2,
-        override val size: IVector2
+    fontRenderer: FontRenderer,
+    override val pos: IVector2,
+    override val size: IVector2
 ) : GuiTextField(0, fontRenderer, pos.xi, pos.yi,
-        size.xi - fontRenderer.getCharWidth('_'), size.yi), IComponent {
+    size.xi - fontRenderer.getCharWidth('_'), size.yi), IComponent {
 
 
     var updateFunc: ((CompTextInput) -> Unit)? = null

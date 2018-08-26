@@ -54,9 +54,9 @@ fun guiShelvingUnit(gui: GuiBase, container: ContainerShelvingUnit) = gui.run {
     }
 
     val buttons = listOf(
-            MultiButton(0, texture, vec2Of(176, 129) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 0), vec2Of(23, 24))),
-            MultiButton(1, texture, vec2Of(176, 154) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 3), vec2Of(23, 24))),
-            MultiButton(2, texture, vec2Of(176, 179) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 6), vec2Of(23, 24)))
+        MultiButton(0, texture, vec2Of(176, 129) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 0), vec2Of(23, 24))),
+        MultiButton(1, texture, vec2Of(176, 154) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 3), vec2Of(23, 24))),
+        MultiButton(2, texture, vec2Of(176, 179) to vec2Of(23, 24), uv = buttonUV(vec2Of(194, 24 * 6), vec2Of(23, 24)))
     )
     buttons.forEach { +it; it.listener = ::onPress; it.allButtons = buttons }
 
@@ -160,9 +160,9 @@ fun guiPumpjack(gui: GuiBase, container: ContainerPumpjack) = gui.run {
 
     repeat(5) {
         +CompLight(
-                on = DrawableBox(pos, size, vec2Of(26, 166 + 16 * it)),
-                off = DrawableBox(pos, size, vec2Of(26, 9999)),
-                texture = texture, condition = { mod.status == ModulePumpjack.Status.values()[it] }
+            on = DrawableBox(pos, size, vec2Of(26, 166 + 16 * it)),
+            off = DrawableBox(pos, size, vec2Of(26, 9999)),
+            texture = texture, condition = { mod.status == ModulePumpjack.Status.values()[it] }
         )
     }
 }
@@ -190,16 +190,16 @@ fun guiHydraulicPress(gui: GuiBase, container: ContainerHydraulicPress) = gui.ru
     }
 
     val buttons = listOf(
-            MultiButton(0, texture, vec2Of(121, 10) to vec2Of(21, 20), uv = buttonUV(vec2Of(0, 166), vec2Of(21, 20))),
-            MultiButton(1, texture, vec2Of(121, 30) to vec2Of(21, 20), uv = buttonUV(vec2Of(24, 166), vec2Of(21, 20))),
-            MultiButton(2, texture, vec2Of(121, 50) to vec2Of(21, 20), uv = buttonUV(vec2Of(48, 166), vec2Of(21, 20)))
+        MultiButton(0, texture, vec2Of(121, 10) to vec2Of(21, 20), uv = buttonUV(vec2Of(0, 166), vec2Of(21, 20))),
+        MultiButton(1, texture, vec2Of(121, 30) to vec2Of(21, 20), uv = buttonUV(vec2Of(24, 166), vec2Of(21, 20))),
+        MultiButton(2, texture, vec2Of(121, 50) to vec2Of(21, 20), uv = buttonUV(vec2Of(48, 166), vec2Of(21, 20)))
     )
     buttons.forEach { +it; it.listener = ::onPress; it.allButtons = buttons }
 
     buttons[tile.hydraulicPressModule.mode.ordinal].state = ButtonState.PRESSED
 }
 
-fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) =  gui.dsl {
+fun guiOilHeater(gui: GuiBase, container: ContainerOilHeater) = gui.dsl {
     val tile = container.tile
     bars {
         heatBar(tile.node)

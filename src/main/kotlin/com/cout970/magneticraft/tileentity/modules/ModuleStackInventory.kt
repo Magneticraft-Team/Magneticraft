@@ -20,8 +20,8 @@ import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
 class ModuleStackInventory(
-        val maxItems: Int,
-        override val name: String = "module_stack_inventory"
+    val maxItems: Int,
+    override val name: String = "module_stack_inventory"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -159,9 +159,9 @@ class ModuleStackInventory(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(IntSyncVariable(
-                id = DATA_ID_ITEM_AMOUNT,
-                getter = { amount },
-                setter = { amount = it }
+            id = DATA_ID_ITEM_AMOUNT,
+            getter = { amount },
+            setter = { amount = it }
         ))
     }
 

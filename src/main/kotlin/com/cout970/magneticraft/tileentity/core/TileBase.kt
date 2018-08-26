@@ -39,7 +39,7 @@ abstract class TileBase : TileEntity() {
     }
 
     fun getBlockState(): IBlockState {
-        if(world == null) return Blocks.AIR.defaultState
+        if (world == null) return Blocks.AIR.defaultState
 
         if (blockState == null || blockState!!.block != getBlockType() || world.totalWorldTime > lastTime + 40) {
             lastTime = world.totalWorldTime
@@ -134,9 +134,9 @@ abstract class TileBase : TileEntity() {
         if (world.isClient) return
         val packet = updatePacket ?: return
         world.playerEntities
-                .map { it as EntityPlayerMP }
-                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
-                .forEach { it.connection.sendPacket(packet) }
+            .map { it as EntityPlayerMP }
+            .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
+            .forEach { it.connection.sendPacket(packet) }
     }
 
     open fun saveToPacket() = save()

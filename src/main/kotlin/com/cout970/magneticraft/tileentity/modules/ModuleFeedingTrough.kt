@@ -29,8 +29,8 @@ import java.util.*
  */
 
 class ModuleFeedingTrough(
-        val inventory: Inventory,
-        override val name: String = "module_feeding_trough"
+    val inventory: Inventory,
+    override val name: String = "module_feeding_trough"
 ) : IModule, IOnActivated {
 
     companion object {
@@ -62,9 +62,9 @@ class ModuleFeedingTrough(
                 //getting the animals
                 val totalAnimals = world.getEntitiesInAABBexcluding(null, box, { it is EntityAnimal })
                 val validAnimals = totalAnimals.map { it as EntityAnimal }
-                        .filter {
-                            !it.isInLove && it.growingAge == 0 && it.isBreedingItem(inventory[0])
-                        }.toMutableList()
+                    .filter {
+                        !it.isInLove && it.growingAge == 0 && it.isBreedingItem(inventory[0])
+                    }.toMutableList()
 
                 if (validAnimals.size >= 2 && totalAnimals.size < MAX_ANIMALS) {
                     for (i in 0..1) {

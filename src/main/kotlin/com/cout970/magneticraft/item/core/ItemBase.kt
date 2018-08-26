@@ -33,7 +33,7 @@ open class ItemBase : Item() {
     override fun getUnlocalizedName(): String = "item.$MOD_ID.${registryName?.resourcePath}"
 
     override fun getUnlocalizedName(
-            stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata] ?: "normal"}"
+        stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata] ?: "normal"}"
 
     override fun getHasSubtypes() = variants.size > 1
 
@@ -58,7 +58,7 @@ open class ItemBase : Item() {
     override fun onItemUse(player: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing,
                            hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
         return onItemUse?.invoke(OnItemUseArgs(this, player, worldIn, pos, hand, facing,
-                vec3Of(hitX, hitY, hitZ))) ?: super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
+            vec3Of(hitX, hitY, hitZ))) ?: super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
     }
 
     override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: EnumHand): ActionResult<ItemStack> {

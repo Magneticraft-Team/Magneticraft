@@ -42,13 +42,13 @@ class TileComputer : TileBase(), ITickable {
     val computerParts = ModuleComputerDevices(monitor, keyboard, networkCard, redstoneSensor)
 
     val computerModule = ModuleComputer(
-            devices = mapOf(
-                    0x00 to monitor,
-                    0x01 to floppyDriveModule.drive,
-                    0x02 to keyboard,
-                    0x03 to networkCard,
-                    0x04 to redstoneSensor
-            )
+        devices = mapOf(
+            0x00 to monitor,
+            0x01 to floppyDriveModule.drive,
+            0x02 to keyboard,
+            0x03 to networkCard,
+            0x04 to redstoneSensor
+        )
     )
 
     init {
@@ -92,22 +92,22 @@ class TileMiningRobot : TileBase(), ITickable {
     val node = ElectricNode(ref, capacity = 0.5)
 
     val storageInventory = InventoryCapabilityFilter(
-            inventory = inventory,
-            inputSlots = (0..15).toList(),
-            outputSlots = (0..15).toList()
+        inventory = inventory,
+        inputSlots = (0..15).toList(),
+        outputSlots = (0..15).toList()
     )
 
     val invModule = ModuleInventory(
-            inventory = inventory,
-            capabilityFilter = { storageInventory })
+        inventory = inventory,
+        capabilityFilter = { storageInventory })
 
     val energyModule = ModuleElectricity(listOf(node))
 
     val energyStorage = ModuleInternalStorage(
-            mainNode = node,
-            capacity = 50000,
-            maxChargeSpeed = 50.0,
-            upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
+        mainNode = node,
+        capacity = 50000,
+        maxChargeSpeed = 50.0,
+        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
     )
 
     val floppyDriveModule = ModuleFloppyDrive(ref = ref, inventory = inventory, slot = 16)
@@ -119,29 +119,29 @@ class TileMiningRobot : TileBase(), ITickable {
     val computerParts = ModuleComputerDevices(monitor, keyboard, networkCard, redstoneSensor, inventorySensor)
 
     val robotControlModule = ModuleRobotControl(
-            ref = ref,
-            inventory = storageInventory,
-            storage = energyStorage,
-            node = node,
-            orientationGetter = { orientation },
-            orientationSetter = { world.setBlockState(pos, it.getBlockState(Computers.miningRobot)) }
+        ref = ref,
+        inventory = storageInventory,
+        storage = energyStorage,
+        node = node,
+        orientationGetter = { orientation },
+        orientationSetter = { world.setBlockState(pos, it.getBlockState(Computers.miningRobot)) }
     )
 
     val computerModule = ModuleComputer(
-            devices = mapOf(
-                    0x00 to monitor,
-                    0x01 to floppyDriveModule.drive,
-                    0x02 to keyboard,
-                    0x03 to networkCard,
-                    0x04 to robotControlModule.device,
-                    0x05 to redstoneSensor,
-                    0x06 to inventorySensor
-            )
+        devices = mapOf(
+            0x00 to monitor,
+            0x01 to floppyDriveModule.drive,
+            0x02 to keyboard,
+            0x03 to networkCard,
+            0x04 to robotControlModule.device,
+            0x05 to redstoneSensor,
+            0x06 to inventorySensor
+        )
     )
 
     init {
         initModules(computerModule, invModule, computerParts, floppyDriveModule, robotControlModule,
-                energyModule, energyStorage)
+            energyModule, energyStorage)
     }
 
     @DoNotRemove

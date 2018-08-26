@@ -37,13 +37,13 @@ operator fun AxisAlignedBB.component2() = Vec3d(maxX, maxY, maxZ)
 fun AxisAlignedBB.cut(other: AxisAlignedBB): AxisAlignedBB? {
     if (!this.intersects(other)) return null
     return AxisAlignedBB(
-            Math.max(minX, other.minX), Math.max(minY, other.minY), Math.max(minZ, other.minZ),
-            Math.min(maxX, other.maxX), Math.min(maxY, other.maxY), Math.min(maxZ, other.maxZ))
+        Math.max(minX, other.minX), Math.max(minY, other.minY), Math.max(minZ, other.minZ),
+        Math.min(maxX, other.maxX), Math.min(maxY, other.maxY), Math.min(maxZ, other.maxZ))
 }
 
 fun AxisAlignedBB.scale(scale: Double) = AxisAlignedBB(
-        minX * scale, minY * scale, minZ * scale,
-        maxX * scale, maxY * scale, maxZ * scale
+    minX * scale, minY * scale, minZ * scale,
+    maxX * scale, maxY * scale, maxZ * scale
 )
 
 infix fun Double.doubleEquals(other: Double): Boolean {

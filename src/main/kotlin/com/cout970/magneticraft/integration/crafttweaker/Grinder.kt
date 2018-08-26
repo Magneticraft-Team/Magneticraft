@@ -24,18 +24,18 @@ object Grinder {
                 return@delayExecution
             }
 
-            if(probOut2 > 1 || probOut2 < 0) {
+            if (probOut2 > 1 || probOut2 < 0) {
                 ctLogError("[Grinder] Invalid output probability: $probOut2, bounds [1, 0]")
                 return@delayExecution
             }
-            if(ticks < 0) {
+            if (ticks < 0) {
                 ctLogError("[Grinder] Invalid processing time: $ticks, must be positive")
                 return@delayExecution
             }
 
             val recipe = GrinderRecipeManager.createRecipe(inStack, outStack1, outStack2, probOut2, ticks, useOreDict)
 
-            applyAction("Adding $recipe"){
+            applyAction("Adding $recipe") {
                 GrinderRecipeManager.registerRecipe(recipe)
             }
         }
@@ -43,7 +43,7 @@ object Grinder {
 
     @ZenMethod
     @JvmStatic
-    fun removeRecipe(input: IItemStack){
+    fun removeRecipe(input: IItemStack) {
         CraftTweakerPlugin.delayExecution {
             val inStack = input.toStack()
 
@@ -54,12 +54,12 @@ object Grinder {
 
             val recipe = GrinderRecipeManager.findRecipe(inStack)
 
-            if(recipe == null) {
+            if (recipe == null) {
                 ctLogError("[Grinder] Cannot remove recipe: No recipe found for $input")
                 return@delayExecution
             }
 
-            applyAction("Removing $recipe"){
+            applyAction("Removing $recipe") {
                 GrinderRecipeManager.removeRecipe(recipe)
             }
         }

@@ -11,15 +11,16 @@ public interface INodeHandler {
 
     /**
      * List of nodes in this handler
+     *
      * @return all the nodes in this handler
      */
     List<INode> getNodes();
 
     /**
-     * Gets a specific node from the handler
-     * Will return null if the node was not found
+     * Gets a specific node from the handler Will return null if the node was not found
      *
      * @param id of the node
+     *
      * @return the selected node
      */
     @Nullable
@@ -27,6 +28,7 @@ public interface INodeHandler {
 
     /**
      * The position in world of this handler
+     *
      * @return The position of this handler
      */
     ITileRef getRef();

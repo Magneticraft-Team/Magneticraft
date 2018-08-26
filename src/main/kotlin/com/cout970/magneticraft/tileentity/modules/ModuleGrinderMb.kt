@@ -16,9 +16,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
 class ModuleGrinderMb(
-        val facingGetter: () -> EnumFacing,
-        val energyModule: () -> ModuleElectricity,
-        override val name: String = "module_grinder_mb"
+    val facingGetter: () -> EnumFacing,
+    val energyModule: () -> ModuleElectricity,
+    override val name: String = "module_grinder_mb"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer

@@ -7,8 +7,8 @@ import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import net.minecraftforge.fluids.FluidStack
 
 class OilHeaterCraftingProcess(
-        val inputTank: Tank,
-        val outputTank: Tank
+    val inputTank: Tank,
+    val outputTank: Tank
 ) : IHeatCraftingProcess {
 
     private var cacheKey: FluidStack? = null

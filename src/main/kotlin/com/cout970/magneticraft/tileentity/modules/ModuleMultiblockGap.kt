@@ -20,7 +20,7 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/07/03.
  */
 class ModuleMultiblockGap(
-        override val name: String = "module_multiblock"
+    override val name: String = "module_multiblock"
 ) : IModule, IMultiblockModule {
 
     lateinit override var container: IModuleContainer

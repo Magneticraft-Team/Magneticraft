@@ -10,11 +10,11 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 22/08/2016.
  */
 data class HydraulicPressRecipe(
-        private val input: ItemStack,
-        private val output: ItemStack,
-        private val ticks: Float,
-        private val mode: HydraulicPressMode,
-        private val oreDict: Boolean
+    private val input: ItemStack,
+    private val output: ItemStack,
+    private val ticks: Float,
+    private val mode: HydraulicPressMode,
+    private val oreDict: Boolean
 ) : IHydraulicPressRecipe {
 
     override fun getMode(): HydraulicPressMode = mode

@@ -12,8 +12,8 @@ import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 
 class ModuleRf(
-        val storage: RfStorage,
-        override val name: String = "module_rf"
+    val storage: RfStorage,
+    override val name: String = "module_rf"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -37,6 +37,6 @@ class ModuleRf(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-            IntSyncVariable(DATA_ID_RF, { storage.energyStored }, { storage.energyStored = it })
+        IntSyncVariable(DATA_ID_RF, { storage.energyStored }, { storage.energyStored = it })
     )
 }

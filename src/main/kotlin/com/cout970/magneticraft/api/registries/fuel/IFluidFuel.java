@@ -8,7 +8,8 @@ public interface IFluidFuel {
     /**
      * @return fluid stack representing this fuel
      */
-    @NotNull FluidStack getFluid();
+    @NotNull
+    FluidStack getFluid();
 
     /**
      * @return total time 1 bucket (1000mB) of this fuel should burn in ticks

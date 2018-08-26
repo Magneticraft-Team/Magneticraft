@@ -20,7 +20,7 @@ object TileRendererCombustionChamber : BaseTileRenderer<TileCombustionChamber>()
 
     override fun init() {
         createModel(HeatMachines.combustionChamber,
-                ModelSelector("door", FilterString("Door"))
+            ModelSelector("door", FilterString("Door"))
         )
     }
 

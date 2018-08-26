@@ -53,8 +53,8 @@ object ElectricMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/battery.mcx"),
-                    "inventory" to resource("models/block/mcx/battery.mcx")
+                "model" to resource("models/block/mcx/battery.mcx"),
+                "inventory" to resource("models/block/mcx/battery.mcx")
             )
             //methods
             onBlockPlaced = CommonMethods::placeWithOrientation
@@ -121,7 +121,7 @@ object ElectricMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/wind_turbine.mcx")
+                "model" to resource("models/block/mcx/wind_turbine.mcx")
             )
             //methods
             onActivated = CommonMethods::openGui
@@ -162,13 +162,13 @@ object ElectricMachines : IBlockMaker {
         }.build()
 
         return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile,
-                windTurbine, electricHeater, rfHeater) + blockListOf(windTurbineGap)
+            windTurbine, electricHeater, rfHeater) + blockListOf(windTurbineGap)
     }
 
     enum class WorkingMode(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val enable: Boolean
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val enable: Boolean
     ) : IStatesEnum, IStringSerializable {
 
         OFF("off", true, false),
@@ -183,9 +183,9 @@ object ElectricMachines : IBlockMaker {
     }
 
     enum class DecayMode(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val enable: Boolean
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val enable: Boolean
     ) : IStatesEnum, IStringSerializable {
 
         OFF("off", true, false),

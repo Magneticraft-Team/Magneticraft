@@ -31,13 +31,13 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/06/29.
  */
 class ModuleHeat(
-        val heatNodes: List<IHeatNode>,
-        val canConnect: (ModuleHeat, IHeatNode, IHeatNodeHandler, IHeatNode, EnumFacing?) -> Boolean = ModuleHeat::defaultCanConnectImpl,
-        val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
-        val onUpdateConnections: (ModuleHeat) -> Unit = {},
-        val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { ModuleHeat.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
-        val capabilityFilter: (EnumFacing?) -> Boolean = { true },
-        override val name: String = "module_heat"
+    val heatNodes: List<IHeatNode>,
+    val canConnect: (ModuleHeat, IHeatNode, IHeatNodeHandler, IHeatNode, EnumFacing?) -> Boolean = ModuleHeat::defaultCanConnectImpl,
+    val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
+    val onUpdateConnections: (ModuleHeat) -> Unit = {},
+    val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { ModuleHeat.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
+    val capabilityFilter: (EnumFacing?) -> Boolean = { true },
+    override val name: String = "module_heat"
 ) : IModule, IHeatNodeHandler {
 
     companion object {
@@ -171,13 +171,13 @@ class ModuleHeat(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return heatNodes
-                .filterIsInstance<HeatNode>()
-                .mapIndexed { index, node ->
-                    FloatSyncVariable(
-                            id = DATA_ID_HEAT_LIST[index],
-                            getter = { node.internalEnergy.toFloat() },
-                            setter = { node.internalEnergy = it.toDouble() }
-                    )
-                }
+            .filterIsInstance<HeatNode>()
+            .mapIndexed { index, node ->
+                FloatSyncVariable(
+                    id = DATA_ID_HEAT_LIST[index],
+                    getter = { node.internalEnergy.toFloat() },
+                    setter = { node.internalEnergy = it.toDouble() }
+                )
+            }
     }
 }

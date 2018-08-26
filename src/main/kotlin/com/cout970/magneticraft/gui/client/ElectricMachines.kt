@@ -19,15 +19,15 @@ fun guiElectricFurnace(gui: GuiBase, container: ContainerElectricFurnace) = gui.
     +CompElectricBar(tile.node, Vec2d(58, 16))
 
     val consumptionCallback = CallbackBarProvider(
-            callback = { tile.processModule.consumption.storage.toDouble() },
-            max = { Config.electricFurnaceMaxConsumption },
-            min = { 0.0 }
+        callback = { tile.processModule.consumption.storage.toDouble() },
+        max = { Config.electricFurnaceMaxConsumption },
+        min = { 0.0 }
     )
 
     val processCallback = CallbackBarProvider(
-            { tile.processModule.timedProcess.timer.toDouble() },
-            { tile.processModule.timedProcess.limit().toDouble() },
-            { 0.0 }
+        { tile.processModule.timedProcess.timer.toDouble() },
+        { tile.processModule.timedProcess.limit().toDouble() },
+        { 0.0 }
     )
 
     +CompVerticalBar(consumptionCallback, 3, Vec2d(69, 16), consumptionCallback.toEnergyText())
@@ -42,16 +42,16 @@ fun guiBattery(gui: GuiBase, container: ContainerBattery) = gui.run {
     +BatteryStorageBar(this, guiTexture("battery"), tile.storageModule)
 
     +TransferRateBar(
-            value = { tile.storageModule.chargeRate.storage.toDouble() },
-            min = { -tile.storageModule.maxChargeSpeed },
-            base = { 0.0 },
-            max = { tile.storageModule.maxChargeSpeed }, pos = Vec2d(58, 16))
+        value = { tile.storageModule.chargeRate.storage.toDouble() },
+        min = { -tile.storageModule.maxChargeSpeed },
+        base = { 0.0 },
+        max = { tile.storageModule.maxChargeSpeed }, pos = Vec2d(58, 16))
 
     +TransferRateBar(
-            value = { tile.itemChargeModule.itemChargeRate.storage.toDouble() },
-            min = { -tile.itemChargeModule.transferRate.toDouble() },
-            base = { 0.0 },
-            max = { tile.itemChargeModule.transferRate.toDouble() }, pos = Vec2d(58 + 33, 16)
+        value = { tile.itemChargeModule.itemChargeRate.storage.toDouble() },
+        min = { -tile.itemChargeModule.transferRate.toDouble() },
+        base = { 0.0 },
+        max = { tile.itemChargeModule.transferRate.toDouble() }, pos = Vec2d(58 + 33, 16)
     )
 }
 

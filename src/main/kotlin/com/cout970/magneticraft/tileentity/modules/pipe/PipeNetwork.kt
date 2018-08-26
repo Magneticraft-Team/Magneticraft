@@ -9,9 +9,9 @@ import com.cout970.magneticraft.tileentity.modules.ModulePipe
  */
 
 class PipeNetwork(module: ModulePipe) : Network<ModulePipe>(
-        module,
-        getInspectFunc(module.type),
-        Companion::createNetwork
+    module,
+    getInspectFunc(module.type),
+    Companion::createNetwork
 ) {
 
     override fun clearCache() {}

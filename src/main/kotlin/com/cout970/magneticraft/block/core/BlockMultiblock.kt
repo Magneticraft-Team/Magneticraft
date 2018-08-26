@@ -32,9 +32,9 @@ import net.minecraft.world.World
  * Created by cout970 on 2017/07/03.
  */
 class BlockMultiblock(
-        factory: (World, IBlockState) -> TileEntity?,
-        filter: ((IBlockState) -> Boolean)?,
-        material: Material
+    factory: (World, IBlockState) -> TileEntity?,
+    filter: ((IBlockState) -> Boolean)?,
+    material: Material
 ) : BlockTileBase(factory, filter, material) {
 
     companion object {
@@ -99,17 +99,17 @@ class BlockMultiblock(
                 val look = player.getLook(0f)
                 val blockReachDistance = Minecraft.getMinecraft().playerController!!.blockReachDistance
                 val end = start.addVector(
-                        look.x * blockReachDistance,
-                        look.y * blockReachDistance,
-                        look.z * blockReachDistance
+                    look.x * blockReachDistance,
+                    look.y * blockReachDistance,
+                    look.z * blockReachDistance
                 )
 
                 val res = getRelativeBoxesInBlock(worldIn, pos, module)
-                        .associate { it to rayTrace(pos, start, end, it) }
-                        .filter { it.value != null }
-                        .map { it.key to it.value }
-                        .sortedBy { it.second!!.hitVec.distanceTo(start) }
-                        .firstOrNull()?.first
+                    .associate { it to rayTrace(pos, start, end, it) }
+                    .filter { it.value != null }
+                    .map { it.key to it.value }
+                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                    .firstOrNull()?.first
 
                 return res?.offset(pos) ?: EMPTY_AABB
             }
@@ -127,11 +127,11 @@ class BlockMultiblock(
             if (module?.multiblock != null) {
 
                 return getRelativeBoxesInBlock(worldIn, pos, module)
-                        .associate { it to rayTrace(pos, start, end, it) }
-                        .filter { it.value != null }
-                        .map { it.key to it.value }
-                        .sortedBy { it.second!!.hitVec.distanceTo(start) }
-                        .firstOrNull()?.second
+                    .associate { it to rayTrace(pos, start, end, it) }
+                    .filter { it.value != null }
+                    .map { it.key to it.value }
+                    .sortedBy { it.second!!.hitVec.distanceTo(start) }
+                    .firstOrNull()?.second
             }
         }
         return this.rayTrace(pos, start, end, blockState.getBoundingBox(worldIn, pos))
@@ -155,13 +155,13 @@ class BlockMultiblock(
                     val facing = state[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: module.multiblockFacing
                     if (module.multiblock != null && facing != null) {
                         MultiblockManager.deactivateMultiblockStructure(
-                                MultiblockContext(
-                                        multiblock = module.multiblock!!,
-                                        world = worldIn,
-                                        center = pos.subtract(module.centerPos!!),
-                                        facing = facing,
-                                        player = null
-                                )
+                            MultiblockContext(
+                                multiblock = module.multiblock!!,
+                                world = worldIn,
+                                center = pos.subtract(module.centerPos!!),
+                                facing = facing,
+                                player = null
+                            )
                         )
                     }
                 }

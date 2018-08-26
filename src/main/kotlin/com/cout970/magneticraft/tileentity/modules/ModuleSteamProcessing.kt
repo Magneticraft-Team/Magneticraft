@@ -19,11 +19,11 @@ import net.minecraft.nbt.NBTTagCompound
  * Created by cout970 on 2017/07/01.
  */
 class ModuleSteamProcessing(
-        val craftingProcess: ICraftingProcess,
-        val storage: Tank,
-        val workingRate: Float,
-        val costPerTick: Float,
-        override val name: String = "module_electric_processing"
+    val craftingProcess: ICraftingProcess,
+    val storage: Tank,
+    val workingRate: Float,
+    val costPerTick: Float,
+    override val name: String = "module_electric_processing"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -67,7 +67,7 @@ class ModuleSteamProcessing(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-            FloatSyncVariable(DATA_ID_BURNING_TIME, { timedProcess.timer }, { timedProcess.timer = it }),
-            consumption.toSyncVariable(DATA_ID_MACHINE_CONSUMPTION)
+        FloatSyncVariable(DATA_ID_BURNING_TIME, { timedProcess.timer }, { timedProcess.timer = it }),
+        consumption.toSyncVariable(DATA_ID_MACHINE_CONSUMPTION)
     )
 }

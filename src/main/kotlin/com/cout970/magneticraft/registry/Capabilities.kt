@@ -77,9 +77,9 @@ fun registerCapabilities() {
     CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage()) { DefaultGear() }
     CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage()) {
         FloppyDisk(
-                ItemStack(ComputerItems.floppyDisk, 1, 0,
-                        ComputerItems.createNBT(128, true, true)
-                )
+            ItemStack(ComputerItems.floppyDisk, 1, 0,
+                ComputerItems.createNBT(128, true, true)
+            )
         )
     }
 }

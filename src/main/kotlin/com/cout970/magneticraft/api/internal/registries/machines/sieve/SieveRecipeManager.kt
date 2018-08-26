@@ -34,6 +34,6 @@ object SieveRecipeManager : ISieveRecipeManager {
                               oreDict: Boolean): ISieveRecipe {
 
         return SieveRecipe(input, primary, primaryChance, secondary, secondaryChance, tertiary, tertiaryChance,
-                duration, oreDict)
+            duration, oreDict)
     }
 }

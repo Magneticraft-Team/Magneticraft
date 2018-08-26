@@ -11,11 +11,11 @@ import com.cout970.magneticraft.util.vector.size
 import net.minecraft.util.ResourceLocation
 
 open class AbstractButton(
-        val id: Int,
-        val texture: ResourceLocation?,
-        val box: Pair<IVector2, IVector2>,
-        val textureSize: IVector2,
-        val uvGetter: (ButtonState) -> Pair<IVector2, IVector2>
+    val id: Int,
+    val texture: ResourceLocation?,
+    val box: Pair<IVector2, IVector2>,
+    val textureSize: IVector2,
+    val uvGetter: (ButtonState) -> Pair<IVector2, IVector2>
 ) : IComponent {
 
     var listener: IButtonListener? = null

@@ -52,8 +52,8 @@ object HeatMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileCombustionChamber)
             customModels = listOf(
-                    "model" to resource("models/block/mcx/combustion_chamber.mcx"),
-                    "inventory" to resource("models/block/mcx/combustion_chamber.mcx")
+                "model" to resource("models/block/mcx/combustion_chamber.mcx"),
+                "inventory" to resource("models/block/mcx/combustion_chamber.mcx")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
@@ -61,9 +61,9 @@ object HeatMachines : IBlockMaker {
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithOrientation {
                 listOf(
-                        (vec3Of(0, 0, 0) toAABBWith vec3Of(16, 12, 15)).scale(PIXEL),
-                        (vec3Of(0, 12, 0) toAABBWith vec3Of(16, 16, 16)).scale(PIXEL),
-                        (vec3Of(3, 2, 15) toAABBWith vec3Of(13, 10, 16)).scale(PIXEL)
+                    (vec3Of(0, 0, 0) toAABBWith vec3Of(16, 12, 15)).scale(PIXEL),
+                    (vec3Of(0, 12, 0) toAABBWith vec3Of(16, 16, 16)).scale(PIXEL),
+                    (vec3Of(3, 2, 15) toAABBWith vec3Of(13, 10, 16)).scale(PIXEL)
                 )
             }
             onBlockPlaced = CommonMethods::placeWithOrientation
@@ -74,8 +74,8 @@ object HeatMachines : IBlockMaker {
         steamBoiler = builder.withName("steam_boiler").copy {
             factory = factoryOf(::TileSteamBoiler)
             customModels = listOf(
-                    "model" to resource("models/block/mcx/steam_boiler.mcx"),
-                    "inventory" to resource("models/block/mcx/steam_boiler.mcx")
+                "model" to resource("models/block/mcx/steam_boiler.mcx"),
+                "inventory" to resource("models/block/mcx/steam_boiler.mcx")
             )
             generateDefaultItemModel = false
             hasCustomModel = true
@@ -89,8 +89,8 @@ object HeatMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/iron_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/iron_pipe_dark.mcx")
+                "model" to resource("models/block/mcx/iron_pipe.mcx"),
+                "inventory" to resource("models/block/mcx/iron_pipe_dark.mcx")
             )
             boundingBox = { heatPipeBoundingBox(it.source, it.pos, 4) }
             onActivated = CommonMethods::delegateToModule
@@ -122,8 +122,8 @@ object HeatMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/insulated_heat_pipe.mcx"),
-                    "inventory" to resource("models/block/mcx/insulated_heat_pipe.mcx")
+                "model" to resource("models/block/mcx/insulated_heat_pipe.mcx"),
+                "inventory" to resource("models/block/mcx/insulated_heat_pipe.mcx")
             )
             boundingBox = { heatPipeBoundingBox(it.source, it.pos, 3) }
             onActivated = CommonMethods::delegateToModule
@@ -135,8 +135,8 @@ object HeatMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/heat_sink.mcx"),
-                    "inventory" to resource("models/block/mcx/heat_sink.mcx")
+                "model" to resource("models/block/mcx/heat_sink.mcx"),
+                "inventory" to resource("models/block/mcx/heat_sink.mcx")
             )
             alwaysDropDefault = true
             onBlockPlaced = CommonMethods::placeWithOppositeFacing
@@ -150,8 +150,8 @@ object HeatMachines : IBlockMaker {
         gasificationUnit = builder.withName("gasification_unit").copy {
             factory = factoryOf(::TileGasificationUnit)
             customModels = listOf(
-                    "model" to resource("models/block/mcx/gasification_unit.mcx"),
-                    "inventory" to resource("models/block/mcx/gasification_unit.mcx")
+                "model" to resource("models/block/mcx/gasification_unit.mcx"),
+                "inventory" to resource("models/block/mcx/gasification_unit.mcx")
             )
             generateDefaultItemModel = false
             hasCustomModel = true

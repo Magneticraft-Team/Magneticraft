@@ -126,7 +126,7 @@ class MineBlockTask : EndTickRobotTask(RobotAction.MINE) {
 }
 
 class MoveRobotTask(val front: Boolean) : EndTickRobotTask(
-        if (front) RobotAction.MOVE_FRONT else RobotAction.MOVE_BACK
+    if (front) RobotAction.MOVE_FRONT else RobotAction.MOVE_BACK
 ) {
 
     override fun startTick(mod: ModuleRobotControl) = mod.run {

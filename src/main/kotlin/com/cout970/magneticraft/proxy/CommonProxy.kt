@@ -26,12 +26,12 @@ import net.minecraftforge.fml.relauncher.Side
 abstract class CommonProxy {
 
     @SubscribeEvent
-    fun initBlocksEvent(event: RegistryEvent.Register<Block>){
+    fun initBlocksEvent(event: RegistryEvent.Register<Block>) {
         initBlocks(event.registry)
     }
 
     @SubscribeEvent
-    fun initItemsEvent(event: RegistryEvent.Register<Item>){
+    fun initItemsEvent(event: RegistryEvent.Register<Item>) {
         initItems(event.registry)
         postItemRegister()
     }

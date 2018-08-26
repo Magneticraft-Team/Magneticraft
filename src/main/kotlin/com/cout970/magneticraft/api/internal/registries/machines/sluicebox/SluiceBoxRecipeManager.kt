@@ -42,7 +42,7 @@ object SluiceBoxRecipeManager : ISluiceBoxRecipeManager {
     }
 
     override fun createRecipe(input: ItemStack, outputs: MutableList<Pair<ItemStack, Float>>, oreDict: Boolean)
-            : ISluiceBoxRecipe {
+        : ISluiceBoxRecipe {
         return SluiceBoxRecipe(input, outputs, oreDict)
     }
 }

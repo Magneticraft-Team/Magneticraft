@@ -14,16 +14,16 @@ class WorldIterator(val start: BlockPos, val end: BlockPos, val inverted: Boolea
     companion object {
         fun create(a: BlockPos, b: BlockPos, inverted: Boolean = false): WorldIterator {
             return WorldIterator(
-                    BlockPos(min(a.x, b.x), max(0, min(a.y, b.y)), min(a.z, b.z)),
-                    BlockPos(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z)),
-                    inverted
+                BlockPos(min(a.x, b.x), max(0, min(a.y, b.y)), min(a.z, b.z)),
+                BlockPos(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z)),
+                inverted
             )
         }
 
         fun deserializeNBT(nbt: NBTTagCompound): WorldIterator? {
             return if (nbt.hasKey("start")) {
                 create(nbt.getBlockPos("start"), nbt.getBlockPos("end"), nbt.getBoolean("inverted"))
-                        .apply { current = nbt.getBlockPos("current") }
+                    .apply { current = nbt.getBlockPos("current") }
             } else null
         }
     }

@@ -7,6 +7,7 @@ package com.cout970.magneticraft.util.vector
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun vec2Of(x: Number, y: Number) = Vec2d(x.toDouble(), y.toDouble())
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun vec2Of(n: Number) = Vec2d(n.toDouble(), n.toDouble())
 

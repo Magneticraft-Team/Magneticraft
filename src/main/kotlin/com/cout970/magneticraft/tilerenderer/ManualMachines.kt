@@ -51,7 +51,7 @@ object TileRendererSluiceBox : BaseTileRenderer<TileSluiceBox>() {
 
     override fun init() {
         createModel(ManualMachines.sluiceBox,
-                ModelSelector("gravel", FilterString("gravel"))
+            ModelSelector("gravel", FilterString("gravel"))
         )
     }
 

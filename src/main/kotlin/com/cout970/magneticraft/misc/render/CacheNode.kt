@@ -4,10 +4,10 @@ package com.cout970.magneticraft.misc.render
  * Created by cout970 on 2016/12/25.
  */
 open class CacheNode<K, V>(
-        key: K,
-        var compute: (K) -> V,
-        var equals: (K, K) -> Boolean = { a, b -> a == b },
-        var reset: (K, V) -> Unit = { _, _ -> Unit }
+    key: K,
+    var compute: (K) -> V,
+    var equals: (K, K) -> Boolean = { a, b -> a == b },
+    var reset: (K, V) -> Unit = { _, _ -> Unit }
 ) {
 
     private var value: V? = null
@@ -17,8 +17,8 @@ open class CacheNode<K, V>(
             field = i
         }
 
-    fun getOrChange(key: K): V{
-        if (!equals(this.key, key)){
+    fun getOrChange(key: K): V {
+        if (!equals(this.key, key)) {
             this.key = key
         }
         return getOrCompute()

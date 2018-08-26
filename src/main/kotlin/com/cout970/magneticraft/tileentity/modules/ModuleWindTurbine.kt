@@ -24,9 +24,9 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin
 import java.util.*
 
 class ModuleWindTurbine(
-        val electricNode: IElectricNode,
-        val facingGetter: () -> EnumFacing,
-        override val name: String = "module_steam_generator"
+    val electricNode: IElectricNode,
+    val facingGetter: () -> EnumFacing,
+    override val name: String = "module_steam_generator"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

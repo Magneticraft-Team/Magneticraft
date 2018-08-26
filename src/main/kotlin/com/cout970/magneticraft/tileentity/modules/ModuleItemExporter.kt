@@ -16,10 +16,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.items.IItemHandler
 
 class ModuleItemExporter(
-        val facing: () -> EnumFacing,
-        val inventory: IItemHandler,
-        val ports: () -> List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
-        override val name: String = "module_item_exporter"
+    val facing: () -> EnumFacing,
+    val inventory: IItemHandler,
+    val ports: () -> List<Pair<BlockPos, EnumFacing>>, // Facing is the side of the block to fill
+    override val name: String = "module_item_exporter"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

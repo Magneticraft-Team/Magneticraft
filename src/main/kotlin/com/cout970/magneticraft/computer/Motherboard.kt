@@ -6,10 +6,10 @@ import com.cout970.magneticraft.api.computer.*
  * Created by cout970 on 2016/09/30.
  */
 class Motherboard(
-        private val cpu: ICPU,
-        private val ram: IRAM,
-        private val rom: IROM,
-        private val bus: Bus
+    private val cpu: ICPU,
+    private val ram: IRAM,
+    private val rom: IROM,
+    private val bus: Bus
 ) : IMotherboard {
 
     companion object {
@@ -98,10 +98,10 @@ class Motherboard(
 
     override fun serialize(): Map<String, Any> {
         return mapOf(
-                "sleep" to sleep,
-                "cycles" to cpuCycles,
-                "cpu" to cpu.serialize(),
-                "ram" to ram.serialize()
+            "sleep" to sleep,
+            "cycles" to cpuCycles,
+            "cpu" to cpu.serialize(),
+            "ram" to ram.serialize()
         )
     }
 

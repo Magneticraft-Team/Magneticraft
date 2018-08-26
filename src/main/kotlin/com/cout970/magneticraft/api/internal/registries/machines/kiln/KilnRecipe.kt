@@ -12,13 +12,13 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by Yurgen on 22/08/2016.
  */
 data class KilnRecipe(
-        private val input: ItemStack,
-        private val itemOutput: ItemStack,
-        private val blockOutput: IBlockState?,
-        private val duration: Int,
-        private val minTemp: Double,
-        private val maxTemp: Double,
-        private val oreDict: Boolean
+    private val input: ItemStack,
+    private val itemOutput: ItemStack,
+    private val blockOutput: IBlockState?,
+    private val duration: Int,
+    private val minTemp: Double,
+    private val maxTemp: Double,
+    private val oreDict: Boolean
 ) : IKilnRecipe {
 
     override fun getInput(): ItemStack = input.copy()
@@ -26,7 +26,7 @@ data class KilnRecipe(
     override fun getItemOutput(): ItemStack = itemOutput.copy()
     override fun getBlockOutput(): IBlockState? = blockOutput
     override fun getBlockOutputAsItem(): ItemStack =
-            if (blockOutput == null) ItemStack.EMPTY else ItemStack(Item.getItemFromBlock(blockOutput.block), 1, blockOutput.block.damageDropped(blockOutput))
+        if (blockOutput == null) ItemStack.EMPTY else ItemStack(Item.getItemFromBlock(blockOutput.block), 1, blockOutput.block.damageDropped(blockOutput))
 
     override fun isItemRecipe(): Boolean = itemOutput.isNotEmpty
     override fun isBlockRecipe(): Boolean = blockOutput != null

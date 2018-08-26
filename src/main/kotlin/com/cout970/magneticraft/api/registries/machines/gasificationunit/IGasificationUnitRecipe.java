@@ -42,6 +42,7 @@ public interface IGasificationUnitRecipe {
 
     /**
      * Whether or not this recipe use the OreDictionary to check if the input is valid
+     *
      * @return if the OreDictionary will be used to compare items
      */
     boolean useOreDictionaryEquivalencies();

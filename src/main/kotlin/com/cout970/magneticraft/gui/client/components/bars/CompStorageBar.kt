@@ -18,11 +18,11 @@ import java.text.DecimalFormat
  */
 
 class CompStorageBar(
-        val storageModule: ModuleInternalStorage,
-        override val pos: IVector2,
-        val tex: IVector2,
-        val texture: ResourceLocation,
-        val textureSize: IVector2 = vec2Of(256)
+    val storageModule: ModuleInternalStorage,
+    override val pos: IVector2,
+    val tex: IVector2,
+    val texture: ResourceLocation,
+    val textureSize: IVector2 = vec2Of(256)
 ) : IComponent {
 
     override val size: IVector2 = vec2Of(11, 48)
@@ -32,11 +32,11 @@ class CompStorageBar(
         gui.bindTexture(texture)
         val level = (storageModule.energy * size.yi / storageModule.capacity.toFloat()).toInt()
         gui.drawTexture(DrawableBox(
-                gui.pos + pos + vec2Of(0, size.yi - level),
-                vec2Of(size.x, level),
-                tex + vec2Of(0, size.yi - level),
-                vec2Of(size.x, level),
-                textureSize
+            gui.pos + pos + vec2Of(0, size.yi - level),
+            vec2Of(size.x, level),
+            tex + vec2Of(0, size.yi - level),
+            vec2Of(size.x, level),
+            textureSize
         ))
     }
 
@@ -49,8 +49,8 @@ class CompStorageBar(
 }
 
 class CompStorageBar2(
-        val storageModule: ModuleInternalStorage,
-        override val pos: IVector2
+    val storageModule: ModuleInternalStorage,
+    override val pos: IVector2
 ) : IComponent {
 
     override val size: IVector2 = vec2Of(13, 50)
@@ -61,29 +61,29 @@ class CompStorageBar2(
 
     override fun init() {
         back = DrawableBox(
-                screenPos = gui.pos + pos,
-                screenSize = vec2Of(13, 50),
-                texturePos = vec2Of(10, 61),
-                textureSize = vec2Of(13, 50),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos,
+            screenSize = vec2Of(13, 50),
+            texturePos = vec2Of(10, 61),
+            textureSize = vec2Of(13, 50),
+            textureScale = vec2Of(256)
         )
         color = DrawableBox(
-                screenPos = gui.pos + pos + vec2Of(1),
-                screenSize = vec2Of(11, 48),
-                texturePos = vec2Of(24, 61),
-                textureSize = vec2Of(11, 48),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos + vec2Of(1),
+            screenSize = vec2Of(11, 48),
+            texturePos = vec2Of(24, 61),
+            textureSize = vec2Of(11, 48),
+            textureScale = vec2Of(256)
         )
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         val level = (storageModule.energy * 48f / storageModule.capacity).toInt()
         val front = DrawableBox(
-                screenPos = gui.pos + pos + vec2Of(1, 1 + 48 - level),
-                screenSize = vec2Of(11, level),
-                texturePos = vec2Of(24, 61 + 48 - level),
-                textureSize = vec2Of(11, level),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos + vec2Of(1, 1 + 48 - level),
+            screenSize = vec2Of(11, level),
+            texturePos = vec2Of(24, 61 + 48 - level),
+            textureSize = vec2Of(11, level),
+            textureScale = vec2Of(256)
         )
 
         gui.bindTexture(guiTexture("misc"))

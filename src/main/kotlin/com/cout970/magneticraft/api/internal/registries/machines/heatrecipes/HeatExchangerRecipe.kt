@@ -7,13 +7,13 @@ import net.minecraftforge.fluids.FluidStack
  * Created by Yurgen on 16/06/2016.
  */
 data class HeatExchangerRecipe(
-        private val input: FluidStack,
-        private val output: FluidStack,
-        private val heat: Long,
-        private val minTemp: Double,
-        private val maxTemp: Double,
-        private val reverseLow: Boolean,
-        private val reverseHigh: Boolean
+    private val input: FluidStack,
+    private val output: FluidStack,
+    private val heat: Long,
+    private val minTemp: Double,
+    private val maxTemp: Double,
+    private val reverseLow: Boolean,
+    private val reverseHigh: Boolean
 ) : IHeatExchangerRecipe {
 
     override fun getInput(): FluidStack = input.copy()

@@ -24,8 +24,8 @@ object FluidFuelManager : IFluidFuelManager {
 
     override fun registerFuel(recipe: IFluidFuel): Boolean {
         if (findFuel(recipe.fluid) != null) return false
-        if(recipe.totalBurningTime <= 0.0) return false
-        if(recipe.powerPerCycle <= 0.0) return false
+        if (recipe.totalBurningTime <= 0.0) return false
+        if (recipe.powerPerCycle <= 0.0) return false
 
         fuels += recipe
         return true

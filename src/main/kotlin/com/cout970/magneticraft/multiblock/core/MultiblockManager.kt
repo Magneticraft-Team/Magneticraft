@@ -26,8 +26,8 @@ object MultiblockManager : IMultiblockManager {
         multiblocks[mb.name] = mb
     }
 
-    override fun getMultiblock(name: String) = multiblocks[name] ?:
-            error("Unregistered $MOD_ID Multiblock: $name, Please contact with the author")
+    override fun getMultiblock(name: String) = multiblocks[name]
+        ?: error("Unregistered $MOD_ID Multiblock: $name, Please contact with the author")
 
     fun registerDefaults() {
         registerMultiblock(MultiblockSolarPanel)
@@ -70,12 +70,12 @@ object MultiblockManager : IMultiblockManager {
         list.addAll(context.multiblock.checkExtraRequirements(data, context))
 
         MinecraftForge.EVENT_BUS.post(MultiBlockEvent.CheckIntegrity(
-                context.multiblock,
-                context.world,
-                context.center,
-                context.facing,
-                context.player,
-                list
+            context.multiblock,
+            context.world,
+            context.center,
+            context.facing,
+            context.player,
+            list
         ))
         return list
     }
@@ -100,10 +100,10 @@ object MultiblockManager : IMultiblockManager {
             context.multiblock.onActivate(data, context)
 
             MinecraftForge.EVENT_BUS.post(MultiBlockEvent.Activate(
-                    context.multiblock,
-                    context.world,
-                    context.center,
-                    context.facing
+                context.multiblock,
+                context.world,
+                context.center,
+                context.facing
             ))
 
         } catch (e: Exception) {
@@ -131,10 +131,10 @@ object MultiblockManager : IMultiblockManager {
         context.multiblock.onDeactivate(data, context)
 
         MinecraftForge.EVENT_BUS.post(MultiBlockEvent.Deactivate(
-                context.multiblock,
-                context.world,
-                context.center,
-                context.facing
+            context.multiblock,
+            context.world,
+            context.center,
+            context.facing
         ))
     }
 

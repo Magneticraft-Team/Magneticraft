@@ -22,10 +22,10 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties
  * Created by cout970 on 2017/07/13.
  */
 class ModuleFluidHandler(
-        vararg val tanks: Tank,
-        val capabilityFilter: (IFluidHandler, EnumFacing?) -> IFluidHandler? = ALLOW_ALL,
-        val guiSyncOffset: Int = 0,
-        override val name: String = "module_fluid_handler"
+    vararg val tanks: Tank,
+    val capabilityFilter: (IFluidHandler, EnumFacing?) -> IFluidHandler? = ALLOW_ALL,
+    val guiSyncOffset: Int = 0,
+    override val name: String = "module_fluid_handler"
 ) : IModule, IFluidHandler {
 
     override lateinit var container: IModuleContainer
@@ -88,11 +88,11 @@ class ModuleFluidHandler(
 
     override fun getGuiSyncVariables(): List<SyncVariable> = tanks.withIndex().flatMap { (index, tank) ->
         listOf(
-                IntSyncVariable(DATA_ID_FLUID_AMOUNT_LIST[index + guiSyncOffset],
-                        { tank.fluidAmount }, { tank.clientFluidAmount = it }),
+            IntSyncVariable(DATA_ID_FLUID_AMOUNT_LIST[index + guiSyncOffset],
+                { tank.fluidAmount }, { tank.clientFluidAmount = it }),
 
-                StringSyncVariable(DATA_ID_FLUID_NAME_LIST[index + guiSyncOffset],
-                        { tank.fluid?.fluid?.name ?: "" }, { tank.clientFluidName = it })
+            StringSyncVariable(DATA_ID_FLUID_NAME_LIST[index + guiSyncOffset],
+                { tank.fluid?.fluid?.name ?: "" }, { tank.clientFluidName = it })
         )
     }
 }

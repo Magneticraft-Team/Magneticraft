@@ -11,18 +11,18 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
 data class BoxedItem(
-        val item: ItemStack,
-        var position: Float,
-        val route: Route,
-        var lastTick: Long,
-        var locked: Boolean = false
+    val item: ItemStack,
+    var position: Float,
+    val route: Route,
+    var lastTick: Long,
+    var locked: Boolean = false
 ) {
 
     constructor(nbt: NBTTagCompound) : this(
-            ItemStack(nbt.getCompoundTag("item")),
-            nbt.getFloat("position"),
-            Route.values()[nbt.getInteger("route")],
-            -1L
+        ItemStack(nbt.getCompoundTag("item")),
+        nbt.getFloat("position"),
+        Route.values()[nbt.getInteger("route")],
+        -1L
     )
 
     fun move(amount: Float) {

@@ -205,7 +205,7 @@ class MarkdownParser(str: String) {
                     if (inList) {
                         inList = false
                         newLines.add(Line(listOf(
-                                ListGroup(items.toList())
+                            ListGroup(items.toList())
                         )))
                         items.clear()
                     }
@@ -215,7 +215,7 @@ class MarkdownParser(str: String) {
 
             if (inList) {
                 newLines.add(Line(listOf(
-                        ListGroup(items)
+                    ListGroup(items)
                 )))
             }
 
@@ -248,14 +248,14 @@ class MarkdownParser(str: String) {
     private fun processLine(tokens: List<Token>): Line {
         if (tokens.size > 2 && isHeader(tokens[0]) && tokens[1].id == SPACE) {
             return Line(listOf(
-                    readHeader(tokens)
+                readHeader(tokens)
             ))
         }
 
         if (tokens.size > 2 && isList(tokens[0]) && tokens[1].id == SPACE) {
             val rest = tokens.drop(1).dropWhile { it.id == SPACE }
             return Line(listOf(
-                    ListItem(processText(rest))
+                ListItem(processText(rest))
             ))
         }
 

@@ -11,10 +11,10 @@ import net.minecraft.world.World
 import kotlin.math.max
 
 class HeatNode(
-        val ref: ITileRef,
-        private val mass: Double = 1.0,
-        private val conductivity: Double = 73.0,
-        private val name: String = "heat_node_1"
+    val ref: ITileRef,
+    private val mass: Double = 1.0,
+    private val conductivity: Double = 73.0,
+    private val name: String = "heat_node_1"
 ) : IHeatNode {
 
     private var internalEnergy = 0.0

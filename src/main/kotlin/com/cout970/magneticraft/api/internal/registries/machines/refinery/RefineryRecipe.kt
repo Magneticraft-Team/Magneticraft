@@ -4,11 +4,11 @@ import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import net.minecraftforge.fluids.FluidStack
 
 class RefineryRecipe(
-        private val input: FluidStack,
-        private val output0: FluidStack?,
-        private val output1: FluidStack?,
-        private val output2: FluidStack?,
-        private val duration: Float
+    private val input: FluidStack,
+    private val output0: FluidStack?,
+    private val output1: FluidStack?,
+    private val output2: FluidStack?,
+    private val duration: Float
 ) : IRefineryRecipe {
 
     override fun getInput(): FluidStack = input.copy()

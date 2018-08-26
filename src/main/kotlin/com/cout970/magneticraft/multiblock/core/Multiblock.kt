@@ -25,7 +25,7 @@ abstract class Multiblock : IMultiblock {
     companion object {
 
         fun yLayers(vararg args: List<List<IMultiblockComponent>>): List<MultiblockLayer> =
-                args.map(Multiblock::MultiblockLayer)
+            args.map(Multiblock::MultiblockLayer)
 
         fun zLayers(vararg args: List<IMultiblockComponent>): List<List<IMultiblockComponent>> = listOf(*args)
     }

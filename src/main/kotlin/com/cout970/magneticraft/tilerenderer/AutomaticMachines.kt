@@ -66,18 +66,18 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 1) {
             pushMatrix()
             transform(Vec3d(2.0, 1.1, 6.0),
-                    Vec3d(90.0, 0.0, 0.0),
-                    Vec3d(0.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(90.0, 0.0, 0.0),
+                Vec3d(0.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
 
             pushMatrix()
             transform(Vec3d(7.5, 1.5, 7.0),
-                    Vec3d(90.0, 30.0, 0.0),
-                    Vec3d(0.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(90.0, 30.0, 0.0),
+                Vec3d(0.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -85,17 +85,17 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 2) {
             pushMatrix()
             transform(Vec3d(0.0, 2.0, 12.0),
-                    Vec3d(90.0, -30.0, 0.0),
-                    Vec3d(16.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(90.0, -30.0, 0.0),
+                Vec3d(16.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(16.5, 2.5, 12.5),
-                    Vec3d(90.0, -30.0, 0.0),
-                    Vec3d(16.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(90.0, -30.0, 0.0),
+                Vec3d(16.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -103,25 +103,25 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 3) {
             pushMatrix()
             transform(Vec3d(1.0, 1.0, 7.0),
-                    Vec3d(-10.0, 22.0, 4.0),
-                    Vec3d(0.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(-10.0, 22.0, 4.0),
+                Vec3d(0.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(0.0, 1.0, 15.0),
-                    Vec3d(10.0, -22.0, -4.0),
-                    Vec3d(16.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(10.0, -22.0, -4.0),
+                Vec3d(16.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(-2.5, -2.0, -4.0),
-                    Vec3d(20.0, -90.0, 5.0),
-                    Vec3d(0.0, 0.0, 8.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(20.0, -90.0, 5.0),
+                Vec3d(0.0, 0.0, 8.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -129,25 +129,25 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 4) {
             pushMatrix()
             transform(Vec3d(5.0, 0.0, 4.5),
-                    Vec3d(-10.0, 0.0, 0.0),
-                    Vec3d(0.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(-10.0, 0.0, 0.0),
+                Vec3d(0.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(7.0, 0.0, 11.0),
-                    Vec3d(14.0, 0.0, 0.0),
-                    Vec3d(0.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(14.0, 0.0, 0.0),
+                Vec3d(0.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(12.0, 0.0, 10.0),
-                    Vec3d(14.0, 0.0, 0.0),
-                    Vec3d(0.0, 0.0, 0.0),
-                    Vec3d(1.0, 1.0, 1.0))
+                Vec3d(14.0, 0.0, 0.0),
+                Vec3d(0.0, 0.0, 0.0),
+                Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }

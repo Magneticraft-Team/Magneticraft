@@ -43,8 +43,8 @@ object TileRendererMiningRobot : BaseTileRenderer<TileMiningRobot>() {
 
     override fun init() {
         createModel(Computers.miningRobot,
-                ModelSelector("drill", FilterRegex("drill")),
-                ModelSelector("prop", FilterRegex("prop"))
+            ModelSelector("drill", FilterRegex("drill")),
+            ModelSelector("prop", FilterRegex("prop"))
         )
     }
 

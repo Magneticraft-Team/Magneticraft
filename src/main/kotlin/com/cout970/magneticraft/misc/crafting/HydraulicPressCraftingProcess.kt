@@ -12,10 +12,10 @@ import net.minecraft.item.ItemStack
  * Created by cout970 on 2017/07/01.
  */
 class HydraulicPressCraftingProcess(
-        val inventory: Inventory,
-        val inputSlot: Int,
-        val outputSlot: Int,
-        val mode: () -> HydraulicPressMode
+    val inventory: Inventory,
+    val inputSlot: Int,
+    val outputSlot: Int,
+    val mode: () -> HydraulicPressMode
 ) : ICraftingProcess {
 
     private var cacheKey: ItemStack = ItemStack.EMPTY

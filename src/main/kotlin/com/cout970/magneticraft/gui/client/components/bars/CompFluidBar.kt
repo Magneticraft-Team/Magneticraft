@@ -21,10 +21,10 @@ import net.minecraftforge.fluids.FluidRegistry
  */
 
 class CompFluidBar(
-        topPos: IVector2,
-        val overlayTexture: ResourceLocation,
-        val overlayPos: IVector2,
-        val tank: Tank
+    topPos: IVector2,
+    val overlayTexture: ResourceLocation,
+    val overlayPos: IVector2,
+    val tank: Tank
 ) : IComponent {
 
     override val pos = topPos
@@ -53,7 +53,7 @@ class CompFluidBar(
                 val heightLevel = Math.min(level - h * 16, 16)
 
                 gui.drawSprite(gui.pos + vec2Of(pos.x, pos.y + 48 - heightLevel - h * 16), vec2Of(size.x, heightLevel),
-                        texture)
+                    texture)
             }
             GlStateManager.disableBlend()
         }
@@ -76,8 +76,8 @@ class CompFluidBar(
 }
 
 class CompFluidBar2(
-        override val pos: IVector2,
-        val tank: Tank
+    override val pos: IVector2,
+    val tank: Tank
 ) : IComponent {
 
     override val size = vec2Of(18, 50)
@@ -88,18 +88,18 @@ class CompFluidBar2(
 
     override fun init() {
         back = DrawableBox(
-                screenPos = gui.pos + pos,
-                screenSize = vec2Of(18, 50),
-                texturePos = vec2Of(102, 61),
-                textureSize = vec2Of(18, 50),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos,
+            screenSize = vec2Of(18, 50),
+            texturePos = vec2Of(102, 61),
+            textureSize = vec2Of(18, 50),
+            textureScale = vec2Of(256)
         )
         front = DrawableBox(
-                screenPos = gui.pos + pos + vec2Of(1),
-                screenSize = vec2Of(16, 48),
-                texturePos = vec2Of(121, 61),
-                textureSize = vec2Of(16, 48),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos + vec2Of(1),
+            screenSize = vec2Of(16, 48),
+            texturePos = vec2Of(121, 61),
+            textureSize = vec2Of(16, 48),
+            textureScale = vec2Of(256)
         )
     }
 
@@ -129,7 +129,7 @@ class CompFluidBar2(
                     val heightLevel = Math.min(level - h * 16, 16)
 
                     gui.drawSprite(gui.pos + vec2Of(pos.x + 1, pos.y + 1 + 48 - heightLevel - h * 16), vec2Of(16, heightLevel),
-                            texture)
+                        texture)
                 }
                 GlStateManager.disableBlend()
             }

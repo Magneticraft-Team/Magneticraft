@@ -43,11 +43,11 @@ class TileConnector : TileBase(), ITickable {
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "connector")
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(wrapper),
-            onWireChange = { if (world.isClient) wireRender.reset() },
-            maxWireDistance = 10.0,
-            canConnectAtSide = this::canConnectAtSide,
-            connectableDirections = this::getConnectableDirections
+        electricNodes = listOf(wrapper),
+        onWireChange = { if (world.isClient) wireRender.reset() },
+        maxWireDistance = 10.0,
+        canConnectAtSide = this::canConnectAtSide,
+        connectableDirections = this::getConnectableDirections
     )
 
     var ignoreBlockStateUpdate = false
@@ -77,10 +77,10 @@ class TileConnector : TileBase(), ITickable {
                 val handler = tile?.getOrNull(FORGE_ENERGY, facing)
                 if (handler != null) {
                     val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-                            ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
+                        ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
                     val accepted = Math.min(
-                            handler.receiveEnergy(amount, true),
-                            node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
+                        handler.receiveEnergy(amount, true),
+                        node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
                     )
                     if (accepted > 0) {
                         handler.receiveEnergy(accepted, false)
@@ -107,7 +107,7 @@ class TileConnector : TileBase(), ITickable {
             if (handler is IElectricNodeHandler) {
                 val node = handler.nodes.firstOrNull { it is IElectricNode }
                 if (node != null && handler.canConnect(node as IElectricNode, te.electricModule, te.wrapper,
-                                te.facing)) {
+                        te.facing)) {
                     return false
                 }
             }
@@ -118,8 +118,8 @@ class TileConnector : TileBase(), ITickable {
     fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
         return if (facing.opposite.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
             listOf(
-                    facing.opposite.toBlockPos() to facing,
-                    facing.opposite.toBlockPos() * 2 to facing)
+                facing.opposite.toBlockPos() to facing,
+                facing.opposite.toBlockPos() * 2 to facing)
         } else emptyList()
     }
 
@@ -141,9 +141,9 @@ class TileElectricPole : TileBase(), ITickable {
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(wrapper),
-            onWireChange = { if (world.isClient) wireRender.reset() },
-            canConnectAtSide = { it == null }
+        electricNodes = listOf(wrapper),
+        onWireChange = { if (world.isClient) wireRender.reset() },
+        canConnectAtSide = { it == null }
     )
 
     // client
@@ -177,9 +177,9 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     val wrapper2 = WireConnectorWrapper(node, this::getConnectors2, "transformer_connector")
 
     val electricModule = ModuleElectricity(
-            electricNodes = listOf(wrapper, wrapper2),
-            onWireChange = { if (world.isClient) wireRender.reset() },
-            canConnectAtSide = { it == null }
+        electricNodes = listOf(wrapper, wrapper2),
+        onWireChange = { if (world.isClient) wireRender.reset() },
+        canConnectAtSide = { it == null }
     )
 
     // client

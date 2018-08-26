@@ -75,8 +75,8 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
 //        }
 
         return Pair(
-                Math.toDegrees(angleY).toFloat(),
-                Math.toDegrees(angleX).toFloat()
+            Math.toDegrees(angleY).toFloat(),
+            Math.toDegrees(angleX).toFloat()
         )
     }
 

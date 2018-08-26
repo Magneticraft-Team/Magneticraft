@@ -100,191 +100,191 @@ class MagneticraftPlugin : IModPlugin {
     override fun registerCategories(registry: IRecipeCategoryRegistration) {
 
         registry.addRecipeCategories(RecipeCategory<CrushingTableRecipeWrapper>(
-                id = CRUSHING_TABLE_ID,
-                backgroundTexture = "crushing_table",
-                unlocalizedTitle = "text.magneticraft.jei.crushing_table",
-                initFunc = { recipeLayout, recipeWrapper, ing ->
-                    recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
-                    recipeLayout.itemStacks.init(1, false, 48, 51 - 5)
-                    recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
-                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
-                }
+            id = CRUSHING_TABLE_ID,
+            backgroundTexture = "crushing_table",
+            unlocalizedTitle = "text.magneticraft.jei.crushing_table",
+            initFunc = { recipeLayout, recipeWrapper, ing ->
+                recipeLayout.itemStacks.init(0, true, 48, 15 - 5)
+                recipeLayout.itemStacks.init(1, false, 48, 51 - 5)
+                recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
+                recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output)
+            }
         ))
 
         registry.addRecipeCategories(RecipeCategory<SluiceBoxRecipeWrapper>(
-                id = SLUICE_BOX_ID,
-                backgroundTexture = "sluice_box",
-                unlocalizedTitle = "text.magneticraft.jei.sluice_box",
-                initFunc = { recipeLayout, recipeWrapper, ing ->
-                    val recipe = recipeWrapper.recipe
+            id = SLUICE_BOX_ID,
+            backgroundTexture = "sluice_box",
+            unlocalizedTitle = "text.magneticraft.jei.sluice_box",
+            initFunc = { recipeLayout, recipeWrapper, ing ->
+                val recipe = recipeWrapper.recipe
 
-                    val outputs = recipe.outputs.filter { it.first.isNotEmpty }
+                val outputs = recipe.outputs.filter { it.first.isNotEmpty }
 
-                    recipeLayout.itemStacks.init(0, true, 41, 12)
-                    val columns = Math.min(outputs.size, 9)
-                    repeat(outputs.size) { index ->
-                        val x = 48 + 18 * (index % 9) - 18 * Math.round(columns / 2.0 - 1).toInt()
-                        val y = 51 + 18 * (index / 9) - 5
-                        recipeLayout.itemStacks.init(index + 1, false, x, y)
-                    }
-
-                    recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
-                    repeat(outputs.size) { index ->
-                        val stack = outputs[index].first
-                        val percent = outputs[index].second * 100f
-
-                        stack.applyNonEmpty { addTooltip("%.2f%%".format(percent)) }
-
-                        recipeLayout.itemStacks.set(index + 1, stack)
-                    }
+                recipeLayout.itemStacks.init(0, true, 41, 12)
+                val columns = Math.min(outputs.size, 9)
+                repeat(outputs.size) { index ->
+                    val x = 48 + 18 * (index % 9) - 18 * Math.round(columns / 2.0 - 1).toInt()
+                    val y = 51 + 18 * (index / 9) - 5
+                    recipeLayout.itemStacks.init(index + 1, false, x, y)
                 }
+
+                recipeLayout.itemStacks.set(0, ing.getInputs(ItemStack::class.java)[0])
+                repeat(outputs.size) { index ->
+                    val stack = outputs[index].first
+                    val percent = outputs[index].second * 100f
+
+                    stack.applyNonEmpty { addTooltip("%.2f%%".format(percent)) }
+
+                    recipeLayout.itemStacks.set(index + 1, stack)
+                }
+            }
         ))
 
         registry.addRecipeCategories(RecipeCategory<GrinderRecipeWrapper>(
-                id = GRINDER_ID,
-                backgroundTexture = "grinder",
-                unlocalizedTitle = "text.magneticraft.jei.grinder",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
-                    recipeLayout.itemStacks.init(0, true, 48, 10)
-                    recipeLayout.itemStacks.init(1, false, 39, 46)
-                    recipeLayout.itemStacks.init(2, false, 57, 46)
-                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
-                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primaryOutput)
-                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput.applyNonEmpty {
-                        addTooltip("%.2f%%".format(recipeWrapper.recipe.probability * 100))
-                    })
-                }
+            id = GRINDER_ID,
+            backgroundTexture = "grinder",
+            unlocalizedTitle = "text.magneticraft.jei.grinder",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
+                recipeLayout.itemStacks.init(0, true, 48, 10)
+                recipeLayout.itemStacks.init(1, false, 39, 46)
+                recipeLayout.itemStacks.init(2, false, 57, 46)
+                recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primaryOutput)
+                recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondaryOutput.applyNonEmpty {
+                    addTooltip("%.2f%%".format(recipeWrapper.recipe.probability * 100))
+                })
+            }
         ))
 
         registry.addRecipeCategories(RecipeCategory<SieveRecipeWrapper>(
-                id = SIEVE_ID,
-                backgroundTexture = "sieve",
-                unlocalizedTitle = "text.magneticraft.jei.sieve",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
-                    recipeLayout.itemStacks.init(0, true, 48, 10)
-                    recipeLayout.itemStacks.init(1, false, 30, 46)
-                    recipeLayout.itemStacks.init(2, false, 48, 46)
-                    recipeLayout.itemStacks.init(3, false, 66, 46)
+            id = SIEVE_ID,
+            backgroundTexture = "sieve",
+            unlocalizedTitle = "text.magneticraft.jei.sieve",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
+                recipeLayout.itemStacks.init(0, true, 48, 10)
+                recipeLayout.itemStacks.init(1, false, 30, 46)
+                recipeLayout.itemStacks.init(2, false, 48, 46)
+                recipeLayout.itemStacks.init(3, false, 66, 46)
 
-                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
 
-                    if (recipeWrapper.recipe.primaryChance > 0) {
-                        recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primary.applyNonEmpty {
-                            addTooltip("%.2f%%".format(recipeWrapper.recipe.primaryChance * 100))
-                        })
-                    }
-                    if (recipeWrapper.recipe.secondaryChance > 0) {
-                        recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondary.applyNonEmpty {
-                            addTooltip("%.2f%%".format(recipeWrapper.recipe.secondaryChance * 100))
-                        })
-                    }
-                    if (recipeWrapper.recipe.tertiaryChance > 0) {
-                        recipeLayout.itemStacks.set(3, recipeWrapper.recipe.tertiary.applyNonEmpty {
-                            addTooltip("%.2f%%".format(recipeWrapper.recipe.tertiaryChance * 100))
-                        })
-                    }
+                if (recipeWrapper.recipe.primaryChance > 0) {
+                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.primary.applyNonEmpty {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.primaryChance * 100))
+                    })
                 }
+                if (recipeWrapper.recipe.secondaryChance > 0) {
+                    recipeLayout.itemStacks.set(2, recipeWrapper.recipe.secondary.applyNonEmpty {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.secondaryChance * 100))
+                    })
+                }
+                if (recipeWrapper.recipe.tertiaryChance > 0) {
+                    recipeLayout.itemStacks.set(3, recipeWrapper.recipe.tertiary.applyNonEmpty {
+                        addTooltip("%.2f%%".format(recipeWrapper.recipe.tertiaryChance * 100))
+                    })
+                }
+            }
         ))
 
         registry.addRecipeCategories(RecipeCategory<HydraulicPressRecipeWrapper>(
-                id = HYDRAULIC_PRESS_ID,
-                backgroundTexture = "hydraulic_press",
-                unlocalizedTitle = "text.magneticraft.jei.hydraulic_press",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
-                    recipeLayout.itemStacks.init(0, true, 49, 11)
-                    recipeLayout.itemStacks.init(1, false, 49, 42)
+            id = HYDRAULIC_PRESS_ID,
+            backgroundTexture = "hydraulic_press",
+            unlocalizedTitle = "text.magneticraft.jei.hydraulic_press",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
+                recipeLayout.itemStacks.init(0, true, 49, 11)
+                recipeLayout.itemStacks.init(1, false, 49, 42)
 
-                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
-                    recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
-                        addTooltip(I18n.format("text.magneticraft.jei.time", recipeWrapper.recipe.duration.toString()))
-                    })
+                recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
+                    addTooltip(I18n.format("text.magneticraft.jei.time", recipeWrapper.recipe.duration.toString()))
+                })
 
-                    // mode indicator
+                // mode indicator
 
-                    val modeItem = when (recipeWrapper.recipe.mode!!) {
-                        HydraulicPressMode.LIGHT -> EnumMetal.COPPER.getIngot()
-                        HydraulicPressMode.MEDIUM -> EnumMetal.COPPER.getLightPlate()
-                        HydraulicPressMode.HEAVY -> EnumMetal.COPPER.getHeavyPlate()
-                    }
-
-                    modeItem.addTooltip(I18n.format("text.magneticraft.jei.hydraulic_hammer." +
-                            recipeWrapper.recipe.mode.name.toLowerCase()))
-
-                    recipeLayout.itemStacks.init(2, false, 78, 25)
-                    recipeLayout.itemStacks.set(2, modeItem)
+                val modeItem = when (recipeWrapper.recipe.mode!!) {
+                    HydraulicPressMode.LIGHT -> EnumMetal.COPPER.getIngot()
+                    HydraulicPressMode.MEDIUM -> EnumMetal.COPPER.getLightPlate()
+                    HydraulicPressMode.HEAVY -> EnumMetal.COPPER.getHeavyPlate()
                 }
+
+                modeItem.addTooltip(I18n.format("text.magneticraft.jei.hydraulic_hammer." +
+                    recipeWrapper.recipe.mode.name.toLowerCase()))
+
+                recipeLayout.itemStacks.init(2, false, 78, 25)
+                recipeLayout.itemStacks.set(2, modeItem)
+            }
         ))
 
         registry.addRecipeCategories(RecipeCategory<OilHeaterRecipeWrapper>(
-                id = OIL_HEATER_ID,
-                backgroundTexture = "oil_heater",
-                unlocalizedTitle = "text.magneticraft.jei.oil_heater",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
+            id = OIL_HEATER_ID,
+            backgroundTexture = "oil_heater",
+            unlocalizedTitle = "text.magneticraft.jei.oil_heater",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
 
-                    val cap1 = recipeWrapper.recipe.input.amount
-                    val cap2 = recipeWrapper.recipe.output.amount
+                val cap1 = recipeWrapper.recipe.input.amount
+                val cap2 = recipeWrapper.recipe.output.amount
 
-                    recipeLayout.fluidStacks.init(0, true, 49, 42, 16, 16, cap1, false, null)
-                    recipeLayout.fluidStacks.init(1, false, 49, 11, 16, 16, cap2, false, null)
+                recipeLayout.fluidStacks.init(0, true, 49, 42, 16, 16, cap1, false, null)
+                recipeLayout.fluidStacks.init(1, false, 49, 11, 16, 16, cap2, false, null)
 
-                    recipeLayout.fluidStacks.set(0, recipeWrapper.recipe.input)
-                    recipeLayout.fluidStacks.set(1, recipeWrapper.recipe.output)
-                }
+                recipeLayout.fluidStacks.set(0, recipeWrapper.recipe.input)
+                recipeLayout.fluidStacks.set(1, recipeWrapper.recipe.output)
+            }
         ))
 
         registry.addRecipeCategories(RecipeCategory<RefineryRecipeWrapper>(
-                id = REFINERY_ID,
-                backgroundTexture = "refinery",
-                unlocalizedTitle = "text.magneticraft.jei.refinery",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
+            id = REFINERY_ID,
+            backgroundTexture = "refinery",
+            unlocalizedTitle = "text.magneticraft.jei.refinery",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
 
-                    val cap1 = recipeWrapper.recipe.input.amount
-                    val cap2 = recipeWrapper.recipe.output0?.amount ?: 10
-                    val cap3 = recipeWrapper.recipe.output1?.amount ?: 10
-                    val cap4 = recipeWrapper.recipe.output2?.amount ?: 10
+                val cap1 = recipeWrapper.recipe.input.amount
+                val cap2 = recipeWrapper.recipe.output0?.amount ?: 10
+                val cap3 = recipeWrapper.recipe.output1?.amount ?: 10
+                val cap4 = recipeWrapper.recipe.output2?.amount ?: 10
 
-                    recipeLayout.fluidStacks.init(0, true, 40, 48, 16, 16, cap1, false, null)
-                    recipeLayout.fluidStacks.init(1, false, 60, 48, 16, 16, cap2, false, null)
-                    recipeLayout.fluidStacks.init(2, false, 60, 30, 16, 16, cap3, false, null)
-                    recipeLayout.fluidStacks.init(3, false, 60, 12, 16, 16, cap4, false, null)
+                recipeLayout.fluidStacks.init(0, true, 40, 48, 16, 16, cap1, false, null)
+                recipeLayout.fluidStacks.init(1, false, 60, 48, 16, 16, cap2, false, null)
+                recipeLayout.fluidStacks.init(2, false, 60, 30, 16, 16, cap3, false, null)
+                recipeLayout.fluidStacks.init(3, false, 60, 12, 16, 16, cap4, false, null)
 
-                    recipeLayout.fluidStacks.set(0, recipeWrapper.recipe.input)
-                    recipeWrapper.recipe.output0?.let { recipeLayout.fluidStacks.set(1, it) }
-                    recipeWrapper.recipe.output1?.let { recipeLayout.fluidStacks.set(2, it) }
-                    recipeWrapper.recipe.output2?.let { recipeLayout.fluidStacks.set(3, it) }
-                }
+                recipeLayout.fluidStacks.set(0, recipeWrapper.recipe.input)
+                recipeWrapper.recipe.output0?.let { recipeLayout.fluidStacks.set(1, it) }
+                recipeWrapper.recipe.output1?.let { recipeLayout.fluidStacks.set(2, it) }
+                recipeWrapper.recipe.output2?.let { recipeLayout.fluidStacks.set(3, it) }
+            }
         ))
 
 
         registry.addRecipeCategories(RecipeCategory<GasificationUnitRecipeWrapper>(
-                id = GASIFICATION_UNIT_ID,
-                backgroundTexture = "gasification_unit",
-                unlocalizedTitle = "text.magneticraft.jei.gasification_unit",
-                initFunc = { recipeLayout, recipeWrapper, _ ->
-                    val cap = recipeWrapper.recipe.fluidOutput?.amount ?: 10
+            id = GASIFICATION_UNIT_ID,
+            backgroundTexture = "gasification_unit",
+            unlocalizedTitle = "text.magneticraft.jei.gasification_unit",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
+                val cap = recipeWrapper.recipe.fluidOutput?.amount ?: 10
 
-                    recipeLayout.itemStacks.init(0, true, 48, 10)
-                    recipeLayout.itemStacks.init(1, false, 48, 46)
-                    recipeLayout.fluidStacks.init(2, true, 48 + 18 + 4, 46, 16, 16, cap, false, null)
+                recipeLayout.itemStacks.init(0, true, 48, 10)
+                recipeLayout.itemStacks.init(1, false, 48, 46)
+                recipeLayout.fluidStacks.init(2, true, 48 + 18 + 4, 46, 16, 16, cap, false, null)
 
-                    recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
-                    recipeWrapper.recipe.itemOutput.ifNonEmpty { recipeLayout.itemStacks.set(1, it) }
-                    recipeWrapper.recipe.fluidOutput?.let { recipeLayout.fluidStacks.set(2, it) }
-                }
+                recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
+                recipeWrapper.recipe.itemOutput.ifNonEmpty { recipeLayout.itemStacks.set(1, it) }
+                recipeWrapper.recipe.fluidOutput?.let { recipeLayout.fluidStacks.set(2, it) }
+            }
         ))
     }
 }
 
 class RecipeCategory<T : IRecipeWrapper>(
-        val id: String,
-        backgroundTexture: String,
-        val unlocalizedTitle: String,
-        val initFunc: (IRecipeLayout, T, IIngredients) -> Unit
+    val id: String,
+    backgroundTexture: String,
+    val unlocalizedTitle: String,
+    val initFunc: (IRecipeLayout, T, IIngredients) -> Unit
 ) : IRecipeCategory<T> {
 
     private val background = DrawableResource(
-            resource("textures/gui/jei/$backgroundTexture.png"),
-            0, 0, 64, 64, 5, 5, 25, 25, 64, 64)
+        resource("textures/gui/jei/$backgroundTexture.png"),
+        0, 0, 64, 64, 5, 5, 25, 25, 64, 64)
 
     override fun getUid(): String = id
     override fun getBackground(): IDrawable = background
@@ -355,8 +355,8 @@ class GrinderRecipeWrapper(val recipe: IGrinderRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(
-                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
-                32, 68, Color.gray.rgb)
+            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            32, 68, Color.gray.rgb)
     }
 }
 
@@ -374,8 +374,8 @@ class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(
-                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
-                32, 68, Color.gray.rgb)
+            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            32, 68, Color.gray.rgb)
     }
 }
 
@@ -383,8 +383,8 @@ class HydraulicPressRecipeWrapper(val recipe: IHydraulicPressRecipe) : IRecipeWr
 
     companion object {
         val slot = DrawableResource(resource("textures/gui/jei/slot.png"), 0, 0,
-                24, 24, 22, 4, 75, 4,
-                24, 24
+            24, 24, 22, 4, 75, 4,
+            24, 24
         )
     }
 
@@ -401,8 +401,8 @@ class HydraulicPressRecipeWrapper(val recipe: IHydraulicPressRecipe) : IRecipeWr
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         slot.draw(minecraft)
         minecraft.fontRenderer.drawString(
-                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
-                32, 68, Color.gray.rgb)
+            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            32, 68, Color.gray.rgb)
     }
 }
 
@@ -415,11 +415,11 @@ class OilHeaterRecipeWrapper(val recipe: IOilHeaterRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(formatHeat(recipe.minTemperature().toDouble()),
-                10, 68, Color.gray.rgb)
+            10, 68, Color.gray.rgb)
 
         minecraft.fontRenderer.drawString(
-                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
-                58, 68, Color.gray.rgb)
+            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            58, 68, Color.gray.rgb)
     }
 }
 
@@ -432,8 +432,8 @@ class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(
-                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
-                32, 68, Color.gray.rgb)
+            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            32, 68, Color.gray.rgb)
     }
 }
 
@@ -451,11 +451,11 @@ class GasificationUnitRecipeWrapper(val recipe: IGasificationUnitRecipe) : IReci
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(formatHeat(recipe.minTemperature().toDouble()),
-                10, 68, Color.gray.rgb)
+            10, 68, Color.gray.rgb)
 
         minecraft.fontRenderer.drawString(
-                I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
-                58, 68, Color.gray.rgb)
+            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            58, 68, Color.gray.rgb)
     }
 }
 

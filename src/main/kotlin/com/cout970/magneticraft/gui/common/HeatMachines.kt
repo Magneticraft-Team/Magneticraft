@@ -49,7 +49,7 @@ class ContainerGasificationUnit(val tile: TileGasificationUnit, player: EntityPl
             addSlotToContainer(SlotTakeOnly(inv, 1, 83, 49))
 
             inventoryRegions += InventoryRegion(0..0,
-                    filter = { GasificationUnitRecipeManager.findRecipe(it) != null })
+                filter = { GasificationUnitRecipeManager.findRecipe(it) != null })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
         }
         bindPlayerInventory(player.inventory)

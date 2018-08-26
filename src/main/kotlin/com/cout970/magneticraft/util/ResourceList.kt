@@ -79,10 +79,10 @@ object ResourceList {
             getResourcesFromJarFile(file, pattern)
         }
         return files
-                .map {
-                    it.replace(""".*assets[/\\]magneticraft[/\\]guide[/\\](.*)[/\\].*""".toRegex(), "$1")
-                }
-                .distinct()
+            .map {
+                it.replace(""".*assets[/\\]magneticraft[/\\]guide[/\\](.*)[/\\].*""".toRegex(), "$1")
+            }
+            .distinct()
     }
 
     fun getGuideBookPages(lang: String): List<ResourceLocation> {

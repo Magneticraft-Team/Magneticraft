@@ -12,8 +12,8 @@ import java.util.*
  * Created by cout970 on 11/06/2016.
  */
 class GaussianOreGenerator(
-        blockstate: IBlockState,
-        val conf: GaussOreConfig
+    blockstate: IBlockState,
+    val conf: GaussOreConfig
 ) : OreGenerator(blockstate, conf) {
 
     override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?,
@@ -26,9 +26,9 @@ class GaussianOreGenerator(
             val randGaussian = random.nextGaussian() * conf.deviation + conf.chunkAmount
 
             val veins = Math.floor(randGaussian)
-                    .toInt()
-                    .coerceAtLeast(0)
-                    .coerceIn(conf.minAmountPerChunk, conf.maxAmountPerChunk)
+                .toInt()
+                .coerceAtLeast(0)
+                .coerceIn(conf.minAmountPerChunk, conf.maxAmountPerChunk)
 
 //            if (config.maxAmountPerChunk == 1 && veins == 1)
 //                debug(randGaussian, veins, random.nextGaussian(), config.deviation)

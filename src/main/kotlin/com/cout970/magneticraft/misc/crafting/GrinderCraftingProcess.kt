@@ -11,10 +11,10 @@ import net.minecraft.item.ItemStack
  * Created by cout970 on 2017/07/01.
  */
 class GrinderCraftingProcess(
-        val invModule: ModuleInventory,
-        val inputSlot: Int,
-        val outputSlot0: Int,
-        val outputSlot1: Int
+    val invModule: ModuleInventory,
+    val inputSlot: Int,
+    val outputSlot0: Int,
+    val outputSlot1: Int
 ) : ICraftingProcess {
 
     private var cacheKey: ItemStack = ItemStack.EMPTY

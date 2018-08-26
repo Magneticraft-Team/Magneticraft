@@ -177,11 +177,11 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override fun drawTexture(box: DrawableBox) {
         drawScaledCustomSizeModalRect(
-                box.screenPos.xi, box.screenPos.yi,
-                box.texturePos.xf, box.texturePos.yf,
-                box.textureSize.xi, box.textureSize.yi,
-                box.screenSize.xi, box.screenSize.yi,
-                box.textureScale.xf, box.textureScale.yf
+            box.screenPos.xi, box.screenPos.yi,
+            box.texturePos.xf, box.texturePos.yf,
+            box.textureSize.xi, box.textureSize.yi,
+            box.screenSize.xi, box.screenSize.yi,
+            box.textureScale.xf, box.textureScale.yf
         )
     }
 

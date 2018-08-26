@@ -11,23 +11,23 @@ import net.minecraft.util.text.TextFormatting
  */
 class TransferRateBar(val value: () -> Double, val min: () -> Double, val base: () -> Double, val max: () -> Double,
                       pos: Vec2d) :
-        CompVerticalBar(EmptyBarProvider, 4, pos), IBarProvider {
+    CompVerticalBar(EmptyBarProvider, 4, pos), IBarProvider {
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(BAR_TEXTURES)
         var level = Math.round(getLevel() * 24)
         if (level > 0) {
             gui.drawTexture(DrawableBox(
-                    gui.pos + pos + vec2Of(0, 48 - level - 24), vec2Of(5, level),
-                    vec2Of(index * 5, 24 - level), vec2Of(5, level),
-                    vec2Of(64, 64)
+                gui.pos + pos + vec2Of(0, 48 - level - 24), vec2Of(5, level),
+                vec2Of(index * 5, 24 - level), vec2Of(5, level),
+                vec2Of(64, 64)
             ))
         } else if (level < 0) {
             level = -level
             gui.drawTexture(DrawableBox(
-                    gui.pos + pos + vec2Of(0, 48 - 23), vec2Of(5, level - 1),
-                    vec2Of(index * 5, 49 - level), vec2Of(5, level - 1),
-                    vec2Of(64, 64)
+                gui.pos + pos + vec2Of(0, 48 - 23), vec2Of(5, level - 1),
+                vec2Of(index * 5, 49 - level), vec2Of(5, level - 1),
+                vec2Of(64, 64)
             ))
         }
     }

@@ -22,7 +22,7 @@ import net.minecraftforge.items.SlotItemHandler
  */
 
 class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: World, blockPos: BlockPos) : ContainerBase(
-        player, world, blockPos) {
+    player, world, blockPos) {
 
     val motherboard = tile.computerModule.motherboard
     val monitor = tile.monitor
@@ -73,7 +73,7 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
 
 class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, world: World,
                            blockPos: BlockPos) : ContainerBase(
-        player, world, blockPos) {
+    player, world, blockPos) {
 
     val motherboard = tile.computerModule.motherboard
     val monitor = tile.monitor

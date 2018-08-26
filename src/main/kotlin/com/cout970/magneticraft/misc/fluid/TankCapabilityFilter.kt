@@ -24,7 +24,7 @@ class TankCapabilityFilter(val tank: Tank, val canFill: Boolean = true, val canD
     }
 
     override fun getTankProperties(): Array<IFluidTankProperties> = arrayOf(
-            FluidTankProperties(tank.fluid, tank.fluidAmount, canFill, canDrain)
+        FluidTankProperties(tank.fluid, tank.fluidAmount, canFill, canDrain)
     )
 }
 

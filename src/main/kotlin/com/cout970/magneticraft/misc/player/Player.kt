@@ -12,6 +12,7 @@ import net.minecraft.util.text.TextFormatting
 fun EntityPlayer.sendMessage(str: String, vararg args: Any) {
     sendStatusMessage(TextComponentTranslation(str, *args), true)
 }
+
 fun EntityPlayer.sendUnlocalizedMessage(str: String) {
     sendStatusMessage(TextComponentString(str), true)
 }

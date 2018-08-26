@@ -17,10 +17,10 @@ import net.minecraftforge.fml.relauncher.Side
  * Created by cout970 on 28/08/2016.
  */
 class ContextBlockComponent(
-        val getter: (MultiblockContext) -> IBlockState,
-        val stack: ItemStack,
-        val replacement: IBlockState,
-        val errorMsg: (MultiblockContext, IBlockState, BlockPos) -> ITextComponent
+    val getter: (MultiblockContext) -> IBlockState,
+    val stack: ItemStack,
+    val replacement: IBlockState,
+    val errorMsg: (MultiblockContext, IBlockState, BlockPos) -> ITextComponent
 ) : IMultiblockComponent {
 
     override fun checkBlock(relativePos: BlockPos, context: MultiblockContext): List<ITextComponent> {

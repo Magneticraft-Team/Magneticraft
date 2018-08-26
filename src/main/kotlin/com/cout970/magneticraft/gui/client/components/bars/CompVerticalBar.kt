@@ -19,10 +19,10 @@ import net.minecraft.client.renderer.GlStateManager.*
 val BAR_TEXTURES = resource("textures/gui/bar_textures.png")
 
 open class CompVerticalBar(
-        val provider: IBarProvider,
-        val index: Int,
-        override val pos: Vec2d,
-        val tooltip: () -> List<String> = { listOf<String>() }
+    val provider: IBarProvider,
+    val index: Int,
+    override val pos: Vec2d,
+    val tooltip: () -> List<String> = { listOf<String>() }
 ) : IComponent {
 
     override val size = Vec2d(5, 48)
@@ -35,16 +35,16 @@ open class CompVerticalBar(
 
         color(1f, 1f, 1f, 0.2f)
         gui.drawTexture(DrawableBox(
-                gui.pos + pos, vec2Of(5, 48),
-                vec2Of(index * 5, 0), vec2Of(5, 48),
-                vec2Of(64, 64)
+            gui.pos + pos, vec2Of(5, 48),
+            vec2Of(index * 5, 0), vec2Of(5, 48),
+            vec2Of(64, 64)
         ))
         color(1f, 1f, 1f, 1f)
 
         gui.drawTexture(DrawableBox(
-                gui.pos + pos + vec2Of(0, 48 - level), vec2Of(5, level),
-                vec2Of(index * 5, 48 - level), vec2Of(5, level),
-                vec2Of(64, 64)
+            gui.pos + pos + vec2Of(0, 48 - level), vec2Of(5, level),
+            vec2Of(index * 5, 48 - level), vec2Of(5, level),
+            vec2Of(64, 64)
         ))
     }
 
@@ -59,10 +59,10 @@ open class CompVerticalBar(
 }
 
 open class CompDynamicBar(
-        val provider: IBarProvider,
-        val index: Int,
-        override val pos: Vec2d,
-        val tooltip: () -> List<String> = { listOf<String>() }
+    val provider: IBarProvider,
+    val index: Int,
+    override val pos: Vec2d,
+    val tooltip: () -> List<String> = { listOf<String>() }
 ) : IComponent {
 
     override val size = Vec2d(7, 50)
@@ -72,36 +72,36 @@ open class CompDynamicBar(
     lateinit var color: DrawableBox
 
     constructor(pos: Vec2d, index: Int, va: ValueAverage, limit: Number, tooltip: (CallbackBarProvider) -> (() -> List<String>))
-            : this(va.toBarProvider(limit), index, pos, tooltip(va.toBarProvider(limit)))
+        : this(va.toBarProvider(limit), index, pos, tooltip(va.toBarProvider(limit)))
 
     constructor(pos: Vec2d, index: Int, timed: TimedCraftingProcess, tooltip: (CallbackBarProvider) -> (() -> List<String>))
-            : this(timed.toBarProvider(), index, pos, tooltip(timed.toBarProvider()))
+        : this(timed.toBarProvider(), index, pos, tooltip(timed.toBarProvider()))
 
     override fun init() {
         back = DrawableBox(
-                screenPos = gui.pos + pos,
-                screenSize = vec2Of(7, 50),
-                texturePos = vec2Of(10, 10),
-                textureSize = vec2Of(7, 50),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos,
+            screenSize = vec2Of(7, 50),
+            texturePos = vec2Of(10, 10),
+            textureSize = vec2Of(7, 50),
+            textureScale = vec2Of(256)
         )
         color = DrawableBox(
-                screenPos = gui.pos + pos + vec2Of(1),
-                screenSize = vec2Of(5, 48),
-                texturePos = vec2Of(22 + index * 5, 10),
-                textureSize = vec2Of(5, 48),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos + vec2Of(1),
+            screenSize = vec2Of(5, 48),
+            texturePos = vec2Of(22 + index * 5, 10),
+            textureSize = vec2Of(5, 48),
+            textureScale = vec2Of(256)
         )
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         val level = (provider.getLevel() * 48).toInt()
         val front = DrawableBox(
-                screenPos = gui.pos + pos + vec2Of(1, 1 + 48 - level),
-                screenSize = vec2Of(5, level),
-                texturePos = vec2Of(22 + index * 5, 10 + 48 - level),
-                textureSize = vec2Of(5, level),
-                textureScale = vec2Of(256)
+            screenPos = gui.pos + pos + vec2Of(1, 1 + 48 - level),
+            screenSize = vec2Of(5, level),
+            texturePos = vec2Of(22 + index * 5, 10 + 48 - level),
+            textureSize = vec2Of(5, level),
+            textureScale = vec2Of(256)
         )
 
         gui.bindTexture(guiTexture("misc"))

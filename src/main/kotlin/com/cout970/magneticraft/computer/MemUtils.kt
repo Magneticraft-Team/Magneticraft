@@ -136,8 +136,8 @@ class ReadWriteByte(val name: String, val setter: (Byte) -> Unit, val getter: ()
 }
 
 class ReadOnlyByteArray(
-        val name: String,
-        val arrayGetter: () -> ByteArray
+    val name: String,
+    val arrayGetter: () -> ByteArray
 ) : IVariable {
 
     override val size: Int = arrayGetter().size
@@ -150,8 +150,8 @@ class ReadOnlyByteArray(
 }
 
 class ReadOnlyIntArray(
-        val name: String,
-        val arrayGetter: () -> IntArray
+    val name: String,
+    val arrayGetter: () -> IntArray
 ) : IVariable {
 
     override val size: Int = arrayGetter().size * 4
@@ -164,8 +164,8 @@ class ReadOnlyIntArray(
 }
 
 class ReadWriteByteArray(
-        val name: String,
-        val array: ByteArray
+    val name: String,
+    val array: ByteArray
 ) : IVariable {
 
     override val size: Int = array.size

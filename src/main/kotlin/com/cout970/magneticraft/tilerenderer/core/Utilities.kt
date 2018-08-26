@@ -410,9 +410,9 @@ object Utilities {
         val list = mutableListOf<Vec3d>()
         val distance = start.distanceTo(end)
         val middle = Vec3d(
-                (start.xd + end.xd) / 2,
-                (start.yd + end.yd) / 2 - distance * mass,
-                (start.zd + end.zd) / 2)
+            (start.xd + end.xd) / 2,
+            (start.yd + end.yd) / 2 - distance * mass,
+            (start.zd + end.zd) / 2)
 
         for (i in 0..10) {
             val p = i / 10.0
@@ -455,10 +455,10 @@ object Utilities {
 
     fun setColor(color: Int) {
         GL11.glColor4f(
-                ((color ushr 16) and 0xFF) / 255f,
-                ((color ushr 8) and 0xFF) / 255f,
-                (color and 0xFF) / 255f,
-                ((color ushr 24) and 0xFF) / 255f
+            ((color ushr 16) and 0xFF) / 255f,
+            ((color ushr 8) and 0xFF) / 255f,
+            (color and 0xFF) / 255f,
+            ((color ushr 24) and 0xFF) / 255f
         )
     }
 
@@ -551,17 +551,17 @@ object Utilities {
         val k = i / 65536
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
-                max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
-                max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
+            max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
+            max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
         )
 
         // Set additive color
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD)
         GlStateManager.color(
-                interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
-                interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
-                interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
-                1f
+            interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
+            interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
+            interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
+            1f
         )
         func()
 

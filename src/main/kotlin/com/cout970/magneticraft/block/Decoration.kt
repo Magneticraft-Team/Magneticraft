@@ -52,8 +52,8 @@ object Decoration : IBlockMaker {
             generateDefaultItemModel = false
             alwaysDropDefault = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/tube_light.mcx"),
-                    "inventory" to resource("models/block/mcx/tube_light.mcx")
+                "model" to resource("models/block/mcx/tube_light.mcx"),
+                "inventory" to resource("models/block/mcx/tube_light.mcx")
             )
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithOrientation {

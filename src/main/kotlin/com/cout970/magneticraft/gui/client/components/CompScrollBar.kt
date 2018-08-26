@@ -16,9 +16,9 @@ import org.lwjgl.opengl.GL11
  * Created by cout970 on 2017/07/29.
  */
 class CompScrollBar(
-        override val pos: IVector2,
-        override val size: IVector2 = vec2Of(12, 88),
-        val texture: ResourceLocation) : IComponent {
+    override val pos: IVector2,
+    override val size: IVector2 = vec2Of(12, 88),
+    val texture: ResourceLocation) : IComponent {
 
     override lateinit var gui: IGui
 

@@ -11,16 +11,16 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
 data class ConnectionSpot(
-        val capability: Capability<*>,
-        val pos: BlockPos,
-        val side: EnumFacing,
-        val getter: () -> Any?
+    val capability: Capability<*>,
+    val pos: BlockPos,
+    val side: EnumFacing,
+    val getter: () -> Any?
 )
 
 class ModuleMultiblockIO(
-        val facing: () -> EnumFacing,
-        val connectionSpots: List<ConnectionSpot>,
-        override val name: String = "module_multiblock_io"
+    val facing: () -> EnumFacing,
+    val connectionSpots: List<ConnectionSpot>,
+    override val name: String = "module_multiblock_io"
 ) : IModule {
 
     // Client side only, for debug purposes
@@ -89,11 +89,11 @@ class ModuleMultiblockIO(
 
     private fun getConnectPoints(connections: List<ConnectionSpot>, direction: EnumFacing): List<Pair<BlockPos, EnumFacing>> {
         return connections
-                .filter { direction.getRelative(it.side).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
-                .map {
-                    val dir = direction.getRelative(it.side)
-                    direction.rotatePoint(BlockPos.ORIGIN, it.pos) + dir.toBlockPos() to dir.opposite
-                }
+            .filter { direction.getRelative(it.side).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
+            .map {
+                val dir = direction.getRelative(it.side)
+                direction.rotatePoint(BlockPos.ORIGIN, it.pos) + dir.toBlockPos() to dir.opposite
+            }
     }
 
     fun canConnectAtSide(facing: EnumFacing?): Boolean {

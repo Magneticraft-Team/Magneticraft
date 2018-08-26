@@ -8,12 +8,12 @@ import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
 
 class GasificationUnitRecipe(
-        private val input: ItemStack,
-        private val itemOutput: ItemStack,
-        private val fluidOutput: FluidStack?,
-        private val duration: Float,
-        private val minTemperature: Float,
-        val oreDict: Boolean
+    private val input: ItemStack,
+    private val itemOutput: ItemStack,
+    private val fluidOutput: FluidStack?,
+    private val duration: Float,
+    private val minTemperature: Float,
+    val oreDict: Boolean
 ) : IGasificationUnitRecipe {
 
     init {

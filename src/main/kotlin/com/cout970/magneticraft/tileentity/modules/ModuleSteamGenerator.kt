@@ -15,9 +15,9 @@ import net.minecraft.nbt.NBTTagCompound
  * Created by cout970 on 2017/07/18.
  */
 class ModuleSteamGenerator(
-        val steamTank: Tank,
-        val node: IElectricNode,
-        override val name: String = "module_steam_generator"
+    val steamTank: Tank,
+    val node: IElectricNode,
+    override val name: String = "module_steam_generator"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

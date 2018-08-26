@@ -31,8 +31,8 @@ import kotlin.math.absoluteValue
  * Created by cout970 on 2017/08/28.
  */
 class ModuleThermopile(
-        val node: IElectricNode,
-        override val name: String = "module_thermopile"
+    val node: IElectricNode,
+    override val name: String = "module_thermopile"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -58,21 +58,21 @@ class ModuleThermopile(
         val sources = EnumFacing.VALUES.map { it to getSource(pos + it, it) }.toMap()
 
         totalFlux = listOf(
-                getFlux(sources[DOWN]!!, sources[UP]!!),
-                getFlux(sources[DOWN]!!, sources[NORTH]!!),
-                getFlux(sources[DOWN]!!, sources[SOUTH]!!),
-                getFlux(sources[DOWN]!!, sources[WEST]!!),
-                getFlux(sources[DOWN]!!, sources[EAST]!!),
-                getFlux(sources[UP]!!, sources[NORTH]!!),
-                getFlux(sources[UP]!!, sources[SOUTH]!!),
-                getFlux(sources[UP]!!, sources[WEST]!!),
-                getFlux(sources[UP]!!, sources[EAST]!!),
-                getFlux(sources[NORTH]!!, sources[SOUTH]!!),
-                getFlux(sources[NORTH]!!, sources[WEST]!!),
-                getFlux(sources[NORTH]!!, sources[EAST]!!),
-                getFlux(sources[SOUTH]!!, sources[EAST]!!),
-                getFlux(sources[SOUTH]!!, sources[WEST]!!),
-                getFlux(sources[WEST]!!, sources[EAST]!!)
+            getFlux(sources[DOWN]!!, sources[UP]!!),
+            getFlux(sources[DOWN]!!, sources[NORTH]!!),
+            getFlux(sources[DOWN]!!, sources[SOUTH]!!),
+            getFlux(sources[DOWN]!!, sources[WEST]!!),
+            getFlux(sources[DOWN]!!, sources[EAST]!!),
+            getFlux(sources[UP]!!, sources[NORTH]!!),
+            getFlux(sources[UP]!!, sources[SOUTH]!!),
+            getFlux(sources[UP]!!, sources[WEST]!!),
+            getFlux(sources[UP]!!, sources[EAST]!!),
+            getFlux(sources[NORTH]!!, sources[SOUTH]!!),
+            getFlux(sources[NORTH]!!, sources[WEST]!!),
+            getFlux(sources[NORTH]!!, sources[EAST]!!),
+            getFlux(sources[SOUTH]!!, sources[EAST]!!),
+            getFlux(sources[SOUTH]!!, sources[WEST]!!),
+            getFlux(sources[WEST]!!, sources[EAST]!!)
         ).sum()
     }
 
@@ -89,8 +89,8 @@ class ModuleThermopile(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-            FloatSyncVariable(id = DATA_ID_THERMOPILE_HEAT_FLUX, getter = { totalFlux }, setter = { totalFlux = it }),
-            AverageSyncVariable(DATA_ID_THERMOPILE_PRODUCTION, production)
+        FloatSyncVariable(id = DATA_ID_THERMOPILE_HEAT_FLUX, getter = { totalFlux }, setter = { totalFlux = it }),
+        AverageSyncVariable(DATA_ID_THERMOPILE_PRODUCTION, production)
     )
 
     fun getSource(pos: BlockPos, side: EnumFacing): HeatSource {

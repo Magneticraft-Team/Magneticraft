@@ -29,9 +29,9 @@ import net.minecraft.util.EnumParticleTypes
  * Created by cout970 on 2017/07/13.
  */
 class ModuleCombustionChamber(
-        val node: IHeatNode,
-        val inventory: Inventory,
-        override val name: String = "module_combustion_chamber"
+    val node: IHeatNode,
+    val inventory: Inventory,
+    override val name: String = "module_combustion_chamber"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer
@@ -48,9 +48,9 @@ class ModuleCombustionChamber(
         val block = container.blockState.block
 
         val boxes = (block as? BlockBase)
-                ?.aabb
-                ?.invoke(BoundingBoxArgs(container.blockState, world, pos))
-                ?: emptyList()
+            ?.aabb
+            ?.invoke(BoundingBoxArgs(container.blockState, world, pos))
+            ?: emptyList()
 
         val index = boxes.indexOfFirst { it.isHitBy(args.hit) }
         if (index != 2) {
@@ -153,8 +153,8 @@ class ModuleCombustionChamber(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(
-                IntSyncVariable(DATA_ID_BURNING_TIME, { burningTime }, { burningTime = it }),
-                IntSyncVariable(DATA_ID_MAX_BURNING_TIME, { maxBurningTime }, { maxBurningTime = it })
+            IntSyncVariable(DATA_ID_BURNING_TIME, { burningTime }, { burningTime = it }),
+            IntSyncVariable(DATA_ID_MAX_BURNING_TIME, { maxBurningTime }, { maxBurningTime = it })
         )
     }
 }

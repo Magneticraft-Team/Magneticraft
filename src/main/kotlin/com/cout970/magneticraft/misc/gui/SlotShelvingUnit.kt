@@ -13,6 +13,7 @@ class SlotShelvingUnit(inv: IItemHandler, id: Int, x: Int, y: Int) : SlotItemHan
     companion object {
         const val HIDE_OFFSET = 1 shl 20
     }
+
     var locked = false
     var hidden = false
 
@@ -24,19 +25,19 @@ class SlotShelvingUnit(inv: IItemHandler, id: Int, x: Int, y: Int) : SlotItemHan
         }
     }
 
-    fun show(){
-        if(hidden){
+    fun show() {
+        if (hidden) {
             hidden = false
             xPos -= HIDE_OFFSET
             yPos -= HIDE_OFFSET
         }
     }
 
-    fun lock(){
+    fun lock() {
         locked = true
     }
 
-    fun unlock(){
+    fun unlock() {
         locked = false
     }
 

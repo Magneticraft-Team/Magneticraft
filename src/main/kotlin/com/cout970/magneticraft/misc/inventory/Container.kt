@@ -12,14 +12,14 @@ import net.minecraft.inventory.Slot
 /**
  * Gets all slots range is a part of player inventory.
  */
-fun Container.getPlayerSlotRanges(player: EntityPlayer) : List<IntRange> {
+fun Container.getPlayerSlotRanges(player: EntityPlayer): List<IntRange> {
     return this.getSlotRanges { it.inventory is InventoryPlayer && it.inventory == player.inventory }
 }
 
 /**
  * Get all slots range that is not a part of player inventory.
  */
-fun Container.getNonPlayerSlotRanges() : List<IntRange> {
+fun Container.getNonPlayerSlotRanges(): List<IntRange> {
     return this.getSlotRanges { it.inventory !is InventoryPlayer }
 }
 
@@ -33,17 +33,17 @@ fun Container.getSlotRanges(predicate: (Slot) -> Boolean): List<IntRange> {
     var start: Int? = null
 
     inventorySlots.forEachIndexed { i, slot ->
-        if(predicate(slot)) {
-            if(start == null)
+        if (predicate(slot)) {
+            if (start == null)
                 start = i
-        } else if(start != null) {
+        } else if (start != null) {
             ranges += start!!..i
             start = null
         }
     }
 
-    if(start != null)
-        ranges += start!!..size-1
+    if (start != null)
+        ranges += start!!..size - 1
 
     return ranges
 }

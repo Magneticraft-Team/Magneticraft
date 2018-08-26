@@ -20,7 +20,9 @@ public interface IFluidFuelManager {
 
     /**
      * Register a fuel if is not already registered
+     *
      * @param recipe The fuel to register
+     *
      * @return if the registration has ended successfully
      */
     boolean registerFuel(@NotNull IFluidFuel recipe);
@@ -33,10 +35,10 @@ public interface IFluidFuelManager {
     /**
      * Create a FluidFuel using the default implementation
      *
-     *
      * @param fluidStack fluid that represents the fuel
      * @param burningTime amount of ticks that takes 1 bucket of fuel to burn, must be bigger than 0
      * @param powerPerCycle energy in RF given by the fuel evey tick while burning, must be bigger than 0
+     *
      * @return A default implementation of IFluidFuel
      */
     IFluidFuel createFuel(@NotNull FluidStack fluidStack, int burningTime, double powerPerCycle);

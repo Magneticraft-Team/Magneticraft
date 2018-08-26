@@ -7,9 +7,9 @@ import net.minecraftforge.items.IItemHandler
  * Created by cout970 on 2017/07/01.
  */
 class InventoryCapabilityFilter(
-        val inventory: IItemHandler,
-        val inputSlots: List<Int>,
-        val outputSlots: List<Int>
+    val inventory: IItemHandler,
+    val inputSlots: List<Int>,
+    val outputSlots: List<Int>
 ) : IItemHandler {
 
     val slotMap = generateSlotMap()

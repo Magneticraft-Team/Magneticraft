@@ -46,7 +46,7 @@ class ModuleSolarTower(
     fun meltDown() {
         val dir = facingGetter().opposite
 
-        iterateVolume(-1..1, 0..2, 0..2){ i, j, k ->
+        iterateVolume(-1..1, 0..2, 0..2) { i, j, k ->
             if (i == 0 && j == 0 && k == 0) return@iterateVolume
             val relPos = dir.rotatePoint(BlockPos.ORIGIN, BlockPos(i, j, k))
             world.setBlockState(pos + relPos, Blocks.LAVA.defaultState)

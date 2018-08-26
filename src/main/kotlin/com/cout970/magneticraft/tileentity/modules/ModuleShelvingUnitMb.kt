@@ -34,8 +34,8 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/07/05.
  */
 class ModuleShelvingUnitMb(
-        val inventory: Inventory,
-        override val name: String = "module_shelving_unit"
+    val inventory: Inventory,
+    override val name: String = "module_shelving_unit"
 ) : IModule, IOnActivated {
 
     companion object {

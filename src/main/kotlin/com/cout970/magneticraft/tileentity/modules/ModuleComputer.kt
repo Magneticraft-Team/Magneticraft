@@ -15,11 +15,11 @@ import gnu.trove.map.hash.TIntObjectHashMap
 import net.minecraft.nbt.NBTTagCompound
 
 class ModuleComputer(
-        val cpu: ICPU = CPU_MIPS(),
-        val ram: IRAM = RAM(0x20000, true),
-        val rom: IROM = ROM("assets/$MOD_ID/cpu/bios.bin"),
-        val devices: Map<Int, IDevice>,
-        override val name: String = "module_computer"
+    val cpu: ICPU = CPU_MIPS(),
+    val ram: IRAM = RAM(0x20000, true),
+    val rom: IROM = ROM("assets/$MOD_ID/cpu/bios.bin"),
+    val devices: Map<Int, IDevice>,
+    override val name: String = "module_computer"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

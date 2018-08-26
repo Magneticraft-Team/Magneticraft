@@ -36,15 +36,15 @@ class MessageContainerUpdate() : IMessage {
         ibd!!.toBuffer(buf!!)
     }
 
-    companion object : IMessageHandler<MessageContainerUpdate, IMessage>{
+    companion object : IMessageHandler<MessageContainerUpdate, IMessage> {
 
         override fun onMessage(message: MessageContainerUpdate?, ctx: MessageContext?): IMessage? {
-            if(ctx!!.side == Side.CLIENT) {
+            if (ctx!!.side == Side.CLIENT) {
                 val container = Minecraft.getMinecraft().player.openContainer
                 if (container is ContainerBase) {
                     container.receiveDataFromServer(message!!.ibd!!)
                 }
-            }else{
+            } else {
                 throw IllegalStateException()
             }
             return null

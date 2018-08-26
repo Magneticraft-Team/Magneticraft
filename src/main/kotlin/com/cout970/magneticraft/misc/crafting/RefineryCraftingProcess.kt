@@ -6,10 +6,10 @@ import com.cout970.magneticraft.misc.fluid.Tank
 import net.minecraftforge.fluids.FluidStack
 
 class RefineryCraftingProcess(
-        val inputTank: Tank,
-        val outputTank0: Tank,
-        val outputTank1: Tank,
-        val outputTank2: Tank
+    val inputTank: Tank,
+    val outputTank0: Tank,
+    val outputTank1: Tank,
+    val outputTank2: Tank
 ) : ICraftingProcess {
 
     private var cacheKey: FluidStack? = null

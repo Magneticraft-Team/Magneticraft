@@ -55,26 +55,26 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
     }
 
     val memStruct = ReadWriteStruct("network_header",
-            ReadWriteStruct("device_header",
-                    ReadOnlyByte("online") { if (isActive) 1 else 0 },
-                    ReadOnlyByte("type") { 2 },
-                    ReadOnlyShort("status") { status.toShort() }
-            ),
-            ReadOnlyByte("internetAllowed") { if (internetAllowed) 1 else 0 },
-            ReadOnlyByte("maxSockets") { maxSockets.toByte() },
-            ReadOnlyByte("activeSockets") { activeSockets.toByte() },
-            ReadWriteByte("signal", { signal(it.toInt()) }, { 0 }),
-            ReadOnlyInt("macAddress") { getMacAddress() },
-            ReadWriteInt("targetMac", { targetMac = it }, { targetMac }),
-            ReadWriteInt("targetPort", { targetPort = it }, { targetPort }),
-            ReadWriteByteArray("targetIp", targetIp),
-            ReadOnlyInt("connectionOpen") { if (socket?.isClosed != false) 0 else 1 },
-            ReadOnlyInt("connectionError") { connectionError },
-            ReadWriteInt("inputBufferPtr", { inputBufferPtr = it }, { inputBufferPtr }),
-            ReadWriteInt("outputBufferPtr", { outputBufferPtr = it }, { outputBufferPtr }),
-            ReadWriteInt("hardwareLock", { hardwareLock = it }, { hardwareLock }),
-            ReadWriteByteArray("inputBuffer", inputBuffer),
-            ReadWriteByteArray("outputBuffer ", outputBuffer)
+        ReadWriteStruct("device_header",
+            ReadOnlyByte("online") { if (isActive) 1 else 0 },
+            ReadOnlyByte("type") { 2 },
+            ReadOnlyShort("status") { status.toShort() }
+        ),
+        ReadOnlyByte("internetAllowed") { if (internetAllowed) 1 else 0 },
+        ReadOnlyByte("maxSockets") { maxSockets.toByte() },
+        ReadOnlyByte("activeSockets") { activeSockets.toByte() },
+        ReadWriteByte("signal", { signal(it.toInt()) }, { 0 }),
+        ReadOnlyInt("macAddress") { getMacAddress() },
+        ReadWriteInt("targetMac", { targetMac = it }, { targetMac }),
+        ReadWriteInt("targetPort", { targetPort = it }, { targetPort }),
+        ReadWriteByteArray("targetIp", targetIp),
+        ReadOnlyInt("connectionOpen") { if (socket?.isClosed != false) 0 else 1 },
+        ReadOnlyInt("connectionError") { connectionError },
+        ReadWriteInt("inputBufferPtr", { inputBufferPtr = it }, { inputBufferPtr }),
+        ReadWriteInt("outputBufferPtr", { outputBufferPtr = it }, { outputBufferPtr }),
+        ReadWriteInt("hardwareLock", { hardwareLock = it }, { hardwareLock }),
+        ReadWriteByteArray("inputBuffer", inputBuffer),
+        ReadWriteByteArray("outputBuffer ", outputBuffer)
     )
 
     fun getMacAddress(): Int {
@@ -104,7 +104,7 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
                         if (outputBufferPtr > outputBuffer.size || outputBufferPtr < 0) {
                             connectionError = INVALID_OUTPUT_BUFFER_POINTER
                             log(2,
-                                    "Error INVALID_OUTPUT_BUFFER_POINTER $outputBufferPtr not in [0, ${outputBuffer.size})")
+                                "Error INVALID_OUTPUT_BUFFER_POINTER $outputBufferPtr not in [0, ${outputBuffer.size})")
                             closeTcpConnection()
                             return
                         }

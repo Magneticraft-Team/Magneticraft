@@ -64,7 +64,7 @@ class FullBitMap(val current: IBitMap, val others: Map<BitmapLocation, IBitMap>)
 
     override fun test(box: AABB): Boolean {
         return test(vec2Of(box.minX, box.minZ) * 16, vec2Of(
-                box.maxX, box.maxZ) * 16)
+            box.maxX, box.maxZ) * 16)
     }
 
     override fun test(start: IVector2, end: IVector2): Boolean {

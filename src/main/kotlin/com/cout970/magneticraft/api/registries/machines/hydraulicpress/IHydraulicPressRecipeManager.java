@@ -36,6 +36,7 @@ public interface IHydraulicPressRecipeManager {
      * Removes a recipe from the registry
      *
      * @param recipe The recipe to remove
+     *
      * @return if the removal has ended successfully
      */
     boolean removeRecipe(IHydraulicPressRecipe recipe);

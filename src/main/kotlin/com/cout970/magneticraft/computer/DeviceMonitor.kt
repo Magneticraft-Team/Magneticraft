@@ -80,11 +80,11 @@ class DeviceMonitor : IDevice {
     }
 
     override fun serialize() = mapOf(
-            "Buffer" to getBuffer().copyOf(),
-            "ScreenBuffer" to getScreenBuffer().copyOf(),
-            "CurrentLine" to currentLine,
-            "CursorLine" to cursorLine,
-            "CursorColumn" to cursorColumn
+        "Buffer" to getBuffer().copyOf(),
+        "ScreenBuffer" to getScreenBuffer().copyOf(),
+        "CurrentLine" to currentLine,
+        "CursorLine" to cursorLine,
+        "CursorColumn" to cursorColumn
     )
 
     override fun deserialize(map: Map<String, Any>) {

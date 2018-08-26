@@ -43,7 +43,7 @@ public interface IGasificationUnitRecipeManager {
 
     /**
      * Creates a default recipe
-     *
+     * <p>
      * A item, fluid or both can be specified as outputs, but both cannot be empty
      *
      * @param input the input item
@@ -53,6 +53,7 @@ public interface IGasificationUnitRecipeManager {
      *
      * @return the new recipe
      */
-    IGasificationUnitRecipe createRecipe(@NotNull ItemStack input, @NotNull ItemStack itemOutput, FluidStack fluidOutput,
+    IGasificationUnitRecipe createRecipe(@NotNull ItemStack input, @NotNull ItemStack itemOutput,
+                                         FluidStack fluidOutput,
                                          float time, float minTemperature, boolean oreDict);
 }

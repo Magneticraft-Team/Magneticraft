@@ -52,7 +52,7 @@ class NearestFirstSearch(start: IPathFindingNode, val getter: InspectFunc) {
             resultList.add(it)
             it.sides.forEach { side ->
                 val blockPos = it.ref.pos + side
-                if(blockPos !in scanned && blockPos !in toScanSet){
+                if (blockPos !in scanned && blockPos !in toScanSet) {
                     toScanList.add(blockPos to side.opposite)
                     toScanSet.add(blockPos)
                 }
@@ -65,11 +65,11 @@ class NearestFirstSearch(start: IPathFindingNode, val getter: InspectFunc) {
 }
 
 fun nearestFirstSearch(start: IPathFindingNode, getter: InspectFunc)
-        : List<IPathFindingNode> {
+    : List<IPathFindingNode> {
 
     val search = NearestFirstSearch(start, getter)
 
-    while(search.iterate());
+    while (search.iterate());
 
     return search.getResult()
 }

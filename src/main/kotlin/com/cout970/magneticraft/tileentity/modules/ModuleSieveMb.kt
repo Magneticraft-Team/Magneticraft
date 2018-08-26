@@ -9,9 +9,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
 class ModuleSieveMb(
-        val facingGetter: () -> EnumFacing,
-        val energyModule: () -> ModuleElectricity,
-        override val name: String = "module_sieve_mb"
+    val facingGetter: () -> EnumFacing,
+    val energyModule: () -> ModuleElectricity,
+    override val name: String = "module_sieve_mb"
 ) : IModule {
 
     override lateinit var container: IModuleContainer

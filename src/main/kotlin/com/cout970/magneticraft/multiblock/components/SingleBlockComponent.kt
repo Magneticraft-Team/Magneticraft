@@ -56,5 +56,5 @@ class SingleBlockComponent(val origin: IBlockState, val replacement: IBlockState
     }
 
     override fun getBlueprintBlocks(multiblock: Multiblock, blockPos: BlockPos): List<ItemStack> = listOf(
-            ItemStack(origin.block, 1, origin.block.getMetaFromState(origin)))
+        ItemStack(origin.block, 1, origin.block.getMetaFromState(origin)))
 }

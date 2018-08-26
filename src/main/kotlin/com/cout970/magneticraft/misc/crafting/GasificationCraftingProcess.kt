@@ -10,10 +10,10 @@ import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import net.minecraft.item.ItemStack
 
 class GasificationCraftingProcess(
-        val tank: Tank,
-        val inv: Inventory,
-        val input: Int,
-        val output: Int
+    val tank: Tank,
+    val inv: Inventory,
+    val input: Int,
+    val output: Int
 ) : IHeatCraftingProcess {
 
     private var cacheKey: ItemStack = ItemStack.EMPTY

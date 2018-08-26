@@ -10,11 +10,11 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
 class ModuleMultiblockCenter(
-        val multiblockStructure: Multiblock,
-        val facingGetter: () -> EnumFacing,
-        val capabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any?,
-        val dynamicCollisionBoxes: (BlockPos) -> List<AABB> = { emptyList() },
-        override val name: String = "module_multiblock"
+    val multiblockStructure: Multiblock,
+    val facingGetter: () -> EnumFacing,
+    val capabilityGetter: (cap: Capability<*>, side: EnumFacing?, pos: BlockPos) -> Any?,
+    val dynamicCollisionBoxes: (BlockPos) -> List<AABB> = { emptyList() },
+    override val name: String = "module_multiblock"
 ) : IModule, IMultiblockCenter {
 
     override lateinit var container: IModuleContainer

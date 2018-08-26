@@ -36,14 +36,14 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/06/29.
  */
 class ModuleElectricity(
-        val electricNodes: List<IElectricNode>,
-        val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
-        val onWireChange: (EnumFacing?) -> Unit = {},
-        val onUpdateConnections: (ModuleElectricity) -> Unit = {},
-        val maxWireDistance: Double = 16.0,
-        val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
-        val capabilityFilter: (EnumFacing?) -> Boolean = { true },
-        override val name: String = "module_electricity"
+    val electricNodes: List<IElectricNode>,
+    val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
+    val onWireChange: (EnumFacing?) -> Unit = {},
+    val onUpdateConnections: (ModuleElectricity) -> Unit = {},
+    val maxWireDistance: Double = 16.0,
+    val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { ModuleElectricity.NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
+    val capabilityFilter: (EnumFacing?) -> Boolean = { true },
+    override val name: String = "module_electricity"
 ) : IModule, IElectricNodeHandler {
 
     companion object {
@@ -118,8 +118,8 @@ class ModuleElectricity(
 
             for ((handler, side) in handlers) {
                 val electricNodes = handler.nodes
-                        .filter { it is IElectricNode }
-                        .map { it as IElectricNode }
+                    .filter { it is IElectricNode }
+                    .map { it as IElectricNode }
 
                 electricNodes.forEach { otherNode ->
                     tryConnect(this, thisNode, handler, otherNode, side.opposite)
@@ -154,13 +154,13 @@ class ModuleElectricity(
 
         handlers.forEach { handler ->
             handler.nodes
-                    .filterIsInstance<IWireConnector>()
-                    .filter { it.connectorsSize == thisNode.connectorsSize }
-                    .forEach { otherNode ->
-                        if (outputWiredConnections.size < 16) {
-                            tryConnect(this, thisNode, handler, otherNode, null)
-                        }
+                .filterIsInstance<IWireConnector>()
+                .filter { it.connectorsSize == thisNode.connectorsSize }
+                .forEach { otherNode ->
+                    if (outputWiredConnections.size < 16) {
+                        tryConnect(this, thisNode, handler, otherNode, null)
                     }
+                }
         }
     }
 
@@ -310,13 +310,13 @@ class ModuleElectricity(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return electricNodes
-                .filterIsInstance<ElectricNode>()
-                .mapIndexed { index, node ->
-                    FloatSyncVariable(
-                            id = DATA_ID_VOLTAGE_LIST[index],
-                            getter = { node.voltage.toFloat() },
-                            setter = { node.voltage = it.toDouble() }
-                    )
-                }
+            .filterIsInstance<ElectricNode>()
+            .mapIndexed { index, node ->
+                FloatSyncVariable(
+                    id = DATA_ID_VOLTAGE_LIST[index],
+                    getter = { node.voltage.toFloat() },
+                    setter = { node.voltage = it.toDouble() }
+                )
+            }
     }
 }

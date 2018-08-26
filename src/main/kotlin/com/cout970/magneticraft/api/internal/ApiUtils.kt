@@ -9,8 +9,8 @@ object ApiUtils {
 
     fun equalsIgnoreSize(a: ItemStack, b: ItemStack): Boolean {
         return a == b || !(a.isEmpty || b.isEmpty)
-                && a.item == b.item
-                && (!a.item.hasSubtypes || a.metadata == b.metadata)
-                && a.tagCompound == b.tagCompound
+            && a.item == b.item
+            && (!a.item.hasSubtypes || a.metadata == b.metadata)
+            && a.tagCompound == b.tagCompound
     }
 }

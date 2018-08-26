@@ -7,9 +7,9 @@ import net.minecraft.block.state.IBlockState
  * Created by cout970 on 2017/08/28.
  */
 data class ThermopileRecipe(
-        private val blockState: IBlockState,
-        private val temperature: Float,
-        private val conductivity: Float
+    private val blockState: IBlockState,
+    private val temperature: Float,
+    private val conductivity: Float
 ) : IThermopileRecipe {
 
     override fun getBlockState(): IBlockState = blockState

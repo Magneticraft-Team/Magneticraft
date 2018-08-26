@@ -30,12 +30,14 @@ public class MultiBlockEvent extends Event {
      * Event called before the multiblock starts forming, this can be used to cancel the formation
      */
     public static class CheckIntegrity extends MultiBlockEvent {
+
         // Player forming the multiblock
         private final EntityPlayer player;
         // Errors found scanning the multiblock, is empty the multiblock will form, otherwise it will show the errors
         private final List<ITextComponent> integrityErrors;
 
-        public CheckIntegrity(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing, EntityPlayer player, List<ITextComponent> integrityErrors) {
+        public CheckIntegrity(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing,
+                              EntityPlayer player, List<ITextComponent> integrityErrors) {
             super(multiblock, world, center, facing);
             this.player = player;
             this.integrityErrors = integrityErrors;
@@ -71,19 +73,19 @@ public class MultiBlockEvent extends Event {
         }
     }
 
-    public IMultiblock getMultiblock(){
+    public IMultiblock getMultiblock() {
         return multiblock;
     }
 
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
 
-    public BlockPos getCenter(){
+    public BlockPos getCenter() {
         return center;
     }
 
-    public EnumFacing getFacing(){
+    public EnumFacing getFacing() {
         return facing;
     }
 }

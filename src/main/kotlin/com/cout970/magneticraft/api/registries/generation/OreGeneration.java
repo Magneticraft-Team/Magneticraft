@@ -12,7 +12,8 @@ public class OreGeneration {
     private final int maxGenerationLevel;
     private final int minGenerationLevel;
 
-    public OreGeneration(String oreDictName, boolean isEnabled, int veinsPerChunk, int blocksPerVein, int maxGenerationLevel, int minGenerationLevel) {
+    public OreGeneration(String oreDictName, boolean isEnabled, int veinsPerChunk, int blocksPerVein,
+                         int maxGenerationLevel, int minGenerationLevel) {
         this.oreDictName = oreDictName;
         this.isEnabled = isEnabled;
         this.veinsPerChunk = veinsPerChunk;
@@ -30,7 +31,8 @@ public class OreGeneration {
     }
 
     public OreGeneration withEnable(boolean value) {
-        return new OreGeneration(oreDictName, value, veinsPerChunk, blocksPerVein, maxGenerationLevel, minGenerationLevel);
+        return new OreGeneration(oreDictName, value, veinsPerChunk, blocksPerVein, maxGenerationLevel,
+                                 minGenerationLevel);
     }
 
     public boolean isEnabled() {

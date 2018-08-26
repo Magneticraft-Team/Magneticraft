@@ -21,19 +21,19 @@ import net.minecraftforge.oredict.OreDictionary
 fun registerOreDictionaryEntries() {
 
     EnumMetal.values().forEach {
-        if(!it.vanilla && !it.isComposite){
+        if (!it.vanilla && !it.isComposite) {
             OreDictionary.registerOre("ingot${it.name.toLowerCase().capitalize()}", it.getIngot())
             OreDictionary.registerOre("nugget${it.name.toLowerCase().capitalize()}", it.getNugget())
         }
-        if(it.useful && !it.isComposite) {
+        if (it.useful && !it.isComposite) {
             OreDictionary.registerOre("lightPlate${it.name.toLowerCase().capitalize()}", it.getLightPlate())
             OreDictionary.registerOre("heavyPlate${it.name.toLowerCase().capitalize()}", it.getHeavyPlate())
         }
-        if(!it.isComposite) {
+        if (!it.isComposite) {
             OreDictionary.registerOre("chunk${it.name.toLowerCase().capitalize()}", it.getChunk())
         }
         OreDictionary.registerOre("rockyChunk${it.name.toLowerCase().capitalize()}", it.getRockyChunk())
-        if(it.subComponents.isEmpty()){
+        if (it.subComponents.isEmpty()) {
             OreDictionary.registerOre("dust${it.name.toLowerCase().capitalize()}", it.getDust())
         }
     }
@@ -72,7 +72,7 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("blockTileLimestone", Decoration.tileLimestone.stack(1, 1))
 }
 
-fun registerOreGenerations(){
+fun registerOreGenerations() {
     OreGenerationRegistry.registerOreGeneration(Config.copperOre.toOG("oreCopper"))
     OreGenerationRegistry.registerOreGeneration(Config.leadOre.toOG("oreGalena"))
     OreGenerationRegistry.registerOreGeneration(Config.pyriteOre.toOG("orePyrite"))

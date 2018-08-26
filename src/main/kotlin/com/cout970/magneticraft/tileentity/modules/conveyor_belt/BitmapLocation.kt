@@ -41,8 +41,8 @@ enum class BitmapLocation {
         val min = fromExternalToLocal(box.minX * 16, box.minZ * 16) / 16
         val max = fromExternalToLocal(box.maxX * 16, box.maxZ * 16) / 16
         return AABB(
-                min.x, box.minY, min.y,
-                max.x, box.maxY, max.y
+            min.x, box.minY, min.y,
+            max.x, box.maxY, max.y
         )
     }
 

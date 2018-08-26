@@ -38,7 +38,7 @@ object IntegrationHandler {
         }
     }
 
-    private fun craftTweaker(){
+    private fun craftTweaker() {
         info("Starting CraftTweaker integration")
         try {
             InputHelper::class.java

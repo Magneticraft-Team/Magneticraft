@@ -12,10 +12,10 @@ import net.minecraft.util.ResourceLocation
  */
 
 class CompLight(
-        val on: DrawableBox,
-        val off: DrawableBox,
-        val texture: ResourceLocation,
-        val condition: () -> Boolean) : IComponent {
+    val on: DrawableBox,
+    val off: DrawableBox,
+    val texture: ResourceLocation,
+    val condition: () -> Boolean) : IComponent {
 
     override lateinit var gui: IGui
     override val pos: IVector2 = on.screenPos

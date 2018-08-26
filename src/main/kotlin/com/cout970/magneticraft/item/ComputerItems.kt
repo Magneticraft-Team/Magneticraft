@@ -26,13 +26,13 @@ object ComputerItems : IItemMaker {
     lateinit var floppyDisk: ItemBase private set
 
     val defaultDisks = mapOf(
-            "user" to 0,
-            "lisp" to 1,
-            "forth" to 2,
-            "shell" to 3,
-            "basic" to 4,
-            "editor" to 5,
-            "asm" to 6
+        "user" to 0,
+        "lisp" to 1,
+        "forth" to 2,
+        "shell" to 3,
+        "basic" to 4,
+        "editor" to 5,
+        "asm" to 6
     )
 
     override fun initItems(): List<Item> {

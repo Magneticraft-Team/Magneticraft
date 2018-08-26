@@ -14,9 +14,9 @@ import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.util.fromCelsiusToKelvin
 
 class ModuleElectricHeater(
-        val node: IHeatNode,
-        val energy: IMachineEnergyInterface,
-        override val name: String = "module_electric_heater"
+    val node: IHeatNode,
+    val energy: IMachineEnergyInterface,
+    override val name: String = "module_electric_heater"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -39,7 +39,7 @@ class ModuleElectricHeater(
             }
 
         } else {
-            if(node.temperature < MAX_HEAT) {
+            if (node.temperature < MAX_HEAT) {
                 this.energy.useEnergy(energy)
                 node.applyHeat(energy)
 
@@ -54,8 +54,8 @@ class ModuleElectricHeater(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(
-                consumption.toSyncVariable(DATA_ID_MACHINE_CONSUMPTION),
-                production.toSyncVariable(DATA_ID_MACHINE_PRODUCTION)
+            consumption.toSyncVariable(DATA_ID_MACHINE_CONSUMPTION),
+            production.toSyncVariable(DATA_ID_MACHINE_PRODUCTION)
         )
     }
 }

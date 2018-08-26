@@ -7,9 +7,9 @@ import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.vec2Of
 
 class CompLabel(
-        override val pos: IVector2,
-        val color: Int = 0xFFFFFF,
-        val text: () -> String
+    override val pos: IVector2,
+    val color: Int = 0xFFFFFF,
+    val text: () -> String
 ) : IComponent {
 
     override lateinit var gui: IGui

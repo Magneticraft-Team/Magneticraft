@@ -10,10 +10,10 @@ import net.minecraftforge.fluids.FluidTank
  * Created by cout970 on 10/07/2016.
  */
 open class Tank(
-        capacity: Int,
-        var fluidFilter: (FluidStack) -> Boolean = { true },
-        allowInput: Boolean = true,
-        allowOutput: Boolean = true
+    capacity: Int,
+    var fluidFilter: (FluidStack) -> Boolean = { true },
+    allowInput: Boolean = true,
+    allowOutput: Boolean = true
 ) : FluidTank(capacity) {
 
     var clientFluidAmount = 0

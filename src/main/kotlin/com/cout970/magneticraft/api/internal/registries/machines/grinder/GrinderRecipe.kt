@@ -10,12 +10,12 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 22/08/2016.
  */
 data class GrinderRecipe(
-        private val input: ItemStack,
-        private val primaryOutput: ItemStack,
-        private val secondaryOutput: ItemStack,
-        private val prob: Float,
-        private val ticks: Float,
-        private val oreDict: Boolean
+    private val input: ItemStack,
+    private val primaryOutput: ItemStack,
+    private val secondaryOutput: ItemStack,
+    private val prob: Float,
+    private val ticks: Float,
+    private val oreDict: Boolean
 ) : IGrinderRecipe {
 
     init {

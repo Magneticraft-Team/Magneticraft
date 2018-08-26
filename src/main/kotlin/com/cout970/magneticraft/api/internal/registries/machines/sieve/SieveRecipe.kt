@@ -10,15 +10,15 @@ import net.minecraftforge.oredict.OreDictionary
  * Created by cout970 on 22/08/2016.
  */
 data class SieveRecipe(
-        private val input: ItemStack,
-        private val primary: ItemStack,
-        private val primaryChance: Float,
-        private val secondary: ItemStack,
-        private val secondaryChance: Float,
-        private val tertiary: ItemStack,
-        private val tertiaryChance: Float,
-        private val ticks: Float,
-        private val oreDict: Boolean
+    private val input: ItemStack,
+    private val primary: ItemStack,
+    private val primaryChance: Float,
+    private val secondary: ItemStack,
+    private val secondaryChance: Float,
+    private val tertiary: ItemStack,
+    private val tertiaryChance: Float,
+    private val ticks: Float,
+    private val oreDict: Boolean
 ) : ISieveRecipe {
 
     init {

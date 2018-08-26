@@ -6,8 +6,8 @@ import net.minecraft.util.SoundEvent
 import net.minecraftforge.registries.IForgeRegistry
 
 enum class Sounds(
-        val resourceLocation: ResourceLocation,
-        val soundEvent: SoundEvent = SoundEvent(resourceLocation)
+    val resourceLocation: ResourceLocation,
+    val soundEvent: SoundEvent = SoundEvent(resourceLocation)
 ) {
     CRUSHING_HIT(resource("crushing_hit")),
     CRUSHING_FINAL(resource("crushing_final")),

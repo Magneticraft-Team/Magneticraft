@@ -22,7 +22,7 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
     TUNGSTEN(false, useful = true),
     STEEL(false, isOre = false, useful = true),
     ALUMINIUM(false),
-    GALENA(false, subComponents = listOf({LEAD}, {SILVER})),
+    GALENA(false, subComponents = listOf({ LEAD }, { SILVER })),
     MITHRIL(false),
     NICKEL(false),
     OSMIUM(false),
@@ -34,20 +34,20 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
 
     companion object {
         val subProducts = mapOf(
-                IRON to listOf(NICKEL, ALUMINIUM),
-                GOLD to listOf(COPPER, SILVER),
-                COPPER to listOf(GOLD, IRON),
-                LEAD to listOf(SILVER),
-                COBALT to listOf(MITHRIL, OSMIUM),
-                TUNGSTEN to listOf(IRON),
-                ALUMINIUM to listOf(NICKEL, IRON),
-                GALENA to listOf(LEAD, SILVER),
-                MITHRIL to listOf(OSMIUM, ZINC),
-                NICKEL to listOf(IRON, TIN),
-                OSMIUM to listOf(MITHRIL, COBALT),
-                SILVER to listOf(LEAD),
-                TIN to listOf(IRON, ALUMINIUM),
-                ZINC to listOf(NICKEL, TIN)
+            IRON to listOf(NICKEL, ALUMINIUM),
+            GOLD to listOf(COPPER, SILVER),
+            COPPER to listOf(GOLD, IRON),
+            LEAD to listOf(SILVER),
+            COBALT to listOf(MITHRIL, OSMIUM),
+            TUNGSTEN to listOf(IRON),
+            ALUMINIUM to listOf(NICKEL, IRON),
+            GALENA to listOf(LEAD, SILVER),
+            MITHRIL to listOf(OSMIUM, ZINC),
+            NICKEL to listOf(IRON, TIN),
+            OSMIUM to listOf(MITHRIL, COBALT),
+            SILVER to listOf(LEAD),
+            TIN to listOf(IRON, ALUMINIUM),
+            ZINC to listOf(NICKEL, TIN)
         )
     }
 
@@ -60,7 +60,7 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
         }
         if (this == ALUMINIUM) {
             return (OreDictionary.getOres("oreAluminium") + OreDictionary.getOres("oreAluminum"))
-                    .map { it.withSize(1) }
+                .map { it.withSize(1) }
         }
         return OreDictionary.getOres("ore" + name.toLowerCase().capitalize()).map {
             it.withSize(1)
@@ -90,7 +90,7 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
     fun getHeavyPlate(): ItemStack = MetallicItems.heavyPlates.stack(1, ordinal)
 
     fun getChunk(): ItemStack {
-        if(this.isComposite) return ItemStack.EMPTY
+        if (this.isComposite) return ItemStack.EMPTY
         return MetallicItems.chunks.stack(1, ordinal)
     }
 

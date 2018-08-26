@@ -16,7 +16,7 @@ object TileRendererShelvingUnit : TileRendererMultiblock<TileShelvingUnit>() {
 
     override fun init() {
         createModel(Multiblocks.shelvingUnit,
-                (1..24).map { ModelSelector("crate-$it", FilterString("Crate$it")) }
+            (1..24).map { ModelSelector("crate-$it", FilterString("Crate$it")) }
         )
     }
 

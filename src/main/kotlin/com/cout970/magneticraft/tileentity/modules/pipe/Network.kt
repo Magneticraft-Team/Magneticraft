@@ -10,9 +10,9 @@ import net.minecraft.util.EnumFacing
 typealias InspectFunc = (TileEntity, EnumFacing) -> List<IPathFindingNode>
 
 abstract class Network<T : INetworkNode>(
-        mainNode: T,
-        val inspectFunc: InspectFunc,
-        val factory: (T) -> Network<T>
+    mainNode: T,
+    val inspectFunc: InspectFunc,
+    val factory: (T) -> Network<T>
 ) {
 
     val members = mutableSetOf(mainNode)

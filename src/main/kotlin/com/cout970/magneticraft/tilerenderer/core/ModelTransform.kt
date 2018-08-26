@@ -9,23 +9,23 @@ object ModelTransform {
 
     fun updateModelUvs(provider: McxModel, sprite: Sprite): McxModel {
         val quads = Mesh(
-                provider.quads.pos,
-                provider.quads.tex.map { sprite.mapUv(it) },
-                provider.quads.indices
+            provider.quads.pos,
+            provider.quads.tex.map { sprite.mapUv(it) },
+            provider.quads.indices
         )
         return McxModel(
-                provider.useAmbientOcclusion,
-                provider.use3dInGui,
-                provider.particleTexture,
-                provider.parts,
-                quads
+            provider.useAmbientOcclusion,
+            provider.use3dInGui,
+            provider.particleTexture,
+            provider.parts,
+            quads
         )
     }
 
     fun Sprite.mapUv(uv: IVector2): IVector2 {
         return com.cout970.vector.extensions.vec2Of(
-                getInterpolatedU(uv.xd * 16),
-                getInterpolatedV(uv.yd * 16)
+            getInterpolatedU(uv.xd * 16),
+            getInterpolatedV(uv.yd * 16)
         )
     }
 }

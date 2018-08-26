@@ -18,11 +18,11 @@ import org.lwjgl.opengl.GL11
  */
 
 class MonitorComponent(
-        val tile: ITileRef,
-        val monitor: DeviceMonitor,
-        val keyboard: DeviceKeyboard,
-        val container: ContainerBase,
-        val green: Boolean
+    val tile: ITileRef,
+    val monitor: DeviceMonitor,
+    val keyboard: DeviceKeyboard,
+    val container: ContainerBase,
+    val green: Boolean
 ) : IComponent {
 
     companion object {
@@ -91,10 +91,10 @@ class MonitorComponent(
     fun sendKey(typedChar: Char, keyCode: Int, press: Boolean) {
 
         val key = when (typedChar.toInt()) {
-        // Unknown keys
+            // Unknown keys
             202, 204, 206 -> typedChar.toInt()
 
-        // printable ascii chars
+            // printable ascii chars
             in 32..126 -> typedChar.toInt()
 
             else -> when (keyCode) {

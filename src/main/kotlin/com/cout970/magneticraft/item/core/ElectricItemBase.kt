@@ -45,8 +45,8 @@ class ElectricItemBase : ItemBase() {
 
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         tooltip.add(TextComponentTranslation("tooltip.magneticraft.item_storage.energy",
-                getStoredEnergyInternal(stack),
-                getCapacityInternal(stack)
+            getStoredEnergyInternal(stack),
+            getCapacityInternal(stack)
         ).unformattedComponentText)
         super.addInformation(stack, worldIn, tooltip, flagIn)
     }

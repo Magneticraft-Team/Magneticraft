@@ -27,10 +27,10 @@ object TileRendererSmallTank : BaseTileRenderer<TileSmallTank>() {
 
     override fun init() {
         createModel(FluidMachines.smallTank,
-                ModelSelector("shell", FilterNot(FilterString("base")))
+            ModelSelector("shell", FilterNot(FilterString("base")))
         )
         createModelWithoutTexture(FluidMachines.smallTank,
-                ModelSelector("base", FilterString("base"))
+            ModelSelector("base", FilterString("base"))
         )
     }
 
@@ -71,8 +71,8 @@ object TileRendererIronPipe : BaseTileRenderer<TileIronPipe>() {
 
     override fun init() {
         val parts = listOf(
-                "center", "up", "down", "north", "south", "east", "west", "wt", "wb", "et", "eb", "nt",
-                "nb", "st", "sb", "nw", "sw", "ne", "se", "cdown", "cup", "cnorth", "csouth", "cwest", "ceast"
+            "center", "up", "down", "north", "south", "east", "west", "wt", "wb", "et", "eb", "nt",
+            "nb", "st", "sb", "nw", "sw", "ne", "se", "cdown", "cup", "cnorth", "csouth", "cwest", "ceast"
         )
         createModel(FluidMachines.ironPipe, parts.map { ModelSelector(it, FilterString(it)) })
     }

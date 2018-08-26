@@ -33,7 +33,7 @@ class ItemBlockElectricPoleTransformer(blockBase: BlockBase) : ItemBlockBase(blo
         val floorPos = basePos.offset(EnumFacing.DOWN, 4)
 
         val baseState = worldIn.getBlockState(basePos)[ElectricConductors.PROPERTY_POLE_ORIENTATION]
-                        ?: return EnumActionResult.PASS
+            ?: return EnumActionResult.PASS
 
         //@formatter:off
         ElectricConductors.air = true

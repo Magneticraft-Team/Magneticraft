@@ -58,9 +58,9 @@ object ManualMachines : IBlockMaker {
             factory = factoryOf(::TileSluiceBox)
             factoryFilter = { it[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false }
             customModels = listOf(
-                    "model" to resource("models/block/mcx/sluice_box.mcx"),
-                    "inventory" to resource("models/block/mcx/sluice_box_inv.mcx"),
-                    "water" to resource("models/block/mcx/sluice_box_water.mcx")
+                "model" to resource("models/block/mcx/sluice_box.mcx"),
+                "inventory" to resource("models/block/mcx/sluice_box_inv.mcx"),
+                "water" to resource("models/block/mcx/sluice_box_water.mcx")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
@@ -78,7 +78,7 @@ object ManualMachines : IBlockMaker {
 
                 listOf(BlockPos.ORIGIN to thisState, facing.toBlockPos() to otherState)
             }
-            onBlockBreak = func@ {
+            onBlockBreak = func@{
                 val facing = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: return@func
                 it.worldIn.destroyBlock(it.pos + facing.toBlockPos(), true)
             }

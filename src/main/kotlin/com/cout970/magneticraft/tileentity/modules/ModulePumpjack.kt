@@ -30,11 +30,11 @@ import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 
 class ModulePumpjack(
-        val energy: IMachineEnergyInterface,
-        val tank: Tank,
-        val ref: () -> BlockPos,
-        val active: () -> Boolean,
-        override val name: String = "module_pumpjack"
+    val energy: IMachineEnergyInterface,
+    val tank: Tank,
+    val ref: () -> BlockPos,
+    val active: () -> Boolean,
+    override val name: String = "module_pumpjack"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -104,8 +104,8 @@ class ModulePumpjack(
 
                     val size = 5 * 16
                     this.depositSearch = WorldIterator.create(
-                            BlockPos(pos.x - size, pos.yi - 7, pos.z - size),
-                            BlockPos(pos.x + size, pos.yi + 4, pos.z + size)
+                        BlockPos(pos.x - size, pos.yi - 7, pos.z - size),
+                        BlockPos(pos.x + size, pos.yi + 4, pos.z + size)
                     )
 
                     depositSize = 0
@@ -119,9 +119,9 @@ class ModulePumpjack(
                 val size = 3
 
                 this.firstOilSearch = WorldIterator.create(
-                        BlockPos(start.x - size, start.y, start.z - size),
-                        BlockPos(start.x + size, 0, start.z + size),
-                        true
+                    BlockPos(start.x - size, start.y, start.z - size),
+                    BlockPos(start.x + size, 0, start.z + size),
+                    true
                 )
             }
         }
@@ -182,8 +182,8 @@ class ModulePumpjack(
             val size = 128
 
             nextSource = WorldIterator.create(
-                    BlockPos(start.x - size, depositStart.y - 10, start.z - size),
-                    BlockPos(start.x + size, depositStart.y + 20, start.z + size)
+                BlockPos(start.x - size, depositStart.y - 10, start.z - size),
+                BlockPos(start.x + size, depositStart.y + 20, start.z + size)
             )
         }
 
@@ -258,9 +258,9 @@ class ModulePumpjack(
         if (placeBlocks == null) {
             val start = ref()
             placeBlocks = WorldIterator.create(
-                    BlockPos(start.x, start.y, start.z),
-                    BlockPos(start.x, depositStart.y, start.z),
-                    true
+                BlockPos(start.x, start.y, start.z),
+                BlockPos(start.x, depositStart.y, start.z),
+                true
             )
         }
 
@@ -324,27 +324,27 @@ class ModulePumpjack(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(
-                IntSyncVariable(DATA_ID_STATUS, status::ordinal, { status = Status.values()[it] }),
-                IntSyncVariable(DATA_ID_DEPOSIT_SIZE, ::depositSize, { depositSize = it }),
-                IntSyncVariable(DATA_ID_DEPOSIT_LEFT, ::depositLeft, { depositLeft = it }),
-                AverageSyncVariable(DATA_ID_MACHINE_PRODUCTION, production),
-                FloatSyncVariable(DATA_ID_MACHINE_PROGRESS, {
-                    when (status) {
-                        ModulePumpjack.Status.SEARCHING_OIL -> {
-                            firstOilSearch?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
-                        }
-                        ModulePumpjack.Status.SEARCHING_DEPOSIT -> {
-                            depositSearch?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
-                        }
-                        ModulePumpjack.Status.DIGGING -> {
-                            placeBlocks?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
-                        }
-                        ModulePumpjack.Status.SEARCHING_SOURCE -> {
-                            nextSource?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
-                        }
-                        else -> 0f
+            IntSyncVariable(DATA_ID_STATUS, status::ordinal, { status = Status.values()[it] }),
+            IntSyncVariable(DATA_ID_DEPOSIT_SIZE, ::depositSize, { depositSize = it }),
+            IntSyncVariable(DATA_ID_DEPOSIT_LEFT, ::depositLeft, { depositLeft = it }),
+            AverageSyncVariable(DATA_ID_MACHINE_PRODUCTION, production),
+            FloatSyncVariable(DATA_ID_MACHINE_PROGRESS, {
+                when (status) {
+                    ModulePumpjack.Status.SEARCHING_OIL -> {
+                        firstOilSearch?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
                     }
-                }, { processPercent = it })
+                    ModulePumpjack.Status.SEARCHING_DEPOSIT -> {
+                        depositSearch?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
+                    }
+                    ModulePumpjack.Status.DIGGING -> {
+                        placeBlocks?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
+                    }
+                    ModulePumpjack.Status.SEARCHING_SOURCE -> {
+                        nextSource?.let { it.doneBlocks() / it.totalBlocks().toFloat() } ?: 0f
+                    }
+                    else -> 0f
+                }
+            }, { processPercent = it })
         )
     }
 

@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d
  */
 
 typealias AABB = AxisAlignedBB
+
 typealias IVector3 = Vec3d
 typealias IVector2 = Vec2d
 typealias Sprite = TextureAtlasSprite

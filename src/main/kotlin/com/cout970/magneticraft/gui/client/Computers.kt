@@ -34,9 +34,9 @@ fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
     +MonitorComponent(container.tile.ref, container.monitor, container.keyboard, container, true)
 
     listOf(
-            buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 230)),
-            buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 230)),
-            buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 230))
+        buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 230)),
+        buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 230)),
+        buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 230))
     ).forEach {
         it.listener = { btn, _, _ ->
             val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, btn.id) }
@@ -50,9 +50,9 @@ fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
     val pos = Vec2d((width - sizeX) / 2, (height - sizeY) / 2) + Vec2d(14, 220)
 
     +CompLight(
-            on = DrawableBox(pos, size, vec2Of(24, 237), size, textureSize),
-            off = DrawableBox(pos, size, vec2Of(24, 230), size, textureSize),
-            texture = texture, condition = motherboard::isOnline
+        on = DrawableBox(pos, size, vec2Of(24, 237), size, textureSize),
+        off = DrawableBox(pos, size, vec2Of(24, 230), size, textureSize),
+        texture = texture, condition = motherboard::isOnline
     )
 
     +CompEnableRepeatedEvents()
@@ -73,9 +73,9 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     +CompElectricBar(tile.node, Vec2d(10, 238))
 
     listOf(
-            buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 317)),
-            buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 317)),
-            buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 317))
+        buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 317)),
+        buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 317)),
+        buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 317))
     ).forEach {
         it.listener = { btn, _, _ ->
             val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, btn.id) }
@@ -91,9 +91,9 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     val pos = Vec2d((width - sizeX) / 2, (height - sizeY) / 2) + Vec2d(14, 220)
 
     +CompLight(
-            on = DrawableBox(pos, size, vec2Of(24, 324), size, textureSize),
-            off = DrawableBox(pos, size, vec2Of(24, 317), size, textureSize),
-            texture = texture, condition = { motherboard.isOnline() }
+        on = DrawableBox(pos, size, vec2Of(24, 324), size, textureSize),
+        off = DrawableBox(pos, size, vec2Of(24, 317), size, textureSize),
+        texture = texture, condition = { motherboard.isOnline() }
     )
     +CompEnableRepeatedEvents()
 }

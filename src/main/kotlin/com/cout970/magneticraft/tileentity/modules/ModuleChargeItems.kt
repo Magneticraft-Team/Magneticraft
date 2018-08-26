@@ -14,12 +14,12 @@ import com.cout970.magneticraft.tileentity.core.IModuleContainer
  * Created by cout970 on 2017/07/02.
  */
 class ModuleChargeItems(
-        val inventory: Inventory,
-        val chargeSlot: Int = -1,
-        val dischargeSlot: Int = -1,
-        val storage: ModuleInternalStorage,
-        val transferRate: Int,
-        override val name: String = "module_charge_items"
+    val inventory: Inventory,
+    val chargeSlot: Int = -1,
+    val dischargeSlot: Int = -1,
+    val storage: ModuleInternalStorage,
+    val transferRate: Int,
+    override val name: String = "module_charge_items"
 ) : IModule {
 
     lateinit override var container: IModuleContainer
@@ -65,5 +65,5 @@ class ModuleChargeItems(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> =
-            listOf(itemChargeRate.toSyncVariable(DATA_ID_ITEM_CHARGE_RATE))
+        listOf(itemChargeRate.toSyncVariable(DATA_ID_ITEM_CHARGE_RATE))
 }

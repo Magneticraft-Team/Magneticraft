@@ -34,8 +34,8 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
 
             val baseName = ComputerItems.defaultDisks.toList()
-                    .find { it.second == stack.itemDamage }
-                    ?.first ?: "bios"
+                .find { it.second == stack.itemDamage }
+                ?.first ?: "bios"
 
             val source = "$baseName.bin"
 
@@ -47,18 +47,18 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
                 if (Debug.DEBUG) {
                     val bytes = ComputerItems::class.java
-                            .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
-                            ?.readBytes()
-                            ?: ByteArray(0)
+                        .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
+                        ?.readBytes()
+                        ?: ByteArray(0)
 
                     file.writeBytes(bytes)
                 }
 
             } else {
                 val bytes = ComputerItems::class.java
-                        .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
-                        ?.readBytes()
-                        ?: ByteArray(0)
+                    .getResourceAsStream("/assets/$MOD_ID/cpu/$source")
+                    ?.readBytes()
+                    ?: ByteArray(0)
 
                 file = createTempFile(directory = parent)
                 file.writeBytes(bytes)
@@ -74,11 +74,11 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
         if (!nbt.hasKey("serialNumber")) {
 
             val num = Random()
-                    .ints(8)
-                    .toArray()
-                    .map { "0123456789ABCDEF"[it and 0xF] }
-                    .joinToString("")
-                    .let { java.lang.Long.decode("0x$it").toInt() }
+                .ints(8)
+                .toArray()
+                .map { "0123456789ABCDEF"[it and 0xF] }
+                .joinToString("")
+                .let { java.lang.Long.decode("0x$it").toInt() }
 
             nbt.add("serialNumber", num)
         }
