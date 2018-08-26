@@ -7,6 +7,7 @@ import com.cout970.magneticraft.block.core.OnActivatedArgs
 import com.cout970.magneticraft.item.itemblock.ItemBlockBase
 import com.cout970.magneticraft.misc.inventory.insertItem
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.tileentity.TimeCache
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.world.dropItem
@@ -32,8 +33,8 @@ import net.minecraftforge.items.IItemHandler
  * Created by cout970 on 2017/06/17.
  */
 class ModuleConveyorBelt(
-        val facingGetter: () -> EnumFacing,
-        override val name: String = "module_conveyor_belt"
+    val facingGetter: () -> EnumFacing,
+    override val name: String = "module_conveyor_belt"
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer
@@ -279,13 +280,23 @@ class ModuleConveyorBelt(
     fun removeItem(slot: Int, amount: Int, simulate: Boolean): ItemStack {
         if (boxes.isEmpty()) return ItemStack.EMPTY
         val lastBox = boxes[slot]
-        if (lastBox.item.count > amount) return ItemStack.EMPTY
+
+        val extracted = if (amount > lastBox.item.count) {
+            lastBox.item
+        } else {
+            lastBox.item.withSize(amount)
+        }
 
         if (!simulate) {
+            if (amount > lastBox.item.count) {
+                boxes.remove(lastBox)
+            } else {
+                boxes[slot] = lastBox.copy(item = lastBox.item.withSize(lastBox.item.count - amount))
+            }
             boxes.remove(lastBox)
             markUpdate()
         }
-        return lastBox.item
+        return extracted
     }
 
 
@@ -296,8 +307,8 @@ class ModuleConveyorBelt(
     override fun deserializeNBT(nbt: NBTTagCompound) {
         newBoxes.clear()
         newBoxes += nbt.getList("items")
-                .map { it as NBTTagCompound }
-                .map { BoxedItem(it) }
+            .map { it as NBTTagCompound }
+            .map { BoxedItem(it) }
         toUpdate = true
     }
 
@@ -351,14 +362,14 @@ class ModuleConveyorBelt(
                 }
 
                 override fun getStackInSlot(slot: Int): ItemStack =
-                        if (slot == 0) ItemStack.EMPTY else boxes[slot - 1].item
+                    if (slot == 0) ItemStack.EMPTY else boxes[slot - 1].item
 
                 override fun getSlotLimit(slot: Int): Int = 64
 
                 override fun getSlots(): Int = boxes.size + 1
 
                 override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack =
-                        if (slot == 0) ItemStack.EMPTY else removeItem(slot - 1, amount, simulate)
+                    if (slot == 0) ItemStack.EMPTY else removeItem(slot - 1, amount, simulate)
             } as T
         }
 

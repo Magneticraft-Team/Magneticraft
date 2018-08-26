@@ -32,7 +32,7 @@ fun ItemStack.consumeItem(amount: Int = 1): ItemStack {
     }
 }
 
-operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack): Unit {
+operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack) {
     setStackInSlot(slot, stack)
 }
 
@@ -76,6 +76,17 @@ fun IItemHandler.copy(): IItemHandler {
         inv.setStackInSlot(index, stack.copy())
     }
     return inv
+}
+
+fun IItemHandler.getSlotForExtraction(other: IItemHandler): Int? {
+    for (slot in 0 until slots) {
+        val stack = this.extractItem(slot, 64, true)
+        if (stack.isEmpty) continue
+        val result = other.insertItem(stack, true)
+        if (ItemStack.areItemStacksEqual(result, stack)) continue
+        return slot
+    }
+    return null
 }
 
 fun IItemHandler.insertItem(stack: ItemStack, simulate: Boolean): ItemStack {

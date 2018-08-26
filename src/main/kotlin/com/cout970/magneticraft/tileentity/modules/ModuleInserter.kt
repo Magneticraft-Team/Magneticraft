@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.tileentity.modules
 
 import com.cout970.magneticraft.misc.inventory.*
-import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.core.IModule
@@ -50,6 +50,35 @@ class ModuleInserter(
     }
 }
 
+enum class Level {
+    LOW, HIGH;
+
+    val opposite get() = if (this == LOW) HIGH else LOW
+}
+
+enum class State {
+    CONTRACTED,
+    CONTRACTED_INVERSE,
+    EXTENDED_LOW,
+    EXTENDED_HIGH,
+    EXTENDED_LOW_INVERSE,
+    EXTENDED_HIGH_INVERSE,
+    TRANSITION
+}
+
+enum class Transition(val animation: String) {
+    MOVE_TO_DROP_LOW("animation0"),
+    ROTATING("animation1"),
+    ROTATING_INVERSE("animation2"),
+    MOVE_FROM_DROP_LOW("animation3"),
+    MOVE_TO_DROP_LOW_INVERSE("animation4"),
+    MOVE_FROM_DROP_LOW_INVERSE("animation5"),
+    MOVE_TO_DROP_HIGH("animation6"),
+    MOVE_FROM_DROP_HIGH("animation7"),
+    MOVE_TO_DROP_HIGH_INVERSE("animation8"),
+    MOVE_FROM_DROP_HIGH_INVERSE("animation9"),
+}
+
 class InsertStateMachine(val mod: ModuleInserter) {
     companion object {
         const val delay = 10f
@@ -61,6 +90,12 @@ class InsertStateMachine(val mod: ModuleInserter) {
     var animationTime = 0f
     var maxAnimationTime = delay
     var sleep = 0
+
+    var currentItem: ItemStack
+        get() = mod.inventory[0]
+        set(i) {
+            mod.inventory[0] = i
+        }
 
     fun tick() {
 
@@ -108,10 +143,18 @@ class InsertStateMachine(val mod: ModuleInserter) {
                     transition(Transition.ROTATING_INVERSE)
                 }
             }
-            State.EXTENDED_LOW -> if (canGrab(Level.LOW) && grab(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW) else sleep()
-            State.EXTENDED_HIGH -> if (canGrab(Level.HIGH) && grab(Level.HIGH)) transition(Transition.MOVE_FROM_DROP_HIGH) else sleep()
-            State.EXTENDED_LOW_INVERSE -> if (canDrop(Level.LOW) && drop(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW_INVERSE) else sleep()
-            State.EXTENDED_HIGH_INVERSE -> if (canDrop(Level.HIGH) && drop(Level.HIGH)) transition(Transition.MOVE_FROM_DROP_HIGH_INVERSE) else sleep()
+            State.EXTENDED_LOW -> if (canGrab(Level.LOW) && grab(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW) else {
+                if (shouldSleepBeforeGrab(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_LOW)
+            }
+            State.EXTENDED_HIGH -> if (canGrab(Level.HIGH) && grab(Level.HIGH)) transition(Transition.MOVE_FROM_DROP_HIGH) else {
+                if (shouldSleepBeforeGrab(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_HIGH)
+            }
+            State.EXTENDED_LOW_INVERSE -> if (canDrop(Level.LOW) && drop(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW_INVERSE) else {
+                if (shouldSleepBeforeDrop(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_LOW_INVERSE)
+            }
+            State.EXTENDED_HIGH_INVERSE -> if (canDrop(Level.HIGH) && drop(Level.HIGH)) transition(Transition.MOVE_FROM_DROP_HIGH_INVERSE) else {
+                if (shouldSleepBeforeDrop(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_HIGH_INVERSE)
+            }
             else -> Unit
         }
     }
@@ -129,21 +172,37 @@ class InsertStateMachine(val mod: ModuleInserter) {
         mod.container.sendUpdateToNearPlayers()
     }
 
-    fun shouldGrabItems() = mod.inventory[0].isEmpty
-    fun shouldDropItems() = mod.inventory[0].isNotEmpty
+    fun shouldGrabItems() = currentItem.isEmpty
+    fun shouldDropItems() = currentItem.isNotEmpty
 
     private fun getInv(offset: BlockPos): IItemHandler? {
         val tile = mod.world.getTileEntity(mod.pos + offset) ?: return null
         return ITEM_HANDLER!!.fromTile(tile, EnumFacing.UP)
     }
 
+    private fun getDropInv(): IItemHandler? {
+        Level.values().forEach {
+            val offset = offset(it, true)
+            val handler = getInv(offset)
+            if (handler != null) return handler
+        }
+        return null
+    }
+
     fun canGrab(level: Level): Boolean {
         if (shouldDropItems()) return false
         val offset = offset(level, false)
         val handler = getInv(offset) ?: return false
+        val other = getDropInv() ?: return false
 
-        val slot = (0 until handler.slots).firstOrNull { handler[it].isNotEmpty } ?: return false
-        return handler.extractItem(slot, 64, true).isNotEmpty
+        val slot = handler.getSlotForExtraction(other) ?: return false
+        val extracted = handler.extractItem(slot, 64, true)
+        if (extracted.isEmpty) return false
+
+        val remaining = other.insertItem(extracted, true)
+        val accepted = if (remaining.isEmpty) extracted.count else extracted.count - remaining.count
+        if (accepted <= 0) return false
+        return accepted > 0
     }
 
     fun canDrop(level: Level): Boolean {
@@ -151,38 +210,57 @@ class InsertStateMachine(val mod: ModuleInserter) {
         val offset = offset(level, true)
         val handler = getInv(offset) ?: return false
 
-        val slot = (0 until handler.slots).firstOrNull { handler[it].isEmpty } ?: return false
-        return handler.insertItem(slot, mod.inventory[0], true).isEmpty
+        for (slot in 0 until handler.slots) {
+            val remaining = handler.insertItem(slot, currentItem, true)
+            if (!ItemStack.areItemStacksEqual(remaining, currentItem)) return true
+        }
+        return false
     }
 
     fun grab(level: Level): Boolean {
-        if (mod.world.isServer) {
-            val offset = offset(level, false)
-            val handler = getInv(offset) ?: return false
+        if (mod.world.isClient) return false
+        val offset = offset(level, false)
+        val handler = getInv(offset) ?: return false
+        val other = getDropInv() ?: return false
 
-            val slot = (0 until handler.slots).firstOrNull { handler[it].isNotEmpty } ?: return false
-            val extracted = handler.extractItem(slot, 64, true)
-            if (extracted.isEmpty) return false
+        val slot = handler.getSlotForExtraction(other) ?: return false
+        val extracted = handler.extractItem(slot, 64, true)
+        if (extracted.isEmpty) return false
 
-            mod.inventory[0] = handler.extractItem(slot, 64, false)
-            mod.container.sendUpdateToNearPlayers()
-        }
+        val remaining = other.insertItem(extracted, true)
+        val accepted = if (remaining.isEmpty) extracted.count else extracted.count - remaining.count
+        if (accepted <= 0) return false
+
+        currentItem = handler.extractItem(slot, accepted, false)
         return true
     }
 
     fun drop(level: Level): Boolean {
-        if (mod.world.isServer) {
-            val offset = offset(level, true)
-            val handler = getInv(offset) ?: return false
+        if (mod.world.isClient) return false
+        val offset = offset(level, true)
+        val handler = getInv(offset) ?: return false
 
-            val remaining = handler.insertItem(mod.inventory[0], true)
-            if (remaining.isNotEmpty) return false
+        val remaining = handler.insertItem(currentItem, true)
+        if (ItemStack.areItemStacksEqual(remaining, currentItem)) return false
 
-            handler.insertItem(mod.inventory[0], false)
-            mod.inventory[0] = ItemStack.EMPTY
-            mod.container.sendUpdateToNearPlayers()
-        }
+        currentItem = handler.insertItem(currentItem, false)
         return true
+    }
+
+    fun shouldSleepBeforeGrab(level: Level): Boolean {
+        if (mod.world.isClient) return false
+        if (shouldDropItems()) return false
+        val offset = offset(level, false)
+        val handler = getInv(offset)
+        return handler != null
+    }
+
+    fun shouldSleepBeforeDrop(level: Level): Boolean {
+        if (mod.world.isClient) return true
+        if (shouldGrabItems()) return false
+        val offset = offset(level, true)
+        val handler = getInv(offset)
+        return handler != null
     }
 
     fun offset(level: Level, inverse: Boolean): BlockPos {
@@ -192,31 +270,4 @@ class InsertStateMachine(val mod: ModuleInserter) {
             if (level == Level.LOW) mod.facing.toBlockPos() + EnumFacing.DOWN else mod.facing.toBlockPos()
         }
     }
-}
-
-enum class Level {
-    LOW, HIGH
-}
-
-enum class State {
-    CONTRACTED,
-    CONTRACTED_INVERSE,
-    EXTENDED_LOW,
-    EXTENDED_HIGH,
-    EXTENDED_LOW_INVERSE,
-    EXTENDED_HIGH_INVERSE,
-    TRANSITION
-}
-
-enum class Transition(val animation: String) {
-    MOVE_TO_DROP_LOW("animation0"),
-    ROTATING("animation1"),
-    ROTATING_INVERSE("animation2"),
-    MOVE_FROM_DROP_LOW("animation3"),
-    MOVE_TO_DROP_LOW_INVERSE("animation4"),
-    MOVE_FROM_DROP_LOW_INVERSE("animation5"),
-    MOVE_TO_DROP_HIGH("animation6"),
-    MOVE_FROM_DROP_HIGH("animation7"),
-    MOVE_TO_DROP_HIGH_INVERSE("animation8"),
-    MOVE_FROM_DROP_HIGH_INVERSE("animation9"),
 }

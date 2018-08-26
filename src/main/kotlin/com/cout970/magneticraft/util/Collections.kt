@@ -21,7 +21,7 @@ fun <T> MutableList<T>.setAll(it: Iterable<T>) {
 fun <T> List<T>.shuffled() = toMutableList().apply(Collections::shuffle)
 
 inline infix fun <reified T> List<T>.with(other: List<T>): MutableList<T> = mutableListOf(*toTypedArray(),
-        *other.toTypedArray())
+    *other.toTypedArray())
 
 fun <T> List<T>.rest(): List<T> {
     if (isEmpty() || size == 1) return emptyList()

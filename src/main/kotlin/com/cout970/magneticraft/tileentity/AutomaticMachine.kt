@@ -74,10 +74,11 @@ class TileInserter : TileBase(), ITickable {
     val facing: EnumFacing get() = getBlockState().getOrientation()
     val inventory = Inventory(1)
     val invModule = ModuleInventory(inventory, capabilityFilter = { null })
+    val openGui = ModuleOpenGui()
     val inserterModule = ModuleInserter({ facing }, inventory)
 
     init {
-        initModules(inserterModule, invModule)
+        initModules(inserterModule, invModule, openGui)
     }
 
     @DoNotRemove

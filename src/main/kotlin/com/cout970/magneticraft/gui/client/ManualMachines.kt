@@ -3,6 +3,7 @@ package com.cout970.magneticraft.gui.client
 import com.cout970.magneticraft.gui.client.components.CompBackground
 import com.cout970.magneticraft.gui.client.core.GuiBase
 import com.cout970.magneticraft.gui.common.ContainerBox
+import com.cout970.magneticraft.gui.common.ContainerInserter
 import com.cout970.magneticraft.util.guiTexture
 
 /**
@@ -13,3 +14,11 @@ import com.cout970.magneticraft.util.guiTexture
 fun guiBox(gui: GuiBase, container: ContainerBox) = gui.run {
     +CompBackground(guiTexture("box"))
 }
+
+@Suppress("UNUSED_PARAMETER")
+fun guiInserter(gui: GuiBase, container: ContainerInserter) = gui.run {
+    +CompBackground(guiTexture("inserter"))
+
+}
+
+
