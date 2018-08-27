@@ -1,5 +1,6 @@
 package com.cout970.magneticraft
 
+import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.proxy.ClientProxy
 import com.cout970.magneticraft.registry.blocks
@@ -103,13 +104,14 @@ object Debug {
     fun printBlockWithoutRecipe() {
 
         val allBlocks = blocks.map { it.first }.toMutableSet()
-        val allItems = items.map { it }.toMutableSet()
+        val allItems = items.flatMap { item -> (item as ItemBase).variants.map { item to it.key } }.toMutableSet()
 
         CraftingManager.REGISTRY.filterIsInstance<IRecipe>().forEach { it ->
             val stack = it.recipeOutput
             if (stack.isEmpty) return@forEach
 
             val item = stack.item
+            val pair = item to stack.itemDamage
 
             // check that the recipe doesn't use ore dictionary entries that are empty
 
@@ -118,8 +120,8 @@ object Debug {
             }
 
             if (valid) {
-                allItems.remove(item)
-            } else if (item in allItems) {
+                allItems.remove(pair)
+            } else if (pair in allItems) {
                 println("Invalid recipe for: ${item.registryName}")
             }
 

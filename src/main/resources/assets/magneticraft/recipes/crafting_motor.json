@@ -14,10 +14,6 @@
       "type": "forge:ore_dict",
       "ore": "lightPlateIron"
     },
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "nuggetCopper"
-    },
     "D": {
       "item": "magneticraft:crafting",
       "data": 3
