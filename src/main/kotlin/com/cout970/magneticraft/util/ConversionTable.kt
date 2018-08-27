@@ -12,6 +12,7 @@ object ConversionTable {
     const val FE_TO_TESLA = 1.0       // 1FE = 1T;     | 1T  = 1FE
     const val FE_TO_J = 1.0           // 1FE = 1J;     | 1J  = 1FE
     const val FE_TO_EU = 0.25         // 1FE = 0.25EU; | 1EU = 4FE
+    const val MJ_TO_FE = 10           // 1FE = 0.1MJ;  | 1MJ = 10FE
 
     // Steam conversion
     const val STEAM_TO_FE = 2.0       // 1mB = 2.0FE   | 1FE = 0.5mb (20mb = 4MJ = 40RF = 40FE; using 2 MJ = 5 EU ratio)

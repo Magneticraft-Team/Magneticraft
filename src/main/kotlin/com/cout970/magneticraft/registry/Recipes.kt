@@ -429,25 +429,41 @@ fun registerRecipes() {
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   FLUID FUELS
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // For balance: 1 coal = 16_000 J
 
-    // TODO
-    //                                                         1 coal = 16_000 J
-    addFluidFuel("oil", 10_000, 30.0)       // 300_000 J/B
-    addFluidFuel("crude_oil", 10_000, 30.0) // 300_000 J/B
-    addFluidFuel("wood_gas", 2_500, 20.0)   // 50_000 J/B
-//    addFluidFuel("heavy_oil", 100, 60.0)   //
-//    addFluidFuel("light_oil", 100, 80.0)   //
-//    addFluidFuel("fuel", 100, 60.0)        //
-//    addFluidFuel("diesel", 100, 100.0)      //
-//    addFluidFuel("kerosene", 100, 100.0)    //
-//    addFluidFuel("gasoline", 100, 100.0)    //
-//    addFluidFuel("naphtha", 100, 100.0)     //
+    // 1 oil bucket  -> 18.75  coal items // unrefined
+    addFluidFuel("oil", 10_000, 30.0)           // 300_000 J/B   = 18.75 coal items
+    addFluidFuel("crude_oil", 10_000, 30.0)     // 300_000 J/B   = 18.75 coal items
 
-//    BuildcraftFuelRegistry.fuel.addFuel(lightOil, 80, 25000);
-//    BuildcraftFuelRegistry.fuel.addFuel(heavyOil, 60, 25000);
-//    BuildcraftFuelRegistry.fuel.addFuel(naturalGas, 40, 75000);
-//    BuildcraftFuelRegistry.fuel.addFuel(oil, 30, 5000);
-//}
+    // 1 oil bucket  -> 225    coal items // refined 1 time
+    addFluidFuel("heavy_oil", 25_000, 60.0)     // 1_500_000 J/B = 93.75 coal items
+    addFluidFuel("light_oil", 25_000, 80.0)     // 2_000_000 J/B = 125   coal items
+    addFluidFuel("natural_gas", 2_500, 40.0)    // 100_000 J/B   = 6.25  coal items
+
+    // 1 oil bucket  -> 318.75 coal items // refined 2 times
+    addFluidFuel("fuel", 25_000, 60.0)          // 1_500_000 J/B = 93.75 coal items
+    addFluidFuel("diesel", 10_000, 80.0)        // 800_000 J/B   = 62.5  coal items
+    addFluidFuel("kerosene", 5_000, 120.0)      // 600_000 J/B   = 37.5  coal items
+    addFluidFuel("gasoline", 12_000, 100.0)     // 1_200_000 J/B = 62.5  coal items
+    addFluidFuel("naphtha", 25_000, 40.0)       // 1_000_000 J/B = 62.5  coal items
+
+    // other fuels
+    addFluidFuel("wood_gas", 2_500, 20.0)       // 50_000 J/B    = 3.125 coal items
+
+    // IE
+    addFluidFuel("creosote", 1_000, 20.0)       // 20_000 J/B    = 1.25  coal items
+    addFluidFuel("ethanol", 2_000, 20.0)        // 40_000 J/B    = 2.5   coal items
+    addFluidFuel("plantoil", 2_000, 20.0)       // 40_000 J/B    = 2.5   coal items
+    addFluidFuel("biodiesel", 10_000, 50.0)     // 500_000 J/B   = 31.25 coal items
+
+    // TE
+    addFluidFuel("coal", 10_000, 40.0)          // 400_000 J/B   = 62.5  coal items
+    addFluidFuel("tree_oil", 12_500, 80.0)      // 1_000_000 J/B = 62.5  coal items
+    addFluidFuel("refined_fuel", 25_000, 80.0)  // 2_000_000 J/B = 125   coal items
+    addFluidFuel("refined_oil", 25_000, 40.0)   // 1_000_000 J/B = 62.5  coal items
+
+    //IF
+    addFluidFuel("biofuel", 10_000, 50.0)       // 500_000 J/B   = 31.25 coal items
 }
 
 private fun fluidOf(name: String, amount: Int) = FluidRegistry.getFluidStack(name, amount)
@@ -545,7 +561,7 @@ private fun addFluidFuel(name: String, ticks: Int, value: Double) {
     val fluid = fluidOf(name, 1)
 
     if (fluid == null) {
-        warn("Error trying to add a fuel for fluid: $name, fluid not found")
+        warn("Unable to add a fuel for '$name': fluid not found")
         return
     }
 

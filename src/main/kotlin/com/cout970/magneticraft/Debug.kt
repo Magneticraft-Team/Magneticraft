@@ -23,11 +23,11 @@ import net.minecraft.item.crafting.IRecipe
 import net.minecraft.launchwrapper.Launch
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.EnumHand
-import net.minecraft.util.ResourceLocation
 import net.minecraft.util.Timer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.gen.ChunkProviderServer
+import net.minecraftforge.fluids.FluidUtil
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.oredict.OreDictionary
 import net.minecraftforge.oredict.OreIngredient
@@ -78,14 +78,14 @@ object Debug {
 //        }
 //        return cache
 //    }
-
-    fun lastModified(loc: ResourceLocation): Long {
-        val path = "assets/${loc.resourceDomain}/${loc.resourcePath}"
-
-        val url = Thread.currentThread().contextClassLoader.getResource(path)
-        return File(url.file).lastModified()
-    }
-
+//
+//    fun lastModified(loc: ResourceLocation): Long {
+//        val path = "assets/${loc.resourceDomain}/${loc.resourcePath}"
+//
+//        val url = Thread.currentThread().contextClassLoader.getResource(path)
+//        return File(url.file).lastModified()
+//    }
+//
 //    fun loadModel(loc: ResourceLocation): List<ModelCache> {
 //        val resourceManager = Minecraft.getMinecraft().resourceManager
 //        val res = resourceManager.getResource(loc)
@@ -287,9 +287,14 @@ object Debug {
                     "ticks" -> setTicksPerSecond(args.getOrNull(1)?.toIntOrNull() ?: 20)
                     "info" -> {
                         val stack = (sender as EntityPlayer).inventory.getCurrentItem()
+                        val fluid = FluidUtil.getFluidContained(stack)
+
                         sender.sendMessage("Item: $stack".toTextComponent())
                         sender.sendMessage("NBT: ${stack.tagCompound}".toTextComponent())
                         sender.sendMessage("OreDict: ${OreDictionary.getOreIDs(stack).map { OreDictionary.getOreName(it) }}".toTextComponent())
+                        if (fluid != null) {
+                            sender.sendMessage("FluidStack: ${fluid.fluid.name}, ${fluid.amount}, ${fluid.tag}".toTextComponent())
+                        }
                     }
                     "reload" -> {
                         Minecraft.getMinecraft().addScheduledTask {
@@ -349,6 +354,8 @@ object Debug {
         override fun getUsage(sender: ICommandSender?): String = "Magneticraft debug command, is you see this please report to the mod author"
     }
 }
+
+val ug get() = Mouse.setGrabbed(false)
 
 fun ug() {
     Mouse.setGrabbed(false)

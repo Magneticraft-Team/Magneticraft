@@ -1,10 +1,13 @@
 package com.cout970.magneticraft.integration
 
 import com.blamejared.mtlib.helpers.InputHelper
+import com.cout970.magneticraft.api.internal.registries.fuel.FluidFuelManager
+import com.cout970.magneticraft.integration.buildcraft.BuildcraftFuelManager
 import com.cout970.magneticraft.integration.crafttweaker.CraftTweakerPlugin
 import com.cout970.magneticraft.integration.tinkersconstruct.TinkersConstruct
 import com.cout970.magneticraft.util.info
 import net.minecraftforge.fml.common.Loader
+import net.minecraftforge.fml.common.ModAPIManager
 
 /**
  * Created by cout970 on 22/07/2016.
@@ -15,14 +18,21 @@ object IntegrationHandler {
     var jei = false
     var craftTweaker = false
     var tconstruct = false
+    var buildcraftApi = false
+    var industrialForegoing = false
 
     fun preInit() {
         // jei automatically loads MagneticraftPlugin because has @JEIPlugin
         jei = Loader.isModLoaded("jei")
         // also auto-loads classes with @ZenRegister
         craftTweaker = Loader.isModLoaded("crafttweaker")
-
         tconstruct = Loader.isModLoaded("tconstruct")
+        buildcraftApi = ModAPIManager.INSTANCE.hasAPI("BuildCraftAPI|fuels")
+        industrialForegoing = Loader.isModLoaded("industrialforegoing")
+
+        if(buildcraftApi){
+            FluidFuelManager.FLUID_FUEL_MANAGER = BuildcraftFuelManager()
+        }
     }
 
     fun init() {

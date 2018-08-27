@@ -9,7 +9,7 @@ data class FluidFuel(
     private val powerPerCycle: Double
 ) : IFluidFuel {
 
-    override fun getFluid(): FluidStack = fluid
+    override fun getFluid(): FluidStack = fluid.copy()
 
     override fun getTotalBurningTime(): Int = totalBurningTime
 
