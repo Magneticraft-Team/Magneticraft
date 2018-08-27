@@ -73,7 +73,7 @@ class TileInserter : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
     val filters = Inventory(9)
-    val inventory: Inventory = Inventory(5) { _, _ -> inserterModule.updateUpgrades() }
+    val inventory: Inventory = Inventory(3) { _, _ -> inserterModule.updateUpgrades() }
     val invModule = ModuleInventory(inventory, capabilityFilter = { null })
     val openGui = ModuleOpenGui()
     val inserterModule = ModuleInserter({ facing }, inventory, filters)

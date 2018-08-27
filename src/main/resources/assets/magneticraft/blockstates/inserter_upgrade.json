@@ -14,16 +14,6 @@
             "textures": {
                 "layer0": "magneticraft:items/upgrades/inserter_upgrade_stack"
             }
-        }],
-        "drop": [{
-            "textures": {
-                "layer0": "magneticraft:items/upgrades/inserter_upgrade_drop"
-            }
-        }],
-        "grab": [{
-            "textures": {
-                "layer0": "magneticraft:items/upgrades/inserter_upgrade_grab"
-            }
         }]
     }
 }

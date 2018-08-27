@@ -52,8 +52,6 @@ class ContainerInserter(val tile: TileInserter, player: EntityPlayer, world: Wor
         addSlotToContainer(SlotItemHandler(inv, 0, 83, 50))
         addSlotToContainer(SlotItemHandler(inv, 1, 83, 14))
         addSlotToContainer(SlotItemHandler(inv, 2, 101, 14))
-        addSlotToContainer(SlotItemHandler(inv, 3, 119, 14))
-        addSlotToContainer(SlotItemHandler(inv, 4, 137, 14))
 
         var i = 0
         iterateArea(0..2, 0..2) { x, y ->
@@ -61,8 +59,8 @@ class ContainerInserter(val tile: TileInserter, player: EntityPlayer, world: Wor
         }
 
         inventoryRegions += InventoryRegion(0..0) { stack -> stack.item != Upgrades.inserterUpgrade }
-        inventoryRegions += InventoryRegion(1..4) { stack -> stack.item == Upgrades.inserterUpgrade }
-        inventoryRegions += InventoryRegion(5..14) { _ -> false }
+        inventoryRegions += InventoryRegion(1..2) { stack -> stack.item == Upgrades.inserterUpgrade }
+        inventoryRegions += InventoryRegion(3..12) { _ -> false }
         bindPlayerInventory(player.inventory)
     }
 
@@ -80,6 +78,8 @@ class ContainerInserter(val tile: TileInserter, player: EntityPlayer, world: Wor
                 1 -> mod.useOreDictionary = !mod.useOreDictionary
                 2 -> mod.useMetadata = !mod.useMetadata
                 3 -> mod.useNbt = !mod.useNbt
+                4 -> mod.canDropItems = !mod.canDropItems
+                5 -> mod.canGrabItems = !mod.canGrabItems
             }
         }
     }

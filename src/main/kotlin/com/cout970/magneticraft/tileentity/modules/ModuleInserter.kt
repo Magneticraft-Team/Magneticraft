@@ -68,9 +68,9 @@ class ModuleInserter(
 
     var hasSpeedUpgrade = false
     var hasStackUpgrade = false
-    var hasGrabUpgrade = false
-    var hasDropUpgrade = false
 
+    var canGrabItems = false
+    var canDropItems = false
     var whiteList = false
     var useOreDictionary = false
     var useMetadata = true
@@ -126,9 +126,9 @@ class ModuleInserter(
                         transition(Transition.MOVE_TO_DROP_HIGH)
                     } else if (canGrabFromInventory(Level.LOW)) {
                         transition(Transition.MOVE_TO_DROP_LOW)
-                    } else if (hasGrabUpgrade && canGrabFromGround(Level.LOW)) {
+                    } else if (canGrabItems && canGrabFromGround(Level.LOW)) {
                         transition(Transition.MOVE_TO_DROP_LOW)
-                    } else if (hasGrabUpgrade && canGrabFromGround(Level.HIGH)) {
+                    } else if (canGrabItems && canGrabFromGround(Level.HIGH)) {
                         transition(Transition.MOVE_TO_DROP_HIGH)
                     }
                 } else if (shouldDropItems()) {
@@ -141,9 +141,9 @@ class ModuleInserter(
                         transition(Transition.MOVE_TO_DROP_HIGH_INVERSE)
                     } else if (canDropToInventory(Level.LOW)) {
                         transition(Transition.MOVE_TO_DROP_LOW_INVERSE)
-                    } else if (hasDropUpgrade && canDropToGround(Level.LOW)) {
+                    } else if (canDropItems && canDropToGround(Level.LOW)) {
                         transition(Transition.MOVE_TO_DROP_LOW_INVERSE)
-                    } else if (hasDropUpgrade && canDropToGround(Level.HIGH)) {
+                    } else if (canDropItems && canDropToGround(Level.HIGH)) {
                         transition(Transition.MOVE_TO_DROP_HIGH_INVERSE)
                     }
                 } else if (shouldGrabItems()) {
@@ -183,18 +183,14 @@ class ModuleInserter(
 
         hasSpeedUpgrade = false
         hasStackUpgrade = false
-        hasGrabUpgrade = false
-        hasDropUpgrade = false
 
-        for (i in 1..4) {
+        for (i in 1..2) {
             val stack = inventory[i]
             if (stack.isEmpty || stack.item != Upgrades.inserterUpgrade) continue
 
             when (stack.metadata) {
                 0 -> hasSpeedUpgrade = true
                 1 -> hasStackUpgrade = true
-                2 -> hasDropUpgrade = true
-                3 -> hasGrabUpgrade = true
             }
         }
     }
@@ -239,7 +235,7 @@ class ModuleInserter(
         return null
     }
 
-    fun canGrab(level: Level): Boolean = canGrabFromInventory(level) || (hasGrabUpgrade && canGrabFromGround(level))
+    fun canGrab(level: Level): Boolean = canGrabFromInventory(level) || (canGrabItems && canGrabFromGround(level))
 
     fun canGrabFromInventory(level: Level): Boolean {
         if (shouldDropItems()) return false
@@ -263,7 +259,7 @@ class ModuleInserter(
         return items.any { canExtract(it.item) && acceptInDestine(it.item) != null }
     }
 
-    fun grab(level: Level): Boolean = grabFromInventory(level) || (hasGrabUpgrade && grabFromGround(level))
+    fun grab(level: Level): Boolean = grabFromInventory(level) || (canGrabItems && grabFromGround(level))
 
     fun grabFromInventory(level: Level): Boolean {
         if (world.isClient) return false
@@ -296,7 +292,7 @@ class ModuleInserter(
         return true
     }
 
-    fun canDrop(level: Level): Boolean = canDropToInventory(level) || (hasDropUpgrade && canDropToGround(level))
+    fun canDrop(level: Level): Boolean = canDropToInventory(level) || (canDropItems && canDropToGround(level))
 
     fun canDropToInventory(level: Level): Boolean {
         if (shouldGrabItems()) return false
@@ -321,7 +317,7 @@ class ModuleInserter(
         return itemList.isEmpty()
     }
 
-    fun drop(level: Level): Boolean = dropToInventory(level) || (hasDropUpgrade && dropToGround(level))
+    fun drop(level: Level): Boolean = dropToInventory(level) || (canDropItems && dropToGround(level))
 
     fun dropToInventory(level: Level): Boolean {
         if (world.isClient) return false
@@ -344,7 +340,7 @@ class ModuleInserter(
 
     fun acceptInDestine(stack: ItemStack): Int? {
         if (stack.isEmpty) return null
-        if (hasDropUpgrade) return maxStackSize
+        if (canDropItems) return maxStackSize
         val other = getDropInv() ?: return null
         val remaining = other.insertItem(stack, true)
 
@@ -406,6 +402,8 @@ class ModuleInserter(
         useOreDictionary = nbt.getBoolean("useOreDictionary")
         useMetadata = nbt.getBoolean("useMetadata")
         useNbt = nbt.getBoolean("useNbt")
+        canDropItems = nbt.getBoolean("canDropItems")
+        canGrabItems = nbt.getBoolean("canGrabItems")
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
@@ -419,17 +417,21 @@ class ModuleInserter(
         add("useOreDictionary", useOreDictionary)
         add("useMetadata", useMetadata)
         add("useNbt", useNbt)
+        add("canDropItems", canDropItems)
+        add("canGrabItems", canGrabItems)
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
         IntSyncVariable(DATA_ID_FLAGS,
-            { encodeFlags(whiteList, useOreDictionary, useMetadata, useNbt) },
+            { encodeFlags(whiteList, useOreDictionary, useMetadata, useNbt, canDropItems, canGrabItems) },
             {
-                val (a, b, c, d) = decodeFlags(it, 4)
-                whiteList = a
-                useOreDictionary = b
-                useMetadata = c
-                useNbt = d
+                val flags = decodeFlags(it, 6)
+                whiteList = flags[0]
+                useOreDictionary = flags[1]
+                useMetadata = flags[2]
+                useNbt = flags[3]
+                canDropItems = flags[4]
+                canGrabItems = flags[5]
             })
     )
 }

@@ -61,9 +61,7 @@ object Upgrades : IItemMaker {
         inserterUpgrade = builder.withName("inserter_upgrade").copy {
             variants = mapOf(
                 0 to "speed",
-                1 to "stack",
-                2 to "drop",
-                3 to "grab"
+                1 to "stack"
             )
         }.build()
 
