@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "ABC",
+    "AB ",
     "DEF",
-    "ABC"
+    "AB "
   ],
   "key": {
     "A": {
@@ -19,8 +19,8 @@
       "ore": "nuggetCopper"
     },
     "D": {
-      "item": "magneticraft:copper_coil",
-      "nbt": "{}"
+      "item": "magneticraft:crafting",
+      "data": 3
     },
     "E": {
       "type": "forge:ore_dict",

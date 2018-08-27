@@ -147,7 +147,9 @@ class ModuleConveyorBelt(
                     return@removeAll false
 
                 if (frontInv.insertItem(it.item, true).isEmpty) {
-                    frontInv.insertItem(it.item, false)
+                    if (world.isServer) {
+                        frontInv.insertItem(it.item, false)
+                    }
                     return@removeAll true
                 }
                 return@removeAll false
@@ -288,7 +290,7 @@ class ModuleConveyorBelt(
         }
 
         if (!simulate) {
-            if (amount > lastBox.item.count) {
+            if (amount >= lastBox.item.count) {
                 boxes.remove(lastBox)
             } else {
                 boxes[slot] = lastBox.copy(item = lastBox.item.withSize(lastBox.item.count - amount))

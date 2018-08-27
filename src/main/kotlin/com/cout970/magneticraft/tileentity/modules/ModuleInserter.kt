@@ -1,60 +1,37 @@
 package com.cout970.magneticraft.tileentity.modules
 
+import com.cout970.magneticraft.gui.common.core.DATA_ID_FLAGS
+import com.cout970.magneticraft.item.Upgrades
 import com.cout970.magneticraft.misc.inventory.*
+import com.cout970.magneticraft.misc.network.IntSyncVariable
+import com.cout970.magneticraft.misc.network.SyncVariable
+import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HANDLER
+import com.cout970.magneticraft.registry.fromEntity
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
 import com.cout970.magneticraft.util.add
+import com.cout970.magneticraft.util.decodeFlags
+import com.cout970.magneticraft.util.encodeFlags
 import com.cout970.magneticraft.util.newNbt
-import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.toBlockPos
+import com.cout970.magneticraft.util.vector.*
+import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.item.EntityMinecartContainer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.items.IItemHandler
+import net.minecraftforge.oredict.OreDictionary
+
 
 /**
  * Created by cout970 on 2017/06/20.
  */
-class ModuleInserter(
-    val facingGetter: () -> EnumFacing,
-    val inventory: Inventory,
-    override val name: String = "module_conveyor_belt"
-) : IModule {
 
-    override lateinit var container: IModuleContainer
-    val facing get() = facingGetter()
-    val machine = InsertStateMachine(this)
-
-    override fun update() {
-        machine.tick()
-    }
-
-    override fun deserializeNBT(nbt: NBTTagCompound) {
-        machine.state = State.values()[nbt.getInteger("state")]
-        machine.transition = Transition.values()[nbt.getInteger("transition")]
-        machine.animationTime = nbt.getFloat("animationTime")
-        machine.maxAnimationTime = nbt.getFloat("maxAnimationTime")
-        machine.sleep = nbt.getInteger("sleep")
-    }
-
-    override fun serializeNBT(): NBTTagCompound = newNbt {
-        add("state", machine.state.ordinal)
-        add("transition", machine.transition.ordinal)
-        add("animationTime", machine.animationTime)
-        add("maxAnimationTime", machine.maxAnimationTime)
-        add("sleep", machine.sleep)
-    }
-}
-
-enum class Level {
-    LOW, HIGH;
-
-    val opposite get() = if (this == LOW) HIGH else LOW
-}
+enum class Level { LOW, HIGH }
 
 enum class State {
     CONTRACTED,
@@ -79,25 +56,47 @@ enum class Transition(val animation: String) {
     MOVE_FROM_DROP_HIGH_INVERSE("animation9"),
 }
 
-class InsertStateMachine(val mod: ModuleInserter) {
-    companion object {
-        const val delay = 10f
-    }
+class ModuleInserter(
+    val facingGetter: () -> EnumFacing,
+    val inventory: Inventory,
+    val filters: Inventory,
+    override val name: String = "module_conveyor_belt"
+) : IModule {
+
+    override lateinit var container: IModuleContainer
+    val facing get() = facingGetter()
+
+    var hasSpeedUpgrade = false
+    var hasStackUpgrade = false
+    var hasGrabUpgrade = false
+    var hasDropUpgrade = false
+
+    var whiteList = false
+    var useOreDictionary = false
+    var useMetadata = true
+    var useNbt = true
+
+    val delay: Float get() = if (hasSpeedUpgrade) 5f else 10f
+    val maxStackSize: Int get() = if (hasStackUpgrade) 64 else 8
+    val moving: Boolean get() = state == State.TRANSITION
 
     var state = State.CONTRACTED
     var transition = Transition.MOVE_TO_DROP_LOW
-    val moving: Boolean get() = state == State.TRANSITION
     var animationTime = 0f
     var maxAnimationTime = delay
     var sleep = 0
 
+    //@formatter:off
     var currentItem: ItemStack
-        get() = mod.inventory[0]
-        set(i) {
-            mod.inventory[0] = i
-        }
+        get() = inventory[0]
+        set(i) { inventory[0] = i }
+    //@formatter:on
 
-    fun tick() {
+    override fun init() {
+        updateUpgrades()
+    }
+
+    override fun update() {
 
         if (sleep > 0) {
             sleep--
@@ -123,10 +122,14 @@ class InsertStateMachine(val mod: ModuleInserter) {
         when (state) {
             State.CONTRACTED -> {
                 if (shouldGrabItems()) {
-                    if (canGrab(Level.HIGH)) {
+                    if (canGrabFromInventory(Level.HIGH)) {
                         transition(Transition.MOVE_TO_DROP_HIGH)
-                    } else if (canGrab(Level.LOW)) {
+                    } else if (canGrabFromInventory(Level.LOW)) {
                         transition(Transition.MOVE_TO_DROP_LOW)
+                    } else if (hasGrabUpgrade && canGrabFromGround(Level.LOW)) {
+                        transition(Transition.MOVE_TO_DROP_LOW)
+                    } else if (hasGrabUpgrade && canGrabFromGround(Level.HIGH)) {
+                        transition(Transition.MOVE_TO_DROP_HIGH)
                     }
                 } else if (shouldDropItems()) {
                     transition(Transition.ROTATING)
@@ -134,26 +137,30 @@ class InsertStateMachine(val mod: ModuleInserter) {
             }
             State.CONTRACTED_INVERSE -> {
                 if (shouldDropItems()) {
-                    if (canDrop(Level.HIGH)) {
+                    if (canDropToInventory(Level.HIGH)) {
                         transition(Transition.MOVE_TO_DROP_HIGH_INVERSE)
-                    } else if (canDrop(Level.LOW)) {
+                    } else if (canDropToInventory(Level.LOW)) {
                         transition(Transition.MOVE_TO_DROP_LOW_INVERSE)
+                    } else if (hasDropUpgrade && canDropToGround(Level.LOW)) {
+                        transition(Transition.MOVE_TO_DROP_LOW_INVERSE)
+                    } else if (hasDropUpgrade && canDropToGround(Level.HIGH)) {
+                        transition(Transition.MOVE_TO_DROP_HIGH_INVERSE)
                     }
                 } else if (shouldGrabItems()) {
                     transition(Transition.ROTATING_INVERSE)
                 }
             }
             State.EXTENDED_LOW -> if (canGrab(Level.LOW) && grab(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW) else {
-                if (shouldSleepBeforeGrab(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_LOW)
+                if (shouldRetractInsteadOfGrab(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW) else sleep()
             }
             State.EXTENDED_HIGH -> if (canGrab(Level.HIGH) && grab(Level.HIGH)) transition(Transition.MOVE_FROM_DROP_HIGH) else {
-                if (shouldSleepBeforeGrab(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_HIGH)
+                if (shouldRetractInsteadOfGrab(Level.LOW)) transition(Transition.MOVE_FROM_DROP_HIGH) else sleep()
             }
             State.EXTENDED_LOW_INVERSE -> if (canDrop(Level.LOW) && drop(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW_INVERSE) else {
-                if (shouldSleepBeforeDrop(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_LOW_INVERSE)
+                if (shouldRetractInsteadOfDrop(Level.LOW)) transition(Transition.MOVE_FROM_DROP_LOW_INVERSE) else sleep()
             }
             State.EXTENDED_HIGH_INVERSE -> if (canDrop(Level.HIGH) && drop(Level.HIGH)) transition(Transition.MOVE_FROM_DROP_HIGH_INVERSE) else {
-                if (shouldSleepBeforeDrop(Level.LOW)) sleep() else transition(Transition.MOVE_FROM_DROP_HIGH_INVERSE)
+                if (shouldRetractInsteadOfDrop(Level.LOW)) transition(Transition.MOVE_FROM_DROP_HIGH_INVERSE) else sleep()
             }
             else -> Unit
         }
@@ -164,51 +171,136 @@ class InsertStateMachine(val mod: ModuleInserter) {
         transition = new
         maxAnimationTime = delay
         animationTime = 0f
-        mod.container.sendUpdateToNearPlayers()
+        container.sendUpdateToNearPlayers()
     }
 
     fun sleep() {
         sleep = delay.toInt()
-        mod.container.sendUpdateToNearPlayers()
+        container.sendUpdateToNearPlayers()
+    }
+
+    fun updateUpgrades() {
+
+        hasSpeedUpgrade = false
+        hasStackUpgrade = false
+        hasGrabUpgrade = false
+        hasDropUpgrade = false
+
+        for (i in 1..4) {
+            val stack = inventory[i]
+            if (stack.isEmpty || stack.item != Upgrades.inserterUpgrade) continue
+
+            when (stack.metadata) {
+                0 -> hasSpeedUpgrade = true
+                1 -> hasStackUpgrade = true
+                2 -> hasDropUpgrade = true
+                3 -> hasGrabUpgrade = true
+            }
+        }
     }
 
     fun shouldGrabItems() = currentItem.isEmpty
     fun shouldDropItems() = currentItem.isNotEmpty
 
-    private fun getInv(offset: BlockPos): IItemHandler? {
-        val tile = mod.world.getTileEntity(mod.pos + offset) ?: return null
-        return ITEM_HANDLER!!.fromTile(tile, EnumFacing.UP)
+    private fun getInv(level: Level, inverse: Boolean): IItemHandler? {
+        val inventoryAccessors = mutableListOf<Pair<BlockPos, EnumFacing>>()
+        val facing = if (inverse) facing.opposite else facing
+
+        if (level == Level.LOW) {
+            inventoryAccessors += (facing.toBlockPos() + EnumFacing.DOWN) to EnumFacing.UP
+            inventoryAccessors += facing.toBlockPos() to facing.opposite
+        } else {
+            inventoryAccessors += facing.toBlockPos() to EnumFacing.UP
+        }
+
+        inventoryAccessors.forEach { (offset, side) ->
+            val base = pos + offset
+            val area = base toAABBWith base.add(1, 1, 1)
+            val carts = world.getEntitiesWithinAABB(EntityMinecartContainer::class.java, area)
+
+            carts.forEach { entity ->
+                val handler = ITEM_HANDLER!!.fromEntity(entity, side)
+                if (handler != null) return handler
+            }
+
+            val tile = world.getTileEntity(pos + offset) ?: return@forEach
+            val handler = ITEM_HANDLER!!.fromTile(tile, side)
+            if (handler != null) return handler
+        }
+
+        return null
     }
 
     private fun getDropInv(): IItemHandler? {
         Level.values().forEach {
-            val offset = offset(it, true)
-            val handler = getInv(offset)
+            val handler = getInv(it, true)
             if (handler != null) return handler
         }
         return null
     }
 
-    fun canGrab(level: Level): Boolean {
+    fun canGrab(level: Level): Boolean = canGrabFromInventory(level) || (hasGrabUpgrade && canGrabFromGround(level))
+
+    fun canGrabFromInventory(level: Level): Boolean {
         if (shouldDropItems()) return false
-        val offset = offset(level, false)
-        val handler = getInv(offset) ?: return false
-        val other = getDropInv() ?: return false
+        val handler = getInv(level, false) ?: return false
 
-        val slot = handler.getSlotForExtraction(other) ?: return false
-        val extracted = handler.extractItem(slot, 64, true)
-        if (extracted.isEmpty) return false
-
-        val remaining = other.insertItem(extracted, true)
-        val accepted = if (remaining.isEmpty) extracted.count else extracted.count - remaining.count
-        if (accepted <= 0) return false
-        return accepted > 0
+        handler.forEachIndexed { slot, _ ->
+            val stack = handler.extractItem(slot, maxStackSize, true)
+            if (stack.isEmpty) return@forEachIndexed
+            if (!canExtract(stack)) return@forEachIndexed
+            val accepted = acceptInDestine(stack)
+            if (accepted != null) return true
+        }
+        return false
     }
 
-    fun canDrop(level: Level): Boolean {
+    fun canGrabFromGround(level: Level): Boolean {
+        val height = if (level == Level.HIGH) pos else pos.down()
+        val base = height.toVec3d() + facing.toVector3()
+        val area = base toAABBWith base.addVector(1.0, 1.0, 1.0)
+        val items = world.getEntitiesWithinAABB(EntityItem::class.java, area)
+        return items.any { canExtract(it.item) && acceptInDestine(it.item) != null }
+    }
+
+    fun grab(level: Level): Boolean = grabFromInventory(level) || (hasGrabUpgrade && grabFromGround(level))
+
+    fun grabFromInventory(level: Level): Boolean {
+        if (world.isClient) return false
+        val handler = getInv(level, false) ?: return false
+
+        handler.forEachIndexed { slot, _ ->
+            val stack = handler.extractItem(slot, maxStackSize, true)
+            if (stack.isEmpty) return@forEachIndexed
+            if (!canExtract(stack)) return@forEachIndexed
+            val accepted = acceptInDestine(stack)
+            if (accepted != null) {
+                currentItem = handler.extractItem(slot, accepted, false)
+                return true
+            }
+        }
+        return false
+    }
+
+    fun grabFromGround(level: Level): Boolean {
+        if (world.isClient) return false
+        val height = if (level == Level.HIGH) pos else pos.down()
+        val base = height.toVec3d() + facing.toVector3()
+        val area = base toAABBWith base.addVector(1.0, 1.0, 1.0)
+        val items = world.getEntitiesWithinAABB(EntityItem::class.java, area)
+        val stack = items.firstOrNull { canExtract(it.item) && acceptInDestine(it.item) != null } ?: return false
+
+        currentItem = stack.item
+        stack.item = ItemStack.EMPTY
+        world.removeEntity(stack)
+        return true
+    }
+
+    fun canDrop(level: Level): Boolean = canDropToInventory(level) || (hasDropUpgrade && canDropToGround(level))
+
+    fun canDropToInventory(level: Level): Boolean {
         if (shouldGrabItems()) return false
-        val offset = offset(level, true)
-        val handler = getInv(offset) ?: return false
+        val handler = getInv(level, true) ?: return false
 
         for (slot in 0 until handler.slots) {
             val remaining = handler.insertItem(slot, currentItem, true)
@@ -217,28 +309,23 @@ class InsertStateMachine(val mod: ModuleInserter) {
         return false
     }
 
-    fun grab(level: Level): Boolean {
-        if (mod.world.isClient) return false
-        val offset = offset(level, false)
-        val handler = getInv(offset) ?: return false
-        val other = getDropInv() ?: return false
+    fun canDropToGround(level: Level): Boolean {
+        val height = if (level == Level.HIGH) pos else pos.down()
+        val base = height + facing.opposite
 
-        val slot = handler.getSlotForExtraction(other) ?: return false
-        val extracted = handler.extractItem(slot, 64, true)
-        if (extracted.isEmpty) return false
+        val blockstate = world.getBlockState(base)
+        if (blockstate.isFullBlock) return false
 
-        val remaining = other.insertItem(extracted, true)
-        val accepted = if (remaining.isEmpty) extracted.count else extracted.count - remaining.count
-        if (accepted <= 0) return false
-
-        currentItem = handler.extractItem(slot, accepted, false)
-        return true
+        val area = base toAABBWith base.add(1.0, 1.0, 1.0)
+        val itemList = world.getEntitiesWithinAABB(EntityItem::class.java, area)
+        return itemList.isEmpty()
     }
 
-    fun drop(level: Level): Boolean {
-        if (mod.world.isClient) return false
-        val offset = offset(level, true)
-        val handler = getInv(offset) ?: return false
+    fun drop(level: Level): Boolean = dropToInventory(level) || (hasDropUpgrade && dropToGround(level))
+
+    fun dropToInventory(level: Level): Boolean {
+        if (world.isClient) return false
+        val handler = getInv(level, true) ?: return false
 
         val remaining = handler.insertItem(currentItem, true)
         if (ItemStack.areItemStacksEqual(remaining, currentItem)) return false
@@ -247,27 +334,102 @@ class InsertStateMachine(val mod: ModuleInserter) {
         return true
     }
 
-    fun shouldSleepBeforeGrab(level: Level): Boolean {
-        if (mod.world.isClient) return false
-        if (shouldDropItems()) return false
-        val offset = offset(level, false)
-        val handler = getInv(offset)
-        return handler != null
+    fun dropToGround(level: Level): Boolean {
+        if (world.isClient) return true
+        val height = if (level == Level.HIGH) pos else pos.down()
+        world.dropItem(currentItem, height + facing.opposite, false)
+        currentItem = ItemStack.EMPTY
+        return true
     }
 
-    fun shouldSleepBeforeDrop(level: Level): Boolean {
-        if (mod.world.isClient) return true
-        if (shouldGrabItems()) return false
-        val offset = offset(level, true)
-        val handler = getInv(offset)
-        return handler != null
+    fun acceptInDestine(stack: ItemStack): Int? {
+        if (stack.isEmpty) return null
+        if (hasDropUpgrade) return maxStackSize
+        val other = getDropInv() ?: return null
+        val remaining = other.insertItem(stack, true)
+
+        val accepted = if (remaining.isEmpty) stack.count else stack.count - remaining.count
+        if (accepted <= 0) return null
+
+        return accepted
     }
 
-    fun offset(level: Level, inverse: Boolean): BlockPos {
-        return if (inverse) {
-            if (level == Level.LOW) mod.facing.opposite.toBlockPos() + EnumFacing.DOWN else mod.facing.opposite.toBlockPos()
-        } else {
-            if (level == Level.LOW) mod.facing.toBlockPos() + EnumFacing.DOWN else mod.facing.toBlockPos()
+    fun shouldRetractInsteadOfGrab(level: Level): Boolean {
+        if (world.isClient) return false
+        if (shouldDropItems()) return true
+        return getInv(level, false) == null
+    }
+
+    fun shouldRetractInsteadOfDrop(level: Level): Boolean {
+        if (world.isClient) return false
+        if (shouldGrabItems()) return true
+        return getInv(level, true) == null
+    }
+
+    fun canExtract(stack: ItemStack): Boolean {
+        if (stack.isEmpty) return false
+        repeat(filters.slots) { slot ->
+            if (checkFilter(filters[slot], stack)) return whiteList
         }
+        return !whiteList
     }
+
+    fun checkFilter(filter: ItemStack, stack: ItemStack): Boolean {
+        if (filter.isEmpty) return false
+
+        if (useOreDictionary && filter.item != stack.item) {
+            val filterIds = OreDictionary.getOreIDs(filter)
+            val stackIds = OreDictionary.getOreIDs(stack)
+            if (stackIds.isNotEmpty() && filterIds.isNotEmpty()) {
+                for (stackId in stackIds) {
+                    for (filterId in filterIds) {
+                        if (stackId == filterId) return true
+                    }
+                }
+            }
+        }
+
+        if (filter.item !== stack.item) return false
+        if (useMetadata && filter.itemDamage != stack.itemDamage) return false
+        if (useNbt && filter.tagCompound != stack.tagCompound) return false
+        return true
+    }
+
+    override fun deserializeNBT(nbt: NBTTagCompound) {
+        state = State.values()[nbt.getInteger("state")]
+        transition = Transition.values()[nbt.getInteger("transition")]
+        animationTime = nbt.getFloat("animationTime")
+        maxAnimationTime = nbt.getFloat("maxAnimationTime")
+        sleep = nbt.getInteger("sleep")
+        filters.deserializeNBT(nbt.getCompoundTag("filters"))
+        whiteList = nbt.getBoolean("whiteList")
+        useOreDictionary = nbt.getBoolean("useOreDictionary")
+        useMetadata = nbt.getBoolean("useMetadata")
+        useNbt = nbt.getBoolean("useNbt")
+    }
+
+    override fun serializeNBT(): NBTTagCompound = newNbt {
+        add("state", state.ordinal)
+        add("transition", transition.ordinal)
+        add("animationTime", animationTime)
+        add("maxAnimationTime", maxAnimationTime)
+        add("sleep", sleep)
+        add("filters", filters.serializeNBT())
+        add("whiteList", whiteList)
+        add("useOreDictionary", useOreDictionary)
+        add("useMetadata", useMetadata)
+        add("useNbt", useNbt)
+    }
+
+    override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
+        IntSyncVariable(DATA_ID_FLAGS,
+            { encodeFlags(whiteList, useOreDictionary, useMetadata, useNbt) },
+            {
+                val (a, b, c, d) = decodeFlags(it, 4)
+                whiteList = a
+                useOreDictionary = b
+                useMetadata = c
+                useNbt = d
+            })
+    )
 }

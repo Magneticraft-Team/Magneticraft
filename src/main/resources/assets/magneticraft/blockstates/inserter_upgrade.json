@@ -1,0 +1,29 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "speed": [{
+            "textures": {
+                "layer0": "magneticraft:items/upgrades/inserter_upgrade_speed"
+            }
+        }],
+        "stack": [{
+            "textures": {
+                "layer0": "magneticraft:items/upgrades/inserter_upgrade_stack"
+            }
+        }],
+        "drop": [{
+            "textures": {
+                "layer0": "magneticraft:items/upgrades/inserter_upgrade_drop"
+            }
+        }],
+        "grab": [{
+            "textures": {
+                "layer0": "magneticraft:items/upgrades/inserter_upgrade_grab"
+            }
+        }]
+    }
+}

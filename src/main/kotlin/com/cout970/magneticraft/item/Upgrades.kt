@@ -23,6 +23,7 @@ object Upgrades : IItemMaker {
     lateinit var ironGear: ItemBase private set
     lateinit var steelGear: ItemBase private set
     lateinit var tungstenGear: ItemBase private set
+    lateinit var inserterUpgrade: ItemBase private set
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
@@ -57,7 +58,16 @@ object Upgrades : IItemMaker {
             customModels = listOf("normal" to resource("models/item/mcx/tungsten_gear.mcx"))
         }.build()
 
-        return listOf(ironGear, steelGear, tungstenGear)
+        inserterUpgrade = builder.withName("inserter_upgrade").copy {
+            variants = mapOf(
+                0 to "speed",
+                1 to "stack",
+                2 to "drop",
+                3 to "grab"
+            )
+        }.build()
+
+        return listOf(ironGear, steelGear, tungstenGear, inserterUpgrade)
     }
 
     class Gear(override val stack: ItemStack, val speed: Float) : IGear, IItemCapability {

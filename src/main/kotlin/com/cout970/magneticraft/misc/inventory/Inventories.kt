@@ -18,18 +18,10 @@ fun Block.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
 
 fun IBlockState.stack(size: Int = 1) = ItemStack(block, size, block.getMetaFromState(this))
 
+@Suppress("DEPRECATION")
 fun ItemStack.toBlockState(): IBlockState? {
     val itemBlock = item as? ItemBlock ?: return null
     return itemBlock.block.getStateFromMeta(metadata)
-}
-
-fun ItemStack.consumeItem(amount: Int = 1): ItemStack {
-    if (count > amount) {
-        count -= amount
-        return this
-    } else {
-        return item.getContainerItem(this)
-    }
 }
 
 operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack) {
@@ -61,7 +53,7 @@ inline fun IItemHandler.forEachIndexed(func: (Int, ItemStack) -> Unit) {
 
 val ItemStack.isNotEmpty get() = !isEmpty
 
-fun ItemStack.withSize(size: Int) = ItemStack(item, size, itemDamage, tagCompound)
+fun ItemStack.withSize(size: Int) = this.copy().also { it.count = size }
 
 fun IItemHandler.isEmpty(): Boolean {
     forEach { stack ->

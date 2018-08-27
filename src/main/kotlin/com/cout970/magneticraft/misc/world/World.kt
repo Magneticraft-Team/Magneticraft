@@ -31,6 +31,9 @@ fun World.dropItem(item: ItemStack, pos: BlockPos, jump: Boolean = true) {
         }
         val entityItem = EntityItem(this, pos.x.toDouble() + d0, pos.y.toDouble() + d1, pos.z.toDouble() + d2, item)
         entityItem.setDefaultPickupDelay()
+        if (!jump) {
+            entityItem.setVelocity(0.0, 0.0, 0.0)
+        }
         spawnEntity(entityItem)
     }
 }

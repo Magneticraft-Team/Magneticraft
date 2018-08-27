@@ -5,7 +5,7 @@ import com.cout970.magneticraft.util.vector.Vec2d
 import com.cout970.magneticraft.util.vector.contains
 import net.minecraft.util.ResourceLocation
 
-class ToggleButton(
+open class ToggleButton(
     id: Int,
     texture: ResourceLocation,
     box: Pair<IVector2, IVector2>,
@@ -14,12 +14,12 @@ class ToggleButton(
 ) : AbstractButton(id, texture, box, textureSize, uvGetter) {
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        if (mouse in box) when {
-            state.getBase() == ButtonState.PRESSED -> state = ButtonState.HOVER_PRESSED
-            else -> state = ButtonState.HOVER_UNPRESSED
+        state = if (mouse in box) when {
+            state.getBase() == ButtonState.PRESSED -> ButtonState.HOVER_PRESSED
+            else -> ButtonState.HOVER_UNPRESSED
         } else when {
-            state.getBase() == ButtonState.PRESSED -> state = ButtonState.PRESSED
-            else -> state = ButtonState.UNPRESSED
+            state.getBase() == ButtonState.PRESSED -> ButtonState.PRESSED
+            else -> ButtonState.UNPRESSED
         }
         super.drawFirstLayer(mouse, partialTicks)
     }
@@ -27,10 +27,10 @@ class ToggleButton(
     override fun onMouseClick(mouse: Vec2d, mouseButton: Int): Boolean {
         val press = super.onMouseClick(mouse, mouseButton)
         if (press) {
-            if (state.getBase() == ButtonState.UNPRESSED) {
-                state = ButtonState.HOVER_PRESSED
+            state = if (state.getBase() == ButtonState.UNPRESSED) {
+                ButtonState.HOVER_PRESSED
             } else {
-                state = ButtonState.HOVER_UNPRESSED
+                ButtonState.HOVER_UNPRESSED
             }
         }
         return press

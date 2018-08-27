@@ -11,8 +11,8 @@
       "ore": "ingotIron"
     },
     "B": {
-      "item": "magneticraft:copper_coil",
-      "nbt": "{}"
+      "item": "magneticraft:crafting",
+      "data": 3
     },
     "C": {
       "type": "forge:ore_dict",

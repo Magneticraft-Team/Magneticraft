@@ -200,7 +200,7 @@ object TileRendererInserter : BaseTileRenderer<TileInserter>() {
 
     override fun render(te: TileInserter) {
         Utilities.rotateFromCenter(te.facing, 180f)
-        val mod = te.inserterModule.machine
+        val mod = te.inserterModule
         val transition = mod.transition
 
         val extra = if (mod.moving) ticks else 0f

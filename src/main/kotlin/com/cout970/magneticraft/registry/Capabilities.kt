@@ -16,6 +16,7 @@ import com.cout970.magneticraft.api.tool.IGear
 import com.cout970.magneticraft.computer.FloppyDisk
 import com.cout970.magneticraft.item.ComputerItems
 import net.minecraft.block.Block
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTBase
@@ -88,6 +89,13 @@ fun registerCapabilities() {
  * Extension functions to get capabilities from TileEntities, Blocks and Items
  */
 fun <T> Capability<T>.fromTile(tile: TileEntity, side: EnumFacing? = null): T? {
+    if (tile.hasCapability(this, side)) {
+        return tile.getCapability(this, side)
+    }
+    return null
+}
+
+fun <T> Capability<T>.fromEntity(tile: Entity, side: EnumFacing? = null): T? {
     if (tile.hasCapability(this, side)) {
         return tile.getCapability(this, side)
     }

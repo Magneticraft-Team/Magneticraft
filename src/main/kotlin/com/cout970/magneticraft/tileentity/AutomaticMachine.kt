@@ -72,10 +72,11 @@ class TileConveyorBelt : TileBase(), ITickable {
 class TileInserter : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
-    val inventory = Inventory(1)
+    val filters = Inventory(9)
+    val inventory: Inventory = Inventory(5) { _, _ -> inserterModule.updateUpgrades() }
     val invModule = ModuleInventory(inventory, capabilityFilter = { null })
     val openGui = ModuleOpenGui()
-    val inserterModule = ModuleInserter({ facing }, inventory)
+    val inserterModule = ModuleInserter({ facing }, inventory, filters)
 
     init {
         initModules(inserterModule, invModule, openGui)

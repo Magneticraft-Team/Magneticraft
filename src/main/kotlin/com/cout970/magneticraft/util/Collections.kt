@@ -32,3 +32,22 @@ fun runningAvg(previousAverage: Float, currentNumber: Float, index: Int): Float 
     // avg = (avg' * (n-1) + x) / n
     return (previousAverage * (index - 1) + currentNumber) / index
 }
+
+fun encodeFlags(vararg flags: Boolean): Int {
+    require(flags.size <= 32)
+    var value = 0
+    repeat(flags.size) {
+        if (flags[it]) {
+            value = value or (1 shl it)
+        }
+    }
+    return value
+}
+
+fun decodeFlags(value: Int, limit: Int = 32): BooleanArray {
+    val array = BooleanArray(limit)
+    repeat(limit) {
+        array[it] = (value ushr it) and 0x1 != 0
+    }
+    return array
+}

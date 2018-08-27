@@ -79,5 +79,6 @@ fun EnumFacing.rotateBox(origin: Vec3d, box: AxisAlignedBB): AxisAlignedBB {
 fun EnumFacing.isHorizontal() = this != UP && this != DOWN
 
 fun EnumFacing.toBlockPos() = directionVec.toBlockPos()
+fun EnumFacing.toVector3() = directionVec.toVec3d()
 
 inline val EnumFacing.lowercaseName get() = name2

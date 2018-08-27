@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "A",
+    "B"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:sugar",
+      "count": 1
+    },
+    "B": {
+      "item": "minecraft:stone_slab",
+      "count": 1,
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:inserter_upgrade",
+    "count": 1,
+    "data": 0
+  }
+}
