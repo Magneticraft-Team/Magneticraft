@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.modules.conveyor_belt
+package com.cout970.magneticraft.tileentity.modules.conveyorbelt
 
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.IVector2

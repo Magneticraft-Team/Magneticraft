@@ -11,8 +11,8 @@ import com.cout970.magneticraft.tileentity.TileComputer
 import com.cout970.magneticraft.tileentity.TileMiningRobot
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import com.cout970.magneticraft.util.vector.rotateBox
-import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -101,9 +101,9 @@ object Computers : IBlockMaker {
             ?: return listOf(AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0))
 
         return listOf(
-            vec3Of(4.px, 4.px, 6.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1 - 2.px), // center
-            vec3Of(5.px, 5.px, 1 - 2.px) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 1), // main thruster
-            vec3Of(5.px, 5.px, 0) toAABBWith vec3Of(1 - 5.px, 1 - 5.px, 6.px) // dill
+            vec3Of(4.px, 4.px, 6.px) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 1 - 2.px), // center
+            vec3Of(5.px, 5.px, 1 - 2.px) createAABBUsing vec3Of(1 - 5.px, 1 - 5.px, 1), // main thruster
+            vec3Of(5.px, 5.px, 0) createAABBUsing vec3Of(1 - 5.px, 1 - 5.px, 6.px) // dill
         ).map { ori.facing.rotateBox(vec3Of(0.5), it) }
     }
 

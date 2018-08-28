@@ -6,7 +6,7 @@ import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.tileentity.TileTubeLight
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -57,7 +57,7 @@ object Decoration : IBlockMaker {
             )
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithOrientation {
-                listOf(Vec3d(PIXEL * 3, 1.0, 0.0) toAABBWith Vec3d(1.0 - PIXEL * 3, 1.0 - PIXEL * 4, 1.0))
+                listOf(Vec3d(PIXEL * 3, 1.0, 0.0) createAABBUsing Vec3d(1.0 - PIXEL * 3, 1.0 - PIXEL * 4, 1.0))
             }
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock

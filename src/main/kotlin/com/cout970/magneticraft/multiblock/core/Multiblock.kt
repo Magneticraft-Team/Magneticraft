@@ -33,7 +33,7 @@ abstract class Multiblock : IMultiblock {
     open fun onActivate(data: List<BlockData>, context: MultiblockContext) = Unit
     open fun onDeactivate(data: List<BlockData>, context: MultiblockContext) = Unit
 
-    open fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN toAABBWith size).offset(-center))
+    open fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = listOf((BlockPos.ORIGIN createAABBUsing size).offset(-center))
 
     infix fun Vec3d.to(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
 

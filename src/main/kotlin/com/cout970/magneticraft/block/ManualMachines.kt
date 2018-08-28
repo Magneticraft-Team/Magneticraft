@@ -12,8 +12,8 @@ import com.cout970.magneticraft.tileentity.TileBox
 import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tileentity.TileSluiceBox
 import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.toBlockPos
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
@@ -49,7 +49,7 @@ object ManualMachines : IBlockMaker {
             customModels = listOf("normal" to resource("models/block/mcx/crushing_table.mcx"))
             hasCustomModel = true
             //methods
-            boundingBox = { listOf(vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.875, 1)) }
+            boundingBox = { listOf(vec3Of(0, 0, 0) createAABBUsing vec3Of(1, 0.875, 1)) }
             onActivated = CommonMethods::delegateToModule
         }.build()
 

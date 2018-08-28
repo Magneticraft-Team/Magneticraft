@@ -11,22 +11,22 @@ import net.minecraft.util.math.Vec3i
  * Created by cout970 on 2017/02/20.
  */
 
-operator fun AxisAlignedBB.plus(offsetVector: Vec3i) = offset(offsetVector)
+operator fun AxisAlignedBB.plus(offsetVector: Vec3i): AxisAlignedBB = offset(offsetVector)
 
-operator fun AxisAlignedBB.plus(offsetVector: Vec3d) = offset(offsetVector)
+operator fun AxisAlignedBB.plus(offsetVector: Vec3d): AxisAlignedBB = offset(offsetVector)
 
-operator fun AxisAlignedBB.minus(offsetVector: Vec3i) = offset(-offsetVector)
+operator fun AxisAlignedBB.minus(offsetVector: Vec3i): AxisAlignedBB = offset(-offsetVector)
 
-operator fun AxisAlignedBB.minus(offsetVector: Vec3d) = offset(-offsetVector)
+operator fun AxisAlignedBB.minus(offsetVector: Vec3d): AxisAlignedBB = offset(-offsetVector)
 
 // Offset overloads for vectors
 
-fun AxisAlignedBB.offset(offsetVector: Vec3i) = offset(offsetVector.toBlockPos())
+fun AxisAlignedBB.offset(offsetVector: Vec3i): AxisAlignedBB = offset(offsetVector.toBlockPos())
 
 //Box construction
 
-infix fun BlockPos.toAABBWith(other: BlockPos) = AxisAlignedBB(this.toBlockPos(), other.toBlockPos())
-infix fun Vec3d.toAABBWith(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
+infix fun BlockPos.createAABBUsing(other: BlockPos) = AxisAlignedBB(this.toBlockPos(), other.toBlockPos())
+infix fun Vec3d.createAABBUsing(other: Vec3d) = AxisAlignedBB(xd, yd, zd, other.xd, other.yd, other.zd)
 
 //Box deconstruction
 

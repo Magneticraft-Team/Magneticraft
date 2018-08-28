@@ -73,7 +73,7 @@ fun EnumFacing.rotatePoint(origin: Vec3d, point: Vec3d): Vec3d {
 fun EnumFacing.rotateBox(origin: Vec3d, box: AxisAlignedBB): AxisAlignedBB {
     val min = Vec3d(box.minX, box.minY, box.minZ)
     val max = Vec3d(box.maxX, box.maxY, box.maxZ)
-    return rotatePoint(origin, min) toAABBWith rotatePoint(origin, max)
+    return rotatePoint(origin, min) createAABBUsing rotatePoint(origin, max)
 }
 
 fun EnumFacing.isHorizontal() = this != UP && this != DOWN

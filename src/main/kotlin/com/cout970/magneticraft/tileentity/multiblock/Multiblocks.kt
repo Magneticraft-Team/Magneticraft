@@ -49,7 +49,7 @@ abstract class TileMultiblock : TileBase() {
     override fun getRenderBoundingBox(): AxisAlignedBB {
         val size = getMultiblock().size.toVec3d()
         val center = getMultiblock().center.toVec3d()
-        val box = Vec3d.ZERO toAABBWith size
+        val box = Vec3d.ZERO createAABBUsing size
         val boxWithOffset = box.offset(-center)
         val normalizedBox = EnumFacing.SOUTH.rotateBox(vec3Of(0.5), boxWithOffset)
         val alignedBox = facing.rotateBox(vec3Of(0.5), normalizedBox)

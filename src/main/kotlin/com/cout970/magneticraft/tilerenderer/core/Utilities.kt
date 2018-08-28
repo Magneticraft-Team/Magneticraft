@@ -45,7 +45,7 @@ import kotlin.math.max
 const val PIXEL = 0.0625
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun modelOf(block: Block, id: String = "model") = { ModelResourceLocation(block.registryName!!, id) }
+inline fun modelOf(block: Block, id: String = "model") = ModelResourceLocation(block.registryName!!, id)
 
 object Utilities {
 
@@ -450,7 +450,7 @@ object Utilities {
     }
 
     fun drawCenter(size: Double = 0.0125) {
-        renderBox(vec3Of(-size) toAABBWith vec3Of(size))
+        renderBox(vec3Of(-size) createAABBUsing vec3Of(size))
     }
 
     fun setColor(color: Int) {

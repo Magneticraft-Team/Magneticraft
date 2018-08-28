@@ -17,12 +17,14 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.tileentity.TileConveyorBelt
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.tileentity.modules.conveyor_belt.*
+import com.cout970.magneticraft.tileentity.modules.conveyorbelt.*
 import com.cout970.magneticraft.util.getList
 import com.cout970.magneticraft.util.list
 import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.util.vector.plus
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -82,8 +84,32 @@ class ModuleConveyorBelt(
         world.getTile<TileConveyorBelt>(pos.add(facing.rotateY().directionVec))?.facing == facing.rotateYCCW()
     }
 
+    val hasFrontUp = TimeCache(tileRefCallback, 10) {
+        world.getTile<TileConveyorBelt>(pos + facing + EnumFacing.UP)?.facing == facing
+    }
+
+    val hasBackUp = TimeCache(tileRefCallback, 10) {
+        world.getTile<TileConveyorBelt>(pos + facing.opposite + EnumFacing.UP)?.facing == facing
+    }
+
+    val hasBlockUp = TimeCache(tileRefCallback, 10) {
+        val state = world.getBlockState(pos + EnumFacing.UP)
+        !state.block.isAir(state, world, pos + EnumFacing.UP)
+    }
+
+    val hasBlockFront = TimeCache(tileRefCallback, 10) {
+        val state = world.getBlockState(pos + facing)
+        !state.block.isAir(state, world, pos + facing)
+    }
+
     val isCorner
         get() = !hasBack() && hasFront() && (hasLeft() xor hasRight())
+
+    val isDown
+        get() = !hasBack() && hasBackUp() && !hasBlockUp()
+
+    val isUp
+        get() = !hasFront() && hasFrontUp() && !hasBlockUp()
 
     override fun update() {
         advanceSimulation()
@@ -93,6 +119,7 @@ class ModuleConveyorBelt(
         // debug
 //        if (world.isServer || world.totalWorldTime % 20 != 0L) return
 
+        // Load data generated at deserializeNBT now that the world is set
         if (toUpdate) {
             boxes.clear()
             boxes.addAll(newBoxes)
@@ -100,12 +127,65 @@ class ModuleConveyorBelt(
             toUpdate = false
         }
 
-        val tile = world.getTileEntity(pos.offset(facing))
-        val frontTile = tile as? TileConveyorBelt
+        val tile = frontTile()
         val frontInv = tile?.let { ITEM_HANDLER!!.fromTile(it, facing.opposite) }
+        val frontBelt = tile as? TileConveyorBelt
 
         // if there is no block in front don't go all the way
-        val limit = if (frontTile == null) 13f else 15f
+        val limit = if (canInsertIntoBelt(frontBelt)) 15f else 13f
+
+        advanceItems(limit)
+
+        // Move to next belt
+        if (frontBelt != null) {
+            moveToNextBelt(frontBelt, limit)
+        } else if (frontInv != null) {
+            moveToInventory(frontInv, limit)
+        }
+
+        if (needsSync && world.isServer) {
+            container.sendUpdateToNearPlayers()
+            needsSync = false
+        }
+    }
+
+    fun canInsertIntoBelt(frontBelt: TileConveyorBelt?): Boolean {
+        val mod = frontBelt?.conveyorModule ?: return false
+        if (frontBelt.facing.opposite == facing) return false
+        return (!mod.isUp && !mod.isDown) || frontBelt.facing == facing
+    }
+
+    fun moveToNextBelt(frontBelt: TileConveyorBelt, limit: Float) {
+        if (canInsertIntoBelt(frontBelt)) {
+            val removed = boxes.removeAll {
+                if (it.position <= limit) return@removeAll false
+                frontBelt.conveyorModule.addItem(it.item, facing, it.route)
+            }
+            if (removed) {
+                markUpdate()
+            }
+        }
+    }
+
+    fun moveToInventory(inv: IItemHandler, limit: Float) {
+        val removed = boxes.removeAll {
+            if (it.position <= limit)
+                return@removeAll false
+
+            if (inv.insertItem(it.item, true).isEmpty) {
+                if (world.isServer) {
+                    inv.insertItem(it.item, false)
+                }
+                return@removeAll true
+            }
+            return@removeAll false
+        }
+        if (removed) {
+            markUpdate()
+        }
+    }
+
+    fun advanceItems(limit: Float) {
 
         val fullBitMap = generateGlobalBitMap()
         val now = world.totalWorldTime
@@ -132,59 +212,60 @@ class ModuleConveyorBelt(
                 it.lastTick = now
             }
         }
-        // Move to next belt
-        if (frontTile != null) {
-            val removed = boxes.removeAll {
-                if (it.position <= limit) return@removeAll false
-                frontTile.conveyorModule.addItem(it.item, facing, it.route)
-            }
-            if (removed) {
-                markUpdate()
-            }
-        } else if (frontInv != null) {
-            val removed = boxes.removeAll {
-                if (it.position <= limit)
-                    return@removeAll false
+    }
 
-                if (frontInv.insertItem(it.item, true).isEmpty) {
-                    if (world.isServer) {
-                        frontInv.insertItem(it.item, false)
-                    }
-                    return@removeAll true
-                }
-                return@removeAll false
-            }
-            if (removed) {
-                markUpdate()
-            }
+    fun frontTile(): TileEntity? {
+        val frontPos = when {
+            isUp -> pos + facing + EnumFacing.UP
+            hasFront() -> pos + facing
+            hasBlockFront() -> return null
+            else -> pos + facing + EnumFacing.DOWN
         }
-
-        if (needsSync && world.isServer) {
-            container.sendUpdateToNearPlayers()
-            needsSync = false
-        }
+        return world.getTileEntity(frontPos)
     }
 
     // Note: this cannot be called on deserializeNBT or the game will crash of StackOverflow
+    // because world field is not set and the tileEntity has not been added to the world yet
     val getSurroundMap = TimeCache(tileRefCallback, 10) {
         val map = mutableMapOf<BitmapLocation, ModuleConveyorBelt>()
 
-        world.getTile<TileConveyorBelt>(pos.offset(facing.opposite))?.let {
+        val back = when {
+            isUp -> pos + facing.opposite + EnumFacing.DOWN
+            isDown -> pos + facing.opposite + EnumFacing.UP
+            else -> pos + facing.opposite
+        }
+
+        val front = when {
+            isUp -> pos + facing + EnumFacing.DOWN
+            isDown -> pos + facing + EnumFacing.UP
+            else -> pos + facing
+        }
+
+        val left = pos + facing.rotateYCCW()
+        val right = pos + facing.rotateY()
+
+        world.getTile<TileConveyorBelt>(back)?.let {
             map += BitmapLocation.IN_BACK to it.conveyorModule
         }
-        world.getTile<TileConveyorBelt>(pos.offset(facing.rotateY()))?.let {
+        world.getTile<TileConveyorBelt>(right)?.let {
             map += BitmapLocation.IN_RIGHT to it.conveyorModule
         }
-        world.getTile<TileConveyorBelt>(pos.offset(facing.rotateYCCW()))?.let {
+        world.getTile<TileConveyorBelt>(left)?.let {
             map += BitmapLocation.IN_LEFT to it.conveyorModule
         }
-        world.getTile<TileConveyorBelt>(pos.offset(facing))?.let {
-            when (it.facing) {
-                facing -> map += BitmapLocation.OUT_FRONT to it.conveyorModule
-                facing.opposite -> map += BitmapLocation.OUT_BACK to it.conveyorModule
-                facing.rotateY() -> map += BitmapLocation.OUT_RIGHT to it.conveyorModule
-                facing.rotateYCCW() -> map += BitmapLocation.OUT_LEFT to it.conveyorModule
-                else -> Unit
+        world.getTile<TileConveyorBelt>(front)?.let {
+            if (it.conveyorModule.isUp || it.conveyorModule.isDown) {
+                if (it.facing == facing) {
+                    map += BitmapLocation.OUT_FRONT to it.conveyorModule
+                }
+            } else {
+                when (it.facing) {
+                    facing -> map += BitmapLocation.OUT_FRONT to it.conveyorModule
+                    facing.opposite -> map += BitmapLocation.OUT_BACK to it.conveyorModule
+                    facing.rotateY() -> map += BitmapLocation.OUT_RIGHT to it.conveyorModule
+                    facing.rotateYCCW() -> map += BitmapLocation.OUT_LEFT to it.conveyorModule
+                    else -> Unit
+                }
             }
         }
         map

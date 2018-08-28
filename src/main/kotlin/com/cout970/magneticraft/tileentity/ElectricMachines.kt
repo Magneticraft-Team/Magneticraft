@@ -16,7 +16,7 @@ import com.cout970.magneticraft.tileentity.modules.*
 import com.cout970.magneticraft.util.add
 import com.cout970.magneticraft.util.getBlockPos
 import com.cout970.magneticraft.util.newNbt
-import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import net.minecraft.block.state.IBlockState
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -219,7 +219,7 @@ class TileWindTurbine : TileBase(), ITickable {
     }
 
     override fun getRenderBoundingBox(): AxisAlignedBB {
-        return (Vec3d(-6.0, -6.0, -6.0) toAABBWith Vec3d(6.0, 6.0, 6.0)).offset(pos)
+        return (Vec3d(-6.0, -6.0, -6.0) createAABBUsing Vec3d(6.0, 6.0, 6.0)).offset(pos)
     }
 }
 

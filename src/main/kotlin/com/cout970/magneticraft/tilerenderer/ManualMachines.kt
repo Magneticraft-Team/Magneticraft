@@ -8,9 +8,7 @@ import com.cout970.magneticraft.tileentity.TileCrushingTable
 import com.cout970.magneticraft.tileentity.TileSluiceBox
 import com.cout970.magneticraft.tileentity.modules.ModuleSluiceBox
 import com.cout970.magneticraft.tilerenderer.core.*
-import com.cout970.modelloader.api.Model
-import com.cout970.modelloader.api.ModelLoaderApi
-import com.cout970.modelloader.api.ModelUtilities
+import com.cout970.modelloader.api.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.texture.TextureMap
@@ -47,7 +45,7 @@ object TileRendererCrushingTable : BaseTileRenderer<TileCrushingTable>() {
 @RegisterRenderer(TileSluiceBox::class)
 object TileRendererSluiceBox : BaseTileRenderer<TileSluiceBox>() {
 
-    var waterModel: ModelCache? = null
+    var waterModel: IRenderCache? = null
 
     override fun init() {
         createModel(ManualMachines.sluiceBox,
@@ -82,7 +80,7 @@ object TileRendererSluiceBox : BaseTileRenderer<TileSluiceBox>() {
     override fun onModelRegistryReload() {
         super.onModelRegistryReload()
         waterModel?.close()
-        val loc = modelOf(ManualMachines.sluiceBox, "water")()
+        val loc = modelOf(ManualMachines.sluiceBox, "water")
         val model = ModelLoaderApi.getModelEntry(loc) ?: return
 
         val textureMap = Minecraft.getMinecraft().textureMapBlocks

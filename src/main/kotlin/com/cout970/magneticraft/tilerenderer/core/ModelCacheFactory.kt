@@ -3,8 +3,8 @@ package com.cout970.magneticraft.tilerenderer.core
 import com.cout970.magneticraft.util.addPostfix
 import com.cout970.magneticraft.util.addPrefix
 import com.cout970.magneticraft.util.logError
+import com.cout970.magneticraft.util.warn
 import com.cout970.modelloader.api.*
-import com.cout970.modelloader.api.ModelUtilities.renderModelParts
 import com.cout970.modelloader.api.animation.AnimatedModel
 import com.cout970.modelloader.api.formats.gltf.GltfAnimationBuilder
 import com.cout970.modelloader.api.formats.gltf.GltfStructure
@@ -17,43 +17,36 @@ import net.minecraft.client.renderer.texture.TextureMap
  */
 object ModelCacheFactory {
 
-    fun createCache(loc: ModelResourceLocation, filter: (String) -> Boolean = { true }): ModelCache? {
-        val model = ModelLoaderApi.getModelEntry(loc) ?: return null
-        val raw = model.raw as? Model.Mcx ?: return null
-        val parts = raw.data.parts.filter { filter(it.name) }
-
-        return ModelCache { renderModelParts(raw.data, parts) }.apply {
-            val material = parts.firstOrNull()?.texture
-            texture = material?.addPrefix("textures/")?.addPostfix(".png")
-        }
-    }
-
     fun createModel(loc: ModelResourceLocation, filters: List<ModelSelector>,
-                    useTextures: Boolean, time: () -> Double): Map<String, IRenderCache> {
+                    useTextures: Boolean, time: () -> Double, createDefault: Boolean = true): Map<String, IRenderCache> {
 
         val models = mutableMapOf<String, IRenderCache>()
 
         val (baked, model) = ModelLoaderApi.getModelEntry(loc) ?: return models
 
         when (model) {
-            is Model.Mcx -> processMcx(model, filters, useTextures, models)
-            is Model.Gltf -> processGltf(model, filters, useTextures, time, models)
+            is Model.Mcx -> processMcx(model, filters, useTextures, models, createDefault)
+            is Model.Gltf -> processGltf(model, filters, useTextures, time, models, createDefault)
             is Model.Obj -> {
-                if (baked != null) {
-                    val cache = ModelCache { ModelUtilities.renderModel(baked) }
-                    models["default"] = if (useTextures) TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, cache) else cache
-                } else {
-                    logError("Error: trying to render a obj model that is not backed, this is not supported!")
+                if (createDefault) {
+                    if (baked != null) {
+                        val cache = ModelCache { ModelUtilities.renderModel(baked) }
+                        models["default"] = if (useTextures) TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, cache) else cache
+                    } else {
+                        logError("Error: trying to render a obj model that is not backed, this is not supported!")
+                    }
                 }
             }
-            Model.Missing -> Unit
+            Model.Missing -> {
+                warn("Model for $loc not found")
+            }
         }
 
         return models
     }
 
-    private fun processMcx(model: Model.Mcx, filters: List<ModelSelector>,
-                           useTextures: Boolean, models: MutableMap<String, IRenderCache>) {
+    private fun processMcx(model: Model.Mcx, filters: List<ModelSelector>, useTextures: Boolean,
+                           models: MutableMap<String, IRenderCache>, createDefault: Boolean) {
 
         val sections = filters.map { (name, filterFunc) ->
             val parts = model.data.parts.filter { filterFunc(it.name, FilterTarget.LEAF) }
@@ -88,11 +81,11 @@ object ModelCacheFactory {
         }
 
         sections.forEach { store(it.first, it.second) }
-        store("default", notUsed)
+        if (createDefault) store("default", notUsed)
     }
 
-    private fun processGltf(model: Model.Gltf, filters: List<ModelSelector>, useTextures: Boolean,
-                            time: () -> Double, models: MutableMap<String, IRenderCache>) {
+    private fun processGltf(model: Model.Gltf, filters: List<ModelSelector>, useTextures: Boolean, time: () -> Double,
+                            models: MutableMap<String, IRenderCache>, createDefault: Boolean) {
 
         val scene = model.data.structure.scenes[0]
         val namedAnimations = model.data.structure.animations.mapIndexed { index, animation ->
@@ -135,7 +128,7 @@ object ModelCacheFactory {
         }
 
         sections.forEach { store(it.first, it.second, it.third) }
-        store("default", allNodes, IGNORE_ANIMATION)
+        if (createDefault) store("default", allNodes, IGNORE_ANIMATION)
     }
 
     private fun GltfStructure.Node.recursiveFilter(filter: Filter): Set<Int> {

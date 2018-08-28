@@ -11,8 +11,8 @@ import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.tileentity.core.IModule
 import com.cout970.magneticraft.tileentity.core.IModuleContainer
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import com.cout970.magneticraft.util.vector.plus
-import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.toVec3d
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.passive.EntityAnimal
@@ -58,7 +58,7 @@ class ModuleFeedingTrough(
                 } else {
                     start += dir.facing.directionVec.toVec3d()
                 }
-                val box = start toAABBWith end
+                val box = start createAABBUsing end
                 //getting the animals
                 val totalAnimals = world.getEntitiesInAABBexcluding(null, box, { it is EntityAnimal })
                 val validAnimals = totalAnimals.map { it as EntityAnimal }

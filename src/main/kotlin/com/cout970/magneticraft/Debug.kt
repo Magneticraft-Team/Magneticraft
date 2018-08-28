@@ -5,7 +5,6 @@ import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.proxy.ClientProxy
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
-import com.cout970.magneticraft.tilerenderer.core.ModelCache
 import com.cout970.magneticraft.util.logError
 import com.cout970.magneticraft.util.toTextComponent
 import com.google.gson.GsonBuilder
@@ -64,8 +63,8 @@ object Debug {
         return temp
     }
 
-    var cache = emptyList<ModelCache>()
-    var last = -1L
+//    var cache = emptyList<IRenderCache>()
+//    var last = -1L
 
 //    fun getOrLoad(loc: ResourceLocation = resource("models/block/mcx/test.mcx")): List<ModelCache> {
 //        val locLasModified = lastModified(loc)
@@ -227,7 +226,7 @@ object Debug {
             if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
                 val folder = File(srcDir, "src/main/resources/assets/magneticraft/recipes")
                 val fileName = handItem.unlocalizedName.replace(".name", "").replaceBeforeLast(".", "").substring(1)
-                val file = File(folder, "${fileName}.json")
+                val file = File(folder, "$fileName.json")
 
                 file.writeText(jsonStr)
                 println("saved: ${file.exists()}, path: ${file.absolutePath}")
@@ -357,6 +356,7 @@ object Debug {
 
 val ug get() = Mouse.setGrabbed(false)
 
-fun ug() {
+fun ug(): Boolean {
     Mouse.setGrabbed(false)
+    return false
 }

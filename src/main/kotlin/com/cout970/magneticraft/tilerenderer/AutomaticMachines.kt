@@ -9,11 +9,9 @@ import com.cout970.magneticraft.tileentity.TileInserter
 import com.cout970.magneticraft.tilerenderer.core.*
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.vector.*
-import com.cout970.modelloader.api.Model
-import com.cout970.modelloader.api.ModelEntry
-import com.cout970.modelloader.api.ModelLoaderApi
-import com.cout970.modelloader.api.ModelUtilities
+import com.cout970.modelloader.api.*
 import com.cout970.modelloader.api.animation.AnimatedModel
+import com.cout970.modelloader.api.formats.gltf.GltfAnimationBuilder
 import com.cout970.modelloader.api.util.TRSTransformation
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
@@ -248,8 +246,10 @@ object TileRendererInserter : BaseTileRenderer<TileInserter>() {
 @RegisterRenderer(TileConveyorBelt::class)
 object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
 
-    var belt: ModelCache? = null
-    var cornerBelt: ModelCache? = null
+    var belt: IRenderCache? = null
+    var beltUp: IRenderCache? = null
+    var beltDown: IRenderCache? = null
+    var cornerBelt: IRenderCache? = null
 
     override fun init() {
         createModel(AutomaticMachines.conveyorBelt, listOf(
@@ -264,20 +264,35 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
         createModel(AutomaticMachines.conveyorBelt,
             listOf(ModelSelector("corner", FilterAlways)), "corner_base")
 
-        val anim = modelOf(AutomaticMachines.conveyorBelt, "anim")()
-        val cornerAnim = modelOf(AutomaticMachines.conveyorBelt, "corner_anim")()
+        createModel(AutomaticMachines.conveyorBelt,
+            listOf(ModelSelector("up", FilterAlways)), "up_base", false)
+
+        createModel(AutomaticMachines.conveyorBelt,
+            listOf(ModelSelector("down", FilterAlways)), "down_base", false)
+
+        val anim = modelOf(AutomaticMachines.conveyorBelt, "anim")
+        val cornerAnim = modelOf(AutomaticMachines.conveyorBelt, "corner_anim")
+        val upAnim = modelOf(AutomaticMachines.conveyorBelt, "up_anim")
+        val downAnim = modelOf(AutomaticMachines.conveyorBelt, "down_anim")
 
         //cleaning
         cornerBelt?.close()
         belt?.close()
+        beltUp?.close()
+        beltDown?.close()
 
         val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
         val cornerBeltModel = ModelLoaderApi.getModelEntry(cornerAnim) ?: return
+        val beltUpModel = ModelLoaderApi.getModelEntry(upAnim) ?: return
+        val beltDownModel = ModelLoaderApi.getModelEntry(downAnim) ?: return
 
-        belt = updateTexture(beltModel, resource("blocks/machines/conveyor_belt_anim"))
-        cornerBelt = updateTexture(cornerBeltModel, resource("blocks/machines/conveyor_belt_anim"))
+        val texture = resource("blocks/machines/conveyor_belt_anim")
+
+        belt = updateTexture(beltModel, texture)
+        cornerBelt = updateTexture(cornerBeltModel, texture)
+        beltUp = updateTexture(beltUpModel, texture)
+        beltDown = updateTexture(beltDownModel, texture)
     }
-
 
     override fun render(te: TileConveyorBelt) {
         Utilities.rotateFromCenter(te.facing)
@@ -302,9 +317,9 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             translate(x, y + 1f, z)
             Utilities.rotateFromCenter(te.facing)
 
-            Utilities.renderBox(vec3Of(1, 0, 0) * PIXEL toAABBWith vec3Of(2, 1, 1) * PIXEL,
+            Utilities.renderBox((vec3Of(1, 0, 0) * PIXEL).createAABBUsing(vec3Of(2, 1, 1) * PIXEL),
                 vec3Of(0, 1, 0))
-            Utilities.renderBox(vec3Of(0, 0, 1) * PIXEL toAABBWith vec3Of(1, 1, 2) * PIXEL,
+            Utilities.renderBox((vec3Of(0, 0, 1) * PIXEL).createAABBUsing(vec3Of(1, 1, 2) * PIXEL),
                 vec3Of(0, 0, 1))
 
             val bitmap2 = te.conveyorModule.generateGlobalBitMap()
@@ -316,7 +331,7 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                     val h = if (bitmap2[i, j]) 1 else 0
 
                     Utilities.renderBox(
-                        vec3Of(i, h, j) * PIXEL toAABBWith vec3Of(i + 1, h, j + 1) * PIXEL, color)
+                        vec3Of(i, h, j) * PIXEL createAABBUsing vec3Of(i + 1, h, j + 1) * PIXEL, color)
                 }
             }
         }
@@ -325,29 +340,44 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
 
     fun renderDynamicParts(te: TileConveyorBelt, partialTicks: Float) {
         bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+        val mod = te.conveyorModule
 
         te.conveyorModule.boxes.forEach { box ->
             stackMatrix {
+                val boxPos = box.position + if (box.locked) 0f else partialTicks
                 val pos = box.getPos(partialTicks)
-                translate(pos.xd, 13.5 * PIXEL, pos.zd)
+                val y = when {
+                    mod.isUp -> boxPos / 16.0
+                    mod.isDown -> 1.0 - boxPos / 16.0
+                    else -> 0.0
+                }
+                translate(pos.xd, 13.5 * PIXEL + y, pos.zd)
                 Utilities.renderItem(box.item, te.facing)
             }
         }
     }
 
-
     fun renderStaticParts(te: TileConveyorBelt) {
         val mod = te.conveyorModule
 
-        if (mod.isCorner) {
+        if (mod.isUp) {
             stackMatrix {
+                Utilities.rotateFromCenter(EnumFacing.NORTH, 180f)
+                beltUp?.render()
+                renderModel("up")
+            }
 
+        } else if (mod.isDown) {
+            beltDown?.render()
+            renderModel("down")
+
+        } else if (mod.isCorner) {
+            stackMatrix {
                 if (mod.hasRight()) {
                     rotate(90f, 0f, 1f, 0f)
                     scale(-1f, 1f, 1f)
                     GlStateManager.cullFace(GlStateManager.CullFace.FRONT)
 
-                    bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
                     cornerBelt?.render()
 
                     renderModel("corner")
@@ -357,7 +387,6 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                     translate(1f, 0f, 0f)
                     rotate(-90f, 0f, 1f, 0f)
 
-                    bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
                     cornerBelt?.render()
 
                     renderModel("corner")
@@ -365,7 +394,6 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             }
 
         } else {
-            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
             belt?.render()
 
             renderModel("default")
@@ -397,11 +425,22 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
         }
     }
 
-    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): ModelCache {
-        val raw = model.raw as Model.Mcx
+    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): IRenderCache {
+        val raw = model.raw
         val textureMap = Minecraft.getMinecraft().textureMapBlocks
         val animTexture = textureMap.getAtlasSprite(texture.toString())
-        val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
-        return ModelCache { ModelUtilities.renderModel(finalModel) }
+
+        return when (raw) {
+            is Model.Mcx -> {
+                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+                TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, ModelCache { ModelUtilities.renderModel(finalModel) })
+            }
+            is Model.Gltf -> {
+                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+                val anim = GltfAnimationBuilder().buildPlain(finalModel)
+                AnimationRenderCache(anim) { 0.0 }
+            }
+            else -> error("Invalid type: $raw, ${raw::class.java}")
+        }
     }
 }

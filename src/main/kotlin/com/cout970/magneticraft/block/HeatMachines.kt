@@ -17,9 +17,9 @@ import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
 import com.cout970.magneticraft.util.toCelsius
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import com.cout970.magneticraft.util.vector.rotateBox
 import com.cout970.magneticraft.util.vector.scale
-import com.cout970.magneticraft.util.vector.toAABBWith
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -61,9 +61,9 @@ object HeatMachines : IBlockMaker {
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithOrientation {
                 listOf(
-                    (vec3Of(0, 0, 0) toAABBWith vec3Of(16, 12, 15)).scale(PIXEL),
-                    (vec3Of(0, 12, 0) toAABBWith vec3Of(16, 16, 16)).scale(PIXEL),
-                    (vec3Of(3, 2, 15) toAABBWith vec3Of(13, 10, 16)).scale(PIXEL)
+                    (vec3Of(0, 0, 0) createAABBUsing vec3Of(16, 12, 15)).scale(PIXEL),
+                    (vec3Of(0, 12, 0) createAABBUsing vec3Of(16, 16, 16)).scale(PIXEL),
+                    (vec3Of(3, 2, 15) createAABBUsing vec3Of(13, 10, 16)).scale(PIXEL)
                 )
             }
             onBlockPlaced = CommonMethods::placeWithOrientation
@@ -80,7 +80,7 @@ object HeatMachines : IBlockMaker {
             generateDefaultItemModel = false
             hasCustomModel = true
             //methods
-            boundingBox = { listOf((vec3Of(1, 0, 1) toAABBWith vec3Of(15, 16, 15)).scale(PIXEL)) }
+            boundingBox = { listOf((vec3Of(1, 0, 1) createAABBUsing vec3Of(15, 16, 15)).scale(PIXEL)) }
             onActivated = CommonMethods::delegateToModule
         }.build()
 
@@ -155,7 +155,7 @@ object HeatMachines : IBlockMaker {
             )
             generateDefaultItemModel = false
             hasCustomModel = true
-            boundingBox = { listOf((vec3Of(1, 0, 1) toAABBWith vec3Of(15, 16, 15)).scale(PIXEL)) }
+            boundingBox = { listOf((vec3Of(1, 0, 1) createAABBUsing vec3Of(15, 16, 15)).scale(PIXEL)) }
             onActivated = CommonMethods::delegateToModule
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
@@ -168,26 +168,26 @@ object HeatMachines : IBlockMaker {
         val pipe = world.getTile<TileBase>(pos)?.getModule<ModuleHeatPipeConnections>()
         val list = mutableListOf<AABB>()
 
-        list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
+        list += vec3Of(size.px) createAABBUsing vec3Of(1 - size.px)
 
         if (pipe != null) {
             if (pipe.canConnect(EnumFacing.DOWN))
-                list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
+                list += vec3Of(size.px, 0, size.px) createAABBUsing vec3Of(1 - size.px, size.px, 1 - size.px)
 
             if (pipe.canConnect(EnumFacing.UP))
-                list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
+                list += vec3Of(size.px, 1 - size.px, size.px) createAABBUsing vec3Of(1 - size.px, 1, 1 - size.px)
 
             if (pipe.canConnect(EnumFacing.NORTH))
-                list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
+                list += vec3Of(size.px, size.px, 0) createAABBUsing vec3Of(1 - size.px, 1 - size.px, size.px)
 
             if (pipe.canConnect(EnumFacing.SOUTH))
-                list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+                list += vec3Of(size.px, size.px, 1 - size.px) createAABBUsing vec3Of(1 - size.px, 1 - size.px, 1)
 
             if (pipe.canConnect(EnumFacing.WEST))
-                list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
+                list += vec3Of(0, size.px, size.px) createAABBUsing vec3Of(size.px, 1 - size.px, 1 - size.px)
 
             if (pipe.canConnect(EnumFacing.EAST))
-                list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+                list += vec3Of(1 - size.px, size.px, size.px) createAABBUsing vec3Of(1, 1 - size.px, 1 - size.px)
         }
         return list
     }

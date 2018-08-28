@@ -211,7 +211,7 @@ class ModuleInserter(
 
         inventoryAccessors.forEach { (offset, side) ->
             val base = pos + offset
-            val area = base toAABBWith base.add(1, 1, 1)
+            val area = base createAABBUsing base.add(1, 1, 1)
             val carts = world.getEntitiesWithinAABB(EntityMinecartContainer::class.java, area)
 
             carts.forEach { entity ->
@@ -254,7 +254,7 @@ class ModuleInserter(
     fun canGrabFromGround(level: Level): Boolean {
         val height = if (level == Level.HIGH) pos else pos.down()
         val base = height.toVec3d() + facing.toVector3()
-        val area = base toAABBWith base.addVector(1.0, 1.0, 1.0)
+        val area = base createAABBUsing base.addVector(1.0, 1.0, 1.0)
         val items = world.getEntitiesWithinAABB(EntityItem::class.java, area)
         return items.any { canExtract(it.item) && acceptInDestine(it.item) != null }
     }
@@ -282,7 +282,7 @@ class ModuleInserter(
         if (world.isClient) return false
         val height = if (level == Level.HIGH) pos else pos.down()
         val base = height.toVec3d() + facing.toVector3()
-        val area = base toAABBWith base.addVector(1.0, 1.0, 1.0)
+        val area = base createAABBUsing base.addVector(1.0, 1.0, 1.0)
         val items = world.getEntitiesWithinAABB(EntityItem::class.java, area)
         val stack = items.firstOrNull { canExtract(it.item) && acceptInDestine(it.item) != null } ?: return false
 
@@ -312,7 +312,7 @@ class ModuleInserter(
         val blockstate = world.getBlockState(base)
         if (blockstate.isFullBlock) return false
 
-        val area = base toAABBWith base.add(1.0, 1.0, 1.0)
+        val area = base createAABBUsing base.add(1.0, 1.0, 1.0)
         val itemList = world.getEntitiesWithinAABB(EntityItem::class.java, area)
         return itemList.isEmpty()
     }

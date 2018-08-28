@@ -35,12 +35,13 @@ abstract class BaseTileRenderer<T : TileBase> : TileRenderer<T>() {
         createModel(block, filters.toList())
     }
 
-    fun createModel(block: Block, filters: List<ModelSelector>, variant: String = "model") {
+    fun createModel(block: Block, filters: List<ModelSelector>, variant: String = "model", createDefault: Boolean = true) {
         models += ModelCacheFactory.createModel(
             loc = ModelResourceLocation(block.registryName!!, variant),
             filters = filters,
             useTextures = true,
-            time = { time }
+            time = { time },
+            createDefault = createDefault
         )
     }
 

@@ -15,7 +15,7 @@ import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.ModulePipe
 import com.cout970.magneticraft.tilerenderer.core.px
 import com.cout970.magneticraft.util.resource
-import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -68,7 +68,7 @@ object FluidMachines : IBlockMaker {
     fun fluidPipeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {
         val list = mutableListOf<AABB>()
 
-        list += vec3Of(4.px) toAABBWith vec3Of(1 - 4.px)
+        list += vec3Of(4.px) createAABBUsing vec3Of(1 - 4.px)
 
         fluidPipeSides(world, pos).forEach {
             list += it.second
@@ -84,22 +84,22 @@ object FluidMachines : IBlockMaker {
         val none = ModulePipe.ConnectionType.NONE
 
         if (pipe.getConnectionType(EnumFacing.DOWN, false) != none)
-            list += EnumFacing.DOWN to (vec3Of(4.px, 0, 4.px) toAABBWith vec3Of(1 - 4.px, 4.px, 1 - 4.px))
+            list += EnumFacing.DOWN to (vec3Of(4.px, 0, 4.px) createAABBUsing vec3Of(1 - 4.px, 4.px, 1 - 4.px))
 
         if (pipe.getConnectionType(EnumFacing.UP, false) != none)
-            list += EnumFacing.UP to (vec3Of(4.px, 1 - 4.px, 4.px) toAABBWith vec3Of(1 - 4.px, 1, 1 - 4.px))
+            list += EnumFacing.UP to (vec3Of(4.px, 1 - 4.px, 4.px) createAABBUsing vec3Of(1 - 4.px, 1, 1 - 4.px))
 
         if (pipe.getConnectionType(EnumFacing.NORTH, false) != none)
-            list += EnumFacing.NORTH to (vec3Of(4.px, 4.px, 0) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 4.px))
+            list += EnumFacing.NORTH to (vec3Of(4.px, 4.px, 0) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 4.px))
 
         if (pipe.getConnectionType(EnumFacing.SOUTH, false) != none)
-            list += EnumFacing.SOUTH to (vec3Of(4.px, 4.px, 1 - 4.px) toAABBWith vec3Of(1 - 4.px, 1 - 4.px, 1))
+            list += EnumFacing.SOUTH to (vec3Of(4.px, 4.px, 1 - 4.px) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 1))
 
         if (pipe.getConnectionType(EnumFacing.WEST, false) != none)
-            list += EnumFacing.WEST to (vec3Of(0, 4.px, 4.px) toAABBWith vec3Of(4.px, 1 - 4.px, 1 - 4.px))
+            list += EnumFacing.WEST to (vec3Of(0, 4.px, 4.px) createAABBUsing vec3Of(4.px, 1 - 4.px, 1 - 4.px))
 
         if (pipe.getConnectionType(EnumFacing.EAST, false) != none)
-            list += EnumFacing.EAST to (vec3Of(1 - 4.px, 4.px, 4.px) toAABBWith vec3Of(1, 1 - 4.px, 1 - 4.px))
+            list += EnumFacing.EAST to (vec3Of(1 - 4.px, 4.px, 4.px) createAABBUsing vec3Of(1, 1 - 4.px, 1 - 4.px))
 
         return list
     }

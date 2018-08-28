@@ -44,13 +44,17 @@ object AutomaticMachines : IBlockMaker {
                 "anim" to resource("models/block/mcx/conveyor_belt_anim.mcx"),
                 "corner_base" to resource("models/block/mcx/conveyor_belt_corner_base.mcx"),
                 "corner_anim" to resource("models/block/mcx/conveyor_belt_corner_anim.mcx"),
+                "up_base" to resource("models/block/gltf/conveyor_belt_up_base.gltf"),
+                "up_anim" to resource("models/block/gltf/conveyor_belt_up_anim.gltf"),
+                "down_base" to resource("models/block/gltf/conveyor_belt_down_base.gltf"),
+                "down_anim" to resource("models/block/gltf/conveyor_belt_down_anim.gltf"),
                 "inventory" to resource("models/block/mcx/conveyor_belt.mcx")
             )
             hasCustomModel = true
             generateDefaultItemModel = false
             alwaysDropDefault = true
             //methods
-            boundingBox = { listOf(vec3Of(0, 0, 0) toAABBWith vec3Of(1, 0.8125, 1)) }
+            boundingBox = { listOf(vec3Of(0, 0, 0) createAABBUsing vec3Of(1, 0.8125, 1)) }
             onBlockPlaced = CommonMethods::placeWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::delegateToModule
@@ -66,7 +70,7 @@ object AutomaticMachines : IBlockMaker {
             hasCustomModel = true
             generateDefaultItemModel = false
             alwaysDropDefault = true
-            boundingBox = { listOf(vec3Of(0, 0, 0) toAABBWith vec3Of(16.px, 3.px, 16.px)) }
+            boundingBox = { listOf(vec3Of(0, 0, 0) createAABBUsing vec3Of(16.px, 3.px, 16.px)) }
             //methods
             onBlockPlaced = CommonMethods::placeWithOppositeOrientation
             pickBlock = CommonMethods::pickDefaultBlock
@@ -111,7 +115,7 @@ object AutomaticMachines : IBlockMaker {
                 val center = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false
                 if (center) it.default else emptyList()
             }
-            boundingBox = { listOf((vec3Of(0, 0, 0) toAABBWith vec3Of(16, 12, 16)).scale(PIXEL)) }
+            boundingBox = { listOf((vec3Of(0, 0, 0) createAABBUsing vec3Of(16, 12, 16)).scale(PIXEL)) }
         }.build()
 
         return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough)

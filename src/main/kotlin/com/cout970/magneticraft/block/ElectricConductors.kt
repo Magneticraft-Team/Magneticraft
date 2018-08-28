@@ -78,7 +78,7 @@ object ElectricConductors : IBlockMaker {
             )
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithFacing {
-                listOf(Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5) toAABBWith Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0))
+                listOf(Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 5) createAABBUsing Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0))
             }
             onBlockPlaced = CommonMethods::placeWithFacing
             pickBlock = CommonMethods::pickDefaultBlock
@@ -106,7 +106,7 @@ object ElectricConductors : IBlockMaker {
             )
             boundingBox = {
                 val size = 0.0625 * 3
-                listOf(Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size))
+                listOf(Vec3d(0.5 - size, 0.0, 0.5 - size) createAABBUsing Vec3d(0.5 + size, 1.0, 0.5 + size))
             }
             onBlockBreak = ElectricConductors::breakElectricPole
             blockStatesToPlace = ElectricConductors::placeElectricPole
@@ -134,7 +134,7 @@ object ElectricConductors : IBlockMaker {
             )
             boundingBox = {
                 val size = 0.0625 * 3
-                listOf(Vec3d(0.5 - size, 0.0, 0.5 - size) toAABBWith Vec3d(0.5 + size, 1.0, 0.5 + size))
+                listOf(Vec3d(0.5 - size, 0.0, 0.5 - size) createAABBUsing Vec3d(0.5 + size, 1.0, 0.5 + size))
             }
             onBlockBreak = ElectricConductors::breakElectricPole
             onDrop = {
@@ -165,26 +165,26 @@ object ElectricConductors : IBlockMaker {
         val mod = world.getTile<TileElectricCable>(pos)
         val list = mutableListOf<AABB>()
 
-        list += vec3Of(size.px) toAABBWith vec3Of(1 - size.px)
+        list += vec3Of(size.px) createAABBUsing vec3Of(1 - size.px)
 
         if (mod != null) {
             if (mod.canConnect(EnumFacing.DOWN))
-                list += vec3Of(size.px, 0, size.px) toAABBWith vec3Of(1 - size.px, size.px, 1 - size.px)
+                list += vec3Of(size.px, 0, size.px) createAABBUsing vec3Of(1 - size.px, size.px, 1 - size.px)
 
             if (mod.canConnect(EnumFacing.UP))
-                list += vec3Of(size.px, 1 - size.px, size.px) toAABBWith vec3Of(1 - size.px, 1, 1 - size.px)
+                list += vec3Of(size.px, 1 - size.px, size.px) createAABBUsing vec3Of(1 - size.px, 1, 1 - size.px)
 
             if (mod.canConnect(EnumFacing.NORTH))
-                list += vec3Of(size.px, size.px, 0) toAABBWith vec3Of(1 - size.px, 1 - size.px, size.px)
+                list += vec3Of(size.px, size.px, 0) createAABBUsing vec3Of(1 - size.px, 1 - size.px, size.px)
 
             if (mod.canConnect(EnumFacing.SOUTH))
-                list += vec3Of(size.px, size.px, 1 - size.px) toAABBWith vec3Of(1 - size.px, 1 - size.px, 1)
+                list += vec3Of(size.px, size.px, 1 - size.px) createAABBUsing vec3Of(1 - size.px, 1 - size.px, 1)
 
             if (mod.canConnect(EnumFacing.WEST))
-                list += vec3Of(0, size.px, size.px) toAABBWith vec3Of(size.px, 1 - size.px, 1 - size.px)
+                list += vec3Of(0, size.px, size.px) createAABBUsing vec3Of(size.px, 1 - size.px, 1 - size.px)
 
             if (mod.canConnect(EnumFacing.EAST))
-                list += vec3Of(1 - size.px, size.px, size.px) toAABBWith vec3Of(1, 1 - size.px, 1 - size.px)
+                list += vec3Of(1 - size.px, size.px, size.px) createAABBUsing vec3Of(1, 1 - size.px, 1 - size.px)
         }
 
         return list
@@ -383,11 +383,11 @@ object ElectricConductors : IBlockMaker {
 
         if (worldIn.isSideSolid(pos.offset(side.opposite), side.opposite, false)) return true
 
-        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) toAABBWith Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
+        var box = Vec3d(0.5 - PIXEL, 0.5 - PIXEL, 0.5 - PIXEL) createAABBUsing Vec3d(0.5 + PIXEL, 0.5 + PIXEL, 0.5 + PIXEL)
         val temp = side.opposite.directionVec.toVec3d() * 0.625 + Vec3d(0.5, 0.5, 0.5)
         val blockPos = pos.offset(side.opposite)
 
-        box = box.union(temp toAABBWith temp).offset(pos)
+        box = box.union(temp createAABBUsing temp).offset(pos)
         val state = worldIn.getBlockState(blockPos)
         val list = mutableListOf<AxisAlignedBB>()
 

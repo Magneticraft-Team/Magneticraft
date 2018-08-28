@@ -6,6 +6,7 @@ import com.cout970.magneticraft.util.vector.xf
 import com.cout970.magneticraft.util.vector.yf
 import com.cout970.magneticraft.util.vector.zf
 import com.cout970.modelloader.api.IRenderCache
+import com.cout970.modelloader.api.ModelCache
 import net.minecraft.client.renderer.BufferBuilder
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats

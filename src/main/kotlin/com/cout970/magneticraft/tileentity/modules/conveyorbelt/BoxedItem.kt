@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.modules.conveyor_belt
+package com.cout970.magneticraft.tileentity.modules.conveyorbelt
 
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.IVector3
@@ -31,6 +31,7 @@ data class BoxedItem(
 
     fun getPos(partialTicks: Float): IVector3 {
         val pos = position + if (locked) 0f else partialTicks
+
         if (route.isRect) {
             val z = Utilities.interpolate(16f, 0f, pos / 16.0f) * PIXEL
             val x = when (route) {
@@ -104,14 +105,14 @@ data class BoxedItem(
                     z = Utilities.interpolate(11f, 0f, (pos - 5f) / 11f) * PIXEL
                 }
             }
-            return vec3Of(x, 0, z)
+            return vec3Of(x, 0.0, z)
         }
-        return vec3Of(0, 0, 0)
+        return vec3Of(0.0, 0.0, 0.0)
     }
 
     fun getHitBox(): AABB {
         val pos = getPos(0f)
-        return (pos - vec3Of(2, 0, 2) * PIXEL) toAABBWith (pos + vec3Of(2, 4, 2) * PIXEL)
+        return (pos - vec3Of(2, 0, 2) * PIXEL) createAABBUsing (pos + vec3Of(2, 4, 2) * PIXEL)
     }
 
     fun serializeNBT() = newNbt {

@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.tileentity.modules.conveyor_belt
+package com.cout970.magneticraft.tileentity.modules.conveyorbelt
 
 enum class Route(val leftSide: Boolean, val isRect: Boolean, val isShort: Boolean) {
     LEFT_FORWARD(true, true, false),

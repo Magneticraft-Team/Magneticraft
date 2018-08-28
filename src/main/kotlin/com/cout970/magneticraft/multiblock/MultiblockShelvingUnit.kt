@@ -3,7 +3,7 @@ package com.cout970.magneticraft.multiblock
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.multiblock.core.*
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
-import com.cout970.magneticraft.util.vector.toAABBWith
+import com.cout970.magneticraft.util.vector.createAABBUsing
 import com.cout970.magneticraft.util.vector.unaryMinus
 import com.cout970.magneticraft.util.vector.vec3Of
 import net.minecraft.util.math.AxisAlignedBB
@@ -40,10 +40,10 @@ object MultiblockShelvingUnit : Multiblock() {
     override fun getControllerBlock() = Multiblocks.shelvingUnit
 
     val hitbox = listOf(
-        (Vec3d.ZERO toAABBWith vec3Of(5, 1 - 5 * PIXEL, 2)),
-        (vec3Of(0, 1 - 5 * PIXEL, 0) toAABBWith vec3Of(5, 2 - 5 * PIXEL, 2)),
-        (vec3Of(0, 2 - 5 * PIXEL, 0) toAABBWith vec3Of(5, 3 - 5 * PIXEL, 2)),
-        (vec3Of(0, 3 - 5 * PIXEL, 0) toAABBWith vec3Of(5, 3, 2))
+        (Vec3d.ZERO createAABBUsing vec3Of(5, 1 - 5 * PIXEL, 2)),
+        (vec3Of(0, 1 - 5 * PIXEL, 0) createAABBUsing vec3Of(5, 2 - 5 * PIXEL, 2)),
+        (vec3Of(0, 2 - 5 * PIXEL, 0) createAABBUsing vec3Of(5, 3 - 5 * PIXEL, 2)),
+        (vec3Of(0, 3 - 5 * PIXEL, 0) createAABBUsing vec3Of(5, 3, 2))
     ).map { it.offset(-center) }
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
