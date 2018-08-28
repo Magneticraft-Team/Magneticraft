@@ -462,8 +462,11 @@ fun registerRecipes() {
     addFluidFuel("refined_fuel", 25_000, 80.0)  // 2_000_000 J/B = 125   coal items
     addFluidFuel("refined_oil", 25_000, 40.0)   // 1_000_000 J/B = 62.5  coal items
 
-    //IF
+    // IF
     addFluidFuel("biofuel", 10_000, 50.0)       // 500_000 J/B   = 31.25 coal items
+
+    // Forestry
+    addFluidFuel("bioethanol", 10_000, 50.0)    // 500_000 J/B   = 31.25 coal items
 }
 
 private fun fluidOf(name: String, amount: Int) = FluidRegistry.getFluidStack(name, amount)

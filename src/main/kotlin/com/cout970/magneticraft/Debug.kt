@@ -289,7 +289,7 @@ object Debug {
                         val stack = (sender as EntityPlayer).inventory.getCurrentItem()
                         val fluid = FluidUtil.getFluidContained(stack)
 
-                        sender.sendMessage("Item: $stack".toTextComponent())
+                        sender.sendMessage("Item: $stack <${stack.item.registryName}:${stack.itemDamage}>".toTextComponent())
                         sender.sendMessage("NBT: ${stack.tagCompound}".toTextComponent())
                         sender.sendMessage("OreDict: ${OreDictionary.getOreIDs(stack).map { OreDictionary.getOreName(it) }}".toTextComponent())
                         if (fluid != null) {
