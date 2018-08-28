@@ -13,12 +13,21 @@ val IGNORE_ANIMATION = FilterNot(FilterAlways)
 
 data class ModelSelector(val name: String, val componentFilter: Filter, val animationFilter: Filter = IGNORE_ANIMATION)
 
-class FilterRegex(val expression: String, val target: FilterTarget = FilterTarget.LEAF) : Filter() {
+class FilterRegex(expression: String, val target: FilterTarget = FilterTarget.LEAF) : Filter() {
     val regex = expression.toRegex()
 
     override operator fun invoke(name: String, type: FilterTarget): Boolean {
         if (type != target) return true
         return regex.matches(name)
+    }
+}
+
+class FilterNotRegex(expression: String, val target: FilterTarget = FilterTarget.LEAF) : Filter() {
+    val regex = expression.toRegex()
+
+    override operator fun invoke(name: String, type: FilterTarget): Boolean {
+        if (type != target) return true
+        return !regex.matches(name)
     }
 }
 

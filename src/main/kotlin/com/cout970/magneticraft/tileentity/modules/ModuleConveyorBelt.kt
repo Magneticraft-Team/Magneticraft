@@ -102,6 +102,11 @@ class ModuleConveyorBelt(
         !state.block.isAir(state, world, pos + facing)
     }
 
+    val hasBlockDown = TimeCache(tileRefCallback, 10) {
+        val state = world.getBlockState(pos + EnumFacing.DOWN)
+        !state.block.isAir(state, world, pos + EnumFacing.DOWN)
+    }
+
     val isCorner
         get() = !hasBack() && hasFront() && (hasLeft() xor hasRight())
 

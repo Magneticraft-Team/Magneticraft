@@ -12,10 +12,7 @@ import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.tileentity.core.TileBase
 import com.cout970.magneticraft.tileentity.modules.*
-import com.cout970.magneticraft.util.vector.toBlockPos
-import com.cout970.magneticraft.util.vector.xd
-import com.cout970.magneticraft.util.vector.yd
-import com.cout970.magneticraft.util.vector.zd
+import com.cout970.magneticraft.util.vector.*
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
@@ -65,6 +62,10 @@ class TileConveyorBelt : TileBase(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB {
+        return pos createAABBUsing pos.add(1, 2, 1)
     }
 }
 

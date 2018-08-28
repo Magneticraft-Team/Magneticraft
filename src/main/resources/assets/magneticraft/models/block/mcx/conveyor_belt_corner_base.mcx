@@ -4,7 +4,7 @@
   "particleTexture": "magneticraft:blocks/machines/conveyor_belt_corner",
   "parts": [
     {
-      "name": "Shape5",
+      "name": "support",
       "from": 0,
       "to": 6,
       "texture": "magneticraft:blocks/machines/conveyor_belt_corner"
@@ -34,7 +34,7 @@
       "texture": "magneticraft:blocks/machines/conveyor_belt_corner"
     },
     {
-      "name": "Shape5",
+      "name": "support",
       "from": 30,
       "to": 36,
       "texture": "magneticraft:blocks/machines/conveyor_belt_corner"

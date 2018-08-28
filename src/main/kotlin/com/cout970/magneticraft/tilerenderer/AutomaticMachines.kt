@@ -261,14 +261,20 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             ModelSelector("panel_right", FilterRegex("panel_right"))
         ), "base")
 
-        createModel(AutomaticMachines.conveyorBelt,
-            listOf(ModelSelector("corner", FilterAlways)), "corner_base")
+        createModel(AutomaticMachines.conveyorBelt, listOf(
+            ModelSelector("corner", FilterNotRegex("support.*")),
+            ModelSelector("corner_supports", FilterRegex("support.*"))
+        ), "corner_base")
 
-        createModel(AutomaticMachines.conveyorBelt,
-            listOf(ModelSelector("up", FilterAlways)), "up_base", false)
+        createModel(AutomaticMachines.conveyorBelt, listOf(
+            ModelSelector("up", FilterNotRegex("support.*")),
+            ModelSelector("up_supports", FilterRegex("support.*"))
+        ), "up_base", false)
 
-        createModel(AutomaticMachines.conveyorBelt,
-            listOf(ModelSelector("down", FilterAlways)), "down_base", false)
+        createModel(AutomaticMachines.conveyorBelt, listOf(
+            ModelSelector("down", FilterNotRegex("support.*")),
+            ModelSelector("down_supports", FilterRegex("support.*"))
+        ), "down_base", false)
 
         val anim = modelOf(AutomaticMachines.conveyorBelt, "anim")
         val cornerAnim = modelOf(AutomaticMachines.conveyorBelt, "corner_anim")
@@ -351,7 +357,13 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                     mod.isDown -> 1.0 - boxPos / 16.0
                     else -> 0.0
                 }
+//                val angle = when {
+//                    mod.isUp -> 45.0f
+//                    mod.isDown -> -45.0f
+//                    else -> 0.0f
+//                }
                 translate(pos.xd, 13.5 * PIXEL + y, pos.zd)
+//                rotate(angle, 1, 0, 0)
                 Utilities.renderItem(box.item, te.facing)
             }
         }
@@ -365,11 +377,19 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                 Utilities.rotateFromCenter(EnumFacing.NORTH, 180f)
                 beltUp?.render()
                 renderModel("up")
+
+                if (mod.hasBlockDown()) {
+                    renderModel("up_supports")
+                }
             }
 
         } else if (mod.isDown) {
             beltDown?.render()
             renderModel("down")
+
+            if (mod.hasBlockDown()) {
+                renderModel("down_supports")
+            }
 
         } else if (mod.isCorner) {
             stackMatrix {
@@ -382,6 +402,10 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
 
                     renderModel("corner")
 
+                    if (mod.hasBlockDown()) {
+                        renderModel("corner_supports")
+                    }
+
                     GlStateManager.cullFace(GlStateManager.CullFace.BACK)
                 } else {
                     translate(1f, 0f, 0f)
@@ -390,6 +414,10 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                     cornerBelt?.render()
 
                     renderModel("corner")
+
+                    if (mod.hasBlockDown()) {
+                        renderModel("corner_supports")
+                    }
                 }
             }
 
@@ -397,6 +425,20 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             belt?.render()
 
             renderModel("default")
+
+            if (mod.hasLeft()) {
+                renderModel("lateral_left")
+            } else {
+                renderModel("panel_left")
+            }
+
+            if (mod.hasRight()) {
+                renderModel("lateral_right")
+            } else {
+                renderModel("panel_right")
+            }
+
+            if (!mod.hasBlockDown()) return
 
             if (mod.hasBack()) {
                 stackMatrix {
@@ -411,17 +453,6 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                 renderModel("front_legs")
             }
 
-            if (mod.hasLeft()) {
-                renderModel("lateral_left")
-            } else {
-                renderModel("panel_left")
-            }
-
-            if (mod.hasRight()) {
-                renderModel("lateral_right")
-            } else {
-                renderModel("panel_right")
-            }
         }
     }
 
