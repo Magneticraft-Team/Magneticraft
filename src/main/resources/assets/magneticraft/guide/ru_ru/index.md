@@ -1,10 +1,10 @@
-# Magneticraft manual
+# Мануал к Magneticraft
 
-*Sections*
-- [Getting Started](1-getting-started.md)
-- [Machines](2-machines.md)
-- [Multiblocks](3-multiblocks.md)
-- [World Generation](4-world-generation.md)
-- [Computers](5-computers.md)
-- [Electricity](6-electricity.md)
-- [Heat](7-heat.md)
+*Разделы*
+- [Начало](1-getting-started.md)
+- [Машины](2-machines.md)
+- [Мультиблоки](3-multiblocks.md)
+- [Генерация мира](4-world-generation.md)
+- [Компьютеры](5-computers.md)
+- [Электричество](6-electricity.md)
+- [Тепло](7-heat.md)
