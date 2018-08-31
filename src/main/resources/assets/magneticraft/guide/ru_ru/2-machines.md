@@ -1,7 +1,7 @@
-# Machines
+# Машины
 
-*Machine categories*
-- [Generators](machines/1-generators.md)
-- [Processing Machines](machines/2-processing-machines.md)
-- [Transport](machines/3-transport.md)
-- [Utilities](machines/4-utilities.md)
+*Категории машин*
+- [Генераторы](machines/1-generators.md)
+- [Машины для процессинга](machines/2-processing-machines.md)
+- [Транспортировка](machines/3-transport.md)
+- [Утилиты](machines/4-utilities.md)
