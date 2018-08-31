@@ -1,4 +1,4 @@
-itemGroup.magneticraft=Magneticraft
+# itemGroup.magneticraft=Magneticraft
 item.magneticraft.guide_book_normal.name=Путеводитель Magneticraft
 
 item.magneticraft.iron_hammer_normal.name=Железный Молот
@@ -95,28 +95,35 @@ item.magneticraft.dusts_osmium.name=Осмиевая Пыль
 item.magneticraft.dusts_nickel.name=Никелевая Пыль
 
 item.magneticraft.copper_coil_normal.name=Медная Катушка
-item.magneticraft.crafting_coil.name=Маленькая Медная Катушка
 item.magneticraft.crafting_sulfur.name=Кристалл Серы
+item.magneticraft.crafting_coil.name=Маленькая Медная Катушка
 item.magneticraft.crafting_alternator.name=Генератор Переменного Тока
 item.magneticraft.crafting_motor.name=Мотор
 item.magneticraft.crafting_magnet.name=Магнит
 item.magneticraft.crafting_mesh.name=Железная Сетка
 item.magneticraft.crafting_string_fabric.name=Сетчатая Ткань
 item.magneticraft.voltmeter_normal.name=Вольтметр
+item.magneticraft.thermometer_normal.name=Термометр
+item.magneticraft.wrench_normal.name=Гаечный ключ
 item.magneticraft.battery_item_low_normal.name=Маленькая Батарея
 item.magneticraft.battery_item_medium_normal.name=Средняя Батарея
 
 item.magneticraft.floppy_disk_user.name=Дискета
 item.magneticraft.floppy_disk_lisp.name=Дискета (Lisp)
 item.magneticraft.floppy_disk_forth.name=Дискета (FORTH)
-item.magneticraft.floppy_disk_js.name=Дискета (JS)
-item.magneticraft.floppy_disk_basic.name=Дискета (BASIC)
-item.magneticraft.floppy_disk_vim.name=Дискета (VI?)
-item.magneticraft.floppy_disk_asm.name=Дискета (ASM)
+# item.magneticraft.floppy_disk_js.name=Дискета (JS)
+item.magneticraft.floppy_disk_shell.name=Дискета (Shell)
+item.magneticraft.floppy_disk_basic.name=Дискета (BASIC WIP)
+item.magneticraft.floppy_disk_editor.name=Дискета (Editor)
+# item.magneticraft.floppy_disk_vim.name=Дискета (VI?)
+item.magneticraft.floppy_disk_asm.name=Дискета (ASM WIP)
 
 item.magneticraft.iron_gear_normal.name=Железная Запчасть
 item.magneticraft.steel_gear_normal.name=Стальная Запчасть
 item.magneticraft.tungsten_gear_normal.name=Вольфрамовая Запчасть
+
+item.magneticraft.inserter_upgrade_speed.name=Улучшение Манипулятора: Скорость
+item.magneticraft.inserter_upgrade_stack.name=Улучшение Манипулятора: Стак
 
 tile.magneticraft.ores_copper.name=Халькопиритовая Руда
 tile.magneticraft.ores_lead.name=Галенитовая Руда
@@ -138,21 +145,21 @@ tile.magneticraft.oil_source_empty.name=Источник Нефти (Пусто�
 tile.magneticraft.box_normal.name=Деревянный Ящик
 tile.magneticraft.crushing_table_normal.name=Дробительный Стол
 tile.magneticraft.sluice_box_center_north.name=Рудопромывочный Шлюз
-tile.magneticraft.feeding_trough_center_north.name=Корыто
+tile.magneticraft.feeding_trough_center_north.name=Кормовое Корыто
 #tile.magneticraft.kiln_shelf.name=Печная Полка
 
 tile.magneticraft.limestone_normal.name=Известняк
 tile.magneticraft.limestone_brick.name=Кирпич из Известняка
 tile.magneticraft.limestone_cobble.name=Булыжник из Известняка
 tile.magneticraft.burnt_limestone_normal.name=Жжёная Известь
-tile.magneticraft.burnt_limestone_brick.name=Кирпич из Жжёной Известняка
-tile.magneticraft.burnt_limestone_cobble.name=Булыжник из Жжёной Известняка
+tile.magneticraft.burnt_limestone_brick.name=Кирпич из Жжёной Извести
+tile.magneticraft.burnt_limestone_cobble.name=Булыжник из Жжёной Извести
 tile.magneticraft.tile_limestone_normal.name=Плитка из Известняка
 tile.magneticraft.tile_limestone_inverted.name=Перевёрнутая Плитка из Известняка
 tile.magneticraft.tube_light_north.name=Световая Труба
 
 tile.magneticraft.conveyor_belt_north.name=Конвейерная Лента
-tile.magneticraft.inserter_north.name=Внедритель
+tile.magneticraft.inserter_north.name=Манипулятор
 tile.magneticraft.connector_down.name=Электрический Соединитель
 tile.magneticraft.battery_north.name=Блок Батареи
 tile.magneticraft.electric_pole_north.name=Электроопора
@@ -160,9 +167,11 @@ tile.magneticraft.electric_pole_transformer_north.name=Трансформато�
 tile.magneticraft.electric_furnace_north.name=Электропечь
 tile.magneticraft.combustion_chamber_north.name=Камера Сгорания
 tile.magneticraft.steam_boiler_normal.name=Бойлер
+tile.magneticraft.pumpjack_drill_normal.name=Труба Станка-качалки
+tile.magneticraft.electric_heater_off.name=Электрический Нагреватель
+tile.magneticraft.electric_heater_on.name=Электрический Нагреватель (Включенный)
+tile.magneticraft.gasification_unit_normal.name=Агрегат Газификации
 
-#tile.magneticraft.electric_heater_off.name=Электрический Нагреватель
-#tile.magneticraft.electric_heater_on.name=Электрический Нагреватель
 #tile.magneticraft.heat_pipe.name=Труба Нагрева
 #tile.magneticraft.redstone_heat_pipe.name=Труба Нагрева (Красный Камень)
 #tile.magneticraft.firebox.name=Топка
@@ -179,27 +188,46 @@ tile.magneticraft.airlock_normal.name=Шлюз
 tile.magneticraft.air_bubble_on.name=Пузырь Воздуха
 tile.magneticraft.air_bubble_off.name=Пузырь Воздуха
 tile.magneticraft.computer_north.name=Компьютер
-tile.magneticraft.mining_robot_north.name=Робот-добытчик
+tile.magneticraft.mining_robot_north.name=Робот-шахтер
 tile.magneticraft.moving_robot_normal.name=Робот
+tile.magneticraft.small_tank_normal.name=Малый бак
 tile.magneticraft.copper_tank_normal.name=Медный Бак
 tile.magneticraft.thermopile_normal.name=Термоэлемент
 tile.magneticraft.iron_pipe_normal.name=Железная Труба
+tile.magneticraft.wind_turbine_north.name=Ветряная турбина
+tile.magneticraft.wind_turbine_gap.name=Ветряная турбина
+tile.magneticraft.heat_sink_down.name=Радиатор
+tile.magneticraft.heat_pipe_normal.name=Тепловая Труба
+tile.magneticraft.insulated_heat_pipe_normal.name=Изолированная Тепловая Труба
+tile.magneticraft.rf_heater_off.name=RF Нагреватель
+tile.magneticraft.electric_cable_normal.name=Электрический кабель
 
-#multiblocks
+# Multiblocks
 #tile.magneticraft.hydraulic_press.name=Гидравлический Пресс
 #tile.magneticraft.kiln.name=Промышленная Печь
 #tile.magneticraft.sifter.name=Элестрическое Сито
+tile.magneticraft.sieve_inactive_north.name=Сито
 tile.magneticraft.solar_panel_inactive_north.name=Солнечная Панель
-#tile.magneticraft.grinder.name=Шлифовальный Станок
+tile.magneticraft.grinder_inactive_north.name=Дробилка
 tile.magneticraft.shelving_unit_inactive_north.name=Стеллаж
-tile.magneticraft.steam_engine_inactive_north.name=Паровой Двигатель
+tile.magneticraft.steam_engine_inactive_north.name=Малый Паровой Двигатель
+tile.magneticraft.solar_tower_inactive_north.name=Солнечная Башня
+tile.magneticraft.solar_mirror_inactive_north.name=Солнечное зеркало
+tile.magneticraft.container_inactive_north.name=Грузовой контейнер
+tile.magneticraft.pumpjack_inactive_north.name=Станок-качалка
+tile.magneticraft.hydraulic_press_inactive_north.name=Гидравлический Пресс
+tile.magneticraft.oil_heater_inactive_north.name=Нагреватель Нефти
+tile.magneticraft.refinery_inactive_north.name=Очистительный завод
+tile.magneticraft.big_combustion_chamber_inactive_north.name=Большая Камера Сгорания
 
+# Ingot blocks
+tile.magneticraft.copper_block.name=Медный Блок
+tile.magneticraft.cobalt_block.name=Кобальтовый Блок
+tile.magneticraft.lead_block.name=Свинцовый Блок
+tile.magneticraft.tungsten_block.name=Вольфрамовый Блок
+tile.magneticraft.storage_blocks_pyrite.name=Серный Блок
 
-#tile.magneticraft.copper_block.name=Медный Блок
-#tile.magneticraft.cobalt_block.name=Кобальтовый Блок
-#tile.magneticraft.lead_block.name=Свинцовый Блок
-#tile.magneticraft.tungsten_block.name=Вольфрамовый Блок
-
+# Multiblock parts
 tile.magneticraft.multiblock_parts_base.name=Машинный Блок
 tile.magneticraft.multiblock_parts_mesh.name=Машинный Блок (Фильтр)
 tile.magneticraft.multiblock_parts_electric.name=Машинный Блок (Электрический)
@@ -207,29 +235,59 @@ tile.magneticraft.multiblock_parts_striped.name=Машинный Блок (По�
 tile.magneticraft.multiblock_parts_grate.name=Машинный Блок (Железная Решётка)
 tile.magneticraft.multiblock_parts_copper_coil.name=Машинный Блок (Медная Катушка)
 tile.magneticraft.multiblock_parts_corrugated_iron.name=Машинный Блок (Рифленое Железо)
-tile.magneticraft.multiblock_column_axis_y.name=Колона Поддержки
-tile.magneticraft.multiblock_column_axis_x.name=Колона Поддержки
-tile.magneticraft.multiblock_column_axis_z.name=Колона Поддержки
-tile.magneticraft.multiblock_gap_normal.name=Пустой макет
+tile.magneticraft.multiblock_column_axis_y.name=Колона Поддержки (Ось Y)
+tile.magneticraft.multiblock_column_axis_x.name=Колона Поддержки (Oсь X)
+tile.magneticraft.multiblock_column_axis_z.name=Колона Поддержки (Ось Z)
+tile.magneticraft.multiblock_gap_normal.name=Мультиблок
+tile.magneticraft.multiblock_gap.name=Мультиблок
 
+# Creative tab
 itemGroup.magneticraft=Magneticraft
 
+# Connection messages
 text.magneticraft.wire_connect.success=Провод подсоединён
 text.magneticraft.wire_connect.fail=Нельзя подсоединить провод
-text.magneticraft.wire_connect.same_block=Нельзя подсоединить провод к тому же блоку
+# text.magneticraft.wire_connect.same_block=Нельзя подсоединить провод к тому же блоку
+text.magneticraft.wire_connect.same_connector=Нельзя подсоединить провод к тому же блоку
+text.magneticraft.wire_connect.invalid_connector=Нельзя присоединить к коннектору этого типа
+text.magneticraft.wire_connect.not_a_connector=Нельзя присоденить к блоку этого типа
+text.magneticraft.wire_connect.too_far=Нельзя присоденять так далеко
+text.magneticraft.wire_connect.already_connected=Уже присоединено
+
 text.magneticraft.wire_connect.no_other_connector=Не выбрана позиция(Shift+ПКМ)
 text.magneticraft.wire_connect.updated_position=Выбрана позиция %s
 text.magneticraft.auto_connect.activate=Авто подсоединение проводов включено
 text.magneticraft.auto_connect.deactivate=Авто подсоединение проводов выключено
 
+# JEI
 text.magneticraft.jei.crushing_table=Дробительный Стол
 text.magneticraft.jei.sluice_box=Рудопромывочный Шлюз
-#text.magneticraft.jei.hydraulic_press=Гидравлический Пресс
+text.magneticraft.jei.hydraulic_press=Гидравлический Пресс
 #text.magneticraft.jei.kiln=Промышленная Печь
-#text.magneticraft.jei.grinder=Шлифовальный Станок
+text.magneticraft.jei.grinder=Шлифовальный Станок
 #text.magneticraft.jei.sifter=Сито
+text.magneticraft.jei.oil_heater=Нареватель Нефти
+text.magneticraft.jei.refinery=Очистительный завод
+text.magneticraft.jei.gasification_unit=Агрегат Газификации
 
-text.magneticraft.multiblock.invalid_block=Неправильный блок на %s, найдено: %s, ожидалось: %s
+#Mining level
+text.magneticraft.jei.mining_level.-1=Уровень Добычи: Любой
+text.magneticraft.jei.mining_level.0=Уровень Добычи: Дерево
+text.magneticraft.jei.mining_level.1=Уровень Добычи: Камень
+text.magneticraft.jei.mining_level.2=Уровень Добычи: Железо
+text.magneticraft.jei.mining_level.3=Уровень Добычи: Алмаз
+text.magneticraft.jei.mining_level.4=Уровень Добычи: Ардит
+text.magneticraft.jei.mining_level.other=Уровень Добычи: %s
+
+text.magneticraft.jei.time=%s тиков
+text.magneticraft.jei.require_water=Требуется 1 Ведро Воды
+
+text.magneticraft.jei.hydraulic_hammer.light=Легкий Режим
+text.magneticraft.jei.hydraulic_hammer.medium=Средний Режим
+text.magneticraft.jei.hydraulic_hammer.heavy=Тяжелый Режим
+
+# Multiblock messages
+text.magneticraft.multiblock.invalid_block=Неправильный блок на %s\nНайдено: %s\n Ожидалось: %s
 text.magneticraft.multiblock.activate=Успешно Активировано
 
 #death.attack.kiln=%1$s зашёл в печь.
@@ -237,7 +295,29 @@ text.magneticraft.multiblock.activate=Успешно Активировано
 #death.attack.kiln=%1$s измельчил себя в блендере.
 #death.attack.kiln.player=%2$s толкнул %1s$ в блендер.
 
+# Item tooltips
 tooltip.magneticraft.item_storage.energy=%f/%fJ
-tooltip.magneticraft.multiblock.blueprint=Поставьте этот макет чтобы увидеть шаблон мультиблока
+tooltip.magneticraft.multiblock.blueprint=Поставьте этот макет, чтобы увидеть шаблон мультиблока
 
+# Fluids
 fluid.magneticraft.steam=Пар
+fluid.magneticraft.oil=Сырая Нефть
+fluid.magneticraft.hot_crude=Горячая нефть
+
+fluid.magneticraft.light_oil=Легакая Нефть
+fluid.magneticraft.heavy_oil=Тяжелая Нефть
+fluid.magneticraft.lpg=Сжиженный Нефтяной Газ
+
+fluid.magneticraft.natural_gas=Природный Газ
+fluid.magneticraft.naphtha=Лигроин
+fluid.magneticraft.plastic=Жидкий Пластик
+
+fluid.magneticraft.diesel=Дизель
+fluid.magneticraft.kerosene=Керосин
+fluid.magneticraft.gasoline=Бензин
+
+fluid.magneticraft.lubricant=Смазка
+fluid.magneticraft.fuel=Топливо
+fluid.magneticraft.oil_residue=Нефтяные осаждения
+
+fluid.magneticraft.wood_gas=Смешанный газ
