@@ -554,6 +554,7 @@ private fun addRefineryRecipe(input: FluidStack?, output0: FluidStack?, output1:
 }
 
 private fun addGasifierRecipe(input: ItemStack, output0: ItemStack, output1: FluidStack?, ticks: Float, minTemp: Float) {
+    if (input.isEmpty) return
     GasificationUnitRecipeManager.registerRecipe(
         GasificationUnitRecipeManager.createRecipe(input, output0, output1,
             ticks, minTemp.fromCelsiusToKelvin().toFloat(), true)
