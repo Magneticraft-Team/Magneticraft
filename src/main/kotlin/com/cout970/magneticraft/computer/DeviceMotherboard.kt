@@ -70,7 +70,7 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
             2 -> print("0x%04x ".format(data))
             3 -> print(data.toChar())
             else -> {
-                println("${getComputerPos()}: 0x%04x, %04d".format(data, data))
+                println("${getComputerPos()}: 0x%04x, %05d".format(data, data))
             }
         }
     }
@@ -81,7 +81,7 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
             2 -> print("0x%08x ".format(data))
             3 -> print(data.toChar())
             else -> {
-                println("${getComputerPos()}: 0x%08x, %08d".format(data, data))
+                println("${getComputerPos()}: 0x%08x, %010d".format(data, data))
             }
         }
     }
