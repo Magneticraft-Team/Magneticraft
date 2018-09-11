@@ -18,10 +18,7 @@ import com.cout970.magneticraft.misc.tileentity.tryConnect
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
-import com.cout970.magneticraft.tileentity.TileConnector
-import com.cout970.magneticraft.tileentity.TileElectricCable
-import com.cout970.magneticraft.tileentity.TileElectricPole
-import com.cout970.magneticraft.tileentity.TileElectricPoleTransformer
+import com.cout970.magneticraft.tileentity.*
 import com.cout970.magneticraft.tileentity.modules.ModuleElectricity
 import com.cout970.magneticraft.tilerenderer.core.PIXEL
 import com.cout970.magneticraft.tilerenderer.core.px
@@ -50,14 +47,16 @@ import kotlin.math.min
 
 object ElectricConductors : IBlockMaker {
 
-    val PROPERTY_POLE_ORIENTATION = PropertyEnum.create("pole_orientation", PoleOrientation::class.java)
+    val PROPERTY_POLE_ORIENTATION: PropertyEnum<PoleOrientation> = PropertyEnum.create("pole_orientation", PoleOrientation::class.java)
+    val PROPERTY_TESLA_TOWER_PART: PropertyEnum<TeslaTowerPart> = PropertyEnum.create("tesla_tower_part", TeslaTowerPart::class.java)
 
     lateinit var connector: BlockBase private set
-    lateinit var electric_pole: BlockBase private set
-    lateinit var electric_pole_transformer: BlockBase private set
-    lateinit var electric_cable: BlockBase private set
+    lateinit var electricPole: BlockBase private set
+    lateinit var electricPoleTransformer: BlockBase private set
+    lateinit var electricCable: BlockBase private set
+    lateinit var teslaTower: BlockBase private set
 
-    // hacky way to avoid power pole drops and break particles
+    // hacky way to avoid power pole drops and break particles, non thread-safe
     var air = false
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
@@ -69,7 +68,7 @@ object ElectricConductors : IBlockMaker {
         connector = builder.withName("connector").copy {
             states = CommonMethods.Facing.values().toList()
             factory = factoryOf(::TileConnector)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             alwaysDropDefault = true
             customModels = listOf(
@@ -92,13 +91,13 @@ object ElectricConductors : IBlockMaker {
             }
         }.build()
 
-        electric_pole = builder.withName("electric_pole").copy {
+        electricPole = builder.withName("electric_pole").copy {
             material = Material.WOOD
             states = PoleOrientation.values().toList()
             factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
             factory = factoryOf(::TileElectricPole)
             alwaysDropDefault = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/electric_pole.mcx"),
@@ -120,13 +119,13 @@ object ElectricConductors : IBlockMaker {
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
-        electric_pole_transformer = builder.withName("electric_pole_transformer").copy {
+        electricPoleTransformer = builder.withName("electric_pole_transformer").copy {
             material = Material.WOOD
             states = PoleOrientation.values().toList()
             factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
             factory = factoryOf(::TileElectricPoleTransformer)
             alwaysDropDefault = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/electric_pole_transformer.mcx"),
@@ -138,7 +137,7 @@ object ElectricConductors : IBlockMaker {
             }
             onBlockBreak = ElectricConductors::breakElectricPole
             onDrop = {
-                if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() == true) it.default + electric_pole.stack()
+                if (it.state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() == true) it.default + electricPole.stack()
                 else emptyList()
             }
             capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER },
@@ -146,9 +145,9 @@ object ElectricConductors : IBlockMaker {
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
-        electric_cable = builder.withName("electric_cable").copy {
+        electricCable = builder.withName("electric_cable").copy {
             factory = factoryOf(::TileElectricCable)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/electric_cable.mcx"),
@@ -157,8 +156,45 @@ object ElectricConductors : IBlockMaker {
             boundingBox = { cableBoundingBox(it.source, it.pos, 6) }
         }.build()
 
-        return itemBlockListOf(connector, electric_pole, electric_cable) +
-            (electric_pole_transformer to ItemBlockElectricPoleTransformer(electric_pole_transformer))
+        teslaTower = builder.withName("tesla_tower").copy {
+            states = TeslaTowerPart.values().toList()
+            factoryFilter = { state -> state[PROPERTY_TESLA_TOWER_PART] == TeslaTowerPart.BOTTOM }
+            factory = factoryOf(::TileTeslaTower)
+            hasCustomModel = true
+            forceModelBake = true
+            generateDefaultItemBlockModel = false
+            customModels = listOf(
+                "bottom" to resource("models/block/gltf/tesla_tower.gltf"),
+                "inventory" to resource("models/block/gltf/tesla_tower_inv.gltf")
+            )
+
+            pickBlock = CommonMethods::pickDefaultBlock
+            blockStatesToPlace = {
+                val bottom = TeslaTowerPart.BOTTOM.getBlockState(it.default.block)
+                val middle = TeslaTowerPart.MIDDLE.getBlockState(it.default.block)
+                val top = TeslaTowerPart.TOP.getBlockState(it.default.block)
+
+                listOf(BlockPos.ORIGIN to bottom, BlockPos(0, 1, 0) to middle, BlockPos(0, 2, 0) to top)
+            }
+            onBlockBreak = {
+                val part = it.state[PROPERTY_TESLA_TOWER_PART]
+                when (part) {
+                    TeslaTowerPart.BOTTOM -> {
+                        it.worldIn.destroyBlock(it.pos + EnumFacing.UP, false)
+                        it.worldIn.destroyBlock(it.pos + EnumFacing.UP + EnumFacing.UP, false)
+                    }
+                    TeslaTowerPart.MIDDLE -> it.worldIn.destroyBlock(it.pos + EnumFacing.DOWN, true)
+                    TeslaTowerPart.TOP -> it.worldIn.destroyBlock(it.pos + EnumFacing.DOWN + EnumFacing.DOWN, true)
+                }
+            }
+            onDrop = {
+                val center = it.state[PROPERTY_TESLA_TOWER_PART] == TeslaTowerPart.BOTTOM
+                if (center) it.default else emptyList()
+            }
+        }.build()
+
+        return itemBlockListOf(connector, electricPole, electricCable, teslaTower) +
+            (electricPoleTransformer to ItemBlockElectricPoleTransformer(electricPoleTransformer))
     }
 
     fun cableBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
@@ -239,6 +275,23 @@ object ElectricConductors : IBlockMaker {
             pos.offset(EnumFacing.UP, 3) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_1),
             pos.offset(EnumFacing.UP, 4) to default.withProperty(PROPERTY_POLE_ORIENTATION, dir)
         )
+    }
+
+    enum class TeslaTowerPart(
+        override val stateName: String,
+        override val isVisible: Boolean
+    ) : IStatesEnum, IStringSerializable {
+        BOTTOM("bottom", true),
+        MIDDLE("middle", false),
+        TOP("top", false);
+
+        override fun getName() = name.toLowerCase()
+
+        override val properties: List<IProperty<*>> get() = listOf(PROPERTY_TESLA_TOWER_PART)
+
+        override fun getBlockState(block: Block): IBlockState {
+            return block.defaultState.withProperty(PROPERTY_TESLA_TOWER_PART, this)
+        }
     }
 
     enum class PoleOrientation(
@@ -379,7 +432,7 @@ object ElectricConductors : IBlockMaker {
     }
 
     fun canStayInSide(worldIn: World, pos: BlockPos, side: EnumFacing): Boolean {
-        if (worldIn.getBlockState(pos.offset(side.opposite)).block == electric_cable) return true
+        if (worldIn.getBlockState(pos.offset(side.opposite)).block == electricCable) return true
 
         if (worldIn.isSideSolid(pos.offset(side.opposite), side.opposite, false)) return true
 

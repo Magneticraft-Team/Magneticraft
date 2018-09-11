@@ -246,3 +246,20 @@ class TileElectricCable : TileBase(), ITickable {
         return false
     }
 }
+
+
+@RegisterTileEntity("tesla_tower")
+class TileTeslaTower : TileBase(), ITickable {
+
+    val node = ElectricNode(ref)
+    val electricModule = ModuleElectricity(listOf(node))
+
+    init {
+        initModules(electricModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}

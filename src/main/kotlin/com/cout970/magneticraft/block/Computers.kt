@@ -45,7 +45,7 @@ object Computers : IBlockMaker {
             factory = factoryOf(::TileComputer)
             states = CommonMethods.Orientation.values().toList()
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/computer.mcx"),
                 "inventory" to resource("models/block/mcx/computer.mcx")
@@ -64,7 +64,7 @@ object Computers : IBlockMaker {
             factory = factoryOf(::TileMiningRobot)
             states = RobotOrientation.values().toList()
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/mining_robot.mcx"),
                 "inventory" to resource("models/block/mcx/mining_robot.mcx")
@@ -83,7 +83,7 @@ object Computers : IBlockMaker {
 
         movingRobot = builder.withName("moving_robot").copy {
             onDrop = { emptyList() }
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             enableOcclusionOptimization = false
             translucent = true
         }.build()

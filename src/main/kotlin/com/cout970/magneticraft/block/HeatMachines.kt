@@ -56,7 +56,7 @@ object HeatMachines : IBlockMaker {
                 "inventory" to resource("models/block/mcx/combustion_chamber.mcx")
             )
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             alwaysDropDefault = true
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithOrientation {
@@ -77,7 +77,7 @@ object HeatMachines : IBlockMaker {
                 "model" to resource("models/block/mcx/steam_boiler.mcx"),
                 "inventory" to resource("models/block/mcx/steam_boiler.mcx")
             )
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             //methods
             boundingBox = { listOf((vec3Of(1, 0, 1) createAABBUsing vec3Of(15, 16, 15)).scale(PIXEL)) }
@@ -86,7 +86,7 @@ object HeatMachines : IBlockMaker {
 
         heatPipe = builder.withName("heat_pipe").copy {
             factory = factoryOf(::TileHeatPipe)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/iron_pipe.mcx"),
@@ -119,7 +119,7 @@ object HeatMachines : IBlockMaker {
 
         insulatedHeatPipe = builder.withName("insulated_heat_pipe").copy {
             factory = factoryOf(::TileInsulatedHeatPipe)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/insulated_heat_pipe.mcx"),
@@ -132,7 +132,7 @@ object HeatMachines : IBlockMaker {
         heatSink = builder.withName("heat_sink").copy {
             states = CommonMethods.Facing.values().toList()
             factory = factoryOf(::TileHeatSink)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/heat_sink.mcx"),
@@ -153,7 +153,7 @@ object HeatMachines : IBlockMaker {
                 "model" to resource("models/block/mcx/gasification_unit.mcx"),
                 "inventory" to resource("models/block/mcx/gasification_unit.mcx")
             )
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             boundingBox = { listOf((vec3Of(1, 0, 1) createAABBUsing vec3Of(15, 16, 15)).scale(PIXEL)) }
             onActivated = CommonMethods::delegateToModule

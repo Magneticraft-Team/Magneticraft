@@ -63,7 +63,7 @@ class BlockBuilder {
     var hardness = 1.5f
     var explosionResistance = 10.0f
     var lightEmission = 0.0f
-    var generateDefaultItemModel = true
+    var generateDefaultItemBlockModel = true
     var enableOcclusionOptimization = true
     var translucent = false
     var tickRandomly = false
@@ -113,7 +113,7 @@ class BlockBuilder {
             customModels                = this@BlockBuilder.customModels
             forceModelBake              = this@BlockBuilder.forceModelBake
             pickBlock                   = this@BlockBuilder.pickBlock
-            generateDefaultItemModel    = this@BlockBuilder.generateDefaultItemModel
+            generateDefaultItemModel    = this@BlockBuilder.generateDefaultItemBlockModel
             canPlaceBlockOnSide         = this@BlockBuilder.canPlaceBlockOnSide
             capabilityProvider          = this@BlockBuilder.capabilityProvider
             onNeighborChanged           = this@BlockBuilder.onNeighborChanged
@@ -136,7 +136,7 @@ class BlockBuilder {
         return block
     }
 
-    fun factoryOf(func: () -> TileEntity): ((World, IBlockState) -> TileEntity?) = { _, _ -> func() }
+    inline fun factoryOf(crossinline func:  () -> TileEntity): ((World, IBlockState) -> TileEntity?) = { _, _ -> func() }
 
     fun copy(func: BlockBuilder.() -> Unit): BlockBuilder {
         val newBuilder = BlockBuilder()
@@ -158,7 +158,7 @@ class BlockBuilder {
         newBuilder.explosionResistance = explosionResistance
         newBuilder.enableOcclusionOptimization = enableOcclusionOptimization
         newBuilder.translucent = translucent
-        newBuilder.generateDefaultItemModel = generateDefaultItemModel
+        newBuilder.generateDefaultItemBlockModel = generateDefaultItemBlockModel
         newBuilder.canPlaceBlockOnSide = canPlaceBlockOnSide
         newBuilder.capabilityProvider = capabilityProvider
         newBuilder.onNeighborChanged = onNeighborChanged

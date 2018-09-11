@@ -2,10 +2,7 @@ package com.cout970.magneticraft.tilerenderer.multiblock
 
 import com.cout970.magneticraft.block.Multiblocks
 import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.tileentity.multiblock.TileBigCombustionChamber
-import com.cout970.magneticraft.tileentity.multiblock.TileGrinder
-import com.cout970.magneticraft.tileentity.multiblock.TileHydraulicPress
-import com.cout970.magneticraft.tileentity.multiblock.TileSieve
+import com.cout970.magneticraft.tileentity.multiblock.*
 import com.cout970.magneticraft.tilerenderer.core.*
 
 @RegisterRenderer(TileGrinder::class)
@@ -65,5 +62,19 @@ object TileRendererBigCombustionChamber : TileRendererMultiblock<TileBigCombusti
         translate(0, 0, -1)
         renderModel("default")
         if (te.bigCombustionChamberModule.working()) renderModel("fire_on") else renderModel("fire_off")
+    }
+}
+
+@RegisterRenderer(TileBigSteamEngine::class)
+object TileRendererBigSteamEngine : TileRendererMultiblock<TileBigSteamEngine>() {
+
+    override fun init() {
+        createModel(Multiblocks.bigSteamBoiler)
+    }
+
+    override fun render(te: TileBigSteamEngine) {
+        Utilities.rotateFromCenter(te.facing, 0f)
+//        translate(-1, 0, 0)
+        renderModel("default")
     }
 }

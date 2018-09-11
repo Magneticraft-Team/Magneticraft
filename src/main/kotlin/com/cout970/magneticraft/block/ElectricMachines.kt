@@ -50,7 +50,7 @@ object ElectricMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileBattery)
             alwaysDropDefault = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/battery.mcx"),
@@ -118,7 +118,7 @@ object ElectricMachines : IBlockMaker {
             states = CommonMethods.Orientation.values().toList()
             factory = factoryOf(::TileWindTurbine)
             alwaysDropDefault = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/wind_turbine.mcx")

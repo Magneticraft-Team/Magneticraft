@@ -43,12 +43,14 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockOilHeater)
         registerMultiblock(MultiblockRefinery)
         registerMultiblock(MultiblockBigCombustionChamber)
+        registerMultiblock(MultiblockBigSteamBoiler)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()
 
     /**
-     * This method checks if the blocks around matches the multiblock structure
+     * This method checks if the blocks around matches the multiblock structure, and returns all errors
+     * in human readable test
      */
     fun checkMultiblockStructure(context: MultiblockContext): List<ITextComponent> {
         val list = mutableListOf<ITextComponent>()

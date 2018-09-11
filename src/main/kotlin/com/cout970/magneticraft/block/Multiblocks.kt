@@ -51,6 +51,7 @@ object Multiblocks : IBlockMaker {
     lateinit var oilHeater: BlockBase private set
     lateinit var refinery: BlockBase private set
     lateinit var bigCombustionChamber: BlockBase private set
+    lateinit var bigSteamBoiler: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -89,7 +90,7 @@ object Multiblocks : IBlockMaker {
 
         solarPanel = builder.withName("solar_panel").copy {
             factory = factoryOf(::TileSolarPanel)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_panel.mcx")
             )
@@ -100,7 +101,7 @@ object Multiblocks : IBlockMaker {
 
         shelvingUnit = builder.withName("shelving_unit").copy {
             factory = factoryOf(::TileShelvingUnit)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/shelving_unit.mcx")
             )
@@ -111,7 +112,7 @@ object Multiblocks : IBlockMaker {
 
         steamEngine = builder.withName("steam_engine").copy {
             factory = factoryOf(::TileSteamEngine)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/steam_engine.gltf")
             )
@@ -122,7 +123,7 @@ object Multiblocks : IBlockMaker {
 
         grinder = builder.withName("grinder").copy {
             factory = factoryOf(::TileGrinder)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/grinder.gltf")
             )
@@ -133,7 +134,7 @@ object Multiblocks : IBlockMaker {
 
         sieve = builder.withName("sieve").copy {
             factory = factoryOf(::TileSieve)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/sieve.gltf")
             )
@@ -144,7 +145,7 @@ object Multiblocks : IBlockMaker {
 
         solarTower = builder.withName("solar_tower").copy {
             factory = factoryOf(::TileSolarTower)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_tower.mcx")
             )
@@ -155,7 +156,7 @@ object Multiblocks : IBlockMaker {
 
         solarMirror = builder.withName("solar_mirror").copy {
             factory = factoryOf(::TileSolarMirror)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_mirror.mcx")
             )
@@ -166,7 +167,7 @@ object Multiblocks : IBlockMaker {
 
         container = builder.withName("container").copy {
             factory = factoryOf(::TileContainer)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/container.mcx")
             )
@@ -177,7 +178,7 @@ object Multiblocks : IBlockMaker {
 
         pumpjack = builder.withName("pumpjack").copy {
             factory = factoryOf(::TilePumpjack)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/pumpjack.mcx")
             )
@@ -188,7 +189,7 @@ object Multiblocks : IBlockMaker {
 
         hydraulicPress = builder.withName("hydraulic_press").copy {
             factory = factoryOf(::TileHydraulicPress)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/hydraulic_press.gltf")
             )
@@ -199,7 +200,7 @@ object Multiblocks : IBlockMaker {
 
         oilHeater = builder.withName("oil_heater").copy {
             factory = factoryOf(::TileOilHeater)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/oil_heater.mcx")
             )
@@ -210,7 +211,7 @@ object Multiblocks : IBlockMaker {
 
         refinery = builder.withName("refinery").copy {
             factory = factoryOf(::TileRefinery)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/refinery.mcx")
             )
@@ -221,7 +222,7 @@ object Multiblocks : IBlockMaker {
 
         bigCombustionChamber = builder.withName("big_combustion_chamber").copy {
             factory = factoryOf(::TileBigCombustionChamber)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/big_combustion_chamber.gltf")
             )
@@ -230,9 +231,22 @@ object Multiblocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        bigSteamBoiler = builder.withName("big_steam_boiler").copy {
+            factory = factoryOf(::TileBigSteamEngine)
+            generateDefaultItemBlockModel = false
+            customModels = listOf(
+                "model" to resource("models/block/gltf/big_steam_boiler.gltf")
+            )
+            onActivated = defaultOnActivated { MultiblockBigSteamBoiler }
+            onBlockPlaced = Multiblocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
         return itemBlockListOf(
             solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
-            container, pumpjack, hydraulicPress, oilHeater, refinery, bigCombustionChamber) + blockListOf(gap)
+            container, pumpjack, hydraulicPress, oilHeater, refinery, bigCombustionChamber,
+            bigSteamBoiler
+        ) + blockListOf(gap)
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {

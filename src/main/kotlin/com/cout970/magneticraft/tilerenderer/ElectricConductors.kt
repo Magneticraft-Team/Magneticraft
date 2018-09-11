@@ -60,7 +60,7 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
 object TileRendererElectricPole : BaseTileRenderer<TileElectricPole>() {
 
     override fun init() {
-        createModel(ElectricConductors.electric_pole)
+        createModel(ElectricConductors.electricPole)
     }
 
     override fun render(te: TileElectricPole) {
@@ -93,7 +93,7 @@ object TileRendererElectricPole : BaseTileRenderer<TileElectricPole>() {
 object TileRendererElectricPoleTransformer : BaseTileRenderer<TileElectricPoleTransformer>() {
 
     override fun init() {
-        createModel(ElectricConductors.electric_pole_transformer)
+        createModel(ElectricConductors.electricPoleTransformer)
     }
 
     override fun render(te: TileElectricPoleTransformer) {
@@ -128,7 +128,7 @@ object TileRendererElectricPoleTransformer : BaseTileRenderer<TileElectricPoleTr
 object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
 
     override fun init() {
-        createModel(ElectricConductors.electric_cable,
+        createModel(ElectricConductors.electricCable,
             ModelSelector("up", FilterRegex("up")),
             ModelSelector("down", FilterRegex("down")),
             ModelSelector("north", FilterRegex("north")),
@@ -137,7 +137,7 @@ object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
             ModelSelector("east", FilterRegex("east"))
         )
 
-        createModelWithoutTexture(ElectricConductors.electric_cable,
+        createModelWithoutTexture(ElectricConductors.electricCable,
             ModelSelector("center", FilterRegex("center"))
         )
     }

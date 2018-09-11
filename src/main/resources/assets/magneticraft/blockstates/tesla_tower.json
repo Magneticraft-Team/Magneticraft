@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/electric_connectors/tesla_tower"
+        }
+    },
+    "variants": {
+        "bottom": [{}],
+        "middle": [{}],
+        "top": [{}]
+    }
+}

@@ -25,7 +25,7 @@ class ItemBlockElectricPoleTransformer(blockBase: BlockBase) : ItemBlockBase(blo
 
         val state = worldIn.getBlockState(pos)
 
-        if (state.block != ElectricConductors.electric_pole) return EnumActionResult.PASS
+        if (state.block != ElectricConductors.electricPole) return EnumActionResult.PASS
         val orientation = state[ElectricConductors.PROPERTY_POLE_ORIENTATION] ?: return EnumActionResult.PASS
         val offset = orientation.offsetY
 

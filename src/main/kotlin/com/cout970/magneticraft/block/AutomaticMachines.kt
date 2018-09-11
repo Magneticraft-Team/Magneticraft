@@ -51,7 +51,7 @@ object AutomaticMachines : IBlockMaker {
                 "inventory" to resource("models/block/mcx/conveyor_belt.mcx")
             )
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             alwaysDropDefault = true
             //methods
             boundingBox = { listOf(vec3Of(0, 0, 0) createAABBUsing vec3Of(1, 0.8125, 1)) }
@@ -68,7 +68,7 @@ object AutomaticMachines : IBlockMaker {
                 "inventory" to resource("models/block/gltf/inserter.gltf")
             )
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             alwaysDropDefault = true
             boundingBox = { listOf(vec3Of(0, 0, 0) createAABBUsing vec3Of(16.px, 3.px, 16.px)) }
             //methods
@@ -92,7 +92,7 @@ object AutomaticMachines : IBlockMaker {
                 "inventory" to resource("models/block/mcx/feeding_trough_inv.mcx")
             )
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             alwaysDropDefault = true
             //methods
             pickBlock = CommonMethods::pickDefaultBlock

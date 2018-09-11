@@ -49,7 +49,7 @@ object Decoration : IBlockMaker {
             factory = factoryOf(::TileTubeLight)
             lightEmission = 1f
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             alwaysDropDefault = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/tube_light.mcx"),

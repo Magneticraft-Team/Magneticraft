@@ -63,7 +63,7 @@ object ManualMachines : IBlockMaker {
                 "water" to resource("models/block/mcx/sluice_box_water.mcx")
             )
             hasCustomModel = true
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             alwaysDropDefault = true
             //methods
             pickBlock = CommonMethods::pickDefaultBlock

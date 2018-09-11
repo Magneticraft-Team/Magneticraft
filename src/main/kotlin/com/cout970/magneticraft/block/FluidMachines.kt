@@ -41,7 +41,7 @@ object FluidMachines : IBlockMaker {
 
         smallTank = builder.withName("small_tank").copy {
             factory = factoryOf(::TileSmallTank)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/small_tank.mcx"),
@@ -52,7 +52,7 @@ object FluidMachines : IBlockMaker {
 
         ironPipe = builder.withName("iron_pipe").copy {
             factory = factoryOf(::TileIronPipe)
-            generateDefaultItemModel = false
+            generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
                 "model" to resource("models/block/mcx/fluid_pipe.mcx"),

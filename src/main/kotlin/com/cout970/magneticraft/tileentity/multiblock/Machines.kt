@@ -12,10 +12,7 @@ import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
-import com.cout970.magneticraft.multiblock.MultiblockBigCombustionChamber
-import com.cout970.magneticraft.multiblock.MultiblockGrinder
-import com.cout970.magneticraft.multiblock.MultiblockHydraulicPress
-import com.cout970.magneticraft.multiblock.MultiblockSieve
+import com.cout970.magneticraft.multiblock.*
 import com.cout970.magneticraft.multiblock.core.Multiblock
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
@@ -342,6 +339,28 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
     init {
         initModules(multiblockModule, invModule, fluidModule, bigCombustionChamberModule, heatModule, openGuiModule)
     }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("big_steam_boiler")
+class TileBigSteamEngine : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockBigSteamBoiler
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+        facing = { facing },
+        connectionSpots = emptyList()
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+        multiblockStructure = getMultiblock(),
+        facingGetter = this::facing,
+        capabilityGetter = ioModule::getCapability
+    )
 
     @DoNotRemove
     override fun update() {
