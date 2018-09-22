@@ -50,9 +50,13 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("dustSulfur", CraftingItems.crafting.stack(1, CraftingItems.Type.SULFUR.meta))
     OreDictionary.registerOre("oreCopper", Ores.ores.stack(1, 0))
     OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))
+    OreDictionary.registerOre("oreLead", Ores.ores.stack(1, 1))
+    OreDictionary.registerOre("oreSilver", Ores.ores.stack(1, 1))
+
     OreDictionary.registerOre("oreCobalt", Ores.ores.stack(1, 2))
     OreDictionary.registerOre("oreTungsten", Ores.ores.stack(1, 3))
     OreDictionary.registerOre("orePyrite", Ores.ores.stack(1, 4))
+    OreDictionary.registerOre("oreSulfur", Ores.ores.stack(1, 4))
 
     OreDictionary.registerOre("blockCopper", Ores.storageBlocks.stack(1, 0))
     OreDictionary.registerOre("blockGalena", Ores.storageBlocks.stack(1, 1))
@@ -60,16 +64,16 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("blockTungsten", Ores.storageBlocks.stack(1, 3))
     OreDictionary.registerOre("blockSulfur", Ores.storageBlocks.stack(1, 4))
 
-    OreDictionary.registerOre("blockLimestone", Decoration.limestone.stack(1, 0))
+    OreDictionary.registerOre("stoneLimestonePolished", Decoration.limestone.stack(1, 0))
     OreDictionary.registerOre("brickLimestone", Decoration.limestone.stack(1, 1))
-    OreDictionary.registerOre("cobbleLimestone", Decoration.limestone.stack(1, 2))
+    OreDictionary.registerOre("stoneLimestone", Decoration.limestone.stack(1, 2))
 
-    OreDictionary.registerOre("blockBurnLimestone", Decoration.burnLimestone.stack(1, 0))
+    OreDictionary.registerOre("stoneBurnLimestonePolished", Decoration.burnLimestone.stack(1, 0))
     OreDictionary.registerOre("brickBurnLimestone", Decoration.burnLimestone.stack(1, 1))
-    OreDictionary.registerOre("cobbleBurnLimestone", Decoration.burnLimestone.stack(1, 2))
+    OreDictionary.registerOre("stoneBurnLimestone", Decoration.burnLimestone.stack(1, 2))
 
-    OreDictionary.registerOre("blockTileLimestone", Decoration.tileLimestone.stack(1, 0))
-    OreDictionary.registerOre("blockTileLimestone", Decoration.tileLimestone.stack(1, 1))
+    OreDictionary.registerOre("stoneTileLimestone", Decoration.tileLimestone.stack(1, 0))
+    OreDictionary.registerOre("stoneTileLimestone", Decoration.tileLimestone.stack(1, 1))
 }
 
 fun registerOreGenerations() {
