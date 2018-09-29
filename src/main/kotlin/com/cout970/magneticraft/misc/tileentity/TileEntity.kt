@@ -6,8 +6,8 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
-import com.cout970.magneticraft.tileentity.core.IModuleContainer
-import com.cout970.magneticraft.tileentity.core.TileBase
+import com.cout970.magneticraft.systems.tileentities.IModuleContainer
+import com.cout970.magneticraft.systems.tileentities.TileBase
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos

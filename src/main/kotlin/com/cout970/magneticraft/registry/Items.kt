@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.item.*
+import com.cout970.magneticraft.features.items.*
 import net.minecraft.item.Item
 import net.minecraftforge.registries.IForgeRegistry
 

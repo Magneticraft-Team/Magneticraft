@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.WATER_BOILING_POINT
-import com.cout970.magneticraft.util.fromCelsiusToKelvin
-import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.misc.WATER_BOILING_POINT
+import com.cout970.magneticraft.misc.fromCelsiusToKelvin
+import com.cout970.magneticraft.misc.resource
 import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidRegistry
 

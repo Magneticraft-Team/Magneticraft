@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.misc.tileentity
 
-import com.cout970.magneticraft.tileentity.core.IModule
-import com.cout970.magneticraft.util.add
-import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.misc.add
+import com.cout970.magneticraft.misc.newNbt
+import com.cout970.magneticraft.systems.tileentities.IModule
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 

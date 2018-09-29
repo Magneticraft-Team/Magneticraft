@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.util.resource
+import com.cout970.magneticraft.misc.resource
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.SoundEvent
 import net.minecraftforge.registries.IForgeRegistry

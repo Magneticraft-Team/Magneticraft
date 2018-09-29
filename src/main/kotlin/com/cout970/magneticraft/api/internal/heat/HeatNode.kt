@@ -3,8 +3,8 @@ package com.cout970.magneticraft.api.internal.heat
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.heat.IHeatNode
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
-import com.cout970.magneticraft.util.newNbt
+import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.misc.newNbt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

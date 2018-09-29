@@ -3,10 +3,10 @@ package com.cout970.magneticraft.misc.crafting
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasificationUnitRecipe
-import com.cout970.magneticraft.integration.crafttweaker.ifNonEmpty
+import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
+import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
 import net.minecraft.item.ItemStack
 
 class GasificationCraftingProcess(

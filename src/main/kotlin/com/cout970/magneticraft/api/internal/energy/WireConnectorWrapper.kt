@@ -5,8 +5,8 @@ import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IWireConnector
-import com.cout970.magneticraft.util.hasIntersection
-import com.cout970.magneticraft.util.vector.toVec3d
+import com.cout970.magneticraft.misc.hasIntersection
+import com.cout970.magneticraft.misc.vector.toVec3d
 import com.google.common.collect.ImmutableList
 import net.minecraft.util.math.Vec3d
 

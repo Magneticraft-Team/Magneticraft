@@ -2,8 +2,8 @@ package com.cout970.magneticraft.api.internal.heat
 
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
-import com.cout970.magneticraft.util.vector.length
-import com.cout970.magneticraft.util.vector.minus
+import com.cout970.magneticraft.misc.vector.length
+import com.cout970.magneticraft.misc.vector.minus
 
 /**
  * Created by cout970 on 11/06/2016.

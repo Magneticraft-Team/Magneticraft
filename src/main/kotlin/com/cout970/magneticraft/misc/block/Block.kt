@@ -2,7 +2,7 @@
 
 package com.cout970.magneticraft.misc.block
 
-import com.cout970.magneticraft.block.core.CommonMethods
+import com.cout970.magneticraft.systems.blocks.CommonMethods
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.EnumFacing

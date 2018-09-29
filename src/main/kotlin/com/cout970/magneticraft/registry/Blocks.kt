@@ -1,6 +1,11 @@
 package com.cout970.magneticraft.registry
 
-import com.cout970.magneticraft.block.*
+import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.info
+import com.cout970.magneticraft.misc.logError
+import com.cout970.magneticraft.systems.blocks.IBlockMaker
 import net.minecraft.block.Block
 import net.minecraft.item.ItemBlock
 import net.minecraftforge.registries.IForgeRegistry
@@ -16,17 +21,25 @@ var blocks: List<Pair<Block, ItemBlock?>> = emptyList()
 fun initBlocks(registry: IForgeRegistry<Block>) {
     val blockList = mutableListOf<Pair<Block, ItemBlock?>>()
 
-    blockList += Decoration.initBlocks()
-    blockList += Ores.initBlocks()
-    blockList += ManualMachines.initBlocks()
-    blockList += MultiblockParts.initBlocks()
-    blockList += ElectricMachines.initBlocks()
-    blockList += Multiblocks.initBlocks()
-    blockList += Computers.initBlocks()
-    blockList += HeatMachines.initBlocks()
-    blockList += AutomaticMachines.initBlocks()
-    blockList += ElectricConductors.initBlocks()
-    blockList += FluidMachines.initBlocks()
+    val data = Magneticraft.asmData.getAll(RegisterBlocks::class.java.canonicalName)
+
+    data.forEach { it ->
+        try {
+            @Suppress("UNCHECKED_CAST")
+            val clazz = Class.forName(it.className) as Class<IBlockMaker>
+            val instance = clazz.kotlin.objectInstance
+
+            if (instance != null) blockList += instance.initBlocks()
+
+            if (Debug.DEBUG) {
+                if (instance == null) logError("Unable to find instance for: ${clazz.canonicalName}")
+                info("Registering Blocks: ${clazz.`package`.name}")
+            }
+        } catch (e: Exception) {
+            logError("Error auto-registering tileEntity: $it")
+            e.printStackTrace()
+        }
+    }
 
     blockList.forEach { registry.register(it.first) }
     blocks = blockList
@@ -35,10 +48,6 @@ fun initBlocks(registry: IForgeRegistry<Block>) {
 //listOf<Block>(
 //        BlockKiln,
 //        BlockKilnShelf,
-//        BlockCompactedCopper,
-//        BlockCompactedCobalt,
-//        BlockCompactedLead,
-//        BlockCompactedTungsten,
 //        BlockIcebox,
 //        BlockCoke,
 //        BlockGlazedBrick,

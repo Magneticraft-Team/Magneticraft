@@ -12,19 +12,17 @@ import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveReci
 import com.cout970.magneticraft.api.internal.registries.machines.sluicebox.SluiceBoxRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode.*
-import com.cout970.magneticraft.block.Decoration
-import com.cout970.magneticraft.block.Ores
-import com.cout970.magneticraft.integration.ItemHolder
-import com.cout970.magneticraft.integration.crafttweaker.ifNonEmpty
-import com.cout970.magneticraft.item.CraftingItems
-import com.cout970.magneticraft.item.EnumMetal
-import com.cout970.magneticraft.item.EnumMetal.*
-import com.cout970.magneticraft.item.MetallicItems
+import com.cout970.magneticraft.features.items.CraftingItems
+import com.cout970.magneticraft.features.items.EnumMetal
+import com.cout970.magneticraft.features.items.EnumMetal.*
+import com.cout970.magneticraft.features.items.MetallicItems
+import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.toBlockState
 import com.cout970.magneticraft.misc.inventory.withSize
-import com.cout970.magneticraft.util.*
+import com.cout970.magneticraft.systems.integration.ItemHolder
+import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
 import net.minecraft.block.Block
 import net.minecraft.block.BlockSnow
 import net.minecraft.block.state.IBlockState
@@ -37,6 +35,8 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fml.common.registry.GameRegistry
+import com.cout970.magneticraft.features.decoration.Blocks as Decoration
+import com.cout970.magneticraft.features.ores.Blocks as Ores
 
 
 /**
@@ -118,18 +118,18 @@ fun registerRecipes() {
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  SIEVE RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    EnumMetal.values().filter { it.isOre }.forEach {
+    EnumMetal.values().filter { it.isOre }.forEach {metal ->
         val subComponents =
-                if(it.isComposite) {
-                    it.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
+                if(metal.isComposite) {
+                    metal.subComponents.map { it.invoke() }.map { it.getChunk() to 1f }
                 } else {
-                    EnumMetal.subProducts[it]?.map { it.getDust() to 0.15f } ?: emptyList()
+                    EnumMetal.subProducts[metal]?.map { it.getDust() to 0.15f } ?: emptyList()
                 }
 
         when(subComponents.size){
-            0 -> addSieveRecipe(it.getRockyChunk(), it.getChunk(), 1f, 50f)
-            1 -> addSieveRecipe(it.getRockyChunk(), it.getChunk(), 1f, subComponents[0].first, subComponents[0].second, 50f)
-            2 -> addSieveRecipe(it.getRockyChunk(), it.getChunk(), 1f, subComponents[0].first, subComponents[0].second,
+            0 -> addSieveRecipe(metal.getRockyChunk(), metal.getChunk(), 1f, 50f)
+            1 -> addSieveRecipe(metal.getRockyChunk(), metal.getChunk(), 1f, subComponents[0].first, subComponents[0].second, 50f)
+            2 -> addSieveRecipe(metal.getRockyChunk(), metal.getChunk(), 1f, subComponents[0].first, subComponents[0].second,
                     subComponents[1].first, subComponents[1].second, 50f)
         }
     }
@@ -254,7 +254,7 @@ fun registerRecipes() {
     }
 
     ItemHolder.uraniumBlock?.ifNonEmpty {
-        it.toBlockState()?.let { addThermopileRecipe(it, FIRE_TEMP, 1.5) }
+        it.toBlockState()?.let { state -> addThermopileRecipe(state, FIRE_TEMP, 1.5) }
     }
 
     FluidRegistry.getRegisteredFluids().values

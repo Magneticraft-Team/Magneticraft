@@ -2,14 +2,14 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry
 import com.cout970.magneticraft.api.registries.generation.OreGeneration
-import com.cout970.magneticraft.block.Decoration
-import com.cout970.magneticraft.block.Ores
-import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.config.OreConfig
-import com.cout970.magneticraft.item.CraftingItems
-import com.cout970.magneticraft.item.EnumMetal
+import com.cout970.magneticraft.features.items.CraftingItems
+import com.cout970.magneticraft.features.items.EnumMetal
 import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.systems.config.Config
+import com.cout970.magneticraft.systems.config.OreConfig
 import net.minecraftforge.oredict.OreDictionary
+import com.cout970.magneticraft.features.decoration.Blocks as DecorationBlocks
+import com.cout970.magneticraft.features.ores.Blocks as OreBlocks
 
 /**
  * Created by cout970 on 24/06/2016.
@@ -48,32 +48,32 @@ fun registerOreDictionaryEntries() {
     }
 
     OreDictionary.registerOre("dustSulfur", CraftingItems.crafting.stack(1, CraftingItems.Type.SULFUR.meta))
-    OreDictionary.registerOre("oreCopper", Ores.ores.stack(1, 0))
-    OreDictionary.registerOre("oreGalena", Ores.ores.stack(1, 1))
-    OreDictionary.registerOre("oreLead", Ores.ores.stack(1, 1))
-    OreDictionary.registerOre("oreSilver", Ores.ores.stack(1, 1))
+    OreDictionary.registerOre("oreCopper", OreBlocks.ores.stack(1, 0))
+    OreDictionary.registerOre("oreGalena", OreBlocks.ores.stack(1, 1))
+    OreDictionary.registerOre("oreLead", OreBlocks.ores.stack(1, 1))
+    OreDictionary.registerOre("oreSilver", OreBlocks.ores.stack(1, 1))
 
-    OreDictionary.registerOre("oreCobalt", Ores.ores.stack(1, 2))
-    OreDictionary.registerOre("oreTungsten", Ores.ores.stack(1, 3))
-    OreDictionary.registerOre("orePyrite", Ores.ores.stack(1, 4))
-    OreDictionary.registerOre("oreSulfur", Ores.ores.stack(1, 4))
+    OreDictionary.registerOre("oreCobalt", OreBlocks.ores.stack(1, 2))
+    OreDictionary.registerOre("oreTungsten", OreBlocks.ores.stack(1, 3))
+    OreDictionary.registerOre("orePyrite", OreBlocks.ores.stack(1, 4))
+    OreDictionary.registerOre("oreSulfur", OreBlocks.ores.stack(1, 4))
 
-    OreDictionary.registerOre("blockCopper", Ores.storageBlocks.stack(1, 0))
-    OreDictionary.registerOre("blockGalena", Ores.storageBlocks.stack(1, 1))
-    OreDictionary.registerOre("blockCobalt", Ores.storageBlocks.stack(1, 2))
-    OreDictionary.registerOre("blockTungsten", Ores.storageBlocks.stack(1, 3))
-    OreDictionary.registerOre("blockSulfur", Ores.storageBlocks.stack(1, 4))
+    OreDictionary.registerOre("blockCopper", OreBlocks.storageBlocks.stack(1, 0))
+    OreDictionary.registerOre("blockGalena", OreBlocks.storageBlocks.stack(1, 1))
+    OreDictionary.registerOre("blockCobalt", OreBlocks.storageBlocks.stack(1, 2))
+    OreDictionary.registerOre("blockTungsten", OreBlocks.storageBlocks.stack(1, 3))
+    OreDictionary.registerOre("blockSulfur", OreBlocks.storageBlocks.stack(1, 4))
 
-    OreDictionary.registerOre("stoneLimestonePolished", Decoration.limestone.stack(1, 0))
-    OreDictionary.registerOre("brickLimestone", Decoration.limestone.stack(1, 1))
-    OreDictionary.registerOre("stoneLimestone", Decoration.limestone.stack(1, 2))
+    OreDictionary.registerOre("stoneLimestonePolished", DecorationBlocks.limestone.stack(1, 0))
+    OreDictionary.registerOre("brickLimestone", DecorationBlocks.limestone.stack(1, 1))
+    OreDictionary.registerOre("stoneLimestone", DecorationBlocks.limestone.stack(1, 2))
 
-    OreDictionary.registerOre("stoneBurnLimestonePolished", Decoration.burnLimestone.stack(1, 0))
-    OreDictionary.registerOre("brickBurnLimestone", Decoration.burnLimestone.stack(1, 1))
-    OreDictionary.registerOre("stoneBurnLimestone", Decoration.burnLimestone.stack(1, 2))
+    OreDictionary.registerOre("stoneBurnLimestonePolished", DecorationBlocks.burnLimestone.stack(1, 0))
+    OreDictionary.registerOre("brickBurnLimestone", DecorationBlocks.burnLimestone.stack(1, 1))
+    OreDictionary.registerOre("stoneBurnLimestone", DecorationBlocks.burnLimestone.stack(1, 2))
 
-    OreDictionary.registerOre("stoneTileLimestone", Decoration.tileLimestone.stack(1, 0))
-    OreDictionary.registerOre("stoneTileLimestone", Decoration.tileLimestone.stack(1, 1))
+    OreDictionary.registerOre("stoneTileLimestone", DecorationBlocks.tileLimestone.stack(1, 0))
+    OreDictionary.registerOre("stoneTileLimestone", DecorationBlocks.tileLimestone.stack(1, 1))
 }
 
 fun registerOreGenerations() {

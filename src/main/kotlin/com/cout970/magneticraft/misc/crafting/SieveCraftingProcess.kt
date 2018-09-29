@@ -4,7 +4,7 @@ import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.tileentity.modules.ModuleInventory
+import com.cout970.magneticraft.systems.tilemodules.ModuleInventory
 import net.minecraft.item.ItemStack
 
 /**

@@ -3,8 +3,8 @@ package cpu
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.computer.IROM
-import com.cout970.magneticraft.computer.*
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.systems.computer.*
 import gnu.trove.map.hash.TIntObjectHashMap
 import org.lwjgl.input.Keyboard
 import java.awt.*

@@ -1,11 +1,11 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.config.ConfigHandler
-import com.cout970.magneticraft.integration.IntegrationHandler
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.misc.info
+import com.cout970.magneticraft.misc.logTime
 import com.cout970.magneticraft.proxy.CommonProxy
-import com.cout970.magneticraft.util.info
-import com.cout970.magneticraft.util.logTime
+import com.cout970.magneticraft.systems.config.ConfigHandler
+import com.cout970.magneticraft.systems.integration.IntegrationHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.discovery.ASMDataTable

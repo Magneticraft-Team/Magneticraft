@@ -1,14 +1,14 @@
 package com.cout970.magneticraft.proxy
 
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.gui.GuiHandler
-import com.cout970.magneticraft.multiblock.core.MultiblockManager
-import com.cout970.magneticraft.network.MessageContainerUpdate
-import com.cout970.magneticraft.network.MessageGuiUpdate
-import com.cout970.magneticraft.network.MessageTileUpdate
+import com.cout970.magneticraft.misc.logTime
 import com.cout970.magneticraft.registry.*
-import com.cout970.magneticraft.util.logTime
-import com.cout970.magneticraft.world.WorldGenerator
+import com.cout970.magneticraft.systems.gui.GuiHandler
+import com.cout970.magneticraft.systems.multiblocks.MultiblockManager
+import com.cout970.magneticraft.systems.network.MessageContainerUpdate
+import com.cout970.magneticraft.systems.network.MessageGuiUpdate
+import com.cout970.magneticraft.systems.network.MessageTileUpdate
+import com.cout970.magneticraft.systems.worldgen.WorldGenerator
 import net.minecraft.block.Block
 import net.minecraft.item.Item
 import net.minecraftforge.common.MinecraftForge
@@ -78,10 +78,10 @@ abstract class CommonProxy {
         //Note for implementing Messages:
         //The class that implements IMessage must have an empty constructor
         logTime("Task registerNetworkMessages:") {
-            Magneticraft.network.registerMessage(MessageContainerUpdate.Companion, MessageContainerUpdate::class.java, 0, Side.CLIENT)
-            Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 1, Side.CLIENT)
-            Magneticraft.network.registerMessage(MessageTileUpdate.Companion, MessageTileUpdate::class.java, 2, Side.SERVER)
-            Magneticraft.network.registerMessage(MessageGuiUpdate.Companion, MessageGuiUpdate::class.java, 3, Side.SERVER)
+            Magneticraft.network.registerMessage(MessageContainerUpdate, MessageContainerUpdate::class.java, 0, Side.CLIENT)
+            Magneticraft.network.registerMessage(MessageTileUpdate, MessageTileUpdate::class.java, 1, Side.CLIENT)
+            Magneticraft.network.registerMessage(MessageTileUpdate, MessageTileUpdate::class.java, 2, Side.SERVER)
+            Magneticraft.network.registerMessage(MessageGuiUpdate, MessageGuiUpdate::class.java, 3, Side.SERVER)
         }
     }
 

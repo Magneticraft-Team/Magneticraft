@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.misc
 
-import com.cout970.magneticraft.item.CraftingItems
+import com.cout970.magneticraft.features.items.CraftingItems
 import net.minecraft.client.resources.I18n
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack

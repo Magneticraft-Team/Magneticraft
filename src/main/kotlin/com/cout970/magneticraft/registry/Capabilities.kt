@@ -13,8 +13,8 @@ import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.tool.IGear
-import com.cout970.magneticraft.computer.FloppyDisk
-import com.cout970.magneticraft.item.ComputerItems
+import com.cout970.magneticraft.features.items.ComputerItems
+import com.cout970.magneticraft.systems.computer.FloppyDisk
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer

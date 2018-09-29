@@ -3,9 +3,9 @@ package com.cout970.magneticraft.api.internal.energy
 
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.misc.vector.length
+import com.cout970.magneticraft.misc.vector.minus
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.util.vector.length
-import com.cout970.magneticraft.util.vector.minus
 
 /**
  * Created by cout970 on 11/06/2016.

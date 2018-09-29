@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.misc.gui
 
-import com.cout970.magneticraft.config.Config
-import com.cout970.magneticraft.util.toCelsius
-import com.cout970.magneticraft.util.toFahrenheit
+import com.cout970.magneticraft.misc.toCelsius
+import com.cout970.magneticraft.misc.toFahrenheit
+import com.cout970.magneticraft.systems.config.Config
 
 /**
  * Created by cout970 on 2017/07/13.

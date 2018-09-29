@@ -1,12 +1,12 @@
 package com.cout970.magneticraft
 
-import com.cout970.magneticraft.item.core.ItemBase
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.logError
+import com.cout970.magneticraft.misc.toTextComponent
 import com.cout970.magneticraft.proxy.ClientProxy
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
-import com.cout970.magneticraft.util.logError
-import com.cout970.magneticraft.util.toTextComponent
+import com.cout970.magneticraft.systems.items.ItemBase
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

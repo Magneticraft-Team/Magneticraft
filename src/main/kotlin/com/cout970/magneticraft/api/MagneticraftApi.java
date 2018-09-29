@@ -25,7 +25,7 @@ import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipeManag
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipeManager;
 import com.cout970.magneticraft.api.registries.tool.hammer.IHammerRegistry;
 import com.cout970.magneticraft.api.registries.tool.wrench.IWrenchRegistry;
-import com.cout970.magneticraft.multiblock.core.MultiblockManager;
+import com.cout970.magneticraft.systems.multiblocks.MultiblockManager;
 
 /**
  * Created by cout970 on 22/08/2016.

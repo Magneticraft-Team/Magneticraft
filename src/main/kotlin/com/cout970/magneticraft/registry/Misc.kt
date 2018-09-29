@@ -4,9 +4,9 @@ import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.internal.registries.tool.hammer.Hammer
 import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry
-import com.cout970.magneticraft.item.ToolItems
+import com.cout970.magneticraft.features.items.ToolItems
+import com.cout970.magneticraft.misc.info
 import com.cout970.magneticraft.misc.inventory.stack
-import com.cout970.magneticraft.util.info
 import net.minecraft.init.Items
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.common.registry.ForgeRegistries

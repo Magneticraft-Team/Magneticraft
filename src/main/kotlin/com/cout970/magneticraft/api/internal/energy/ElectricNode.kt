@@ -3,8 +3,8 @@ package com.cout970.magneticraft.api.internal.energy
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricNode
+import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.util.newNbt
 import net.minecraft.nbt.NBTTagCompound
 
 

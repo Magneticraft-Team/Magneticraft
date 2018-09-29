@@ -2,8 +2,8 @@ package com.cout970.magneticraft.misc.crafting
 
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterRecipe
+import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.fluid.Tank
-import com.cout970.magneticraft.util.STANDARD_AMBIENT_TEMPERATURE
 import net.minecraftforge.fluids.FluidStack
 
 class OilHeaterCraftingProcess(
