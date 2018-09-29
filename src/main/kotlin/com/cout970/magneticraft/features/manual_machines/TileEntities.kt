@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.features.manual_machines
 
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.vector.toBlockPos
 import com.cout970.magneticraft.misc.vector.xd
 import com.cout970.magneticraft.misc.vector.yd

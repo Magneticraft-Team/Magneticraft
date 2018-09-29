@@ -12,25 +12,15 @@ import com.cout970.magneticraft.systems.gui.render.dsl
  * Created by cout970 on 2017/08/10.
  */
 
-fun guiElectricFurnace(gui: GuiBase, container: ContainerElectricFurnace) = gui.run {
+fun guiElectricFurnace(gui: GuiBase, container: ContainerElectricFurnace) = gui.dsl {
     val tile = container.tile
-    +CompBackground(guiTexture("electric_furnace"))
-    +CompElectricBar(tile.node, Vec2d(58, 16))
 
-    val consumptionCallback = CallbackBarProvider(
-        callback = { tile.processModule.consumption.storage.toDouble() },
-        max = { Config.electricFurnaceMaxConsumption },
-        min = { 0.0 }
-    )
-
-    val processCallback = CallbackBarProvider(
-        { tile.processModule.timedProcess.timer.toDouble() },
-        { tile.processModule.timedProcess.limit().toDouble() },
-        { 0.0 }
-    )
-
-    +CompVerticalBar(consumptionCallback, 3, Vec2d(69, 16), consumptionCallback.toEnergyText())
-    +CompVerticalBar(processCallback, 2, Vec2d(80, 16), processCallback.toPercentText("Burning: "))
+    bars {
+        electricBar(tile.node)
+        electricConsumption(tile.processModule.consumption, Config.electricFurnaceMaxConsumption)
+        progressBar(tile.processModule.timedProcess)
+        slotPair()
+    }
 }
 
 fun guiBattery(gui: GuiBase, container: ContainerBattery) = gui.run {

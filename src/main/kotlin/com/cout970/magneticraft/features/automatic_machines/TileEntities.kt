@@ -1,11 +1,11 @@
 package com.cout970.magneticraft.features.automatic_machines
 
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.registry.FLUID_HANDLER

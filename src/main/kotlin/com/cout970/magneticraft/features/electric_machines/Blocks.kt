@@ -3,7 +3,7 @@ package com.cout970.magneticraft.features.electric_machines
 import com.cout970.magneticraft.features.heat_machines.TileElectricHeater
 import com.cout970.magneticraft.features.heat_machines.TileRfHeater
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getModule
@@ -72,7 +72,7 @@ object Blocks : IBlockMaker {
             alwaysDropDefault = true
             hasCustomModel = true
             //methods
-            onBlockPlaced = CommonMethods::placeInactiveWithOrientation
+            onBlockPlaced = CommonMethods::placeInactiveWithOppositeOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
         }.build()

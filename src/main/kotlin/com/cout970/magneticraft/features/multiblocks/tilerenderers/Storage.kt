@@ -2,7 +2,7 @@ package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileContainer
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileShelvingUnit
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
 import com.cout970.magneticraft.systems.tilerenderers.FilterString
 import com.cout970.magneticraft.systems.tilerenderers.ModelSelector

@@ -3,7 +3,7 @@ package com.cout970.magneticraft.features.multiblocks.tilerenderers
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileOilHeater
 import com.cout970.magneticraft.features.multiblocks.tileentities.TilePumpjack
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileRefinery
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.systems.tilerenderers.Utilities
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 

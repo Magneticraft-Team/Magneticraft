@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.systems.tilerenderers.*
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 

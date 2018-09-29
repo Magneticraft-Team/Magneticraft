@@ -38,8 +38,8 @@ class ContainerElectricFurnace(val tile: TileElectricFurnace, player: EntityPlay
 
     init {
         tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 91, 16))
-            addSlotToContainer(SlotTakeOnly(inv, 1, 91, 48))
+            addSlotToContainer(SlotItemHandler(inv, 0, 93, 17))
+            addSlotToContainer(SlotTakeOnly(inv, 1, 93, 49))
 
             inventoryRegions += InventoryRegion(0..0,
                 filter = { FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })

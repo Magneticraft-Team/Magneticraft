@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.automatic_machines
 
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.*

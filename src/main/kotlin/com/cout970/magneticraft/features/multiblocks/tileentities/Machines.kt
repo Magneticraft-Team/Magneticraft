@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.features.multiblocks.structures.*
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
 import com.cout970.magneticraft.misc.crafting.HydraulicPressCraftingProcess
 import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
@@ -12,7 +13,6 @@ import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER

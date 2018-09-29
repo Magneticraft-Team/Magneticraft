@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.features.decoration
 
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.systems.tilerenderers.BaseTileRenderer
 import com.cout970.magneticraft.systems.tilerenderers.FilterRegex

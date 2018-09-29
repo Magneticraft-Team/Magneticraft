@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.features.electric_machines
 
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.systems.tilerenderers.BaseTileRenderer
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import com.cout970.magneticraft.systems.tilerenderers.Utilities

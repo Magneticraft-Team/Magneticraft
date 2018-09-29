@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.decoration
 
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.createAABBUsing
 import com.cout970.magneticraft.systems.blocks.*

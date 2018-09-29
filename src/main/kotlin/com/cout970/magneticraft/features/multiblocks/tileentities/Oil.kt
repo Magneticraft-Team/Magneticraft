@@ -6,12 +6,12 @@ import com.cout970.magneticraft.features.multiblocks.structures.MultiblockOilHea
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockPumpjack
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockRefinery
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.crafting.OilHeaterCraftingProcess
 import com.cout970.magneticraft.misc.crafting.RefineryCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.vector.rotatePoint
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER

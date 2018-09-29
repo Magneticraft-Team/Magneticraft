@@ -2,7 +2,7 @@ package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileSolarPanel
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileSteamEngine
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.systems.tilerenderers.*
 import net.minecraft.util.EnumFacing
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks

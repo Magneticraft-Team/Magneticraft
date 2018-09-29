@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
+import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.SlotItemHandler
@@ -47,6 +48,22 @@ class ContainerGasificationUnit(val tile: TileGasificationUnit, player: EntityPl
 
             inventoryRegions += InventoryRegion(0..0,
                 filter = { GasificationUnitRecipeManager.findRecipe(it) != null })
+            inventoryRegions += InventoryRegion(1..1, filter = { false })
+        }
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+class ContainerBrickFurnace(val tile: TileBrickFurnace, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        tile.invModule.inventory.let { inv ->
+            addSlotToContainer(SlotItemHandler(inv, 0, 93, 17))
+            addSlotToContainer(SlotTakeOnly(inv, 1, 93, 49))
+
+            inventoryRegions += InventoryRegion(0..0,
+                filter = { FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })
             inventoryRegions += InventoryRegion(1..1, filter = { false })
         }
         bindPlayerInventory(player.inventory)

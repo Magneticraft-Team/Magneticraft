@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.features.fluid_machines
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.systems.tileentities.TileBase

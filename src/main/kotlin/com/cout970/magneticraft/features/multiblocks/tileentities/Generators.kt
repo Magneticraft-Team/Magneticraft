@@ -4,12 +4,12 @@ import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSolarPanel
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSteamEngine
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.wrapWithFluidFilter
 import com.cout970.magneticraft.misc.interpolate
 import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotatePoint
 import com.cout970.magneticraft.misc.world.isServer

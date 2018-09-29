@@ -7,7 +7,7 @@ import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler.Result.*
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.inventory.stack

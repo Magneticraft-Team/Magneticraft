@@ -58,6 +58,7 @@ object GuiHandler : IGuiHandler {
             is ContainerGasificationUnit     -> guiOf(container, ::guiGasificationUnit)
             is ContainerBigCombustionChamber -> guiOf(container, ::guiBigCombustionChamber)
             is ContainerInserter             -> guiOf(container, ::guiInserter)
+            is ContainerBrickFurnace         -> guiOf(container, ::guiBrickFurnace)
             else -> null
         }
         // @formatter:on
@@ -98,6 +99,7 @@ object GuiHandler : IGuiHandler {
             is TileGasificationUnit     -> ContainerGasificationUnit(tile, player, world, pos)
             is TileBigCombustionChamber -> ContainerBigCombustionChamber(tile, player, world, pos)
             is TileInserter             -> ContainerInserter(tile, player, world, pos)
+            is TileBrickFurnace         -> ContainerBrickFurnace(tile, player, world, pos)
             else -> null
         }
         // @formatter:on
@@ -110,4 +112,6 @@ object GuiHandler : IGuiHandler {
             }
         }
     }
+
+
 }

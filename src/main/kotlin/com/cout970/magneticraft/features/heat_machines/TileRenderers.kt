@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.features.heat_machines
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.resource
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.toCelsius
 import com.cout970.magneticraft.misc.vector.lowercaseName
 import com.cout970.magneticraft.misc.vector.vec3Of

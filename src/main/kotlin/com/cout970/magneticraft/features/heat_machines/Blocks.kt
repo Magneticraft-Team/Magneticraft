@@ -2,7 +2,7 @@ package com.cout970.magneticraft.features.heat_machines
 
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getModule
@@ -42,6 +42,7 @@ object Blocks : IBlockMaker {
     lateinit var insulatedHeatPipe: BlockBase private set
     lateinit var heatSink: BlockBase private set
     lateinit var gasificationUnit: BlockBase private set
+    lateinit var brickFurnace: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -161,7 +162,20 @@ object Blocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
-        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe, heatSink, gasificationUnit)
+        brickFurnace = builder.withName("brick_furnace").copy {
+            material = Material.ROCK
+            states = CommonMethods.OrientationActive.values().toList()
+            factory = factoryOf(::TileBrickFurnace)
+            alwaysDropDefault = true
+            hasCustomModel = true
+            //methods
+            onBlockPlaced = CommonMethods::placeInactiveWithOppositeOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(combustionChamber, steamBoiler, heatPipe, insulatedHeatPipe, heatSink,
+            gasificationUnit, brickFurnace)
     }
 
     // size is (8 - realSize)

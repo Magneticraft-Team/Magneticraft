@@ -1,0 +1,78 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "orientable",
+    "transform": "forge:default-block",
+    "textures": {
+      "top": "magneticraft:blocks/heat_machines/brick_furnace_top",
+      "side": "magneticraft:blocks/heat_machines/brick_furnace",
+      "particle": "magneticraft:blocks/heat_machines/brick_furnace"
+    }
+  },
+  "variants": {
+    "off_north": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front"
+        },
+        "y": 0
+      }
+    ],
+    "off_south": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front"
+        },
+        "y": 180
+      }
+    ],
+    "off_east": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front"
+        },
+        "y": 90
+      }
+    ],
+    "off_west": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front"
+        },
+        "y": 270
+      }
+    ],
+    "on_north": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front_on"
+        },
+        "y": 0
+      }
+    ],
+    "on_south": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front_on"
+        },
+        "y": 180
+      }
+    ],
+    "on_east": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front_on"
+        },
+        "y": 90
+      }
+    ],
+    "on_west": [
+      {
+        "textures": {
+          "front": "magneticraft:blocks/heat_machines/brick_furnace_front_on"
+        },
+        "y": 270
+      }
+    ]
+  }
+}

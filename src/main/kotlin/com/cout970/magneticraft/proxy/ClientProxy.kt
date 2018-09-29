@@ -4,11 +4,7 @@ package com.cout970.magneticraft.proxy
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.misc.info
-import com.cout970.magneticraft.misc.logError
-import com.cout970.magneticraft.misc.logTime
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
-import com.cout970.magneticraft.misc.toModel
+import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.registry.blocks
 import com.cout970.magneticraft.registry.items
 import com.cout970.magneticraft.registry.registerSounds

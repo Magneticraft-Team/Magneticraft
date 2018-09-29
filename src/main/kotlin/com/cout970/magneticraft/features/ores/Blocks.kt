@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.ores
 
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.systems.blocks.*
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
 import net.minecraft.block.Block

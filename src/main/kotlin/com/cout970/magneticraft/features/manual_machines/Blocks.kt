@@ -2,7 +2,7 @@ package com.cout970.magneticraft.features.manual_machines
 
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.createAABBUsing

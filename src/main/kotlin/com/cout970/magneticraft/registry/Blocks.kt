@@ -2,7 +2,7 @@ package com.cout970.magneticraft.registry
 
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.info
 import com.cout970.magneticraft.misc.logError
 import com.cout970.magneticraft.systems.blocks.IBlockMaker

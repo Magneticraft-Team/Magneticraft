@@ -7,12 +7,12 @@ import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
 import com.cout970.magneticraft.misc.ElectricConstants
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.interpolate
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.tileentity.canConnect
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.misc.world.isClient

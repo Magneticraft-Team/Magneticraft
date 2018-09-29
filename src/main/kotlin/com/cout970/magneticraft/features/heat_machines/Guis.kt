@@ -69,3 +69,14 @@ fun guiBigCombustionChamber(gui: GuiBase, container: ContainerBigCombustionChamb
         singleSlot()
     }
 }
+
+fun guiBrickFurnace(gui: GuiBase, container: ContainerBrickFurnace) = gui.dsl {
+    val tile = container.tile
+
+    bars {
+        heatBar(tile.node)
+        electricConsumption(tile.processModule.consumption, Config.electricFurnaceMaxConsumption)
+        progressBar(tile.processModule.timedProcess)
+        slotPair()
+    }
+}

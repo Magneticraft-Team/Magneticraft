@@ -3,7 +3,7 @@ package com.cout970.magneticraft.features.multiblocks
 import com.cout970.magneticraft.features.multiblocks.structures.*
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.resource

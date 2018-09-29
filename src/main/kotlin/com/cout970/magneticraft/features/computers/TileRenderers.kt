@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.features.computers
 
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.systems.tilemodules.mining_robot.MineBlockTask
 import com.cout970.magneticraft.systems.tilemodules.mining_robot.MoveRobotTask
 import com.cout970.magneticraft.systems.tilemodules.mining_robot.RobotAction

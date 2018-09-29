@@ -4,9 +4,12 @@ import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.features.electric_machines.Blocks
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
+import com.cout970.magneticraft.misc.block.getOrientationActive
+import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
 import com.cout970.magneticraft.misc.crafting.GasificationCraftingProcess
 import com.cout970.magneticraft.misc.energy.RfNodeWrapper
 import com.cout970.magneticraft.misc.energy.RfStorage
@@ -15,8 +18,8 @@ import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.systems.blocks.CommonMethods
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.*
@@ -250,5 +253,45 @@ class TileGasificationUnit : TileBase(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
+    }
+}
+
+@RegisterTileEntity("brick_furnace")
+class TileBrickFurnace : TileBase(), ITickable {
+
+    val facing: EnumFacing get() = getBlockState().getOrientationActive()
+    val node = HeatNode(ref)
+
+    val heatModule = ModuleHeat(
+        heatNodes = listOf(node)
+    )
+
+    val invModule = ModuleInventory(Inventory(2), capabilityFilter = {
+        InventoryCapabilityFilter(it, inputSlots = listOf(0), outputSlots = listOf(1))
+    })
+
+    val updateBlockModule = ModuleUpdateBlockstate { oldState ->
+        val state = CommonMethods.OrientationActive.of(facing, processModule.working)
+        oldState.withProperty(CommonMethods.PROPERTY_ORIENTATION_ACTIVE, state)
+    }
+
+    val processModule = ModuleHeatProcessing(
+        craftingProcess = FurnaceCraftingProcess(invModule, 0, 1),
+        node = node,
+        workingRate = 1f,
+        costPerTick = Config.electricFurnaceMaxConsumption.toFloat()
+    )
+
+    init {
+        initModules(heatModule, invModule, processModule, updateBlockModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
+        return oldState.block != newSate.block
     }
 }

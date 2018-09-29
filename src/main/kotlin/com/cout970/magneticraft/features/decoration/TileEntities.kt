@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.decoration
 
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.getOrientation
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import net.minecraft.util.EnumFacing
 

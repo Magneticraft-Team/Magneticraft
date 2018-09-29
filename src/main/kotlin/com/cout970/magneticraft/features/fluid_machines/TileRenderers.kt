@@ -2,8 +2,8 @@ package com.cout970.magneticraft.features.fluid_machines
 
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.Sprite
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.resource
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.vector.lowercaseName
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.tilemodules.ModulePipe

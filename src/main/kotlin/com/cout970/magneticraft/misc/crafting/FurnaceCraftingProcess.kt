@@ -12,7 +12,7 @@ class FurnaceCraftingProcess(
     val invModule: ModuleInventory,
     val inputSlot: Int,
     val outputSlot: Int
-) : ICraftingProcess {
+) : ICraftingProcess, IHeatCraftingProcess {
 
     private var cacheKey: ItemStack = ItemStack.EMPTY
     private var cacheValue: ItemStack = ItemStack.EMPTY
@@ -49,4 +49,6 @@ class FurnaceCraftingProcess(
     }
 
     override fun duration(): Float = 100f
+
+    override fun minTemperature(): Float = 60.0f
 }

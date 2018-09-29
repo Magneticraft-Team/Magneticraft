@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.multiblock_parts
 
 import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.block.RegisterBlocks
+import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.systems.blocks.BlockBase
 import com.cout970.magneticraft.systems.blocks.BlockBuilder
 import com.cout970.magneticraft.systems.blocks.IBlockMaker

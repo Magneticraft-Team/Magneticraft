@@ -3,10 +3,10 @@ package com.cout970.magneticraft.registry
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.info
 import com.cout970.magneticraft.misc.logError
 import com.cout970.magneticraft.misc.resource
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ResourceLocation

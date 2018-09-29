@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.features.manual_machines
 
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.systems.tilemodules.ModuleSluiceBox
 import com.cout970.magneticraft.systems.tilerenderers.*
 import com.cout970.modelloader.api.*

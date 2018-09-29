@@ -2,9 +2,9 @@ package com.cout970.magneticraft.features.multiblocks.tileentities
 
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockContainer
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockShelvingUnit
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*

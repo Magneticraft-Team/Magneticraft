@@ -1,17 +1,13 @@
 package com.cout970.magneticraft.features.electric_machines
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
-import com.cout970.magneticraft.misc.ElectricConstants
-import com.cout970.magneticraft.misc.add
+import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationActive
 import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
-import com.cout970.magneticraft.misc.getBlockPos
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
-import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.vector.createAABBUsing
 import com.cout970.magneticraft.systems.blocks.CommonMethods
 import com.cout970.magneticraft.systems.config.Config

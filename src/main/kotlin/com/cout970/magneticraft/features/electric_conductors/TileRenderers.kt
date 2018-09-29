@@ -2,9 +2,9 @@ package com.cout970.magneticraft.features.electric_conductors
 
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
 import com.cout970.magneticraft.misc.vector.lowercaseName
 import com.cout970.magneticraft.misc.vector.minus
 import com.cout970.magneticraft.misc.vector.vec3Of

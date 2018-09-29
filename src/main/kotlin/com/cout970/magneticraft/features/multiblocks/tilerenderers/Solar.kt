@@ -2,7 +2,7 @@ package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileSolarMirror
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileSolarTower
-import com.cout970.magneticraft.misc.tileentity.RegisterRenderer
+import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.toRads
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.tilerenderers.FilterRegex

@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.get
-import com.cout970.magneticraft.misc.tileentity.RegisterTileEntity
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.multiblocks.MultiblockContext
