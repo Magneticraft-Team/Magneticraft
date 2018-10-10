@@ -4,7 +4,7 @@
 Magneticraft mod, more info in curseforge https://minecraft.curseforge.com/projects/magneticraft
 
 ### This mod is no longer being developed!
-At October 10th 2018, the 4 yeah anniversary of the mod, we decided to stop the development of this mod.
+At October 10th 2018, the 4th year anniversary of the mod, we decided to stop the development of this mod.
 
 If anyone wants to continue the mod, the License allow copy, modification and redistribution of the mod's code and assets.
 
