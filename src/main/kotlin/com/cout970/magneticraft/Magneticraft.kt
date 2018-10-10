@@ -26,7 +26,7 @@ import java.io.File
     modLanguage = "kotlin",
     modLanguageAdapter = LANG_ADAPTER,
     acceptedMinecraftVersions = "[1.12]",
-    dependencies = "required-after:modelloader@[1.1.3,);required-after:forgelin",
+    dependencies = "required-client:modelloader@[1.1.5,);required-after:forgelin",
     updateJSON = "https://raw.githubusercontent.com/Magneticraft-Team/Magneticraft/1.12/src/main/resources/update.json"
 )
 //Singleton, see KotlinAdapter to know how it's loaded by forge

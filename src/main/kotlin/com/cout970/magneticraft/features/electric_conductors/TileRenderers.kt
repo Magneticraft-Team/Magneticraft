@@ -37,6 +37,12 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
         te.wireRender.render()
 
         if (Debug.DEBUG) {
+
+//            val player = Minecraft.getMinecraft().player
+//            val box = player.entityBoundingBox.center - te.pos.toVec3d()
+//
+//            Utilities.drawWireBetween(te.wrapper.connectors().first(), box, 0.035)
+
             Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
             Utilities.renderFloatingLabel("I: %.2f".format(te.node.amperage), vec3Of(0, 1.25, 0))
             Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
