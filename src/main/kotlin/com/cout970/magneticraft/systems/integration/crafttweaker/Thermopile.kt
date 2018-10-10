@@ -12,6 +12,7 @@ import stanhebben.zenscript.annotations.ZenMethod
 @ZenRegister
 object Thermopile {
 
+    @Suppress("DEPRECATION")
     @ZenMethod
     @JvmStatic
     fun addRecipe(block: IItemStack, temperature: Float, conductivity: Float) {
@@ -48,6 +49,7 @@ object Thermopile {
         }
     }
 
+    @Suppress("DEPRECATION")
     @ZenMethod
     @JvmStatic
     fun removeRecipe(block: IItemStack) {

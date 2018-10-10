@@ -1,11 +1,14 @@
 buildscript {
+    ext.project_kotlin_version = '1.2.40'
+    ext.mod_version = '2.5.2'
+    
     repositories {
         jcenter()
         maven { name = 'forge'; url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$project_kotlin_version"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -13,39 +16,20 @@ apply plugin: 'kotlin'
 apply plugin: 'maven'
 
 archivesBaseName = name
-version project.version + '-' + getBuildNumber()
-group project.groupId
+version mod_version + '-' + getBuildNumber()
+group 'com.cout970.magneticraft'
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
     version = "1.12.2-14.23.4.2705"
 	mappings = "snapshot_20171003"
     makeObfSourceJar = false
     runDir = "run"
-    replace "\${version}", project.version
-}
 
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-	
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
+    replaceIn 'Magneticraft.kt'
+    replace '@VERSION@', '2.5.2'
 }
 
 repositories {
@@ -96,8 +80,8 @@ repositories {
 
 dependencies {
     // Kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$project_kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$project_kotlin_version"
     compile "net.shadowfacts:Forgelin:1.7.3"
 
     // JEI
@@ -118,6 +102,26 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+
+processResources {
+    inputs.property "version", mod_version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'version': mod_version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+//sourceSets {
+//    main.java.srcDirs += 'src/main/kotlin'
+//}
 
 uploadArchives {
     repositories {

@@ -43,6 +43,7 @@ class ModuleCrushingTable(
     companion object {
         const val CRUSHING_DAMAGE = 40
 
+        @Suppress("DEPRECATION")
         fun getCrushingLevel(storedItem: ItemStack): Int {
             val item = storedItem.item
             if (item is ItemBlock) {

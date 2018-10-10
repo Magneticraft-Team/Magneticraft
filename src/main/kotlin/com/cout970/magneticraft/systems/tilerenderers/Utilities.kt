@@ -14,7 +14,6 @@ import com.cout970.magneticraft.systems.multiblocks.IMultiblockModule
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.multiblocks.MultiblockContext
 import com.cout970.magneticraft.systems.multiblocks.MultiblockManager
-import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleMultiblockIO
 import com.cout970.vector.extensions.Vector3
 import net.minecraft.block.Block
@@ -588,7 +587,7 @@ object Utilities {
         return (0xFF shl 24) or ((red and 0xFF) shl 16) or ((green and 0xFF) shl 8) or (blue and 0xFF)
     }
 
-    fun renderIO(te: TileBase, ioModule: ModuleMultiblockIO) {
+    fun renderIO(ioModule: ModuleMultiblockIO) {
         pushMatrix()
         rotateFromCenter(ioModule.facing(), 0f)
 

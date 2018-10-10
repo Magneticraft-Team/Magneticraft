@@ -26,7 +26,7 @@ object ModelCacheFactory {
 
         when (model) {
             is Model.Mcx -> processMcx(model, filters, useTextures, models, createDefault)
-            is Model.Gltf -> processGltf(model, filters, useTextures, time, models, createDefault)
+            is Model.Gltf -> processGltf(model, filters, time, models, createDefault)
             is Model.Obj -> {
                 if (createDefault) {
                     if (baked != null) {
@@ -84,8 +84,8 @@ object ModelCacheFactory {
         if (createDefault) store("default", notUsed)
     }
 
-    private fun processGltf(model: Model.Gltf, filters: List<ModelSelector>, useTextures: Boolean, time: () -> Double,
-                            models: MutableMap<String, IRenderCache>, createDefault: Boolean) {
+    private fun processGltf(model: Model.Gltf, filters: List<ModelSelector>, time: () -> Double, models: MutableMap<String, IRenderCache>,
+                            createDefault: Boolean) {
 
         val scene = model.data.structure.scenes[0]
         val namedAnimations = model.data.structure.animations.mapIndexed { index, animation ->
