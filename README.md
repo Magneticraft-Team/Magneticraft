@@ -3,18 +3,10 @@
 # Magneticraft
 Magneticraft mod, more info in curseforge https://minecraft.curseforge.com/projects/magneticraft
 
-### Do you want to contribute?
-You don't need to be a programer or artist to help with the development of the mod. 
+### This mod is no longer being developed!
+At October 10th 2018, the 4 yeah anniversary of the mod, we decided to stop the development of this mod.
 
-Playtesting the mod and finding bugs is a great way to help with the development of the mod, most people doesn't report bugs they find, so this helps a lot.
-
-You also can help with the guide book, by just proposing new pages or interesting things to add, or even if you feel generous writing them.
-
-We also accept translations, you can make a pull request with a new lang file or with changes to an existing lang file.
-
-We also accept new ideas or critics about the way the mod works, any feedback is welcome, just try not to give too many ideas, the development is kinda slow so the TODO list may grow faster than the mod's content.
-
-Finally, if you have any question feel free to ask at our [discord](https://discord.gg/EhYbA97).
+If anyone wants to continue the mod, the License allow copy, modification and redistribution of the mod's code and assets.
 
 ### Compiling the mod
 This is a small tutorial for non-modders to get the last version of the mod from github, so you can play with alpha versions of the mod.
