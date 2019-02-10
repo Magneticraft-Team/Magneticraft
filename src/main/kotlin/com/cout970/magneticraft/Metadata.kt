@@ -4,6 +4,7 @@ import com.cout970.magneticraft.misc.vector.Vec2d
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.Vec3d
+import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.FMLModContainer
 import net.minecraftforge.fml.common.ILanguageAdapter
 import net.minecraftforge.fml.common.ModContainer
@@ -29,6 +30,14 @@ typealias Sprite = TextureAtlasSprite
  */
 @Suppress("unused")
 class KotlinAdapter : ILanguageAdapter {
+
+    init {
+        try {
+            Class.forName("kotlin.jvm.internal.Intrinsics")
+        } catch (error: NoClassDefFoundError) {
+            FMLCommonHandler.instance().raiseException(error, "Mod Magneticraft requires the Kotlin standard library, please install Forgelin", true)
+        }
+    }
 
     override fun supportsStatics() = false
 
