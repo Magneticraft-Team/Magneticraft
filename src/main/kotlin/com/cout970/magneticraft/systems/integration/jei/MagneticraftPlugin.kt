@@ -12,13 +12,10 @@ import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.features.items.EnumMetal
-import com.cout970.magneticraft.misc.add
+import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.gui.formatHeat
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.stack
-import com.cout970.magneticraft.misc.list
-import com.cout970.magneticraft.misc.newNbt
-import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.systems.tilemodules.ModuleCrushingTable
 import mezz.jei.api.IModPlugin
@@ -33,7 +30,6 @@ import mezz.jei.api.recipe.IRecipeWrapper
 import mezz.jei.gui.elements.DrawableResource
 import mezz.jei.util.Translator
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fluids.FluidStack
@@ -196,7 +192,7 @@ class MagneticraftPlugin : IModPlugin {
 
                 recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
                 recipeLayout.itemStacks.set(1, recipeWrapper.recipe.output.applyNonEmpty {
-                    addTooltip(I18n.format("text.magneticraft.jei.time", recipeWrapper.recipe.duration.toString()))
+                    addTooltip(t("text.magneticraft.jei.time", recipeWrapper.recipe.duration.toString()))
                 })
 
                 // mode indicator
@@ -207,7 +203,7 @@ class MagneticraftPlugin : IModPlugin {
                     HydraulicPressMode.HEAVY -> EnumMetal.COPPER.getHeavyPlate()
                 }
 
-                modeItem.addTooltip(I18n.format("text.magneticraft.jei.hydraulic_hammer." +
+                modeItem.addTooltip(t("text.magneticraft.jei.hydraulic_hammer." +
                     recipeWrapper.recipe.mode.name.toLowerCase()))
 
                 recipeLayout.itemStacks.init(2, false, 78, 25)
@@ -312,13 +308,13 @@ class CrushingTableRecipeWrapper(val recipe: ICrushingTableRecipe) : IRecipeWrap
         val level = ModuleCrushingTable.getCrushingLevel(recipe.input)
 
         val name = when (level) {
-            -1 -> I18n.format("text.magneticraft.jei.mining_level.-1")
-            0 -> I18n.format("text.magneticraft.jei.mining_level.0")
-            1 -> I18n.format("text.magneticraft.jei.mining_level.1")
-            2 -> I18n.format("text.magneticraft.jei.mining_level.2")
-            3 -> I18n.format("text.magneticraft.jei.mining_level.3")
-            4 -> I18n.format("text.magneticraft.jei.mining_level.4")
-            else -> I18n.format("text.magneticraft.jei.mining_level.other", level.toString())
+            -1 -> t("text.magneticraft.jei.mining_level.-1")
+            0 -> t("text.magneticraft.jei.mining_level.0")
+            1 -> t("text.magneticraft.jei.mining_level.1")
+            2 -> t("text.magneticraft.jei.mining_level.2")
+            3 -> t("text.magneticraft.jei.mining_level.3")
+            4 -> t("text.magneticraft.jei.mining_level.4")
+            else -> t("text.magneticraft.jei.mining_level.other", level.toString())
         }
 
         minecraft.fontRenderer.drawString(name, 16, 68, Color.gray.rgb)
@@ -337,7 +333,7 @@ class SluiceBoxRecipeWrapper(val recipe: ISluiceBoxRecipe) : IRecipeWrapper {
     }
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
-        minecraft.fontRenderer.drawString(I18n.format("text.magneticraft.jei.require_water"), 0, 68, Color.gray.rgb)
+        minecraft.fontRenderer.drawString(t("text.magneticraft.jei.require_water"), 0, 68, Color.gray.rgb)
     }
 }
 
@@ -355,7 +351,7 @@ class GrinderRecipeWrapper(val recipe: IGrinderRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(
-            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            t("text.magneticraft.jei.time", recipe.duration.toString()),
             32, 68, Color.gray.rgb)
     }
 }
@@ -374,7 +370,7 @@ class SieveRecipeWrapper(val recipe: ISieveRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(
-            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            t("text.magneticraft.jei.time", recipe.duration.toString()),
             32, 68, Color.gray.rgb)
     }
 }
@@ -401,7 +397,7 @@ class HydraulicPressRecipeWrapper(val recipe: IHydraulicPressRecipe) : IRecipeWr
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         slot.draw(minecraft)
         minecraft.fontRenderer.drawString(
-            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            t("text.magneticraft.jei.time", recipe.duration.toString()),
             32, 68, Color.gray.rgb)
     }
 }
@@ -418,7 +414,7 @@ class OilHeaterRecipeWrapper(val recipe: IOilHeaterRecipe) : IRecipeWrapper {
             10, 68, Color.gray.rgb)
 
         minecraft.fontRenderer.drawString(
-            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            t("text.magneticraft.jei.time", recipe.duration.toString()),
             58, 68, Color.gray.rgb)
     }
 }
@@ -432,7 +428,7 @@ class RefineryRecipeWrapper(val recipe: IRefineryRecipe) : IRecipeWrapper {
 
     override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
         minecraft.fontRenderer.drawString(
-            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            t("text.magneticraft.jei.time", recipe.duration.toString()),
             32, 68, Color.gray.rgb)
     }
 }
@@ -454,7 +450,7 @@ class GasificationUnitRecipeWrapper(val recipe: IGasificationUnitRecipe) : IReci
             10, 68, Color.gray.rgb)
 
         minecraft.fontRenderer.drawString(
-            I18n.format("text.magneticraft.jei.time", recipe.duration.toString()),
+            t("text.magneticraft.jei.time", recipe.duration.toString()),
             58, 68, Color.gray.rgb)
     }
 }

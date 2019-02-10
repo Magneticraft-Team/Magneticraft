@@ -11,7 +11,6 @@ import com.cout970.magneticraft.misc.player.sendUnlocalizedMessage
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.*
 import com.cout970.magneticraft.systems.items.*
-import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -19,8 +18,6 @@ import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
-import net.minecraftforge.fml.common.FMLCommonHandler
-import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 2017/06/12.
@@ -100,7 +97,7 @@ object ToolItems : IItemMaker {
             val msg = handler.nodes
                 .filterIsInstance<IHeatNode>()
                 .joinToString("\n") {
-                    I18n.format("text.magneticraft.thermometer.temp", formatHeat(it.temperature))
+                    t("text.magneticraft.thermometer.temp", formatHeat(it.temperature))
                 }
 
             args.player.sendUnlocalizedMessage(msg)
@@ -123,9 +120,9 @@ object ToolItems : IItemMaker {
 
         override fun getItemStackDisplayName(stack: ItemStack): String {
             val name = super.getItemStackDisplayName(stack)
-            if (FMLCommonHandler.instance().effectiveSide == Side.CLIENT && stack.hasKey(POSITION_KEY)) {
+            if (stack.hasKey(POSITION_KEY)) {
                 val basePos = stack.getBlockPos(POSITION_KEY)
-                return name + " [${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
+                return name + " [${TextFormatting.AQUA}${t("text.magneticraft.wire_connect.position")}: " +
                     "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
             }
             return name
@@ -155,7 +152,7 @@ object ToolItems : IItemMaker {
                     if (basePos != null) {
                         stack.setBlockPos(POSITION_KEY, basePos)
                         player.sendMessage("text.magneticraft.wire_connect.updated_position",
-                            "[${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
+                            "[${TextFormatting.AQUA}${t("text.magneticraft.wire_connect.position")}: " +
                                 "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
                         return EnumActionResult.SUCCESS
                     }

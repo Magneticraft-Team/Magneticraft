@@ -2,6 +2,7 @@ package com.cout970.magneticraft.systems.blocks
 
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.t
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.*
@@ -14,7 +15,6 @@ import com.cout970.magneticraft.systems.tileentities.TileBase
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.item.ItemStack
@@ -172,7 +172,7 @@ class BlockMultiblock(
 
     override fun addInformation(stack: ItemStack, player: World?, tooltip: MutableList<String>, advanced: ITooltipFlag) {
 
-        tooltip.add(I18n.format("tooltip.magneticraft.multiblock.blueprint"))
+        tooltip.add(t("tooltip.magneticraft.multiblock.blueprint"))
         super.addInformation(stack, player, tooltip, advanced)
     }
 }
