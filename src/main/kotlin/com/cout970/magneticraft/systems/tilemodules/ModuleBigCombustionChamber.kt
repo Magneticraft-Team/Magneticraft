@@ -22,7 +22,6 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_MAX_BURNING_TIME
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.px
-import com.cout970.vector.extensions.vec3Of
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing

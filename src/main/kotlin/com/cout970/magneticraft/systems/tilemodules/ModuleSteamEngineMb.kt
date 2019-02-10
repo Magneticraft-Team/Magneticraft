@@ -15,7 +15,6 @@ import com.cout970.magneticraft.systems.multiblocks.IMultiblockModule
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import com.cout970.vector.extensions.times
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumParticleTypes

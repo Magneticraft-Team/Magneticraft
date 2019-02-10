@@ -3,7 +3,6 @@ package com.cout970.magneticraft.systems.worldgen
 import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.config.OilGenConfig
-import com.cout970.vector.extensions.distanceSq
 import com.google.common.base.Predicate
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
@@ -58,7 +57,7 @@ class OilSourceGenerator(
         val outerRadiusSq = (5.5 * 16) * (5.5 * 16) // 5.5 chunk radius
 
         // do nothing if the chunk is too far away
-        if (chunkPos.toVec3d().distanceSq(center) > outerRadiusSq) {
+        if (chunkPos.toVec3d().squareDistanceTo(center) > outerRadiusSq) {
             return
         }
 

@@ -2,10 +2,9 @@ package com.cout970.magneticraft.features.multiblocks.structures
 
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotateBox
+import com.cout970.magneticraft.misc.vector.times
 import com.cout970.magneticraft.systems.multiblocks.*
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import com.cout970.vector.extensions.times
-import com.cout970.vector.extensions.vec3Of
 import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
@@ -136,7 +135,7 @@ object MultiblockSteamEngine : Multiblock() {
         Vec3d(-10.621, 7.379, -21.000) * PIXEL to Vec3d(-6.379, 11.621, -19.000) * PIXEL,
         Vec3d(-11.000, 9.000, -21.000) * PIXEL to Vec3d(-6.000, 10.000, -19.000) * PIXEL,
         Vec3d(-9.000, 7.000, -21.000) * PIXEL to Vec3d(-8.000, 12.000, -19.000) * PIXEL
-    ).map { EnumFacing.SOUTH.rotateBox(vec3Of(0.5), it) + vec3Of(1, 0, 1) }
+    ).map { EnumFacing.SOUTH.rotateBox(Vec3d(0.5, 0.5, 0.5), it) + Vec3d(1.0, 0.0, 1.0) }
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitbox
 }
