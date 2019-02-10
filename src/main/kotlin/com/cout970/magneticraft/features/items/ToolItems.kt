@@ -19,6 +19,8 @@ import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 2017/06/12.
@@ -121,7 +123,7 @@ object ToolItems : IItemMaker {
 
         override fun getItemStackDisplayName(stack: ItemStack): String {
             val name = super.getItemStackDisplayName(stack)
-            if (stack.hasKey(POSITION_KEY)) {
+            if (FMLCommonHandler.instance().effectiveSide == Side.CLIENT && stack.hasKey(POSITION_KEY)) {
                 val basePos = stack.getBlockPos(POSITION_KEY)
                 return name + " [${TextFormatting.AQUA}${I18n.format("text.magneticraft.wire_connect.position")}: " +
                     "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
