@@ -2,11 +2,17 @@ package com.cout970.magneticraft.misc.inventory
 
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
+import net.minecraft.init.Items
 import net.minecraft.item.Item
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.Fluid
+import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.FluidUtil
+import net.minecraftforge.fluids.IFluidBlock
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.IItemHandlerModifiable
+import java.util.*
 
 /**
  * Created by cout970 on 07/07/2016.
@@ -16,7 +22,27 @@ fun Item.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
 
 fun Block.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
 
-fun IBlockState.stack(size: Int = 1) = ItemStack(block, size, block.getMetaFromState(this))
+fun IBlockState.stack(size: Int = 1): ItemStack {
+    val block = block
+
+    return when {
+        block is IFluidBlock -> {
+            if (block.getMetaFromState(this) != 0) {
+                ItemStack.EMPTY
+            } else {
+                FluidUtil.getFilledBucket(block.fluid.stack())
+            }
+        }
+        Item.getItemFromBlock(block) != Items.AIR -> {
+            ItemStack(block, size)
+        }
+        else -> {
+            ItemStack(block.getItemDropped(this, Random(), 0), size, block.damageDropped(this))
+        }
+    }
+}
+
+fun Fluid.stack() = FluidStack(this, 1000)
 
 @Suppress("DEPRECATION")
 fun ItemStack.toBlockState(): IBlockState? {

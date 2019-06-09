@@ -2,6 +2,7 @@ package com.cout970.magneticraft.systems.integration.jei
 
 import com.cout970.magneticraft.MOD_NAME
 import com.cout970.magneticraft.api.MagneticraftApi
+import com.cout970.magneticraft.api.registries.generators.thermopile.IThermopileRecipe
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
 import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasificationUnitRecipe
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipe
@@ -30,11 +31,14 @@ import mezz.jei.api.recipe.IRecipeWrapper
 import mezz.jei.gui.elements.DrawableResource
 import mezz.jei.util.Translator
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.FontRenderer
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
 import java.awt.Color
+import com.cout970.magneticraft.features.electric_machines.Blocks as ElectricBlocks
 import com.cout970.magneticraft.features.heat_machines.Blocks as HeatBlocks
 import com.cout970.magneticraft.features.manual_machines.Blocks as ManualBlocks
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
@@ -54,6 +58,7 @@ class MagneticraftPlugin : IModPlugin {
         const val OIL_HEATER_ID = "magneticraft.oil_heater"
         const val REFINERY_ID = "magneticraft.refinery"
         const val GASIFICATION_UNIT_ID = "magneticraft.gasification_unit"
+        const val THERMOPILE_ID = "magneticraft.thermopile"
     }
 
     override fun register(registry: IModRegistry) {
@@ -89,6 +94,10 @@ class MagneticraftPlugin : IModPlugin {
         registry.handleRecipes(IGasificationUnitRecipe::class.java, ::GasificationUnitRecipeWrapper, GASIFICATION_UNIT_ID)
         registry.addRecipeCatalyst(HeatBlocks.gasificationUnit.stack(), GASIFICATION_UNIT_ID)
         registry.addRecipes(MagneticraftApi.getGasificationUnitRecipeManager().recipes, GASIFICATION_UNIT_ID)
+
+        registry.handleRecipes(IThermopileRecipe::class.java, ::ThermopileRecipeWrapper, THERMOPILE_ID)
+        registry.addRecipeCatalyst(ElectricBlocks.thermopile.stack(), THERMOPILE_ID)
+        registry.addRecipes(MagneticraftApi.getThermopileRecipeManager().recipes.filter(::validThermopileRecipe), THERMOPILE_ID)
 
 //        registry.addRecipeClickArea(...) fuck
     }
@@ -266,6 +275,16 @@ class MagneticraftPlugin : IModPlugin {
                 recipeLayout.itemStacks.set(0, recipeWrapper.recipe.input)
                 recipeWrapper.recipe.itemOutput.ifNonEmpty { recipeLayout.itemStacks.set(1, it) }
                 recipeWrapper.recipe.fluidOutput?.let { recipeLayout.fluidStacks.set(2, it) }
+            }
+        ))
+
+        registry.addRecipeCategories(RecipeCategory<ThermopileRecipeWrapper>(
+            id = THERMOPILE_ID,
+            backgroundTexture = "thermopile",
+            unlocalizedTitle = "text.magneticraft.jei.thermopile",
+            initFunc = { recipeLayout, recipeWrapper, _ ->
+                recipeLayout.itemStacks.init(0, true, 48, 10)
+                recipeLayout.itemStacks.set(0, recipeWrapper.recipe.blockState.stack())
             }
         ))
     }
@@ -453,6 +472,43 @@ class GasificationUnitRecipeWrapper(val recipe: IGasificationUnitRecipe) : IReci
             t("text.magneticraft.jei.time", recipe.duration.toString()),
             58, 68, Color.gray.rgb)
     }
+}
+
+class ThermopileRecipeWrapper(val recipe: IThermopileRecipe) : IRecipeWrapper {
+
+    override fun getIngredients(ingredients: IIngredients) {
+        ingredients.setInput(ItemStack::class.java, recipe.blockState.stack())
+    }
+
+    override fun drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int) {
+        minecraft.fontRenderer.text(
+            t("text.magneticraft.jei.temperature", formatHeat(recipe.temperature.toDouble())),
+            0, 35, Color.white.rgb
+        )
+
+        minecraft.fontRenderer.text(
+            t("text.magneticraft.jei.head_conductivity", recipe.conductivity),
+            0, 47, Color.white.rgb
+        )
+    }
+}
+
+private fun validThermopileRecipe(recipe: IThermopileRecipe): Boolean {
+    return recipe.blockState.stack().isNotEmpty
+}
+
+private fun FontRenderer.text(txt: String, x: Int, y: Int, color: Int) {
+    val width = getStringWidth(txt)
+    val pad = 1
+
+    GuiScreen.drawRect(
+        x - pad,
+        y - pad,
+        x + width + pad,
+        y + FONT_HEIGHT + pad,
+        0x3F000000 or color.inv()
+    )
+    drawStringWithShadow(txt, x.toFloat(), y.toFloat(), color)
 }
 
 private inline fun ItemStack.applyNonEmpty(func: ItemStack.() -> Unit): ItemStack {

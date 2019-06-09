@@ -2,6 +2,7 @@ package com.cout970.magneticraft.api;
 
 import com.cout970.magneticraft.api.internal.registries.fuel.FluidFuelManager;
 import com.cout970.magneticraft.api.internal.registries.generation.OreGenerationRegistry;
+import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager;
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager;
@@ -15,6 +16,7 @@ import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegist
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager;
 import com.cout970.magneticraft.api.registries.fuel.IFluidFuelManager;
 import com.cout970.magneticraft.api.registries.generation.IOreGenerationRegistry;
+import com.cout970.magneticraft.api.registries.generators.thermopile.IThermopileRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasificationUnitRecipeManager;
 import com.cout970.magneticraft.api.registries.machines.grinder.IGrinderRecipeManager;
@@ -69,6 +71,10 @@ public class MagneticraftApi {
 
     public static IGasificationUnitRecipeManager getGasificationUnitRecipeManager() {
         return GasificationUnitRecipeManager.INSTANCE;
+    }
+
+    public static IThermopileRecipeManager getThermopileRecipeManager() {
+        return ThermopileRecipeManager.INSTANCE;
     }
 
     public static IOreGenerationRegistry getOreGenerationRegistry() {

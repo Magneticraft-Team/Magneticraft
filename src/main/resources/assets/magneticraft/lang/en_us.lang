@@ -256,6 +256,7 @@ text.magneticraft.jei.sieve=Sieve
 text.magneticraft.jei.oil_heater=Oil Heater
 text.magneticraft.jei.refinery=Refinery
 text.magneticraft.jei.gasification_unit=Gasification Unit
+text.magneticraft.jei.thermopile=Thermopile
 
 #Mining level
 text.magneticraft.jei.mining_level.-1=Mining Level: Any
@@ -268,6 +269,8 @@ text.magneticraft.jei.mining_level.other=Mining Level: %s
 
 text.magneticraft.jei.time=%s ticks
 text.magneticraft.jei.require_water=Needs 1 Water Bucket
+text.magneticraft.jei.temperature=Temperature: %s
+text.magneticraft.jei.head_conductivity=Conductivity: %.1f W/mK
 
 text.magneticraft.jei.hydraulic_hammer.light=Light Model
 text.magneticraft.jei.hydraulic_hammer.medium=Medium Mode

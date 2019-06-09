@@ -4,9 +4,7 @@ cobalt as ore subproduct (OP)
 shelving unit crash + not blocking keys
 wires breaking when chunks load without order
 too much microcrafting
-copper coil text error
 shelving unit chest right click
-text translation in server for copper coil
 thermopile JEI recipes
 
 ### TODO list

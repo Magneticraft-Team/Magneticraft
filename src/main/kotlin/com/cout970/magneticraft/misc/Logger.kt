@@ -38,7 +38,7 @@ fun debug(vararg obj: Any?) {
 
 fun t(msg: String, vararg params: Any): String {
     if (FMLCommonHandler.instance().effectiveSide == Side.CLIENT) {
-        return I18n.format(msg, params)
+        return I18n.format(msg, *params)
     }
     return msg
 }
