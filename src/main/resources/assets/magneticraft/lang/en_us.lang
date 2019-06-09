@@ -161,12 +161,14 @@ tile.magneticraft.battery_north.name=Battery Block
 tile.magneticraft.electric_pole_north.name=Electric Pole
 tile.magneticraft.electric_pole_transformer_north.name=Electric Pole Transformer
 tile.magneticraft.electric_furnace_off_north.name=Electric furnace
+tile.magneticraft.brick_furnace_off_north.name=Brick furnace
 tile.magneticraft.combustion_chamber_north.name=Combustion Chamber
 tile.magneticraft.steam_boiler_normal.name=Boiler
 tile.magneticraft.pumpjack_drill_normal.name=Pumpjack Pipe
 tile.magneticraft.electric_heater_off.name=Electric Heater
 tile.magneticraft.electric_heater_on.name=Electric Heater (On)
 tile.magneticraft.gasification_unit_normal.name=Gasification Unit
+tile.magneticraft.tesla_tower_bottom.name=Tesla Tower
 
 tile.magneticraft.water_generator_normal.name=Water Generator
 tile.magneticraft.infinite_energy_normal.name=Infinite Energy
@@ -202,6 +204,7 @@ tile.magneticraft.hydraulic_press_inactive_north.name=Hydraulic Press
 tile.magneticraft.oil_heater_inactive_north.name=Oil Heater
 tile.magneticraft.refinery_inactive_north.name=Refinery
 tile.magneticraft.big_combustion_chamber_inactive_north.name=Big Combustion Chamber
+tile.magneticraft.big_steam_boiler_inactive_north.name=Big Steam Boiler
 
 # Ingot blocks
 tile.magneticraft.storage_blocks_copper.name=Copper Block

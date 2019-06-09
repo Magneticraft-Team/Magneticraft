@@ -25,14 +25,16 @@ class ModuleMultiblockCenter(
 
     //current multiblock
     override var multiblock: Multiblock? = multiblockStructure
-        set(value) {}
+        set(_) {}
+
     //relative position from the multiblock center to this block
     override var centerPos: BlockPos? = BlockPos.ORIGIN
-        set(value) {}
+        set(_) {}
+
     //orientation of the multiblock
     override var multiblockFacing: EnumFacing?
         get() = facingGetter()
-        set(value) {}
+        set(_) {}
 
     override fun onDeactivate() {
         container.tile.onBreak()
