@@ -44,7 +44,7 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
             GALENA to listOf(LEAD, SILVER),
             MITHRIL to listOf(OSMIUM, ZINC),
             NICKEL to listOf(IRON, TIN),
-            OSMIUM to listOf(MITHRIL, COBALT),
+            OSMIUM to listOf(MITHRIL, NICKEL),
             SILVER to listOf(LEAD),
             TIN to listOf(IRON, ALUMINIUM),
             ZINC to listOf(NICKEL, TIN)
@@ -62,9 +62,8 @@ enum class EnumMetal(val vanilla: Boolean, val isOre: Boolean = true, val useful
             return (OreDictionary.getOres("oreAluminium") + OreDictionary.getOres("oreAluminum"))
                 .map { it.withSize(1) }
         }
-        return OreDictionary.getOres("ore" + name.toLowerCase().capitalize()).map {
-            it.withSize(1)
-        }
+        return OreDictionary.getOres("ore" + name.toLowerCase().capitalize())
+            .map { it.withSize(1) }
     }
 
     fun getIngot(): ItemStack {

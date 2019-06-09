@@ -33,7 +33,7 @@ public class MultiBlockEvent extends Event {
 
         // Player forming the multiblock
         private final EntityPlayer player;
-        // Errors found scanning the multiblock, is empty the multiblock will form, otherwise it will show the errors
+        // Errors found scanning the multiblock, if empty the multiblock will form, otherwise it will show the errors
         private final List<ITextComponent> integrityErrors;
 
         public CheckIntegrity(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing,
