@@ -46,7 +46,7 @@ fun t(msg: String, vararg params: Any): String {
 fun String.toTextComponent(): ITextComponent = TextComponentString(this)
 
 
-fun <R> logTime(prefix: String = "Time", func: () -> R): R {
+inline fun <R> logTime(prefix: String = "Time", func: () -> R): R {
     val start = System.currentTimeMillis()
     val res = func()
     val end = System.currentTimeMillis()
