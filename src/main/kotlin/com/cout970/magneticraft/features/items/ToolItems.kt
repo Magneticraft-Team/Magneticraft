@@ -122,8 +122,7 @@ object ToolItems : IItemMaker {
             val name = super.getItemStackDisplayName(stack)
             if (stack.hasKey(POSITION_KEY)) {
                 val basePos = stack.getBlockPos(POSITION_KEY)
-                return name + " [${TextFormatting.AQUA}${t("text.magneticraft.wire_connect.position")}: " +
-                    "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
+                return name + " [${TextFormatting.AQUA}${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]"
             }
             return name
         }
@@ -152,7 +151,7 @@ object ToolItems : IItemMaker {
                     if (basePos != null) {
                         stack.setBlockPos(POSITION_KEY, basePos)
                         player.sendMessage("text.magneticraft.wire_connect.updated_position",
-                            "[${TextFormatting.AQUA}${t("text.magneticraft.wire_connect.position")}: " +
+                            "[${TextFormatting.AQUA}" +
                                 "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
                         return EnumActionResult.SUCCESS
                     }
