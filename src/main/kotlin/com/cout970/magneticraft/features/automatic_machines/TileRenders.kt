@@ -479,12 +479,6 @@ object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
     override fun init() {
         createModel(Blocks.pneumaticTube, listOf(
             ModelSelector("center_full", FilterString("center_full")),
-            ModelSelector("center_north", FilterString("center_north")),
-            ModelSelector("center_south", FilterString("center_south")),
-            ModelSelector("center_east", FilterString("center_east")),
-            ModelSelector("center_west", FilterString("center_west")),
-            ModelSelector("center_up", FilterString("center_up")),
-            ModelSelector("center_down", FilterString("center_down")),
             ModelSelector("north", FilterString("north")),
             ModelSelector("south", FilterString("south")),
             ModelSelector("east", FilterString("east")),

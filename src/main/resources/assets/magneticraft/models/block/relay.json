@@ -1,0 +1,19 @@
+{
+    "parent": "block/cube",
+    "display": {
+        "firstperson_righthand": {
+            "rotation": [ 0, 135, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        }
+    },
+    "textures": {
+        "particle": "magneticraft:blocks/machines/relay_front",
+        "down": "magneticraft:blocks/machines/relay_down",
+        "up": "magneticraft:blocks/machines/relay_up",
+        "north": "magneticraft:blocks/machines/relay_front",
+        "east": "magneticraft:blocks/machines/relay_east",
+        "south": "magneticraft:blocks/machines/relay_back",
+        "west": "magneticraft:blocks/machines/relay_west"
+    }
+}

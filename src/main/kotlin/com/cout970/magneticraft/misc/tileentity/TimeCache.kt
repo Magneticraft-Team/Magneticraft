@@ -17,4 +17,9 @@ class TimeCache<T>(val tile: ITileRef, val interval: Int, val getter: () -> T) {
 
         return cache!!
     }
+
+    fun clear() {
+        cache = null
+        time = 0L
+    }
 }

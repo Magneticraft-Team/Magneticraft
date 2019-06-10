@@ -1,9 +1,11 @@
 package com.cout970.magneticraft.features.automatic_machines
 
+import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.blocks.BlockBase
 import com.cout970.magneticraft.systems.blocks.BlockBuilder
@@ -15,7 +17,9 @@ import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.ItemBlock
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -28,6 +32,7 @@ object Blocks : IBlockMaker {
     lateinit var inserter: BlockBase private set
     lateinit var waterGenerator: BlockBase private set
     lateinit var pneumaticTube: BlockBase private set
+    lateinit var relay: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -125,11 +130,65 @@ object Blocks : IBlockMaker {
             )
             hasCustomModel = true
             generateDefaultItemBlockModel = false
-            boundingBox = {
-                listOf(vec3Of(4.px, 4.px, 4.px) createAABBUsing vec3Of(12.px, 12.px, 12.px))
+            boundingBox = { pneumaticTubeBoundingBox(it.source, it.pos) }
+            onNeighborChanged = {
+                it.worldIn.getTile<TilePneumaticTube>(it.fromPos)?.apply {
+                    north.clear()
+                    south.clear()
+                    east.clear()
+                    west.clear()
+                    up.clear()
+                    down.clear()
+                }
             }
         }.build()
 
-        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube)
+        relay = builder.withName("relay").copy {
+            states = CommonMethods.Facing.values().toList()
+            factory = factoryOf(::TileRelay)
+            alwaysDropDefault = true
+            onBlockPlaced = CommonMethods::placeWithOppositeFacing
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube, relay)
+    }
+
+    fun pneumaticTubeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {
+        val list = mutableListOf<AABB>()
+
+        list += vec3Of(4.px) createAABBUsing vec3Of(1 - 4.px)
+
+        pneumaticTubeSides(world, pos).forEach {
+            list += it.second
+        }
+
+        return list
+    }
+
+    fun pneumaticTubeSides(world: IBlockAccess, pos: BlockPos): List<Pair<EnumFacing, AABB>> {
+        val pipe = world.getTile<TilePneumaticTube>(pos) ?: return emptyList()
+        val list = mutableListOf<Pair<EnumFacing, AABB>>()
+
+        if (pipe.canConnect(EnumFacing.DOWN))
+            list += EnumFacing.DOWN to (vec3Of(4.px, 0, 4.px) createAABBUsing vec3Of(1 - 4.px, 4.px, 1 - 4.px))
+
+        if (pipe.canConnect(EnumFacing.UP))
+            list += EnumFacing.UP to (vec3Of(4.px, 1 - 4.px, 4.px) createAABBUsing vec3Of(1 - 4.px, 1, 1 - 4.px))
+
+        if (pipe.canConnect(EnumFacing.NORTH))
+            list += EnumFacing.NORTH to (vec3Of(4.px, 4.px, 0) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 4.px))
+
+        if (pipe.canConnect(EnumFacing.SOUTH))
+            list += EnumFacing.SOUTH to (vec3Of(4.px, 4.px, 1 - 4.px) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 1))
+
+        if (pipe.canConnect(EnumFacing.WEST))
+            list += EnumFacing.WEST to (vec3Of(0, 4.px, 4.px) createAABBUsing vec3Of(4.px, 1 - 4.px, 1 - 4.px))
+
+        if (pipe.canConnect(EnumFacing.EAST))
+            list += EnumFacing.EAST to (vec3Of(1 - 4.px, 4.px, 4.px) createAABBUsing vec3Of(1, 1 - 4.px, 1 - 4.px))
+
+        return list
     }
 }
