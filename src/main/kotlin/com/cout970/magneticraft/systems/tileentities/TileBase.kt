@@ -166,10 +166,6 @@ abstract class TileBase : TileEntity() {
         return writeToNBT(NBTTagCompound())
     }
 
-    override fun handleUpdateTag(tag: NBTTagCompound) {
-        super.handleUpdateTag(tag)
-    }
-
     /**
      * Receives data sent using [sendSyncData] in ContainerBase
      * @param otherSide the side that sent the message

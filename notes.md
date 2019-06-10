@@ -1,11 +1,9 @@
 # Bugs
 
-cobalt as ore subproduct (OP)
-shelving unit crash + not blocking keys
-wires breaking when chunks load without order
-too much microcrafting
-shelving unit chest right click
-thermopile JEI recipes
+// shelving unit crash + not blocking keys
+// wires breaking when chunks load without order
+// too much microcrafting
+// shelving unit chest right click
 
 ### TODO list
 - expand container

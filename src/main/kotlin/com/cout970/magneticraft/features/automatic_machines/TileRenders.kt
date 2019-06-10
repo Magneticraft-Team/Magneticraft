@@ -207,8 +207,7 @@ object TileRendererInserter : BaseTileRenderer<TileInserter>() {
         // animation0 is used to get the articulated node because Transition.ROTATING discards the
         // info about translation/rotation of the inner nodes
         val cache0 = getModel("animation0") as? AnimationRenderCache ?: return
-        val cache1 = getModel(transition.animation) as? AnimationRenderCache
-            ?: return
+        val cache1 = getModel(transition.animation) as? AnimationRenderCache ?: return
         val node = cache0.model.rootNodes.firstOrNull() ?: return
         val anim = cache1.model
 
@@ -470,5 +469,78 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             }
             else -> error("Invalid type: $raw, ${raw::class.java}")
         }
+    }
+}
+
+
+@RegisterRenderer(TilePneumaticTube::class)
+object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
+
+    override fun init() {
+        createModel(Blocks.pneumaticTube, listOf(
+            ModelSelector("center_full", FilterString("center_full")),
+            ModelSelector("center_north", FilterString("center_north")),
+            ModelSelector("center_south", FilterString("center_south")),
+            ModelSelector("center_east", FilterString("center_east")),
+            ModelSelector("center_west", FilterString("center_west")),
+            ModelSelector("center_up", FilterString("center_up")),
+            ModelSelector("center_down", FilterString("center_down")),
+            ModelSelector("north", FilterString("north")),
+            ModelSelector("south", FilterString("south")),
+            ModelSelector("east", FilterString("east")),
+            ModelSelector("west", FilterString("west")),
+            ModelSelector("up", FilterString("up")),
+            ModelSelector("down", FilterString("down")),
+            ModelSelector("center_north_h", FilterString("center_north_h")),
+            ModelSelector("center_south_h", FilterString("center_south_h")),
+            ModelSelector("center_east_h", FilterString("center_east_h")),
+            ModelSelector("center_west_h", FilterString("center_west_h")),
+            ModelSelector("center_up_h", FilterString("center_up_h")),
+            ModelSelector("center_down_h", FilterString("center_down_h")),
+            ModelSelector("center_north_v", FilterString("center_north_v")),
+            ModelSelector("center_south_v", FilterString("center_south_v")),
+            ModelSelector("center_east_v", FilterString("center_east_v")),
+            ModelSelector("center_west_v", FilterString("center_west_v")),
+            ModelSelector("center_up_v", FilterString("center_up_v")),
+            ModelSelector("center_down_v", FilterString("center_down_v"))
+        ))
+    }
+
+    override fun render(te: TilePneumaticTube) {
+        val n = te.north()
+        val s = te.south()
+        val e = te.east()
+        val w = te.west()
+        val u = te.up()
+        val d = te.down()
+
+        when {
+            n && s && !e && !w && !u && !d -> {
+                renderModel("center_east_h")
+                renderModel("center_west_h")
+                renderModel("center_up_h")
+                renderModel("center_down_h")
+            }
+            !n && !s && e && w && !u && !d -> {
+                renderModel("center_north_h")
+                renderModel("center_south_h")
+                renderModel("center_up_v")
+                renderModel("center_down_v")
+            }
+            !n && !s && !e && !w && u && d -> {
+                renderModel("center_north_v")
+                renderModel("center_south_v")
+                renderModel("center_east_v")
+                renderModel("center_west_v")
+            }
+            else -> renderModel("center_full")
+        }
+
+        if (n) renderModel("north")
+        if (s) renderModel("south")
+        if (e) renderModel("east")
+        if (w) renderModel("west")
+        if (u) renderModel("up")
+        if (d) renderModel("down")
     }
 }

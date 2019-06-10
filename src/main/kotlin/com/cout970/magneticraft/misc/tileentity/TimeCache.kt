@@ -10,7 +10,7 @@ class TimeCache<T>(val tile: ITileRef, val interval: Int, val getter: () -> T) {
     operator fun invoke(): T {
         val now = tile.world?.totalWorldTime ?: 0L
 
-        if (now > interval + time) {
+        if (now > interval + time || cache == null) {
             time = now
             cache = getter()
         }

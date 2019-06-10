@@ -6,13 +6,17 @@ import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
+import com.cout970.magneticraft.misc.tileentity.TimeCache
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.registry.FLUID_HANDLER
+import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.*
+import net.minecraft.block.Block
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
@@ -129,5 +133,49 @@ class TileWaterGenerator : TileBase(), ITickable {
                 handler.fill(FluidStack(water, amount), true)
             }
         }
+    }
+}
+
+
+@RegisterTileEntity("pneumatic_tube")
+class TilePneumaticTube : TileBase(), ITickable {
+
+    val north = TimeCache(this.ref, 10) {
+        world.getTile<TilePneumaticTube>(pos.north()) != null ||
+            world.getTileEntity(pos.north())?.getOrNull(ITEM_HANDLER, EnumFacing.SOUTH) != null
+    }
+
+    val south = TimeCache(this.ref, 10) {
+        world.getTile<TilePneumaticTube>(pos.south()) != null ||
+            world.getTileEntity(pos.south())?.getOrNull(ITEM_HANDLER, EnumFacing.NORTH) != null
+    }
+
+    val east = TimeCache(this.ref, 10) {
+        world.getTile<TilePneumaticTube>(pos.east()) != null ||
+            world.getTileEntity(pos.east())?.getOrNull(ITEM_HANDLER, EnumFacing.WEST) != null
+    }
+
+    val west = TimeCache(this.ref, 10) {
+        world.getTile<TilePneumaticTube>(pos.west()) != null ||
+            world.getTileEntity(pos.west())?.getOrNull(ITEM_HANDLER, EnumFacing.EAST) != null
+    }
+
+    val up = TimeCache(this.ref, 10) {
+        world.getTile<TilePneumaticTube>(pos.up()) != null ||
+            world.getTileEntity(pos.up())?.getOrNull(ITEM_HANDLER, EnumFacing.UP) != null
+    }
+
+    val down = TimeCache(this.ref, 10) {
+        world.getTile<TilePneumaticTube>(pos.down()) != null ||
+            world.getTileEntity(pos.down())?.getOrNull(ITEM_HANDLER, EnumFacing.DOWN) != null
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+
+    override fun getRenderBoundingBox(): AxisAlignedBB {
+        return Block.FULL_BLOCK_AABB
     }
 }

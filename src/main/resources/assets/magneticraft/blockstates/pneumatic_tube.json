@@ -1,0 +1,13 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/machines/pneumatic_tube"
+        }
+    },
+    "variants": {
+        "normal": [{}]
+    }
+}

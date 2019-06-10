@@ -27,6 +27,7 @@ object Blocks : IBlockMaker {
     lateinit var conveyorBelt: BlockBase private set
     lateinit var inserter: BlockBase private set
     lateinit var waterGenerator: BlockBase private set
+    lateinit var pneumaticTube: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -116,6 +117,19 @@ object Blocks : IBlockMaker {
             boundingBox = { listOf((vec3Of(0, 0, 0) createAABBUsing vec3Of(16, 12, 16)).scale(PIXEL)) }
         }.build()
 
-        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough)
+        pneumaticTube = builder.withName("pneumatic_tube").copy {
+            factory = factoryOf(::TilePneumaticTube)
+            customModels = listOf(
+                "model" to resource("models/block/gltf/pneumatic_tube.gltf"),
+                "inventory" to resource("models/block/gltf/pneumatic_tube_inv.gltf")
+            )
+            hasCustomModel = true
+            generateDefaultItemBlockModel = false
+            boundingBox = {
+                listOf(vec3Of(4.px, 4.px, 4.px) createAABBUsing vec3Of(12.px, 12.px, 12.px))
+            }
+        }.build()
+
+        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube)
     }
 }
