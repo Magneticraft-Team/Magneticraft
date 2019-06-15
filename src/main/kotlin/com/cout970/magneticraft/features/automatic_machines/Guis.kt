@@ -24,6 +24,16 @@ fun guiInserter(gui: GuiBase, container: ContainerInserter) = gui.run {
     +button(5, vec2Of(138, 14), vec2Of(18, 166), container::onClick) { mod.canGrabItems }
 }
 
+@Suppress("UNUSED_PARAMETER")
+fun guiRelay(gui: GuiBase, container: ContainerRelay) = gui.run {
+    +CompBackground(guiTexture("relay"))
+}
+
+@Suppress("UNUSED_PARAMETER")
+fun guiFilter(gui: GuiBase, container: ContainerFilter) = gui.run {
+    +CompBackground(guiTexture("relay"))
+}
+
 private fun button(id: Int, pos: IVector2, tex: IVector2, listener: IButtonListener, on: () -> Boolean): ToggleButton {
 
     val uv: (ButtonState) -> Pair<IVector2, IVector2> = { state ->

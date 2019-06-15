@@ -174,6 +174,10 @@ abstract class TileBase : TileEntity() {
         container.modules.forEach { it.receiveSyncData(ibd, otherSide) }
     }
 
+    override fun toString(): String {
+        return this::class.qualifiedName ?: "MagneticraftTileEntity"
+    }
+
     class ModuleContainer(override val tile: TileBase, override val modules: List<IModule>) : IModuleContainer {
         override val world: World get() = tile.world
         override val pos: BlockPos get() = tile.pos

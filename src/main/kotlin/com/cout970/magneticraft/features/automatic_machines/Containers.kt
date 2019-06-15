@@ -108,3 +108,86 @@ class ContainerInserter(val tile: TileInserter, player: EntityPlayer, world: Wor
         return result
     }
 }
+
+class ContainerRelay(val tile: TileRelay, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        val inv = tile.inventory
+        var i = 0
+
+        iterateArea(0..2, 0..2) { x, y ->
+            addSlotToContainer(SlotItemHandler(inv, i++, x * 18 + 62, y * 18 + 13))
+        }
+
+        inventoryRegions += InventoryRegion(0..8)
+        bindPlayerInventory(player.inventory)
+    }
+}
+
+class ContainerFilter(val tile: TileFilter, player: EntityPlayer, world: World, blockPos: BlockPos)
+    : ContainerBase(player, world, blockPos) {
+
+    init {
+        val inv = tile.inventory
+        var i = 0
+
+        iterateArea(0..2, 0..2) { x, y ->
+            addSlotToContainer(SlotFilter(inv, i++, x * 18 + 62, y * 18 + 13))
+        }
+
+        inventoryRegions += InventoryRegion(0..8) { _ -> false }
+        bindPlayerInventory(player.inventory)
+    }
+
+    @Suppress("FoldInitializerAndIfToElvis")
+    override fun slotClick(slotId: Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer): ItemStack {
+        val slot = inventorySlots.getOrNull(slotId) as? SlotFilter
+        if (slot == null) return super.slotClick(slotId, dragType, clickTypeIn, player)
+
+        var result = ItemStack.EMPTY
+        val playerInv = player.inventory
+
+        if (clickTypeIn != ClickType.PICKUP && clickTypeIn != ClickType.PICKUP_ALL) {
+            return result
+        }
+        if (dragType != 0 && dragType != 1) return result
+
+        if (slotId == -999) {
+            if (!playerInv.itemStack.isEmpty) {
+                if (dragType == 0) {
+                    player.dropItem(playerInv.itemStack, true)
+                    playerInv.itemStack = ItemStack.EMPTY
+                }
+
+                if (dragType == 1) {
+                    player.dropItem(playerInv.itemStack.splitStack(1), true)
+                }
+            }
+            return result
+        }
+
+        val slotStack = slot.stack
+        val handStack = playerInv.itemStack
+
+        if (!slotStack.isEmpty) {
+            result = slotStack.copy()
+        }
+
+        if (handStack.isEmpty) {
+            // Empty hand, clear the slot item
+            slot.putStack(ItemStack.EMPTY)
+        } else {
+            // Replace slot contents with the player's hand item
+            if (handStack.isNotEmpty) {
+                slot.putStack(handStack.withSize(1))
+            } else {
+                slot.putStack(ItemStack.EMPTY)
+            }
+        }
+
+        slot.onSlotChanged()
+
+        return result
+    }
+}

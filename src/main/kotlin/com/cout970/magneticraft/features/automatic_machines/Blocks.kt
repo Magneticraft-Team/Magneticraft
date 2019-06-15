@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.features.automatic_machines
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.api.internal.pneumatic.PneumaticUtils
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
@@ -32,7 +33,9 @@ object Blocks : IBlockMaker {
     lateinit var inserter: BlockBase private set
     lateinit var waterGenerator: BlockBase private set
     lateinit var pneumaticTube: BlockBase private set
+    lateinit var pneumaticRestrictionTube: BlockBase private set
     lateinit var relay: BlockBase private set
+    lateinit var filter: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -131,8 +134,31 @@ object Blocks : IBlockMaker {
             hasCustomModel = true
             generateDefaultItemBlockModel = false
             boundingBox = { pneumaticTubeBoundingBox(it.source, it.pos) }
+            onActivated = CommonMethods::delegateToModule
             onNeighborChanged = {
                 it.worldIn.getTile<TilePneumaticTube>(it.fromPos)?.apply {
+                    north.clear()
+                    south.clear()
+                    east.clear()
+                    west.clear()
+                    up.clear()
+                    down.clear()
+                }
+            }
+        }.build()
+
+        pneumaticRestrictionTube = builder.withName("pneumatic_restriction_tube").copy {
+            factory = factoryOf(::TilePneumaticRestrictionTube)
+            customModels = listOf(
+                "model" to resource("models/block/gltf/pneumatic_restriction_tube.gltf"),
+                "inventory" to resource("models/block/gltf/pneumatic_restriction_tube_inv.gltf")
+            )
+            hasCustomModel = true
+            generateDefaultItemBlockModel = false
+            boundingBox = { pneumaticTubeBoundingBox(it.source, it.pos) }
+            onActivated = CommonMethods::delegateToModule
+            onNeighborChanged = {
+                it.worldIn.getTile<TilePneumaticRestrictionTube>(it.fromPos)?.apply {
                     north.clear()
                     south.clear()
                     east.clear()
@@ -152,7 +178,16 @@ object Blocks : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube, relay)
+        filter = builder.withName("filter").copy {
+            states = CommonMethods.Facing.values().toList()
+            factory = factoryOf(::TileFilter)
+            alwaysDropDefault = true
+            onBlockPlaced = CommonMethods::placeWithOppositeFacing
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube, pneumaticRestrictionTube, relay, filter)
     }
 
     fun pneumaticTubeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {
@@ -168,25 +203,24 @@ object Blocks : IBlockMaker {
     }
 
     fun pneumaticTubeSides(world: IBlockAccess, pos: BlockPos): List<Pair<EnumFacing, AABB>> {
-        val pipe = world.getTile<TilePneumaticTube>(pos) ?: return emptyList()
         val list = mutableListOf<Pair<EnumFacing, AABB>>()
 
-        if (pipe.canConnect(EnumFacing.DOWN))
+        if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.DOWN))
             list += EnumFacing.DOWN to (vec3Of(4.px, 0, 4.px) createAABBUsing vec3Of(1 - 4.px, 4.px, 1 - 4.px))
 
-        if (pipe.canConnect(EnumFacing.UP))
+        if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.UP))
             list += EnumFacing.UP to (vec3Of(4.px, 1 - 4.px, 4.px) createAABBUsing vec3Of(1 - 4.px, 1, 1 - 4.px))
 
-        if (pipe.canConnect(EnumFacing.NORTH))
+        if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.NORTH))
             list += EnumFacing.NORTH to (vec3Of(4.px, 4.px, 0) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 4.px))
 
-        if (pipe.canConnect(EnumFacing.SOUTH))
+        if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.SOUTH))
             list += EnumFacing.SOUTH to (vec3Of(4.px, 4.px, 1 - 4.px) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 1))
 
-        if (pipe.canConnect(EnumFacing.WEST))
+        if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.WEST))
             list += EnumFacing.WEST to (vec3Of(0, 4.px, 4.px) createAABBUsing vec3Of(4.px, 1 - 4.px, 1 - 4.px))
 
-        if (pipe.canConnect(EnumFacing.EAST))
+        if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.EAST))
             list += EnumFacing.EAST to (vec3Of(1 - 4.px, 4.px, 4.px) createAABBUsing vec3Of(1, 1 - 4.px, 1 - 4.px))
 
         return list

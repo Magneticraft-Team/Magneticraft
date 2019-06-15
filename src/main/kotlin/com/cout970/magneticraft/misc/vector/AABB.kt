@@ -50,6 +50,12 @@ infix fun Double.doubleEquals(other: Double): Boolean {
     return Math.abs(this - other) < 1e-6
 }
 
+fun AxisAlignedBB.containsPoint(vec: Vec3d): Boolean {
+    return vec.x >= this.minX && vec.x <= this.maxX &&
+        vec.y >= this.minY && vec.y <= this.maxY &&
+        vec.z >= this.minZ && vec.z <= this.maxZ
+}
+
 fun AxisAlignedBB.isHitBy(v: IVector3): Boolean {
     if (maxY doubleEquals v.y || minY doubleEquals v.y) {
         if (v.x in minX..maxX) {

@@ -27,6 +27,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.gen.ChunkProviderServer
 import net.minecraftforge.fluids.FluidUtil
+import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.oredict.OreDictionary
 import net.minecraftforge.oredict.OreIngredient
@@ -298,7 +299,14 @@ object Debug {
                     "reload" -> {
                         Minecraft.getMinecraft().addScheduledTask {
                             ug()
-                            Minecraft.getMinecraft().refreshResources()
+                            try {
+                                Minecraft.getMinecraft().refreshResources()
+                                val list = Minecraft.getMinecraft().saveLoader.saveList
+                                list.sort()
+                                FMLClientHandler.instance().tryLoadExistingWorld(null, list[0])
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
                     }
                     "r" -> {

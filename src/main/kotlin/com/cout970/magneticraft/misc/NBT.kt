@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package com.cout970.magneticraft.misc
 
@@ -115,11 +115,14 @@ fun NBTTagCompound.getBlockPos(key: String): BlockPos {
     return BlockPos(list.getIntAt(0), list.getIntAt(1), list.getIntAt(2))
 }
 
-fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing) {
-    setInteger(key, facing.ordinal)
+fun NBTTagCompound.setEnumFacing(key: String, facing: EnumFacing?) {
+    setInteger(key, facing?.ordinal ?: -1)
 }
 
 fun NBTTagCompound.getEnumFacing(key: String): EnumFacing = EnumFacing.getFront(getInteger(key))
+fun NBTTagCompound.getNullableEnumFacing(key: String): EnumFacing? {
+    return if (getInteger(key) < 0) null else EnumFacing.getFront(getInteger(key))
+}
 
 // Builders
 
@@ -175,12 +178,27 @@ fun NBTTagCompound.add(key: String, value: Byte) = setByte(key, value)
 fun NBTTagCompound.add(key: String, value: Short) = setShort(key, value)
 fun NBTTagCompound.add(key: String, value: Long) = setLong(key, value)
 fun NBTTagCompound.add(key: String, value: UUID) = setUniqueId(key, value)
-fun NBTTagCompound.add(key: String, value: EnumFacing) = setEnumFacing(key, value)
 fun NBTTagCompound.add(key: String, value: BlockPos) = setBlockPos(key, value)
 fun NBTTagCompound.add(key: String, value: Vec3d) = setVector3(key, value)
 fun NBTTagCompound.add(key: String, value: IntArray) = setIntArray(key, value)
 fun NBTTagCompound.add(key: String, value: String) = setString(key, value)
 fun NBTTagCompound.add(key: String, value: NBTTagCompound) = setTag(key, value)
+fun NBTTagCompound.add(key: String, value: EnumFacing?) = setEnumFacing(key, value)
+
+inline operator fun NBTTagCompound.set(key: String, value: Int) = setInteger(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Boolean) = setBoolean(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Float) = setFloat(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Double) = setDouble(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Byte) = setByte(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Short) = setShort(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Long) = setLong(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: UUID) = setUniqueId(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: BlockPos) = setBlockPos(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: Vec3d) = setVector3(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: IntArray) = setIntArray(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: String) = setString(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: NBTBase) = setTag(key, value)
+inline operator fun NBTTagCompound.set(key: String, value: EnumFacing?) = setEnumFacing(key, value)
 
 
 fun NBTTagCompound.toMap(): Map<String, Any> {

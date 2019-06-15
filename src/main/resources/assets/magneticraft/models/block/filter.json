@@ -1,13 +1,13 @@
 {
     "parent": "block/block",
     "textures": {
-        "particle": "magneticraft:blocks/machines/relay_front",
-        "down": "magneticraft:blocks/machines/relay_side",
-        "up": "magneticraft:blocks/machines/relay_side",
-        "north": "magneticraft:blocks/machines/relay_front",
-        "east": "magneticraft:blocks/machines/relay_side",
-        "south": "magneticraft:blocks/machines/relay_back",
-        "west": "magneticraft:blocks/machines/relay_side"
+        "particle": "magneticraft:blocks/machines/filter_front",
+        "down": "magneticraft:blocks/machines/filter_side",
+        "up": "magneticraft:blocks/machines/filter_side",
+        "north": "magneticraft:blocks/machines/filter_front",
+        "east": "magneticraft:blocks/machines/filter_side",
+        "south": "magneticraft:blocks/machines/filter_back",
+        "west": "magneticraft:blocks/machines/filter_side"
     },
     "elements": [
         {

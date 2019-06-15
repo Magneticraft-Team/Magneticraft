@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.features.automatic_machines
 
+import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBoxStorage
+import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.resource
@@ -501,12 +503,14 @@ object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
     }
 
     override fun render(te: TilePneumaticTube) {
-        val n = te.north()
-        val s = te.south()
-        val e = te.east()
-        val w = te.west()
-        val u = te.up()
-        val d = te.down()
+        val d = te.down() && te.tubeModule.enabledSides[0]
+        val u = te.up() && te.tubeModule.enabledSides[1]
+        val n = te.north() && te.tubeModule.enabledSides[2]
+        val s = te.south() && te.tubeModule.enabledSides[3]
+        val w = te.west() && te.tubeModule.enabledSides[4]
+        val e = te.east() && te.tubeModule.enabledSides[5]
+
+        GlStateManager.disableCull()
 
         when {
             n && s && !e && !w && !u && !d -> {
@@ -536,5 +540,100 @@ object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
         if (w) renderModel("west")
         if (u) renderModel("up")
         if (d) renderModel("down")
+
+        GlStateManager.enableCull()
+
+        renderItems(te.flow)
+    }
+
+    fun renderItems(flow: PneumaticBoxStorage) {
+        flow.getItems().forEach { box ->
+
+            val percent = if (!box.isOutput) {
+                1 - ((box.progress.toFloat() + ticks * 16) / PneumaticBox.MAX_PROGRESS)
+            } else {
+                (box.progress.toFloat() + ticks * 16) / PneumaticBox.MAX_PROGRESS
+            }
+
+            val offset = vec3Of(8.px, 7.px, 8.px) + box.side.toVector3() * 0.5 * percent
+
+            stackMatrix {
+                translate(offset)
+                Utilities.renderItem(box.item)
+            }
+        }
+    }
+}
+
+@RegisterRenderer(TilePneumaticRestrictionTube::class)
+object TileRendererPneumaticRestrictionTube : BaseTileRenderer<TilePneumaticRestrictionTube>() {
+
+    override fun init() {
+        createModel(Blocks.pneumaticRestrictionTube, listOf(
+            ModelSelector("center_full", FilterString("center_full")),
+            ModelSelector("north", FilterString("north")),
+            ModelSelector("south", FilterString("south")),
+            ModelSelector("east", FilterString("east")),
+            ModelSelector("west", FilterString("west")),
+            ModelSelector("up", FilterString("up")),
+            ModelSelector("down", FilterString("down")),
+            ModelSelector("center_north_h", FilterString("center_north_h")),
+            ModelSelector("center_south_h", FilterString("center_south_h")),
+            ModelSelector("center_east_h", FilterString("center_east_h")),
+            ModelSelector("center_west_h", FilterString("center_west_h")),
+            ModelSelector("center_up_h", FilterString("center_up_h")),
+            ModelSelector("center_down_h", FilterString("center_down_h")),
+            ModelSelector("center_north_v", FilterString("center_north_v")),
+            ModelSelector("center_south_v", FilterString("center_south_v")),
+            ModelSelector("center_east_v", FilterString("center_east_v")),
+            ModelSelector("center_west_v", FilterString("center_west_v")),
+            ModelSelector("center_up_v", FilterString("center_up_v")),
+            ModelSelector("center_down_v", FilterString("center_down_v"))
+        ))
+    }
+
+    override fun render(te: TilePneumaticRestrictionTube) {
+
+        val d = te.down() && te.tubeModule.enabledSides[0]
+        val u = te.up() && te.tubeModule.enabledSides[1]
+        val n = te.north() && te.tubeModule.enabledSides[2]
+        val s = te.south() && te.tubeModule.enabledSides[3]
+        val w = te.west() && te.tubeModule.enabledSides[4]
+        val e = te.east() && te.tubeModule.enabledSides[5]
+
+        GlStateManager.disableCull()
+
+        when {
+            n && s && !e && !w && !u && !d -> {
+                renderModel("center_east_h")
+                renderModel("center_west_h")
+                renderModel("center_up_h")
+                renderModel("center_down_h")
+            }
+            !n && !s && e && w && !u && !d -> {
+                renderModel("center_north_h")
+                renderModel("center_south_h")
+                renderModel("center_up_v")
+                renderModel("center_down_v")
+            }
+            !n && !s && !e && !w && u && d -> {
+                renderModel("center_north_v")
+                renderModel("center_south_v")
+                renderModel("center_east_v")
+                renderModel("center_west_v")
+            }
+            else -> renderModel("center_full")
+        }
+
+        if (n) renderModel("north")
+        if (s) renderModel("south")
+        if (e) renderModel("east")
+        if (w) renderModel("west")
+        if (u) renderModel("up")
+        if (d) renderModel("down")
+
+        GlStateManager.enableCull()
+
+        TileRendererPneumaticTube.renderItems(te.flow)
     }
 }

@@ -82,12 +82,12 @@
       "count": 6,
       "type": "VEC2",
       "max": [
-        1.0,
-        0.8125
+        0.25,
+        0.34375
       ],
       "min": [
-        0.75,
-        0.5625
+        0.0,
+        0.09375
       ]
     },
     {
@@ -112,12 +112,12 @@
       "count": 6,
       "type": "VEC2",
       "max": [
-        1.0,
-        0.8125
+        0.25,
+        0.34375
       ],
       "min": [
-        0.75,
-        0.5625
+        0.0,
+        0.09375
       ]
     },
     {
@@ -189,7 +189,7 @@
   },
   "buffers": [
     {
-      "uri": "pneumatic_tube_inv.bin",
+      "uri": "pneumatic_restriction_tube_inv.bin",
       "byteLength": 1824
     }
   ],

@@ -46,8 +46,8 @@ fun interpolate(v: Double, min: Double, max: Double): Double {
 }
 
 inline fun iterateArea(rangeX: IntRange, rangeY: IntRange, func: (x: Int, y: Int) -> Unit) {
-    for (i in rangeX) {
-        for (j in rangeY) {
+    for (j in rangeY) {
+        for (i in rangeX) {
             func(i, j)
         }
     }

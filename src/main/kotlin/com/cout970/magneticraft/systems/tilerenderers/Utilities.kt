@@ -134,12 +134,12 @@ object Utilities {
             rotate(-facing.horizontalAngle, 0f, 0f, 1f)
             translate(0.0, -1 * PIXEL, 0.0)
             val s = 0.5
-            GlStateManager.scale(s, s, s)
+            scale(s, s, s)
         } else {
             rotate(facing.horizontalAngle, 0f, 1f, 0f)
             translate(0.0, -1.9 * PIXEL, 0.0)
             val s = 0.9
-            GlStateManager.scale(s, s, s)
+            scale(s, s, s)
         }
 
         Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)

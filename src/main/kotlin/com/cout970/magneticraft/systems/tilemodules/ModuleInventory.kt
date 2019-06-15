@@ -19,7 +19,8 @@ import net.minecraftforge.items.IItemHandler
 open class ModuleInventory(
     val inventory: Inventory,
     override val name: String = "module_inventory",
-    val capabilityFilter: (IItemHandler) -> IItemHandler? = ALLOW_ALL
+    val capabilityFilter: (IItemHandler) -> IItemHandler? = ALLOW_ALL,
+    val sideFilter: (EnumFacing) -> Boolean = { true }
 ) : IModule {
 
     companion object {
@@ -37,7 +38,7 @@ open class ModuleInventory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
-        if (cap == ITEM_HANDLER) {
+        if (cap == ITEM_HANDLER && (facing == null || sideFilter(facing))) {
             return capabilityFilter(inventory) as? T
         }
         return null

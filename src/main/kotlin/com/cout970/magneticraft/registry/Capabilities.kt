@@ -12,6 +12,9 @@ import com.cout970.magneticraft.api.energy.IManualConnectionHandler
 import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
+import com.cout970.magneticraft.api.pneumatic.ITubeConnectable
+import com.cout970.magneticraft.api.pneumatic.PneumaticBox
+import com.cout970.magneticraft.api.pneumatic.PneumaticMode
 import com.cout970.magneticraft.api.tool.IGear
 import com.cout970.magneticraft.features.items.ComputerItems
 import com.cout970.magneticraft.systems.computer.FloppyDisk
@@ -68,20 +71,26 @@ var ITEM_FLOPPY_DISK: Capability<IFloppyDisk>? = null
 @CapabilityInject(IGear::class)
 var ITEM_GEAR: Capability<IGear>? = null
 
+@CapabilityInject(ITubeConnectable::class)
+var TUBE_CONNECTABLE: Capability<ITubeConnectable>? = null
+
 /**
  * This is called on the server and the client at preInit
  */
 fun registerCapabilities() {
-    CapabilityManager.INSTANCE.register(IElectricNodeHandler::class.java, EmptyStorage()) { DefaultElectricNodeProvider() }
-    CapabilityManager.INSTANCE.register(IHeatNodeHandler::class.java, EmptyStorage()) { DefaultHeatNodeProvider() }
-    CapabilityManager.INSTANCE.register(IManualConnectionHandler::class.java, EmptyStorage()) { DefaultManualConnectionHandler() }
-    CapabilityManager.INSTANCE.register(IGear::class.java, EmptyStorage()) { DefaultGear() }
-    CapabilityManager.INSTANCE.register(IFloppyDisk::class.java, EmptyStorage()) {
-        FloppyDisk(
-            ItemStack(ComputerItems.floppyDisk, 1, 0,
-                ComputerItems.createNBT(128, true, true)
+    CapabilityManager.INSTANCE.apply {
+        register(IElectricNodeHandler::class.java, EmptyStorage()) { DefaultElectricNodeProvider() }
+        register(IHeatNodeHandler::class.java, EmptyStorage()) { DefaultHeatNodeProvider() }
+        register(IManualConnectionHandler::class.java, EmptyStorage()) { DefaultManualConnectionHandler() }
+        register(IGear::class.java, EmptyStorage()) { DefaultGear() }
+        register(ITubeConnectable::class.java, EmptyStorage()) { DefaultTubeConnectable() }
+        register(IFloppyDisk::class.java, EmptyStorage()) {
+            FloppyDisk(
+                ItemStack(ComputerItems.floppyDisk, 1, 0,
+                    ComputerItems.createNBT(128, read = true, write = true)
+                )
             )
-        )
+        }
     }
 }
 
@@ -193,4 +202,11 @@ class DefaultGear : IGear {
     override fun getMaxDurability(): Int = 0
     override fun getDurability(): Int = 0
     override fun applyDamage(stack: ItemStack): ItemStack = ItemStack.EMPTY
+}
+
+class DefaultTubeConnectable : ITubeConnectable {
+
+    override fun insert(box: PneumaticBox, mode: PneumaticMode): Boolean = false
+    override fun canInsert(box: PneumaticBox, mode: PneumaticMode): Boolean = false
+    override fun getWeight(): Int = 0
 }

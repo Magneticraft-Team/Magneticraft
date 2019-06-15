@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.systems.tilemodules
 
-import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry
@@ -9,6 +8,7 @@ import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.misc.vector.containsPoint
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
@@ -25,7 +25,6 @@ import com.cout970.magneticraft.systems.tilemodules.pipe.PipeNetwork
 import com.cout970.magneticraft.systems.tilemodules.pipe.PipeType
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.Vec3d
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fluids.FluidUtil
 import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate
@@ -130,12 +129,6 @@ class ModulePipe(
         ConnectionState.PASSIVE -> ConnectionState.ACTIVE
         ConnectionState.ACTIVE -> ConnectionState.DISABLE
         ConnectionState.DISABLE -> ConnectionState.PASSIVE
-    }
-
-    private fun AABB.containsPoint(vec: Vec3d): Boolean {
-        return vec.x >= this.minX && vec.x <= this.maxX &&
-            vec.y >= this.minY && vec.y <= this.maxY &&
-            vec.z >= this.minZ && vec.z <= this.maxZ
     }
 
     fun getNetworkTank() = FluidHandlerConcatenate(pipeNetwork?.members?.map { it.tank } ?: emptyList())

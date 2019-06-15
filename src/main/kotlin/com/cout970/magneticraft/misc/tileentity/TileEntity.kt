@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
+import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import net.minecraft.tileentity.TileEntity
@@ -13,6 +14,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/02/20.
@@ -29,6 +31,11 @@ fun IModuleContainer.shouldTick(ticks: Int): Boolean {
 inline fun <reified T : TileEntity> World.getTile(pos: BlockPos): T? {
     val tile = getTileEntity(pos)
     return tile as? T
+}
+
+fun <T> IBlockAccess.getCap(cap: Capability<T>?, pos: BlockPos, side: EnumFacing?): T? {
+    val tile = getTileEntity(pos) ?: return null
+    return cap?.fromTile(tile, side)
 }
 
 inline fun <reified T> TileBase.getModule(): T? = container.modules.find { it is T } as? T

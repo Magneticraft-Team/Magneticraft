@@ -190,6 +190,9 @@ tile.magneticraft.insulated_heat_pipe_normal.name=Insulated Heat Pipe
 tile.magneticraft.rf_heater_off.name=RF Heater
 tile.magneticraft.electric_cable_normal.name=Electric cable
 tile.magneticraft.pneumatic_tube_normal.name=Pneumatic Tube
+tile.magneticraft.pneumatic_restriction_tube_normal.name=Restriction Pneumatic Tube
+tile.magneticraft.relay_down.name=Relay
+tile.magneticraft.filter_down.name=Filter
 
 # Multiblocks
 tile.magneticraft.sieve_inactive_north.name=Sieve

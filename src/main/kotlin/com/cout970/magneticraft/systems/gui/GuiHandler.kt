@@ -1,8 +1,6 @@
 package com.cout970.magneticraft.systems.gui
 
-import com.cout970.magneticraft.features.automatic_machines.ContainerInserter
-import com.cout970.magneticraft.features.automatic_machines.TileInserter
-import com.cout970.magneticraft.features.automatic_machines.guiInserter
+import com.cout970.magneticraft.features.automatic_machines.*
 import com.cout970.magneticraft.features.computers.*
 import com.cout970.magneticraft.features.electric_machines.*
 import com.cout970.magneticraft.features.heat_machines.*
@@ -59,6 +57,8 @@ object GuiHandler : IGuiHandler {
             is ContainerBigCombustionChamber -> guiOf(container, ::guiBigCombustionChamber)
             is ContainerInserter             -> guiOf(container, ::guiInserter)
             is ContainerBrickFurnace         -> guiOf(container, ::guiBrickFurnace)
+            is ContainerRelay                -> guiOf(container, ::guiRelay)
+            is ContainerFilter               -> guiOf(container, ::guiFilter)
             else -> null
         }
         // @formatter:on
@@ -100,6 +100,8 @@ object GuiHandler : IGuiHandler {
             is TileBigCombustionChamber -> ContainerBigCombustionChamber(tile, player, world, pos)
             is TileInserter             -> ContainerInserter(tile, player, world, pos)
             is TileBrickFurnace         -> ContainerBrickFurnace(tile, player, world, pos)
+            is TileRelay                -> ContainerRelay(tile, player, world, pos)
+            is TileFilter               -> ContainerFilter(tile, player, world, pos)
             else -> null
         }
         // @formatter:on
@@ -112,6 +114,4 @@ object GuiHandler : IGuiHandler {
             }
         }
     }
-
-
 }
