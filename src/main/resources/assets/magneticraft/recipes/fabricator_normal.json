@@ -1,20 +1,19 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AA ",
-    "BCD",
-    "AA "
+    "AB",
+    "CD"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotLead",
+      "ore": "ingotCopper",
       "count": 1
     },
     "B": {
-      "item": "magneticraft:crafting",
-      "count": 1,
-      "data": 3
+      "type": "forge:ore_dict",
+      "ore": "ingotIron",
+      "count": 1
     },
     "C": {
       "type": "forge:ore_dict",
@@ -23,13 +22,13 @@
     },
     "D": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron",
+      "ore": "workbench",
       "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:crafting",
-    "count": 4,
-    "data": 2
+    "item": "magneticraft:fabricator",
+    "count": 1,
+    "data": 0
   }
 }

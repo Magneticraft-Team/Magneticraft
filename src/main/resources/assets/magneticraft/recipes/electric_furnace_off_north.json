@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "CCC"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:crafting",
+      "count": 1,
+      "data": 3
+    },
+    "B": {
+      "item": "magneticraft:brick_furnace",
+      "count": 1,
+      "data": 0
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:electric_furnace",
+    "count": 1,
+    "data": 0
+  }
+}

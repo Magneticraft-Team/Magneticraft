@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    "A A",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:brick_block",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateCopper",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:brick_furnace",
+    "count": 1,
+    "data": 0
+  }
+}

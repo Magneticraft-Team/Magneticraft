@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AB"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:pneumatic_tube",
+      "count": 1,
+      "data": 0
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:pneumatic_restriction_tube",
+    "count": 1,
+    "data": 0
+  }
+}

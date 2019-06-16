@@ -1,35 +1,35 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AA ",
-    "BCD",
-    "AA "
+    "AAA",
+    "BCB",
+    "BDB"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotLead",
+      "ore": "plankWood",
       "count": 1
     },
     "B": {
-      "item": "magneticraft:crafting",
-      "count": 1,
-      "data": 3
+      "type": "forge:ore_dict",
+      "ore": "cobblestone",
+      "count": 1
     },
     "C": {
-      "type": "forge:ore_dict",
-      "ore": "dustRedstone",
-      "count": 1
+      "item": "magneticraft:crafting",
+      "count": 1,
+      "data": 5
     },
     "D": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron",
+      "ore": "dustRedstone",
       "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:crafting",
-    "count": 4,
-    "data": 2
+    "item": "magneticraft:filter",
+    "count": 1,
+    "data": 0
   }
 }

@@ -24,6 +24,7 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleElectricity
+import com.cout970.magneticraft.systems.tilemodules.ModuleTeslaTower
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
@@ -251,10 +252,11 @@ class TileElectricCable : TileBase(), ITickable {
 class TileTeslaTower : TileBase(), ITickable {
 
     val node = ElectricNode(ref)
-    val electricModule = ModuleElectricity(listOf(node))
+    val electricModule = ModuleElectricity(listOf(node), capabilityFilter = { side -> side == EnumFacing.DOWN })
+    val teslaTowerModule = ModuleTeslaTower(node)
 
     init {
-        initModules(electricModule)
+        initModules(electricModule, teslaTowerModule)
     }
 
     @DoNotRemove

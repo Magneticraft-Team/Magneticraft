@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A",
+    "BB"
+  ],
+  "key": {
+    "A": {
+      "item": "magneticraft:iron_hammer",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:light_plates",
+    "count": 1,
+    "data": 1
+  }
+}

@@ -72,7 +72,7 @@ object Blocks : IBlockMaker {
             alwaysDropDefault = true
             hasCustomModel = true
             //methods
-            onBlockPlaced = CommonMethods::placeInactiveWithOppositeOrientation
+            onBlockPlaced = CommonMethods::placeInactiveWithOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
         }.build()

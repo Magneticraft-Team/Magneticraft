@@ -1,6 +1,6 @@
 buildscript {
     ext.project_kotlin_version = '1.2.40'
-    ext.mod_version = '2.5.2'
+    ext.mod_version = '2.6.0'
     
     repositories {
         jcenter()
@@ -29,7 +29,7 @@ minecraft {
     runDir = "run"
 
     replaceIn 'Magneticraft.kt'
-    replace '@VERSION@', '2.5.2'
+    replace '@VERSION@', mod_version
 }
 
 repositories {
