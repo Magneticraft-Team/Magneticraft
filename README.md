@@ -3,11 +3,6 @@
 # Magneticraft
 Magneticraft mod, more info in curseforge https://minecraft.curseforge.com/projects/magneticraft
 
-### This mod is no longer being developed!
-At October 10th 2018, the 4th year anniversary of the mod, we decided to stop the development of this mod.
-
-If anyone wants to continue the mod, the License allow copy, modification and redistribution of the mod's code and assets.
-
 ### Compiling the mod
 This is a small tutorial for non-modders to get the last version of the mod from github, so you can play with alpha versions of the mod.
 
