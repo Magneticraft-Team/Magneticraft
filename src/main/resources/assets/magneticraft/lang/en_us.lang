@@ -193,6 +193,7 @@ tile.magneticraft.pneumatic_tube_normal.name=Pneumatic Tube
 tile.magneticraft.pneumatic_restriction_tube_normal.name=Restriction Pneumatic Tube
 tile.magneticraft.relay_down.name=Relay
 tile.magneticraft.filter_down.name=Filter
+tile.magneticraft.transposer_down.name=Transposer
 
 # Multiblocks
 tile.magneticraft.sieve_inactive_north.name=Sieve

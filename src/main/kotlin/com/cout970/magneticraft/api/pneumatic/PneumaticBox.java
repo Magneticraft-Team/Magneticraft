@@ -32,6 +32,10 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
      * Indicates if this item has a route or should be dropped immediately
      */
     private boolean inRoute;
+    /**
+     * Last mode of this item
+     */
+    private PneumaticMode mode;
 
     public PneumaticBox() {
         item = ItemStack.EMPTY;
@@ -39,6 +43,7 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
         side = EnumFacing.UP;
         output = false;
         inRoute = true;
+        mode = PneumaticMode.TRAVELING;
     }
 
     public PneumaticBox(ItemStack item) {
@@ -91,6 +96,14 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
         this.inRoute = inRoute;
     }
 
+    public PneumaticMode getMode() {
+        return mode;
+    }
+
+    public void setMode(PneumaticMode mode) {
+        this.mode = mode;
+    }
+
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
@@ -98,6 +111,7 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
         nbt.setInteger("progress", progress);
         nbt.setInteger("side", side.ordinal());
         nbt.setBoolean("output", output);
+        nbt.setInteger("mode", mode.ordinal());
         return nbt;
     }
 
@@ -107,5 +121,6 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
         progress = nbt.getInteger("progress");
         side = EnumFacing.getFront(nbt.getInteger("side"));
         output = nbt.getBoolean("output");
+        mode = PneumaticMode.values()[nbt.getInteger("mode")];
     }
 }

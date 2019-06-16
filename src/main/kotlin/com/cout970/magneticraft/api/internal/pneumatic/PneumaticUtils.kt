@@ -61,7 +61,7 @@ object PneumaticUtils {
 
             entity.setPositionAndRotation(
                 pos.xd + (0.5 - dir.x * 5.px),
-                pos.yd + (0.5 - dir.y * 5.px) - 2.px, // TODO
+                pos.yd + (0.5 - dir.y * 5.px) - 2.px,
                 pos.zd + (0.5 - dir.z * 5.px),
                 0.0f, 0.0f
             )

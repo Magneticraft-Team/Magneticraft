@@ -1,0 +1,26 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "particle": "magneticraft:blocks/machines/transposer_front",
+        "down": "magneticraft:blocks/machines/transposer_side",
+        "up": "magneticraft:blocks/machines/transposer_side",
+        "north": "magneticraft:blocks/machines/transposer_front",
+        "east": "magneticraft:blocks/machines/transposer_side",
+        "south": "magneticraft:blocks/machines/transposer_back",
+        "west": "magneticraft:blocks/machines/transposer_side"
+    },
+    "elements": [
+        {
+            "from": [0, 0, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "down": {"texture": "#down", "cullface": "down", "rotation": 90},
+                "up": {"texture": "#up", "cullface": "up", "rotation": 270},
+                "north": {"texture": "#north", "cullface": "north", "rotation": 0},
+                "south": {"texture": "#south", "cullface": "south", "rotation": 0},
+                "west": {"texture": "#west", "cullface": "west", "rotation": 180},
+                "east": {"texture": "#east", "cullface": "east", "rotation": 0}
+            }
+        }
+    ]
+}

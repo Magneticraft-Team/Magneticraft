@@ -503,12 +503,12 @@ object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
     }
 
     override fun render(te: TilePneumaticTube) {
-        val d = te.down() && te.tubeModule.enabledSides[0]
-        val u = te.up() && te.tubeModule.enabledSides[1]
-        val n = te.north() && te.tubeModule.enabledSides[2]
-        val s = te.south() && te.tubeModule.enabledSides[3]
-        val w = te.west() && te.tubeModule.enabledSides[4]
-        val e = te.east() && te.tubeModule.enabledSides[5]
+        val d = te.down()
+        val u = te.up()
+        val n = te.north()
+        val s = te.south()
+        val w = te.west()
+        val e = te.east()
 
         GlStateManager.disableCull()
 
@@ -559,7 +559,7 @@ object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
 
             stackMatrix {
                 translate(offset)
-                Utilities.renderItem(box.item)
+                Utilities.renderTubeItem(box.item)
             }
         }
     }
@@ -593,13 +593,12 @@ object TileRendererPneumaticRestrictionTube : BaseTileRenderer<TilePneumaticRest
     }
 
     override fun render(te: TilePneumaticRestrictionTube) {
-
-        val d = te.down() && te.tubeModule.enabledSides[0]
-        val u = te.up() && te.tubeModule.enabledSides[1]
-        val n = te.north() && te.tubeModule.enabledSides[2]
-        val s = te.south() && te.tubeModule.enabledSides[3]
-        val w = te.west() && te.tubeModule.enabledSides[4]
-        val e = te.east() && te.tubeModule.enabledSides[5]
+        val d = te.down()
+        val u = te.up()
+        val n = te.north()
+        val s = te.south()
+        val w = te.west()
+        val e = te.east()
 
         GlStateManager.disableCull()
 

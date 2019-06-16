@@ -145,6 +145,23 @@ object Utilities {
         Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
     }
 
+    fun renderTubeItem(stack: ItemStack) {
+        val renderItem = Minecraft.getMinecraft().renderItem
+
+        if (!renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+//            translate(0.0, -0.9 * PIXEL, 0.0)
+//            rotate(90f, 1f, 0f, 0f)
+//            translate(0.0, -1 * PIXEL, 0.0)
+            val s = 12.px
+            translate(0.0, (-0.5).px, 0.0)
+            scale(s, s, s)
+        } else {
+            translate(0.0, (-2).px, 0.0)
+        }
+
+        renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
+    }
+
     fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms.TransformType, alpha: Float) {
         var bakedModel = Minecraft.getMinecraft().renderItem.getItemModelWithOverrides(stack, null, null)
         if (stack.isNotEmpty) {

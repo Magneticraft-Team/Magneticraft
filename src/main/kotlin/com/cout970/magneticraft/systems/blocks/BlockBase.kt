@@ -118,8 +118,8 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
 
     @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override fun getSelectedBoundingBox(state: IBlockState, worldIn: World, pos: BlockPos): AxisAlignedBB {
-        aabb?.let {
-            val rel = it.invoke(BoundingBoxArgs(state, worldIn, pos))
+        aabb?.let { aabb ->
+            val rel = aabb.invoke(BoundingBoxArgs(state, worldIn, pos))
 
             val player = Minecraft.getMinecraft().player
             val start = player.getPositionEyes(0f)
@@ -136,8 +136,8 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
                 .associate { it to rayTrace(pos, start, end, it) }
                 .filter { it.value != null }
                 .map { it.key to it.value }
-                .sortedBy { it.second!!.hitVec.distanceTo(start) }
-                .firstOrNull()?.first
+                .minBy { it.second!!.hitVec.distanceTo(start) }
+                ?.first
 
             return res?.offset(pos) ?: EMPTY_AABB
         }
@@ -148,17 +148,15 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun collisionRayTrace(blockState: IBlockState, worldIn: World, pos: BlockPos, start: Vec3d,
                                    end: Vec3d): RayTraceResult? {
 
-        aabb?.let {
-            val rel = it.invoke(BoundingBoxArgs(blockState, worldIn, pos))
-            val res = rel
+        aabb?.let { aabb ->
+            val rel = aabb.invoke(BoundingBoxArgs(blockState, worldIn, pos))
+            return rel
                 .mapNotNull { it.cut(FULL_BLOCK_AABB) }
                 .associate { it to rayTrace(pos, start, end, it) }
                 .filter { it.value != null }
                 .map { it.key to it.value }
-                .sortedBy { it.second!!.hitVec.distanceTo(start) }
-                .firstOrNull()?.second
-
-            return res
+                .minBy { it.second!!.hitVec.distanceTo(start) }
+                ?.second
         }
         return this.rayTrace(pos, start, end, blockState.getBoundingBox(worldIn, pos))
     }

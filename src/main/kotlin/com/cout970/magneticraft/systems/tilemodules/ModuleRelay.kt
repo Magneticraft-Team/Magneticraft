@@ -17,7 +17,7 @@ class ModuleRelay(
     override lateinit var container: IModuleContainer
 
     override fun update() {
-        if (world.isClient || !container.shouldTick(10) || buffer.blocked) return
+        if (world.isClient || !container.shouldTick(5) || buffer.blocked) return
 
         for (index in 0 until inventory.slots) {
             val stack = inventory.getStackInSlot(index)

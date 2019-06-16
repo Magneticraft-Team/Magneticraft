@@ -2,7 +2,6 @@ package com.cout970.magneticraft.features.automatic_machines
 
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBoxStorage
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBuffer
-import com.cout970.magneticraft.api.internal.pneumatic.PneumaticUtils
 import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
@@ -139,12 +138,25 @@ class TileWaterGenerator : TileBase(), ITickable {
 
 abstract class AbstractTileTube : TileBase() {
 
-    val north = TimeCache(this.ref, 10) { PneumaticUtils.canConnectToTube(world, pos, EnumFacing.NORTH) }
-    val south = TimeCache(this.ref, 10) { PneumaticUtils.canConnectToTube(world, pos, EnumFacing.SOUTH) }
-    val east = TimeCache(this.ref, 10) { PneumaticUtils.canConnectToTube(world, pos, EnumFacing.EAST) }
-    val west = TimeCache(this.ref, 10) { PneumaticUtils.canConnectToTube(world, pos, EnumFacing.WEST) }
-    val up = TimeCache(this.ref, 10) { PneumaticUtils.canConnectToTube(world, pos, EnumFacing.UP) }
-    val down = TimeCache(this.ref, 10) { PneumaticUtils.canConnectToTube(world, pos, EnumFacing.DOWN) }
+    val flow = PneumaticBoxStorage()
+
+    @Suppress("LeakingThis")
+    val tubeModule = ModulePneumaticTube(flow, getWeight())
+    val connections = TimeCache(this.ref, 10) { tubeModule.getConnections() }
+
+    val down = { connections()[0] }
+    val up = { connections()[1] }
+    val north = { connections()[2] }
+    val south = { connections()[3] }
+    val west = { connections()[4] }
+    val east = { connections()[5] }
+
+    abstract fun getWeight(): Int
+
+    init {
+        initModules(tubeModule)
+    }
+
 
     override fun getRenderBoundingBox(): AxisAlignedBB {
         return Block.FULL_BLOCK_AABB.offset(pos)
@@ -154,12 +166,7 @@ abstract class AbstractTileTube : TileBase() {
 @RegisterTileEntity("pneumatic_tube")
 class TilePneumaticTube : AbstractTileTube(), ITickable {
 
-    val flow = PneumaticBoxStorage()
-    val tubeModule = ModulePneumaticTube(flow)
-
-    init {
-        initModules(tubeModule)
-    }
+    override fun getWeight(): Int = 0
 
     @DoNotRemove
     override fun update() {
@@ -171,12 +178,7 @@ class TilePneumaticTube : AbstractTileTube(), ITickable {
 @RegisterTileEntity("pneumatic_restriction_tube")
 class TilePneumaticRestrictionTube : AbstractTileTube(), ITickable {
 
-    val flow = PneumaticBoxStorage()
-    val tubeModule = ModulePneumaticTube(flow, 100)
-
-    init {
-        initModules(tubeModule)
-    }
+    override fun getWeight(): Int = 100
 
     @DoNotRemove
     override fun update() {
@@ -220,6 +222,9 @@ class TileRelay : TileBase(), ITickable {
 // manager x,
 // ejector
 // color
+// route only in intersections and ends ✓
+// faster relay ✓
+// round robin in intersections ✓
 
 @RegisterTileEntity("filter")
 class TileFilter : TileBase(), ITickable {
@@ -245,6 +250,25 @@ class TileFilter : TileBase(), ITickable {
 
     init {
         initModules(endpointModule, invModule, filterModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("transposer")
+class TileTransposer : TileBase(), ITickable {
+
+    val facing: EnumFacing get() = getBlockState().getFacing()
+    val buffer = PneumaticBuffer()
+
+    val endpointModule = ModulePneumaticEndpoint(buffers = listOf(buffer), getInfo = { BufferInfo(false, facing) })
+    val transposerModule = ModuleTransposer(buffer, { facing })
+
+    init {
+        initModules(endpointModule, transposerModule)
     }
 
     @DoNotRemove

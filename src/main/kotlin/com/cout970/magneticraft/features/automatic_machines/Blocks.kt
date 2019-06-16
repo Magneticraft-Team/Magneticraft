@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.*
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.blocks.BlockBase
 import com.cout970.magneticraft.systems.blocks.BlockBuilder
 import com.cout970.magneticraft.systems.blocks.CommonMethods
@@ -36,6 +37,7 @@ object Blocks : IBlockMaker {
     lateinit var pneumaticRestrictionTube: BlockBase private set
     lateinit var relay: BlockBase private set
     lateinit var filter: BlockBase private set
+    lateinit var transposer: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -135,14 +137,11 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             boundingBox = { pneumaticTubeBoundingBox(it.source, it.pos) }
             onActivated = CommonMethods::delegateToModule
-            onNeighborChanged = {
-                it.worldIn.getTile<TilePneumaticTube>(it.fromPos)?.apply {
-                    north.clear()
-                    south.clear()
-                    east.clear()
-                    west.clear()
-                    up.clear()
-                    down.clear()
+            onBlockPostPlaced = {
+                if (it.world.isClient){
+                    EnumFacing.values().forEach {side ->
+                        it.world.getTile<AbstractTileTube>(it.pos.offset(side))?.connections?.clear()
+                    }
                 }
             }
         }.build()
@@ -157,14 +156,11 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             boundingBox = { pneumaticTubeBoundingBox(it.source, it.pos) }
             onActivated = CommonMethods::delegateToModule
-            onNeighborChanged = {
-                it.worldIn.getTile<TilePneumaticRestrictionTube>(it.fromPos)?.apply {
-                    north.clear()
-                    south.clear()
-                    east.clear()
-                    west.clear()
-                    up.clear()
-                    down.clear()
+            onBlockPostPlaced = {
+                if (it.world.isClient){
+                    EnumFacing.values().forEach {side ->
+                        it.world.getTile<AbstractTileTube>(it.pos.offset(side))?.connections?.clear()
+                    }
                 }
             }
         }.build()
@@ -187,7 +183,16 @@ object Blocks : IBlockMaker {
             onActivated = CommonMethods::openGui
         }.build()
 
-        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube, pneumaticRestrictionTube, relay, filter)
+        transposer = builder.withName("transposer").copy {
+            states = CommonMethods.Facing.values().toList()
+            factory = factoryOf(::TileTransposer)
+            alwaysDropDefault = true
+            onBlockPlaced = CommonMethods::placeWithOppositeFacing
+            pickBlock = CommonMethods::pickDefaultBlock
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube, pneumaticRestrictionTube, relay, filter, transposer)
     }
 
     fun pneumaticTubeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {

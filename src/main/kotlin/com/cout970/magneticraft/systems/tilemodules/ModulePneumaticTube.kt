@@ -7,14 +7,15 @@ import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegist
 import com.cout970.magneticraft.api.pneumatic.ITube
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.api.pneumatic.PneumaticMode
+import com.cout970.magneticraft.features.automatic_machines.AbstractTileTube
 import com.cout970.magneticraft.features.automatic_machines.Blocks
 import com.cout970.magneticraft.misc.getList
-import com.cout970.magneticraft.misc.getNullableEnumFacing
 import com.cout970.magneticraft.misc.inventory.insertItem
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.set
 import com.cout970.magneticraft.misc.tileentity.getCap
+import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.containsPoint
 import com.cout970.magneticraft.misc.vector.toVec3d
 import com.cout970.magneticraft.misc.vector.vec3Of
@@ -44,8 +45,8 @@ class ModulePneumaticTube(
 ) : IModule, IOnActivated {
 
     override lateinit var container: IModuleContainer
-    private var preferredNextSide: EnumFacing? = null
     var changed = false
+    val roundRobbingMap = booleanArrayOf(false, false, false, false, false, false)
     val enabledSides = booleanArrayOf(true, true, true, true, true, true)
 
     override fun update() {
@@ -58,22 +59,44 @@ class ModulePneumaticTube(
             }
 
             if (box.progress < PneumaticBox.MAX_PROGRESS) continue
-            changed = true
+
 
             if (box.isOutput) {
                 toEject.add(box)
+                changed = true
+                continue
+            }
+            val validConnections = getConnections()
+            val sides = validConnections.count { it }
+
+            // If the tube is not an intersection the next side is the other valid connection
+            if (sides == 2) {
+                val side = validConnections.mapIndexed { index, open -> index to open }
+                    .find { (index, open) -> open && index != box.side.ordinal }!!
+                    .first
+                    .let { EnumFacing.getFront(it) }
+
+                box.setInRoute(true)
+                box.side = side
+                box.isOutput = true
+                box.progress = 0
                 continue
             }
 
-            val previousSide = box.side
-            var route = PneumaticUtils.findRoute(world, pos, box.side, box, PneumaticMode.TRAVELING, preferredNextSide)
+            changed = true
+            val nextSide = nextSide(validConnections, box.side)
+            var route = PneumaticUtils.findRoute(world, pos, box.side, box, PneumaticMode.TRAVELING, nextSide)
 
             if (route == null) {
-                route = PneumaticUtils.findRoute(world, pos, box.side, box, PneumaticMode.GOING_BACK, preferredNextSide)
+                route = PneumaticUtils.findRoute(world, pos, box.side, box, PneumaticMode.GOING_BACK, nextSide)
 
                 if (route == null) {
                     box.setInRoute(false)
+                } else {
+                    box.mode = PneumaticMode.GOING_BACK
                 }
+            } else {
+                box.mode = PneumaticMode.TRAVELING
             }
 
             if (route != null) {
@@ -81,12 +104,8 @@ class ModulePneumaticTube(
                 box.side = route
                 box.isOutput = true
                 box.progress = 0
-
-                preferredNextSide = EnumFacing.values()
-                    .filter { it != route && it != previousSide && PneumaticUtils.canConnectToTube(world, pos, it) }
-                    .shuffled(world.rand)
-                    .firstOrNull()
             } else {
+                // Drop the item
                 toEject.add(box)
             }
         }
@@ -108,6 +127,44 @@ class ModulePneumaticTube(
         }
     }
 
+    fun getConnections(): List<Boolean> = listOf(
+        enabledSides[0] && PneumaticUtils.canConnectToTube(world, pos, EnumFacing.DOWN),
+        enabledSides[1] && PneumaticUtils.canConnectToTube(world, pos, EnumFacing.UP),
+        enabledSides[2] && PneumaticUtils.canConnectToTube(world, pos, EnumFacing.NORTH),
+        enabledSides[3] && PneumaticUtils.canConnectToTube(world, pos, EnumFacing.SOUTH),
+        enabledSides[4] && PneumaticUtils.canConnectToTube(world, pos, EnumFacing.WEST),
+        enabledSides[5] && PneumaticUtils.canConnectToTube(world, pos, EnumFacing.EAST)
+    )
+
+    fun nextSide(validConnections: List<Boolean>, fromSide: EnumFacing): EnumFacing? {
+
+        val sidesToCheck = roundRobbingMap
+            .mapIndexed { index, _ -> EnumFacing.getFront(index) to (validConnections[index] && index != fromSide.ordinal) }
+            .filter { it.second }
+            .map { it.first }
+
+        if (sidesToCheck.isEmpty()) return null
+        var nextSide: EnumFacing? = null
+
+        for (side in sidesToCheck) {
+            val index = side.ordinal
+            val used = roundRobbingMap[index]
+
+            if (!used) {
+                nextSide = side
+                roundRobbingMap[index] = true
+                break
+            }
+        }
+
+        if (nextSide == null) {
+            roundRobbingMap.fill(false)
+            return nextSide(validConnections, fromSide)
+        }
+
+        return nextSide
+    }
+
     override fun onActivated(args: OnActivatedArgs): Boolean {
         if (args.heldItem.isEmpty || !WrenchRegistry.isWrench(args.heldItem)) return false
         if (world.isClient) return true
@@ -127,10 +184,8 @@ class ModulePneumaticTube(
 
         // Add to next tube
         if (tube != null && box.hasRoute()) {
-            if (!simulate) {
-                tube.insert(box, PneumaticMode.TRAVELING)
-            }
-            return true
+            if (simulate) return true
+            return tube.insert(box, box.mode)
         }
 
         val inv = world.getCap(ITEM_HANDLER, pos.offset(box.side), box.side.opposite)
@@ -148,19 +203,6 @@ class ModulePneumaticTube(
             world.dropItem(box.item, pos)
         }
         return true
-    }
-
-    override fun receiveSyncData(ibd: IBD, otherSide: Side) {
-        if (otherSide != Side.SERVER) return
-        // id 0 is the packet type, for now there is only one type
-        val size = ibd.getInteger(1)
-        flow.clear()
-
-        repeat(size) { index ->
-            val array = ibd.getByteArray(index + 2)
-            val input = CompressedStreamTools.readCompressed(array.inputStream())
-            flow.insert(PneumaticBox(input))
-        }
     }
 
     fun sendItemUpdate() {
@@ -189,9 +231,27 @@ class ModulePneumaticTube(
         closePlayers.forEach { Magneticraft.network.sendTo(packet, it) }
     }
 
+    override fun receiveSyncData(ibd: IBD, otherSide: Side) {
+        if (otherSide != Side.SERVER) return
+        // id 0 is the packet type, for now there is only one type
+        val size = ibd.getInteger(1)
+        flow.clear()
+
+        repeat(size) { index ->
+            val array = ibd.getByteArray(index + 2)
+            val input = CompressedStreamTools.readCompressed(array.inputStream())
+            flow.insert(PneumaticBox(input))
+        }
+    }
+
     override fun onBreak() {
         flow.getItems().forEach { box ->
             container.world.dropItem(box.item, container.pos)
+        }
+        if (world.isClient) {
+            EnumFacing.values().forEach { side ->
+                world.getTile<AbstractTileTube>(pos.offset(side))?.connections?.clear()
+            }
         }
     }
 
@@ -226,14 +286,16 @@ class ModulePneumaticTube(
     override fun serializeNBT(): NBTTagCompound {
         return newNbt {
             this["flow"] = flow.serializeNBT()
-            this["preferredNextSide"] = preferredNextSide
+            this["roundRobbingMap"] = roundRobbingMap.map { if (it) 1 else 0 }.toIntArray()
             this["enabledSides"] = enabledSides.map { if (it) 1 else 0 }.toIntArray()
         }
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         flow.deserializeNBT(nbt.getList("flow"))
-        preferredNextSide = nbt.getNullableEnumFacing("preferredNextSide")
+        nbt.getIntArray("roundRobbingMap").forEachIndexed { index, i ->
+            roundRobbingMap[index] = i != 0
+        }
         nbt.getIntArray("enabledSides").forEachIndexed { index, i ->
             enabledSides[index] = i != 0
         }
