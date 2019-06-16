@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.misc.inventory
 
+import com.cout970.magneticraft.api.internal.ApiUtils
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Items
@@ -109,7 +110,22 @@ fun IItemHandler.getSlotForExtraction(other: IItemHandler): Int? {
 
 fun IItemHandler.insertItem(stack: ItemStack, simulate: Boolean): ItemStack {
     var remaining = stack
-    (0 until slots).forEach {
+    var preferredSlot = -1
+
+    for (slot in 0 until slots) {
+        if (!ApiUtils.equalsIgnoreSize(getStackInSlot(slot), stack)) continue
+        if (insertItem(slot, stack, true).count != stack.count) {
+            preferredSlot = slot
+            break
+        }
+    }
+
+    if (preferredSlot >= 0) {
+        remaining = insertItem(preferredSlot, remaining, simulate)
+        if (remaining.isEmpty) return ItemStack.EMPTY
+    }
+
+    for (it in 0 until slots) {
         remaining = insertItem(it, remaining, simulate)
         if (remaining.isEmpty) return ItemStack.EMPTY
     }

@@ -28,6 +28,7 @@ object Blocks : IBlockMaker {
     lateinit var box: BlockBase private set
     lateinit var crushingTable: BlockBase private set
     lateinit var sluiceBox: BlockBase private set
+    lateinit var fabricator: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock>> {
         val builder = BlockBuilder().apply {
@@ -91,6 +92,11 @@ object Blocks : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(box, crushingTable, sluiceBox)
+        fabricator = builder.withName("fabricator").copy {
+            factory = factoryOf(::TileFabricator)
+            onActivated = CommonMethods::openGui
+        }.build()
+
+        return itemBlockListOf(box, crushingTable, sluiceBox, fabricator)
     }
 }

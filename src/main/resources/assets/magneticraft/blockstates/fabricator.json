@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [
+            {
+                "model": "cube",
+                "textures": {
+                    "particle": "magneticraft:blocks/machines/fabricator_top",
+                    "down": "magneticraft:blocks/machines/fabricator_bottom",
+                    "up": "magneticraft:blocks/machines/fabricator_top",
+                    "north": "magneticraft:blocks/machines/fabricator_side",
+                    "east": "magneticraft:blocks/machines/fabricator_side",
+                    "south": "magneticraft:blocks/machines/fabricator_side",
+                    "west": "magneticraft:blocks/machines/fabricator_side"
+                }
+            }
+        ]
+    }
+}

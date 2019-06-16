@@ -13,10 +13,14 @@ import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
 import com.cout970.magneticraft.features.items.EnumMetal
+import com.cout970.magneticraft.features.manual_machines.ContainerFabricator
 import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.gui.formatHeat
+import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.inventory.set
 import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.systems.tilemodules.ModuleCrushingTable
 import mezz.jei.api.IModPlugin
@@ -28,16 +32,22 @@ import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.IRecipeCategory
 import mezz.jei.api.recipe.IRecipeCategoryRegistration
 import mezz.jei.api.recipe.IRecipeWrapper
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid
+import mezz.jei.api.recipe.transfer.IRecipeTransferError
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandler
 import mezz.jei.gui.elements.DrawableResource
 import mezz.jei.util.Translator
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.GuiScreen
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompressedStreamTools
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
 import java.awt.Color
+import java.io.ByteArrayOutputStream
 import com.cout970.magneticraft.features.electric_machines.Blocks as ElectricBlocks
 import com.cout970.magneticraft.features.heat_machines.Blocks as HeatBlocks
 import com.cout970.magneticraft.features.manual_machines.Blocks as ManualBlocks
@@ -62,6 +72,8 @@ class MagneticraftPlugin : IModPlugin {
     }
 
     override fun register(registry: IModRegistry) {
+
+        registry.recipeTransferRegistry.addRecipeTransferHandler(FabricatorHandler, VanillaRecipeCategoryUid.CRAFTING)
 
         registry.handleRecipes(ICrushingTableRecipe::class.java, ::CrushingTableRecipeWrapper, CRUSHING_TABLE_ID)
         registry.addRecipeCatalyst(ManualBlocks.crushingTable.stack(), CRUSHING_TABLE_ID)
@@ -535,4 +547,33 @@ private fun getOreDictEquivalents(stack: ItemStack): List<ItemStack> {
     }
     if (ores.isEmpty()) return listOf(stack)
     return ores
+}
+
+private object FabricatorHandler : IRecipeTransferHandler<ContainerFabricator> {
+    override fun getContainerClass(): Class<ContainerFabricator> = ContainerFabricator::class.java
+
+    override fun transferRecipe(container: ContainerFabricator, recipeLayout: IRecipeLayout, player: EntityPlayer, maxTransfer: Boolean, doTransfer: Boolean): IRecipeTransferError? {
+        if (!doTransfer) return null
+        val inv = Inventory(9)
+        val inputIngredients = recipeLayout.itemStacks.guiIngredients.toList()
+            .filter { it.second.isInput }
+            .map { it.second }
+
+        for (slot in 0..8) {
+            val ingredient = inputIngredients.getOrNull(slot) ?: continue
+            val stack = ingredient.allIngredients.firstOrNull() ?: continue
+            if (stack.isEmpty) continue
+            inv[slot] = stack.copy()
+        }
+
+        val ibd = IBD().also {
+            val output = ByteArrayOutputStream()
+            CompressedStreamTools.writeCompressed(inv.serializeNBT(), output)
+            it.setByteArray(1, output.toByteArray())
+        }
+
+        container.sendUpdate(ibd)
+
+        return null
+    }
 }

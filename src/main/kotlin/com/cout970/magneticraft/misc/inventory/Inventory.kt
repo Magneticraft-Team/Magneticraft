@@ -7,7 +7,7 @@ import net.minecraftforge.items.ItemStackHandler
  * Created by cout970 on 2017/08/22.
  */
 
-class Inventory(val size: Int, val onContentsChanges: ((Inventory, Int) -> Unit)? = null) : ItemStackHandler(size) {
+class Inventory(val size: Int, var onContentsChanges: ((Inventory, Int) -> Unit)? = null) : ItemStackHandler(size) {
 
     override fun onContentsChanged(slot: Int) {
         onContentsChanges?.invoke(this, slot)

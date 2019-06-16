@@ -4,9 +4,7 @@ import com.cout970.magneticraft.features.automatic_machines.*
 import com.cout970.magneticraft.features.computers.*
 import com.cout970.magneticraft.features.electric_machines.*
 import com.cout970.magneticraft.features.heat_machines.*
-import com.cout970.magneticraft.features.manual_machines.ContainerBox
-import com.cout970.magneticraft.features.manual_machines.TileBox
-import com.cout970.magneticraft.features.manual_machines.guiBox
+import com.cout970.magneticraft.features.manual_machines.*
 import com.cout970.magneticraft.features.multiblocks.*
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
@@ -59,6 +57,7 @@ object GuiHandler : IGuiHandler {
             is ContainerBrickFurnace         -> guiOf(container, ::guiBrickFurnace)
             is ContainerRelay                -> guiOf(container, ::guiRelay)
             is ContainerFilter               -> guiOf(container, ::guiFilter)
+            is ContainerFabricator           -> guiOf(container, ::guiFabricator)
             else -> null
         }
         // @formatter:on
@@ -102,6 +101,7 @@ object GuiHandler : IGuiHandler {
             is TileBrickFurnace         -> ContainerBrickFurnace(tile, player, world, pos)
             is TileRelay                -> ContainerRelay(tile, player, world, pos)
             is TileFilter               -> ContainerFilter(tile, player, world, pos)
+            is TileFabricator           -> ContainerFabricator(tile, player, world, pos)
             else -> null
         }
         // @formatter:on
