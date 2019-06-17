@@ -14,6 +14,7 @@ import net.minecraft.util.text.ITextComponent
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 
 
+@Suppress("LocalVariableName")
 object MultiblockGrinder : Multiblock() {
 
     override val name: String = "grinder"

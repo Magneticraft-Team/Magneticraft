@@ -37,14 +37,16 @@
         "2.4.4": "Adds some animations, allow connectors on cables",
         "2.5.0": "Fix inserters and conveyor belts",
         "2.5.1": "Fix sluice box crashes in servers",
-        "2.5.2": "Fix crashes in servers"
+        "2.5.2": "Fix crashes in servers",
+        "2.6.0": "The secret update",
+        "2.6.1": "Hotfix 1"
     },
     "promos": {
         "1.12-latest": "2.1.2",
         "1.12-recommended": "2.1.2",
         "1.12.1-latest": "2.1.2",
         "1.12.1-recommended": "2.1.2",
-        "1.12.2-latest": "2.5.2",
-        "1.12.2-recommended": "2.5.2"
+        "1.12.2-latest": "2.6.1",
+        "1.12.2-recommended": "2.6.1"
     }
 }

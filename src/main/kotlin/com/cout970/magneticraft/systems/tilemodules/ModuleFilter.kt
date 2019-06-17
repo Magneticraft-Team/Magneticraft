@@ -29,6 +29,7 @@ class ModuleFilter(
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun canInsert(buff: PneumaticBuffer, box: PneumaticBox, mode: PneumaticMode, side: EnumFacing): Boolean {
         if (buff == input) {
             return mode == PneumaticMode.TRAVELING && !output.blocked && filterAllowStack(box.item)

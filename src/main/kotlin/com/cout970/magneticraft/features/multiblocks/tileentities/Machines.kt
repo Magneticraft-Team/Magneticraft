@@ -52,6 +52,9 @@ class TileGrinder : TileMultiblock(), ITickable {
             ),
             ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -2), EnumFacing.NORTH,
                 getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(1, 2)) }
+            ),
+            ConnectionSpot(ITEM_HANDLER!!, BlockPos(-1, 0, -1), EnumFacing.WEST,
+                getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
             )
         ) + ModuleMultiblockIO.connectionArea(ITEM_HANDLER!!, BlockPos(-1, 3, -2), BlockPos(1, 3, 0),
             EnumFacing.UP, getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }

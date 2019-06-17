@@ -1,6 +1,6 @@
 buildscript {
     ext.project_kotlin_version = '1.2.40'
-    ext.mod_version = '2.6.0'
+    ext.mod_version = '2.6.1'
     
     repositories {
         jcenter()
@@ -23,7 +23,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
-    version = "1.12.2-14.23.4.2705"
+    version = "1.12.2-14.23.5.2768"
 	mappings = "snapshot_20171003"
     makeObfSourceJar = false
     runDir = "run"

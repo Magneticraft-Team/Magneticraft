@@ -10,7 +10,10 @@ After depleting an oil block, it will search for the next one until the deposit 
 
 The pumpjack requires 80 Watts to work at full speed.
 
-The best way find oil is to search in places where the coordinates x and z are multiples of 2560.
+The best way find oil is to search in places where the coordinates x and z are multiples of 2560 and
+ then travel 128 block to the south and then 128 block to the east, you will be at the center of an oil deposit.
+
+The oil deposits are located between 16 and 24 in the Y axis.
 
 This structure is a [multiblock](../../3-multiblocks.md) of size *3, 5, 6* (x, y, z).
 

@@ -56,6 +56,7 @@ class ModulePneumaticEndpoint(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
         return if (cap == TUBE_CONNECTABLE && facing != null) {
 

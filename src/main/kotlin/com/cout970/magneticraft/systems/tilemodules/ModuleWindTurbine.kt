@@ -77,7 +77,7 @@ class ModuleWindTurbine(
         if (world.isClient) return
 
         if (hasTurbineHitbox && electricNode.voltage < ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE) {
-            val power = Config.windTurbineMaxProduction * openSpace * currentWind
+            val power = Config.windTurbineMaxProduction * openSpace * currentWind * (pos.y / 256.0)
             electricNode.applyPower(power, false)
             production += power
         }

@@ -221,6 +221,7 @@ class ModuleFabricator(
 
         craftingResult.deserializeNBT(nbt.getCompoundTag("result"))
 
+        @Suppress("SENSELESS_COMPARISON")
         if (container.tile.world != null && world.isServer) {
             resetMatches()
         } else {

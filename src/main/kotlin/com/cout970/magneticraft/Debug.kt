@@ -300,6 +300,7 @@ object Debug {
                         Minecraft.getMinecraft().addScheduledTask {
                             ug()
                             try {
+                                @Suppress("DEPRECATION")
                                 Minecraft.getMinecraft().refreshResources()
                                 val list = Minecraft.getMinecraft().saveLoader.saveList
                                 list.sort()

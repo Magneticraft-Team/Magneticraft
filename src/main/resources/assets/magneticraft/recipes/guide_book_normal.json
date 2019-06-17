@@ -1,17 +1,14 @@
 {
-  "type": "forge:ore_shaped",
-  "pattern": [
-    "AB"
-  ],
-  "key": {
-    "A": {
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
       "item": "minecraft:book"
     },
-    "B": {
+    {
       "item": "magneticraft:crafting",
       "data": 4
     }
-  },
+  ],
   "result": {
     "item": "magneticraft:guide_book"
   }

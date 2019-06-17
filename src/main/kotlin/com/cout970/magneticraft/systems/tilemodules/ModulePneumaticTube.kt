@@ -264,6 +264,7 @@ class ModulePneumaticTube(
         sendItemUpdate()
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
         return if (cap == TUBE_CONNECTABLE && facing != null && enabledSides[facing.ordinal]) {
             object : ITube {

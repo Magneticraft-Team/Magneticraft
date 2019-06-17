@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.iterateVolume
@@ -38,6 +39,10 @@ class ModuleSolarTower(
             orientateNearMirrors()
         }
 
+        if (node.temperature > 3500f.fromCelsiusToKelvin()) {
+            val diff = node.temperature - STANDARD_AMBIENT_TEMPERATURE
+            node.applyHeat(-diff)
+        }
         if (node.temperature > 4000f.fromCelsiusToKelvin()) {
             meltDown()
         }

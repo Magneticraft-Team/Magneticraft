@@ -12,13 +12,13 @@ item.magneticraft.heavy_plates_cobalt.name=Heavy Cobalt Plate
 item.magneticraft.heavy_plates_tungsten.name=Heavy Tungsten Plate
 item.magneticraft.heavy_plates_steel.name=Heavy Steel Plate
 
-item.magneticraft.light_plates_iron.name=Light Iron Plate
-item.magneticraft.light_plates_gold.name=Light Gold Plate
-item.magneticraft.light_plates_copper.name=Light Copper Plate
-item.magneticraft.light_plates_lead.name=Light Lead Plate
-item.magneticraft.light_plates_cobalt.name=Light Cobalt Plate
-item.magneticraft.light_plates_tungsten.name=Light Tungsten Plate
-item.magneticraft.light_plates_steel.name=Light Steel Plate
+item.magneticraft.light_plates_iron.name=Double Iron Plate
+item.magneticraft.light_plates_gold.name=Double Gold Plate
+item.magneticraft.light_plates_copper.name=Double Copper Plate
+item.magneticraft.light_plates_lead.name=Double Lead Plate
+item.magneticraft.light_plates_cobalt.name=Double Cobalt Plate
+item.magneticraft.light_plates_tungsten.name=Double Tungsten Plate
+item.magneticraft.light_plates_steel.name=Double Steel Plate
 
 item.magneticraft.nuggets_copper.name=Copper Nugget
 item.magneticraft.nuggets_lead.name=Lead Nugget
@@ -121,11 +121,11 @@ item.magneticraft.tungsten_gear_normal.name=Tungsten Gear
 item.magneticraft.inserter_upgrade_speed.name=Inserter Upgrade: Speed
 item.magneticraft.inserter_upgrade_stack.name=Inserter Upgrade: Stack
 
-tile.magneticraft.ores_copper.name=Chalcopyrite Ore
-tile.magneticraft.ores_lead.name=Galena Ore
-tile.magneticraft.ores_cobalt.name=Cobaltite Ore
-tile.magneticraft.ores_tungsten.name=Wolframite Ore
-tile.magneticraft.ores_pyrite.name=Pyrite Ore
+tile.magneticraft.ores_copper.name=Chalcopyrite Ore (Copper)
+tile.magneticraft.ores_lead.name=Galena Ore (Lead)
+tile.magneticraft.ores_cobalt.name=Cobaltite Ore (Cobalt)
+tile.magneticraft.ores_tungsten.name=Wolframite Ore (Tungsten)
+tile.magneticraft.ores_pyrite.name=Pyrite Ore (Sulfur)
 tile.magneticraft.oil_source_full_100.name=Oil Source (Full)
 tile.magneticraft.oil_source_full_90.name=Oil Source (90%)
 tile.magneticraft.oil_source_full_80.name=Oil Source (80%)
@@ -278,7 +278,7 @@ text.magneticraft.jei.require_water=Needs 1 Water Bucket
 text.magneticraft.jei.temperature=Temperature: %s
 text.magneticraft.jei.head_conductivity=Conductivity: %.1f W/mK
 
-text.magneticraft.jei.hydraulic_hammer.light=Light Model
+text.magneticraft.jei.hydraulic_hammer.light=Light Mode
 text.magneticraft.jei.hydraulic_hammer.medium=Medium Mode
 text.magneticraft.jei.hydraulic_hammer.heavy=Heavy Mode
 
