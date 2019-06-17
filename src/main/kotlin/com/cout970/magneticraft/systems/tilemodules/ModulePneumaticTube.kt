@@ -76,11 +76,14 @@ class ModulePneumaticTube(
                     .first
                     .let { EnumFacing.getFront(it) }
 
-                box.setInRoute(true)
-                box.side = side
-                box.isOutput = true
-                box.progress = 0
-                continue
+                val tube = world.getCap(TUBE_CONNECTABLE, pos.offset(side), side.opposite)
+                if (tube != null && tube is ITube) {
+                    box.setInRoute(true)
+                    box.side = side
+                    box.isOutput = true
+                    box.progress = 0
+                    continue
+                }
             }
 
             changed = true
@@ -113,6 +116,8 @@ class ModulePneumaticTube(
         for (box in toEject) {
             if (ejectItem(box, world.isClient)) {
                 removed += box
+            } else {
+                box.setInRoute(false)
             }
         }
 

@@ -2,13 +2,16 @@ package com.cout970.magneticraft.features.electric_machines
 
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.misc.*
+import com.cout970.magneticraft.misc.ElectricConstants.TIER_1_MAX_VOLTAGE
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationActive
 import com.cout970.magneticraft.misc.crafting.FurnaceCraftingProcess
+import com.cout970.magneticraft.misc.energy.RfStorage
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.vector.createAABBUsing
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.blocks.CommonMethods
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
@@ -234,5 +237,28 @@ class TileWindTurbineGap : TileBase() {
         if (nbt.hasKey("center")) {
             centerPos = nbt.getBlockPos("center")
         }
+    }
+}
+
+@RegisterTileEntity("rf_transformer")
+class TileRfTransformer : TileBase(), ITickable {
+    val storage = RfStorage(80_000)
+    val node = ElectricNode(ref)
+
+    val rfModule = ModuleRf(storage)
+    val electricModule = ModuleElectricity(listOf(node))
+
+    init {
+        initModules(rfModule, electricModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+
+        if (world.isClient || storage.energyStored == 0 || node.voltage >= TIER_1_MAX_VOLTAGE) return
+        val rf = Math.min(storage.energyStored, Config.rfConversionSpeed)
+        node.applyPower(rf * ConversionTable.FE_TO_J, false)
+        storage.energyStored -= rf
     }
 }

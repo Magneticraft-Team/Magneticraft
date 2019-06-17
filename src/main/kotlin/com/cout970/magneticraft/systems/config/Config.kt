@@ -48,6 +48,9 @@ object Config {
         "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion speed for the RF transformer in RF/t")
+    var rfConversionSpeed = 100
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Production (in joules)")
     var electricHeaterMaxProduction = 80.0
 

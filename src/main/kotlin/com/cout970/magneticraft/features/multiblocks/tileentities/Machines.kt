@@ -13,6 +13,12 @@ import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
+import com.cout970.magneticraft.misc.vector.createAABBUsing
+import com.cout970.magneticraft.misc.vector.rotateBox
+import com.cout970.magneticraft.misc.vector.rotatePoint
+import com.cout970.magneticraft.misc.vector.vec3Of
+import com.cout970.magneticraft.misc.world.ParticleSpawner
+import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
@@ -20,7 +26,11 @@ import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
+import com.cout970.magneticraft.systems.tilerenderers.px
+import com.cout970.vector.extensions.Vector3
+import net.minecraft.init.Blocks
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumParticleTypes
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
 
@@ -92,6 +102,12 @@ class TileGrinder : TileMultiblock(), ITickable {
         capabilityGetter = ioModule::getCapability
     )
 
+    val spawner = ParticleSpawner(30.0, EnumParticleTypes.BLOCK_DUST, Blocks.STONE.defaultState,
+        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0.1, 0)) }
+    ) {
+        facing.rotateBox(vec3Of(0.5), vec3Of((-5).px, 14.px, 5.px).createAABBUsing(vec3Of(21.px, 58.px, (-21).px))).offset(pos)
+    }
+
     init {
         initModules(multiblockModule, energyModule, storageModule, processModule, invModule, openGuiModule, ioModule,
             itemExporterModule)
@@ -100,6 +116,9 @@ class TileGrinder : TileMultiblock(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
+
+        if (world.isServer || !processModule.working) return
+        spawner.spawn(world)
     }
 }
 
@@ -149,6 +168,9 @@ class TileSieve : TileMultiblock(), ITickable {
             ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 1, 0), EnumFacing.UP,
                 getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
             ),
+            ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, 0), EnumFacing.SOUTH,
+                getter = { InventoryCapabilityFilter(inventory, listOf(0), emptyList()) }
+            ),
             ConnectionSpot(ITEM_HANDLER!!, BlockPos(0, 0, -1), EnumFacing.DOWN,
                 getter = { InventoryCapabilityFilter(inventory, emptyList(), listOf(1)) }
             ),
@@ -192,6 +214,22 @@ class TileSieve : TileMultiblock(), ITickable {
         capabilityGetter = ioModule::getCapability
     )
 
+    val spawner1 = ParticleSpawner(20.0, EnumParticleTypes.BLOCK_DUST, Blocks.SAND.defaultState,
+        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0, -0.1)) }
+    ) {
+        facing.rotateBox(vec3Of(0.5), vec3Of((-4).px, 1.5, (-4).px).createAABBUsing(vec3Of(20.px, 1.5, (-20).px))).offset(pos)
+    }
+    val spawner2 = ParticleSpawner(20.0, EnumParticleTypes.BLOCK_DUST, Blocks.SAND.defaultState,
+        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0, -0.1)) }
+    ) {
+        facing.rotateBox(vec3Of(0.5), vec3Of((-4).px, 1.25, (-20).px).createAABBUsing(vec3Of(20.px, 1.25, (-36).px))).offset(pos)
+    }
+    val spawner3 = ParticleSpawner(20.0, EnumParticleTypes.BLOCK_DUST, Blocks.SAND.defaultState,
+        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0, -0.1)) }
+    ) {
+        facing.rotateBox(vec3Of(0.5), vec3Of((-4).px, 1, (-36).px).createAABBUsing(vec3Of(20.px, 1, (-52).px))).offset(pos)
+    }
+
     init {
         initModules(multiblockModule, energyModule, storageModule, processModule, invModule, ioModule, openGuiModule,
             itemExporterModule0, itemExporterModule1, itemExporterModule2)
@@ -200,6 +238,11 @@ class TileSieve : TileMultiblock(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
+
+        if (world.isServer || !processModule.working) return
+        spawner1.spawn(world)
+        spawner2.spawn(world)
+        spawner3.spawn(world)
     }
 }
 

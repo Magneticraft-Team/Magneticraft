@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_column",
+        "transform": "forge:default-block",
+        "textures": {
+            "end": "magneticraft:blocks/electric_machines/rf_transformer_top",
+            "side": "magneticraft:blocks/electric_machines/rf_transformer"
+        }
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

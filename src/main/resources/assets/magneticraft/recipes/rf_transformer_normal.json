@@ -1,0 +1,35 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "ABA",
+    "CDC",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateIron",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateGold",
+      "count": 1
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "lightPlateLead",
+      "count": 1
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:rf_transformer",
+    "count": 1,
+    "data": 0
+  }
+}

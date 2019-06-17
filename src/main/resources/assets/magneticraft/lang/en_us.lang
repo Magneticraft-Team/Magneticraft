@@ -169,6 +169,7 @@ tile.magneticraft.electric_heater_off.name=Electric Heater
 tile.magneticraft.electric_heater_on.name=Electric Heater (On)
 tile.magneticraft.gasification_unit_normal.name=Gasification Unit
 tile.magneticraft.tesla_tower_bottom.name=Tesla Tower
+tile.magneticraft.rf_transformer_normal.name=RF transformer
 
 tile.magneticraft.water_generator_normal.name=Water Generator
 tile.magneticraft.infinite_energy_normal.name=Infinite Energy
