@@ -207,25 +207,6 @@ class TileRelay : TileBase(), ITickable {
     }
 }
 
-// TODO
-// microblocks ✓,
-// tubes ✓,
-// restriction ✓,
-// transposer,
-// filter ✓,
-// relay ✓,
-// sorter x,
-// accelerator x,
-// breaker x,
-// sorter x,
-// retriever x,
-// manager x,
-// ejector
-// color
-// route only in intersections and ends ✓
-// faster relay ✓
-// round robin in intersections ✓
-
 @RegisterTileEntity("filter")
 class TileFilter : TileBase(), ITickable {
 
@@ -258,6 +239,8 @@ class TileFilter : TileBase(), ITickable {
     }
 }
 
+
+// Nice to have: filter to only extract certain items
 @RegisterTileEntity("transposer")
 class TileTransposer : TileBase(), ITickable {
 

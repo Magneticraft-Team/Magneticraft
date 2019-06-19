@@ -81,4 +81,9 @@ class TileFabricator : TileBase(), ITickable {
     init {
         initModules(invModule, fabricatorModule)
     }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
 }

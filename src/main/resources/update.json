@@ -40,14 +40,15 @@
         "2.5.2": "Fix crashes in servers",
         "2.6.0": "The secret update",
         "2.6.1": "Hotfix 1",
-        "2.6.2": "Add RF transformer"
+        "2.6.2": "Add RF transformer",
+        "2.6.3": "Fix server startup"
     },
     "promos": {
         "1.12-latest": "2.1.2",
         "1.12-recommended": "2.1.2",
         "1.12.1-latest": "2.1.2",
         "1.12.1-recommended": "2.1.2",
-        "1.12.2-latest": "2.6.2",
-        "1.12.2-recommended": "2.6.2"
+        "1.12.2-latest": "2.6.3",
+        "1.12.2-recommended": "2.6.3"
     }
 }
