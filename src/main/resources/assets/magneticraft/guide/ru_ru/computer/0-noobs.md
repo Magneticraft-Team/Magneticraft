@@ -1,21 +1,21 @@
-# Computers for noobs
+# Компьютер для новичков
 
-- What can I do with a computer right now?
-+ Nothing
+- Что я могу сделать с компьютером сейчас?
++ Ничего.
 
-- What can I do with a mining robot?
-+ Mine
+- Что я огу делать с помощью робота-шахтера
++ Копать
 
-- How?
-+ You need a mining robot and a floppy disk named 'SHELL', 
-place the robot in world and enter the gui, 
-place the shell disk in the slot with a floppy disk icon,
-press the third red button and then the first red button,
-a text should appear asking for input, type 'quarry 10' 
-and the robot will start mining and 10x10 area, 
-it will mine a column down to bedrock and go back, 
-it will wait some seconds for you to take the stuff from the inventory,
-you can stop it anytime pressing the key 'q'
+- Кака
++ Вам нужен робот-шахтер и дискета 'SHELL', 
+Помостите робота в мир и войдите в его интерфейс, 
+Поместите дискету в слот со значком дискеты,
+нажмите третью красную кнопку, а затем первую красную кнопку,
+должен появиться текст, запрашивающий ввод, тип 'quarry 10' 
+и робот начнет добычу в области 10x10 блоков, 
+Он начнет копать яму до бедрока и вернется назад, 
+он подождет пару секунд чтобы вы смогли взять вещи из инвентаря,
+Вы можете остановить его в любое время нажав клавишу 'q'
 
-- Does the mining robot use energy?
-+ No for now
+- Использует ли робот-шахтер энергию?
++ На данный момент нет
