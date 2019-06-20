@@ -64,8 +64,10 @@ class ModulePipe(
             val mod = tile.getModule<ModulePipe>()
 
             if (mod != null && mod.type == type) {
-                if (render && (connectionStates[side.ordinal] == ConnectionState.DISABLE
-                        || mod.connectionStates[side.opposite.ordinal] == ConnectionState.DISABLE)) {
+                if (mod.connectionStates[side.opposite.ordinal] == ConnectionState.DISABLE) {
+                    return ConnectionType.NONE
+                }
+                if (render && (connectionStates[side.ordinal] == ConnectionState.DISABLE || mod.connectionStates[side.opposite.ordinal] == ConnectionState.DISABLE)) {
                     return ConnectionType.NONE
                 }
                 return ConnectionType.PIPE
@@ -119,7 +121,17 @@ class ModulePipe(
         val side = boxes.find { it.second.containsPoint(args.hit) }?.first ?: return false
 
         if (args.worldIn.isServer) {
-            connectionStates[side.ordinal] = connectionStates[side.ordinal].next()
+            val type = getConnectionType(side, false)
+            if (type == ConnectionType.PIPE) {
+                if (connectionStates[side.ordinal] != ConnectionState.DISABLE) {
+
+                    connectionStates[side.ordinal] = ConnectionState.DISABLE
+                } else {
+                    connectionStates[side.ordinal] = ConnectionState.PASSIVE
+                }
+            } else {
+                connectionStates[side.ordinal] = connectionStates[side.ordinal].next()
+            }
             container.sendUpdateToNearPlayers()
         }
         return true

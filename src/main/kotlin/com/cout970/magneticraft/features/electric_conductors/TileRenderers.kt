@@ -1,17 +1,22 @@
 package com.cout970.magneticraft.features.electric_conductors
 
-import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.api.energy.IWireConnector
+import com.cout970.magneticraft.features.items.ToolItems
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.getBlockPos
+import com.cout970.magneticraft.misc.hasKey
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.lowercaseName
 import com.cout970.magneticraft.misc.vector.minus
+import com.cout970.magneticraft.misc.vector.toVec3d
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.tilerenderers.BaseTileRenderer
 import com.cout970.magneticraft.systems.tilerenderers.FilterRegex
 import com.cout970.magneticraft.systems.tilerenderers.ModelSelector
 import com.cout970.magneticraft.systems.tilerenderers.Utilities
+import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumFacing
 
 /**
@@ -33,20 +38,54 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
             }
         }
 
-        TileRendererConnector.bindTexture(Utilities.WIRE_TEXTURE)
+        bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
-        if (Debug.DEBUG) {
+        val player = Minecraft.getMinecraft().player
 
-//            val player = Minecraft.getMinecraft().player
-//            val box = player.entityBoundingBox.center - te.pos.toVec3d()
-//
-//            Utilities.drawWireBetween(te.wrapper.connectors().first(), box, 0.035)
+        if (player.heldItemMainhand.item == ToolItems.voltmeter ||
+            player.heldItemOffhand.item == ToolItems.voltmeter) {
 
-            Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
-            Utilities.renderFloatingLabel("I: %.2f".format(te.node.amperage), vec3Of(0, 1.25, 0))
-            Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
-//            Utilities.renderFloatingLabel("R: %.2f".format(te.node.resistance), vec3Of(0, 1.75, 0))
+            if (te.pos.distanceSq(player.position) < 8 * 8) {
+                Utilities.renderFloatingLabel("%.2fV".format(te.node.voltage), vec3Of(0, 1, 0))
+                Utilities.renderFloatingLabel("%.2fA".format(te.node.amperage), vec3Of(0, 1.25, 0))
+                Utilities.renderFloatingLabel("%.2fW".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
+            }
+
+        } else if (player.heldItemMainhand.item == ToolItems.copperCoil ||
+            player.heldItemOffhand.item == ToolItems.copperCoil) {
+
+            val stack = if (player.heldItemMainhand.isNotEmpty) {
+                player.heldItemMainhand
+            } else {
+                player.heldItemOffhand
+            }
+
+            if (stack.hasKey(ToolItems.CopperCoil.POSITION_KEY)) {
+                val basePos = stack.getBlockPos(ToolItems.CopperCoil.POSITION_KEY)
+
+                if (basePos == te.pos) {
+                    val oldPos = player.positionVector
+
+                    player.setPosition(
+                        player.posX + (player.posX - player.prevPosX) * ticks,
+                        player.posY + (player.posY - player.prevPosY) * ticks,
+                        player.posZ + (player.posZ - player.prevPosZ) * ticks
+                    )
+
+                    val box = player.entityBoundingBox.center - te.pos.toVec3d()
+
+                    player.setPosition(
+                        oldPos.x,
+                        oldPos.y,
+                        oldPos.z
+                    )
+
+                    if (basePos.distanceSq(player.position) < 10 * 10) {
+                        Utilities.drawWireBetween(te.wrapper.connectors().first(), box, 0.035)
+                    }
+                }
+            }
         }
 
         Utilities.rotateAroundCenter(te.facing)
@@ -162,10 +201,10 @@ object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
         }
         renderModel("center")
 
-        if (Debug.DEBUG) {
-            Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
+//        if (Debug.DEBUG) {
+//            Utilities.renderFloatingLabel("V: %.2f".format(te.node.voltage), vec3Of(0, 1, 0))
 //            Utilities.renderFloatingLabel("I: %.2f".format(te.node.amperage), vec3Of(0, 1.25, 0))
 //            Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
-        }
+//        }
     }
 }

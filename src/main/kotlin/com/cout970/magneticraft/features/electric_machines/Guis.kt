@@ -56,7 +56,7 @@ fun guiThermopile(gui: GuiBase, container: ContainerThermopile) = gui.dsl {
         electricProduction(tile.thermopileModule.production, Config.thermopileProduction)
 
         StaticBarProvider(0.0, 10_000.0, tile.thermopileModule::totalFlux).let { prov ->
-            genericBar(2, 4, prov, prov.toIntText(postfix = " Flux/t"))
+            genericBar(2, 4, prov, prov.toIntText(postfix = " Heat Flux/t"))
         }
     }
 }

@@ -14,9 +14,9 @@ import com.cout970.magneticraft.misc.interpolate
 import com.cout970.magneticraft.misc.render.RenderCache
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.canConnect
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromTile
@@ -71,25 +71,26 @@ class TileConnector : TileBase(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
-        if (world.isServer) {
-            if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
-                val tile = world.getTileEntity(pos.offset(facing.opposite))
-                val handler = tile?.getOrNull(FORGE_ENERGY, facing)
-                if (handler != null) {
-                    val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-                        ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
-                    val accepted = Math.min(
-                        handler.receiveEnergy(amount, true),
-                        node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
-                    )
-                    if (accepted > 0) {
-                        handler.receiveEnergy(accepted, false)
-                        node.applyPower(-accepted.toDouble() * Config.wattsToFE, false)
-                    }
+        if (world.isClient) return
+
+        if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
+            val tile = world.getTileEntity(pos.offset(facing.opposite))
+            val handler = tile?.getOrNull(FORGE_ENERGY, facing)
+            if (handler != null) {
+                val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+                    ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
+                val accepted = Math.min(
+                    handler.receiveEnergy(amount, true),
+                    node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
+                )
+                if (accepted > 0) {
+                    handler.receiveEnergy(accepted, false)
+                    node.applyPower(-accepted.toDouble() * Config.wattsToFE, false)
                 }
             }
         }
-        if (Debug.DEBUG) {
+
+        if (container.shouldTick(10) && world.isAnyPlayerWithinRangeAt(pos.xd, pos.yd, pos.zd, 8.0)) {
             sendUpdateToNearPlayers()
         }
     }

@@ -12,7 +12,7 @@ import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotatePoint
-import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
@@ -71,20 +71,21 @@ class TileSolarPanel : TileMultiblock(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
-        if (world.isServer) {
-            if (active && world.isDaytime && world.provider.hasSkyLight()) {
-                var count = 0
-                iterateArea(0..2, 0..2) { i, j ->
-                    val offset = facing.rotatePoint(BlockPos.ORIGIN, BlockPos(i - 1, 0, j))
-                    if (world.canBlockSeeSky(pos + offset)) {
-                        count++
-                    }
+        if (world.isClient) return
+        if (active && world.isDaytime && world.provider.hasSkyLight()) {
+            var count = 0
+            iterateArea(0..2, 0..2) { i, j ->
+                val offset = facing.rotatePoint(BlockPos.ORIGIN, BlockPos(i - 1, 0, j))
+                if (world.canBlockSeeSky(pos + offset)) {
+                    count++
                 }
-                if (count > 0) {
-                    val limit = interpolate(node.voltage, ElectricConstants.TIER_1_MAX_VOLTAGE,
-                        ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE)
-                    node.applyPower((1 - limit) * Config.solarPanelMaxProduction * (count / 9f), false)
-                }
+            }
+            if (count > 0) {
+                val limit = interpolate(node.voltage,
+                    ElectricConstants.TIER_1_MAX_VOLTAGE,
+                    ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE
+                )
+                node.applyPower((1 - limit) * Config.solarPanelMaxProduction * (count / 9f), false)
             }
         }
     }

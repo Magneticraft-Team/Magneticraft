@@ -41,7 +41,7 @@ class ModuleSolarTower(
 
         if (node.temperature > 3500f.fromCelsiusToKelvin()) {
             val diff = node.temperature - STANDARD_AMBIENT_TEMPERATURE
-            node.applyHeat(-diff)
+            node.applyHeat(-diff * 0.25)
         }
         if (node.temperature > 4000f.fromCelsiusToKelvin()) {
             meltDown()

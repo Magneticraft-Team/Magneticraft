@@ -60,7 +60,7 @@ class ModuleInserter(
     val facingGetter: () -> EnumFacing,
     val inventory: Inventory,
     val filters: Inventory,
-    override val name: String = "module_conveyor_belt"
+    override val name: String = "module_conveyor_belt" // TODO fix for 1.14
 ) : IModule {
 
     override lateinit var container: IModuleContainer

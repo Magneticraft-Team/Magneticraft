@@ -71,9 +71,8 @@ object Blocks : IBlockMaker {
             states = CommonMethods.OrientationActive.values().toList()
             factory = factoryOf(::TileElectricFurnace)
             alwaysDropDefault = true
-            hasCustomModel = true
             //methods
-            onBlockPlaced = CommonMethods::placeInactiveWithOrientation
+            onBlockPlaced = CommonMethods::placeInactiveWithOppositeOrientation
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
         }.build()

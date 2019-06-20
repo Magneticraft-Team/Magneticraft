@@ -15,14 +15,15 @@
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front"
         },
-        "y": 180
+        "y": 0
       }
     ],
     "off_south": [
       {
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front"
-        }
+        },
+        "y": 180
       }
     ],
     "off_east": [
@@ -30,7 +31,7 @@
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front"
         },
-        "y": 270
+        "y": 90
       }
     ],
     "off_west": [
@@ -38,7 +39,7 @@
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front"
         },
-        "y": 90
+        "y": 270
       }
     ],
     "on_north": [
@@ -46,14 +47,15 @@
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front_on"
         },
-        "y": 180
+        "y": 0
       }
     ],
     "on_south": [
       {
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front_on"
-        }
+        },
+        "y": 180
       }
     ],
     "on_east": [
@@ -61,7 +63,7 @@
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front_on"
         },
-        "y": 270
+        "y": 90
       }
     ],
     "on_west": [
@@ -69,7 +71,7 @@
         "textures": {
           "front": "magneticraft:blocks/electric_machines/electric_furnace_front_on"
         },
-        "y": 90
+        "y": 270
       }
     ]
   }

@@ -13,5 +13,5 @@ class ROM(val path: String) : IROM {
     constructor(res: ResourceLocation) : this("/assets/$MOD_ID/cpu/${res.resourcePath}")
 
     override fun getBIOS(): InputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(path)
-        ?: throw IllegalStateException("Resource not found at location: $path")
+        ?: error("Resource not found at location: $path")
 }

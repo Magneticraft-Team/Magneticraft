@@ -60,7 +60,7 @@ class ModuleConveyorBelt(
 
         boxes.forEach { bitmap.mark(it.getHitBox()) }
 
-        map.forEach { pos, mod ->
+        map.forEach { (pos, mod) ->
             mod.boxes.forEach {
                 bitmap.mark(pos.fromExternalToLocal(it.getHitBox()))
             }
@@ -223,7 +223,7 @@ class ModuleConveyorBelt(
         val frontPos = when {
             isUp -> pos + facing + EnumFacing.UP
             hasFront() -> pos + facing
-            hasBlockFront() -> return null
+            hasBlockFront() -> pos + facing
             else -> pos + facing + EnumFacing.DOWN
         }
         return world.getTileEntity(frontPos)

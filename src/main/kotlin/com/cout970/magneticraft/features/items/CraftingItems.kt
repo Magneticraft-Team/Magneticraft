@@ -39,6 +39,7 @@ object CraftingItems : IItemMaker {
         }
 
         crafting = builder.withName("crafting").copy {
+            constructor = { CraftingItem() }
             variants = meta.map { it.value to it.key }.toMap()
         }.build()
 
@@ -55,5 +56,13 @@ object CraftingItems : IItemMaker {
         }.build()
 
         return listOf(crafting, guideBook)
+    }
+
+    class CraftingItem : ItemBase() {
+
+        override fun getItemBurnTime(itemStack: ItemStack): Int {
+            if (itemStack.metadata == Type.SULFUR.meta) return 800
+            return -1
+        }
     }
 }

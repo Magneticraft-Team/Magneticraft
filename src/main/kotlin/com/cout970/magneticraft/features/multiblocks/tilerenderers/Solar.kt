@@ -30,7 +30,7 @@ object TileRendererSolarTower : TileRendererMultiblock<TileSolarTower>() {
 object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
 
     override fun init() {
-        createModel(Multiblocks.solarMirror, ModelSelector("mirror", FilterRegex("mirror")))
+        createModel(Multiblocks.solarMirror, ModelSelector("mirror", FilterRegex("mirror.*")))
     }
 
     fun getAngles(from: BlockPos, to: BlockPos): Pair<Float, Float> {

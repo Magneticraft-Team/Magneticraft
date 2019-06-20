@@ -31,7 +31,7 @@ fun guiRelay(gui: GuiBase, container: ContainerRelay) = gui.run {
 
 @Suppress("UNUSED_PARAMETER")
 fun guiFilter(gui: GuiBase, container: ContainerFilter) = gui.run {
-    +CompBackground(guiTexture("relay"))
+    +CompBackground(guiTexture("filter"))
 }
 
 private fun button(id: Int, pos: IVector2, tex: IVector2, listener: IButtonListener, on: () -> Boolean): ToggleButton {

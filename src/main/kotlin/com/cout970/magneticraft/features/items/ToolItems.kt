@@ -97,7 +97,7 @@ object ToolItems : IItemMaker {
             val msg = handler.nodes
                 .filterIsInstance<IHeatNode>()
                 .joinToString("\n") {
-                    t("text.magneticraft.thermometer.temp", formatHeat(it.temperature))
+                    formatHeat(it.temperature)
                 }
 
             args.player.sendUnlocalizedMessage(msg)

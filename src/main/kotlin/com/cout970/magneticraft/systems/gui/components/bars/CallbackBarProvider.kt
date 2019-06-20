@@ -27,22 +27,22 @@ fun TimedCraftingProcess.toBarProvider() = CallbackBarProvider(this::timer, this
 fun ValueAverage.toBarProvider(max: Number) = CallbackBarProvider(this::storage, { max }, ZERO)
 
 
-fun CallbackBarProvider.toPercentText(prefix: String = "", postfix: String = "%") = {
+fun CallbackBarProvider.toPercentText(prefix: String = "", postfix: String = "%"): () -> List<String> = {
     listOf("$prefix${(getLevel() * 100.0).toInt()}$postfix")
 }
 
-fun CallbackBarProvider.toIntText(prefix: String = "", postfix: String = "") = {
+fun CallbackBarProvider.toIntText(prefix: String = "", postfix: String = ""): () -> List<String> = {
     listOf("$prefix${callback().toInt()}$postfix")
 }
 
-fun CallbackBarProvider.toFluidPerTick(prefix: String = "") = {
+fun CallbackBarProvider.toFluidPerTick(prefix: String = ""): () -> List<String> = {
     listOf("$prefix${callback().toInt()}mB/t")
 }
 
-fun CallbackBarProvider.toEnergyText(prefix: String = "", postfix: String = "") = {
+fun CallbackBarProvider.toEnergyText(prefix: String = "", postfix: String = ""): () -> List<String>  = {
     listOf("$prefix${String.format("%.2fW", callback())}$postfix")
 }
 
-fun CallbackBarProvider.toHeatPerTickText(prefix: String = "Heat: ", postfix: String = "W") = {
+fun CallbackBarProvider.toHeatPerTickText(prefix: String = "Heat: ", postfix: String = "W"): () -> List<String>  = {
     listOf("$prefix${String.format("%.2f", callback())}$postfix")
 }
