@@ -27,7 +27,7 @@ object IntegrationHandler {
         // also auto-loads classes with @ZenRegister
         craftTweaker = Loader.isModLoaded("crafttweaker")
         tconstruct = Loader.isModLoaded("tconstruct")
-        buildcraftApi = ModAPIManager.INSTANCE.hasAPI("BuildCraftAPI|fuels")
+        buildcraftApi = ModAPIManager.INSTANCE.hasAPI("buildcraftapi_fuels")
         industrialForegoing = Loader.isModLoaded("industrialforegoing")
 
         if(buildcraftApi){
