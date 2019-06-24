@@ -6,13 +6,13 @@ item.magneticraft.iron_hammer_normal.name=Marteau en fer
 item.magneticraft.stone_hammer_normal.name=Marteau en pierre
 item.magneticraft.steel_hammer_normal.name=Marteau en acier
 
-item.magneticraft.heavy_plates_iron.name=Plaque de fer Èpaisse
-item.magneticraft.heavy_plates_gold.name=Plaque d'or Èpaisse
-item.magneticraft.heavy_plates_copper.name=Plaque de cuivre Èpaisse
-item.magneticraft.heavy_plates_lead.name=Plaque de plomb Èpaisse
-item.magneticraft.heavy_plates_cobalt.name=Plaque de Cobalt Èpaisse
-item.magneticraft.heavy_plates_tungsten.name=Plaque de tungsten Èpaisse
-item.magneticraft.heavy_plates_steel.name=Plaque d'acier Èpaisse
+item.magneticraft.heavy_plates_iron.name=Plaque de fer √©paisse
+item.magneticraft.heavy_plates_gold.name=Plaque d'or √©paisse
+item.magneticraft.heavy_plates_copper.name=Plaque de cuivre √©paisse
+item.magneticraft.heavy_plates_lead.name=Plaque de plomb √©paisse
+item.magneticraft.heavy_plates_cobalt.name=Plaque de Cobalt √©paisse
+item.magneticraft.heavy_plates_tungsten.name=Plaque de tungsten √©paisse
+item.magneticraft.heavy_plates_steel.name=Plaque d'acier √©paisse
 
 item.magneticraft.light_plates_iron.name=Plaque de fer fine
 item.magneticraft.light_plates_gold.name=Plaque d'or fine
@@ -22,19 +22,19 @@ item.magneticraft.light_plates_cobalt.name=Plaque de cobalt fine
 item.magneticraft.light_plates_tungsten.name=Plaque de tungsten fine
 item.magneticraft.light_plates_steel.name=Plaque d'acier fine
 
-item.magneticraft.nuggets_copper.name=PÈpite de cuivre
-item.magneticraft.nuggets_lead.name=PÈpite de plomb
-item.magneticraft.nuggets_cobalt.name=PÈpite de cobalt
-item.magneticraft.nuggets_tungsten.name=PÈpite de tungsten
-item.magneticraft.nuggets_steel.name=PÈpite d'acier
-item.magneticraft.nuggets_aluminium.name=PÈpite d'aluminium
-item.magneticraft.nuggets_silver.name=PÈpite d'argent
-item.magneticraft.nuggets_mithril.name=PÈpite de Mithril
-item.magneticraft.nuggets_tin.name=PÈpite d'Ètain
-item.magneticraft.nuggets_zinc.name=PÈpite de zinc
-item.magneticraft.nuggets_galena.name=PÈpite de Galena
-item.magneticraft.nuggets_osmium.name=PÈpite d'Osmium
-item.magneticraft.nuggets_nickel.name=PÈpite de nickel
+item.magneticraft.nuggets_copper.name=P√©pite de cuivre
+item.magneticraft.nuggets_lead.name=P√©pite de plomb
+item.magneticraft.nuggets_cobalt.name=P√©pite de cobalt
+item.magneticraft.nuggets_tungsten.name=P√©pite de tungsten
+item.magneticraft.nuggets_steel.name=P√©pite d'acier
+item.magneticraft.nuggets_aluminium.name=P√©pite d'aluminium
+item.magneticraft.nuggets_silver.name=P√©pite d'argent
+item.magneticraft.nuggets_mithril.name=P√©pite de Mithril
+item.magneticraft.nuggets_tin.name=P√©pite d'√©tain
+item.magneticraft.nuggets_zinc.name=P√©pite de zinc
+item.magneticraft.nuggets_galena.name=P√©pite de Galena
+item.magneticraft.nuggets_osmium.name=P√©pite d'Osmium
+item.magneticraft.nuggets_nickel.name=P√©pite de nickel
 
 item.magneticraft.ingots_copper.name=Lingot de cuivre
 item.magneticraft.ingots_lead.name=Lingot de plomb
@@ -44,7 +44,7 @@ item.magneticraft.ingots_steel.name=Lingot d'acier
 item.magneticraft.ingots_aluminium.name=Lingot d'aluminium
 item.magneticraft.ingots_silver.name=Lingot d'argent
 item.magneticraft.ingots_mithril.name=Lingot de mithril
-item.magneticraft.ingots_tin.name=Lingot d'Ètain
+item.magneticraft.ingots_tin.name=Lingot d'√©tain
 item.magneticraft.ingots_zinc.name=Lingot de zinc
 item.magneticraft.ingots_osmium.name=Lingot d'osmium
 item.magneticraft.ingots_nickel.name=Lingot de nickel
@@ -58,7 +58,7 @@ item.magneticraft.chunks_tungsten.name=Eclats de tungsten
 item.magneticraft.chunks_aluminium.name=Eclats d'aluminium
 item.magneticraft.chunks_silver.name=Eclats d'argent
 item.magneticraft.chunks_mithril.name=Eclats de mithril
-item.magneticraft.chunks_tin.name=Eclats d'Ètain
+item.magneticraft.chunks_tin.name=Eclats d'√©tain
 item.magneticraft.chunks_zinc.name=Eclats de zinc
 item.magneticraft.chunks_galena.name=Eclats de galena
 item.magneticraft.chunks_osmium.name=Eclats d'osmium
@@ -73,7 +73,7 @@ item.magneticraft.rocky_chunks_tungsten.name=Eclats de tungsten sales
 item.magneticraft.rocky_chunks_aluminium.name=Eclats d'aluminium sales
 item.magneticraft.rocky_chunks_silver.name=Eclats d'argent sales
 item.magneticraft.rocky_chunks_mithril.name=Eclats de mithril sales
-item.magneticraft.rocky_chunks_tin.name=Eclats d'Ètain sales
+item.magneticraft.rocky_chunks_tin.name=Eclats d'√©tain sales
 item.magneticraft.rocky_chunks_zinc.name=Eclats de zinc sales
 item.magneticraft.rocky_chunks_galena.name=Eclats de galena sales
 item.magneticraft.rocky_chunks_osmium.name=Eclats d'osmium sales
@@ -89,7 +89,7 @@ item.magneticraft.dusts_steel.name=Poudre d'acier
 item.magneticraft.dusts_aluminium.name=Poudre d'aluminium
 item.magneticraft.dusts_silver.name=Poudre d'argent
 item.magneticraft.dusts_mithril.name=Poudre de mithril
-item.magneticraft.dusts_tin.name=Poudre d'Ètain
+item.magneticraft.dusts_tin.name=Poudre d'√©tain
 item.magneticraft.dusts_zinc.name=Poudre de zinc
 item.magneticraft.dusts_osmium.name=Poudre d'osmium
 item.magneticraft.dusts_nickel.name=Poudre de nickel
@@ -102,9 +102,9 @@ item.magneticraft.crafting_motor.name=Moteur
 item.magneticraft.crafting_magnet.name=Aimant
 item.magneticraft.crafting_mesh.name=Maile de fer
 item.magneticraft.crafting_string_fabric.name=Maille de tissu
-item.magneticraft.voltmeter_normal.name=VoltmËtre
-item.magneticraft.thermometer_normal.name=ThermomËtre
-item.magneticraft.wrench_normal.name=ClÈ anglaise
+item.magneticraft.voltmeter_normal.name=Voltm√®tre
+item.magneticraft.thermometer_normal.name=Thermom√®tre
+item.magneticraft.wrench_normal.name=Cl√© anglaise
 item.magneticraft.battery_item_low_normal.name=Petite batterie
 item.magneticraft.battery_item_medium_normal.name=Batterie moyenne
 
@@ -113,31 +113,35 @@ item.magneticraft.floppy_disk_lisp.name=Disquette (Lisp)
 item.magneticraft.floppy_disk_forth.name=Disquette (FORTH)
 item.magneticraft.floppy_disk_shell.name=Disquette (Shell)
 item.magneticraft.floppy_disk_basic.name=Disquette (BASIC WIP)
-item.magneticraft.floppy_disk_editor.name=Disquette (Èditeur)
+item.magneticraft.floppy_disk_editor.name=Disquette (√©diteur)
 item.magneticraft.floppy_disk_asm.name=Disquette (ASM WIP)
 
 item.magneticraft.iron_gear_normal.name=Engrenage en fer
 item.magneticraft.steel_gear_normal.name=Engrenage en acier
 item.magneticraft.tungsten_gear_normal.name=Engrenage en tungsten
+item.magneticraft.broken_gear_normal.name=Engrenage cass√©s
+
+item.magneticraft.inserter_upgrade_speed.name=Inserter Upgrade: Vitesse
+item.magneticraft.inserter_upgrade_stack.name=Inserter Upgrade: Capacit√©
 
 tile.magneticraft.ores_copper.name=Minerai de chalcopyrite
 tile.magneticraft.ores_lead.name=Minerai de galena
 tile.magneticraft.ores_cobalt.name=Minerai de cobaltite
 tile.magneticraft.ores_tungsten.name=Minerai de wolframite
 tile.magneticraft.ores_pyrite.name=Minerai de pyrite
-tile.magneticraft.oil_source_full_100.name=Source de pÈtrole (Pleine)
-tile.magneticraft.oil_source_full_90.name=Source de pÈtrole (90%)
-tile.magneticraft.oil_source_full_80.name=Source de pÈtrole (80%)
-tile.magneticraft.oil_source_full_70.name=Source de pÈtrole (70%)
-tile.magneticraft.oil_source_full_60.name=Source de pÈtrole (60%)
-tile.magneticraft.oil_source_full_50.name=Source de pÈtrole (50%)
-tile.magneticraft.oil_source_full_40.name=Source de pÈtrole (40%)
-tile.magneticraft.oil_source_full_30.name=Source de pÈtrole (30%)
-tile.magneticraft.oil_source_full_20.name=Source de pÈtrole (20%)
-tile.magneticraft.oil_source_full_10.name=Source de pÈtrole (10%)
-tile.magneticraft.oil_source_empty.name=Source de pÈtrole (Vide)
+tile.magneticraft.oil_source_full_100.name=Source de p√©trole (Pleine)
+tile.magneticraft.oil_source_full_90.name=Source de p√©trole (90%)
+tile.magneticraft.oil_source_full_80.name=Source de p√©trole (80%)
+tile.magneticraft.oil_source_full_70.name=Source de p√©trole (70%)
+tile.magneticraft.oil_source_full_60.name=Source de p√©trole (60%)
+tile.magneticraft.oil_source_full_50.name=Source de p√©trole (50%)
+tile.magneticraft.oil_source_full_40.name=Source de p√©trole (40%)
+tile.magneticraft.oil_source_full_30.name=Source de p√©trole (30%)
+tile.magneticraft.oil_source_full_20.name=Source de p√©trole (20%)
+tile.magneticraft.oil_source_full_10.name=Source de p√©trole (10%)
+tile.magneticraft.oil_source_empty.name=Source de p√©trole (Vide)
 
-tile.magneticraft.box_normal.name=BoÓte en bois
+tile.magneticraft.box_normal.name=Bo√Æte en bois
 tile.magneticraft.crushing_table_normal.name=Table de concassage
 tile.magneticraft.sluice_box_center_north.name=Tamis
 tile.magneticraft.feeding_trough_center_north.name=Mangeoire en bois
@@ -150,55 +154,66 @@ tile.magneticraft.burnt_limestone_normal.name=Calcaire cuit
 tile.magneticraft.burnt_limestone_brick.name=Briques de calcaire cuites
 tile.magneticraft.burnt_limestone_cobble.name=Pierre de calcaire cuite
 tile.magneticraft.tile_limestone_normal.name=Dalles de calcaire
-tile.magneticraft.tile_limestone_inverted.name=Dalles de calcaire inversÈes
-tile.magneticraft.tube_light_north.name=NÈon
+tile.magneticraft.tile_limestone_inverted.name=Dalles de calcaire invers√©es
+tile.magneticraft.tube_light_north.name=N√©on
 
 tile.magneticraft.conveyor_belt_north.name=Tapis roulant
-tile.magneticraft.inserter_north.name=Bras robotisÈ
-tile.magneticraft.connector_down.name=Connecteur Èlectrique
+tile.magneticraft.inserter_north.name=Bras robotis√©
+tile.magneticraft.connector_down.name=Connecteur √©lectrique
 tile.magneticraft.battery_north.name=Bloc de batteries
-tile.magneticraft.electric_pole_north.name=Poteau Èlectrique
-tile.magneticraft.electric_pole_transformer_north.name=Transformateur de poteau Èlectrique
-tile.magneticraft.electric_furnace_off_north.name=Four Èlectrique
+tile.magneticraft.electric_pole_north.name=Poteau √©lectrique
+tile.magneticraft.electric_pole_transformer_north.name=Poteau √©lectrique avec transformateur
+tile.magneticraft.electric_furnace_off_north.name=Four √©lectrique
+tile.magneticraft.brick_furnace_off_north.name=Four en briques
 tile.magneticraft.combustion_chamber_north.name=Chambre de combustion
-tile.magneticraft.steam_boiler_normal.name=ChaudiËre
+tile.magneticraft.steam_boiler_normal.name=Chaudi√®re
 tile.magneticraft.pumpjack_drill_normal.name=Tuyau pour chevalet de pompage
-tile.magneticraft.electric_heater_off.name=Chauffage Èlectrique
-tile.magneticraft.electric_heater_on.name=Chauffage Èlectrique (allumÈ)
-tile.magneticraft.gasification_unit_normal.name=UnitÈ de gazÈification
+tile.magneticraft.electric_heater_off.name=Chauffage √©lectrique
+tile.magneticraft.electric_heater_on.name=Chauffage √©lectrique (allum√©)
+tile.magneticraft.gasification_unit_normal.name=Unit√© de gaz√©ification
+tile.magneticraft.tesla_tower_bottom.name=Tour tesla
+tile.magneticraft.rf_transformer_normal.name=Transformateur de RF
 
-tile.magneticraft.water_generator_normal.name=GÈnÈrateur d'eau (CrÈatif uniquement)
-tile.magneticraft.infinite_energy_normal.name=GÈnÈrateur Èlectrique (CrÈatif uniquement)
+tile.magneticraft.water_generator_normal.name=G√©n√©rateur d'eau (Cr√©atif uniquement)
+tile.magneticraft.infinite_energy_normal.name=G√©n√©rateur √©lectrique (Cr√©atif uniquement)
 
 tile.magneticraft.airlock_normal.name=Sas
 tile.magneticraft.air_bubble_on.name=Bulle d'air
 tile.magneticraft.air_bubble_off.name=Bulle d'air
-tile.magneticraft.computer_north.name=Computer
+tile.magneticraft.computer_north.name=Ordinateur
 tile.magneticraft.mining_robot_north.name=Robot mineur
 tile.magneticraft.moving_robot_normal.name=Robot
-tile.magneticraft.small_tank_normal.name=Petit rÈservoir
+tile.magneticraft.small_tank_normal.name=Petit r√©servoir
 tile.magneticraft.thermopile_normal.name=Thermopile
 tile.magneticraft.iron_pipe_normal.name=Tuyau en fer
 tile.magneticraft.wind_turbine_north.name=Eolienne
-tile.magneticraft.heat_sink_down.name=Dissipateur de chaleur
+tile.magneticraft.heat_sink_down.name=Dissipateur thermique
 tile.magneticraft.heat_pipe_normal.name=Conduit de chaleur
-tile.magneticraft.insulated_heat_pipe_normal.name=Conduit de chaleur (isolÈ)
+tile.magneticraft.insulated_heat_pipe_normal.name=Conduit de chaleur (isol√©)
 tile.magneticraft.rf_heater_off.name=Chauffage au RF
-tile.magneticraft.electric_cable_normal.name=Cable Èlectrique
+tile.magneticraft.electric_cable_normal.name=Cable √©lectrique
+tile.magneticraft.pneumatic_tube_normal.name=Tube pneumatique
+tile.magneticraft.pneumatic_restriction_tube_normal.name=Tube pneumatique avec restrictions
+tile.magneticraft.relay_down.name=Relai
+tile.magneticraft.filter_down.name=Filtre
+tile.magneticraft.transposer_down.name=Transpondeur
+tile.magneticraft.fabricator_normal.name=Etabli automatique
 
 # Multiblocks
 tile.magneticraft.sieve_inactive_north.name=Sieve
-tile.magneticraft.solar_panel_inactive_north.name=Panneau photovoltaÔque
+tile.magneticraft.solar_panel_inactive_north.name=Panneau photovolta√Øque
 tile.magneticraft.grinder_inactive_north.name=Broyeur
-tile.magneticraft.shelving_unit_inactive_north.name=Shelving Unit
-tile.magneticraft.steam_engine_inactive_north.name=Petit moteur ‡ vapeur
+tile.magneticraft.shelving_unit_inactive_north.name=Etag√®re
+tile.magneticraft.steam_engine_inactive_north.name=Petit moteur √† vapeur
 tile.magneticraft.solar_tower_inactive_north.name=Tour solaire
 tile.magneticraft.solar_mirror_inactive_north.name=Miroir solaire
 tile.magneticraft.container_inactive_north.name=Conteneur
 tile.magneticraft.pumpjack_inactive_north.name=Chevalet de pompage
 tile.magneticraft.hydraulic_press_inactive_north.name=Presse hydraulique
-tile.magneticraft.oil_heater_inactive_north.name=Chaufeur de pÈtrole
+tile.magneticraft.oil_heater_inactive_north.name=Chaufeur de p√©trole
 tile.magneticraft.refinery_inactive_north.name=Raffinerie
+tile.magneticraft.big_combustion_chamber_inactive_north.name=Grande chambre de combustion
+tile.magneticraft.big_steam_boiler_inactive_north.name=Grande chaudi√®re √† vapeur
 
 # Ingot blocks
 tile.magneticraft.storage_blocks_copper.name=Bloc de cuivre
@@ -210,41 +225,47 @@ tile.magneticraft.storage_blocks_pyrite.name=Bloc de soufre
 # Multiblock parts
 tile.magneticraft.multiblock_parts_base.name=Bloc de machinerie
 tile.magneticraft.multiblock_parts_mesh.name=Bloc de machinerie filtrant
-tile.magneticraft.multiblock_parts_electric.name=Bloc de machinerie Èlectrique
-tile.magneticraft.multiblock_parts_striped.name=Bloc de machinerie rayÈ
+tile.magneticraft.multiblock_parts_electric.name=Bloc de machinerie √©lectrique
+tile.magneticraft.multiblock_parts_striped.name=Bloc de machinerie ray√©
 tile.magneticraft.multiblock_parts_grate.name=Bloc de machinerie en grilles de fer
-tile.magneticraft.multiblock_parts_copper_coil.name=Bloc de machinerie en fils de cuivre
-tile.magneticraft.multiblock_parts_corrugated_iron.name=Bloc de machinerie en tÙle ondulÈe
+tile.magneticraft.multiblock_parts_copper_coil.name=Bloc de machinerie √† bobine de cuivre
+tile.magneticraft.multiblock_parts_corrugated_iron.name=Bloc de machinerie en t√¥le ondul√©e
 tile.magneticraft.multiblock_column_axis_y.name=Colonne de support (axe Y)
 tile.magneticraft.multiblock_column_axis_x.name=Colonne de support (axe X)
 tile.magneticraft.multiblock_column_axis_z.name=Colonne de support (axe Z)
 tile.magneticraft.multiblock_gap_normal.name=Multibloc
-tile.magneticraft.multiblock_gap.name=Multiblock
+tile.magneticraft.multiblock_gap.name=Multibloc
 
 # Creative tab
 itemGroup.magneticraft=Magneticraft
 
 # Connection messages
-text.magneticraft.wire_connect.success=Fil connectÈ
+text.magneticraft.wire_connect.success=Fil connect√©
 text.magneticraft.wire_connect.fail=Impossible de connecter le fil
-text.magneticraft.wire_connect.same_block=Impossible de connecter le fil sur le mÍme bloc
-text.magneticraft.wire_connect.no_other_connector=Pas de position dÈfinie
-text.magneticraft.wire_connect.updated_position=Position mise ‡ jour %s
-text.magneticraft.auto_connect.activate=Connexion de fil automatique activÈe
-text.magneticraft.auto_connect.deactivate=Connexion de fil automatique dÈsactivÈe
+text.magneticraft.wire_connect.same_block=Impossible de connecter le fil sur le m√™me bloc
+text.magneticraft.wire_connect.invalid_connector=Impossible de connecter le fil sur ce type de connecteur
+text.magneticraft.wire_connect.not_a_connector=Impossible de connecter le fil sur ce type de bloc
+text.magneticraft.wire_connect.too_far=Impossible de connecter le fil aussi loin
+text.magneticraft.wire_connect.already_connected=Fil d√©j√† connect√©
+
+text.magneticraft.wire_connect.no_other_connector=Pas de position d√©finie
+text.magneticraft.wire_connect.updated_position=Mise mise √† jour %s
+text.magneticraft.auto_connect.activate=Connexion de fil automatique activ√©e
+text.magneticraft.auto_connect.deactivate=Connexion de fil automatique d√©sactiv√©e
 
 text.magneticraft.wire_connect.position=Position
 text.magneticraft.thermometer.temp=Temp: %s
 
 # JEI
 text.magneticraft.jei.crushing_table=Table de concassage
-text.magneticraft.jei.sluice_box=Tamis
+text.magneticraft.jei.sluice_box=Ecluse
 text.magneticraft.jei.hydraulic_press=Presse hydraulique
 text.magneticraft.jei.grinder=Broyeur
-text.magneticraft.jei.sieve=Sieve
-text.magneticraft.jei.oil_heater=Chaufeur de pÈtrole
+text.magneticraft.jei.sieve=Tamis
+text.magneticraft.jei.oil_heater=Chaufeur de p√©trole
 text.magneticraft.jei.refinery=Raffinerie
-text.magneticraft.jei.gasification_unit=UnitÈ de gazÈification
+text.magneticraft.jei.gasification_unit=Unit√© de gaz√©ification
+text.magneticraft.jei.thermopile=Thermopile
 
 #Mining level
 text.magneticraft.jei.mining_level.-1=Mining Level: Tous
@@ -255,30 +276,33 @@ text.magneticraft.jei.mining_level.3=Mining Level: Diamant
 text.magneticraft.jei.mining_level.4=Mining Level: Ardite
 text.magneticraft.jei.mining_level.other=Mining Level: %s
 
-text.magneticraft.jei.time=%s ticks
-text.magneticraft.jei.require_water=NÈcessite un(1) seau d'eau
 
-text.magneticraft.jei.hydraulic_hammer.light=Mode lÈger
+text.magneticraft.jei.time=%s ticks
+text.magneticraft.jei.require_water=N√©cessite un(1) seau d'eau
+text.magneticraft.jei.temperature=Temperature: %s
+text.magneticraft.jei.head_conductivity=Conductivite: %.1f W/mK
+
+text.magneticraft.jei.hydraulic_hammer.light=Mode l√©ger
 text.magneticraft.jei.hydraulic_hammer.medium=Mode normal
 text.magneticraft.jei.hydraulic_hammer.heavy=Mode lourd
 
 # Multiblock messages
-text.magneticraft.multiblock.invalid_block=Bloc invalide ‡ la position %s\nTrouvÈ: %s\nAttendu: %s
-text.magneticraft.multiblock.invalid_column_orientation=Orientation de bloc inavlide ‡ la position %s\nBloc trouvÈ: %s\nOrientation attendue: %s
-text.magneticraft.multiblock.activate=ActivÈ avec succËs
+text.magneticraft.multiblock.invalid_block=Bloc invalide √† la position %s\nTrouv√©: %s\nAttendu: %s
+text.magneticraft.multiblock.invalid_column_orientation=Orientation de bloc inavlide √† la position %s\nBloc trouv√©: %s\nOrientation attendue: %s
+text.magneticraft.multiblock.activate=Activ√© avec succ√®s
 
 # Item tooltips
 tooltip.magneticraft.item_storage.energy=%f/%fJ
-tooltip.magneticraft.multiblock.blueprint=Placez ce plan pour voir le modËle du multibloc
+tooltip.magneticraft.multiblock.blueprint=Placez ce plan pour voir le mod√®le du multibloc
 
 # Fluids
 fluid.magneticraft.steam=Vapeur
-fluid.magneticraft.oil=PÈtrole brut
-fluid.magneticraft.hot_crude=PÈtrole brut chaud
+fluid.magneticraft.oil=P√©trole brut
+fluid.magneticraft.hot_crude=P√©trole brut chaud
 
-fluid.magneticraft.light_oil=PÈtrole lÈger
-fluid.magneticraft.heavy_oil=PÈtrole lourd
-fluid.magneticraft.lpg=Gaz de pÈtrole liquÈfiÈ
+fluid.magneticraft.light_oil=P√©trole l√©ger
+fluid.magneticraft.heavy_oil=P√©trole lourd
+fluid.magneticraft.lpg=Gaz de p√©trole liqu√©fi√©
 
 fluid.magneticraft.natural_gas=Gaz naturel
 fluid.magneticraft.naphtha=Naphtha
@@ -290,6 +314,6 @@ fluid.magneticraft.gasoline=Gasoil
 
 fluid.magneticraft.lubricant=Lubrifiant
 fluid.magneticraft.fuel=Carburant
-fluid.magneticraft.oil_residue=RÈsidus de pÈtrole
+fluid.magneticraft.oil_residue=R√©sidus de p√©trole
 
 fluid.magneticraft.wood_gas=Gaz de bois
