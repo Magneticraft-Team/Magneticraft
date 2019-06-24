@@ -6,7 +6,8 @@
   ],
   "key": {
     "A": {
-      "item": "magneticraft:iron_hammer",
+      "type": "forge:ore_dict",
+      "ore": "magneticraftHammer",
       "count": 1
     },
     "B": {

@@ -4,6 +4,7 @@
     "AB",
     "BA"
   ],
+  "mirrored": false,
   "key": {
     "A": {
       "item": "magneticraft:limestone",

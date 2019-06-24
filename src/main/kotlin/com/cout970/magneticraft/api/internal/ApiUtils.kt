@@ -13,4 +13,10 @@ object ApiUtils {
             && (!a.item.hasSubtypes || a.metadata == b.metadata)
             && a.tagCompound == b.tagCompound
     }
+
+    fun equalsIgnoreSizeAndNBT(a: ItemStack, b: ItemStack): Boolean {
+        return a == b || !(a.isEmpty || b.isEmpty)
+            && a.item == b.item
+            && (!a.item.hasSubtypes || a.metadata == b.metadata)
+    }
 }

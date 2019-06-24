@@ -2,6 +2,7 @@ package com.cout970.magneticraft.systems.items
 
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.vector.vec3Of
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
@@ -70,6 +71,27 @@ open class ItemBase : Item() {
 
         addInformation?.invoke(AddInformationArgs(stack, worldIn, tooltip, flagIn))
         super.addInformation(stack, worldIn, tooltip, flagIn)
+    }
+
+    override fun hasContainerItem(stack: ItemStack): Boolean {
+        if (stack.isNotEmpty && containerItem == null && maxDamage > 0) {
+            return true
+        }
+        return super.hasContainerItem(stack)
+    }
+
+    override fun getContainerItem(itemStack: ItemStack): ItemStack {
+        var newStack = super.getContainerItem(itemStack)
+
+        if (newStack.isEmpty && maxDamage > 0) {
+            newStack = itemStack.copy()
+            newStack.itemDamage++
+
+            if (newStack.itemDamage > maxDamage) {
+                newStack.shrink(1)
+            }
+        }
+        return newStack
     }
 
     override fun toString(): String = "ItemBase($registryName)"

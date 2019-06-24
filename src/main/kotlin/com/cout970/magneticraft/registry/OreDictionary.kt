@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.generation.OreGeneration
 import com.cout970.magneticraft.api.registries.generation.OreGeneration
 import com.cout970.magneticraft.features.items.CraftingItems
 import com.cout970.magneticraft.features.items.EnumMetal
+import com.cout970.magneticraft.features.items.ToolItems
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.config.OreConfig
@@ -74,6 +75,9 @@ fun registerOreDictionaryEntries() {
 
     OreDictionary.registerOre("stoneTileLimestone", DecorationBlocks.tileLimestone.stack(1, 0))
     OreDictionary.registerOre("stoneTileLimestone", DecorationBlocks.tileLimestone.stack(1, 1))
+    OreDictionary.registerOre("magneticraftHammer", ToolItems.stoneHammer)
+    OreDictionary.registerOre("magneticraftHammer", ToolItems.ironHammer)
+    OreDictionary.registerOre("magneticraftHammer", ToolItems.steelHammer)
 }
 
 fun registerOreGenerations() {

@@ -9,7 +9,8 @@ object WrenchRegistry : IWrenchRegistry {
     private val registry = mutableSetOf<ItemStack>()
 
     override fun isWrench(stack: ItemStack): Boolean {
-        return registry.any { ApiUtils.equalsIgnoreSize(it, stack) }
+        // NBT is used by some mods like the Morph-o-tool to store additional information
+        return registry.any { ApiUtils.equalsIgnoreSizeAndNBT(it, stack) }
     }
 
     override fun registerWrench(stack: ItemStack): Boolean = registry.add(stack.copy())

@@ -65,7 +65,7 @@ object Upgrades : IItemMaker {
             )
         }.build()
 
-        return listOf(ironGear, steelGear, tungstenGear, inserterUpgrade)
+        return listOf(ironGear, brokenGear, steelGear, tungstenGear, inserterUpgrade)
     }
 
     class Gear(override val stack: ItemStack, val speed: Float) : IGear, IItemCapability {

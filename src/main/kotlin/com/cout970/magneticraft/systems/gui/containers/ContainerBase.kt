@@ -3,6 +3,8 @@ package com.cout970.magneticraft.systems.gui.containers
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.systems.network.MessageContainerUpdate
@@ -12,6 +14,7 @@ import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.InventoryPlayer
+import net.minecraft.inventory.ClickType
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
@@ -130,5 +133,52 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     fun sendUpdate(ibd: IBD) {
         Magneticraft.network.sendToServer(MessageGuiUpdate(ibd, player.persistentID))
+    }
+
+    fun onFilterSlotClick(slot: Slot, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer): ItemStack {
+        var result = ItemStack.EMPTY
+        val playerInv = player.inventory
+
+        if (clickTypeIn != ClickType.PICKUP && clickTypeIn != ClickType.PICKUP_ALL && clickTypeIn != ClickType.QUICK_CRAFT) {
+            return result
+        }
+        if (dragType != 0 && dragType != 1 && dragType != 5) return result
+
+        if (slot.slotNumber == -999) {
+            if (!playerInv.itemStack.isEmpty) {
+                if (dragType == 0) {
+                    player.dropItem(playerInv.itemStack, true)
+                    playerInv.itemStack = ItemStack.EMPTY
+                }
+
+                if (dragType == 1) {
+                    player.dropItem(playerInv.itemStack.splitStack(1), true)
+                }
+            }
+            return result
+        }
+
+        val slotStack = slot.stack
+        val handStack = playerInv.itemStack
+
+        if (!slotStack.isEmpty) {
+            result = slotStack.copy()
+        }
+
+        if (handStack.isEmpty) {
+            // Empty hand, clear the slot item
+            slot.putStack(ItemStack.EMPTY)
+        } else {
+            // Replace slot contents with the player's hand item
+            if (handStack.isNotEmpty) {
+                slot.putStack(handStack.withSize(1))
+            } else {
+                slot.putStack(ItemStack.EMPTY)
+            }
+        }
+
+        slot.onSlotChanged()
+
+        return result
     }
 }

@@ -158,8 +158,9 @@ object Blocks : IBlockMaker {
 
         teslaTower = builder.withName("tesla_tower").copy {
             states = TeslaTowerPart.values().toList()
-            factoryFilter = { state -> state[PROPERTY_TESLA_TOWER_PART] == TeslaTowerPart.BOTTOM }
-            factory = factoryOf(::TileTeslaTower)
+            factory = { _, state ->
+                if (state[PROPERTY_TESLA_TOWER_PART] == TeslaTowerPart.BOTTOM) TileTeslaTower() else TileTeslaTowerPart()
+            }
             hasCustomModel = true
             forceModelBake = true
             generateDefaultItemBlockModel = false

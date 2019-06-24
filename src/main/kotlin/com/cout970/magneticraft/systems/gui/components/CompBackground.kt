@@ -29,7 +29,7 @@ class CompBackground(
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(texture)
-        gui.drawTexture(DrawableBox(gui.pos, size, Vec2d.ZERO, size, textureSize))
+        gui.drawTexture(back)
     }
 }
 

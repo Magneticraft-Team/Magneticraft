@@ -60,7 +60,6 @@ class ModulePneumaticTube(
 
             if (box.progress < PneumaticBox.MAX_PROGRESS) continue
 
-
             if (box.isOutput) {
                 toEject.add(box)
                 changed = true
@@ -118,6 +117,7 @@ class ModulePneumaticTube(
                 removed += box
             } else {
                 box.setInRoute(false)
+                box.isOutput = false
             }
         }
 

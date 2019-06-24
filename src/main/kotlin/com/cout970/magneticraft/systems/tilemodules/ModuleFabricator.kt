@@ -93,7 +93,12 @@ class ModuleFabricator(
         }
 
         for (slot in craftingResources) {
-            slot.inventory.extractItem(slot.index, slot.amount, false)
+            val stack = slot.inventory.extractItem(slot.index, slot.amount, false)
+            val container = stack.item.getContainerItem(stack)
+
+            if (container.isNotEmpty && slot.inventory[slot.index].isEmpty) {
+                slot.inventory.insertItem(slot.index, container, false)
+            }
         }
 
         val result = craftingResult[0].copy()

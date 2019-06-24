@@ -1,0 +1,14 @@
+{
+    "background": {
+        "sizeX": 176,
+        "sizeY": 150
+    },
+    "slots": [],
+    "components": {
+        "voltage": {
+            "posX": 0,
+            "posY": 0
+        }
+    },
+    "playerInventory": true
+}

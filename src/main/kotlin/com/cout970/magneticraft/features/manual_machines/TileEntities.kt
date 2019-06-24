@@ -24,7 +24,8 @@ import net.minecraft.util.math.AxisAlignedBB
 @RegisterTileEntity("box")
 class TileBox : TileBase() {
 
-    val invModule = ModuleInventory(Inventory(27))
+    val inventory = Inventory(27)
+    val invModule = ModuleInventory(inventory)
 
     init {
         initModules(invModule)

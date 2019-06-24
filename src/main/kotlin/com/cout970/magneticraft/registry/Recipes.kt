@@ -36,7 +36,10 @@ import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fml.common.registry.GameRegistry
 import com.cout970.magneticraft.features.decoration.Blocks as Decoration
+import com.cout970.magneticraft.features.decoration.Blocks as DecorationBlocks
+import com.cout970.magneticraft.features.ores.Blocks as OreBlocks
 import com.cout970.magneticraft.features.ores.Blocks as Ores
+import com.cout970.magneticraft.features.ores.Blocks.OreType as BlockOreType
 
 
 /**
@@ -94,7 +97,10 @@ fun registerRecipes() {
     addGrinderRecipe(Blocks.COBBLESTONE.stack(), Blocks.GRAVEL.stack(1), Blocks.SAND.stack(1), 0.5f, 60f)
     addGrinderRecipe(Blocks.QUARTZ_BLOCK.stack(), Items.QUARTZ.stack(4), ItemStack.EMPTY, 0.0f, 50f)
 
-    addGrinderRecipe(Ores.OreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), EnumMetal.IRON.getDust(), 0.01f, 40f)
+    addGrinderRecipe(DecorationBlocks.limestone.stack(meta = 0), DecorationBlocks.limestone.stack(meta = 2), ItemStack.EMPTY, 0.0f, 20f)
+    addGrinderRecipe(DecorationBlocks.burnLimestone.stack(meta = 0), DecorationBlocks.burnLimestone.stack(meta = 2), ItemStack.EMPTY, 0.0f, 20f)
+
+    addGrinderRecipe(BlockOreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), EnumMetal.IRON.getDust(), 0.01f, 40f)
 
     ItemHolder.sawdust?.ifNonEmpty { sawdust ->
         addGrinderRecipe(Blocks.LOG.stack(), sawdust.withSize(8), sawdust.withSize(4), 0.5f, 100f)
@@ -160,14 +166,18 @@ fun registerRecipes() {
         addCrushingTableRecipe(it, OSMIUM.getRockyChunk())
     }
 
-    addCrushingTableRecipe(Ores.OreType.PYRITE.stack(), CraftingItems.Type.SULFUR.stack(2))
+    addCrushingTableRecipe(BlockOreType.PYRITE.stack(), CraftingItems.Type.SULFUR.stack(2))
     // limestone
     addCrushingTableRecipe(Decoration.limestone.stack(), Decoration.limestone.stack(1, 2))
     addCrushingTableRecipe(Decoration.burnLimestone.stack(), Decoration.burnLimestone.stack(1, 2))
-    // light plates
-    EnumMetal.values().filter { it.useful }.forEach {
-        addCrushingTableRecipe(it.getIngot(), it.getLightPlate())
-    }
+    // double plates
+    addCrushingTableRecipe(Blocks.IRON_BLOCK.stack(), EnumMetal.IRON.getLightPlate().withSize(5), true)
+    addCrushingTableRecipe(Blocks.GOLD_BLOCK.stack(), EnumMetal.GOLD.getLightPlate().withSize(5), true)
+    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.COPPER.ordinal), EnumMetal.COPPER.getLightPlate().withSize(5))
+    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.LEAD.ordinal), EnumMetal.LEAD.getLightPlate().withSize(5))
+    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.TUNGSTEN.ordinal), EnumMetal.TUNGSTEN.getLightPlate().withSize(5))
+    addCrushingTableRecipe(EnumMetal.STEEL.getIngot(), EnumMetal.STEEL.getLightPlate())
+
     // rods
     addCrushingTableRecipe(Items.BLAZE_ROD.stack(), Items.BLAZE_POWDER.stack(5))
     addCrushingTableRecipe(Items.BONE.stack(), Items.DYE.stack(4, 15))
@@ -270,12 +280,12 @@ fun registerRecipes() {
     //@formatter:on
 
     // Heavy recipes
-    addHydraulicPressRecipe(IRON_INGOT.stack(2), IRON.getHeavyPlate(), HEAVY, 120f)
-    addHydraulicPressRecipe(GOLD_INGOT.stack(2), GOLD.getHeavyPlate(), HEAVY, 50f)
-    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(2), EnumMetal.COPPER.getHeavyPlate(), HEAVY, 100f)
-    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(2), EnumMetal.LEAD.getHeavyPlate(), HEAVY, 50f)
-    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(2), EnumMetal.TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
-    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(2), EnumMetal.STEEL.getHeavyPlate(), HEAVY, 140f)
+    addHydraulicPressRecipe(IRON_INGOT.stack(4), IRON.getHeavyPlate(), HEAVY, 120f)
+    addHydraulicPressRecipe(GOLD_INGOT.stack(4), GOLD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(4), EnumMetal.COPPER.getHeavyPlate(), HEAVY, 100f)
+    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(4), EnumMetal.LEAD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(4), EnumMetal.TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
+    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(4), EnumMetal.STEEL.getHeavyPlate(), HEAVY, 140f)
 
     // Medium recipes
     addHydraulicPressRecipe(IRON_INGOT.stack(1), IRON.getLightPlate(), MEDIUM, 120f)

@@ -26,11 +26,13 @@ import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleElectricity
 import com.cout970.magneticraft.systems.tilemodules.ModuleTeslaTower
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -253,7 +255,11 @@ class TileElectricCable : TileBase(), ITickable {
 class TileTeslaTower : TileBase(), ITickable {
 
     val node = ElectricNode(ref)
-    val electricModule = ModuleElectricity(listOf(node), capabilityFilter = { side -> side == EnumFacing.DOWN })
+    val electricModule = ModuleElectricity(
+        listOf(node),
+        capabilityFilter = { side -> side == EnumFacing.DOWN || side == EnumFacing.UP }
+    )
+
     val teslaTowerModule = ModuleTeslaTower(node)
 
     init {
@@ -263,5 +269,29 @@ class TileTeslaTower : TileBase(), ITickable {
     @DoNotRemove
     override fun update() {
         super.update()
+    }
+}
+
+@RegisterTileEntity("tesla_tower_part")
+class TileTeslaTowerPart : TileBase() {
+
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+        val other: TileEntity? = when (facing) {
+            EnumFacing.UP -> world.getTileEntity(pos.down())
+            EnumFacing.DOWN -> world.getTileEntity(pos.up())
+            else -> null
+        }
+
+        return other?.getCapability(capability, facing) ?: super.getCapability(capability, facing)
+    }
+
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
+        val other: TileEntity? = when (facing) {
+            EnumFacing.UP -> world.getTileEntity(pos.down())
+            EnumFacing.DOWN -> world.getTileEntity(pos.up())
+            else -> null
+        }
+
+        return other?.hasCapability(capability, facing) ?: super.hasCapability(capability, facing)
     }
 }

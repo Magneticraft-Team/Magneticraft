@@ -3,7 +3,9 @@ package com.cout970.magneticraft.features.manual_machines
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.gui.SlotFabricator
 import com.cout970.magneticraft.misc.gui.SlotLegacyFilter
-import com.cout970.magneticraft.misc.inventory.*
+import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.misc.inventory.InventoryRegion
+import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.vec2Of
@@ -93,49 +95,6 @@ class ContainerFabricator(val tile: TileFabricator, player: EntityPlayer, world:
         val slot = inventorySlots.getOrNull(slotId) as? SlotLegacyFilter
         if (slot == null) return super.slotClick(slotId, dragType, clickTypeIn, player)
 
-        var result = ItemStack.EMPTY
-        val playerInv = player.inventory
-
-        if (clickTypeIn != ClickType.PICKUP && clickTypeIn != ClickType.PICKUP_ALL) {
-            return result
-        }
-        if (dragType != 0 && dragType != 1) return result
-
-        if (slotId == -999) {
-            if (!playerInv.itemStack.isEmpty) {
-                if (dragType == 0) {
-                    player.dropItem(playerInv.itemStack, true)
-                    playerInv.itemStack = ItemStack.EMPTY
-                }
-
-                if (dragType == 1) {
-                    player.dropItem(playerInv.itemStack.splitStack(1), true)
-                }
-            }
-            return result
-        }
-
-        val slotStack = slot.stack
-        val handStack = playerInv.itemStack
-
-        if (!slotStack.isEmpty) {
-            result = slotStack.copy()
-        }
-
-        if (handStack.isEmpty) {
-            // Empty hand, clear the slot item
-            slot.putStack(ItemStack.EMPTY)
-        } else {
-            // Replace slot contents with the player's hand item
-            if (handStack.isNotEmpty) {
-                slot.putStack(handStack.withSize(1))
-            } else {
-                slot.putStack(ItemStack.EMPTY)
-            }
-        }
-
-        slot.onSlotChanged()
-
-        return result
+        return onFilterSlotClick(slot, dragType, clickTypeIn, player)
     }
 }

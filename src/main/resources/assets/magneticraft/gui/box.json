@@ -1,0 +1,18 @@
+{
+    "background": {
+        "sizeX": 176,
+        "sizeY": 150
+    },
+    "slots": [
+        {
+            "startIndex": 0,
+            "rows": 3,
+            "columns": 9,
+            "posX": 8,
+            "posY": 8,
+            "icon": "default"
+        }
+    ],
+    "components": {},
+    "playerInventory": true
+}

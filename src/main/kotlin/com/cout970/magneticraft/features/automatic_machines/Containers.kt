@@ -3,8 +3,6 @@ package com.cout970.magneticraft.features.automatic_machines
 import com.cout970.magneticraft.features.items.Upgrades
 import com.cout970.magneticraft.misc.gui.SlotFilter
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
-import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
@@ -62,50 +60,7 @@ class ContainerInserter(val tile: TileInserter, player: EntityPlayer, world: Wor
         val slot = inventorySlots.getOrNull(slotId) as? SlotFilter
         if (slot == null) return super.slotClick(slotId, dragType, clickTypeIn, player)
 
-        var result = ItemStack.EMPTY
-        val playerInv = player.inventory
-
-        if (clickTypeIn != ClickType.PICKUP && clickTypeIn != ClickType.PICKUP_ALL) {
-            return result
-        }
-        if (dragType != 0 && dragType != 1) return result
-
-        if (slotId == -999) {
-            if (!playerInv.itemStack.isEmpty) {
-                if (dragType == 0) {
-                    player.dropItem(playerInv.itemStack, true)
-                    playerInv.itemStack = ItemStack.EMPTY
-                }
-
-                if (dragType == 1) {
-                    player.dropItem(playerInv.itemStack.splitStack(1), true)
-                }
-            }
-            return result
-        }
-
-        val slotStack = slot.stack
-        val handStack = playerInv.itemStack
-
-        if (!slotStack.isEmpty) {
-            result = slotStack.copy()
-        }
-
-        if (handStack.isEmpty) {
-            // Empty hand, clear the slot item
-            slot.putStack(ItemStack.EMPTY)
-        } else {
-            // Replace slot contents with the player's hand item
-            if (handStack.isNotEmpty) {
-                slot.putStack(handStack.withSize(1))
-            } else {
-                slot.putStack(ItemStack.EMPTY)
-            }
-        }
-
-        slot.onSlotChanged()
-
-        return result
+        return onFilterSlotClick(slot, dragType, clickTypeIn, player)
     }
 }
 
@@ -145,49 +100,6 @@ class ContainerFilter(val tile: TileFilter, player: EntityPlayer, world: World, 
         val slot = inventorySlots.getOrNull(slotId) as? SlotFilter
         if (slot == null) return super.slotClick(slotId, dragType, clickTypeIn, player)
 
-        var result = ItemStack.EMPTY
-        val playerInv = player.inventory
-
-        if (clickTypeIn != ClickType.PICKUP && clickTypeIn != ClickType.PICKUP_ALL) {
-            return result
-        }
-        if (dragType != 0 && dragType != 1) return result
-
-        if (slotId == -999) {
-            if (!playerInv.itemStack.isEmpty) {
-                if (dragType == 0) {
-                    player.dropItem(playerInv.itemStack, true)
-                    playerInv.itemStack = ItemStack.EMPTY
-                }
-
-                if (dragType == 1) {
-                    player.dropItem(playerInv.itemStack.splitStack(1), true)
-                }
-            }
-            return result
-        }
-
-        val slotStack = slot.stack
-        val handStack = playerInv.itemStack
-
-        if (!slotStack.isEmpty) {
-            result = slotStack.copy()
-        }
-
-        if (handStack.isEmpty) {
-            // Empty hand, clear the slot item
-            slot.putStack(ItemStack.EMPTY)
-        } else {
-            // Replace slot contents with the player's hand item
-            if (handStack.isNotEmpty) {
-                slot.putStack(handStack.withSize(1))
-            } else {
-                slot.putStack(ItemStack.EMPTY)
-            }
-        }
-
-        slot.onSlotChanged()
-
-        return result
+       return onFilterSlotClick(slot, dragType, clickTypeIn, player)
     }
 }

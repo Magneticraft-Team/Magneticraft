@@ -47,9 +47,8 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
             player.heldItemOffhand.item == ToolItems.voltmeter) {
 
             if (te.pos.distanceSq(player.position) < 8 * 8) {
-                Utilities.renderFloatingLabel("%.2fV".format(te.node.voltage), vec3Of(0, 1, 0))
-                Utilities.renderFloatingLabel("%.2fA".format(te.node.amperage), vec3Of(0, 1.25, 0))
-                Utilities.renderFloatingLabel("%.2fW".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
+                val text = "%.2fV %.2fA %.2fW".format(te.node.voltage, te.node.amperage, te.node.voltage * te.node.amperage)
+                Utilities.renderFloatingLabel(text, vec3Of(0.5, 0.2, 0.5))
             }
 
         } else if (player.heldItemMainhand.item == ToolItems.copperCoil ||

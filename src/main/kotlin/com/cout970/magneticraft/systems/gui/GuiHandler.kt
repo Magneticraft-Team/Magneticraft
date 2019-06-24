@@ -8,6 +8,8 @@ import com.cout970.magneticraft.features.manual_machines.*
 import com.cout970.magneticraft.features.multiblocks.*
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
+import com.cout970.magneticraft.systems.gui.json.JsonContainer
+import com.cout970.magneticraft.systems.gui.json.JsonGui
 import com.cout970.magneticraft.systems.gui.render.GuiBase
 import com.cout970.magneticraft.systems.manual.ContainerGuideBook
 import com.cout970.magneticraft.systems.manual.GuiGuideBook
@@ -30,13 +32,14 @@ object GuiHandler : IGuiHandler {
 
         // @formatter:off
         return when (container) {
+            is JsonContainer                 -> JsonGui(container)
+            is ContainerBox                  -> guiOf(container, ::guiBox)
             is ContainerElectricHeater       -> guiOf(container, ::guiElectricHeater)
             is ContainerBattery              -> guiOf(container, ::guiBattery)
             is ContainerElectricFurnace      -> guiOf(container, ::guiElectricFurnace)
             is ContainerThermopile           -> guiOf(container, ::guiThermopile)
             is ContainerWindTurbine          -> guiOf(container, ::guiWindTurbine)
             is ContainerCombustionChamber    -> guiOf(container, ::guiCombustionChamber)
-            is ContainerBox                  -> guiOf(container, ::guiBox)
             is ContainerGrinder              -> guiOf(container, ::guiGrinder)
             is ContainerSieve                -> guiOf(container, ::guiSieve)
             is ContainerSolarTower           -> guiOf(container, ::guiSolarTower)
@@ -70,10 +73,12 @@ object GuiHandler : IGuiHandler {
             return ContainerGuideBook(player, world, pos)
         }
 
+        @Suppress("MoveVariableDeclarationIntoWhen")
         val tile = world.getTileEntity(pos)
 
         // @formatter:off
         return when (tile) {
+//            is TileBox                  -> JsonContainer("box", { it.boxGui(tile) }, player, world, pos)
             is TileBox                  -> ContainerBox(tile, player, world, pos)
             is TileShelvingUnit         -> ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnitMb.Level.values()[ID])
             is TileBattery              -> ContainerBattery(tile, player, world, pos)
