@@ -1,6 +1,6 @@
 buildscript {
     ext.project_kotlin_version = '1.2.50'
-    ext.mod_version = '2.6.4'
+    ext.mod_version = '2.6.5'
     
     repositories {
         jcenter()
@@ -28,8 +28,8 @@ minecraft {
     makeObfSourceJar = false
     runDir = "run"
 
-    replaceIn 'Magneticraft.kt'
-    replace '@VERSION@', mod_version
+//    replaceIn 'Magneticraft.kt'
+//    replace '@VERSION@', mod_version
 }
 
 repositories {
@@ -113,7 +113,6 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-
         expand 'version': mod_version, 'mcversion': project.minecraft.version
     }
 
@@ -133,6 +132,17 @@ uploadArchives {
         }
     }
 }
+
+task updateModVersion {
+    doLast {
+        exec {
+            workingDir 'src/main/kotlin/com/cout970/magneticraft'
+            commandLine 'sed', '-i', '-e', """s/version = "[1-9]*\\.[1-9]*\\.[1-9]*"/version = "${mod_version}"/g""", 'Magneticraft.kt'
+        }
+    }
+}
+
+build.dependsOn updateModVersion
 
 static String getBuildNumber() {
     String buildNumber = System.getenv("BUILD_NUMBER") != null ? System.getenv("BUILD_NUMBER") : ""

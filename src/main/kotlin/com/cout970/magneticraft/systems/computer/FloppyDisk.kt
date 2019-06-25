@@ -43,7 +43,7 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
             val serial = serialNumber
 
             if (serial in cache) {
-                file = File(cache[serial])
+                file = File(cache[serial]!!)
 
                 if (Debug.DEBUG) {
                     val bytes = ComputerItems::class.java
