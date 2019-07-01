@@ -40,8 +40,8 @@ object TileRendererMiningRobot : BaseTileRenderer<TileMiningRobot>() {
 
     override fun init() {
         createModel(Blocks.miningRobot,
-            ModelSelector("drill", FilterRegex("drill")),
-            ModelSelector("prop", FilterRegex("prop"))
+            ModelSelector("drill", FilterRegex("drill.*")),
+            ModelSelector("prop", FilterRegex("prop.*"))
         )
     }
 
@@ -80,8 +80,7 @@ object TileRendererMiningRobot : BaseTileRenderer<TileMiningRobot>() {
                 else -> norm - 1
             }
 
-            val level = orientation.level
-            when (level) {
+            when (orientation.level) {
                 Blocks.OrientationLevel.UP -> translate(0.0, amount.toDouble(), 0.0)
                 Blocks.OrientationLevel.DOWN -> translate(0.0, -amount.toDouble(), 0.0)
                 Blocks.OrientationLevel.CENTER -> translate(0.0, 0.0, amount.toDouble())

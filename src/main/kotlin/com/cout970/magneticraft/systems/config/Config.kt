@@ -139,4 +139,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_PC, comment = "Energy consumed every tick by the mining robot")
     var miningRobotPassiveConsumption: Double = 1.0
+
+    @ConfigValue(category = CATEGORY_PC, comment = "Color of text, valid values: 0 => amber 1, 1 => amber 2, 2 => white, 3 => green 1, 4 => apple 2, 5 => green 2, 6 => apple 2c, 7 => green 3, 8 => green 4")
+    var computerTextColor: Int = 0
 }

@@ -57,7 +57,7 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            sleep = floppy.accessTime
+            sleep = floppy.accessTime - 1
         } else {
 //            debug("Read invalid sector: $currentSector")
         }
@@ -76,7 +76,7 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            sleep = floppy.accessTime
+            sleep = floppy.accessTime - 1
         } else {
 //            debug("Write invalid sector: $currentSector")
         }
@@ -92,7 +92,7 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            sleep = floppy.accessTime
+            sleep = floppy.accessTime - 1
         }
     }
 
@@ -104,7 +104,7 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            sleep = floppy.accessTime
+            sleep = floppy.accessTime - 1
         }
     }
 

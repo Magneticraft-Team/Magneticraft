@@ -101,7 +101,7 @@ class DeviceKeyboard : IDevice, IResettable {
         }
 
         ibd.getByteArray(DATA_ID_KEYBOARD_KEY_STATES) { buffer ->
-            System.arraycopy(keyStates, 0, buffer, 0, buffer.size)
+            System.arraycopy(buffer, 0, keyStates, 0, buffer.size)
         }
     }
 

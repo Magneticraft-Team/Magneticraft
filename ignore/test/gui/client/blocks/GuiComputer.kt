@@ -29,6 +29,5 @@ class GuiComputer(val comp: TileComputer, val contMonitor: ContainerMonitor) : G
         components.add(SimpleButton(1, Vec2d(33, 220), listener, Vec2d(0, 49)))
         components.add(SimpleButton(2, Vec2d(43, 220), listener, Vec2d(0, 49)))
         components.add(CompGreenLight(box.start + Vec2d(14, 221), { comp.motherboard.isOnline() }))
-
     }
 }

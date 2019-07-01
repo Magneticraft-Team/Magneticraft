@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.features.computers
 
-import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.vec2Of
@@ -11,6 +10,7 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_BUTTON
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_LIGHT
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.inventory.Slot
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.SlotItemHandler
@@ -27,12 +27,14 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
     val keyboard = tile.keyboard
 
     init {
-        addSlotToContainer(object : SlotTakeOnly(tile.invModule.inventory, 0, 64, 233) {
-            override fun canTakeStack(playerIn: EntityPlayer?): Boolean {
-                return false
-            }
-        })
+        addSlotToContainer(SlotItemHandler(tile.invModule.inventory, 0, 35, 225))
         inventoryRegions += InventoryRegion(0..0)
+
+        val hotBarIndex = inventorySlots.size
+        repeat(9) { i ->
+            addSlotToContainer(Slot(player.inventory, i, i * 18 + 95, 226))
+        }
+        inventoryRegions += InventoryRegion(hotBarIndex..hotBarIndex + 8)
     }
 
     override fun sendDataToClient(): IBD {
@@ -58,10 +60,12 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
 
     override fun receiveDataFromClient(ibd: IBD) {
         ibd.getInteger(DATA_ID_COMPUTER_BUTTON) {
-            when (it) {
-                0 -> motherboard.start()
-                1 -> motherboard.halt()
-                2 -> motherboard.reset()
+            if (motherboard.isOnline) {
+                motherboard.halt()
+            } else {
+                motherboard.halt()
+                motherboard.reset()
+                motherboard.start()
             }
         }
         keyboard.loadFromClient(ibd)
@@ -78,33 +82,35 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
     val keyboard = tile.keyboard
 
     init {
-        tile.inventory.let {
+        tile.inventory.let { inv ->
 
             var index = 0
             (0..3).forEach { j ->
                 (0..3).forEach { i ->
                     val x = i * 18 + 268
-                    val y = j * 18 + 235
-                    addSlotToContainer(SlotItemHandler(it, index, x, y))
+                    val y = j * 18 + 226
+                    addSlotToContainer(SlotItemHandler(inv, index, x, y))
                     index++
                 }
             }
             inventoryRegions += InventoryRegion(0..15)
+
             // floppy disk
-            addSlotToContainer(SlotItemHandler(it, 16, 35, 292))
+            addSlotToContainer(SlotItemHandler(inv, 16, 69, 263))
             inventoryRegions += InventoryRegion(16..16, filter = { ITEM_FLOPPY_DISK!!.fromItem(it) != null })
+
             // battery slot
-            addSlotToContainer(SlotItemHandler(it, 17, 12, 292))
+            addSlotToContainer(SlotItemHandler(inv, 17, 69, 284))
             inventoryRegions += InventoryRegion(17..17, filter = { FORGE_ENERGY!!.fromItem(it) != null })
         }
 
-        bindPlayerInventory(player.inventory, vec2Of(87, 151))
+        bindPlayerInventory(player.inventory, vec2Of(87, 142))
     }
 
     override fun sendDataToClient(): IBD {
         val ibd = super.sendDataToClient() ?: IBD()
         monitor.saveToClient(ibd)
-        ibd.setBoolean(DATA_ID_COMPUTER_LIGHT, motherboard.isOnline())
+        ibd.setBoolean(DATA_ID_COMPUTER_LIGHT, motherboard.isOnline)
         return ibd
     }
 
@@ -124,10 +130,12 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
 
     override fun receiveDataFromClient(ibd: IBD) {
         ibd.getInteger(DATA_ID_COMPUTER_BUTTON) {
-            when (it) {
-                0 -> motherboard.start()
-                1 -> motherboard.halt()
-                2 -> motherboard.reset()
+            if (motherboard.isOnline) {
+                motherboard.halt()
+            } else {
+                motherboard.halt()
+                motherboard.reset()
+                motherboard.start()
             }
         }
         keyboard.loadFromClient(ibd)

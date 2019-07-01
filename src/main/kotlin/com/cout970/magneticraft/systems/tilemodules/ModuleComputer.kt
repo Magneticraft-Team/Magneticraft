@@ -26,9 +26,11 @@ class ModuleComputer(
     val bus: Bus = Bus(ram, TIntObjectHashMap<IDevice>().apply { putAll(devices) })
 
     val motherboard = Motherboard(cpu, ram, rom, bus)
+    lateinit var motherboardDevice: DeviceMotherboard
 
     override fun init() {
-        bus.devices.put(0xFF, DeviceMotherboard(container.ref, motherboard))
+        motherboardDevice = DeviceMotherboard(container.ref, motherboard)
+        bus.devices.put(0xFF, motherboardDevice)
     }
 
     override fun update() {
@@ -40,10 +42,13 @@ class ModuleComputer(
     }
 
     override fun serializeNBT(): NBTTagCompound {
-        return motherboard.serialize().toNBT()
+        return motherboard.serialize().toNBT().also {
+            it.setTag("motherboardDevice", motherboardDevice.serialize().toNBT())
+        }
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         motherboard.deserialize(nbt.toMap())
+        motherboardDevice.deserialize(nbt.getCompoundTag("motherboardDevice").toMap())
     }
 }

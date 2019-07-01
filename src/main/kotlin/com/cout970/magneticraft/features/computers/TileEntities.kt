@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.systems.computer.*
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.*
 import net.minecraft.block.state.IBlockState
@@ -104,6 +105,14 @@ class TileMiningRobot : TileBase(), ITickable {
         upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
     )
 
+    val itemChargeModule = ModuleChargeItems(
+        inventory = inventory,
+        storage = energyStorage,
+        chargeSlot = -1,
+        dischargeSlot = 17,
+        transferRate = Config.blockBatteryTransferRate
+    )
+
     val floppyDriveModule = ModuleFloppyDrive(ref = ref, inventory = inventory, slot = 16)
     val keyboard = DeviceKeyboard()
     val monitor = DeviceMonitor()
@@ -135,7 +144,7 @@ class TileMiningRobot : TileBase(), ITickable {
 
     init {
         initModules(computerModule, invModule, computerParts, floppyDriveModule, robotControlModule,
-            energyModule, energyStorage)
+            energyModule, energyStorage, itemChargeModule)
     }
 
     @DoNotRemove

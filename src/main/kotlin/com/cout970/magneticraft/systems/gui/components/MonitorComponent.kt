@@ -7,9 +7,11 @@ import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.systems.computer.DeviceKeyboard
 import com.cout970.magneticraft.systems.computer.DeviceMonitor
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_MONITOR_CLIPBOARD
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import com.cout970.magneticraft.systems.gui.render.*
+import net.minecraft.client.gui.Gui
 import net.minecraft.client.gui.GuiScreen
 import org.lwjgl.opengl.GL11
 
@@ -21,8 +23,7 @@ class MonitorComponent(
     val tile: ITileRef,
     val monitor: DeviceMonitor,
     val keyboard: DeviceKeyboard,
-    val container: ContainerBase,
-    val green: Boolean
+    val container: ContainerBase
 ) : IComponent {
 
     companion object {
@@ -37,26 +38,45 @@ class MonitorComponent(
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
 
         gui.bindTexture(TEXTURE)
-        if (green) {
-            GL11.glColor4f(76.0f / 256f, 1.0f, 0.0f, 1.0f)
+        // 0 => amber 1, 1 => amber 2, 2 => white, 3 => green 1, 4 => apple 2, 5 => green 2, 6 => apple 2c, 7 => green 3, 8 => green 4
+        when (Config.computerTextColor) {
+            0 -> GL11.glColor4f(255f / 255f, 176f / 255f, 0f / 255f, 1.0f)// Amber
+            1 -> GL11.glColor4f(255f / 255f, 204f / 255f, 0f / 255f, 1.0f) // Amb
+            2 -> GL11.glColor4f(220f / 255f, 220f / 255f, 220f / 255f, 1.0f) // white
+            3 -> GL11.glColor4f(51f / 255f, 255f / 255f, 0f / 255f, 1.0f) // Green 1
+            4 -> GL11.glColor4f(51f / 255f, 255f / 255f, 51f / 255f, 1.0f) // Apple 2
+            5 -> GL11.glColor4f(0f / 255f, 255f / 255f, 51f / 255f, 1.0f) // Green 2
+            6 -> GL11.glColor4f(102f / 255f, 255f / 255f, 102f / 255f, 1.0f) // Apple 2c
+            7 -> GL11.glColor4f(0f / 255f, 255f / 255f, 102f / 255f, 1.0f) // Green 3
+            else -> GL11.glColor4f(47f / 255f, 140f / 255f, 64f / 255f, 1.0f) // Intellij
         }
         val lines = monitor.lines
         val columns = monitor.columns
         val scale = 4
-        val charSize = Vec2d(scale, scale)
 
         for (line in 0 until lines) {
             for (column in 0 until columns) {
                 var character = monitor.getChar(line * columns + column) and 0xFF
-                if (line == monitor.cursorLine && column == monitor.cursorColumn && tile.world.worldTime % 20 >= 10) {
+
+                if (line == monitor.cursorLine && column == monitor.cursorColumn &&
+                    tile.world.worldTime % 10 >= 4) {
+
                     character = character xor 128
                 }
+
                 if (character != 32 && character != 0) {
-                    val pos = gui.pos + Vec2d(15 + column * scale, 15 + line * (scale + 2))
+                    val posX = gui.pos.xi + 15 + column * scale
+                    val posY = gui.pos.yi + 15 + line * (scale + 2)
                     val x = character and 15
                     val y = character shr 4
 
-                    gui.drawTexture(DrawableBox(pos, charSize, Vec2d(x, y) * 16, Vec2d(16, 16)))
+                    Gui.drawScaledCustomSizeModalRect(
+                        posX, posY,
+                        x * 16f, y * 16f,
+                        16, 16,
+                        scale, scale,
+                        256f, 256f
+                    )
                 }
             }
         }
@@ -89,13 +109,18 @@ class MonitorComponent(
     }
 
     fun sendKey(typedChar: Char, keyCode: Int, press: Boolean) {
+        var intChar = typedChar.toInt()
 
-        val key = when (typedChar.toInt()) {
+        if (isCtrlKeyDown() && keyCode != 29) {
+            intChar += 96
+        }
+
+        val key = when (intChar) {
             // Unknown keys
-            202, 204, 206 -> typedChar.toInt()
+            202, 204, 206 -> intChar
 
             // printable ascii chars
-            in 32..126 -> typedChar.toInt()
+            in 32..126 -> intChar
 
             else -> when (keyCode) {
                 0 -> return // Unknown

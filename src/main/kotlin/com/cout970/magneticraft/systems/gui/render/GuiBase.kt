@@ -32,8 +32,8 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         components.clear()
         initComponents()
         components.forEach { it.gui = this }
-        components.forEach { it.init() }
         super.initGui()
+        components.forEach { it.init() }
     }
 
     @Suppress("NOTHING_TO_INLINE")

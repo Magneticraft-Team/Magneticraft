@@ -2,7 +2,6 @@ package com.cout970.magneticraft.features.computers
 
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_BUTTON
 import com.cout970.magneticraft.systems.gui.components.CompBackground
@@ -22,34 +21,25 @@ import com.cout970.magneticraft.systems.gui.render.GuiBase
 fun guiComputer(gui: GuiBase, container: ContainerComputer) = gui.run {
     val motherboard = container.motherboard
     val texture = guiTexture("old_monitor")
-    val textureSize = Vec2d(512, 512)
-    val buttonSize = vec2Of(8, 8)
+    val textureSize = vec2Of(512, 512)
 
     sizeX = 350
-    sizeY = 255
+    sizeY = 250
 
-    +CompBackground(texture, textureSize = textureSize, size = Vec2d(350, 230))
-    +MonitorComponent(container.tile.ref, container.monitor, container.keyboard, container, true)
+    +CompBackground(texture, textureSize = textureSize, size = vec2Of(350, 250))
+    +MonitorComponent(container.tile.ref, container.monitor, container.keyboard, container)
 
-    listOf(
-        buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 230)),
-        buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 230)),
-        buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 230))
-    ).forEach {
-        it.listener = { btn, _, _ ->
-            val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, btn.id) }
-            container.sendUpdate(ibd)
-            true
-        }
-        +it
+    +buttonOf(0, texture, vec2Of(12, 225), vec2Of(16, 16), textureSize, vec2Of(36, 251)) { _, _, _ ->
+        val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, 0) }
+        container.sendUpdate(ibd)
+        true
     }
 
-    val size = vec2Of(7, 7)
-    val pos = Vec2d((width - sizeX) / 2, (height - sizeY) / 2) + Vec2d(14, 220)
+    val pos = vec2Of((width - sizeX) / 2, (height - sizeY) / 2) + vec2Of(12, 225)
 
     +CompLight(
-        on = DrawableBox(pos, size, vec2Of(24, 237), size, textureSize),
-        off = DrawableBox(pos, size, vec2Of(24, 230), size, textureSize),
+        on = DrawableBox(pos, vec2Of(16, 16), vec2Of(1, 251), vec2Of(16, 16), textureSize),
+        off = DrawableBox(pos, vec2Of(16, 16), vec2Of(19, 251), vec2Of(16, 16), textureSize),
         texture = texture, condition = motherboard::isOnline
     )
 
@@ -60,38 +50,30 @@ fun guiMiningRobot(gui: GuiBase, container: ContainerMiningRobot) = gui.run {
     val tile = container.tile
     val motherboard = container.motherboard
     val texture = guiTexture("mining_robot")
-    val textureSize = Vec2d(512, 512)
-    val buttonSize = vec2Of(8, 8)
+    val textureSize = vec2Of(512, 512)
 
     sizeX = 350
-    sizeY = 317
+    sizeY = 308
 
-    +CompBackground(texture, textureSize = textureSize, size = Vec2d(350, 317))
-    +MonitorComponent(tile.ref, container.monitor, container.keyboard, container, false)
-    +CompElectricBar(tile.node, Vec2d(10, 238))
+    +CompBackground(texture, textureSize = textureSize, size = vec2Of(350, 308))
+    +MonitorComponent(tile.ref, container.monitor, container.keyboard, container)
+    +CompElectricBar(tile.node, vec2Of(39, 252))
 
-    listOf(
-        buttonOf(0, texture, vec2Of(23, 220), buttonSize, textureSize, vec2Of(0, 317)),
-        buttonOf(1, texture, vec2Of(33, 220), buttonSize, textureSize, vec2Of(8, 317)),
-        buttonOf(2, texture, vec2Of(43, 220), buttonSize, textureSize, vec2Of(16, 317))
-    ).forEach {
-        it.listener = { btn, _, _ ->
-            val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, btn.id) }
-            container.sendUpdate(ibd)
-            true
-        }
-        +it
+    +buttonOf(0, texture, vec2Of(69, 242), vec2Of(16, 16), textureSize, vec2Of(0, 326)) { _, _, _ ->
+        val ibd = IBD().apply { setInteger(DATA_ID_COMPUTER_BUTTON, 0) }
+        container.sendUpdate(ibd)
+        true
     }
 
-    +CompStorageBar(tile.energyStorage, vec2Of(19, 238), vec2Of(31, 317), texture, textureSize)
+    +CompStorageBar(tile.energyStorage, vec2Of(48, 252), vec2Of(36, 308), texture, textureSize)
 
-    val size = vec2Of(7, 7)
-    val pos = Vec2d((width - sizeX) / 2, (height - sizeY) / 2) + Vec2d(14, 220)
+    val pos = vec2Of((width - sizeX) / 2, (height - sizeY) / 2) + vec2Of(69, 242)
 
     +CompLight(
-        on = DrawableBox(pos, size, vec2Of(24, 324), size, textureSize),
-        off = DrawableBox(pos, size, vec2Of(24, 317), size, textureSize),
-        texture = texture, condition = { motherboard.isOnline() }
+        on = DrawableBox(pos, vec2Of(16, 16), vec2Of(1, 309), vec2Of(16, 16), textureSize),
+        off = DrawableBox(pos, vec2Of(16, 16), vec2Of(19, 309), vec2Of(16, 16), textureSize),
+        texture = texture, condition = motherboard::isOnline
     )
+
     +CompEnableRepeatedEvents()
 }
