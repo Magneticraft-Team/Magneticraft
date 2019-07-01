@@ -136,7 +136,7 @@
     }
   ],
   "asset": {
-    "generator": "TO_BE_NAMED glTF v2 Exporter",
+    "generator": "Cout970\u0027s Modeler glTF v2 Exporter",
     "version": "2.0"
   },
   "buffers": [
@@ -337,7 +337,7 @@
       "translation": [
         -1.0,
         1.0,
-        0.0625
+        0.0
       ],
       "name": "Shape15"
     },

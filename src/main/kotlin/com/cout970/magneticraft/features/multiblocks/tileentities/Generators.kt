@@ -171,6 +171,10 @@ class TileSteamTurbine : TileMultiblock(), ITickable {
     val tank = Tank(32_000)
     val node = ElectricNode(ref)
 
+    var lastTime = 0f
+    var turbineAngle = 0f
+    var turbineSpeed = 0f
+
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
 
     val steamGeneratorModule = ModuleSteamGenerator(

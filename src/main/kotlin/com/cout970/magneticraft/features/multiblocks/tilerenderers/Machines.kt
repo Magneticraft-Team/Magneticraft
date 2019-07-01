@@ -83,13 +83,39 @@ object TileRendererSteamTurbine : TileRendererMultiblock<TileSteamTurbine>() {
 
     override fun init() {
         createModel(Multiblocks.steamTurbine,
-            ModelSelector("blades", FilterString("blades"))
+            ModelSelector("blade", FilterRegex("blade.*")),
+            ModelSelector("not_blade", FilterNotRegex("blade.*"))
         )
     }
 
     override fun render(te: TileSteamTurbine) {
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(-1, 0, 0)
-        renderModel("default")
+        renderModel("not_blade")
+
+        translate(1.5f, 1.5f, 0f)
+        val speed = 0.25f * te.steamGeneratorModule.production.storage / te.steamGeneratorModule.maxProduction
+
+        // Smooth changes in speed
+        if (te.turbineSpeed < speed) {
+            te.turbineSpeed += 0.25f / 20
+        } else if (te.turbineSpeed > speed) {
+            te.turbineSpeed -= 0.25f / 20
+        }
+
+        // Smooth rotation
+        val now = (System.currentTimeMillis() % 0xFFFF).toFloat()
+        val delta = now - te.lastTime
+
+        te.lastTime = now
+        te.turbineAngle += te.turbineSpeed * delta
+
+        repeat(12) {
+            stackMatrix {
+                rotate(it * 360 / 12f + te.turbineAngle, 0, 0, 1)
+                translate(-1.5f, -1.5f, 0f)
+                renderModel("blade")
+            }
+        }
     }
 }

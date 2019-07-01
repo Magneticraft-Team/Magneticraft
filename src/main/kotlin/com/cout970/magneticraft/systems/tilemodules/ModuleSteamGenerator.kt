@@ -6,6 +6,7 @@ import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.tileentity.WorkingIndicator
+import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
@@ -54,11 +55,20 @@ class ModuleSteamGenerator(
         }
         production.tick()
         working.tick()
+
+        if (working.working && container.shouldTick(20)) {
+            container.sendUpdateToNearPlayers()
+        }
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         working.deserializeNBT(nbt)
+        production.storage = nbt.getFloat("production")
     }
 
-    override fun serializeNBT(): NBTTagCompound = working.serializeNBT()
+    override fun serializeNBT(): NBTTagCompound {
+        return working.serializeNBT().also {
+            it.setFloat("production", production.average)
+        }
+    }
 }
