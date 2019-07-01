@@ -124,7 +124,7 @@ class TileOilHeater : TileMultiblock(), ITickable {
         )
     )
 
-    val heatModule = ModuleHeat(listOf(node),
+    val heatModule = ModuleHeat(node,
         capabilityFilter = { false },
         connectableDirections = ioModule::getHeatConnectPoints
     )

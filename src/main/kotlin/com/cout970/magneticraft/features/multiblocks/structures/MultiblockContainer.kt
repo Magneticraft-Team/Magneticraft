@@ -18,7 +18,7 @@ object MultiblockContainer : Multiblock() {
 
     override val name: String = "container"
     override val size: BlockPos = BlockPos(3, 3, 7)
-    override val scheme: List<Multiblock.MultiblockLayer>
+    override val scheme: List<MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
@@ -26,9 +26,9 @@ object MultiblockContainer : Multiblock() {
         val B = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
-        scheme = Multiblock.yLayers(
+        scheme = yLayers(
 
-            Multiblock.zLayers(listOf(B, B, B), // y = 2
+            zLayers(listOf(B, B, B), // y = 2
                 listOf(B, B, B),
                 listOf(B, B, B),
                 listOf(B, B, B),
@@ -36,7 +36,7 @@ object MultiblockContainer : Multiblock() {
                 listOf(B, B, B),
                 listOf(B, B, B)),
 
-            Multiblock.zLayers(listOf(B, B, B), // y = 1
+            zLayers(listOf(B, B, B), // y = 1
                 listOf(B, I, B),
                 listOf(B, I, B),
                 listOf(B, I, B),
@@ -44,7 +44,7 @@ object MultiblockContainer : Multiblock() {
                 listOf(B, I, B),
                 listOf(B, B, B)),
 
-            Multiblock.zLayers(listOf(B, M, B), // y = 0
+            zLayers(listOf(B, M, B), // y = 0
                 listOf(B, B, B),
                 listOf(B, B, B),
                 listOf(B, B, B),

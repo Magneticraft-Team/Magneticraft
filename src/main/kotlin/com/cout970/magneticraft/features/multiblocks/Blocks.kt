@@ -54,6 +54,7 @@ object Blocks : IBlockMaker {
     lateinit var refinery: BlockBase private set
     lateinit var bigCombustionChamber: BlockBase private set
     lateinit var bigSteamBoiler: BlockBase private set
+    lateinit var steamTurbine: BlockBase private set
 
     override fun initBlocks(): List<Pair<Block, ItemBlock?>> {
         val builder = BlockBuilder().apply {
@@ -234,7 +235,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         bigSteamBoiler = builder.withName("big_steam_boiler").copy {
-            factory = factoryOf(::TileBigSteamEngine)
+            factory = factoryOf(::TileBigSteamBoiler)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/big_steam_boiler.gltf")
@@ -244,10 +245,21 @@ object Blocks : IBlockMaker {
             pickBlock = CommonMethods::pickDefaultBlock
         }.build()
 
+        steamTurbine = builder.withName("steam_turbine").copy {
+            factory = factoryOf(::TileSteamTurbine)
+            generateDefaultItemBlockModel = false
+            customModels = listOf(
+                "model" to resource("models/block/gltf/steam_turbine.gltf")
+            )
+            onActivated = defaultOnActivated { MultiblockSteamTurbine }
+            onBlockPlaced = Blocks::placeWithOrientation
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
         return itemBlockListOf(
             solarPanel, shelvingUnit, steamEngine, grinder, sieve, solarTower, solarMirror,
             container, pumpjack, hydraulicPress, oilHeater, refinery, bigCombustionChamber,
-            bigSteamBoiler
+            bigSteamBoiler, steamTurbine
         ) + blockListOf(gap)
     }
 

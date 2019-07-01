@@ -25,7 +25,8 @@ object MultiblockSolarPanel : Multiblock() {
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
-            zLayers(listOf(P, M, P),
+            zLayers(
+                listOf(P, M, P),
                 listOf(P, P, P),
                 listOf(P, P, P))
         )

@@ -33,6 +33,8 @@ open class CompVerticalBar(
         gui.bindTexture(BAR_TEXTURES)
         val level = (provider.getLevel() * 48).toInt()
 
+        enableBlend()
+        enableAlpha()
         color(1f, 1f, 1f, 0.2f)
         gui.drawTexture(DrawableBox(
             gui.pos + pos, vec2Of(5, 48),

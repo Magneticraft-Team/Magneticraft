@@ -6,9 +6,7 @@ import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getTile
-import com.cout970.magneticraft.misc.vector.createAABBUsing
-import com.cout970.magneticraft.misc.vector.rotateBox
-import com.cout970.magneticraft.misc.vector.vec3Of
+import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.blocks.*
 import com.cout970.magneticraft.systems.itemblocks.blockListOf
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
@@ -19,6 +17,7 @@ import net.minecraft.block.properties.IProperty
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemBlock
+import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.IStringSerializable
 
@@ -83,6 +82,20 @@ object Blocks : IBlockMaker {
 
         movingRobot = builder.withName("moving_robot").copy {
             onDrop = { emptyList() }
+            boundingBox = { listOf(vec3Of(4.px, 4.px, 4.px) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 1 - 4.px)) }
+            onActivated = func@{
+                for (side in EnumFacing.VALUES) {
+                    val state = it.worldIn.getBlockState(it.pos.offset(side))
+                    if (state.block == miningRobot) {
+                        return@func state.block.onBlockActivated(
+                            it.worldIn, it.pos.offset(side), it.state, it.playerIn, it.hand, it.side,
+                            it.hit.xf, it.hit.yf, it.hit.zf
+                        )
+                    }
+                }
+                false
+            }
+            pickBlock = { ItemStack(miningRobot) }
             generateDefaultItemBlockModel = false
             enableOcclusionOptimization = false
             translucent = true

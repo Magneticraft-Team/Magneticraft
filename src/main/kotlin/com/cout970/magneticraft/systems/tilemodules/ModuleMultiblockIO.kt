@@ -43,6 +43,36 @@ class ModuleMultiblockIO(
             return result
         }
 
+        fun connectionCube(capability: Capability<*>, start: BlockPos, end: BlockPos, getter: () -> Any?): List<ConnectionSpot> {
+            val result = mutableListOf<ConnectionSpot>()
+
+            for (x in start.x..end.x) {
+                for (y in start.y..end.y) {
+                    for (z in start.z..end.z) {
+                        val pos = BlockPos(x, y, z)
+
+                        getCubeSides(pos, start, end).forEach {
+                            result += ConnectionSpot(capability, pos, it, getter)
+                        }
+                    }
+                }
+            }
+            return result
+        }
+
+        private fun getCubeSides(pos: BlockPos, start: BlockPos, end: BlockPos): List<EnumFacing> {
+            val sides = mutableListOf<EnumFacing>()
+
+            if (pos.y == start.y) sides += EnumFacing.DOWN
+            if (pos.y == end.y) sides += EnumFacing.UP
+            if (pos.x == start.x) sides += EnumFacing.WEST
+            if (pos.x == end.x) sides += EnumFacing.EAST
+            if (pos.z == start.z) sides += EnumFacing.NORTH
+            if (pos.z == end.z) sides += EnumFacing.SOUTH
+
+            return sides
+        }
+
         fun connectionCross(capability: Capability<*>, start: BlockPos, dist: Int = 1, getter: () -> Any?): List<ConnectionSpot> {
             val result = mutableListOf<ConnectionSpot>()
 

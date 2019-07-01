@@ -17,7 +17,7 @@ object MultiblockHydraulicPress : Multiblock() {
 
     override val name: String = "hydraulic_press"
     override val size: BlockPos = BlockPos(3, 5, 3)
-    override val scheme: List<Multiblock.MultiblockLayer>
+    override val scheme: List<MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
@@ -30,29 +30,29 @@ object MultiblockHydraulicPress : Multiblock() {
         val H = columnBlock(EnumFacing.EAST)
         val M = mainBlockOf(controllerBlock)
 
-        scheme = Multiblock.yLayers(
+        scheme = yLayers(
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(I, I, I), // y = 4
                 listOf(H, H, H),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(I, I, I), // y = 3
                 listOf(U, R, U),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(I, I, I), // y = 2
                 listOf(U, Y, U),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(G, G, G), // y = 1
                 listOf(C, R, C),
                 listOf(G, G, G)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(G, M, G), // y = 0
                 listOf(G, G, G),
                 listOf(G, G, G))

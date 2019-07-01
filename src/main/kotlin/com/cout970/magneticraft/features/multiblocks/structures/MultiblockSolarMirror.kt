@@ -27,15 +27,18 @@ object MultiblockSolarMirror : Multiblock() {
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
-            zLayers(listOf(N, N, N), // y = 2
+            zLayers(
+                listOf(N, N, N), // y = 2
                 listOf(N, I, N),
                 listOf(N, N, N)),
 
-            zLayers(listOf(N, N, N), // y = 1
+            zLayers(
+                listOf(N, N, N), // y = 1
                 listOf(N, I, N),
                 listOf(N, N, N)),
 
-            zLayers(listOf(N, M, N), // y = 0
+            zLayers(
+                listOf(N, M, N), // y = 0
                 listOf(B, B, B),
                 listOf(N, B, N))
         )

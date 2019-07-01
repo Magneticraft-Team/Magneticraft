@@ -213,6 +213,7 @@ tile.magneticraft.oil_heater_inactive_north.name=Oil Heater
 tile.magneticraft.refinery_inactive_north.name=Refinery
 tile.magneticraft.big_combustion_chamber_inactive_north.name=Big Combustion Chamber
 tile.magneticraft.big_steam_boiler_inactive_north.name=Big Steam Boiler
+tile.magneticraft.steam_TURBINE_inactive_north.name=Steam Turbine
 
 # Ingot blocks
 tile.magneticraft.storage_blocks_copper.name=Copper Block

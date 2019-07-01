@@ -35,22 +35,26 @@ object MultiblockSteamEngine : Multiblock() {
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
-            zLayers(listOf(N, I, I), // y = 2
+            zLayers(
+                listOf(N, I, I), // y = 2
                 listOf(N, I, I),
                 listOf(N, I, I),
                 listOf(I, I, I)),
 
-            zLayers(listOf(O, I, I), // y = 1
+            zLayers(
+                listOf(O, I, I), // y = 1
                 listOf(C, I, I),
                 listOf(G, G, I),
                 listOf(I, G, I)),
 
-            zLayers(listOf(M, I, I), // y = 0
+            zLayers(
+                listOf(M, I, I), // y = 0
                 listOf(B, I, I),
                 listOf(B, G, V),
                 listOf(B, G, C)),
 
-            zLayers(listOf(I, I, I), // y = -1
+            zLayers(
+                listOf(I, I, I), // y = -1
                 listOf(I, I, I),
                 listOf(I, G, I),
                 listOf(I, G, I))

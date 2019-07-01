@@ -17,16 +17,15 @@ import net.minecraft.nbt.NBTTagCompound
 class ModuleSteamGenerator(
     val steamTank: Tank,
     val node: IElectricNode,
+    val maxProduction: Int = 240,
     override val name: String = "module_steam_generator"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
 
     companion object {
-        const val MAX_ENERGY_PER_TICK = 240
         const val STEAM_PER_OPERATION = 10
         const val ENERGY_PER_OPERATION = (STEAM_PER_OPERATION * ConversionTable.STEAM_TO_J).toInt()
-        const val MAX_OPERATIONS_PER_TICK = MAX_ENERGY_PER_TICK / ENERGY_PER_OPERATION
     }
 
     val production = ValueAverage()
@@ -41,7 +40,7 @@ class ModuleSteamGenerator(
             return 0
         }
 
-        return Math.min(fluidLimit, MAX_OPERATIONS_PER_TICK)
+        return Math.min(fluidLimit, maxProduction / ENERGY_PER_OPERATION)
     }
 
     override fun update() {

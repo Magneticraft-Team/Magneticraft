@@ -28,15 +28,18 @@ object MultiblockSolarTower : Multiblock() {
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
-            zLayers(listOf(B, I, B), // y = 2
+            zLayers(
+                listOf(B, I, B), // y = 2
                 listOf(I, C, I),
                 listOf(B, I, B)),
 
-            zLayers(listOf(B, I, B), // y = 1
+            zLayers(
+                listOf(B, I, B), // y = 1
                 listOf(I, C, I),
                 listOf(B, I, B)),
 
-            zLayers(listOf(B, M, B), // y = 0
+            zLayers(
+                listOf(B, M, B), // y = 0
                 listOf(B, B, B),
                 listOf(B, B, B))
         )

@@ -17,7 +17,6 @@ import com.cout970.magneticraft.systems.gui.render.TankIO
 import com.cout970.magneticraft.systems.gui.render.dsl
 import com.cout970.magneticraft.systems.tilemodules.ModulePumpjack.Status.*
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
-import com.cout970.magneticraft.systems.tilemodules.ModuleSteamGenerator
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -225,7 +224,7 @@ fun guiSteamEngine(gui: GuiBase, container: ContainerSteamEngine) = gui.dsl {
     bars {
         electricBar(tile.node)
         storageBar(tile.storageModule)
-        electricProduction(tile.steamGeneratorModule.production, ModuleSteamGenerator.MAX_ENERGY_PER_TICK)
+        electricProduction(tile.steamGeneratorModule.production, tile.steamGeneratorModule.maxProduction)
         tank(tile.tank, TankIO.IN)
     }
 }

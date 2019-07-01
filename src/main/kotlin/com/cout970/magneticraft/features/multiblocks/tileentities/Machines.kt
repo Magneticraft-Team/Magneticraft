@@ -118,7 +118,9 @@ class TileGrinder : TileMultiblock(), ITickable {
         super.update()
 
         if (world.isServer || !processModule.working) return
-        spawner.spawn(world)
+        if (Config.enableMachineParticles == 1) {
+            spawner.spawn(world)
+        }
     }
 }
 
@@ -240,9 +242,11 @@ class TileSieve : TileMultiblock(), ITickable {
         super.update()
 
         if (world.isServer || !processModule.working) return
-        spawner1.spawn(world)
-        spawner2.spawn(world)
-        spawner3.spawn(world)
+        if (Config.enableMachineParticles == 1) {
+            spawner1.spawn(world)
+            spawner2.spawn(world)
+            spawner3.spawn(world)
+        }
     }
 }
 
@@ -373,7 +377,7 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
         ) { if (active) heatModule else null }
     )
 
-    val heatModule = ModuleHeat(listOf(node), connectableDirections = ioModule::getHeatConnectPoints)
+    val heatModule = ModuleHeat(node, connectableDirections = ioModule::getHeatConnectPoints)
     val bigCombustionChamberModule = ModuleBigCombustionChamber(this::facing, node, inventory, tank, 2000.fromCelsiusToKelvin())
 
     override val multiblockModule = ModuleMultiblockCenter(
@@ -393,13 +397,42 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
 }
 
 @RegisterTileEntity("big_steam_boiler")
-class TileBigSteamEngine : TileMultiblock(), ITickable {
+class TileBigSteamBoiler : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockBigSteamBoiler
 
+    val input = Tank(
+        capacity = 16_000,
+        allowInput = true,
+        allowOutput = false,
+        fluidFilter = { it.fluid.name == "water" }
+    ).apply { clientFluidName = "water" }
+
+    val output = Tank(
+        capacity = 128_000,
+        allowInput = false,
+        allowOutput = true,
+        fluidFilter = { it.fluid.name == "steam" }
+    ).apply { clientFluidName = "steam" }
+
+    val node = HeatNode(ref)
+
+
+    val fluidMod = ModuleFluidHandler(input, output,
+        capabilityFilter = ModuleFluidHandler.ALLOW_NONE
+    )
+    val heatMod = ModuleHeat(node)
+
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
         facing = { facing },
-        connectionSpots = emptyList()
+        connectionSpots = (
+            ModuleMultiblockIO.connectionCube(FLUID_HANDLER!!,
+                BlockPos(-1, 0, -2), BlockPos(1, 3, 0)
+            ) { fluidMod } +
+                ModuleMultiblockIO.connectionArea(HEAT_NODE_HANDLER!!,
+                    BlockPos(-1, 0, -2), BlockPos(1, 0, 0), EnumFacing.DOWN
+                ) { heatMod }
+            )
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
@@ -407,6 +440,12 @@ class TileBigSteamEngine : TileMultiblock(), ITickable {
         facingGetter = this::facing,
         capabilityGetter = ioModule::getCapability
     )
+
+    val boiler = ModuleSteamBoiler(node, input, output, Config.multiblockBoilerMaxProduction)
+
+    init {
+        initModules(multiblockModule, ioModule, heatMod, fluidMod, boiler)
+    }
 
     @DoNotRemove
     override fun update() {

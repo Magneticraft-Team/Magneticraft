@@ -72,6 +72,18 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Gasification Unit Max Consumption")
     var gasificationUnitConsumption = 40.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Small boiler max steam production in mB")
+    var boilerMaxProduction = 20
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Multiblock boiler max steam production in mB")
+    var multiblockBoilerMaxProduction = 600
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Steam engine max production in W (J/t)")
+    var steamEngineMaxProduction = 240
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Steam turbine max production in W (J/t)")
+    var steamTurbineMaxProduction = 1200
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Airlock: maintenance cost per Air Bubble every " +
         "40 ticks (2 sec)")
     var airlockBubbleCost = 1.0
@@ -84,7 +96,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press Max Consumption")
     var hydraulicPressMaxConsumption = 60.0
-    //
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Grinder Max Consumption")
     var grinderMaxConsumption = 40.0
 
@@ -130,6 +142,9 @@ object Config {
 
     @ConfigValue(category = CATEGORY_MACHINES, comment = "Max amount of items that a container can store")
     var containerMaxItemStorage: Int = 1024 * 64
+
+    @ConfigValue(category = CATEGORY_MACHINES, comment = "Enable/disable (1/0) particles in machine animations ")
+    var enableMachineParticles: Int = 1
 
     @ConfigValue(category = CATEGORY_PC, comment = "Allow TCP connections in PCs")
     var allowTcpConnections: Boolean = true

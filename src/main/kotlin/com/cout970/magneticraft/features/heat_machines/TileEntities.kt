@@ -40,7 +40,7 @@ class TileCombustionChamber : TileBase(), ITickable {
     val inventory = Inventory(1)
     val node = HeatNode(ref)
 
-    val heatModule = ModuleHeat(listOf(node), capabilityFilter = { it == EnumFacing.UP })
+    val heatModule = ModuleHeat(node, capabilityFilter = { it == EnumFacing.UP })
     val invModule = ModuleInventory(inventory)
     val combustionChamberModule = ModuleCombustionChamber(node, inventory)
 
@@ -59,7 +59,7 @@ class TileSteamBoiler : TileBase(), ITickable {
 
     val node = HeatNode(ref)
 
-    val heatModule = ModuleHeat(listOf(node))
+    val heatModule = ModuleHeat(node)
 
     val waterTank = Tank(
         capacity = 1000,
@@ -77,7 +77,7 @@ class TileSteamBoiler : TileBase(), ITickable {
 
     val fluidModule = ModuleFluidHandler(waterTank, steamTank)
 
-    val boilerModule = ModuleSteamBoiler(node, waterTank, steamTank, 20)
+    val boilerModule = ModuleSteamBoiler(node, waterTank, steamTank, Config.boilerMaxProduction)
 
     val fluidExportModule = ModuleFluidExporter(steamTank, { listOf(BlockPos(0, 1, 0) to EnumFacing.DOWN) })
     val openGui = ModuleOpenGui()
@@ -96,7 +96,7 @@ class TileSteamBoiler : TileBase(), ITickable {
 class TileHeatPipe : TileBase(), ITickable {
 
     val heatNode = HeatNode(ref)
-    val heatModule = ModuleHeat(listOf(heatNode))
+    val heatModule = ModuleHeat(heatNode)
     val heatPipeConnections = ModuleHeatPipeConnections(heatModule)
 
     init {
@@ -117,7 +117,7 @@ class TileHeatPipe : TileBase(), ITickable {
 class TileInsulatedHeatPipe : TileBase(), ITickable {
 
     val heatNode = HeatNode(ref)
-    val heatModule = ModuleHeat(listOf(heatNode))
+    val heatModule = ModuleHeat(heatNode)
     val heatPipeConnections = ModuleHeatPipeConnections(heatModule)
 
     init {
@@ -139,7 +139,7 @@ class TileHeatSink : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getFacing()
     val heatNode = HeatNode(ref)
-    val heatModule = ModuleHeat(listOf(heatNode), capabilityFilter = { it != facing.opposite })
+    val heatModule = ModuleHeat(heatNode, capabilityFilter = { it != facing.opposite })
 
     init {
         initModules(heatModule)
@@ -165,7 +165,7 @@ class TileElectricHeater : TileBase(), ITickable {
 
     val electricModule = ModuleElectricity(listOf(electricNode))
 
-    val moduleHeat = ModuleHeat(listOf(heatNode), capabilityFilter = { it == EnumFacing.UP })
+    val moduleHeat = ModuleHeat(heatNode, capabilityFilter = { it == EnumFacing.UP })
 
     val storageModule = ModuleInternalStorage(capacity = 10000, mainNode = electricNode)
 
@@ -199,7 +199,7 @@ class TileRfHeater : TileBase(), ITickable {
     val node = HeatNode(ref)
 
     val rfModule = ModuleRf(storage)
-    val heatModule = ModuleHeat(listOf(node), capabilityFilter = { it == EnumFacing.UP })
+    val heatModule = ModuleHeat(node, capabilityFilter = { it == EnumFacing.UP })
 
     val electricHeaterModule = ModuleElectricHeater(node, RfNodeWrapper(storage))
 
@@ -232,7 +232,7 @@ class TileGasificationUnit : TileBase(), ITickable {
     val inv = Inventory(2)
 
     val fluidModule = ModuleFluidHandler(tank)
-    val heatModule = ModuleHeat(listOf(heatNode))
+    val heatModule = ModuleHeat(heatNode)
     val inventoryModule = ModuleInventory(inv, capabilityFilter = { InventoryCapabilityFilter(it, listOf(0), listOf(1)) })
 
     val exporter = ModuleFluidExporter(tank, { listOf(BlockPos(0, 1, 0) to EnumFacing.UP) })
@@ -262,9 +262,7 @@ class TileBrickFurnace : TileBase(), ITickable {
     val facing: EnumFacing get() = getBlockState().getOrientationActive()
     val node = HeatNode(ref)
 
-    val heatModule = ModuleHeat(
-        heatNodes = listOf(node)
-    )
+    val heatModule = ModuleHeat(node)
 
     val invModule = ModuleInventory(Inventory(2), capabilityFilter = {
         InventoryCapabilityFilter(it, inputSlots = listOf(0), outputSlots = listOf(1))

@@ -17,7 +17,7 @@ object MultiblockRefinery : Multiblock() {
 
     override val name: String = "refinery"
     override val size: BlockPos = BlockPos(3, 9, 3)
-    override val scheme: List<Multiblock.MultiblockLayer>
+    override val scheme: List<MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
@@ -26,48 +26,48 @@ object MultiblockRefinery : Multiblock() {
         val I = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
-        scheme = Multiblock.yLayers(
-            Multiblock.zLayers(
+        scheme = yLayers(
+            zLayers(
                 listOf(U, U, U), // y = 8
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 7
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 6
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 5
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 4
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 3
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 2
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, U, U), // y = 1
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(U, M, U), // y = 0
                 listOf(H, H, H),
                 listOf(H, H, H))

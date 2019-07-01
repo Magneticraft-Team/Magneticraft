@@ -3,6 +3,7 @@ package com.cout970.magneticraft.features.multiblocks.tileentities
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSolarPanel
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSteamEngine
+import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSteamTurbine
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.fluid.Tank
@@ -14,6 +15,7 @@ import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotatePoint
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FLUID_HANDLER
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
@@ -96,7 +98,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     override fun getMultiblock(): Multiblock = MultiblockSteamEngine
 
-    val tank = Tank(1000)
+    val tank = Tank(16_000)
     val node = ElectricNode(ref)
 
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
@@ -112,7 +114,8 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     val steamGeneratorModule = ModuleSteamGenerator(
         steamTank = tank,
-        node = node
+        node = node,
+        maxProduction = Config.steamEngineMaxProduction
     )
 
     val steamEngineMbModule = ModuleSteamEngineMb(
@@ -152,6 +155,66 @@ class TileSteamEngine : TileMultiblock(), ITickable {
     init {
         initModules(multiblockModule, fluidModule, energyModule, storageModule, steamGeneratorModule,
             steamEngineMbModule, ioModule, guiModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+    }
+}
+
+@RegisterTileEntity("steam_turbine")
+class TileSteamTurbine : TileMultiblock(), ITickable {
+
+    override fun getMultiblock(): Multiblock = MultiblockSteamTurbine
+
+    val tank = Tank(32_000)
+    val node = ElectricNode(ref)
+
+    val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
+
+    val steamGeneratorModule = ModuleSteamGenerator(
+        steamTank = tank,
+        node = node,
+        maxProduction = Config.steamTurbineMaxProduction
+    )
+
+    val storageModule = ModuleInternalStorage(
+        mainNode = node,
+        capacity = 80_000,
+        lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
+        upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
+    )
+
+    val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
+        facing = { facing },
+        connectionSpots = listOf(
+            ConnectionSpot(ELECTRIC_NODE_HANDLER!!, BlockPos(0, 2, -1), EnumFacing.UP) { energyModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -1), EnumFacing.WEST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 1, -1), EnumFacing.WEST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -2), EnumFacing.WEST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 1, -2), EnumFacing.WEST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -1), EnumFacing.EAST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 1, -1), EnumFacing.EAST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -2), EnumFacing.EAST) { fluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 1, -2), EnumFacing.EAST) { fluidModule }
+        )
+    )
+
+    val energyModule = ModuleElectricity(
+        electricNodes = listOf(node),
+        connectableDirections = ioModule::getElectricConnectPoints,
+        capabilityFilter = { false }
+    )
+
+    override val multiblockModule = ModuleMultiblockCenter(
+        multiblockStructure = getMultiblock(),
+        facingGetter = this::facing,
+        capabilityGetter = ioModule::getCapability
+    )
+
+    init {
+        initModules(multiblockModule, ioModule, fluidModule, steamGeneratorModule, storageModule, ioModule, energyModule)
     }
 
     @DoNotRemove

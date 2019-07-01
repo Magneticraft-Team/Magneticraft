@@ -17,7 +17,7 @@ object MultiblockPumpjack : Multiblock() {
 
     override val name: String = "pumpjack"
     override val size: BlockPos = BlockPos(3, 5, 6)
-    override val scheme: List<Multiblock.MultiblockLayer>
+    override val scheme: List<MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
@@ -30,37 +30,37 @@ object MultiblockPumpjack : Multiblock() {
         val R = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
-        scheme = Multiblock.yLayers(
+        scheme = yLayers(
 
-            Multiblock.zLayers(listOf(I, I, I), // y = 4
+            zLayers(listOf(I, I, I), // y = 4
                 listOf(G, G, G),
                 listOf(G, G, G),
                 listOf(G, G, G),
                 listOf(I, G, I),
                 listOf(I, R, I)),
 
-            Multiblock.zLayers(listOf(I, I, I), // y = 3
+            zLayers(listOf(I, I, I), // y = 3
                 listOf(G, H, G),
                 listOf(G, H, G),
                 listOf(G, H, G),
                 listOf(I, H, I),
                 listOf(I, R, I)),
 
-            Multiblock.zLayers(listOf(I, I, I), // y = 2
+            zLayers(listOf(I, I, I), // y = 2
                 listOf(G, R, G),
                 listOf(G, G, G),
                 listOf(G, V, G),
                 listOf(I, G, I),
                 listOf(I, R, I)),
 
-            Multiblock.zLayers(listOf(I, I, I), // y = 1
+            zLayers(listOf(I, I, I), // y = 1
                 listOf(G, R, G),
                 listOf(G, G, G),
                 listOf(G, V, G),
                 listOf(I, G, I),
                 listOf(I, G, I)),
 
-            Multiblock.zLayers(listOf(B, M, C), // y = 0
+            zLayers(listOf(B, M, C), // y = 0
                 listOf(B, B, B),
                 listOf(B, B, B),
                 listOf(B, B, B),

@@ -142,7 +142,7 @@ task updateModVersion {
     }
 }
 
-build.dependsOn updateModVersion
+compileKotlin.dependsOn updateModVersion
 
 static String getBuildNumber() {
     String buildNumber = System.getenv("BUILD_NUMBER") != null ? System.getenv("BUILD_NUMBER") : ""

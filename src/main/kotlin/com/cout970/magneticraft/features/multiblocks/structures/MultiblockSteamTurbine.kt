@@ -13,38 +13,42 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.text.ITextComponent
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 
-object MultiblockOilHeater : Multiblock() {
+object MultiblockSteamTurbine : Multiblock() {
 
-    override val name: String = "oil_heater"
-    override val size: BlockPos = BlockPos(3, 3, 3)
+    override val name: String = "steam_turbine"
+    override val size: BlockPos = BlockPos(3, 3, 5)
     override val scheme: List<MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
-        val U = columnBlock(EnumFacing.UP)
-        val H = columnBlock(EnumFacing.NORTH)
         val I = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
             zLayers(
-                listOf(U, U, U), // y = 2
+                listOf(I, I, I), // y = 2
+                listOf(I, I, I),
+                listOf(I, I, I),
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
             zLayers(
-                listOf(U, U, U), // y = 1
+                listOf(I, I, I), // y = 1
+                listOf(I, I, I),
+                listOf(I, I, I),
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
             zLayers(
-                listOf(U, M, U), // y = 0
-                listOf(H, H, H),
-                listOf(H, H, H))
+                listOf(I, M, I), // y = 0
+                listOf(I, I, I),
+                listOf(I, I, I),
+                listOf(I, I, I),
+                listOf(I, I, I))
         )
     }
 
-    override fun getControllerBlock() = Multiblocks.oilHeater
+    override fun getControllerBlock() = Multiblocks.steamTurbine
 
     override fun getGlobalCollisionBoxes(): List<AxisAlignedBB> = hitboxes
 

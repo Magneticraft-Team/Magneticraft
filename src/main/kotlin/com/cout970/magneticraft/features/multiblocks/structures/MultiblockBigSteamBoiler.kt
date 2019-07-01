@@ -16,7 +16,7 @@ object MultiblockBigSteamBoiler : Multiblock() {
 
     override val name: String = "big_steam_boiler"
     override val size: BlockPos = BlockPos(3, 4, 3)
-    override val scheme: List<Multiblock.MultiblockLayer>
+    override val scheme: List<MultiblockLayer>
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
@@ -24,23 +24,23 @@ object MultiblockBigSteamBoiler : Multiblock() {
         val I = corrugatedIronBlock()
         val M = mainBlockOf(controllerBlock)
 
-        scheme = Multiblock.yLayers(
-            Multiblock.zLayers(
+        scheme = yLayers(
+            zLayers(
                 listOf(I, I, I), // y = 3
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(I, I, I), // y = 2
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(I, I, I), // y = 1
                 listOf(I, I, I),
                 listOf(I, I, I)),
 
-            Multiblock.zLayers(
+            zLayers(
                 listOf(H, M, H), // y = 0
                 listOf(H, H, H),
                 listOf(H, H, H))

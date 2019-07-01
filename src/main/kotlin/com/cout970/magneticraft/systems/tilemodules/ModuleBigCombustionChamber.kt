@@ -74,7 +74,7 @@ class ModuleBigCombustionChamber(
     }
 
     fun spawnParticles() {
-        if (working()) {
+        if (working() && Config.enableMachineParticles == 1) {
             val flameLocalArea = AABB((-8).px, 2.px, 12.px, 24.px, 14.px, 16.px)
             val flameArea = facing().rotateBox(pos.toVec3d() + vec3Of(0.5), flameLocalArea.offset(pos))
             world.spawnParticles(EnumParticleTypes.FLAME, flameArea, 2, vec3Of(0, 0.005, 0), 0.01f)

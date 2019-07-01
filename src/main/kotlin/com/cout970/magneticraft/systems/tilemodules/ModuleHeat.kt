@@ -31,7 +31,7 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/06/29.
  */
 class ModuleHeat(
-    val heatNodes: List<IHeatNode>,
+    vararg val heatNodes: IHeatNode,
     val canConnect: (ModuleHeat, IHeatNode, IHeatNodeHandler, IHeatNode, EnumFacing?) -> Boolean = ModuleHeat::defaultCanConnectImpl,
     val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
     val onUpdateConnections: (ModuleHeat) -> Unit = {},
@@ -151,6 +151,7 @@ class ModuleHeat(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
+        if (cap != HEAT_NODE_HANDLER) return null
         if (!capabilityFilter.invoke(facing)) return null
         return this as T
     }

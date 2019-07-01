@@ -30,8 +30,6 @@ class ModuleSteamBoiler(
     val maxWaterPerTick = (maxProduction / ConversionTable.WATER_TO_STEAM).toInt()
     val production = ValueAverage()
 
-    val maxSteamProduction = (maxWaterPerTick * ConversionTable.WATER_TO_STEAM).toInt()
-
     override fun update() {
         if (world.isClient) return
 

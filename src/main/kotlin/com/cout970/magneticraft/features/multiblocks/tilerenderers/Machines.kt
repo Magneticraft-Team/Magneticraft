@@ -65,16 +65,31 @@ object TileRendererBigCombustionChamber : TileRendererMultiblock<TileBigCombusti
     }
 }
 
-@RegisterRenderer(TileBigSteamEngine::class)
-object TileRendererBigSteamEngine : TileRendererMultiblock<TileBigSteamEngine>() {
+@RegisterRenderer(TileBigSteamBoiler::class)
+object TileRendererBigSteamBoiler : TileRendererMultiblock<TileBigSteamBoiler>() {
 
     override fun init() {
         createModel(Multiblocks.bigSteamBoiler)
     }
 
-    override fun render(te: TileBigSteamEngine) {
+    override fun render(te: TileBigSteamBoiler) {
         Utilities.rotateFromCenter(te.facing, 0f)
-//        translate(-1, 0, 0)
+        renderModel("default")
+    }
+}
+
+@RegisterRenderer(TileSteamTurbine::class)
+object TileRendererSteamTurbine : TileRendererMultiblock<TileSteamTurbine>() {
+
+    override fun init() {
+        createModel(Multiblocks.steamTurbine,
+            ModelSelector("blades", FilterString("blades"))
+        )
+    }
+
+    override fun render(te: TileSteamTurbine) {
+        Utilities.rotateFromCenter(te.facing, 0f)
+        translate(-1, 0, 0)
         renderModel("default")
     }
 }

@@ -44,6 +44,7 @@ object MultiblockManager : IMultiblockManager {
         registerMultiblock(MultiblockRefinery)
         registerMultiblock(MultiblockBigCombustionChamber)
         registerMultiblock(MultiblockBigSteamBoiler)
+        registerMultiblock(MultiblockSteamTurbine)
     }
 
     override fun getRegisteredMultiblocks(): MutableMap<String, IMultiblock> = multiblocks.toMutableMap()

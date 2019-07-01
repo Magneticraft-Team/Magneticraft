@@ -26,13 +26,16 @@ object MultiblockShelvingUnit : Multiblock() {
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
-            zLayers(listOf(P, P, P, P, P), // y = 2
+            zLayers(
+                listOf(P, P, P, P, P), // y = 2
                 listOf(P, P, P, P, P)),
 
-            zLayers(listOf(P, P, P, P, P), // y = 1
+            zLayers(
+                listOf(P, P, P, P, P), // y = 1
                 listOf(P, P, P, P, P)),
 
-            zLayers(listOf(P, P, M, P, P), // y = 0
+            zLayers(
+                listOf(P, P, M, P, P), // y = 0
                 listOf(P, P, P, P, P))
         )
     }
