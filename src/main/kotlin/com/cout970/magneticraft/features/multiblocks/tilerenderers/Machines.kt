@@ -93,7 +93,6 @@ object TileRendererSteamTurbine : TileRendererMultiblock<TileSteamTurbine>() {
         translate(-1, 0, 0)
         renderModel("not_blade")
 
-        translate(1.5f, 1.5f, 0f)
         val speed = 0.25f * te.steamGeneratorModule.production.storage / te.steamGeneratorModule.maxProduction
 
         // Smooth changes in speed
@@ -110,6 +109,7 @@ object TileRendererSteamTurbine : TileRendererMultiblock<TileSteamTurbine>() {
         te.lastTime = now
         te.turbineAngle += te.turbineSpeed * delta
 
+        translate(1.5f, 1.5f, 0f)
         repeat(12) {
             stackMatrix {
                 rotate(it * 360 / 12f + te.turbineAngle, 0, 0, 1)

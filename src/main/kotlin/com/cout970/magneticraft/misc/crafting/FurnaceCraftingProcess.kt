@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.misc.crafting
 
 import com.cout970.magneticraft.api.internal.ApiUtils
+import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.systems.tilemodules.ModuleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
@@ -50,5 +51,5 @@ class FurnaceCraftingProcess(
 
     override fun duration(): Float = 100f
 
-    override fun minTemperature(): Float = 60.0f
+    override fun minTemperature(): Float = 60.fromCelsiusToKelvin().toFloat()
 }
