@@ -57,6 +57,11 @@ fun guiShelvingUnit(gui: GuiBase, container: ContainerShelvingUnit) = gui.run {
     )
     buttons.forEach { +it; it.listener = ::onPress; it.allButtons = buttons }
 
+//    +SimpleButton(0, texture,
+//        vec2Of(176, 179) to vec2Of(23, 24), vec2Of(256),
+//        buttonUV(vec2Of(194, 24 * 6), vec2Of(23, 24))
+//    ).also { it.listener = { _, _, _ -> false } }
+
     val level = container.level.levelIndex
     if (level != -1) {
         buttons[2 - level].state = ButtonState.PRESSED

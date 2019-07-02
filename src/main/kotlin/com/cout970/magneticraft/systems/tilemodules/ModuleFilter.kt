@@ -4,13 +4,16 @@ import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBuffer
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.api.pneumatic.PneumaticMode
+import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.forEach
 import com.cout970.magneticraft.misc.inventory.isEmpty
+import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 
 class ModuleFilter(
@@ -50,5 +53,15 @@ class ModuleFilter(
             }
         }
         return false
+    }
+
+    override fun deserializeNBT(nbt: NBTTagCompound) {
+        inventory.deserializeNBT(nbt.getCompoundTag("filter"))
+    }
+
+    override fun serializeNBT(): NBTTagCompound {
+        return newNbt {
+            add("filter", inventory.serializeNBT())
+        }
     }
 }

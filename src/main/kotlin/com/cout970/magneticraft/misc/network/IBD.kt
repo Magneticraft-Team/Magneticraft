@@ -43,6 +43,10 @@ class IBD {
         map[id] = value
     }
 
+    fun setIntArray(id: Int, value: IntArray) {
+        map[id] = value
+    }
+
     fun getInteger(id: Int) = map[id] as Int
 
     fun getLong(id: Int) = map[id] as Long
@@ -56,6 +60,8 @@ class IBD {
     fun getString(id: Int) = map[id] as String
 
     fun getByteArray(id: Int) = map[id] as ByteArray
+
+    fun getIntArray(id: Int) = map[id] as IntArray
 
     fun getInteger(id: Int, action: (Int) -> Unit) {
         if (hasKey(id)) {
@@ -119,6 +125,14 @@ class IBD {
             }
         }
     }
+    fun getIntArray(id: Int, action: (IntArray) -> Unit) {
+        if (hasKey(id)) {
+            val value = map[id]
+            if (value is IntArray) {
+                action.invoke(value)
+            }
+        }
+    }
 
     fun hasKey(id: Int) = map.containsKey(id)
 
@@ -150,6 +164,7 @@ class IBD {
                 5 -> setBoolean(id, buf.readBoolean())
                 6 -> setString(id, buf.readString())
                 7 -> setByteArray(id, buf.readByteArray())
+                8 -> setIntArray(id, buf.readIntArray())
             }
         }
     }
@@ -165,6 +180,7 @@ class IBD {
                 is Boolean -> 5
                 is String -> 6
                 is ByteArray -> 7
+                is IntArray -> 8
                 else -> throw IllegalStateException("Invalid value type: ${value.javaClass}, value:$value")
             }
             buf.writeByte(type)
@@ -177,6 +193,7 @@ class IBD {
                 5 -> buf.writeBoolean(value as Boolean)
                 6 -> buf.writeString(value as String)
                 7 -> buf.writeByteArray(value as ByteArray)
+                8 -> buf.writeIntArray(value as IntArray)
                 else -> throw IllegalStateException("Invalid value type: ${value.javaClass}, value:$value")
             }
         }

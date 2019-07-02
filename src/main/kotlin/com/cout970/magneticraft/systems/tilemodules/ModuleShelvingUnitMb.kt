@@ -6,10 +6,7 @@ import com.cout970.magneticraft.features.multiblocks.structures.MultiblockShelvi
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileMultiblockGap
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileShelvingUnit
 import com.cout970.magneticraft.misc.add
-import com.cout970.magneticraft.misc.inventory.Inventory
-import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
-import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.inventory.stack
+import com.cout970.magneticraft.misc.inventory.*
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.*
@@ -22,7 +19,7 @@ import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import net.minecraft.block.BlockChest
-import net.minecraft.init.Blocks
+import net.minecraft.item.Item
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -39,13 +36,14 @@ class ModuleShelvingUnitMb(
 ) : IModule, IOnActivated {
 
     companion object {
-        val MAX_CHESTS = 24
-        val SLOTS_PER_CHEST = 27
-        val CHESTS_PER_LEVEL = 8
+        const val MAX_CHESTS = 24
+        const val SLOTS_PER_CHEST = 27
+        const val CHESTS_PER_LEVEL = 8
     }
 
-    lateinit override var container: IModuleContainer
+    override lateinit var container: IModuleContainer
     var chestCount = intArrayOf(0, 0, 0)
+    val chests = Inventory(MAX_CHESTS)
 
     override fun onActivated(args: OnActivatedArgs): Boolean {
         val stack = args.playerIn.getHeldItem(args.hand)
@@ -92,6 +90,7 @@ class ModuleShelvingUnitMb(
         if (module.chestCount[levelIndex] < CHESTS_PER_LEVEL) {
             module.chestCount[levelIndex]++
             module.container.sendUpdateToNearPlayers()
+            chests.insertItem(stack.withSize(1), false)
             stack.shrink(1)
             return true
         }
@@ -110,22 +109,48 @@ class ModuleShelvingUnitMb(
         }
     }
 
+    fun sortStacks(desc: Boolean) {
+        val items = mutableListOf<ItemStack>()
+        inventory.forEach { items += it }
+
+        items.sortWith(Comparator { a, b ->
+            val aId = Item.getIdFromItem(a.item)
+            val bId = Item.getIdFromItem(b.item)
+            val order = when {
+                aId != bId -> aId - bId
+                a.itemDamage != b.itemDamage -> a.itemDamage - b.itemDamage
+                else -> 0
+            }
+
+            if (desc) order else -order
+        })
+
+        repeat(inventory.size) { index ->
+            inventory[index] = ItemStack.EMPTY
+        }
+
+        items.forEachIndexed { index, item ->
+            inventory[index] = item
+        }
+    }
+
     override fun serializeNBT(): NBTTagCompound = newNbt {
         add("chestCount0", chestCount[0])
         add("chestCount1", chestCount[1])
         add("chestCount2", chestCount[2])
+        add("chests", chests.serializeNBT())
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         chestCount[0] = nbt.getInteger("chestCount0")
         chestCount[1] = nbt.getInteger("chestCount1")
         chestCount[2] = nbt.getInteger("chestCount2")
+        chests.deserializeNBT(nbt.getCompoundTag("chests"))
     }
 
     // other pos relative to this block
     fun getLevel(otherPos: IVector3): Level {
-        val y = otherPos.y - pos.y
-        return when (y) {
+        return when (otherPos.y - pos.y) {
             in 0.0..(11 * PIXEL) -> {
                 // if there are shelving units stacked one on top of another,
                 // and you click the bottom part, this will act as the top of the shelving unit below
@@ -153,10 +178,8 @@ class ModuleShelvingUnitMb(
     }
 
     override fun onBreak() {
-        chestCount.forEach { count ->
-            repeat(count) {
-                world.dropItem(Blocks.CHEST.stack(1), pos)
-            }
+        chests.forEach { item ->
+            world.dropItem(item, pos)
         }
     }
 

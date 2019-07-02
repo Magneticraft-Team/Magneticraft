@@ -215,7 +215,6 @@ class TileFilter : TileBase(), ITickable {
     val inputBuffer = PneumaticBuffer()
     val outputBuffer = PneumaticBuffer()
 
-    val invModule = ModuleInventory(inventory, capabilityFilter = ModuleInventory.ALLOW_NONE)
     val filterModule = ModuleFilter(inputBuffer, outputBuffer, inventory)
 
     val endpointModule = ModulePneumaticEndpoint(
@@ -230,7 +229,7 @@ class TileFilter : TileBase(), ITickable {
     )
 
     init {
-        initModules(endpointModule, invModule, filterModule)
+        initModules(endpointModule, filterModule)
     }
 
     @DoNotRemove

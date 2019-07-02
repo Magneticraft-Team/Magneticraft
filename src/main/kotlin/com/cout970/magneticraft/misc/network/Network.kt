@@ -13,7 +13,7 @@ fun ByteBuf.readString(): String {
     for (i in 0 until size) {
         buffer[i] = this.readByte()
     }
-    return kotlin.text.String(buffer, charset = Charsets.UTF_8)
+    return String(buffer, charset = Charsets.UTF_8)
 }
 
 fun ByteBuf.writeString(str: String) {
@@ -37,6 +37,22 @@ fun ByteBuf.writeByteArray(array: ByteArray) {
     this.writeShort(array.size)
     for (i in 0 until array.size) {
         this.writeByte(array[i].toInt())
+    }
+}
+
+fun ByteBuf.readIntArray(): IntArray {
+    val size = Math.abs(this.readShort().toInt())
+    val buffer = IntArray(size)
+    for (i in 0 until size) {
+        buffer[i] = this.readInt()
+    }
+    return buffer
+}
+
+fun ByteBuf.writeIntArray(array: IntArray) {
+    this.writeShort(array.size)
+    for (i in 0 until array.size) {
+        this.writeInt(array[i])
     }
 }
 

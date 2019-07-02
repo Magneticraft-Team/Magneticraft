@@ -57,6 +57,7 @@ const val DATA_ID_HEAT_1 = 52
 const val DATA_ID_HEAT_2 = 53
 const val DATA_ID_HEAT_3 = 54
 const val DATA_ID_FLAGS = 55
+const val DATA_ID_SHELVING_UNIT_SORT = 56
 
 val DATA_ID_VOLTAGE_LIST = listOf(
     DATA_ID_VOLTAGE_0,
