@@ -33,7 +33,8 @@ class CompTextInput(
         x = gui.pos.xi + pos.xi
         y = gui.pos.yi + pos.yi
         if (isFocused) {
-            gui.drawColor(gui.pos + pos - vec2Of(2) to size + vec2Of(2, 0), 0x70654FF7)
+            val pos = gui.pos + pos - vec2Of(2)
+            gui.drawColor(pos, pos + size + vec2Of(2, 0), 0x70654FF7)
         }
         drawTextBox()
         GL11.glColor4f(1f, 1f, 1f, 1f)

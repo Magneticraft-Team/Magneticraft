@@ -1,40 +1,25 @@
 package com.cout970.magneticraft.systems.gui.json
 
-import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Slot
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class JsonContainer(name: String, configFunc: (GuiBuilder) -> Unit, player: EntityPlayer, world: World, pos: BlockPos) : ContainerBase(player, world, pos) {
+fun <T> jsonContainer(name: String, configFunc: GuiBuilder.(T) -> Unit, tile: T, player: EntityPlayer, world: World, pos: BlockPos): JsonContainer {
+    if (Debug.DEBUG) GuiConfig.loadAll()
+    val config = GuiConfig.config[name] ?: error("Unable to find gui in config: $name")
+    val builder = GuiBuilder(config)
+    configFunc.invoke(builder, tile)
 
-    val config: GuiConfig
-    val guiComponents = mutableMapOf<String, AbstractGuiComponent>()
+    return JsonContainer(builder, builder.containerConfig, player, world, pos)
+}
+
+class JsonContainer(val gui: GuiBuilder, configFunc: (JsonContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos) : ContainerBase(player, world, pos) {
 
     init {
-        GuiConfig.loadAll()
-        config = GuiConfig.allConfigs[name]!!
-
-        GuiBuilder(this).apply(configFunc)
-
-        config.slots.forEach { group ->
-            repeat(group.rows) { row ->
-                repeat(group.columns) loop@{ column ->
-                    val index = group.startIndex + column + row * group.columns
-                    val slot = inventorySlots.getOrNull(index) ?: return@loop
-
-                    slot.xPos = group.posX + column * 18
-                    slot.yPos = group.posY + row * 18
-                }
-            }
-        }
-
-        if (config.playerInventory) {
-            val offsetX = config.background.sizeX - 176
-            val offsetY = config.background.sizeY - 166
-            bindPlayerInventory(player.inventory, vec2Of(offsetX, offsetY))
-        }
+        configFunc(this)
     }
 
     public override fun addSlotToContainer(slotIn: Slot): Slot {

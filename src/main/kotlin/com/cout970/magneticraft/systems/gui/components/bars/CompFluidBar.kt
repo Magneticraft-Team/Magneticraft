@@ -10,7 +10,7 @@ import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.util.ResourceLocation
@@ -47,7 +47,7 @@ class CompFluidBar(
 
             gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
-            GlStateManager.enableBlend()
+            enableBlend()
             val height = level / 16
             for (h in 0..height) {
                 val heightLevel = Math.min(level - h * 16, 16)
@@ -55,7 +55,7 @@ class CompFluidBar(
                 gui.drawSprite(gui.pos + vec2Of(pos.x, pos.y + 48 - heightLevel - h * 16), vec2Of(size.x, heightLevel),
                     texture)
             }
-            GlStateManager.disableBlend()
+            disableBlend()
         }
 
         gui.bindTexture(overlayTexture)
@@ -113,8 +113,11 @@ class CompFluidBar2(
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        color(1f, 1f, 1f, 1f)
         gui.bindTexture(guiTexture("misc"))
         gui.drawTexture(back)
+        enableAlpha()
+        enableBlend()
 
         if (tank.clientFluidAmount > 0) {
             val texture = getFluidTexture()
@@ -123,7 +126,7 @@ class CompFluidBar2(
 
                 gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
-                GlStateManager.enableBlend()
+
                 val height = level / 16
                 for (h in 0..height) {
                     val heightLevel = Math.min(level - h * 16, 16)
@@ -131,7 +134,6 @@ class CompFluidBar2(
                     gui.drawSprite(gui.pos + vec2Of(pos.x + 1, pos.y + 1 + 48 - heightLevel - h * 16), vec2Of(16, heightLevel),
                         texture)
                 }
-                GlStateManager.disableBlend()
             }
         }
 

@@ -2,7 +2,6 @@ package com.cout970.magneticraft.systems.gui.render
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.vector.Vec2d
-import com.cout970.magneticraft.misc.vector.contains
 
 /**
  * Created by cout970 on 20/05/2016.
@@ -37,8 +36,6 @@ interface IComponent {
     fun onKeyReleased(typedChar: Char, keyCode: Int): Boolean = false
 
     fun onWheel(amount: Int) = Unit
-
-    fun isMouseInside(mouse: Vec2d): Boolean = mouse in (pos to size)
 
     fun onGuiClosed() = Unit
 }

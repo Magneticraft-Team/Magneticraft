@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.systems.gui.components.bars
 
+import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.misc.clamp
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.guiTexture
@@ -11,6 +13,7 @@ import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
 import net.minecraft.client.renderer.GlStateManager.*
+import kotlin.math.roundToInt
 
 /**
  * Created by cout970 on 09/07/2016.
@@ -64,7 +67,7 @@ open class CompDynamicBar(
     val provider: IBarProvider,
     val index: Int,
     override val pos: Vec2d,
-    val tooltip: () -> List<String> = { listOf<String>() }
+    val tooltip: () -> List<String> = { emptyList() }
 ) : IComponent {
 
     override val size = Vec2d(7, 50)
@@ -106,22 +109,81 @@ open class CompDynamicBar(
             textureScale = vec2Of(256)
         )
 
+        color(1f, 1f, 1f, 1f)
+        enableBlend()
         gui.bindTexture(guiTexture("misc"))
-        gui.drawTexture(back)
+        back.draw()
 
-        disableAlpha()
         color(1f, 1f, 1f, 0.2f)
-        gui.drawTexture(color)
+        color.draw()
 
         color(1f, 1f, 1f, 1f)
-        gui.drawTexture(front)
-        enableAlpha()
+        front.draw()
     }
 
     override fun drawSecondLayer(mouse: Vec2d) {
         if (mouse in (gui.pos + pos to size)) {
             val text = tooltip.invoke()
-            if (!text.isEmpty()) {
+            if (text.isNotEmpty()) {
+                gui.drawHoveringText(text, mouse)
+            }
+        }
+    }
+}
+
+
+open class GuiValueBar(
+    override val pos: IVector2,
+    override val size: IVector2 = Vec2d(12, 54),
+    val backgroundTextureOffset: IVector2 = vec2Of(10, 120),
+    val colorTextureOffset: IVector2 = vec2Of(23, 121),
+    val value: () -> Double,
+    val tooltip: () -> List<String> = { emptyList() }
+) : IComponent {
+
+    override lateinit var gui: IGui
+
+    override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        val border = vec2Of(1)
+        val start = gui.pos + pos
+        val colorSize = size - border * 2
+        val rawValue = value()
+
+
+        val value = if (rawValue.isNaN() || rawValue.isInfinite()) 0 else {
+            (clamp(rawValue, 1.0, 0.0) * colorSize.y).roundToInt()
+        }
+
+        color(1f, 1f, 1f, 1f)
+        gui.bindTexture(guiTexture("misc"))
+        gui.drawTexture(
+            screenPos = start,
+            screenSize = size,
+            texturePos = backgroundTextureOffset
+        )
+
+        enableAlpha()
+        enableBlend()
+        color(1f, 1f, 1f, 0.2f)
+        gui.drawTexture(
+            screenPos = start + border,
+            screenSize = colorSize,
+            texturePos = colorTextureOffset
+        )
+        color(1f, 1f, 1f, 1f)
+        disableBlend()
+        //  Colored bar
+        gui.drawTexture(
+            screenPos = start + border + vec2Of(0, colorSize.yi - value),
+            screenSize = colorSize.withY(value),
+            texturePos = colorTextureOffset + vec2Of(0, colorSize.yi - value)
+        )
+    }
+
+    override fun drawSecondLayer(mouse: Vec2d) {
+        if (mouse in (gui.pos + pos to size)) {
+            val text = tooltip.invoke()
+            if (text.isNotEmpty()) {
                 gui.drawHoveringText(text, mouse)
             }
         }

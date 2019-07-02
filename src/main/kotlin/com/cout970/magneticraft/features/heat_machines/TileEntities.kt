@@ -165,7 +165,7 @@ class TileElectricHeater : TileBase(), ITickable {
 
     val electricModule = ModuleElectricity(listOf(electricNode))
 
-    val moduleHeat = ModuleHeat(heatNode, capabilityFilter = { it == EnumFacing.UP })
+    val moduleHeat = ModuleHeat(heatNode, capabilityFilter = { it?.axis == EnumFacing.Axis.Y })
 
     val storageModule = ModuleInternalStorage(capacity = 10000, mainNode = electricNode)
 
@@ -199,7 +199,7 @@ class TileRfHeater : TileBase(), ITickable {
     val node = HeatNode(ref)
 
     val rfModule = ModuleRf(storage)
-    val heatModule = ModuleHeat(node, capabilityFilter = { it == EnumFacing.UP })
+    val heatModule = ModuleHeat(node, capabilityFilter = { it?.axis == EnumFacing.Axis.Y })
 
     val electricHeaterModule = ModuleElectricHeater(node, RfNodeWrapper(storage))
 

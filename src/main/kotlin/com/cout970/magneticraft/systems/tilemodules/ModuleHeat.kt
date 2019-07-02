@@ -35,8 +35,10 @@ class ModuleHeat(
     val canConnect: (ModuleHeat, IHeatNode, IHeatNodeHandler, IHeatNode, EnumFacing?) -> Boolean = ModuleHeat::defaultCanConnectImpl,
     val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
     val onUpdateConnections: (ModuleHeat) -> Unit = {},
-    val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
     val capabilityFilter: (EnumFacing?) -> Boolean = { true },
+    val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = {
+        NEGATIVE_DIRECTIONS.filter { capabilityFilter(it) }.map { it.toBlockPos() to it.opposite }
+    },
     override val name: String = "module_heat"
 ) : IModule, IHeatNodeHandler {
 

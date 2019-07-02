@@ -1,48 +1,48 @@
 package com.cout970.magneticraft.systems.gui.json
 
 import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.misc.gui.SlotType
+import com.cout970.magneticraft.misc.gui.TypedSlot
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.inventory.GuiContainer
+import com.cout970.magneticraft.systems.gui.render.GuiBase
+import net.minecraft.inventory.Slot
 
-class JsonGui(val container: JsonContainer) : GuiContainer(container) {
+class JsonGui(override val container: JsonContainer) : GuiBase(container) {
 
     lateinit var background: List<DrawableBox>
     lateinit var slots: List<DrawableBox>
 
     override fun initGui() {
-        val config = container.config
-        this.xSize = config.background.sizeX
-        this.ySize = config.background.sizeY
+        val config = container.gui.config
+        this.xSize = config.background.xi
+        this.ySize = config.background.yi
         super.initGui()
-        this.background = createRectWithBorders(vec2Of(guiLeft, guiTop), vec2Of(xSize, ySize))
 
-        val slotConfig = if (config.playerInventory) {
-            val offsetX = xSize - 176
-            val offsetY = ySize - 166
-            config.slots + listOf(
-                GuiConfig.SlotGroup(0, 3, 9, offsetX + 8, offsetY + 84, "default"),
-                GuiConfig.SlotGroup(27, 1, 9, offsetX + 8, offsetY + 142, "default")
-            )
+        this.slots = createSlots(container.inventorySlots)
+        this.background = if (config.top) {
+            createRectWithBorders(pos, size)
         } else {
-            config.slots
+            createRectWithBorders(pos + vec2Of(0, 76), size - vec2Of(0, 76))
         }
-
-        this.slots = createSlots(slotConfig)
     }
 
-    override fun drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) {
-        Minecraft.getMinecraft().renderEngine.bindTexture(guiTexture("misc"))
-        background.forEach { it.draw() }
-        slots.forEach { it.draw() }
+    override fun initComponents() {
+        container.gui.build(this)
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         this.drawDefaultBackground()
         super.drawScreen(mouseX, mouseY, partialTicks)
         this.renderHoveredToolTip(mouseX, mouseY)
+    }
+
+    override fun drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) {
+        bindTexture(guiTexture("misc"))
+        background.forEach { it.draw() }
+        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY)
+        slots.forEach { it.draw() }
     }
 
     fun createRectWithBorders(pPos: IVector2, pSize: IVector2): List<DrawableBox> {
@@ -115,30 +115,27 @@ class JsonGui(val container: JsonContainer) : GuiContainer(container) {
         )
     }
 
-    fun createSlots(slots: List<GuiConfig.SlotGroup>): List<DrawableBox> {
+    fun createSlots(slots: List<Slot>): List<DrawableBox> {
         val boxes = mutableListOf<DrawableBox>()
 
-        slots.forEach { group ->
-            repeat(group.rows) { row ->
-                repeat(group.columns) loop@{ column ->
-                    val x = guiLeft + group.posX + column * 18 - 1
-                    val y = guiTop + group.posY + row * 18 - 1
+        slots.forEach { slot ->
+            val x = guiLeft + slot.xPos - 1
+            val y = guiTop + slot.yPos - 1
 
-                    val icon = when (group.icon) {
-                        "in" -> vec2Of(55, 81)
-                        "out" -> vec2Of(36, 81)
-                        "filter" -> vec2Of(74, 81)
-                        else -> vec2Of(36, 100)
-                    }
-
-                    boxes += DrawableBox(
-                        screenPos = vec2Of(x, y),
-                        screenSize = vec2Of(18),
-                        texturePos = icon,
-                        textureSize = vec2Of(18)
-                    )
-                }
+            val type = (slot as? TypedSlot)?.type ?: SlotType.NORMAL
+            val icon = when (type) {
+                SlotType.INPUT -> vec2Of(55, 81)
+                SlotType.OUTPUT -> vec2Of(36, 81)
+                SlotType.FILTER -> vec2Of(74, 81)
+                SlotType.NORMAL -> vec2Of(36, 100)
             }
+
+            boxes += DrawableBox(
+                screenPos = vec2Of(x, y),
+                screenSize = vec2Of(18),
+                texturePos = icon,
+                textureSize = vec2Of(18)
+            )
         }
 
         return boxes

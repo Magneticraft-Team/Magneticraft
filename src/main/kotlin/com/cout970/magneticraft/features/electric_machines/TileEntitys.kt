@@ -170,7 +170,7 @@ class TileThermopile : TileBase(), ITickable {
 
     val storage = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
+        capacity = 80_000,
         lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
         upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
     )
@@ -197,7 +197,7 @@ class TileWindTurbine : TileBase(), ITickable {
         electricNodes = listOf(node)
     )
     val storageModule = ModuleInternalStorage(
-        capacity = 10000,
+        capacity = 80_000,
         mainNode = node,
         upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5,
         lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 10

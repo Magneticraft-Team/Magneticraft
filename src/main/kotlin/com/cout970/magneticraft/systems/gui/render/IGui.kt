@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.systems.gui.render
 
 import com.cout970.magneticraft.IVector2
-import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.client.gui.FontRenderer
 
@@ -11,15 +10,13 @@ import net.minecraft.client.gui.FontRenderer
 
 interface IGui : IGuiRenderer {
 
+    val container: ContainerBase
     val components: MutableList<IComponent>
 
     val pos: IVector2
     val size: IVector2
-
-    val container: ContainerBase
+    val windowSize: IVector2
 
     val fontHelper: FontRenderer
-
-    fun getWindowSize(): Vec2d
 }
 

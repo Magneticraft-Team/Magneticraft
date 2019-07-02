@@ -9,6 +9,15 @@ package com.cout970.magneticraft.misc.vector
 inline fun vec2Of(x: Number, y: Number) = Vec2d(x.toDouble(), y.toDouble())
 
 @Suppress("NOTHING_TO_INLINE")
+inline fun vec2Of(x: Int, y: Int) = Vec2d(x.toDouble(), y.toDouble())
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun vec2Of(x: Float, y: Float) = Vec2d(x.toDouble(), y.toDouble())
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun vec2Of(x: Double, y: Double) = Vec2d(x, y)
+
+@Suppress("NOTHING_TO_INLINE")
 inline fun vec2Of(n: Number) = Vec2d(n.toDouble(), n.toDouble())
 
 inline val Pair<Vec2d, Vec2d>.start get() = first
@@ -49,6 +58,8 @@ data class Vec2d(val x: Double, val y: Double) {
     fun toPair(): Pair<Double, Double> = x to y
 
     fun swap() = Vec2d(y, x)
+    inline fun withX(x: Number) = Vec2d(x.toDouble(), y)
+    inline fun withY(y: Number) = Vec2d(x, y.toDouble())
 
     operator fun plus(v: Number) = Vec2d(v.toDouble() + x, v.toDouble() + y)
 

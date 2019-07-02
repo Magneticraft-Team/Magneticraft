@@ -53,7 +53,9 @@ class CompShelvingUnit(
             }
         }
         if (container.currentSlots.isEmpty() && (container.filterText.isEmpty() || container.filterText.isBlank())) {
-            gui.drawColor(Pair(gui.pos + vec2Of(6, 56), vec2Of(164, 17)), 0xF0000000.toInt())
+            val start = gui.pos + vec2Of(6, 56)
+            val end = start + vec2Of(164, 17)
+            gui.drawColor(start, end, 0xF0000000.toInt())
             gui.drawCenteredString("Add Chests to increase storage", gui.pos + vec2Of(88, 61),
                 0xFFFFFFFF.toInt())
         }

@@ -1,0 +1,44 @@
+{
+    "box": {
+        "points": {
+            "inv_start": [8, 8],
+            "player_inv_offset": [0, -16]
+        },
+        "background": [176, 150],
+        "top": true
+    },
+    "electric_heater": {},
+    "combustion_chamber": {
+        "points": {
+            "fuel_slot": [93, 32]
+        }
+    },
+    "steam_boiler": {},
+    "battery_block": {
+        "points": {
+            "input_slot": [103, 16],
+            "output_slot": [103, 48]
+        }
+    },
+    "electric_furnace": {
+        "points": {
+            "input_slot": [100, 17],
+            "output_slot": [100, 49]
+        }
+    },
+    "brick_furnace": {
+        "points": {
+            "input_slot": [100, 17],
+            "output_slot": [100, 49]
+        }
+    },
+    "thermopile": {},
+    "wind_turbine": {},
+    "rf_heater": {},
+    "gasification_unit": {
+        "points": {
+            "input_slot": [90, 17],
+            "output_slot": [90, 49]
+        }
+    }
+}

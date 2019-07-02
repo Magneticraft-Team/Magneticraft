@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.systems.gui.render
 
+import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Sprite
-import com.cout970.magneticraft.misc.vector.*
+import com.cout970.magneticraft.misc.vector.vec2Of
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 
@@ -14,13 +15,13 @@ interface IGuiRenderer {
     fun bindTexture(res: ResourceLocation)
 
     //string render
-    fun drawHoveringText(textLines: List<String>, pos: Vec2d)
+    fun drawHoveringText(textLines: List<String>, pos: IVector2)
 
-    fun drawCenteredString(text: String, pos: Vec2d, color: Int)
+    fun drawCenteredString(text: String, pos: IVector2, color: Int)
 
-    fun drawString(text: String, pos: Vec2d, color: Int)
+    fun drawString(text: String, pos: IVector2, color: Int)
 
-    fun drawShadelessString(text: String, pos: Vec2d, color: Int)
+    fun drawShadelessString(text: String, pos: IVector2, color: Int)
 
     //line render
     fun drawHorizontalLine(startX: Int, endX: Int, y: Int, color: Int)
@@ -28,22 +29,19 @@ interface IGuiRenderer {
     fun drawVerticalLine(x: Int, startY: Int, endY: Int, color: Int)
 
     //box render
-    fun drawColor(start: Vec2d, end: Vec2d, color: Int)
+    fun drawColor(start: IVector2, end: IVector2, color: Int)
 
-    fun drawColor(rect: Pair<Vec2d, Vec2d>, color: Int) = drawColor(rect.start, rect.end, color)
+    fun drawColorGradient(start: IVector2, end: IVector2, startColor: Int, endColor: Int)
 
-    fun drawColorGradient(start: Vec2d, end: Vec2d, startColor: Int, endColor: Int)
-
-    fun drawColorGradient(rect: Pair<Vec2d, Vec2d>, startColor: Int, endColor: Int) {
-        drawColorGradient(rect.start, rect.end, startColor, endColor)
-    }
-
-    fun drawSprite(rect: Pair<Vec2d, Vec2d>, sprite: Sprite) = drawSprite(rect.pos, rect.size, sprite)
-    fun drawSprite(pos: Vec2d, size: Vec2d, sprite: Sprite)
+    fun drawSprite(pos: IVector2, size: IVector2, sprite: Sprite)
 
     //texture render
     fun drawTexture(box: DrawableBox)
 
+    fun drawTexture(screenPos: IVector2, screenSize: IVector2,
+                    texturePos: IVector2, textureSize: IVector2 = screenSize,
+                    textureScale: IVector2 = vec2Of(256))
+
     //itemstack render
-    fun drawStack(stack: ItemStack, pos: Vec2d, text: String? = null)
+    fun drawStack(stack: ItemStack, pos: IVector2, text: String? = null)
 }

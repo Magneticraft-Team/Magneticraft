@@ -3,6 +3,7 @@ package com.cout970.magneticraft.systems.gui.render
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.misc.vector.Vec2d
+import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
@@ -22,8 +23,21 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     override val components = mutableListOf<IComponent>()
 
-    override val pos: IVector2 get() = Vec2d(guiLeft, guiTop)
-    override val size: IVector2 get() = Vec2d(xSize, ySize)
+    override val pos: IVector2 get() = vec2Of(guiLeft, guiTop)
+    override val size: IVector2 get() = vec2Of(xSize, ySize)
+    override val windowSize: IVector2 get() = vec2Of(width, height)
+
+    var sizeX: Int
+        get() = super.xSize
+        set(value) {
+            super.xSize = value
+        }
+
+    var sizeY: Int
+        get() = super.ySize
+        set(value) {
+            super.ySize = value
+        }
 
     override val fontHelper: FontRenderer get() = super.fontRenderer
 
@@ -42,8 +56,6 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     abstract fun initComponents()
-
-    override fun getWindowSize(): Vec2d = Vec2d(width, height)
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         this.drawDefaultBackground()
@@ -85,8 +97,8 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     @Throws(IOException::class)
     override fun keyTyped(typedChar: Char, keyCode: Int) {
-        val block = components.any { it -> it.onKeyTyped(typedChar, keyCode) }
-        if (!block) {
+        this.keyHandled = components.any { it.onKeyTyped(typedChar, keyCode) }
+        if (!this.keyHandled) {
             super.keyTyped(typedChar, keyCode)
         }
     }
@@ -102,7 +114,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         }
 
         if (!state) {
-            components.any { it -> it.onKeyReleased(char, event) }
+            components.any { it.onKeyReleased(char, event) }
         }
 
         this.mc.dispatchKeypresses()
@@ -120,18 +132,6 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         components.forEach { it.onGuiClosed() }
         super.onGuiClosed()
     }
-
-    var sizeX: Int
-        get() = super.xSize
-        set(value) {
-            super.xSize = value
-        }
-
-    var sizeY: Int
-        get() = super.ySize
-        set(value) {
-            super.ySize = value
-        }
 
     //render utilities
 
@@ -182,6 +182,19 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
             box.textureSize.xi, box.textureSize.yi,
             box.screenSize.xi, box.screenSize.yi,
             box.textureScale.xf, box.textureScale.yf
+        )
+    }
+
+    override fun drawTexture(screenPos: IVector2, screenSize: IVector2,
+                             texturePos: IVector2, textureSize: IVector2,
+                             textureScale: IVector2) {
+
+        drawScaledCustomSizeModalRect(
+            screenPos.xi, screenPos.yi,
+            texturePos.xf, texturePos.yf,
+            textureSize.xi, textureSize.yi,
+            screenSize.xi, screenSize.yi,
+            textureScale.xf, textureScale.yf
         )
     }
 

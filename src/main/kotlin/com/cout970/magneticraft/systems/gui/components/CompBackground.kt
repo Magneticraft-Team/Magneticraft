@@ -47,7 +47,7 @@ class CompDynamicBackground(
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        gui.bindTexture(guiTexture("misc"))
+        gui.bindTexture(guiTexture("misc2"))
         dynamicBack.forEach { gui.drawTexture(it) }
     }
 
