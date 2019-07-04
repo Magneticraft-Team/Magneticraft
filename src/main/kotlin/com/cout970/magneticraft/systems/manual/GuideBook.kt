@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.systems.manual
 
+import com.cout970.magneticraft.systems.gui.ContainerBase
+import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.components.CompBookRenderer
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

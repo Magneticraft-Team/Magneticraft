@@ -6,9 +6,9 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_BUTTON
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_LIGHT
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Slot
 import net.minecraft.util.math.BlockPos

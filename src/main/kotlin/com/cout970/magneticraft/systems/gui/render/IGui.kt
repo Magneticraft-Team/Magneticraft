@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.systems.gui.render
 
 import com.cout970.magneticraft.IVector2
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import net.minecraft.client.gui.FontRenderer
 
 /**

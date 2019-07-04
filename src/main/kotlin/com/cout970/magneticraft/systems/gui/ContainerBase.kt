@@ -1,7 +1,9 @@
-package com.cout970.magneticraft.systems.gui.containers
+package com.cout970.magneticraft.systems.gui
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.misc.gui.SlotButton
+import com.cout970.magneticraft.misc.gui.SlotFilter
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.withSize
@@ -103,8 +105,8 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     //Called every tick to get the changes in the server that need to be sent to the client
     open fun sendDataToClient(): IBD? {
-        return (tileEntity as? TileBase)?.let {
-            val vars = it.container.modules.flatMap { it.getGuiSyncVariables() }
+        return (tileEntity as? TileBase)?.let { tileBase ->
+            val vars = tileBase.container.modules.flatMap { it.getGuiSyncVariables() }
             if (vars.isEmpty()) {
                 null
             } else {
@@ -121,8 +123,8 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     //called when server data is received
     open fun receiveDataFromServer(ibd: IBD) {
-        (tileEntity as? TileBase)?.let {
-            val vars = it.container.modules.flatMap { it.getGuiSyncVariables() }
+        (tileEntity as? TileBase)?.let { tileBase ->
+            val vars = tileBase.container.modules.flatMap { it.getGuiSyncVariables() }
             vars.forEach { it.read(ibd) }
         }
     }
@@ -133,6 +135,24 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     fun sendUpdate(ibd: IBD) {
         Magneticraft.network.sendToServer(MessageGuiUpdate(ibd, player.persistentID))
+    }
+
+    @Suppress("FoldInitializerAndIfToElvis")
+    override fun slotClick(slotId: Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer): ItemStack {
+        val slot = inventorySlots.getOrNull(slotId)
+
+        return when (slot) {
+            is SlotButton -> {
+                slot.onClick(player, dragType)
+                super.slotClick(slotId, dragType, clickTypeIn, player)
+            }
+            is SlotFilter -> {
+                onFilterSlotClick(slot, dragType, clickTypeIn, player)
+            }
+            else -> {
+                super.slotClick(slotId, dragType, clickTypeIn, player)
+            }
+        }
     }
 
     fun onFilterSlotClick(slot: Slot, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer): ItemStack {

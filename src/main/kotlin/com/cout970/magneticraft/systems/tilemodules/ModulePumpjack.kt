@@ -102,7 +102,7 @@ class ModulePumpjack(
                     depositStart = pos
                     this.firstOilSearch = null
 
-                    val size = 5 * 16
+                    val size = 32 // 5 * 16
                     this.depositSearch = WorldIterator.create(
                         BlockPos(pos.x - size, pos.yi - 7, pos.z - size),
                         BlockPos(pos.x + size, pos.yi + 4, pos.z + size)
@@ -179,7 +179,7 @@ class ModulePumpjack(
 
         if (nextSource == null) {
             val start = ref().down()
-            val size = 128
+            val size = 32
 
             nextSource = WorldIterator.create(
                 BlockPos(start.x - size, depositStart.y - 10, start.z - size),
@@ -190,7 +190,7 @@ class ModulePumpjack(
         repeat(Config.pumpjackScanSpeed) {
             val source = nextSource!!
             if (!source.hasNext()) {
-                status = Status.SEARCHING_DEPOSIT
+                status = Status.SEARCHING_SOURCE
                 nextSource = null
                 container.sendUpdateToNearPlayers()
                 return
@@ -204,6 +204,11 @@ class ModulePumpjack(
 
     fun extractOil() {
         if (!energy.hasEnergy(Config.pumpjackConsumption)) return
+        production += Config.pumpjackConsumption
+        energy.useEnergy(Config.pumpjackConsumption)
+
+
+        if (!container.shouldTick(20)) return
 
         val state = world.getBlockState(nextSourcePos)
 
@@ -223,16 +228,11 @@ class ModulePumpjack(
 
             if (newAmount == 0) {
                 depositLeft--
+                status = Status.SEARCHING_SOURCE
             }
 
             world.setBlockState(nextSourcePos, newState)
             tank.fill(fluid, true)
-
-            production += Config.pumpjackConsumption
-            energy.useEnergy(Config.pumpjackConsumption)
-
-            status = Status.SEARCHING_SOURCE
-            searchNextSource()
         }
     }
 

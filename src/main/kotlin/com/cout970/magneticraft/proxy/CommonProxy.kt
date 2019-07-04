@@ -3,8 +3,8 @@ package com.cout970.magneticraft.proxy
 import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.logTime
 import com.cout970.magneticraft.registry.*
+import com.cout970.magneticraft.systems.gui.GuiConfig
 import com.cout970.magneticraft.systems.gui.GuiHandler
-import com.cout970.magneticraft.systems.gui.json.GuiConfig
 import com.cout970.magneticraft.systems.multiblocks.MultiblockManager
 import com.cout970.magneticraft.systems.network.MessageContainerUpdate
 import com.cout970.magneticraft.systems.network.MessageGuiUpdate

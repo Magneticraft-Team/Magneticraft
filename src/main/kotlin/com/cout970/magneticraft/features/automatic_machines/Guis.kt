@@ -4,11 +4,11 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.components.CompBackground
 import com.cout970.magneticraft.systems.gui.components.buttons.ButtonState
 import com.cout970.magneticraft.systems.gui.components.buttons.IButtonListener
 import com.cout970.magneticraft.systems.gui.components.buttons.ToggleButton
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 
 @Suppress("UNUSED_PARAMETER")
 fun guiInserter(gui: GuiBase, container: ContainerInserter) = gui.run {
@@ -24,15 +24,6 @@ fun guiInserter(gui: GuiBase, container: ContainerInserter) = gui.run {
     +button(5, vec2Of(138, 14), vec2Of(18, 166), container::onClick) { mod.canGrabItems }
 }
 
-@Suppress("UNUSED_PARAMETER")
-fun guiRelay(gui: GuiBase, container: ContainerRelay) = gui.run {
-    +CompBackground(guiTexture("relay"))
-}
-
-@Suppress("UNUSED_PARAMETER")
-fun guiFilter(gui: GuiBase, container: ContainerFilter) = gui.run {
-    +CompBackground(guiTexture("filter"))
-}
 
 private fun button(id: Int, pos: IVector2, tex: IVector2, listener: IButtonListener, on: () -> Boolean): ToggleButton {
 

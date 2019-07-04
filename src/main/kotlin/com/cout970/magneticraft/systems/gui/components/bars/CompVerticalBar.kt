@@ -189,3 +189,25 @@ open class GuiValueBar(
         }
     }
 }
+
+data class CompDrawable(
+    override val pos: IVector2,
+    override val size: IVector2,
+    val texture: IVector2,
+    val enable: () -> Boolean = { true }
+) : IComponent {
+
+    override lateinit var gui: IGui
+
+    override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        if (!enable()) return
+
+        color(1f, 1f, 1f, 1f)
+        gui.bindTexture(guiTexture("misc"))
+        gui.drawTexture(
+            screenPos = gui.pos + pos,
+            screenSize = size,
+            texturePos = texture
+        )
+    }
+}

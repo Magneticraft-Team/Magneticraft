@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.systems.gui.json
+package com.cout970.magneticraft.systems.gui
 
 import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2

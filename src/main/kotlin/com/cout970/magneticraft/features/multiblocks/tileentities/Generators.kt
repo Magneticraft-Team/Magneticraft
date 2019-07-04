@@ -107,7 +107,7 @@ class TileSteamEngine : TileMultiblock(), ITickable {
 
     val storageModule = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
+        capacity = 80_000,
         lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
         upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
     )
@@ -218,7 +218,8 @@ class TileSteamTurbine : TileMultiblock(), ITickable {
     )
 
     init {
-        initModules(multiblockModule, ioModule, fluidModule, steamGeneratorModule, storageModule, ioModule, energyModule)
+        initModules(multiblockModule, ioModule, fluidModule, steamGeneratorModule, storageModule,
+            ioModule, energyModule, ModuleOpenGui())
     }
 
     @DoNotRemove

@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.features.manual_machines
 
 import com.cout970.magneticraft.misc.guiTexture
+import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.components.CompBackground
 import com.cout970.magneticraft.systems.gui.components.CompFabricatorMatches
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 
 /**
  * Created by cout970 on 2017/08/10.

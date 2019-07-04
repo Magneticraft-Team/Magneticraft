@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.crafting.GrinderCraftingProcess
 import com.cout970.magneticraft.misc.crafting.HydraulicPressCraftingProcess
 import com.cout970.magneticraft.misc.crafting.SieveCraftingProcess
+import com.cout970.magneticraft.misc.flatten
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -421,18 +422,20 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
     val fluidMod = ModuleFluidHandler(input, output,
         capabilityFilter = ModuleFluidHandler.ALLOW_NONE
     )
-    val heatMod = ModuleHeat(node)
+    val heatMod = ModuleHeat(node, capabilityFilter = { false })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
         facing = { facing },
-        connectionSpots = (
+        connectionSpots = flatten(
             ModuleMultiblockIO.connectionCube(FLUID_HANDLER!!,
-                BlockPos(-1, 0, -2), BlockPos(1, 3, 0)
-            ) { fluidMod } +
-                ModuleMultiblockIO.connectionArea(HEAT_NODE_HANDLER!!,
-                    BlockPos(-1, 0, -2), BlockPos(1, 0, 0), EnumFacing.DOWN
-                ) { heatMod }
+                BlockPos(-1, 0, -2), BlockPos(1, 3, 0),
+                getter = { fluidMod }
+            ),
+            ModuleMultiblockIO.connectionArea(HEAT_NODE_HANDLER!!,
+                BlockPos(-1, 0, -2), BlockPos(1, 0, 0), EnumFacing.DOWN,
+                getter = { heatMod }
             )
+        )
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
@@ -441,10 +444,14 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
         capabilityGetter = ioModule::getCapability
     )
 
+    val extract = ModuleFluidExporter(output,
+        ports = { listOf(BlockPos(0, 4, 1) to EnumFacing.DOWN) }
+    )
+
     val boiler = ModuleSteamBoiler(node, input, output, Config.multiblockBoilerMaxProduction)
 
     init {
-        initModules(multiblockModule, ioModule, heatMod, fluidMod, boiler)
+        initModules(multiblockModule, ioModule, heatMod, fluidMod, boiler, extract, ModuleOpenGui())
     }
 
     @DoNotRemove

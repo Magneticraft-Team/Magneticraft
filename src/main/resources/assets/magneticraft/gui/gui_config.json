@@ -40,5 +40,78 @@
             "input_slot": [90, 17],
             "output_slot": [90, 49]
         }
+    },
+    "grinder": {
+        "points": {
+            "input_slot": [107, 17],
+            "output_slot": [96, 49],
+            "output2_slot": [118, 49],
+            "arrow_offset": [4, 32],
+            "arrow_size": [30, 11],
+            "arrow_uv": [225, 11]
+        }
+    },
+    "sieve": {
+        "points": {
+            "input_slot": [107, 17],
+            "output_slot": [85, 49],
+            "output2_slot": [107, 49],
+            "output3_slot": [129, 49],
+            "arrow_offset": [5, 32],
+            "arrow_size": [52, 11],
+            "arrow_uv": [203, 23]
+        }
+    },
+    "container": {
+        "points": {
+            "input_slot": [84, 16],
+            "output_slot": [84, 46]
+        }
+    },
+    "pumpjack": {
+        "points": {
+            "status_icon_pos": [0, 0],
+            "status_icon_size": [16, 16],
+            "status_icon_uv_0": [238, 36],
+            "status_icon_uv_1": [238, 52],
+            "status_icon_uv_2": [238, 68],
+            "status_icon_uv_3": [238, 84],
+            "status_icon_uv_4": [238, 100]
+        }
+    },
+    "big_combustion_chamber": {
+        "points": {
+            "fuel_slot": [104, 33]
+        }
+    },
+    "oil_heater": {},
+    "refinery": {},
+    "steam_engine": {},
+    "big_steam_boiler": {},
+    "steam_turbine": {},
+    "relay": {
+        "points": {
+            "inv_start": [62, 5]
+        }
+    },
+    "filter": {
+        "points": {
+            "inv_start": [62, 5]
+        }
+    },
+    "fabricator": {
+        "points": {
+            "recipe_grid": [24, 5],
+            "recipe_result": [80, 23],
+            "inv_start": [100, 5]
+        }
+    },
+    "solar_tower": {
+        "points": {
+            "button_offset": [0, 24],
+            "icon_offset": [-18, 26],
+            "icon_size": [14, 14],
+            "icon_uv": [147, 11]
+        }
     }
 }

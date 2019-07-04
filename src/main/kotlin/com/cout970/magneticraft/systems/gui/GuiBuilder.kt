@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.systems.gui.json
+package com.cout970.magneticraft.systems.gui
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.api.energy.IElectricNode
@@ -8,28 +8,31 @@ import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.gui.*
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
+import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.components.CompDynamicBackground
 import com.cout970.magneticraft.systems.gui.components.CompImage
 import com.cout970.magneticraft.systems.gui.components.bars.*
+import com.cout970.magneticraft.systems.gui.components.buttons.ClickButton
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 import com.cout970.magneticraft.systems.gui.render.IComponent
-import com.cout970.magneticraft.systems.gui.render.TankIO
+import com.cout970.magneticraft.systems.tilemodules.ModuleBigCombustionChamber
 import com.cout970.magneticraft.systems.tilemodules.ModuleCombustionChamber
 import com.cout970.magneticraft.systems.tilemodules.ModuleInternalStorage
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.items.IItemHandler
-import net.minecraftforge.items.SlotItemHandler
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import kotlin.math.max
 
+enum class TankIO { IN, OUT, INOUT, NONE }
+
 class GuiBuilder(val config: GuiConfig) {
 
-    var containerConfig: (JsonContainer) -> Unit = {}
+    var containerConfig: (AutoContainer) -> Unit = {}
     var bars: DslBars? = null
 
     fun container(func: ContainerBuilder.() -> Unit) {
@@ -39,21 +42,21 @@ class GuiBuilder(val config: GuiConfig) {
     }
 
     fun bars(func: DslBars.() -> Unit) {
-        val dsl = DslBars()
+        val dsl = DslBars(config)
         dsl.func()
         bars = dsl
     }
 
-    fun build(gui: JsonGui) {
+    fun build(gui: AutoGui, container: AutoContainer) {
         val bars = bars ?: return
         val sizeX = bars.getExternalSize().xi
         val startX = (gui.sizeX - sizeX) / 2
 
-        bars.build(gui, vec2Of(startX, 0))
+        bars.build(gui, container, vec2Of(startX, 0))
     }
 }
 
-class ContainerBuilder(val container: JsonContainer, val config: GuiConfig) {
+class ContainerBuilder(val container: AutoContainer, val config: GuiConfig) {
 
     fun playerInventory(point: String? = null) {
         val pos = config.points[point] ?: Vec2d.ZERO
@@ -70,19 +73,29 @@ class ContainerBuilder(val container: JsonContainer, val config: GuiConfig) {
         container.addSlotToContainer(slot)
     }
 
-    fun slotGroup(rows: Int, columns: Int, inventory: IItemHandler, startIndex: Int, point: String) {
+    fun slotGroup(rows: Int, columns: Int, inventory: IItemHandler, startIndex: Int, point: String, type: SlotType = SlotType.NORMAL) {
         val pos = config.points[point] ?: Vec2d.ZERO
 
         repeat(rows) { row ->
-            repeat(columns) loop@{ column ->
+            repeat(columns) { column ->
                 val index = startIndex + column + row * columns
 
-                container.addSlotToContainer(SlotItemHandler(inventory, index,
-                    pos.xi + column * 18,
-                    pos.yi + row * 18
-                ))
+                val slot = if (type == SlotType.FILTER) {
+                    SlotFilter(inventory, index, pos.xi + column * 18, pos.yi + row * 18)
+                } else {
+                    TypedSlot(inventory, index, pos.xi + column * 18, pos.yi + row * 18, type)
+                }
+
+                container.addSlotToContainer(slot)
             }
         }
+    }
+
+    fun slotButton(inventory: IItemHandler, index: Int, point: String, func: (EntityPlayer, Int) -> Unit) {
+        val pos = config.points[point] ?: Vec2d.ZERO
+        val slot = SlotButton(inventory, index, pos.xi, pos.yi, func)
+
+        container.addSlotToContainer(slot)
     }
 
     fun region(
@@ -93,12 +106,24 @@ class ContainerBuilder(val container: JsonContainer, val config: GuiConfig) {
     ) {
         container.inventoryRegions += InventoryRegion(first until first + size, inverseDirection, filter)
     }
+
+    fun onClick(id: String, func: () -> Unit) {
+        container.buttonListeners[id] = func
+    }
+
+    fun sendToServer(data: IBD) {
+        container.sendUpdate(data)
+    }
+
+    fun receiveDataFromClient(func: (IBD) -> Unit) {
+        container.receiveDataFromClientFunc = func
+    }
 }
 
 private val ICON_SIZE = vec2Of(0, 10)
 private const val ICON_HEIGHT = 10
 
-class DslBars {
+class DslBars(val config: GuiConfig) {
     private val components = mutableListOf<Pair<IVector2, (IVector2) -> List<IComponent>>>()
     var marginX = 4
     var marginY = 4
@@ -192,8 +217,11 @@ class DslBars {
         )
     }
 
-    fun slotSpacer() {
-        components.add(Pair(vec2Of(18, 18), { pos -> emptyList<IComponent>() }))
+    fun slotSpacer(rows: Int = 1, columns: Int = 1) {
+        components.add(Pair(vec2Of(18 * columns, 18 * rows), { pos ->
+            @Suppress("RemoveExplicitTypeArguments")
+            emptyList<IComponent>()
+        }))
     }
 
     fun fuelBar(mod: ModuleCombustionChamber) {
@@ -210,12 +238,18 @@ class DslBars {
         )
     }
 
-    fun rfConsumption(va: ValueAverage, limit: Number) {
-        components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(pos + ICON_SIZE, 3, va, limit) { it.toIntText(postfix = " RF/t") }, iconOf(5, pos)) }
-    }
-
-    fun electricProduction(va: ValueAverage, limit: Number) {
-        components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(pos + ICON_SIZE, 3, va, limit) { it.toEnergyText() }, iconOf(3, pos)) }
+    fun fuelBar(mod: ModuleBigCombustionChamber) {
+        val value = {
+            if (mod.maxBurningTime == 0) 0.0 else {
+                (mod.maxBurningTime - mod.burningTime) / mod.maxBurningTime.toDouble()
+            }
+        }
+        components += bar2Of(
+            texture = vec2Of(21, 176),
+            value = value,
+            tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
+            icon = 5
+        )
     }
 
     fun productionBar(va: ValueAverage, limit: Number) {
@@ -273,6 +307,32 @@ class DslBars {
         }
     }
 
+    fun drawable(hitbox: IVector2, offset: String, size: String, uv: String) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        val sizeVec = config.points[size] ?: Vec2d.ZERO
+        val texVec = config.points[uv] ?: Vec2d.ZERO
+        components.add(Pair(hitbox, { pos ->
+            listOf(CompDrawable(pos + offsetVec, sizeVec, texVec))
+        }))
+    }
+
+    fun light(offset: String, size: String, uv: String, callback: () -> Boolean) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        val sizeVec = config.points[size] ?: Vec2d.ZERO
+        val texVec = config.points[uv] ?: Vec2d.ZERO
+
+        components.add(Pair(sizeVec, { pos ->
+            listOf(CompDrawable(pos + offsetVec, sizeVec, texVec, callback))
+        }))
+    }
+
+    fun clickButton(id: String, offset: String) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        components.add(Pair(Vec2d(18, 18), { pos ->
+            listOf(ClickButton(pos + offsetVec, id))
+        }))
+    }
+
     private fun iconOf(index: Int, pos: IVector2): CompImage = CompImage(guiTexture("misc"), DrawableBox(
         screenPos = pos,
         screenSize = vec2Of(7, 8),
@@ -292,7 +352,7 @@ class DslBars {
         return vec2Of(size.x + marginX * 2, size.y + marginY * 2)
     }
 
-    fun build(gui: GuiBase, pos: IVector2) {
+    fun build(gui: AutoGui, container: AutoContainer, pos: IVector2) {
         var startX = pos.xi + marginX
         val startY = pos.yi + marginY
 
@@ -302,6 +362,13 @@ class DslBars {
             val compPos = vec2Of(startX + paddingX, startY)
             startX += compSize.xi + paddingX * 2
             gui.components += factory(compPos)
+        }
+
+        gui.components.filterIsInstance<ClickButton>().forEach {
+            val listener = container.buttonListeners[it.id]
+            if (listener != null) {
+                it.onClick = listener
+            }
         }
     }
 }

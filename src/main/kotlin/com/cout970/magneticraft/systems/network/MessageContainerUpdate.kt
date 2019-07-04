@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.systems.network
 
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage

@@ -4,6 +4,7 @@ import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_BUTTON
+import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.components.CompBackground
 import com.cout970.magneticraft.systems.gui.components.CompEnableRepeatedEvents
 import com.cout970.magneticraft.systems.gui.components.CompLight
@@ -12,7 +13,6 @@ import com.cout970.magneticraft.systems.gui.components.bars.CompElectricBar
 import com.cout970.magneticraft.systems.gui.components.bars.CompStorageBar
 import com.cout970.magneticraft.systems.gui.components.buttons.buttonOf
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 
 /**
  * Created by cout970 on 2017/08/10.

@@ -18,6 +18,16 @@ fun <T> MutableList<T>.setAll(it: Iterable<T>) {
     addAll(it)
 }
 
+fun <T> flatten(vararg lists: List<T>): List<T> {
+    val newList = mutableListOf<T>()
+    for (list in lists) {
+        for (element in list) {
+            newList.add(element)
+        }
+    }
+    return newList
+}
+
 fun <T> List<T>.shuffled() = toMutableList().apply(Collections::shuffle)
 
 inline infix fun <reified T> List<T>.with(other: List<T>): MutableList<T> = mutableListOf(*toTypedArray(),

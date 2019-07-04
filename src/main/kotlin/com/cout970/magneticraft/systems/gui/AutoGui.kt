@@ -1,4 +1,4 @@
-package com.cout970.magneticraft.systems.gui.json
+package com.cout970.magneticraft.systems.gui
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.gui.SlotType
@@ -6,16 +6,16 @@ import com.cout970.magneticraft.misc.gui.TypedSlot
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
-import com.cout970.magneticraft.systems.gui.render.GuiBase
+import net.minecraft.client.Minecraft
 import net.minecraft.inventory.Slot
 
-class JsonGui(override val container: JsonContainer) : GuiBase(container) {
+class AutoGui(override val container: AutoContainer) : GuiBase(container) {
 
     lateinit var background: List<DrawableBox>
     lateinit var slots: List<DrawableBox>
 
     override fun initGui() {
-        val config = container.gui.config
+        val config = container.builder.config
         this.xSize = config.background.xi
         this.ySize = config.background.yi
         super.initGui()
@@ -28,8 +28,18 @@ class JsonGui(override val container: JsonContainer) : GuiBase(container) {
         }
     }
 
+    override fun setWorldAndResolution(mc: Minecraft, width: Int, height: Int) {
+        val size = container.builder.config.background
+
+        if (width < size.xi || height < size.yi) {
+            super.setWorldAndResolution(mc, width * 2, height * 2)
+        } else {
+            super.setWorldAndResolution(mc, width, height)
+        }
+    }
+
     override fun initComponents() {
-        container.gui.build(this)
+        container.builder.build(this, container)
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -42,6 +52,7 @@ class JsonGui(override val container: JsonContainer) : GuiBase(container) {
         bindTexture(guiTexture("misc"))
         background.forEach { it.draw() }
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY)
+        bindTexture(guiTexture("misc"))
         slots.forEach { it.draw() }
     }
 
@@ -128,13 +139,13 @@ class JsonGui(override val container: JsonContainer) : GuiBase(container) {
                 SlotType.OUTPUT -> vec2Of(36, 81)
                 SlotType.FILTER -> vec2Of(74, 81)
                 SlotType.NORMAL -> vec2Of(36, 100)
+                SlotType.BUTTON -> vec2Of(74, 100)
             }
 
             boxes += DrawableBox(
                 screenPos = vec2Of(x, y),
                 screenSize = vec2Of(18),
-                texturePos = icon,
-                textureSize = vec2Of(18)
+                texturePos = icon
             )
         }
 

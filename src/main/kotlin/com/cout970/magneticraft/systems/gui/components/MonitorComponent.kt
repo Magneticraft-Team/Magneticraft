@@ -8,8 +8,8 @@ import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.systems.computer.DeviceKeyboard
 import com.cout970.magneticraft.systems.computer.DeviceMonitor
 import com.cout970.magneticraft.systems.config.Config
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import com.cout970.magneticraft.systems.gui.DATA_ID_MONITOR_CLIPBOARD
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import com.cout970.magneticraft.systems.gui.render.*
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.gui.GuiScreen

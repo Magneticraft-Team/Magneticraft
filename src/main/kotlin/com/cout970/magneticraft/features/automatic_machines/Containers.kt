@@ -6,8 +6,8 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import com.cout970.magneticraft.systems.gui.components.buttons.AbstractButton
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.ClickType
 import net.minecraft.item.ItemStack
@@ -61,45 +61,5 @@ class ContainerInserter(val tile: TileInserter, player: EntityPlayer, world: Wor
         if (slot == null) return super.slotClick(slotId, dragType, clickTypeIn, player)
 
         return onFilterSlotClick(slot, dragType, clickTypeIn, player)
-    }
-}
-
-class ContainerRelay(val tile: TileRelay, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        val inv = tile.inventory
-        var i = 0
-
-        iterateArea(0..2, 0..2) { x, y ->
-            addSlotToContainer(SlotItemHandler(inv, i++, x * 18 + 62, y * 18 + 13))
-        }
-
-        inventoryRegions += InventoryRegion(0..8)
-        bindPlayerInventory(player.inventory)
-    }
-}
-
-class ContainerFilter(val tile: TileFilter, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        val inv = tile.inventory
-        var i = 0
-
-        iterateArea(0..2, 0..2) { x, y ->
-            addSlotToContainer(SlotFilter(inv, i++, x * 18 + 62, y * 18 + 13))
-        }
-
-        inventoryRegions += InventoryRegion(0..8) { _ -> false }
-        bindPlayerInventory(player.inventory)
-    }
-
-    @Suppress("FoldInitializerAndIfToElvis")
-    override fun slotClick(slotId: Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer): ItemStack {
-        val slot = inventorySlots.getOrNull(slotId) as? SlotFilter
-        if (slot == null) return super.slotClick(slotId, dragType, clickTypeIn, player)
-
-       return onFilterSlotClick(slot, dragType, clickTypeIn, player)
     }
 }

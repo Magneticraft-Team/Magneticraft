@@ -2,11 +2,11 @@ package com.cout970.magneticraft.features.multiblocks
 
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
-import com.cout970.magneticraft.features.multiblocks.tileentities.*
+import com.cout970.magneticraft.features.multiblocks.tileentities.TileHydraulicPress
+import com.cout970.magneticraft.features.multiblocks.tileentities.TileShelvingUnit
+import com.cout970.magneticraft.features.multiblocks.tileentities.TileSolarTower
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
-import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandler
-import com.cout970.magneticraft.misc.gui.SlotUnmodifiableItemHandlerTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
@@ -14,7 +14,6 @@ import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.*
 import com.cout970.magneticraft.systems.gui.components.buttons.AbstractButton
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
@@ -120,44 +119,6 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     }
 }
 
-class ContainerGrinder(val tile: TileGrinder, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 96, 16))
-            addSlotToContainer(SlotTakeOnly(inv, 1, 85, 48))
-            addSlotToContainer(SlotTakeOnly(inv, 2, 107, 48))
-
-            inventoryRegions += InventoryRegion(0..0, filter = {
-                MagneticraftApi.getGrinderRecipeManager().findRecipe(it) != null
-            })
-            inventoryRegions += InventoryRegion(1..1, filter = { false })
-            inventoryRegions += InventoryRegion(2..2, filter = { false })
-        }
-        bindPlayerInventory(player.inventory)
-    }
-}
-
-class ContainerSieve(val tile: TileSieve, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 96, 16))
-            addSlotToContainer(SlotTakeOnly(inv, 1, 74, 48))
-            addSlotToContainer(SlotTakeOnly(inv, 2, 96, 48))
-            addSlotToContainer(SlotTakeOnly(inv, 3, 118, 48))
-
-            inventoryRegions += InventoryRegion(0..0, filter = {
-                MagneticraftApi.getSieveRecipeManager().findRecipe(it) != null
-            })
-            inventoryRegions += InventoryRegion(1..1, filter = { false })
-            inventoryRegions += InventoryRegion(2..2, filter = { false })
-        }
-        bindPlayerInventory(player.inventory)
-    }
-}
 
 class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
@@ -179,28 +140,6 @@ class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world:
     }
 }
 
-class ContainerContainer(val tile: TileContainer, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        val inv = tile.stackInventoryModule.getGuiInventory()
-        addSlotToContainer(SlotUnmodifiableItemHandler(inv, 0, 85, 16))
-        addSlotToContainer(SlotUnmodifiableItemHandlerTakeOnly(inv, 1, 85, 48))
-
-        inventoryRegions += InventoryRegion(0..0, advFilter = { _, i -> i != 1 })
-        inventoryRegions += InventoryRegion(1..1, advFilter = { _, _ -> false })
-
-        bindPlayerInventory(player.inventory)
-    }
-}
-
-class ContainerPumpjack(val tile: TilePumpjack, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        bindPlayerInventory(player.inventory)
-    }
-}
 
 class ContainerHydraulicPress(val tile: TileHydraulicPress, player: EntityPlayer, world: World, blockPos: BlockPos)
     : ContainerBase(player, world, blockPos) {
@@ -222,41 +161,5 @@ class ContainerHydraulicPress(val tile: TileHydraulicPress, player: EntityPlayer
         ibd.getInteger(DATA_ID_SELECTED_OPTION) {
             tile.hydraulicPressModule.mode = HydraulicPressMode.values()[it]
         }
-    }
-}
-
-class ContainerOilHeater(val tile: TileOilHeater, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        bindPlayerInventory(player.inventory)
-    }
-}
-
-class ContainerRefinery(val tile: TileRefinery, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        bindPlayerInventory(player.inventory)
-    }
-}
-
-class ContainerSteamEngine(val tile: TileSteamEngine, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        bindPlayerInventory(player.inventory)
-    }
-}
-
-class ContainerBigCombustionChamber(val tile: TileBigCombustionChamber, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 99, 33))
-            inventoryRegions += InventoryRegion(0..0)
-        }
-        bindPlayerInventory(player.inventory)
     }
 }

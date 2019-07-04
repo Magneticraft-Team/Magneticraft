@@ -7,15 +7,13 @@ import com.cout970.magneticraft.features.electric_machines.TileElectricFurnace
 import com.cout970.magneticraft.features.electric_machines.TileThermopile
 import com.cout970.magneticraft.features.electric_machines.TileWindTurbine
 import com.cout970.magneticraft.features.heat_machines.*
-import com.cout970.magneticraft.features.manual_machines.ContainerFabricator
 import com.cout970.magneticraft.features.manual_machines.TileBox
 import com.cout970.magneticraft.features.manual_machines.TileFabricator
-import com.cout970.magneticraft.features.manual_machines.guiFabricator
-import com.cout970.magneticraft.features.multiblocks.*
+import com.cout970.magneticraft.features.multiblocks.ContainerHydraulicPress
+import com.cout970.magneticraft.features.multiblocks.ContainerShelvingUnit
+import com.cout970.magneticraft.features.multiblocks.guiHydraulicPress
+import com.cout970.magneticraft.features.multiblocks.guiShelvingUnit
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
-import com.cout970.magneticraft.systems.gui.json.*
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 import com.cout970.magneticraft.systems.manual.ContainerGuideBook
 import com.cout970.magneticraft.systems.manual.GuiGuideBook
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
@@ -37,7 +35,7 @@ object GuiHandler : IGuiHandler {
 
         // @formatter:off
         return when (container) {
-            is JsonContainer                 -> JsonGui(container)
+            is AutoContainer                 -> AutoGui(container)
 //            is ContainerBox                  -> guiOf(container, ::guiBox)
 //            is ContainerElectricHeater       -> guiOf(container, ::guiElectricHeater)
 //            is ContainerCombustionChamber    -> guiOf(container, ::guiCombustionChamber)
@@ -49,23 +47,23 @@ object GuiHandler : IGuiHandler {
 //            is ContainerWindTurbine          -> guiOf(container, ::guiWindTurbine)
 //            is ContainerRfHeater             -> guiOf(container, ::guiRfHeater)
 //            is ContainerGasificationUnit     -> guiOf(container, ::guiGasificationUnit)
-            is ContainerGrinder              -> guiOf(container, ::guiGrinder)
-            is ContainerSieve                -> guiOf(container, ::guiSieve)
-            is ContainerSolarTower           -> guiOf(container, ::guiSolarTower)
-            is ContainerContainer            -> guiOf(container, ::guiContainer)
-            is ContainerPumpjack             -> guiOf(container, ::guiPumpjack)
+//            is ContainerGrinder              -> guiOf(container, ::guiGrinder)
+//            is ContainerSieve                -> guiOf(container, ::guiSieve)
+//            is ContainerContainer            -> guiOf(container, ::guiContainer)
+//            is ContainerPumpjack             -> guiOf(container, ::guiPumpjack)
             is ContainerShelvingUnit         -> guiOf(container, ::guiShelvingUnit)
             is ContainerComputer             -> guiOf(container, ::guiComputer)
             is ContainerMiningRobot          -> guiOf(container, ::guiMiningRobot)
             is ContainerHydraulicPress       -> guiOf(container, ::guiHydraulicPress)
-            is ContainerOilHeater            -> guiOf(container, ::guiOilHeater)
-            is ContainerRefinery             -> guiOf(container, ::guiRefinery)
-            is ContainerSteamEngine          -> guiOf(container, ::guiSteamEngine)
-            is ContainerBigCombustionChamber -> guiOf(container, ::guiBigCombustionChamber)
+//            is ContainerOilHeater            -> guiOf(container, ::guiOilHeater)
+//            is ContainerRefinery             -> guiOf(container, ::guiRefinery)
+//            is ContainerSteamEngine          -> guiOf(container, ::guiSteamEngine)
+//            is ContainerBigCombustionChamber -> guiOf(container, ::guiBigCombustionChamber)
+//            is ContainerRelay                -> guiOf(container, ::guiRelay)
+//            is ContainerFilter               -> guiOf(container, ::guiFilter)
             is ContainerInserter             -> guiOf(container, ::guiInserter)
-            is ContainerRelay                -> guiOf(container, ::guiRelay)
-            is ContainerFilter               -> guiOf(container, ::guiFilter)
-            is ContainerFabricator           -> guiOf(container, ::guiFabricator)
+//            is ContainerFabricator           -> guiOf(container, ::guiFabricator)
+//            is ContainerSolarTower           -> guiOf(container, ::guiSolarTower)
             else -> null
         }
         // @formatter:on
@@ -83,36 +81,37 @@ object GuiHandler : IGuiHandler {
 
         // @formatter:off
         return when (tile) {
-            is TileBox                  -> jsonContainer("box", GuiBuilder::boxGui, tile, player, world, pos)
-            is TileElectricHeater       -> jsonContainer("electric_heater", GuiBuilder::electricHeaterGui, tile, player, world, pos)
-            is TileCombustionChamber    -> jsonContainer("combustion_chamber", GuiBuilder::combustionChamberGui, tile, player, world, pos)
-            is TileSteamBoiler          -> jsonContainer("steam_boiler", GuiBuilder::steamBoilerGui, tile, player, world, pos)
-            is TileBattery              -> jsonContainer("battery_block", GuiBuilder::batteryBlockGui, tile, player, world, pos)
-            is TileElectricFurnace      -> jsonContainer("electric_furnace", GuiBuilder::electricFurnaceGui, tile, player, world, pos)
-            is TileBrickFurnace         -> jsonContainer("brick_furnace", GuiBuilder::brickFurnaceGui, tile, player, world, pos)
-            is TileThermopile           -> jsonContainer("thermopile", GuiBuilder::thermopileGui, tile, player, world, pos)
-            is TileWindTurbine          -> jsonContainer("wind_turbine", GuiBuilder::windTurbineGui, tile, player, world, pos)
-            is TileRfHeater             -> jsonContainer("rf_heater", GuiBuilder::rfHeaterGui, tile, player, world, pos)
-            is TileGasificationUnit     -> jsonContainer("gasification_unit", GuiBuilder::gasificationUnitGui, tile, player, world, pos)
+            is TileBox                  -> autoContainer("box", GuiBuilder::boxGui, tile, player, world, pos)
+            is TileElectricHeater       -> autoContainer("electric_heater", GuiBuilder::electricHeaterGui, tile, player, world, pos)
+            is TileCombustionChamber    -> autoContainer("combustion_chamber", GuiBuilder::combustionChamberGui, tile, player, world, pos)
+            is TileSteamBoiler          -> autoContainer("steam_boiler", GuiBuilder::steamBoilerGui, tile, player, world, pos)
+            is TileBattery              -> autoContainer("battery_block", GuiBuilder::batteryBlockGui, tile, player, world, pos)
+            is TileElectricFurnace      -> autoContainer("electric_furnace", GuiBuilder::electricFurnaceGui, tile, player, world, pos)
+            is TileBrickFurnace         -> autoContainer("brick_furnace", GuiBuilder::brickFurnaceGui, tile, player, world, pos)
+            is TileThermopile           -> autoContainer("thermopile", GuiBuilder::thermopileGui, tile, player, world, pos)
+            is TileWindTurbine          -> autoContainer("wind_turbine", GuiBuilder::windTurbineGui, tile, player, world, pos)
+            is TileRfHeater             -> autoContainer("rf_heater", GuiBuilder::rfHeaterGui, tile, player, world, pos)
+            is TileGasificationUnit     -> autoContainer("gasification_unit", GuiBuilder::gasificationUnitGui, tile, player, world, pos)
+            is TileGrinder              -> autoContainer("grinder", GuiBuilder::grinderGui, tile, player, world, pos)
+            is TileSieve                -> autoContainer("sieve", GuiBuilder::sieveGui, tile, player, world, pos)
+            is TileContainer            -> autoContainer("container", GuiBuilder::containerGui, tile, player, world, pos)
+            is TilePumpjack             -> autoContainer("pumpjack", GuiBuilder::pumpjackGui, tile, player, world, pos)
+            is TileOilHeater            -> autoContainer("oil_heater", GuiBuilder::oilHeaterGui, tile, player, world, pos)
+            is TileRefinery             -> autoContainer("refinery", GuiBuilder::refineryGui, tile, player, world, pos)
+            is TileSteamEngine          -> autoContainer("steam_engine", GuiBuilder::steamEngineGui, tile, player, world, pos)
+            is TileBigCombustionChamber -> autoContainer("big_combustion_chamber", GuiBuilder::bigCombustionChamberGui, tile, player, world, pos)
+            is TileBigSteamBoiler       -> autoContainer("big_steam_boiler", GuiBuilder::bigSteamBoilerGui, tile, player, world, pos)
+            is TileSteamTurbine         -> autoContainer("steam_turbine", GuiBuilder::steamTurbineGui, tile, player, world, pos)
+            is TileRelay                -> autoContainer("relay", GuiBuilder::relayGui, tile, player, world, pos)
+            is TileFilter               -> autoContainer("filter", GuiBuilder::filterGui, tile, player, world, pos)
+            is TileFabricator           -> autoContainer("fabricator", GuiBuilder::fabricatorGui, tile, player, world, pos)
+            is TileSolarTower           -> autoContainer("solar_tower", GuiBuilder::solarTowerGui, tile, player, world, pos)
 
+            is TileHydraulicPress       -> ContainerHydraulicPress(tile, player, world, pos)
+            is TileInserter             -> ContainerInserter(tile, player, world, pos)
             is TileShelvingUnit         -> ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnitMb.Level.values()[ID])
             is TileComputer             -> ContainerComputer(tile, player, world, pos)
             is TileMiningRobot          -> ContainerMiningRobot(tile, player, world, pos)
-            is TileGrinder              -> ContainerGrinder(tile, player, world, pos)
-            is TileSieve                -> ContainerSieve(tile, player, world, pos)
-            is TileSolarTower           -> ContainerSolarTower(tile, player, world, pos)
-            is TileContainer            -> ContainerContainer(tile, player, world, pos)
-            is TilePumpjack             -> ContainerPumpjack(tile, player, world, pos)
-            is TileHydraulicPress       -> ContainerHydraulicPress(tile, player, world, pos)
-            is TileOilHeater            -> ContainerOilHeater(tile, player, world, pos)
-            is TileRefinery             -> ContainerRefinery(tile, player, world, pos)
-
-            is TileSteamEngine          -> ContainerSteamEngine(tile, player, world, pos)
-            is TileBigCombustionChamber -> ContainerBigCombustionChamber(tile, player, world, pos)
-            is TileInserter             -> ContainerInserter(tile, player, world, pos)
-            is TileRelay                -> ContainerRelay(tile, player, world, pos)
-            is TileFilter               -> ContainerFilter(tile, player, world, pos)
-            is TileFabricator           -> ContainerFabricator(tile, player, world, pos)
             else -> null
         }
         // @formatter:on

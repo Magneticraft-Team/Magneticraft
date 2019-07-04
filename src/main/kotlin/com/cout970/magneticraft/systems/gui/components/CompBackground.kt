@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
+import net.minecraft.client.renderer.GlStateManager.color
 import net.minecraft.util.ResourceLocation
 
 /**
@@ -47,6 +48,7 @@ class CompDynamicBackground(
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
+        color(1f, 1f, 1f, 1f)
         gui.bindTexture(guiTexture("misc2"))
         dynamicBack.forEach { gui.drawTexture(it) }
     }

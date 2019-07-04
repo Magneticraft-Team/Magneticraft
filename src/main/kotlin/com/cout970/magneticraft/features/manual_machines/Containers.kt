@@ -10,7 +10,7 @@ import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.misc.world.isServer
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.ClickType
 import net.minecraft.item.ItemStack
@@ -84,10 +84,7 @@ class ContainerFabricator(val tile: TileFabricator, player: EntityPlayer, world:
     override fun slotClick(slotId: Int, dragType: Int, clickTypeIn: ClickType, player: EntityPlayer): ItemStack {
         if (inventorySlots.getOrNull(slotId) is SlotFabricator && player.world.isServer) {
             if (dragType == 1) {
-                repeat(9) {
-                    tile.fabricatorModule.recipeGrid.setInventorySlotContents(it, ItemStack.EMPTY)
-                }
-//            tile.fabricatorModule.clearGrid()
+                tile.fabricatorModule.clearGrid()
             } else if (dragType == 0) {
                 tile.fabricatorModule.requestItemCraft()
             }

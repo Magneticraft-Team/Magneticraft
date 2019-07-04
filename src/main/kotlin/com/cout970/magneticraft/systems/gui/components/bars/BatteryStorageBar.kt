@@ -4,8 +4,8 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
 import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
-import com.cout970.magneticraft.systems.gui.render.GuiBase
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
 import com.cout970.magneticraft.systems.tilemodules.ModuleInternalStorage

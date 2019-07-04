@@ -15,36 +15,44 @@ class IBD {
 
     private val map = mutableMapOf<Int, Any>()
 
-    fun setInteger(id: Int, value: Int) {
+    fun setInteger(id: Int, value: Int): IBD {
         map[id] = value
+        return this
     }
 
-    fun setLong(id: Int, value: Long) {
+    fun setLong(id: Int, value: Long): IBD {
         map[id] = value
+        return this
     }
 
-    fun setFloat(id: Int, value: Float) {
+    fun setFloat(id: Int, value: Float): IBD {
         map[id] = value
+        return this
     }
 
-    fun setDouble(id: Int, value: Double) {
+    fun setDouble(id: Int, value: Double): IBD {
         map[id] = value
+        return this
     }
 
-    fun setBoolean(id: Int, value: Boolean) {
+    fun setBoolean(id: Int, value: Boolean): IBD {
         map[id] = value
+        return this
     }
 
-    fun setString(id: Int, value: String) {
+    fun setString(id: Int, value: String): IBD {
         map[id] = value
+        return this
     }
 
-    fun setByteArray(id: Int, value: ByteArray) {
+    fun setByteArray(id: Int, value: ByteArray): IBD {
         map[id] = value
+        return this
     }
 
-    fun setIntArray(id: Int, value: IntArray) {
+    fun setIntArray(id: Int, value: IntArray): IBD {
         map[id] = value
+        return this
     }
 
     fun getInteger(id: Int) = map[id] as Int
@@ -125,6 +133,7 @@ class IBD {
             }
         }
     }
+
     fun getIntArray(id: Int, action: (IntArray) -> Unit) {
         if (hasKey(id)) {
             val value = map[id]

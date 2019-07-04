@@ -3,7 +3,7 @@ package com.cout970.magneticraft.features.heat_machines
 import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager
 import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
+import com.cout970.magneticraft.systems.gui.ContainerBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

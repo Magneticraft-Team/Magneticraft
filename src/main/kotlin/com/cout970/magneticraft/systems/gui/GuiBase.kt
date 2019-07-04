@@ -1,10 +1,12 @@
-package com.cout970.magneticraft.systems.gui.render
+package com.cout970.magneticraft.systems.gui
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
-import com.cout970.magneticraft.systems.gui.containers.ContainerBase
+import com.cout970.magneticraft.systems.gui.render.DrawableBox
+import com.cout970.magneticraft.systems.gui.render.IComponent
+import com.cout970.magneticraft.systems.gui.render.IGui
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.inventory.GuiContainer
