@@ -13,32 +13,32 @@ class DeviceRedstoneSensor(val tile: ITileRef) : IDevice, ITileRef by tile {
 
     val memStruct = ReadWriteStruct("redstone_sensor_header",
         ReadWriteStruct("device_header",
-            ReadOnlyByte("online", { 1 }),
-            ReadOnlyByte("type", { 4 }),
-            ReadOnlyShort("status", { 0 })
+            ReadOnlyByte("online") { 1 },
+            ReadOnlyByte("type") { 4 },
+            ReadOnlyShort("status") { 0 }
         ),
         ReadWriteStruct("pin_down",
-            ReadOnlyInt("input", { getInput(0) }),
+            ReadOnlyInt("input") { getInput(0) },
             ReadWriteInt("output", { setOutput(0, it) }, { getOutput(0) })
         ),
         ReadWriteStruct("pin_up",
-            ReadOnlyInt("input", { getInput(1) }),
+            ReadOnlyInt("input") { getInput(1) },
             ReadWriteInt("output", { setOutput(1, it) }, { getOutput(1) })
         ),
         ReadWriteStruct("pin_north",
-            ReadOnlyInt("input", { getInput(2) }),
+            ReadOnlyInt("input") { getInput(2) },
             ReadWriteInt("output", { setOutput(2, it) }, { getOutput(2) })
         ),
         ReadWriteStruct("pin_south",
-            ReadOnlyInt("input", { getInput(3) }),
+            ReadOnlyInt("input") { getInput(3) },
             ReadWriteInt("output", { setOutput(3, it) }, { getOutput(3) })
         ),
         ReadWriteStruct("pin_west",
-            ReadOnlyInt("input", { getInput(4) }),
+            ReadOnlyInt("input") { getInput(4) },
             ReadWriteInt("output", { setOutput(4, it) }, { getOutput(4) })
         ),
         ReadWriteStruct("pin_east",
-            ReadOnlyInt("input", { getInput(5) }),
+            ReadOnlyInt("input") { getInput(5) },
             ReadWriteInt("output", { setOutput(5, it) }, { getOutput(5) })
         )
     )

@@ -30,7 +30,7 @@ class ModuleSteamGenerator(
     }
 
     val production = ValueAverage()
-    var working = WorkingIndicator(this)
+    var working = WorkingIndicator(this, 80)
 
     fun getAvailableOperations(): Int {
         if (steamTank.fluidAmount < STEAM_PER_OPERATION) return 0

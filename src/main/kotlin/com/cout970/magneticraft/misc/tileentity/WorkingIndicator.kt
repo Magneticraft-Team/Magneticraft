@@ -6,7 +6,7 @@ import com.cout970.magneticraft.systems.tileentities.IModule
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 
-class WorkingIndicator(val module: IModule) : INBTSerializable<NBTTagCompound> {
+class WorkingIndicator(val module: IModule, val freq: Int = 20) : INBTSerializable<NBTTagCompound> {
 
     var working = false
     var lastWorkTick = 0L
@@ -18,7 +18,7 @@ class WorkingIndicator(val module: IModule) : INBTSerializable<NBTTagCompound> {
     }
 
     fun tick() {
-        val isWorking = module.world.totalWorldTime - lastWorkTick < 20
+        val isWorking = module.world.totalWorldTime - lastWorkTick < freq
         if (isWorking != working) {
             working = isWorking
             module.container.sendUpdateToNearPlayers()

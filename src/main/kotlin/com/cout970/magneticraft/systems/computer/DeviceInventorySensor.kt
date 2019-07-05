@@ -12,17 +12,17 @@ class DeviceInventorySensor(val tile: ITileRef, val inv: Inventory) : IDevice, I
 
     val memStruct = ReadWriteStruct("inventory_sensor_header",
         ReadWriteStruct("device_header",
-            ReadOnlyByte("online", { 1 }),
-            ReadOnlyByte("type", { 5 }),
-            ReadOnlyShort("status", { 0 })
+            ReadOnlyByte("online") { 1 },
+            ReadOnlyByte("type") { 5 },
+            ReadOnlyShort("status") { 0 }
         ),
         ReadWriteInt("selectedSlot", { selectedIndex = it }, { selectedIndex }),
-        ReadOnlyInt("slotCount", { inv.slots }),
+        ReadOnlyInt("slotCount") { inv.slots },
         ReadWriteStruct("stack",
-            ReadOnlyInt("itemId", { Item.getIdFromItem(getStack().item) }),
-            ReadOnlyInt("itemMeta", { getStack().metadata }),
-            ReadOnlyInt("itemNbtHash", { getStack().tagCompound?.hashCode() ?: 0 }),
-            ReadOnlyInt("stackSize", { getStack().count })
+            ReadOnlyInt("itemId") { Item.getIdFromItem(getStack().item) },
+            ReadOnlyInt("itemMeta") { getStack().metadata },
+            ReadOnlyInt("itemNbtHash") { getStack().tagCompound?.hashCode() ?: 0 },
+            ReadOnlyInt("stackSize") { getStack().count }
         )
     )
 

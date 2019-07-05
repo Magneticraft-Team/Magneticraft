@@ -31,7 +31,7 @@ object Emulator {
     private lateinit var motherboard: Motherboard
 
     fun init(args: Array<String>) {
-        val img = "editor"
+        val img = "shell"
         val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
         val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
@@ -143,7 +143,10 @@ object Emulator {
             override fun keyPressed(e: KeyEvent) {
                 if (e.extendedKeyCode == 116) {
                     restart()
+                } else if (e.extendedKeyCode == 117) {
+                    motherboard.reset()
                 }
+
                 if (e.keyChar.toInt() != 0xFFFF && e.modifiers and CTRL_MASK > 0) {
                     return
                 }

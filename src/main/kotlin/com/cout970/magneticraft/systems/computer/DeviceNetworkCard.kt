@@ -2,7 +2,6 @@ package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.misc.debug
 import com.cout970.magneticraft.systems.config.Config
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -86,7 +85,8 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
 
     private fun log(level: Int, vararg any: Any?) {
         if (debugLevel > level) {
-            debug(*any)
+//            debug(*any)
+            println(any.joinToString("\n"))
         }
     }
 
