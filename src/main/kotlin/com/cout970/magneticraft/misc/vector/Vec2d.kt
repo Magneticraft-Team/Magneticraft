@@ -58,7 +58,9 @@ data class Vec2d(val x: Double, val y: Double) {
     fun toPair(): Pair<Double, Double> = x to y
 
     fun swap() = Vec2d(y, x)
+    @Suppress("NOTHING_TO_INLINE")
     inline fun withX(x: Number) = Vec2d(x.toDouble(), y)
+    @Suppress("NOTHING_TO_INLINE")
     inline fun withY(y: Number) = Vec2d(x, y.toDouble())
 
     operator fun plus(v: Number) = Vec2d(v.toDouble() + x, v.toDouble() + y)

@@ -561,7 +561,7 @@ fun GuiBuilder.hydraulicPressGui(tile: TileHydraulicPress) {
     }
 }
 
-fun GuiBuilder.shelvingUnitGui(tile: TileShelvingUnit) {
+fun GuiBuilder.shelvingUnitGui(@Suppress("UNUSED_PARAMETER") tile: TileShelvingUnit) {
     containerClass = ::ContainerShelvingUnit
 
     container {

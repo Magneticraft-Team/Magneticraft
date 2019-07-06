@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.features.multiblocks.structures
 
+import com.cout970.magneticraft.features.fluid_machines.Blocks
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotateBox
 import com.cout970.magneticraft.misc.vector.times
@@ -21,30 +22,34 @@ object MultiblockSteamTurbine : Multiblock() {
     override val center: BlockPos = BlockPos(1, 0, 0)
 
     init {
-        val I = corrugatedIronBlock()
+        val I = grateBlock()
+        val B = corrugatedIronBlock()
+        val C = copperCoilBlock()
+        val A = baseBlock()
+        val T = ofBlock(Blocks.smallTank)
         val M = mainBlockOf(controllerBlock)
 
         scheme = yLayers(
             zLayers(
-                listOf(I, I, I), // y = 2
+                listOf(A, I, A), // y = 2
+                listOf(I, C, I),
                 listOf(I, I, I),
                 listOf(I, I, I),
-                listOf(I, I, I),
+                listOf(A, I, A)),
+
+            zLayers(
+                listOf(I, A, I), // y = 1
+                listOf(T, B, T),
+                listOf(T, B, T),
+                listOf(A, B, A),
                 listOf(I, I, I)),
 
             zLayers(
-                listOf(I, I, I), // y = 1
+                listOf(A, M, A), // y = 0
                 listOf(I, I, I),
                 listOf(I, I, I),
                 listOf(I, I, I),
-                listOf(I, I, I)),
-
-            zLayers(
-                listOf(I, M, I), // y = 0
-                listOf(I, I, I),
-                listOf(I, I, I),
-                listOf(I, I, I),
-                listOf(I, I, I))
+                listOf(A, I, A))
         )
     }
 

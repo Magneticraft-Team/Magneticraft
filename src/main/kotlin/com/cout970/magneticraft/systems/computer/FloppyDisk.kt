@@ -89,7 +89,7 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
         return stack.getString("label")
     }
 
-    override fun setLabel(str: String) = stack.setString("label", label)
+    override fun setLabel(str: String) = stack.setString("label", str)
 
     override fun getSectorCount(): Int = stack.getInteger("sectorCount")
 

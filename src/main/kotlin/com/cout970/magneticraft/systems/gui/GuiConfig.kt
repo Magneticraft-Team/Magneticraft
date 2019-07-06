@@ -1,13 +1,8 @@
 package com.cout970.magneticraft.systems.gui
 
-import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2
-import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.google.gson.*
-import net.minecraftforge.common.crafting.CraftingHelper
-import net.minecraftforge.fml.common.Loader
-import java.io.File
 import java.lang.reflect.Type
 
 data class GuiConfig(
@@ -37,12 +32,14 @@ private object Vec2Adapter : JsonDeserializer<IVector2> {
 }
 
 private fun load(): Map<String, GuiConfig> {
-    val file = findFile()
+    val path = "assets/magneticraft/gui_config.json"
     val gson = GsonBuilder()
         .registerTypeAdapter(IVector2::class.java, Vec2Adapter)
         .create()
 
-    val obj = JsonParser().parse(file.inputStream().bufferedReader()).asJsonObject
+    val input = Thread.currentThread().contextClassLoader.getResourceAsStream(path) ?: error("Not found: $path")
+    val obj = JsonParser().parse(input.bufferedReader()).asJsonObject
+
     val map = mutableMapOf<String, GuiConfig>()
 
     obj.entrySet().forEach { (name, json) ->
@@ -50,27 +47,4 @@ private fun load(): Map<String, GuiConfig> {
     }
 
     return map
-}
-
-private fun findFile(): File {
-    if (Debug.DEBUG && Debug.srcDir != null) {
-        return File(Debug.srcDir!!, "src/main/resources/assets/magneticraft/gui/gui_config.json")
-    }
-
-    val container = Loader.instance().indexedModList[MOD_ID]!!
-    var foundFile: File? = null
-
-    CraftingHelper.findFiles(
-        container,
-        "assets/$MOD_ID/gui/gui_config.json",
-        null,
-        { _, file ->
-            foundFile = file.toFile()
-            true
-        },
-        false,
-        false
-    )
-
-    return foundFile!!
 }

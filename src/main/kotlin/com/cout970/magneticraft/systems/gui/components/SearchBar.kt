@@ -10,7 +10,6 @@ import com.cout970.magneticraft.systems.gui.render.IGui
 import net.minecraft.client.gui.GuiTextField
 import net.minecraft.client.renderer.GlStateManager.color
 import org.lwjgl.input.Keyboard
-import slimeknights.tconstruct.common.ClientProxy.fontRenderer
 
 class SearchBar(
     override val pos: IVector2,
@@ -25,7 +24,7 @@ class SearchBar(
     lateinit var textField: GuiTextField
 
     override fun init() {
-        val charWidth = fontRenderer.getCharWidth('_')
+        val charWidth = gui.fontHelper.getCharWidth('_')
         textField = GuiTextField(0, gui.fontHelper, pos.xi, pos.yi, size.xi - charWidth - 8, size.yi)
         textField.enableBackgroundDrawing = false
         textField.isFocused = true

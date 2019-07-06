@@ -22,7 +22,7 @@ import java.io.File
 @net.minecraftforge.fml.common.Mod(
     modid = MOD_ID,
     name = MOD_NAME,
-    version = "2.6.5",
+    version = "2.7.0",
     modLanguage = "kotlin",
     modLanguageAdapter = LANG_ADAPTER,
     acceptedMinecraftVersions = "[1.12]",

@@ -74,12 +74,14 @@ open class ItemBase : Item() {
     }
 
     override fun hasContainerItem(stack: ItemStack): Boolean {
+        @Suppress("DEPRECATION")
         if (stack.isNotEmpty && containerItem == null && maxDamage > 0) {
             return true
         }
         return super.hasContainerItem(stack)
     }
 
+    @Suppress("DEPRECATION")
     override fun getContainerItem(itemStack: ItemStack): ItemStack {
         var newStack = super.getContainerItem(itemStack)
 
