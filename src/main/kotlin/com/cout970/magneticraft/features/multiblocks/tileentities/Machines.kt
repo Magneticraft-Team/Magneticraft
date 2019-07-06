@@ -422,7 +422,6 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
     val fluidMod = ModuleFluidHandler(input, output,
         capabilityFilter = ModuleFluidHandler.ALLOW_NONE
     )
-    val heatMod = ModuleHeat(node, capabilityFilter = { false })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
         facing = { facing },
@@ -433,9 +432,14 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
             ),
             ModuleMultiblockIO.connectionArea(HEAT_NODE_HANDLER!!,
                 BlockPos(-1, 0, -2), BlockPos(1, 0, 0), EnumFacing.DOWN,
-                getter = { heatMod }
+                getter = { if (active) heatMod else null }
             )
         )
+    )
+
+    val heatMod = ModuleHeat(node,
+        capabilityFilter = { false },
+        connectableDirections = { ioModule.getHeatConnectPoints() }
     )
 
     override val multiblockModule = ModuleMultiblockCenter(
@@ -445,7 +449,7 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
     )
 
     val extract = ModuleFluidExporter(output,
-        ports = { listOf(BlockPos(0, 4, 1) to EnumFacing.DOWN) }
+        ports = { listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(0, 4, 1)) to EnumFacing.DOWN) }
     )
 
     val boiler = ModuleSteamBoiler(node, input, output, Config.multiblockBoilerMaxProduction)

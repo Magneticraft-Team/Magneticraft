@@ -169,6 +169,17 @@ object Blocks : IBlockMaker {
                 "inventory" to resource("models/block/gltf/tesla_tower_inv.gltf")
             )
 
+            onActivated = {
+                val part = it.state[PROPERTY_TESLA_TOWER_PART]
+                if (part == Blocks.TeslaTowerPart.BOTTOM) {
+                    CommonMethods.openGui(it)
+                } else {
+                    val state = it.worldIn.getBlockState(it.pos.down())
+                    state.block.onBlockActivated(it.worldIn, it.pos.down(), state, it.playerIn, it.hand, it.side,
+                        it.hit.xf, it.hit.yf, it.hit.zf
+                    )
+                }
+            }
             pickBlock = CommonMethods::pickDefaultBlock
             blockStatesToPlace = {
                 val bottom = TeslaTowerPart.BOTTOM.getBlockState(it.default.block)

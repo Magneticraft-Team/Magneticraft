@@ -66,7 +66,7 @@ class TileSolarPanel : TileMultiblock(), ITickable {
     var deltaTime = System.currentTimeMillis()
 
     init {
-        initModules(multiblockModule, energyModule, ioModule)
+        initModules(multiblockModule, energyModule, ioModule, ModuleOpenGui())
     }
 
 

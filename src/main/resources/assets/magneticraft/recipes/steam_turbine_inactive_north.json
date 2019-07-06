@@ -1,25 +1,23 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    " A ",
-    "BCB"
+    "AB"
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron"
+      "ore": "paper",
+      "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "nuggetIron"
-    },
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "dustGlowstone"
+      "ore": "lightPlateGold",
+      "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:tube_light",
+    "item": "magneticraft:steam_turbine",
+    "count": 1,
     "data": 0
   }
 }

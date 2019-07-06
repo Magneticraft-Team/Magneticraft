@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
+import com.cout970.magneticraft.systems.gui.render.isCtrlKeyDown
 import net.minecraft.client.renderer.GlStateManager.color
 import net.minecraft.util.ResourceLocation
 
@@ -31,6 +32,26 @@ class CompBackground(
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         gui.bindTexture(texture)
         gui.drawTexture(back)
+    }
+}
+
+class CompDebugOutline(
+    override val pos: IVector2,
+    override val size: IVector2
+) : IComponent {
+
+    override lateinit var gui: IGui
+
+    override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {}
+
+    override fun drawSecondLayer(mouse: Vec2d) {
+        if (!isCtrlKeyDown()) return
+        color(1f, 1f, 1f, 1f)
+        val start = pos
+        val end = start + size
+
+        gui.drawColor(start, end, 0xFF000000.toInt())
+        gui.drawColor(start + 1, end - 1, -1)
     }
 }
 

@@ -13,17 +13,25 @@ fun <T> autoContainer(name: String, configFunc: GuiBuilder.(T) -> Unit, tile: T,
     val builder = GuiBuilder(config)
     configFunc.invoke(builder, tile)
 
-    return AutoContainer(builder, builder.containerConfig, player, world, pos)
+    val container = builder.containerClass(builder, builder.containerConfig, player, world, pos)
+    container.postInit()
+
+    return container
 }
 
-class AutoContainer(val builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos) : ContainerBase(player, world, pos) {
+open class AutoContainer(val builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
+    : ContainerBase(player, world, pos) {
 
     val buttonListeners = mutableMapOf<String, () -> Unit>()
+    val switchButtonCallbacks = mutableMapOf<String, () -> Boolean>()
+    val selectButtonCallbacks = mutableMapOf<String, () -> Int>()
     var receiveDataFromClientFunc: ((IBD) -> Unit)? = null
 
     init {
         configFunc(this)
     }
+
+    open fun postInit() = Unit
 
     public override fun addSlotToContainer(slotIn: Slot): Slot {
         return super.addSlotToContainer(slotIn)

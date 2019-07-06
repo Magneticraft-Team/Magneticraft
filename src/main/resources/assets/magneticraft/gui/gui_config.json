@@ -10,7 +10,7 @@
     "electric_heater": {},
     "combustion_chamber": {
         "points": {
-            "fuel_slot": [93, 32]
+            "fuel_slot": [94, 32]
         }
     },
     "steam_boiler": {},
@@ -22,14 +22,14 @@
     },
     "electric_furnace": {
         "points": {
-            "input_slot": [100, 17],
-            "output_slot": [100, 49]
+            "input_slot": [101, 17],
+            "output_slot": [101, 49]
         }
     },
     "brick_furnace": {
         "points": {
-            "input_slot": [100, 17],
-            "output_slot": [100, 49]
+            "input_slot": [101, 17],
+            "output_slot": [101, 49]
         }
     },
     "thermopile": {},
@@ -37,26 +37,26 @@
     "rf_heater": {},
     "gasification_unit": {
         "points": {
-            "input_slot": [90, 17],
-            "output_slot": [90, 49]
+            "input_slot": [91, 17],
+            "output_slot": [91, 49]
         }
     },
     "grinder": {
         "points": {
-            "input_slot": [107, 17],
-            "output_slot": [96, 49],
-            "output2_slot": [118, 49],
-            "arrow_offset": [4, 32],
+            "input_slot": [108, 17],
+            "output_slot": [97, 49],
+            "output2_slot": [119, 49],
+            "arrow_offset": [5, 32],
             "arrow_size": [30, 11],
             "arrow_uv": [225, 11]
         }
     },
     "sieve": {
         "points": {
-            "input_slot": [107, 17],
-            "output_slot": [85, 49],
-            "output2_slot": [107, 49],
-            "output3_slot": [129, 49],
+            "input_slot": [108, 17],
+            "output_slot": [86, 49],
+            "output2_slot": [108, 49],
+            "output3_slot": [130, 49],
             "arrow_offset": [5, 32],
             "arrow_size": [52, 11],
             "arrow_uv": [203, 23]
@@ -99,6 +99,11 @@
             "inv_start": [62, 5]
         }
     },
+    "transposer": {
+        "points": {
+            "inv_start": [62, 5]
+        }
+    },
     "fabricator": {
         "points": {
             "recipe_grid": [24, 5],
@@ -113,5 +118,93 @@
             "icon_size": [14, 14],
             "icon_uv": [147, 11]
         }
+    },
+    "inserter": {
+        "points": {
+            "grabbed": [89, 32],
+            "upgrade1": [79, 5],
+            "upgrade2": [97, 5],
+            "filters": [23, 5],
+            "btn0_offset": [0, 0],
+            "btn1_offset": [20, 0],
+            "btn2_offset": [0, 20],
+            "btn3_offset": [20, 20],
+            "btn4_offset": [0, 40],
+            "btn5_offset": [20, 40],
+            "btn0_on": [154, 35],
+            "btn1_on": [188, 35],
+            "btn2_on": [205, 35],
+            "btn3_on": [171, 35],
+            "btn4_on": [239, 35],
+            "btn5_on": [222, 35],
+            "btn0_off": [154, 52],
+            "btn1_off": [188, 52],
+            "btn2_off": [205, 52],
+            "btn3_off": [171, 52],
+            "btn4_off": [239, 52],
+            "btn5_off": [222, 52]
+        }
+    },
+    "hydraulic_press": {
+        "points": {
+            "input_slot": [91, 17],
+            "output_slot": [91, 49],
+            "opt0_offset": [0, 10],
+            "opt1_offset": [0, 30],
+            "opt2_offset": [0, 50],
+            "opt0_background": [95, 11],
+            "opt1_background": [112, 11],
+            "opt2_background": [129, 11],
+            "arrow_offset": [5, 32],
+            "arrow_size": [8, 11],
+            "arrow_uv": [216, 11]
+        }
+    },
+    "shelving_unit": {
+        "points": {
+            "scroll_pos": [173, 20],
+            "search_pos": [7, 4],
+            "button_offset": [171, 124],
+            "opt0_offset": [171, 144],
+            "opt1_offset": [171, 164],
+            "opt2_offset": [171, 184],
+            "opt0_background": [237, 70],
+            "opt1_background": [218, 70],
+            "opt2_background": [199, 70],
+            "button_icon_pos": [172, 125],
+            "button_icon_size": [16, 16],
+            "button_icon_uv": [163, 70]
+        },
+        "background": [194, 207],
+        "top": true
+    },
+    "rf_transformer": {},
+    "airlock": {},
+    "small_tank": {},
+    "tesla_tower": {},
+    "solar_panel": {},
+    "computer": {
+        "points": {
+            "button_offset": [12, 224],
+            "button_icon_offset": [13, 225],
+            "button_icon_size": [16, 16],
+            "button_icon_on_uv": [221, 89],
+            "button_icon_off_uv": [239, 89]
+        },
+        "background": [350, 250],
+        "top": true
+    },
+    "mining_robot": {
+        "points": {
+            "button_offset": [68, 241],
+            "button_icon_offset": [69, 242],
+            "button_icon_size": [16, 16],
+            "button_icon_on_uv": [221, 89],
+            "button_icon_off_uv": [239, 89],
+            "electric_bar_offset": [39, 238],
+            "storage_bar_offset": [53, 238]
+        },
+        "background": [350, 308],
+        "top": true
     }
 }

@@ -109,6 +109,7 @@ object Blocks : IBlockMaker {
 
         airLock = builder.withName("airlock").copy {
             factory = factoryOf(::TileAirLock)
+            onActivated = CommonMethods::openGui
         }.build()
 
         thermopile = builder.withName("thermopile").copy {
@@ -166,6 +167,7 @@ object Blocks : IBlockMaker {
 
         rfTransformer = builder.withName("rf_transformer").copy {
             factory = factoryOf(::TileRfTransformer)
+            onActivated = CommonMethods::openGui
         }.build()
 
         return itemBlockListOf(battery, electricFurnace, infiniteEnergy, airBubble, airLock, thermopile,

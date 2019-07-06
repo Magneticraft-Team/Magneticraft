@@ -1,7 +1,9 @@
 package com.cout970.magneticraft.systems.gui
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.Sprite
+import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
@@ -10,6 +12,7 @@ import com.cout970.magneticraft.systems.gui.render.IGui
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.inventory.GuiContainer
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
@@ -66,6 +69,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     override fun drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) {
+        GlStateManager.color(1f, 1f, 1f, 1f)
         components.forEach { it.drawFirstLayer(Vec2d(mouseX, mouseY), partialTicks) }
     }
 
@@ -75,7 +79,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
 
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        val block = components.any { it ->
+        val block = components.any {
             it.onMouseClick(Vec2d(mouseX, mouseY), mouseButton)
         }
         if (!block) {
@@ -84,7 +88,7 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
     }
 
     override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
-        val block = components.any { it ->
+        val block = components.any {
             it.onMouseClickMove(Vec2d(mouseX, mouseY), clickedMouseButton, timeSinceLastClick)
         }
         if (!block) {
@@ -110,6 +114,10 @@ abstract class GuiBase(override val container: ContainerBase) : GuiContainer(con
         val char = Keyboard.getEventCharacter()
         val event = Keyboard.getEventKey()
         val state = Keyboard.getEventKeyState()
+
+        if (Debug.DEBUG && char.toInt() == 0 && event == 64) {
+            this.mc.textureManager.deleteTexture(guiTexture("misc"))
+        }
 
         if ((event == 0 && char >= ' ') || state) {
             this.keyTyped(char, event)

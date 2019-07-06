@@ -52,6 +52,7 @@ class ModuleFabricator(
     }
 
     fun resetMatches() {
+        if (world.isClient) return
         itemMatches = null
     }
 

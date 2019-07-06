@@ -215,7 +215,8 @@ class TileFilter : TileBase(), ITickable {
     val inputBuffer = PneumaticBuffer()
     val outputBuffer = PneumaticBuffer()
 
-    val filterModule = ModuleFilter(inputBuffer, outputBuffer, inventory)
+    val itemFilter = ModuleItemFilter(inventory)
+    val filterModule = ModuleFilter(inputBuffer, outputBuffer, itemFilter)
 
     val endpointModule = ModulePneumaticEndpoint(
         buffers = listOf(inputBuffer, outputBuffer),
@@ -229,7 +230,7 @@ class TileFilter : TileBase(), ITickable {
     )
 
     init {
-        initModules(endpointModule, filterModule)
+        initModules(endpointModule, filterModule, itemFilter)
     }
 
     @DoNotRemove
@@ -245,12 +246,14 @@ class TileTransposer : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getFacing()
     val buffer = PneumaticBuffer()
+    val inventory = Inventory(9)
 
+    val itemFilter = ModuleItemFilter(inventory)
     val endpointModule = ModulePneumaticEndpoint(buffers = listOf(buffer), getInfo = { BufferInfo(false, facing) })
-    val transposerModule = ModuleTransposer(buffer, { facing })
+    val transposerModule = ModuleTransposer(buffer, itemFilter, { facing })
 
     init {
-        initModules(endpointModule, transposerModule)
+        initModules(endpointModule, transposerModule, itemFilter)
     }
 
     @DoNotRemove

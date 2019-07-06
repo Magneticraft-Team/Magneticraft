@@ -87,15 +87,18 @@ class ModuleElectricity(
     }
 
     fun loadConnections() {
-        unloadedWireConnections.removeAll { (localName, nodeID) ->
-            val thisNode = electricNodes.find { it.id.name == localName } ?: return@removeAll false
+        val iter = unloadedWireConnections.iterator()
+        while (iter.hasNext()) {
+            val (localName, nodeID) = iter.next()
 
-            val otherTile = world.getTileEntity(nodeID.pos) ?: return@removeAll false
-            val other = otherTile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: return@removeAll false
-            val otherNode = (other.getNode(nodeID) as? IElectricNode) ?: return@removeAll false
+            val thisNode = electricNodes.find { it.id.name == localName } ?: continue
+
+            val otherTile = world.getTileEntity(nodeID.pos) ?: continue
+            val other = otherTile.getOrNull(ELECTRIC_NODE_HANDLER, null) ?: continue
+            val otherNode = (other.getNode(nodeID) as? IElectricNode) ?: continue
 
             tryConnect(this, thisNode, other, otherNode, null)
-            true
+            iter.remove()
         }
     }
 
@@ -135,8 +138,10 @@ class ModuleElectricity(
         }
 
         val changed = outputWiredConnections.removeAll {
+            // Chunk unloaded, we do not remove the connection
+            it.secondNode.world.getTileEntity(it.secondNode.pos) ?: return@removeAll false
             val handler = getHandler(it.secondNode)
-            handler == null || !handler.nodes.contains(it.secondNode)
+            handler == null || handler.nodes.none { node -> node.id == it.secondNode.id }
         }
 
         if (changed || autoConnectWires) {
@@ -202,6 +207,7 @@ class ModuleElectricity(
         }
         list.add(connection)
         onWireChange(side)
+        container.markDirty()
     }
 
     override fun removeConnection(connection: IElectricConnection?) {
@@ -283,7 +289,7 @@ class ModuleElectricity(
             connectionList.forEachTag { tag ->
                 unloaded += tag.getString("first") to NodeID.deserializeFromNBT(tag.getCompoundTag("second"))
             }
-            unloadedWireConnections.setAll(unloaded)
+            unloadedWireConnections.addAll(unloaded)
         }
     }
 

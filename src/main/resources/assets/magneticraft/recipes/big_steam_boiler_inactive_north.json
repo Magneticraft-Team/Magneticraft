@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AB"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "paper",
+      "count": 1
+    },
+    "B": {
+      "item": "magneticraft:steam_boiler",
+      "count": 1,
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:big_steam_boiler",
+    "count": 1,
+    "data": 0
+  }
+}

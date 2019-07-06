@@ -1,38 +1,30 @@
 package com.cout970.magneticraft.features.multiblocks
 
-import com.cout970.magneticraft.api.MagneticraftApi
-import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
-import com.cout970.magneticraft.features.multiblocks.tileentities.TileHydraulicPress
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileShelvingUnit
-import com.cout970.magneticraft.features.multiblocks.tileentities.TileSolarTower
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
-import com.cout970.magneticraft.misc.gui.SlotTakeOnly
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.*
-import com.cout970.magneticraft.systems.gui.components.buttons.AbstractButton
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.items.SlotItemHandler
 
 /**
  * Created by cout970 on 2017/08/10.
  */
 
 
-class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, world: World, blockPos: BlockPos,
-                            val level: ModuleShelvingUnitMb.Level) : ContainerBase(player, world, blockPos) {
+class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
+    : AutoContainer(builder, configFunc, player, world, pos) {
+
+    val tile: TileShelvingUnit = tileEntity as TileShelvingUnit
 
     val allSlots: List<SlotShelvingUnit>
     var currentSlots = emptyList<SlotShelvingUnit>()
-    var scroll = 0f
-    var currentLevel = level
-    var filterText: String = ""
+    var currentLevel = tile.shelvingUnitModule.guiLevel
 
     init {
         val inv = tile.invModule.inventory
@@ -44,14 +36,27 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
         }
 
         allSlots.forEach { addSlotToContainer(it) }
-        bindPlayerInventory(player.inventory, offset = vec2Of(0, 41))
-        switchLevel(level)
+        bindPlayerInventory(player.inventory, vec2Of(0, 41))
+    }
+
+    override fun postInit() {
+        switchLevel(currentLevel)
     }
 
     fun updateCurrentSlots(list: List<SlotShelvingUnit>) {
         allSlots.forEach { it.hide(); it.lock() }
         currentSlots = list
         withScroll(0f)
+    }
+
+    fun levelButton(id: Int){
+        val ibd = IBD().apply {
+            setInteger(DATA_ID_SHELVING_UNIT_LEVEL, id)
+            setString(DATA_ID_SHELVING_UNIT_FILTER, "")
+        }
+        sendUpdate(ibd)
+        filterSlots("")
+        switchLevel(ModuleShelvingUnitMb.Level.values()[id])
     }
 
     fun switchLevel(newLevel: ModuleShelvingUnitMb.Level) {
@@ -61,9 +66,8 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     }
 
     fun withScroll(scrollLevel: Float) {
-        scroll = scrollLevel
         currentSlots.forEach { it.hide(); it.lock() }
-        val column = Math.max(0, Math.round(scroll * ((currentSlots.size / 9f) - 5)))
+        val column = Math.max(0, Math.round(scrollLevel * ((currentSlots.size / 9f) - 5)))
         var min = Int.MAX_VALUE
         var max = Int.MIN_VALUE
         currentSlots.forEachIndexed { index, it ->
@@ -84,7 +88,6 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
     }
 
     fun filterSlots(filter: String) {
-        filterText = filter
         if (filter.isEmpty() || filter.isBlank()) {
             switchLevel(currentLevel)
             return
@@ -104,62 +107,17 @@ class ContainerShelvingUnit(val tile: TileShelvingUnit, player: EntityPlayer, wo
         })
     }
 
-    override fun receiveDataFromClient(ibd: IBD) {
-        ibd.getBoolean(DATA_ID_SHELVING_UNIT_SORT) { tile.shelvingUnitModule.sortStacks(it) }
-        ibd.getInteger(DATA_ID_SHELVING_UNIT_LEVEL) { switchLevel(ModuleShelvingUnitMb.Level.values()[it]) }
-        ibd.getFloat(DATA_ID_SHELVING_UNIT_SCROLL) { withScroll(it) }
-        ibd.getIntArray(DATA_ID_SHELVING_UNIT_FILTER) { serverFilterSlots(it) }
-    }
-
     fun setFilter(text: String) {
         filterSlots(text)
         sendUpdate(IBD().apply {
             setIntArray(DATA_ID_SHELVING_UNIT_FILTER, currentSlots.map { it.slotNumber }.toIntArray())
         })
     }
-}
-
-
-class ContainerSolarTower(val tile: TileSolarTower, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        bindPlayerInventory(player.inventory)
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun onClick(button: AbstractButton, mouse: Vec2d, mouseButton: Int): Boolean {
-        sendUpdate(IBD().apply { this.setBoolean(button.id, true) })
-        return true
-    }
 
     override fun receiveDataFromClient(ibd: IBD) {
-        ibd.getBoolean(0) {
-            tile.solarTowerModule.searchMirrors = true
-        }
-    }
-}
-
-
-class ContainerHydraulicPress(val tile: TileHydraulicPress, player: EntityPlayer, world: World, blockPos: BlockPos)
-    : ContainerBase(player, world, blockPos) {
-
-    init {
-        tile.invModule.inventory.let { inv ->
-            addSlotToContainer(SlotItemHandler(inv, 0, 97, 16))
-            addSlotToContainer(SlotTakeOnly(inv, 1, 97, 48))
-
-            inventoryRegions += InventoryRegion(0..0, filter = {
-                MagneticraftApi.getHydraulicPressRecipeManager().findRecipe(it, tile.hydraulicPressModule.mode) != null
-            })
-            inventoryRegions += InventoryRegion(1..1, filter = { false })
-        }
-        bindPlayerInventory(player.inventory)
-    }
-
-    override fun receiveDataFromClient(ibd: IBD) {
-        ibd.getInteger(DATA_ID_SELECTED_OPTION) {
-            tile.hydraulicPressModule.mode = HydraulicPressMode.values()[it]
-        }
+        ibd.getBoolean(DATA_ID_SHELVING_UNIT_SORT) { tile.shelvingUnitModule.sortStacks() }
+        ibd.getInteger(DATA_ID_SHELVING_UNIT_LEVEL) { switchLevel(ModuleShelvingUnitMb.Level.values()[it]) }
+        ibd.getFloat(DATA_ID_SHELVING_UNIT_SCROLL) { withScroll(it) }
+        ibd.getIntArray(DATA_ID_SHELVING_UNIT_FILTER) { serverFilterSlots(it) }
     }
 }

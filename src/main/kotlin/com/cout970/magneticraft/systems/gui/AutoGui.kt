@@ -7,12 +7,14 @@ import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.inventory.Slot
 
 class AutoGui(override val container: AutoContainer) : GuiBase(container) {
 
     lateinit var background: List<DrawableBox>
     lateinit var slots: List<DrawableBox>
+    var oldGuiScale = 0
 
     override fun initGui() {
         val config = container.builder.config
@@ -30,22 +32,25 @@ class AutoGui(override val container: AutoContainer) : GuiBase(container) {
 
     override fun setWorldAndResolution(mc: Minecraft, width: Int, height: Int) {
         val size = container.builder.config.background
+        oldGuiScale = mc.gameSettings.guiScale
 
         if (width < size.xi || height < size.yi) {
-            super.setWorldAndResolution(mc, width * 2, height * 2)
-        } else {
-            super.setWorldAndResolution(mc, width, height)
+            mc.gameSettings.guiScale = 3
+            val sr = ScaledResolution(mc)
+            super.setWorldAndResolution(mc, sr.scaledWidth, sr.scaledHeight)
+            return
         }
+
+        super.setWorldAndResolution(mc, width, height)
+    }
+
+    override fun onGuiClosed() {
+        super.onGuiClosed()
+        mc.gameSettings.guiScale = oldGuiScale
     }
 
     override fun initComponents() {
         container.builder.build(this, container)
-    }
-
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        this.drawDefaultBackground()
-        super.drawScreen(mouseX, mouseY, partialTicks)
-        this.renderHoveredToolTip(mouseX, mouseY)
     }
 
     override fun drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) {
@@ -89,28 +94,28 @@ class AutoGui(override val container: AutoContainer) : GuiBase(container) {
             screenPos = pPos + vec2Of(0, 4),
             screenSize = vec2Of(4, pSize.y - 8),
             texturePos = vec2Of(0, 10),
-            textureSize = vec2Of(4, pSize.y - 8)
+            textureSize = vec2Of(4, 1)
         )
 
         val right = DrawableBox(
             screenPos = pPos + vec2Of(pSize.xi - 4, 4),
             screenSize = vec2Of(4, pSize.yi - 8),
             texturePos = vec2Of(5, 10),
-            textureSize = vec2Of(4, pSize.yi - 8)
+            textureSize = vec2Of(4, 1)
         )
 
         val up = DrawableBox(
             screenPos = pPos + vec2Of(4, 0),
             screenSize = vec2Of(pSize.xi - 8, 4),
             texturePos = vec2Of(10, 0),
-            textureSize = vec2Of(pSize.xi - 8, 4)
+            textureSize = vec2Of(1, 4)
         )
 
         val down = DrawableBox(
             screenPos = pPos + vec2Of(4, pSize.yi - 4),
             screenSize = vec2Of(pSize.xi - 8, 4),
             texturePos = vec2Of(10, 5),
-            textureSize = vec2Of(pSize.xi - 8, 4)
+            textureSize = vec2Of(1, 4)
         )
 
         val center = DrawableBox(
@@ -140,6 +145,8 @@ class AutoGui(override val container: AutoContainer) : GuiBase(container) {
                 SlotType.FILTER -> vec2Of(74, 81)
                 SlotType.NORMAL -> vec2Of(36, 100)
                 SlotType.BUTTON -> vec2Of(74, 100)
+                SlotType.FLOPPY -> vec2Of(144, 69)
+                SlotType.BATTERY -> vec2Of(144, 87)
             }
 
             boxes += DrawableBox(

@@ -7,10 +7,7 @@ import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.systems.tileentities.TileBase
-import com.cout970.magneticraft.systems.tilemodules.ModuleBucketIO
-import com.cout970.magneticraft.systems.tilemodules.ModuleFluidHandler
-import com.cout970.magneticraft.systems.tilemodules.ModulePipe
-import com.cout970.magneticraft.systems.tilemodules.ModuleToggleFluidExporter
+import com.cout970.magneticraft.systems.tilemodules.*
 import com.cout970.magneticraft.systems.tilemodules.pipe.PipeType
 import com.cout970.magneticraft.systems.tilerenderers.MutableCubeCache
 import net.minecraft.util.EnumFacing
@@ -37,7 +34,7 @@ class TileSmallTank : TileBase(), ITickable {
     })
 
     init {
-        initModules(fluidModule, bucketIoModule, toggleExportModule)
+        initModules(fluidModule, bucketIoModule, toggleExportModule, ModuleOpenGui())
     }
 
     @DoNotRemove

@@ -367,5 +367,5 @@ val ug get() = Mouse.setGrabbed(false)
 
 fun ug(): Boolean {
     Mouse.setGrabbed(false)
-    return false
+    return true
 }

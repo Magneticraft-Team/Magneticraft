@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.gui
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -11,10 +12,11 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
-import com.cout970.magneticraft.systems.gui.components.CompDynamicBackground
-import com.cout970.magneticraft.systems.gui.components.CompImage
+import com.cout970.magneticraft.systems.gui.components.*
 import com.cout970.magneticraft.systems.gui.components.bars.*
 import com.cout970.magneticraft.systems.gui.components.buttons.ClickButton
+import com.cout970.magneticraft.systems.gui.components.buttons.SelectButton
+import com.cout970.magneticraft.systems.gui.components.buttons.SwitchButton
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.tilemodules.ModuleBigCombustionChamber
@@ -22,6 +24,8 @@ import com.cout970.magneticraft.systems.tilemodules.ModuleCombustionChamber
 import com.cout970.magneticraft.systems.tilemodules.ModuleInternalStorage
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.items.IItemHandler
 import java.text.DecimalFormat
@@ -34,6 +38,8 @@ class GuiBuilder(val config: GuiConfig) {
 
     var containerConfig: (AutoContainer) -> Unit = {}
     var bars: DslBars? = null
+    var comps: DslComponents? = null
+    var containerClass: (GuiBuilder, (AutoContainer) -> Unit, EntityPlayer, World, BlockPos) -> AutoContainer = ::AutoContainer
 
     fun container(func: ContainerBuilder.() -> Unit) {
         containerConfig = { container ->
@@ -47,12 +53,23 @@ class GuiBuilder(val config: GuiConfig) {
         bars = dsl
     }
 
-    fun build(gui: AutoGui, container: AutoContainer) {
-        val bars = bars ?: return
-        val sizeX = bars.getExternalSize().xi
-        val startX = (gui.sizeX - sizeX) / 2
+    fun components(func: DslComponents.() -> Unit) {
+        val dsl = DslComponents(config)
+        dsl.func()
+        comps = dsl
+    }
 
-        bars.build(gui, container, vec2Of(startX, 0))
+    fun build(gui: AutoGui, container: AutoContainer) {
+        val bars = bars
+
+        if (bars != null) {
+            val sizeX = bars.getExternalSize().xi
+            val startX = (gui.sizeX - sizeX) / 2
+
+            bars.build(gui, container, vec2Of(startX, 0))
+        }
+
+        comps?.build(gui, container)
     }
 }
 
@@ -111,6 +128,14 @@ class ContainerBuilder(val container: AutoContainer, val config: GuiConfig) {
         container.buttonListeners[id] = func
     }
 
+    fun switchButtonState(id: String, func: () -> Boolean) {
+        container.switchButtonCallbacks[id] = func
+    }
+
+    fun selectButtonState(id: String, func: () -> Int) {
+        container.selectButtonCallbacks[id] = func
+    }
+
     fun sendToServer(data: IBD) {
         container.sendUpdate(data)
     }
@@ -129,12 +154,20 @@ class DslBars(val config: GuiConfig) {
     var marginY = 4
 
     var paddingX = 1
+    private var disableSpacing = false
+
+    private fun component(size: IVector2, getter: (IVector2) -> List<IComponent>) {
+        components += if (disableSpacing) {
+            Vec2d.ZERO to getter
+        } else {
+            size to getter
+        }
+    }
 
     private fun barOf(texture: IVector2,
-                      value: () -> Double, tooltip: () -> List<String> = { emptyList() },
-                      icon: Int): Pair<IVector2, (IVector2) -> List<IComponent>> {
+                      value: () -> Double, tooltip: () -> List<String> = { emptyList() }, icon: Int) {
 
-        return Vec2d(12, 54 + ICON_HEIGHT) to { pos ->
+        component(vec2Of(12, 54 + ICON_HEIGHT)) { pos ->
             listOf(
                 GuiValueBar(
                     pos = pos + ICON_SIZE,
@@ -149,9 +182,9 @@ class DslBars(val config: GuiConfig) {
     }
 
     private fun bar2Of(texture: IVector2, value: () -> Double, tooltip: () -> List<String> = { emptyList() },
-                       icon: Int): Pair<IVector2, (IVector2) -> List<IComponent>> {
+                       icon: Int) {
 
-        return Vec2d(12, 54 + ICON_HEIGHT) to { pos ->
+        component(vec2Of(12, 54 + ICON_HEIGHT)) { pos ->
             listOf(
                 GuiValueBar(
                     pos = pos + ICON_SIZE + vec2Of(1, 0),
@@ -167,7 +200,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun electricBar(node: IElectricNode) {
-        components += barOf(
+        barOf(
             texture = vec2Of(23, 121),
             value = { node.voltage / 120.0 },
             tooltip = { listOf(String.format("%.2fV", node.voltage)) },
@@ -177,7 +210,7 @@ class DslBars(val config: GuiConfig) {
 
     fun storageBar(node: ModuleInternalStorage) {
         val numberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = ' ' })
-        components += barOf(
+        barOf(
             texture = vec2Of(45, 121),
             value = { node.energy / node.capacity.toDouble() },
             tooltip = { listOf(numberFormat.format(node.energy) + "J") },
@@ -186,7 +219,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun heatBar(node: IHeatNode) {
-        components += barOf(
+        barOf(
             texture = vec2Of(34, 121),
             value = { node.temperature / 4000.0 },
             tooltip = { listOf(formatHeat(node.temperature)) },
@@ -196,7 +229,7 @@ class DslBars(val config: GuiConfig) {
 
     fun rfBar(node: IEnergyStorage) {
         val numberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = ' ' })
-        components += barOf(
+        barOf(
             texture = vec2Of(57, 121),
             value = { node.energyStored / node.maxEnergyStored.toDouble() },
             tooltip = { listOf(numberFormat.format(node.energyStored) + "RF") },
@@ -205,11 +238,11 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun genericBar(index: Int, icon: Int, prov: IBarProvider, tooltip: () -> List<String>) {
-        components += Vec2d(7, 60) to { pos -> listOf(CompDynamicBar(prov, index, pos + ICON_SIZE, tooltip), iconOf(icon, pos)) }
+        component(vec2Of(7, 60)) { pos -> listOf(CompDynamicBar(prov, index, pos + ICON_SIZE, tooltip), iconOf(icon, pos)) }
     }
 
     fun consumptionBar(va: ValueAverage, limit: Number) {
-        components += bar2Of(
+        bar2Of(
             texture = vec2Of(39, 176),
             value = { va.storage / limit.toDouble() },
             tooltip = { listOf(String.format("Consumption: %.2fW", va.storage)) },
@@ -218,10 +251,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun slotSpacer(rows: Int = 1, columns: Int = 1) {
-        components.add(Pair(vec2Of(18 * columns, 18 * rows), { pos ->
-            @Suppress("RemoveExplicitTypeArguments")
-            emptyList<IComponent>()
-        }))
+        component(vec2Of(18 * columns, 18 * rows)) { emptyList() }
     }
 
     fun fuelBar(mod: ModuleCombustionChamber) {
@@ -230,7 +260,7 @@ class DslBars(val config: GuiConfig) {
                 (mod.maxBurningTime - mod.burningTime) / mod.maxBurningTime.toDouble()
             }
         }
-        components += bar2Of(
+        bar2Of(
             texture = vec2Of(21, 176),
             value = value,
             tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
@@ -244,7 +274,7 @@ class DslBars(val config: GuiConfig) {
                 (mod.maxBurningTime - mod.burningTime) / mod.maxBurningTime.toDouble()
             }
         }
-        components += bar2Of(
+        bar2Of(
             texture = vec2Of(21, 176),
             value = value,
             tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
@@ -253,7 +283,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun productionBar(va: ValueAverage, limit: Number) {
-        components += bar2Of(
+        bar2Of(
             texture = vec2Of(30, 176),
             value = { va.storage / limit.toDouble() },
             tooltip = { listOf(String.format("Production: %.2fW", va.storage)) },
@@ -262,7 +292,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun machineFluidBar(va: ValueAverage, limit: Number) {
-        components += bar2Of(
+        bar2Of(
             texture = vec2Of(30, 176),
             value = { va.storage / limit.toDouble() },
             tooltip = { listOf(String.format("%.1f mB/t", va.storage)) },
@@ -271,7 +301,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun electricTransferBar(va: ValueAverage, min: Number, max: Number) {
-        components += Vec2d(7, 54 + ICON_HEIGHT) to { pos ->
+        component(vec2Of(7, 54 + ICON_HEIGHT)) { pos ->
             listOf(
                 TransferRateBar(
                     pos = pos + ICON_SIZE + vec2Of(1, 3),
@@ -287,7 +317,7 @@ class DslBars(val config: GuiConfig) {
 
     fun progressBar(timed: TimedCraftingProcess) {
         val value = { timed.timer / timed.limit().toDouble() }
-        components += bar2Of(
+        bar2Of(
             texture = vec2Of(66, 176),
             value = value,
             tooltip = { listOf(String.format("Progress: %.1f%%", 100 * value())) },
@@ -296,7 +326,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun tank(tank: Tank, use: TankIO) {
-        components += Vec2d(18, 50) to { pos ->
+        component(vec2Of(18, 50) + ICON_SIZE) { pos ->
             val icons = when (use) {
                 TankIO.IN -> listOf(iconOf(5, pos + vec2Of(6, 0)))
                 TankIO.OUT -> listOf(iconOf(3, pos + vec2Of(6, 0)))
@@ -311,9 +341,9 @@ class DslBars(val config: GuiConfig) {
         val offsetVec = config.points[offset] ?: Vec2d.ZERO
         val sizeVec = config.points[size] ?: Vec2d.ZERO
         val texVec = config.points[uv] ?: Vec2d.ZERO
-        components.add(Pair(hitbox, { pos ->
+        component(hitbox) { pos ->
             listOf(CompDrawable(pos + offsetVec, sizeVec, texVec))
-        }))
+        }
     }
 
     fun light(offset: String, size: String, uv: String, callback: () -> Boolean) {
@@ -321,29 +351,57 @@ class DslBars(val config: GuiConfig) {
         val sizeVec = config.points[size] ?: Vec2d.ZERO
         val texVec = config.points[uv] ?: Vec2d.ZERO
 
-        components.add(Pair(sizeVec, { pos ->
+        component(sizeVec) { pos ->
             listOf(CompDrawable(pos + offsetVec, sizeVec, texVec, callback))
-        }))
+        }
     }
 
     fun clickButton(id: String, offset: String) {
         val offsetVec = config.points[offset] ?: Vec2d.ZERO
-        components.add(Pair(Vec2d(18, 18), { pos ->
+        component(vec2Of(18, 18)) { pos ->
             listOf(ClickButton(pos + offsetVec, id))
-        }))
+        }
     }
 
-    private fun iconOf(index: Int, pos: IVector2): CompImage = CompImage(guiTexture("misc"), DrawableBox(
-        screenPos = pos,
-        screenSize = vec2Of(7, 8),
-        texturePos = vec2Of(37 + (index % 8) * 8, 62 + (index / 8) * 9),
-        textureSize = vec2Of(7, 8),
-        textureScale = vec2Of(256)
-    ))
+    fun switchButton(id: String, offset: String,
+                     enableIcon: String, disableIcon: String,
+                     tooltipOn: String, tooltipOff: String) {
+
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        val enableIconVec = config.points[enableIcon] ?: Vec2d.ZERO
+        val disableIconVec = config.points[disableIcon] ?: Vec2d.ZERO
+
+        component(vec2Of(18, 18)) { pos ->
+            listOf(SwitchButton(
+                pos = pos + offsetVec,
+                enableIcon = enableIconVec,
+                disableIcon = disableIconVec,
+                tooltipEnable = tooltipOn,
+                tooltipDisable = tooltipOff,
+                id = id
+            ))
+        }
+    }
+
+    fun group(size: IVector2, dsl: DslBars.() -> Unit) {
+        disableSpacing = true
+        dsl()
+        disableSpacing = false
+        component(size) { emptyList() }
+    }
+
+    fun selectButton(size: IVector2, id: String, func: SelectButtonDsl.() -> Unit) {
+        component(size) { pos ->
+            listOf(SelectButtonDsl(config).apply(func).build(pos, id))
+        }
+    }
 
     fun getInternalSize(): IVector2 {
-        val sizeX = components.sumByDouble { it.first.x + paddingX * 2 }
-        val sizeY = components.fold(0.0) { acc, it -> max(acc, it.first.y) }
+        val sizeX = components.sumBy {
+            if (it.first.xi != 0) it.first.xi + paddingX * 2 else 0
+        }
+        val sizeY = components.fold(0) { acc, it -> max(acc, it.first.yi) }
+
         return vec2Of(sizeX, sizeY)
     }
 
@@ -360,7 +418,11 @@ class DslBars(val config: GuiConfig) {
 
         components.forEach { (compSize, factory) ->
             val compPos = vec2Of(startX + paddingX, startY)
-            startX += compSize.xi + paddingX * 2
+            startX += if (compSize.xi != 0) compSize.xi + paddingX * 2 else 0
+
+            if (Debug.DEBUG) {
+                gui.components += CompDebugOutline(compPos, compSize)
+            }
             gui.components += factory(compPos)
         }
 
@@ -370,5 +432,165 @@ class DslBars(val config: GuiConfig) {
                 it.onClick = listener
             }
         }
+
+        gui.components.filterIsInstance<SwitchButton>().forEach {
+            val listener = container.buttonListeners[it.id]
+            val callback = container.switchButtonCallbacks[it.id]
+
+            if (listener != null) {
+                it.onClick = listener
+            }
+            if (callback != null) {
+                it.isEnable = callback
+            }
+        }
+
+        gui.components.filterIsInstance<SelectButton>().forEach { btn ->
+            val callback = container.selectButtonCallbacks[btn.id]
+
+            if (callback != null) {
+                btn.selectedOption = callback
+            }
+
+            val listeners = mutableMapOf<Int, () -> Unit>()
+            for (index in btn.options.indices) {
+                val listener = container.buttonListeners["${btn.id}_$index"]
+                if (listener != null) {
+                    listeners[index] = listener
+                }
+            }
+            btn.onClick = { index -> listeners[index]?.invoke() }
+        }
     }
 }
+
+class SelectButtonDsl(val config: GuiConfig) {
+
+    private val options = mutableListOf<SelectButton.SelectOption>()
+
+    fun option(offset: String, background: String, tooltip: String) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        val backgroundVec = config.points[background] ?: Vec2d.ZERO
+        options += SelectButton.SelectOption(offsetVec, backgroundVec, tooltip)
+    }
+
+    fun build(pos: IVector2, id: String): SelectButton {
+        return SelectButton(pos, options, id)
+    }
+}
+
+class DslComponents(val config: GuiConfig) {
+
+    private val components = mutableListOf<IComponent>()
+
+    private fun barOf(pos: IVector2, texture: IVector2,
+                      value: () -> Double, tooltip: () -> List<String> = { emptyList() }, icon: Int) {
+
+        components += GuiValueBar(
+            pos = pos + ICON_SIZE,
+            size = vec2Of(12, 54),
+            colorTextureOffset = texture,
+            value = value,
+            tooltip = tooltip
+        )
+        components += iconOf(icon, pos + vec2Of(2, 0))
+    }
+
+    fun electricBar(pos: String, node: IElectricNode) {
+        val posVec = config.points[pos] ?: Vec2d.ZERO
+        barOf(
+            pos = posVec,
+            texture = vec2Of(23, 121),
+            value = { node.voltage / 120.0 },
+            tooltip = { listOf(String.format("%.2fV", node.voltage)) },
+            icon = 1
+        )
+    }
+
+    fun storageBar(pos: String, node: ModuleInternalStorage) {
+        val posVec = config.points[pos] ?: Vec2d.ZERO
+        val numberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = ' ' })
+        barOf(
+            pos = posVec,
+            texture = vec2Of(45, 121),
+            value = { node.energy / node.capacity.toDouble() },
+            tooltip = { listOf(numberFormat.format(node.energy) + "J") },
+            icon = 0
+        )
+    }
+
+    fun searchBar(id: String, pos: String) {
+        val posVec = config.points[pos] ?: Vec2d.ZERO
+        components += SearchBar(posVec, id)
+    }
+
+    fun scrollBar(id: String, pos: String, steps: Int) {
+        val posVec = config.points[pos] ?: Vec2d.ZERO
+        components += ScrollBar(posVec, steps, id)
+    }
+
+    fun custom(vararg points: String, func: (List<IVector2>) -> IComponent) {
+        val vecs = points.map { config.points[it] ?: Vec2d.ZERO }
+        components += func(vecs)
+    }
+
+    fun selectButton(id: String, func: SelectButtonDsl.() -> Unit) {
+        components += SelectButtonDsl(config).apply(func).build(Vec2d.ZERO, id)
+    }
+
+    fun drawable(offset: String, size: String, uv: String) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        val sizeVec = config.points[size] ?: Vec2d.ZERO
+        val texVec = config.points[uv] ?: Vec2d.ZERO
+        components += CompDrawable(offsetVec, sizeVec, texVec)
+    }
+
+    fun light(offset: String, size: String, uv: String, callback: () -> Boolean) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        val sizeVec = config.points[size] ?: Vec2d.ZERO
+        val texVec = config.points[uv] ?: Vec2d.ZERO
+
+        components += CompDrawable(offsetVec, sizeVec, texVec, callback)
+    }
+
+    fun clickButton(id: String, offset: String) {
+        val offsetVec = config.points[offset] ?: Vec2d.ZERO
+        components += ClickButton(offsetVec, id)
+    }
+
+    fun build(gui: AutoGui, container: AutoContainer) {
+        gui.components += components
+
+        gui.components.filterIsInstance<ClickButton>().forEach {
+            val listener = container.buttonListeners[it.id]
+            if (listener != null) {
+                it.onClick = listener
+            }
+        }
+
+        gui.components.filterIsInstance<SelectButton>().forEach { btn ->
+            val callback = container.selectButtonCallbacks[btn.id]
+
+            if (callback != null) {
+                btn.selectedOption = callback
+            }
+
+            val listeners = mutableMapOf<Int, () -> Unit>()
+            for (index in btn.options.indices) {
+                val listener = container.buttonListeners["${btn.id}_$index"]
+                if (listener != null) {
+                    listeners[index] = listener
+                }
+            }
+            btn.onClick = { index -> listeners[index]?.invoke() }
+        }
+    }
+}
+
+private fun iconOf(index: Int, pos: IVector2): CompImage = CompImage(guiTexture("misc"), DrawableBox(
+    screenPos = pos,
+    screenSize = vec2Of(7, 8),
+    texturePos = vec2Of(37 + (index % 8) * 8, 62 + (index / 8) * 9),
+    textureSize = vec2Of(7, 8),
+    textureScale = vec2Of(256)
+))

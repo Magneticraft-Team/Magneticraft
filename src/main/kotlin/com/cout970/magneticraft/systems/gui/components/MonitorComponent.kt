@@ -2,18 +2,20 @@ package com.cout970.magneticraft.systems.gui.components
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.api.core.ITileRef
+import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.Vec2d
+import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.computer.DeviceKeyboard
 import com.cout970.magneticraft.systems.computer.DeviceMonitor
 import com.cout970.magneticraft.systems.config.Config
-import com.cout970.magneticraft.systems.gui.ContainerBase
 import com.cout970.magneticraft.systems.gui.DATA_ID_MONITOR_CLIPBOARD
 import com.cout970.magneticraft.systems.gui.render.*
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.gui.GuiScreen
-import org.lwjgl.opengl.GL11
+import net.minecraft.client.renderer.GlStateManager.color
+import org.lwjgl.input.Keyboard
 
 /**
  * Created by cout970 on 20/05/2016.
@@ -22,8 +24,7 @@ import org.lwjgl.opengl.GL11
 class MonitorComponent(
     val tile: ITileRef,
     val monitor: DeviceMonitor,
-    val keyboard: DeviceKeyboard,
-    val container: ContainerBase
+    val keyboard: DeviceKeyboard
 ) : IComponent {
 
     companion object {
@@ -35,20 +36,30 @@ class MonitorComponent(
     override val size: IVector2 = Vec2d(350, 230)
     override lateinit var gui: IGui
 
+    override fun init() {
+        Keyboard.enableRepeatEvents(true)
+    }
+
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
 
-        gui.bindTexture(TEXTURE)
+        gui.bindTexture(guiTexture("misc"))
+        val start = gui.pos + vec2Of(11, 11)
+        val end = start + vec2Of(328, 208)
+        gui.drawColor(start - 1, end + 1, 0xFF1E1E1E.toInt())
+        gui.drawColor(start, end, 0xFF232323.toInt())
+
+        gui.bindTexture(guiTexture("monitor_text"))
         // 0 => amber 1, 1 => amber 2, 2 => white, 3 => green 1, 4 => apple 2, 5 => green 2, 6 => apple 2c, 7 => green 3, 8 => green 4
         when (Config.computerTextColor) {
-            0 -> GL11.glColor4f(255f / 255f, 176f / 255f, 0f / 255f, 1.0f)// Amber
-            1 -> GL11.glColor4f(255f / 255f, 204f / 255f, 0f / 255f, 1.0f) // Amb
-            2 -> GL11.glColor4f(220f / 255f, 220f / 255f, 220f / 255f, 1.0f) // white
-            3 -> GL11.glColor4f(51f / 255f, 255f / 255f, 0f / 255f, 1.0f) // Green 1
-            4 -> GL11.glColor4f(51f / 255f, 255f / 255f, 51f / 255f, 1.0f) // Apple 2
-            5 -> GL11.glColor4f(0f / 255f, 255f / 255f, 51f / 255f, 1.0f) // Green 2
-            6 -> GL11.glColor4f(102f / 255f, 255f / 255f, 102f / 255f, 1.0f) // Apple 2c
-            7 -> GL11.glColor4f(0f / 255f, 255f / 255f, 102f / 255f, 1.0f) // Green 3
-            else -> GL11.glColor4f(47f / 255f, 140f / 255f, 64f / 255f, 1.0f) // Intellij
+            0 -> color(255f / 255f, 176f / 255f, 0f / 255f, 1.0f)// Amber
+            1 -> color(255f / 255f, 204f / 255f, 0f / 255f, 1.0f) // Amb
+            2 -> color(220f / 255f, 220f / 255f, 220f / 255f, 1.0f) // white
+            3 -> color(51f / 255f, 255f / 255f, 0f / 255f, 1.0f) // Green 1
+            4 -> color(51f / 255f, 255f / 255f, 51f / 255f, 1.0f) // Apple 2
+            5 -> color(0f / 255f, 255f / 255f, 51f / 255f, 1.0f) // Green 2
+            6 -> color(102f / 255f, 255f / 255f, 102f / 255f, 1.0f) // Apple 2c
+            7 -> color(0f / 255f, 255f / 255f, 102f / 255f, 1.0f) // Green 3
+            else -> color(47f / 255f, 140f / 255f, 64f / 255f, 1.0f) // Intellij
         }
         val lines = monitor.lines
         val columns = monitor.columns
@@ -80,7 +91,7 @@ class MonitorComponent(
                 }
             }
         }
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
+        color(1.0f, 1.0f, 1.0f, 1.0f)
     }
 
 
@@ -95,7 +106,7 @@ class MonitorComponent(
             val str = GuiScreen.getClipboardString()
 
             if (str.isNotBlank()) {
-                container.sendUpdate(IBD().apply { setString(DATA_ID_MONITOR_CLIPBOARD, str) })
+                gui.container.sendUpdate(IBD().apply { setString(DATA_ID_MONITOR_CLIPBOARD, str) })
             }
         }
 
@@ -186,5 +197,6 @@ class MonitorComponent(
 
     override fun onGuiClosed() {
         keyboard.reset()
+        Keyboard.enableRepeatEvents(false)
     }
 }

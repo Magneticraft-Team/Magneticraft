@@ -1,25 +1,40 @@
 package com.cout970.magneticraft.systems.gui
 
-import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.internal.registries.machines.gasificationunit.GasificationUnitRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
+import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager
+import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import com.cout970.magneticraft.features.automatic_machines.TileFilter
+import com.cout970.magneticraft.features.automatic_machines.TileInserter
 import com.cout970.magneticraft.features.automatic_machines.TileRelay
-import com.cout970.magneticraft.features.electric_machines.TileBattery
-import com.cout970.magneticraft.features.electric_machines.TileElectricFurnace
-import com.cout970.magneticraft.features.electric_machines.TileThermopile
-import com.cout970.magneticraft.features.electric_machines.TileWindTurbine
+import com.cout970.magneticraft.features.automatic_machines.TileTransposer
+import com.cout970.magneticraft.features.computers.ContainerComputer
+import com.cout970.magneticraft.features.computers.ContainerMiningRobot
+import com.cout970.magneticraft.features.computers.TileComputer
+import com.cout970.magneticraft.features.computers.TileMiningRobot
+import com.cout970.magneticraft.features.electric_conductors.TileTeslaTower
+import com.cout970.magneticraft.features.electric_machines.*
+import com.cout970.magneticraft.features.fluid_machines.TileSmallTank
 import com.cout970.magneticraft.features.heat_machines.*
+import com.cout970.magneticraft.features.items.Upgrades
+import com.cout970.magneticraft.features.manual_machines.ContainerFabricator
 import com.cout970.magneticraft.features.manual_machines.TileBox
 import com.cout970.magneticraft.features.manual_machines.TileFabricator
+import com.cout970.magneticraft.features.multiblocks.ContainerShelvingUnit
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.gui.SlotType
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.systems.config.Config
+import com.cout970.magneticraft.systems.gui.components.CompFabricatorMatches
+import com.cout970.magneticraft.systems.gui.components.ComponentShelvingUnit
+import com.cout970.magneticraft.systems.gui.components.MonitorComponent
 import com.cout970.magneticraft.systems.gui.components.bars.*
 import com.cout970.magneticraft.systems.tilemodules.ModulePumpjack.Status.*
 import net.minecraft.init.Items
@@ -189,7 +204,7 @@ fun GuiBuilder.grinderGui(tile: TileGrinder) {
         slot(tile.inventory, 0, "input_slot", SlotType.INPUT)
         slot(tile.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
         slot(tile.inventory, 2, "output2_slot", SlotType.OUTPUT, blockInput = true)
-        region(0, 1, filter = { it, _ -> MagneticraftApi.getGrinderRecipeManager().findRecipe(it) != null })
+        region(0, 1, filter = { it, _ -> GrinderRecipeManager.findRecipe(it) != null })
         region(1, 1, filter = { _, _ -> false })
         region(2, 1, filter = { _, _ -> false })
         playerInventory()
@@ -209,7 +224,7 @@ fun GuiBuilder.sieveGui(tile: TileSieve) {
         slot(tile.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
         slot(tile.inventory, 2, "output2_slot", SlotType.OUTPUT, blockInput = true)
         slot(tile.inventory, 3, "output3_slot", SlotType.OUTPUT, blockInput = true)
-        region(0, 1, filter = { it, _ -> MagneticraftApi.getSieveRecipeManager().findRecipe(it) != null })
+        region(0, 1, filter = { it, _ -> SieveRecipeManager.findRecipe(it) != null })
         region(1, 1, filter = { _, _ -> false })
         region(2, 1, filter = { _, _ -> false })
         region(3, 1, filter = { _, _ -> false })
@@ -220,7 +235,7 @@ fun GuiBuilder.sieveGui(tile: TileSieve) {
         storageBar(tile.storageModule)
         consumptionBar(tile.processModule.consumption, Config.sieveMaxConsumption)
         progressBar(tile.processModule.timedProcess)
-        drawable(vec2Of(64, 50), "arrow_offset", "arrow_size", "arrow_uv")
+        drawable(vec2Of(62, 50), "arrow_offset", "arrow_size", "arrow_uv")
     }
 }
 
@@ -390,7 +405,21 @@ fun GuiBuilder.filterGui(tile: TileFilter) {
     }
 }
 
+fun GuiBuilder.transposerGui(tile: TileTransposer) {
+    container {
+        slotGroup(3, 3, tile.inventory, 0, "inv_start", SlotType.FILTER)
+        region(0, 9) { _, _ -> false }
+        playerInventory()
+    }
+
+    bars {
+        slotSpacer(3, 3)
+    }
+}
+
 fun GuiBuilder.fabricatorGui(tile: TileFabricator) {
+    containerClass = ::ContainerFabricator
+
     container {
         slotGroup(3, 3, InvWrapper(tile.fabricatorModule.recipeGrid), 0, "recipe_grid", SlotType.FILTER)
         slotButton(tile.fabricatorModule.craftingResult, 0, "recipe_result") { player, type ->
@@ -409,6 +438,8 @@ fun GuiBuilder.fabricatorGui(tile: TileFabricator) {
         region(10, 9)
         playerInventory()
     }
+
+    components { custom { CompFabricatorMatches(tile) } }
 
     bars {
         slotSpacer(3, 3)
@@ -434,5 +465,212 @@ fun GuiBuilder.solarTowerGui(tile: TileSolarTower) {
         productionBar(tile.solarTowerModule.production, 500)
         clickButton("btn1", "button_offset")
         drawable(vec2Of(0), "icon_offset", "icon_size", "icon_uv")
+    }
+}
+
+fun GuiBuilder.inserterGui(tile: TileInserter) {
+    container {
+        slot(tile.inventory, 0, "grabbed")
+        slot(tile.inventory, 1, "upgrade1")
+        slot(tile.inventory, 2, "upgrade2")
+        slotGroup(3, 3, tile.filters, 0, "filters", SlotType.FILTER)
+        region(0, 1) { stack, _ -> stack.item != Upgrades.inserterUpgrade }
+        region(1, 2) { stack, _ -> stack.item == Upgrades.inserterUpgrade }
+        region(3, 9) { _, _ -> false }
+        playerInventory()
+
+        switchButtonState("btn0") { tile.inserterModule.whiteList }
+        switchButtonState("btn1") { tile.inserterModule.useOreDictionary }
+        switchButtonState("btn2") { tile.inserterModule.useMetadata }
+        switchButtonState("btn3") { tile.inserterModule.useNbt }
+        switchButtonState("btn4") { tile.inserterModule.canDropItems }
+        switchButtonState("btn5") { tile.inserterModule.canGrabItems }
+
+        onClick("btn0") { sendToServer(IBD().setInteger(0, 0)) }
+        onClick("btn1") { sendToServer(IBD().setInteger(0, 1)) }
+        onClick("btn2") { sendToServer(IBD().setInteger(0, 2)) }
+        onClick("btn3") { sendToServer(IBD().setInteger(0, 3)) }
+        onClick("btn4") { sendToServer(IBD().setInteger(0, 4)) }
+        onClick("btn5") { sendToServer(IBD().setInteger(0, 5)) }
+
+        receiveDataFromClient {
+            it.getInteger(0) { prop ->
+                val mod = tile.inserterModule
+                when (prop) {
+                    0 -> mod.whiteList = !mod.whiteList
+                    1 -> mod.useOreDictionary = !mod.useOreDictionary
+                    2 -> mod.useMetadata = !mod.useMetadata
+                    3 -> mod.useNbt = !mod.useNbt
+                    4 -> mod.canDropItems = !mod.canDropItems
+                    5 -> mod.canGrabItems = !mod.canGrabItems
+                }
+            }
+        }
+    }
+
+    bars {
+        slotSpacer(3, 3)
+        slotSpacer(1, 2)
+
+        group(vec2Of(38, 58)) {
+            switchButton("btn0", "btn0_offset", "btn0_on", "btn0_off", "Whitelist", "Blacklist")
+            switchButton("btn1", "btn1_offset", "btn1_on", "btn1_off", "Ore Dictionary", "Ore Dictionary")
+            switchButton("btn2", "btn2_offset", "btn2_on", "btn2_off", "Metadata", "Metadata")
+            switchButton("btn3", "btn3_offset", "btn3_on", "btn3_off", "NBT", "NBT")
+            switchButton("btn4", "btn4_offset", "btn4_on", "btn4_off", "Drop items", "Drop items")
+            switchButton("btn5", "btn5_offset", "btn5_on", "btn5_off", "Grab items", "Grab items")
+        }
+    }
+}
+
+fun GuiBuilder.hydraulicPressGui(tile: TileHydraulicPress) {
+    container {
+        slot(tile.inventory, 0, "input_slot", SlotType.INPUT)
+        slot(tile.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
+        region(0, 1, filter = { it, _ -> HydraulicPressRecipeManager.findRecipe(it, tile.hydraulicPressModule.mode) != null })
+        region(1, 1, filter = { _, _ -> false })
+        playerInventory()
+
+        receiveDataFromClient { data ->
+            data.getInteger(0) {
+                tile.hydraulicPressModule.mode = HydraulicPressMode.values()[it]
+            }
+        }
+
+        onClick("btn0_0") { sendToServer(IBD().setInteger(0, 0)) }
+        onClick("btn0_1") { sendToServer(IBD().setInteger(0, 1)) }
+        onClick("btn0_2") { sendToServer(IBD().setInteger(0, 2)) }
+
+        selectButtonState("btn0") {
+            tile.hydraulicPressModule.mode.ordinal
+        }
+    }
+
+    bars {
+        electricBar(tile.node)
+        storageBar(tile.storageModule)
+        progressBar(tile.processModule.timedProcess)
+
+        drawable(Vec2d.ZERO, "arrow_offset", "arrow_size", "arrow_uv")
+        slotSpacer()
+        selectButton(vec2Of(18, 68), "btn0") {
+            option("opt0_offset", "opt0_background", "Light")
+            option("opt1_offset", "opt1_background", "Medium")
+            option("opt2_offset", "opt2_background", "Heavy")
+        }
+    }
+}
+
+fun GuiBuilder.shelvingUnitGui(tile: TileShelvingUnit) {
+    containerClass = ::ContainerShelvingUnit
+
+    container {
+        onClick("btn1") { sendToServer(IBD().setBoolean(DATA_ID_SHELVING_UNIT_SORT, true)) }
+        onClick("btn0_0") { (container as ContainerShelvingUnit).levelButton(0) }
+        onClick("btn0_1") { (container as ContainerShelvingUnit).levelButton(1) }
+        onClick("btn0_2") { (container as ContainerShelvingUnit).levelButton(2) }
+
+        selectButtonState("btn0") {
+            (container as ContainerShelvingUnit).currentLevel.ordinal
+        }
+    }
+
+    components {
+        searchBar("search0", "search_pos")
+        scrollBar("scroll0", "scroll_pos", 19)
+        custom { ComponentShelvingUnit() }
+
+        clickButton("btn1", "button_offset")
+        drawable("button_icon_pos", "button_icon_size", "button_icon_uv")
+        selectButton("btn0") {
+            option("opt0_offset", "opt0_background", "Top level")
+            option("opt1_offset", "opt1_background", "Middle level")
+            option("opt2_offset", "opt2_background", "Bottom level")
+        }
+    }
+}
+
+fun GuiBuilder.rfTransformerGui(tile: TileRfTransformer) {
+    container {
+        playerInventory()
+    }
+
+    bars {
+        electricBar(tile.node)
+        rfBar(tile.storage)
+    }
+}
+
+fun GuiBuilder.airlockGui(tile: TileAirLock) {
+    container {
+        playerInventory()
+    }
+
+    bars {
+        electricBar(tile.node)
+    }
+}
+
+fun GuiBuilder.smallTankGui(tile: TileSmallTank) {
+    container {
+        playerInventory()
+    }
+
+    bars {
+        tank(tile.tank, TankIO.INOUT)
+    }
+}
+
+fun GuiBuilder.teslaTowerGui(tile: TileTeslaTower) {
+    container {
+        playerInventory()
+    }
+
+    bars {
+        electricBar(tile.node)
+    }
+}
+
+fun GuiBuilder.solarPanelGui(tile: TileSolarPanel) {
+    container {
+        playerInventory()
+    }
+
+    bars {
+        electricBar(tile.node)
+    }
+}
+
+fun GuiBuilder.computerGui(tile: TileComputer) {
+    containerClass = ::ContainerComputer
+    val motherboard = tile.computerModule.motherboard
+
+    container {
+        onClick("btn0") { sendToServer(IBD().setInteger(DATA_ID_COMPUTER_BUTTON, 0)) }
+    }
+
+    components {
+        custom { MonitorComponent(tile.ref, tile.monitor, tile.keyboard) }
+        clickButton("btn0", "button_offset")
+        light("button_icon_offset", "button_icon_size", "button_icon_on_uv") { motherboard.isOnline }
+        light("button_icon_offset", "button_icon_size", "button_icon_off_uv") { !motherboard.isOnline }
+    }
+}
+
+fun GuiBuilder.miningRobotGui(tile: TileMiningRobot) {
+    containerClass = ::ContainerMiningRobot
+    val motherboard = tile.computerModule.motherboard
+
+    container {
+        onClick("btn0") { sendToServer(IBD().setInteger(DATA_ID_COMPUTER_BUTTON, 0)) }
+    }
+
+    components {
+        custom { MonitorComponent(tile.ref, tile.monitor, tile.keyboard) }
+        clickButton("btn0", "button_offset")
+        light("button_icon_offset", "button_icon_size", "button_icon_on_uv") { motherboard.isOnline }
+        light("button_icon_offset", "button_icon_size", "button_icon_off_uv") { !motherboard.isOnline }
+        electricBar("electric_bar_offset", tile.node)
+        storageBar("storage_bar_offset", tile.energyStorage)
     }
 }

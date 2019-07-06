@@ -77,13 +77,16 @@ fun World.getTileEntitiesIn(start: BlockPos, end: BlockPos,
 }
 
 fun tryConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,
-               otherHandler: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?) {
+               otherHandler: IElectricNodeHandler, otherNode: IElectricNode, side: EnumFacing?): Boolean {
 
     if (canConnect(thisHandler, thisNode, otherHandler, otherNode, side)) {
         val connection = ElectricConnection(thisNode, otherNode)
         thisHandler.addConnection(connection, side, true)
         otherHandler.addConnection(connection, side?.opposite, false)
+        return true
     }
+
+    return false
 }
 
 fun canConnect(thisHandler: IElectricNodeHandler, thisNode: IElectricNode,

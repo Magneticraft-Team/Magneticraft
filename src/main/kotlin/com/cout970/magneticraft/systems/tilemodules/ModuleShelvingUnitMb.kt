@@ -26,6 +26,8 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
+import java.util.*
+import kotlin.Comparator
 
 /**
  * Created by cout970 on 2017/07/05.
@@ -44,6 +46,7 @@ class ModuleShelvingUnitMb(
     override lateinit var container: IModuleContainer
     var chestCount = intArrayOf(0, 0, 0)
     val chests = Inventory(MAX_CHESTS)
+    var guiLevel = Level.BOTTOM
 
     override fun onActivated(args: OnActivatedArgs): Boolean {
         val stack = args.playerIn.getHeldItem(args.hand)
@@ -69,7 +72,10 @@ class ModuleShelvingUnitMb(
                         level = Level.BOTTOM
                     }
                 }
-                args.playerIn.openGui(Magneticraft, level.ordinal, args.worldIn, pos.xi, pos.yi, pos.zi)
+
+                guiLevel = level
+                container.sendUpdateToNearPlayers()
+                args.playerIn.openGui(Magneticraft, 0, args.worldIn, pos.xi, pos.yi, pos.zi)
             }
             return true
         } else {
@@ -109,9 +115,14 @@ class ModuleShelvingUnitMb(
         }
     }
 
-    fun sortStacks(desc: Boolean) {
+    fun sortStacks() {
         val items = mutableListOf<ItemStack>()
-        inventory.forEach { items += it }
+        repeat(inventory.size) { index ->
+            if (inventory[index].isNotEmpty) {
+                items += inventory[index]
+            }
+            inventory[index] = ItemStack.EMPTY
+        }
 
         items.sortWith(Comparator { a, b ->
             val aId = Item.getIdFromItem(a.item)
@@ -122,19 +133,30 @@ class ModuleShelvingUnitMb(
                 else -> 0
             }
 
-            if (desc) order else -order
+            order
         })
 
-        repeat(inventory.size) { index ->
-            inventory[index] = ItemStack.EMPTY
+        val queue = ArrayDeque(items)
+        var count = 0
+
+        while (queue.isNotEmpty() && count < inventory.slots) {
+            val stack = queue.pollFirst()!!
+            val remaining = inventory.insertItem(stack, false)
+
+            if (remaining.isNotEmpty) {
+                queue.addFirst(remaining)
+            }
+            count++
         }
 
-        items.forEachIndexed { index, item ->
-            inventory[index] = item
+        // If after sorting the items use more slots, the remaining items are dropped
+        if (queue.isNotEmpty()) {
+            queue.forEach { world.dropItem(it, pos, true) }
         }
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
+        add("level", guiLevel.ordinal)
         add("chestCount0", chestCount[0])
         add("chestCount1", chestCount[1])
         add("chestCount2", chestCount[2])
@@ -142,6 +164,7 @@ class ModuleShelvingUnitMb(
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
+        guiLevel = Level.values()[nbt.getInteger("level")]
         chestCount[0] = nbt.getInteger("chestCount0")
         chestCount[1] = nbt.getInteger("chestCount1")
         chestCount[2] = nbt.getInteger("chestCount2")
@@ -163,6 +186,14 @@ class ModuleShelvingUnitMb(
             in (27 * PIXEL)..(43 * PIXEL) -> Level.MIDDLE
             in (43 * PIXEL)..(48 * PIXEL) -> Level.TOP
             else -> Level.TOP
+        }
+    }
+
+    fun getLevelByPosY(pos: BlockPos): Level {
+        return when {
+            pos.y == this.pos.y + 2 -> Level.TOP
+            pos.y == this.pos.y + 1 -> Level.BOTTOM
+            else -> Level.BOTTOM
         }
     }
 

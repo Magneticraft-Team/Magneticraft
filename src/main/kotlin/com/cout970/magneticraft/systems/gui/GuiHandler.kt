@@ -1,22 +1,20 @@
 package com.cout970.magneticraft.systems.gui
 
-import com.cout970.magneticraft.features.automatic_machines.*
-import com.cout970.magneticraft.features.computers.*
-import com.cout970.magneticraft.features.electric_machines.TileBattery
-import com.cout970.magneticraft.features.electric_machines.TileElectricFurnace
-import com.cout970.magneticraft.features.electric_machines.TileThermopile
-import com.cout970.magneticraft.features.electric_machines.TileWindTurbine
+import com.cout970.magneticraft.features.automatic_machines.TileFilter
+import com.cout970.magneticraft.features.automatic_machines.TileInserter
+import com.cout970.magneticraft.features.automatic_machines.TileRelay
+import com.cout970.magneticraft.features.automatic_machines.TileTransposer
+import com.cout970.magneticraft.features.computers.TileComputer
+import com.cout970.magneticraft.features.computers.TileMiningRobot
+import com.cout970.magneticraft.features.electric_conductors.TileTeslaTower
+import com.cout970.magneticraft.features.electric_machines.*
+import com.cout970.magneticraft.features.fluid_machines.TileSmallTank
 import com.cout970.magneticraft.features.heat_machines.*
 import com.cout970.magneticraft.features.manual_machines.TileBox
 import com.cout970.magneticraft.features.manual_machines.TileFabricator
-import com.cout970.magneticraft.features.multiblocks.ContainerHydraulicPress
-import com.cout970.magneticraft.features.multiblocks.ContainerShelvingUnit
-import com.cout970.magneticraft.features.multiblocks.guiHydraulicPress
-import com.cout970.magneticraft.features.multiblocks.guiShelvingUnit
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.systems.manual.ContainerGuideBook
 import com.cout970.magneticraft.systems.manual.GuiGuideBook
-import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -36,34 +34,6 @@ object GuiHandler : IGuiHandler {
         // @formatter:off
         return when (container) {
             is AutoContainer                 -> AutoGui(container)
-//            is ContainerBox                  -> guiOf(container, ::guiBox)
-//            is ContainerElectricHeater       -> guiOf(container, ::guiElectricHeater)
-//            is ContainerCombustionChamber    -> guiOf(container, ::guiCombustionChamber)
-//            is ContainerSteamBoiler          -> guiOf(container, ::guiSteamBoiler)
-//            is ContainerBattery              -> guiOf(container, ::guiBattery)
-//            is ContainerElectricFurnace      -> guiOf(container, ::guiElectricFurnace)
-//            is ContainerBrickFurnace         -> guiOf(container, ::guiBrickFurnace)
-//            is ContainerThermopile           -> guiOf(container, ::guiThermopile)
-//            is ContainerWindTurbine          -> guiOf(container, ::guiWindTurbine)
-//            is ContainerRfHeater             -> guiOf(container, ::guiRfHeater)
-//            is ContainerGasificationUnit     -> guiOf(container, ::guiGasificationUnit)
-//            is ContainerGrinder              -> guiOf(container, ::guiGrinder)
-//            is ContainerSieve                -> guiOf(container, ::guiSieve)
-//            is ContainerContainer            -> guiOf(container, ::guiContainer)
-//            is ContainerPumpjack             -> guiOf(container, ::guiPumpjack)
-            is ContainerShelvingUnit         -> guiOf(container, ::guiShelvingUnit)
-            is ContainerComputer             -> guiOf(container, ::guiComputer)
-            is ContainerMiningRobot          -> guiOf(container, ::guiMiningRobot)
-            is ContainerHydraulicPress       -> guiOf(container, ::guiHydraulicPress)
-//            is ContainerOilHeater            -> guiOf(container, ::guiOilHeater)
-//            is ContainerRefinery             -> guiOf(container, ::guiRefinery)
-//            is ContainerSteamEngine          -> guiOf(container, ::guiSteamEngine)
-//            is ContainerBigCombustionChamber -> guiOf(container, ::guiBigCombustionChamber)
-//            is ContainerRelay                -> guiOf(container, ::guiRelay)
-//            is ContainerFilter               -> guiOf(container, ::guiFilter)
-            is ContainerInserter             -> guiOf(container, ::guiInserter)
-//            is ContainerFabricator           -> guiOf(container, ::guiFabricator)
-//            is ContainerSolarTower           -> guiOf(container, ::guiSolarTower)
             else -> null
         }
         // @formatter:on
@@ -106,12 +76,17 @@ object GuiHandler : IGuiHandler {
             is TileFilter               -> autoContainer("filter", GuiBuilder::filterGui, tile, player, world, pos)
             is TileFabricator           -> autoContainer("fabricator", GuiBuilder::fabricatorGui, tile, player, world, pos)
             is TileSolarTower           -> autoContainer("solar_tower", GuiBuilder::solarTowerGui, tile, player, world, pos)
-
-            is TileHydraulicPress       -> ContainerHydraulicPress(tile, player, world, pos)
-            is TileInserter             -> ContainerInserter(tile, player, world, pos)
-            is TileShelvingUnit         -> ContainerShelvingUnit(tile, player, world, pos, ModuleShelvingUnitMb.Level.values()[ID])
-            is TileComputer             -> ContainerComputer(tile, player, world, pos)
-            is TileMiningRobot          -> ContainerMiningRobot(tile, player, world, pos)
+            is TileInserter             -> autoContainer("inserter", GuiBuilder::inserterGui, tile, player, world, pos)
+            is TileHydraulicPress       -> autoContainer("hydraulic_press", GuiBuilder::hydraulicPressGui, tile, player, world, pos)
+            is TileShelvingUnit         -> autoContainer("shelving_unit", GuiBuilder::shelvingUnitGui, tile, player, world, pos)
+            is TileRfTransformer        -> autoContainer("rf_transformer", GuiBuilder::rfTransformerGui, tile, player, world, pos)
+            is TileAirLock              -> autoContainer("airlock", GuiBuilder::airlockGui, tile, player, world, pos)
+            is TileSmallTank            -> autoContainer("small_tank", GuiBuilder::smallTankGui, tile, player, world, pos)
+            is TileTeslaTower           -> autoContainer("tesla_tower", GuiBuilder::teslaTowerGui, tile, player, world, pos)
+            is TileSolarPanel           -> autoContainer("solar_panel", GuiBuilder::solarPanelGui, tile, player, world, pos)
+            is TileTransposer           -> autoContainer("transposer", GuiBuilder::transposerGui, tile, player, world, pos)
+            is TileComputer             -> autoContainer("computer", GuiBuilder::computerGui, tile, player, world, pos)
+            is TileMiningRobot          -> autoContainer("mining_robot", GuiBuilder::miningRobotGui, tile, player, world, pos)
             else -> null
         }
         // @formatter:on

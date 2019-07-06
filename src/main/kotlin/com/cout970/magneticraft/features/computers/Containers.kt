@@ -1,14 +1,17 @@
 package com.cout970.magneticraft.features.computers
 
+import com.cout970.magneticraft.misc.gui.SlotType
+import com.cout970.magneticraft.misc.gui.TypedSlot
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.ITEM_FLOPPY_DISK
 import com.cout970.magneticraft.registry.fromItem
-import com.cout970.magneticraft.systems.gui.ContainerBase
+import com.cout970.magneticraft.systems.gui.AutoContainer
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_BUTTON
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_LIGHT
+import com.cout970.magneticraft.systems.gui.GuiBuilder
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Slot
 import net.minecraft.util.math.BlockPos
@@ -19,15 +22,16 @@ import net.minecraftforge.items.SlotItemHandler
  * Created by cout970 on 2017/08/10.
  */
 
-class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: World, blockPos: BlockPos) : ContainerBase(
-    player, world, blockPos) {
+class ContainerComputer(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
+    : AutoContainer(builder, configFunc, player, world, pos) {
 
+    val tile: TileComputer = tileEntity as TileComputer
     val motherboard = tile.computerModule.motherboard
     val monitor = tile.monitor
     val keyboard = tile.keyboard
 
     init {
-        addSlotToContainer(SlotItemHandler(tile.invModule.inventory, 0, 35, 225))
+        addSlotToContainer(TypedSlot(tile.invModule.inventory, 0, 35, 225, SlotType.FLOPPY))
         inventoryRegions += InventoryRegion(0..0)
 
         val hotBarIndex = inventorySlots.size
@@ -73,10 +77,10 @@ class ContainerComputer(val tile: TileComputer, player: EntityPlayer, world: Wor
     }
 }
 
-class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, world: World,
-                           blockPos: BlockPos) : ContainerBase(
-    player, world, blockPos) {
+class ContainerMiningRobot(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
+    : AutoContainer(builder, configFunc, player, world, pos) {
 
+    val tile: TileMiningRobot = tileEntity as TileMiningRobot
     val motherboard = tile.computerModule.motherboard
     val monitor = tile.monitor
     val keyboard = tile.keyboard
@@ -96,11 +100,11 @@ class ContainerMiningRobot(val tile: TileMiningRobot, player: EntityPlayer, worl
             inventoryRegions += InventoryRegion(0..15)
 
             // floppy disk
-            addSlotToContainer(SlotItemHandler(inv, 16, 69, 263))
+            addSlotToContainer(TypedSlot(inv, 16, 69, 263, SlotType.FLOPPY))
             inventoryRegions += InventoryRegion(16..16, filter = { ITEM_FLOPPY_DISK!!.fromItem(it) != null })
 
             // battery slot
-            addSlotToContainer(SlotItemHandler(inv, 17, 69, 284))
+            addSlotToContainer(TypedSlot(inv, 17, 69, 284, SlotType.BATTERY))
             inventoryRegions += InventoryRegion(17..17, filter = { FORGE_ENERGY!!.fromItem(it) != null })
         }
 

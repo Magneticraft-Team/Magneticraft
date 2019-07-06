@@ -8,20 +8,23 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron"
+      "ore": "lightPlateIron",
+      "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "ore": "ingotIron",
+      "count": 1
     },
     "C": {
-      "item": "magneticraft:multiblock_parts",
-      "data": 0
+      "item": "magneticraft:crafting",
+      "count": 1,
+      "data": 2
     }
   },
   "result": {
     "item": "magneticraft:conveyor_belt",
-    "data": 0,
-    "count": 8
+    "count": 12,
+    "data": 0
   }
 }

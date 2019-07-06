@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing
 
 class ModuleTransposer(
     val buffer: PneumaticBuffer,
+    val itemFilter: ModuleItemFilter,
     val facing: () -> EnumFacing,
     override val name: String = "module_transposer"
 ) : IModule {
@@ -29,6 +30,7 @@ class ModuleTransposer(
             for (slot in 0 until inventory.slots) {
                 val stack = inventory.extractItem(slot, 64, true)
                 if (stack.isEmpty) continue
+                if (!itemFilter.filterAllowStack(stack)) continue
 
                 buffer.add(inventory.extractItem(slot, 64, false))
                 return
@@ -42,11 +44,18 @@ class ModuleTransposer(
 
         val items = world.getEntitiesWithinAABB(EntityItem::class.java, aabb)
             .filter { !it.isDead }
+            .toMutableSet()
 
-        if (items.isNotEmpty()) {
+        while (items.isNotEmpty()) {
             val target = items.first()
-            buffer.add(target.item)
-            target.setDead()
+
+            if (itemFilter.filterAllowStack(target.item)) {
+                buffer.add(target.item)
+                target.setDead()
+                break
+            }
+
+            items.remove(target)
         }
     }
 }

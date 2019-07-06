@@ -29,7 +29,7 @@ open class TypedSlot(
 }
 
 enum class SlotType {
-    NORMAL, INPUT, OUTPUT, FILTER, BUTTON
+    NORMAL, INPUT, OUTPUT, FILTER, BUTTON, FLOPPY, BATTERY
 }
 
 /**
