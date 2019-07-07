@@ -320,7 +320,7 @@ fun GuiBuilder.refineryGui(tile: TileRefinery) {
         playerInventory()
     }
     bars {
-        consumptionBar(tile.processModule.consumption, Config.refineryMaxConsumption)
+        machineFluidBar(tile.processModule.consumption, Config.refineryMaxConsumption)
         tank(tile.steamTank, TankIO.IN)
         tank(tile.inputTank, TankIO.IN)
         tank(tile.outputTank0, TankIO.OUT)

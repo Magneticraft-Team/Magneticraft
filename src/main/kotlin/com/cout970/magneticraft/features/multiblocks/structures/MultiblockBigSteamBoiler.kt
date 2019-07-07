@@ -53,7 +53,7 @@ object MultiblockBigSteamBoiler : Multiblock() {
 
     val hitboxes = listOf(
         Vec3d(8.000, 53.000, -30.000) * PIXEL to Vec3d(30.000, 62.000, -8.000) * PIXEL,
-        Vec3d(4.000, 62.000, -11.000) * PIXEL to Vec3d(12.000, 64.000, -3.000) * PIXEL,
+        Vec3d(4.000, 62.000, -12.000) * PIXEL to Vec3d(12.000, 64.000, -4.000) * PIXEL,
         Vec3d(-14.000, 53.000, -30.000) * PIXEL to Vec3d(30.000, 62.000, 14.000) * PIXEL,
         Vec3d(30.000, 16.000, -30.000) * PIXEL to Vec3d(31.000, 17.000, 15.000) * PIXEL,
         Vec3d(-16.000, 0.000, -32.000) * PIXEL to Vec3d(32.000, 8.000, 16.000) * PIXEL,

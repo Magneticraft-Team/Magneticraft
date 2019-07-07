@@ -64,7 +64,7 @@ object Config {
     var electricFurnaceMaxConsumption = 20.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Oil Heater Max Consumption")
-    var oilHeaterMaxConsumption = 60.0
+    var oilHeaterMaxConsumption = 120.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Refinery Max Consumption in Steam mB")
     var refineryMaxConsumption = 20.0

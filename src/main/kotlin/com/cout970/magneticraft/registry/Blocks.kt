@@ -23,7 +23,7 @@ fun initBlocks(registry: IForgeRegistry<Block>) {
 
     val data = Magneticraft.asmData.getAll(RegisterBlocks::class.java.canonicalName)
 
-    data.forEach { it ->
+    data.forEach {
         try {
             @Suppress("UNCHECKED_CAST")
             val clazz = Class.forName(it.className) as Class<IBlockMaker>
