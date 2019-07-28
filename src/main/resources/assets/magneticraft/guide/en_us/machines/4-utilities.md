@@ -6,3 +6,4 @@
 - [AirLock](utilities/4-airlock.md)
 - [Feeding Trough](utilities/5-feeding-trough.md)
 - [Copper Tank](utilities/6-copper-tank.md)
+- [Fabricator](utilities/7-fabricator.md)

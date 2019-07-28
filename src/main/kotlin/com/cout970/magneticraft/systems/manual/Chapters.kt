@@ -3,6 +3,7 @@ package com.cout970.magneticraft.systems.manual
 import com.cout970.magneticraft.misc.ResourceList
 import com.cout970.magneticraft.misc.logError
 import net.minecraft.client.Minecraft
+import kotlin.streams.toList
 
 /**
  * Created by cout970 on 2017/08/02.
@@ -23,7 +24,7 @@ fun loadBook(): Book {
         val locations = ResourceList.getGuideBookPages(lang)
         val resources = locations.map { it to Minecraft.getMinecraft().resourceManager.getResource(it) }
 
-        val sections = resources.mapNotNull { (loc, res) ->
+        val texts = resources.mapNotNull { (loc, res) ->
 
             val text = res.inputStream.reader().readText()
 
@@ -32,13 +33,19 @@ fun loadBook(): Book {
 
             val prefix = name.substringBeforeLast('/', "")
 
-            Section(name, parseMarkdownDocument(text, prefix))
+            Triple(text, prefix, name)
         }
+
+        val parsed = texts.parallelStream().map { (text, prefix, name) ->
+            parseMarkdownDocument(text, prefix) to name
+        }.toList()
+
+        val sections = parsed.map { (md, name) -> Section(name, md) }
 
         checkInvalidLinks(sections)
 
         val pages = sections.map { it.name to it }.toMap()
-        return Book(pages["index"]!!, pages)
+        return Book(pages["index"] ?: error("No index page"), pages)
 
     } catch (e: Exception) {
         e.printStackTrace()

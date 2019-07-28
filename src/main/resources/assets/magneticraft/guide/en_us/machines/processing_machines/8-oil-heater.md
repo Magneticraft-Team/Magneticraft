@@ -12,3 +12,8 @@ The fluid input is at the back and the fluid output is at the top.
 
 
 This structure is a [multiblock](../../3-multiblocks.md) of size *3, 3, 3* (x, y, z).
+
+Materials needed:
+- 1 x Oil Heater Blueprint
+- 13 x Support Column
+- 12 x Corrugate Iron Machine Block

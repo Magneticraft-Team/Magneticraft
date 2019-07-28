@@ -6,7 +6,6 @@ import com.cout970.magneticraft.misc.logError
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
-import com.cout970.magneticraft.misc.vector.offset
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
@@ -22,8 +21,8 @@ import java.util.*
 class CompBookRenderer : IComponent {
 
     companion object {
-        val BACKGROUND = resource("textures/gui/guide/book.png")
-        val backgroundSize: IVector2 = vec2Of(280, 186)
+        val backgroundTexture = resource("textures/gui/guide/book_alt.png")
+        val backgroundSize: IVector2 = vec2Of(280, 180)
         val scale get() = Config.guideBookScale
 
         var book: Book = loadBook()
@@ -37,10 +36,14 @@ class CompBookRenderer : IComponent {
     override val size: IVector2 = vec2Of(280, 186) * scale
     override lateinit var gui: IGui
 
+    // Processed pages to be rendered
     var pages: List<Page> = emptyList()
-    val pageSize get() = vec2Of(110 * scale, scale * 130)
-    val pageOffset get() = 130 * scale
-    val textOffset get() = vec2Of(22, 24) * scale
+
+    // Offset form the left-top corner
+    val textOffset get() = vec2Of(14, 14) * scale
+
+    // Size of bounding box of the page, text cannot be placed outside this box
+    val pageSize get() = vec2Of(250 * scale, scale * 148)
 
     override fun init() {
         openSection()
@@ -85,46 +88,45 @@ class CompBookRenderer : IComponent {
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         GlStateManager.color(1f, 1f, 1f)
-        gui.bindTexture(BACKGROUND)
-        gui.drawTexture(DrawableBox(gui.pos, size, Vec2d.ZERO, backgroundSize, vec2Of(512)))
+        gui.bindTexture(backgroundTexture)
+        gui.drawTexture(gui.pos, size, Vec2d.ZERO, backgroundSize, vec2Of(512))
 
         if (currentSection != "index") {
-            renderArrow(Arrow.INDEX, mouse in Arrow.INDEX.collisionBox.offset(gui.pos))
+            renderArrow(Arrow.INDEX, mouse in arrowHitbox(Arrow.INDEX))
         }
-        if (pageIndex >= 2)
-            renderArrow(Arrow.LEFT, mouse in Arrow.LEFT.collisionBox.offset(gui.pos))
-        if (pageIndex + 2 in pages.indices)
-            renderArrow(Arrow.RIGHT, mouse in Arrow.RIGHT.collisionBox.offset(gui.pos))
+
+        if (pageIndex >= 1) {
+            renderArrow(Arrow.LEFT, mouse in arrowHitbox(Arrow.LEFT))
+        }
+
+        if (pageIndex + 1 in pages.indices) {
+            renderArrow(Arrow.RIGHT, mouse in arrowHitbox(Arrow.RIGHT))
+        }
 
         if (pageIndex in pages.indices) {
             renderPage(pages[pageIndex], mouse, gui.pos + textOffset)
-        }
-        if (pageIndex + 1 in pages.indices) {
-            renderPage(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
         }
     }
 
     override fun onMouseClick(mouse: Vec2d, mouseButton: Int): Boolean {
 
-        if (pageIndex >= 2 && mouse in Arrow.LEFT.collisionBox.offset(gui.pos)) {
-            pageIndex -= 2
-            return true
-        }
-        if (pageIndex + 2 in pages.indices && mouse in Arrow.RIGHT.collisionBox.offset(gui.pos)) {
-            pageIndex += 2
+        if (pageIndex - 1 in pages.indices && mouse in arrowHitbox(Arrow.LEFT)) {
+            pageIndex--
             return true
         }
 
-        if (currentSection != "index" && mouse in Arrow.INDEX.collisionBox.offset(gui.pos)) {
+        if (pageIndex + 1 in pages.indices && mouse in arrowHitbox(Arrow.RIGHT)) {
+            pageIndex++
+            return true
+        }
+
+        if (currentSection != "index" && mouse in arrowHitbox(Arrow.INDEX)) {
             sectionHistory.clear()
             openPage("index", 0)
         }
 
         if (pageIndex in pages.indices) {
-            var link = checkLinkClick(pages[pageIndex], mouse, gui.pos + textOffset)
-            if (link == null && (pageIndex + 1) in pages.indices) {
-                link = checkLinkClick(pages[pageIndex + 1], mouse, vec2Of(pageOffset, 0) + gui.pos + textOffset)
-            }
+            val link = checkLinkClick(pages[pageIndex], mouse, gui.pos + textOffset)
             if (link != null) {
                 if (link.linkSection in book.sections) {
                     openPage(link.linkSection, link.linkPage)
@@ -141,6 +143,8 @@ class CompBookRenderer : IComponent {
         when (keyCode) {
             14 -> goBack()
             28 -> goForward()
+            205 -> if (pageIndex + 1 in pages.indices) pageIndex++ // Right
+            203 -> if (pageIndex - 1 in pages.indices) pageIndex-- // Left
             else -> return false
         }
         return true
@@ -157,9 +161,10 @@ class CompBookRenderer : IComponent {
 
     fun renderArrow(it: Arrow, hover: Boolean) {
         val uv = if (hover) it.hoverUv to it.uvSize else it.uvPos to it.uvSize
-        gui.drawTexture(DrawableBox(gui.pos + it.pos, it.size, uv.first, uv.second, vec2Of(512)))
-    }
+        val (pos, size) = arrowHitbox(it)
 
+        gui.drawTexture(DrawableBox(gui.pos + pos, size, uv.first, uv.second, vec2Of(512)))
+    }
 
     fun renderPage(page: Page, mouse: IVector2, pos: IVector2) {
         page.text.forEach {
@@ -172,7 +177,6 @@ class CompBookRenderer : IComponent {
     }
 
     fun renderTextBox(it: TextBox, pos: IVector2, color: Int) {
-
         gui.drawShadelessString(
             text = it.txt,
             pos = pos + it.pos,
@@ -180,15 +184,22 @@ class CompBookRenderer : IComponent {
         )
     }
 
-    enum class Arrow(val pos: IVector2, val size: IVector2 = vec2Of(18, 26) * scale,
+    fun arrowHitbox(arrow: Arrow): Pair<IVector2, IVector2> {
+        val pos = when (arrow) {
+            Arrow.LEFT -> vec2Of(20 * scale, 178 * scale)
+            Arrow.RIGHT -> vec2Of(242 * scale, 178 * scale)
+            Arrow.INDEX -> vec2Of(130 * scale, 178 * scale)
+        }
+        return (pos + gui.pos) to (arrow.size * scale)
+    }
+
+    enum class Arrow(val size: IVector2 = vec2Of(18, 26),
                      val uvSize: IVector2 = vec2Of(18, 26),
                      val uvPos: IVector2,
                      val hoverUv: IVector2) {
 
-        LEFT(pos = vec2Of(30 * scale, 164 * scale), uvPos = vec2Of(26, 188), hoverUv = vec2Of(26, 218)),
-        RIGHT(pos = vec2Of(232 * scale, 164 * scale), uvPos = vec2Of(4, 188), hoverUv = vec2Of(4, 218)),
-        INDEX(pos = vec2Of(98 * scale, 172 * scale), uvPos = vec2Of(4, 247), hoverUv = vec2Of(26, 247));
-
-        val collisionBox = pos to size
+        LEFT(uvPos = vec2Of(40, 180), hoverUv = vec2Of(60, 180)),
+        RIGHT(uvPos = vec2Of(80, 180), hoverUv = vec2Of(100, 180)),
+        INDEX(uvPos = vec2Of(0, 180), hoverUv = vec2Of(20, 180));
     }
 }
