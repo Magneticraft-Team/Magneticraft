@@ -87,6 +87,7 @@ object GuiHandler : IGuiHandler {
             is TileTransposer           -> autoContainer("transposer", GuiBuilder::transposerGui, tile, player, world, pos)
             is TileComputer             -> autoContainer("computer", GuiBuilder::computerGui, tile, player, world, pos)
             is TileMiningRobot          -> autoContainer("mining_robot", GuiBuilder::miningRobotGui, tile, player, world, pos)
+            is TileBigElectricFurnace   -> autoContainer("big_electric_furnace", GuiBuilder::bigElectricFurnaceGui, tile, player, world, pos)
             else -> null
         }
         // @formatter:on

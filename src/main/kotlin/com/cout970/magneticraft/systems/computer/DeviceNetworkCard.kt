@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.systems.config.Config
 import net.minecraft.util.math.BlockPos
@@ -240,11 +241,11 @@ class DeviceNetworkCard(val parent: ITileRef) : IDevice, ITileRef by parent {
         }
     }
 
-    override fun readByte(addr: Int): Byte {
+    override fun readByte(bus: IRW, addr: Int): Byte {
         return memStruct.read(addr)
     }
 
-    override fun writeByte(addr: Int, data: Byte) {
+    override fun writeByte(bus: IRW, addr: Int, data: Byte) {
         memStruct.write(addr, data)
     }
 

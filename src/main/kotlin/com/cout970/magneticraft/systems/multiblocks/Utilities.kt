@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.multiblocks
 
+import com.cout970.magneticraft.features.multiblock_parts.Blocks.ColumnOrientation.*
 import com.cout970.magneticraft.features.multiblock_parts.toColumnAxis
 import com.cout970.magneticraft.misc.i18n
 import com.cout970.magneticraft.misc.inventory.stack
@@ -63,7 +64,12 @@ fun Multiblock.columnBlock(dir: EnumFacing): ContextBlockComponent {
 
             if (state.block == expected.block) {
                 val keyStr = "text.magneticraft.multiblock.invalid_column_orientation"
-                keyStr.i18n(vecStr, state.prettyFormat(), axis.name.toLowerCase().replace("_", " "))
+                val axisName = when (axis) {
+                    AXIS_Y -> "Axis Y"
+                    AXIS_X -> "Axis X"
+                    AXIS_Z -> "Axis Z"
+                }
+                keyStr.i18n(vecStr, state.prettyFormat(), axisName)
             } else {
                 val keyStr = "text.magneticraft.multiblock.invalid_block"
                 keyStr.i18n(vecStr, state.prettyFormat(), expected.prettyFormat())

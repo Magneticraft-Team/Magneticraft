@@ -53,7 +53,7 @@ open class ElectricNode(
             lastTick -> return
             lastTick + 1 -> {
                 lastTick = tick
-                amperage = amperageCount * 0.5
+                amperage = amperageCount //* 0.5
                 amperageCount = 0.0
             }
             else -> {

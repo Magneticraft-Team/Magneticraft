@@ -22,8 +22,14 @@
     },
     "electric_furnace": {
         "points": {
-            "input_slot": [101, 17],
-            "output_slot": [101, 49]
+            "input_slot": [108, 17],
+            "output_slot": [108, 49]
+        }
+    },
+    "big_electric_furnace": {
+        "points": {
+            "input_slot": [108, 17],
+            "output_slot": [108, 49]
         }
     },
     "brick_furnace": {

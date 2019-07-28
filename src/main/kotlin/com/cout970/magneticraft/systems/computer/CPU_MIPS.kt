@@ -444,13 +444,15 @@ class CPU_MIPS : ICPU {
             "t4", "t5", "t6", "t7", "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "t8", "t9", "k0", "k1", "gp",
             "sp", "fp", "ra")
 
-        val TYPE_R = arrayOf("SLL  ", "UNKNOW", "SRL  ", "SRA  ", "SLLV ", "UNKNOW", "SRLV ", "SRAV ", "JR   ", "JALR ",
-            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MFHI ", "MTHI ", "MFLO ", "MTLO ",
-            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "MULT ", "MULTU", "DIV  ", "DIVU ", "UNKNOW", "UNKNOW",
-            "UNKNOW", "UNKNOW", "ADD  ", "ADDU ", "SUB  ", "SUBU ", "AND  ", "OR   ", "XOR  ", "NOR  ", "UNKNOW",
-            "UNKNOW", "SLT  ", "SLTU ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-            "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
-            "UNKNOW", "UNKNOW", "UNKNOW")
+        val TYPE_R = arrayOf(
+            "SLL   ", "UNKN01", "SRL   ", "SRA   ", "SLLV  ", "UNKN05", "SRLV  ", "SRAV  ", "JR    ", "JALR  ",
+            "UNKN10", "UNKN11", "UNKN12", "UNKN13", "UNKN14", "UNKN15", "MFHI  ", "MTHI  ", "MFLO  ", "MTLO  ",
+            "UNKN20", "UNKN21", "UNKN22", "UNKN23", "MULT  ", "MULTU ", "DIV   ", "DIVU  ", "UNKN28", "UNKN29",
+            "UNKN30", "UNKN31", "ADD   ", "ADDU  ", "SUB   ", "SUBU  ", "AND   ", "OR    ", "XOR   ", "NOR   ",
+            "UNKN40", "UNKN41", "SLT   ", "SLTU  ", "UNKN44", "UNKN45", "UNKN46", "UNKN47", "UNKN48", "UNKN49",
+            "UNKN50", "UNKN51", "UNKN52", "UNKN53", "UNKN54", "UNKN55", "UNKN56", "UNKN57", "UNKN58", "UNKN59",
+            "UNKN60", "UNKN61", "UNKN62", "UNKN63"
+        )
 
         val TYPE_I = arrayOf("UNKNOW", "BGEZ ", "UNKNOW", "UNKNOW", "BEQ  ", "BNE  ", "BLEZ ", "BGTZ ", "ADDI ",
             "ADDIU", "SLTI ", "SLTIU", "ANDI ", "ORI  ", "XORI ", "LUI  ", "UNKNOW", "UNKNOW", "UNKNOW", "UNKNOW",
@@ -545,22 +547,22 @@ class CPU_MIPS : ICPU {
                 log("\t %d: \t %s : 0x%08x (%08d)", i, registerNames[i], getRegister(i), getRegister(i))
             }
 
-            println("Code before error: ")
+            debug("Code before error: ")
             for (j in 0..15) {
                 val i = 15 - j
                 val word = bus.readWord(pfPC - i * 4)
-                println("(PC 0x%08x) 0x%08x            %s".format(pfPC - i * 4, word, decompileInst(word)))
+                debug("(PC 0x%08x) 0x%08x            %s".format(pfPC - i * 4, word, decompileInst(word)))
             }
-            println("Code after error: ")
+            debug("Code after error: ")
             for (i in 0..15) {
                 val word = bus.readWord(pfPC + i * 4)
-                println("(PC 0x%08x) 0x%08x            %s".format(pfPC + i * 4, word, decompileInst(word)))
+                debug("(PC 0x%08x) 0x%08x            %s".format(pfPC + i * 4, word, decompileInst(word)))
             }
 
-            println("Stacktrace:")
-            println("Stack Pointer: 0x%08x".format(getRegister(29)))
+            debug("Stacktrace:")
+            debug("Stack Pointer: 0x%08x".format(getRegister(29)))
             for (i in 0..50) {
-                println("(0x%08x) 0x%08x".format(getRegister(29) + i * 4,
+                debug("(0x%08x) 0x%08x".format(getRegister(29) + i * 4,
                     bus.readWord(getRegister(29) + i * 4)))
             }
         } else {

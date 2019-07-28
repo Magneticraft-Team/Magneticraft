@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "A",
+    "B"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "paper",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBrick",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:big_electric_furnace",
+    "count": 1,
+    "data": 0
+  }
+}

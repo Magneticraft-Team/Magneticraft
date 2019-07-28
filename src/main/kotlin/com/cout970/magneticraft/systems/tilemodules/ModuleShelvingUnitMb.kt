@@ -95,9 +95,10 @@ class ModuleShelvingUnitMb(
 
         if (module.chestCount[levelIndex] < CHESTS_PER_LEVEL) {
             module.chestCount[levelIndex]++
-            module.container.sendUpdateToNearPlayers()
-            chests.insertItem(stack.withSize(1), false)
+            module.chests.insertItem(stack.withSize(1), false)
             stack.shrink(1)
+            module.container.markDirty()
+            module.container.sendUpdateToNearPlayers()
             return true
         }
         return false
@@ -186,14 +187,6 @@ class ModuleShelvingUnitMb(
             in (27 * PIXEL)..(43 * PIXEL) -> Level.MIDDLE
             in (43 * PIXEL)..(48 * PIXEL) -> Level.TOP
             else -> Level.TOP
-        }
-    }
-
-    fun getLevelByPosY(pos: BlockPos): Level {
-        return when {
-            pos.y == this.pos.y + 2 -> Level.TOP
-            pos.y == this.pos.y + 1 -> Level.BOTTOM
-            else -> Level.BOTTOM
         }
     }
 

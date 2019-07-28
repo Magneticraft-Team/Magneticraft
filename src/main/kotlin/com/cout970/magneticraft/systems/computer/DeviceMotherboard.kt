@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.split
 import com.cout970.magneticraft.misc.splitSet
@@ -96,11 +97,11 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
         return pos
     }
 
-    override fun readByte(addr: Int): Byte {
+    override fun readByte(bus: IRW, addr: Int): Byte {
         return memStruct.read(addr)
     }
 
-    override fun writeByte(addr: Int, data: Byte) {
+    override fun writeByte(bus: IRW, addr: Int, data: Byte) {
         memStruct.write(addr, data)
     }
 

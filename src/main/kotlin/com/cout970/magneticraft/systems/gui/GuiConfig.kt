@@ -1,8 +1,10 @@
 package com.cout970.magneticraft.systems.gui
 
+import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.google.gson.*
+import java.io.File
 import java.lang.reflect.Type
 
 data class GuiConfig(
@@ -32,12 +34,17 @@ private object Vec2Adapter : JsonDeserializer<IVector2> {
 }
 
 private fun load(): Map<String, GuiConfig> {
-    val path = "assets/magneticraft/gui_config.json"
     val gson = GsonBuilder()
         .registerTypeAdapter(IVector2::class.java, Vec2Adapter)
         .create()
 
-    val input = Thread.currentThread().contextClassLoader.getResourceAsStream(path) ?: error("Not found: $path")
+    val input = if (Debug.DEBUG && Debug.srcDir != null) {
+        File(Debug.srcDir!!, "src/main/resources/assets/magneticraft/gui_config.json").inputStream()
+    } else {
+        val path = "assets/magneticraft/gui_config.json"
+        Thread.currentThread().contextClassLoader.getResourceAsStream(path) ?: error("Not found: $path")
+    }
+
     val obj = JsonParser().parse(input.bufferedReader()).asJsonObject
 
     val map = mutableMapOf<String, GuiConfig>()

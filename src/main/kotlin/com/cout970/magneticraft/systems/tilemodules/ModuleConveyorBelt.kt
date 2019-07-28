@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.api.conveyorbelt.IConveyorBelt
+import com.cout970.magneticraft.api.conveyorbelt.Route
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.features.automatic_machines.Blocks
-import com.cout970.magneticraft.features.automatic_machines.TileConveyorBelt
 import com.cout970.magneticraft.misc.getList
 import com.cout970.magneticraft.misc.inventory.insertItem
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -10,10 +11,13 @@ import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.list
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.TimeCache
-import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.getCap
 import com.cout970.magneticraft.misc.vector.plus
+import com.cout970.magneticraft.misc.vector.times
+import com.cout970.magneticraft.misc.vector.toBlockPos
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.registry.CONVEYOR_BELT
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.systems.blocks.IOnActivated
@@ -36,8 +40,10 @@ import net.minecraftforge.items.IItemHandler
  */
 class ModuleConveyorBelt(
     val facingGetter: () -> EnumFacing,
+    val hardLimit: Float? = null,
+    val frontOffset: Int? = null,
     override val name: String = "module_conveyor_belt"
-) : IModule, IOnActivated {
+) : IModule, IOnActivated, IConveyorBelt {
 
     override lateinit var container: IModuleContainer
 
@@ -46,13 +52,21 @@ class ModuleConveyorBelt(
         override fun getPos(): BlockPos = container.pos
     }
 
-    val facing get() = facingGetter()
+    override fun getFacing(): EnumFacing = facingGetter()
 
-    val boxes = mutableListOf<BoxedItem>()
+    private val boxes = mutableListOf<BoxedItem>()
     var toUpdate = false
     private val newBoxes = mutableListOf<BoxedItem>()
     private var flip = true
     private var needsSync = true
+
+    override fun getBoxes(): MutableList<BoxedItem> = boxes
+
+    override fun getLevel(): Int = when {
+        isUp -> 1
+        isDown -> -1
+        else -> 0
+    }
 
     fun generateGlobalBitMap(): IBitMap {
         val map = getSurroundMap()
@@ -69,27 +83,27 @@ class ModuleConveyorBelt(
     }
 
     val hasBack = TimeCache(tileRefCallback, 10) {
-        world.getTile<TileConveyorBelt>(pos.add(facing.opposite.directionVec))?.facing == facing
+        world.getCap(CONVEYOR_BELT!!, pos.add(facing.opposite.directionVec), null)?.facing == facing
     }
 
     val hasFront = TimeCache(tileRefCallback, 10) {
-        world.getTile<TileConveyorBelt>(pos.add(facing.directionVec)) != null
+        world.getCap(CONVEYOR_BELT!!, pos.add(facing.directionVec), null) != null
     }
 
     val hasLeft = TimeCache(tileRefCallback, 10) {
-        world.getTile<TileConveyorBelt>(pos.add(facing.rotateYCCW().directionVec))?.facing == facing.rotateY()
+        world.getCap(CONVEYOR_BELT!!, pos.add(facing.rotateYCCW().directionVec), null)?.facing == facing.rotateY()
     }
 
     val hasRight = TimeCache(tileRefCallback, 10) {
-        world.getTile<TileConveyorBelt>(pos.add(facing.rotateY().directionVec))?.facing == facing.rotateYCCW()
+        world.getCap(CONVEYOR_BELT!!, pos.add(facing.rotateY().directionVec), null)?.facing == facing.rotateYCCW()
     }
 
     val hasFrontUp = TimeCache(tileRefCallback, 10) {
-        world.getTile<TileConveyorBelt>(pos + facing + EnumFacing.UP)?.facing == facing
+        world.getCap(CONVEYOR_BELT!!, pos + facing + EnumFacing.UP, null)?.facing == facing
     }
 
     val hasBackUp = TimeCache(tileRefCallback, 10) {
-        world.getTile<TileConveyorBelt>(pos + facing.opposite + EnumFacing.UP)?.facing == facing
+        world.getCap(CONVEYOR_BELT!!, pos + facing.opposite + EnumFacing.UP, null)?.facing == facing
     }
 
     val hasBlockUp = TimeCache(tileRefCallback, 10) {
@@ -134,10 +148,10 @@ class ModuleConveyorBelt(
 
         val tile = frontTile()
         val frontInv = tile?.let { ITEM_HANDLER!!.fromTile(it, facing.opposite) }
-        val frontBelt = tile as? TileConveyorBelt
+        val frontBelt = tile?.let { CONVEYOR_BELT!!.fromTile(it, facing.opposite) }
 
         // if there is no block in front don't go all the way
-        val limit = if (canInsertIntoBelt(frontBelt)) 15f else 13f
+        val limit = hardLimit ?: if (frontBelt != null && canInsertIntoBelt(frontBelt)) 15f else 13f
 
         advanceItems(limit)
 
@@ -154,17 +168,16 @@ class ModuleConveyorBelt(
         }
     }
 
-    fun canInsertIntoBelt(frontBelt: TileConveyorBelt?): Boolean {
-        val mod = frontBelt?.conveyorModule ?: return false
+    fun canInsertIntoBelt(frontBelt: IConveyorBelt): Boolean {
         if (frontBelt.facing.opposite == facing) return false
-        return (!mod.isUp && !mod.isDown) || frontBelt.facing == facing
+        return (frontBelt.level == 0) || frontBelt.facing == facing
     }
 
-    fun moveToNextBelt(frontBelt: TileConveyorBelt, limit: Float) {
+    fun moveToNextBelt(frontBelt: IConveyorBelt, limit: Float) {
         if (canInsertIntoBelt(frontBelt)) {
             val removed = boxes.removeAll {
                 if (it.position <= limit) return@removeAll false
-                frontBelt.conveyorModule.addItem(it.item, facing, it.route)
+                frontBelt.addItem(it.item, facing, it.route)
             }
             if (removed) {
                 markUpdate()
@@ -220,19 +233,25 @@ class ModuleConveyorBelt(
     }
 
     fun frontTile(): TileEntity? {
-        val frontPos = when {
-            isUp -> pos + facing + EnumFacing.UP
-            hasFront() -> pos + facing
-            hasBlockFront() -> pos + facing
-            else -> pos + facing + EnumFacing.DOWN
+        val frontPos = if (frontOffset != null) {
+            val offset = facing.toBlockPos().times(frontOffset)
+            pos + offset
+        } else {
+            when {
+                isUp -> pos + facing + EnumFacing.UP
+                hasFront() -> pos + facing
+                hasBlockFront() -> pos + facing
+                else -> pos + facing + EnumFacing.DOWN
+            }
         }
+
         return world.getTileEntity(frontPos)
     }
 
     // Note: this cannot be called on deserializeNBT or the game will crash of StackOverflow
     // because world field is not set and the tileEntity has not been added to the world yet
     val getSurroundMap = TimeCache(tileRefCallback, 10) {
-        val map = mutableMapOf<BitmapLocation, ModuleConveyorBelt>()
+        val map = mutableMapOf<BitmapLocation, IConveyorBelt>()
 
         val back = when {
             isUp -> pos + facing.opposite + EnumFacing.DOWN
@@ -249,26 +268,26 @@ class ModuleConveyorBelt(
         val left = pos + facing.rotateYCCW()
         val right = pos + facing.rotateY()
 
-        world.getTile<TileConveyorBelt>(back)?.let {
-            map += BitmapLocation.IN_BACK to it.conveyorModule
+        world.getCap(CONVEYOR_BELT!!, back, null)?.let {
+            map += BitmapLocation.IN_BACK to it
         }
-        world.getTile<TileConveyorBelt>(right)?.let {
-            map += BitmapLocation.IN_RIGHT to it.conveyorModule
+        world.getCap(CONVEYOR_BELT!!, right, null)?.let {
+            map += BitmapLocation.IN_RIGHT to it
         }
-        world.getTile<TileConveyorBelt>(left)?.let {
-            map += BitmapLocation.IN_LEFT to it.conveyorModule
+        world.getCap(CONVEYOR_BELT!!, left, null)?.let {
+            map += BitmapLocation.IN_LEFT to it
         }
-        world.getTile<TileConveyorBelt>(front)?.let {
-            if (it.conveyorModule.isUp || it.conveyorModule.isDown) {
+        world.getCap(CONVEYOR_BELT!!, front, null)?.let {
+            if (it.level == 1 || it.level == -1) {
                 if (it.facing == facing) {
-                    map += BitmapLocation.OUT_FRONT to it.conveyorModule
+                    map += BitmapLocation.OUT_FRONT to it
                 }
             } else {
                 when (it.facing) {
-                    facing -> map += BitmapLocation.OUT_FRONT to it.conveyorModule
-                    facing.opposite -> map += BitmapLocation.OUT_BACK to it.conveyorModule
-                    facing.rotateY() -> map += BitmapLocation.OUT_RIGHT to it.conveyorModule
-                    facing.rotateYCCW() -> map += BitmapLocation.OUT_LEFT to it.conveyorModule
+                    facing -> map += BitmapLocation.OUT_FRONT to it
+                    facing.opposite -> map += BitmapLocation.OUT_BACK to it
+                    facing.rotateY() -> map += BitmapLocation.OUT_RIGHT to it
+                    facing.rotateYCCW() -> map += BitmapLocation.OUT_LEFT to it
                     else -> Unit
                 }
             }
@@ -290,7 +309,7 @@ class ModuleConveyorBelt(
         return tempResult
     }
 
-    fun addItem(stack: ItemStack, simulated: Boolean): Boolean {
+    override fun addItem(stack: ItemStack, simulated: Boolean): Boolean {
 
         val route = if (flip) Route.LEFT_FORWARD else Route.RIGHT_FORWARD
 
@@ -310,7 +329,7 @@ class ModuleConveyorBelt(
         return test
     }
 
-    fun addItem(stack: ItemStack, side: EnumFacing, oldRoute: Route): Boolean {
+    override fun addItem(stack: ItemStack, side: EnumFacing, oldRoute: Route): Boolean {
         val newRoute = getRoute(facing, side, oldRoute)
         val box = BoxedItem(stack.copy(), 0f, newRoute, world.totalWorldTime)
         val bitmap = BitMap().apply { boxes.forEach { mark(it.getHitBox()) } }
@@ -441,6 +460,7 @@ class ModuleConveyorBelt(
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
 
+        if (cap == CONVEYOR_BELT) return this as T
         if (cap == ITEM_HANDLER && facing == EnumFacing.UP) {
             return object : IItemHandler {
 

@@ -1,8 +1,17 @@
 package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
+import com.cout970.magneticraft.features.automatic_machines.Blocks
+import com.cout970.magneticraft.features.automatic_machines.TileRendererConveyorBelt
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.RegisterRenderer
+import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.systems.tilerenderers.*
+import com.cout970.modelloader.api.*
+import com.cout970.modelloader.api.formats.gltf.GltfAnimationBuilder
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.GlStateManager.*
+import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.util.ResourceLocation
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 
 @RegisterRenderer(TileGrinder::class)
@@ -116,6 +125,99 @@ object TileRendererSteamTurbine : TileRendererMultiblock<TileSteamTurbine>() {
                 translate(-1.5f, -1.5f, 0f)
                 renderModel("blade")
             }
+        }
+    }
+}
+
+@RegisterRenderer(TileBigElectricFurnace::class)
+object TileRendererBigElectricFurnace : TileRendererMultiblock<TileBigElectricFurnace>() {
+
+    var belt: IRenderCache? = null
+
+    override fun init() {
+        createModelWithoutTexture(Multiblocks.bigElectricFurnace,
+            ModelSelector("multiblock", FilterAlways),
+            ModelSelector("dark", FilterString("Object 26"))
+        )
+
+        createModel(Blocks.conveyorBelt, listOf(
+            ModelSelector("back_legs", FilterRegex("back_leg.*")),
+            ModelSelector("front_legs", FilterRegex("front_leg.*")),
+            ModelSelector("lateral_left", FilterRegex("lateral_left")),
+            ModelSelector("lateral_right", FilterRegex("lateral_right")),
+            ModelSelector("panel_left", FilterRegex("panel_left")),
+            ModelSelector("panel_right", FilterRegex("panel_right"))
+        ), "base")
+
+        val anim = modelOf(Blocks.conveyorBelt, "anim")
+
+        //cleaning
+        belt?.close()
+
+        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
+        val texture = resource("blocks/machines/conveyor_belt_anim")
+
+        belt = updateTexture(beltModel, texture)
+    }
+
+    override fun render(te: TileBigElectricFurnace) {
+        Utilities.rotateFromCenter(te.facing, 0f)
+        // Input belt
+        renderBelt()
+        TileRendererConveyorBelt.renderDynamicParts(te.inConveyor, ticks)
+
+        // Main structure
+        translate(0f, 0f, -1f)
+        if (te.processModule.working) {
+            bindTexture(resource("textures/blocks/multiblocks/big_electric_furnace_on.png"))
+        } else {
+            bindTexture(resource("textures/blocks/multiblocks/big_electric_furnace_off.png"))
+        }
+        renderModel("multiblock")
+
+        // Dark interior
+        disableTexture2D()
+        if (te.processModule.working) {
+            color(0.2f, 0.1f, 0.05f, 1f)
+        } else {
+            color(0f, 0f, 0f, 1f)
+        }
+        renderModel("dark")
+        enableTexture2D()
+        color(1f, 1f, 1f, 1f)
+
+        // Exit belt
+        translate(0f, 0f, -1f)
+        renderBelt()
+        TileRendererConveyorBelt.renderDynamicParts(te.outConveyor, ticks)
+    }
+
+    fun renderBelt() {
+        belt?.render()
+
+        renderModel("default")
+        renderModel("panel_left")
+        renderModel("panel_right")
+        renderModel("back_legs")
+        renderModel("front_legs")
+    }
+
+    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): IRenderCache {
+        val raw = model.raw
+        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+        val animTexture = textureMap.getAtlasSprite(texture.toString())
+
+        return when (raw) {
+            is Model.Mcx -> {
+                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+                TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, ModelCache { ModelUtilities.renderModel(finalModel) })
+            }
+            is Model.Gltf -> {
+                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+                val anim = GltfAnimationBuilder().buildPlain(finalModel)
+                AnimationRenderCache(anim) { 0.0 }
+            }
+            else -> error("Invalid type: $raw, ${raw::class.java}")
         }
     }
 }

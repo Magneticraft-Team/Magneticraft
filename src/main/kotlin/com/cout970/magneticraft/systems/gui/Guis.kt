@@ -126,7 +126,25 @@ fun GuiBuilder.electricFurnaceGui(tile: TileElectricFurnace) {
     }
     bars {
         electricBar(tile.node)
+        storageBar(tile.storageModule)
         consumptionBar(tile.processModule.consumption, Config.electricFurnaceMaxConsumption)
+        progressBar(tile.processModule.timedProcess)
+        slotSpacer()
+    }
+}
+
+fun GuiBuilder.bigElectricFurnaceGui(tile: TileBigElectricFurnace) {
+    container {
+        slot(tile.invModule.inventory, 0, "input_slot", SlotType.INPUT)
+        slot(tile.invModule.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
+        region(0, 1, filter = { it, _ -> FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })
+        region(1, 1, filter = { _, _ -> false })
+        playerInventory()
+    }
+    bars {
+        electricBar(tile.node)
+        storageBar(tile.storageModule)
+        consumptionBar(tile.processModule.consumption, Config.bigElectricFurnaceMaxConsumption)
         progressBar(tile.processModule.timedProcess)
         slotSpacer()
     }

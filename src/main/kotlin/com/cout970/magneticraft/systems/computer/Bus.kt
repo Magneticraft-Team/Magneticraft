@@ -18,7 +18,7 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
         if (addr.isExternal()) {
             val ext = addr shr 16 and 0xFF
             val dev = devices[ext] ?: return 0
-            return dev.readByte(addr and 0xFFFF)
+            return dev.readByte(this, addr and 0xFFFF)
         }
         return ram.readByte(addr)
     }
@@ -27,7 +27,7 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
         if (addr.isExternal()) {
             val ext = addr shr 16 and 0xFF
             val dev = devices[ext] ?: return
-            dev.writeByte(addr and 0xFFFF, data)
+            dev.writeByte(this, addr and 0xFFFF, data)
         } else {
             ram.writeByte(addr, data)
         }
@@ -44,10 +44,10 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
             val c = (data shr 8  and 0xFF).toByte()
             val d = (data        and 0xFF).toByte()
 
-            dev.writeByte(addr + 3 and 0xFFFF, a)
-            dev.writeByte(addr + 2 and 0xFFFF, b)
-            dev.writeByte(addr + 1 and 0xFFFF, c)
-            dev.writeByte(addr     and 0xFFFF, d)
+            dev.writeByte(this, addr + 3 and 0xFFFF, a)
+            dev.writeByte(this, addr + 2 and 0xFFFF, b)
+            dev.writeByte(this, addr + 1 and 0xFFFF, c)
+            dev.writeByte(this, addr     and 0xFFFF, d)
             // @formatter:on
         } else {
             ram.writeWord(addr, data)
@@ -60,10 +60,10 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
             val dev = devices[ext] ?: return 0
 
             // @formatter:off
-            val a = dev.readByte(addr + 3 and 0xFFFF)
-            val b = dev.readByte(addr + 2 and 0xFFFF)
-            val c = dev.readByte(addr + 1 and 0xFFFF)
-            val d = dev.readByte(addr     and 0xFFFF)
+            val a = dev.readByte(this, addr + 3 and 0xFFFF)
+            val b = dev.readByte(this, addr + 2 and 0xFFFF)
+            val c = dev.readByte(this, addr + 1 and 0xFFFF)
+            val d = dev.readByte(this, addr     and 0xFFFF)
             // @formatter:on
 
             val ai = a.toInt() and 0xFF shl 24

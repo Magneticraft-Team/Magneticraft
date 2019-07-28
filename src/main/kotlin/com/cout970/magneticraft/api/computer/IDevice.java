@@ -7,7 +7,7 @@ public interface IDevice extends IMapSerializable {
 
     void update();
 
-    byte readByte(int addr);
+    byte readByte(IRW bus, int addr);
 
-    void writeByte(int addr, byte data);
+    void writeByte(IRW bus, int addr, byte data);
 }

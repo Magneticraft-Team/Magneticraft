@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.features.automatic_machines
 
+import com.cout970.magneticraft.api.conveyorbelt.IConveyorBelt
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBoxStorage
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.misc.RegisterRenderer
@@ -301,7 +302,7 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
     override fun render(te: TileConveyorBelt) {
         Utilities.rotateFromCenter(te.facing)
         renderStaticParts(te)
-        renderDynamicParts(te, ticks)
+        renderDynamicParts(te.conveyorModule, ticks)
         translate(0f, 12.5 * PIXEL, 0f)
 
         //debug hitboxes
@@ -342,27 +343,20 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
     }
 
 
-    fun renderDynamicParts(te: TileConveyorBelt, partialTicks: Float) {
+    fun renderDynamicParts(mod: IConveyorBelt, partialTicks: Float) {
         bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-        val mod = te.conveyorModule
 
-        te.conveyorModule.boxes.forEach { box ->
+        mod.boxes.forEach { box ->
             stackMatrix {
                 val boxPos = box.position + if (box.locked) 0f else partialTicks
                 val pos = box.getPos(partialTicks)
-                val y = when {
-                    mod.isUp -> boxPos / 16.0
-                    mod.isDown -> 1.0 - boxPos / 16.0
+                val y = when(mod.level) {
+                    1 -> boxPos / 16.0
+                    -1 -> 1.0 - boxPos / 16.0
                     else -> 0.0
                 }
-//                val angle = when {
-//                    mod.isUp -> 45.0f
-//                    mod.isDown -> -45.0f
-//                    else -> 0.0f
-//                }
                 translate(pos.xd, 13.5 * PIXEL + y, pos.zd)
-//                rotate(angle, 1, 0, 0)
-                Utilities.renderItem(box.item, te.facing)
+                Utilities.renderItem(box.item, mod.facing)
             }
         }
     }

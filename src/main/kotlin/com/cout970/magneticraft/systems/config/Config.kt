@@ -63,6 +63,9 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Big Electric Furnace Max Consumption")
+    var bigElectricFurnaceMaxConsumption = 200.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Oil Heater Max Consumption")
     var oilHeaterMaxConsumption = 120.0
 

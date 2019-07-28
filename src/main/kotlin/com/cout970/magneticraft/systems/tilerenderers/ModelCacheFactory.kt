@@ -26,7 +26,7 @@ object ModelCacheFactory {
 
         when (model) {
             is Model.Mcx -> processMcx(model, filters, useTextures, models, createDefault)
-            is Model.Gltf -> processGltf(model, filters, time, models, createDefault)
+            is Model.Gltf -> processGltf(model, filters, useTextures, time, models, createDefault)
             is Model.Obj -> {
                 if (createDefault) {
                     if (baked != null) {
@@ -43,6 +43,25 @@ object ModelCacheFactory {
         }
 
         return models
+    }
+
+    private fun removeTextures(model: AnimatedModel): AnimatedModel {
+        return AnimatedModel(model.rootNodes.map { removeTextures(it) }, model.channels)
+    }
+
+    private fun removeTextures(node: AnimatedModel.Node): AnimatedModel.Node {
+        return node.copy(
+            children = node.children.map { removeTextures(it) },
+            cache = removeTextures(node.cache)
+        )
+    }
+
+    private fun removeTextures(renderCache: IRenderCache): IRenderCache {
+        return when (renderCache) {
+            is ModelGroupCache -> ModelGroupCache(*renderCache.cache.map { removeTextures(it) }.toTypedArray())
+            is TextureModelCache -> ModelGroupCache(*renderCache.cache)
+            else -> renderCache
+        }
     }
 
     private fun processMcx(model: Model.Mcx, filters: List<ModelSelector>, useTextures: Boolean,
@@ -84,7 +103,7 @@ object ModelCacheFactory {
         if (createDefault) store("default", notUsed)
     }
 
-    private fun processGltf(model: Model.Gltf, filters: List<ModelSelector>, time: () -> Double, models: MutableMap<String, IRenderCache>,
+    private fun processGltf(model: Model.Gltf, filters: List<ModelSelector>, useTextures: Boolean, time: () -> Double, models: MutableMap<String, IRenderCache>,
                             createDefault: Boolean) {
 
         val scene = model.data.structure.scenes[0]
@@ -112,7 +131,11 @@ object ModelCacheFactory {
                 builder.build(model.data).first { it.first in validAnimations }.second
             }
 
-            val obj = AnimationRenderCache(newModel, time)
+            val obj = if (useTextures) {
+                AnimationRenderCache(newModel, time)
+            } else {
+                AnimationRenderCache(removeTextures(newModel), time)
+            }
 
             if (name in models) {
                 val old = models[name]!!

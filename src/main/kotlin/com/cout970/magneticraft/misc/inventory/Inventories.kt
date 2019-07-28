@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.misc.inventory
 
 import com.cout970.magneticraft.api.internal.ApiUtils
+import com.cout970.magneticraft.systems.blocks.BlockBase
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Items
@@ -34,8 +35,11 @@ fun IBlockState.stack(size: Int = 1): ItemStack {
                 FluidUtil.getFilledBucket(block.fluid.stack())
             }
         }
-        Item.getItemFromBlock(block) != Items.AIR -> {
+        Item.getItemFromBlock(block) == Items.AIR -> {
             ItemStack(block, size)
+        }
+        (block as? BlockBase)?.alwaysDropDefault == true -> {
+            ItemStack(block.getItemDropped(this, Random(), 0), size, block.getMetaFromState(this))
         }
         else -> {
             ItemStack(block.getItemDropped(this, Random(), 0), size, block.damageDropped(this))

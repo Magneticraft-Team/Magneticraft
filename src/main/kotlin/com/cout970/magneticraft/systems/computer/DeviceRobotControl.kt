@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.api.core.ITileRef
 
 /**
@@ -42,9 +43,9 @@ class DeviceRobotControl(val tile: ITileRef, val robot: IMiningRobot) : IDevice,
 
     override fun update() = Unit
 
-    override fun readByte(addr: Int): Byte = memStruct.read(addr)
+    override fun readByte(bus: IRW, addr: Int): Byte = memStruct.read(addr)
 
-    override fun writeByte(addr: Int, data: Byte) = memStruct.write(addr, data)
+    override fun writeByte(bus: IRW, addr: Int, data: Byte) = memStruct.write(addr, data)
 
     override fun serialize(): Map<String, Any> = mapOf()
 

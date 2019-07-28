@@ -92,8 +92,6 @@ abstract class TileBase : TileEntity() {
         super.readFromNBT(compound)
         if (compound.hasKey("TileData")) {
             load(compound.getCompoundTag("TileData"))
-        } else {
-            println(compound)
         }
     }
 

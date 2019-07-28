@@ -38,7 +38,8 @@ class ModuleElectricProcessing(
         val rate = workingRate * storage.getSpeed()
 
         //making sure that (speed * costPerTick) is an integer
-        val speed = Math.floor((rate * costPerTick)).toFloat() / costPerTick
+        val unit = costPerTick / workingRate
+        val speed = Math.floor((rate * unit)).toFloat() / unit
         if (speed > 0) {
             timedProcess.tick(world, speed)
         }
@@ -52,8 +53,9 @@ class ModuleElectricProcessing(
     }
 
     fun onWorkingTick(speed: Float) {
-        consumption += speed * costPerTick
-        storage.useEnergy(speed * costPerTick.toDouble())
+        val unit = costPerTick / workingRate
+        consumption += speed * unit
+        storage.useEnergy(speed.toDouble() * unit)
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {

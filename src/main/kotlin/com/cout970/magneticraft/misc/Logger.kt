@@ -27,13 +27,14 @@ fun warn(str: String, vararg args: Any) {
     Magneticraft.log.warn(str, *args)
 }
 
-fun debug(vararg obj: Any?) {
-    if (!Debug.DEBUG) return
+fun debug(vararg obj: Any?): Boolean {
+    if (!Debug.DEBUG) return false
     obj.joinToString().forEach {
         print(it)
     }
     print('\n')
 //    Magneticraft.log.info("[$MOD_ID][DEBUG]${obj.joinToString()}")
+    return false
 }
 
 fun t(msg: String, vararg params: Any): String {

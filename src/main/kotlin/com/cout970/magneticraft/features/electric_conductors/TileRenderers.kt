@@ -93,6 +93,10 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
             renderModel("base")
         }
     }
+
+    override fun isGlobalRenderer(te: TileConnector): Boolean {
+        return te.electricModule.outputWiredConnections.isNotEmpty()
+    }
 }
 
 @RegisterRenderer(TileElectricPole::class)

@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.api.computer.IResettable
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.systems.gui.DATA_ID_KEYBOARD_EVENT_CODE
@@ -105,11 +106,11 @@ class DeviceKeyboard : IDevice, IResettable {
         }
     }
 
-    override fun writeByte(addr: Int, data: Byte) {
+    override fun writeByte(bus: IRW, addr: Int, data: Byte) {
         memStruct.write(addr, data)
     }
 
-    override fun readByte(addr: Int): Byte {
+    override fun readByte(bus: IRW, addr: Int): Byte {
         return memStruct.read(addr)
     }
 

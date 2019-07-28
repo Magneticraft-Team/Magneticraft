@@ -2,6 +2,7 @@ package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IFloppyDisk
+import com.cout970.magneticraft.api.computer.IRW
 import java.io.RandomAccessFile
 import java.nio.charset.Charset
 import java.util.*
@@ -127,11 +128,11 @@ class DeviceFloppyDrive(val getDisk: () -> IFloppyDisk?) : IDevice {
         ReadWriteByteArray("buffer", getBuffer())
     )
 
-    override fun readByte(addr: Int): Byte {
+    override fun readByte(bus: IRW, addr: Int): Byte {
         return memStruct.read(addr)
     }
 
-    override fun writeByte(addr: Int, data: Byte) {
+    override fun writeByte(bus: IRW, addr: Int, data: Byte) {
         memStruct.write(addr, data)
     }
 

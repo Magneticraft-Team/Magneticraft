@@ -13,7 +13,7 @@ import net.minecraftforge.common.capabilities.Capability
 data class ConnectionSpot(
     val capability: Capability<*>,
     val pos: BlockPos,
-    val side: EnumFacing,
+    val side: EnumFacing?,
     val getter: () -> Any?
 )
 
@@ -84,13 +84,19 @@ class ModuleMultiblockIO(
     }
 
     fun getCapability(cap: Capability<*>, side: EnumFacing?, relPos: BlockPos): Any? {
-        if (connectionSpots.isEmpty() || side == null) return null
+        if (connectionSpots.isEmpty()) return null
 
         val direction = facing()
 
         val validCapability = connectionSpots.filter { it.capability == cap }
 
-        val validSide = validCapability.filter { direction.getRelative(it.side) == side }
+        val validSide = validCapability.filter {
+            if (it.side == null) {
+                side == null
+            } else {
+                direction.getRelative(it.side) == side
+            }
+        }
 
         val validPos = validSide.filter { direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos }
 
@@ -119,9 +125,10 @@ class ModuleMultiblockIO(
 
     private fun getConnectPoints(connections: List<ConnectionSpot>, direction: EnumFacing): List<Pair<BlockPos, EnumFacing>> {
         return connections
-            .filter { direction.getRelative(it.side).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
+            .filter { it.side != null }
+            .filter { direction.getRelative(it.side!!).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
             .map {
-                val dir = direction.getRelative(it.side)
+                val dir = direction.getRelative(it.side!!)
                 direction.rotatePoint(BlockPos.ORIGIN, it.pos) + dir.toBlockPos() to dir.opposite
             }
     }
@@ -133,7 +140,13 @@ class ModuleMultiblockIO(
 
         val direction = facing()
 
-        return connections.any { direction.getRelative(it.side) == facing }
+        return connections.any {
+            if (it.side == null) {
+                facing == null
+            } else {
+                direction.getRelative(it.side) == facing
+            }
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

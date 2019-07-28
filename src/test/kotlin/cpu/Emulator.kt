@@ -31,7 +31,7 @@ object Emulator {
     private lateinit var motherboard: Motherboard
 
     fun init(args: Array<String>) {
-        val img = "shell"
+        val img = "rust_drivers"
         val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
         val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
@@ -61,7 +61,6 @@ object Emulator {
         val display = createDisplay(monitor, keyboard)
 
         //start pc
-        cpu.debugLevel = 2
         restart()
 
         while (motherboard.isOnline) {
@@ -95,6 +94,7 @@ object Emulator {
         useOs = true
 
         motherboard.reset()
+        (motherboard.cpu as CPU_MIPS).debugLevel = 2
         motherboard.cyclesPerTick = 200000
         motherboard.start()
 

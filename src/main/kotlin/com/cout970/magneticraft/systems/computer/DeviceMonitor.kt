@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.systems.gui.DATA_ID_MONITOR_BUFFER
 import com.cout970.magneticraft.systems.gui.DATA_ID_MONITOR_CURSOR_COLUMN
@@ -57,11 +58,11 @@ class DeviceMonitor : IDevice {
         }
     }
 
-    override fun readByte(pointer: Int): Byte {
+    override fun readByte(bus: IRW, pointer: Int): Byte {
         return memStruct.read(pointer)
     }
 
-    override fun writeByte(pointer: Int, data: Byte) {
+    override fun writeByte(bus: IRW, pointer: Int, data: Byte) {
         memStruct.write(pointer, data)
     }
 
