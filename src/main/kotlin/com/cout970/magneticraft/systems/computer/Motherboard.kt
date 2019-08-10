@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.*
+import gnu.trove.map.hash.TIntObjectHashMap
 
 /**
  * Created by cout970 on 2016/09/30.
@@ -8,8 +9,7 @@ import com.cout970.magneticraft.api.computer.*
 class Motherboard(
     private val cpu: ICPU,
     private val ram: IRAM,
-    private val rom: IROM,
-    private val bus: Bus
+    private val rom: IROM
 ) : IMotherboard {
 
     companion object {
@@ -17,6 +17,11 @@ class Motherboard(
     }
 
     var cyclesPerTick = 1_000_000 / 20 // 1MHz
+
+
+    val deviceMap = TIntObjectHashMap<IDevice>()
+
+    private val bus = Bus(ram) { deviceMap[it] }
     private var cpuCycles = -1
     private var clock = 0
     private var sleep = 0
@@ -33,22 +38,16 @@ class Motherboard(
         if (cpuCycles >= 0) {
             cpuCycles += cyclesPerTick
 
-            //limits cycles if the CPU halts using sleep();
+            // Limits cycles if the CPU halts using sleep();
             if (cpuCycles > cyclesPerTick * 10) {
                 cpuCycles = cyclesPerTick * 10
             }
 
-            //DEBUG to measure the performance of the cpu
-//            var nanos = System.nanoTime()
-//            val cycles = cpuCycles
             while (cpuCycles > 0) {
                 cpuCycles--
                 clock++
                 cpu.iterate()
             }
-//            nanos = System.nanoTime() - nanos
-//            debug("Cycles: %d, Time: %10.1f(ns), %5.1f(micro seg) %.1f(ms), %.1f(s)".format(cycles, nanos.toFloat(),
-//                    nanos.toFloat() / 1000, nanos.toFloat() / (1000 * 1000), nanos.toFloat() / (1000 * 1000 * 1000)))
         }
     }
 
@@ -72,7 +71,7 @@ class Motherboard(
     override fun reset() {
         clock = 0
         cpu.reset()
-        devices.filterIsInstance<IResettable>().forEach { it.reset() }
+        deviceMap.values().filterIsInstance<IResettable>().forEach { it.reset() }
         rom.bios.use {
             var index = CPU_START_POINT
             while (true) {
@@ -84,15 +83,13 @@ class Motherboard(
         }
     }
 
-    override fun getBus(): Bus = bus
+    override fun getBus(): IRW = bus
 
     override fun getCPU(): ICPU = cpu
 
     override fun getRAM(): IRAM = ram
 
     override fun getROM(): IROM = rom
-
-    override fun getDevices(): List<IDevice> = bus.devices.valueCollection().toList()
 
     override fun getClock(): Int = clock
 

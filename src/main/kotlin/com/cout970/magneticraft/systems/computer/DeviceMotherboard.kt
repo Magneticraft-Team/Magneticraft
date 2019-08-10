@@ -15,22 +15,22 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
     var logType = 0
 
     val memStruct = ReadWriteStruct("motherboard_header",
-        ReadOnlyByte("online", { if (mb.isOnline) 1 else 0 }),
+        ReadOnlyByte("online") { if (mb.isOnline) 1 else 0 },
         ReadWriteByte("signal", { signal(it.toInt()) }, { 0 }),
         ReadWriteByte("sleep", { mb.sleep(it.toInt()) }, { 0 }),
-        ReadOnlyByte("padding", { 0 }),
-        ReadOnlyInt("memSize", { mb.ram.memorySize }),
-        ReadOnlyInt("littleEndian", { if (mb.ram.isLittleEndian) -1 else 0 }),
-        ReadOnlyInt("worldTime", { (getWorldTime() and 0xFFFFFFFF).toInt() }),
-        ReadOnlyInt("cpuTime", { mb.clock }),
+        ReadOnlyByte("padding") { 0 },
+        ReadOnlyInt("memSize") { mb.ram.memorySize },
+        ReadOnlyInt("littleEndian") { if (mb.ram.isLittleEndian) -1 else 0 },
+        ReadOnlyInt("worldTime") { (getWorldTime() and 0xFFFFFFFF).toInt() },
+        ReadOnlyInt("cpuTime") { mb.clock },
         ReadWriteByte("logType", { logType = it.toInt() }, { logType.toByte() }),
         ReadWriteByte("logByte", { logByte(it) }, { 0 }),
-        LogShort("logShort", { logShort(it) }),
-        LogInt("logInt", { logInt(it) }),
-        ReadOnlyIntArray("devices", { getDevices() }),
-        ReadOnlyInt("*monitor", { 0xFF000000.toInt() }),
-        ReadOnlyInt("*floppy", { 0xFF010000.toInt() }),
-        ReadOnlyInt("*keyboard", { 0xFF020000.toInt() })
+        LogShort("logShort") { logShort(it) },
+        LogInt("logInt") { logInt(it) },
+        ReadOnlyIntArray("devices") { getDevices() },
+        ReadOnlyInt("*monitor") { 0xFF000000.toInt() },
+        ReadOnlyInt("*floppy") { 0xFF010000.toInt() },
+        ReadOnlyInt("*keyboard") { 0xFF020000.toInt() }
     )
 
     override fun update() = Unit
@@ -38,7 +38,7 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
     fun getDevices(): IntArray {
         val buffer = IntArray(16)
         repeat(16) {
-            if (it in mb.bus.devices.keySet()) {
+            if (it in mb.deviceMap.keySet()) {
                 buffer[it] = 0xFF000000.toInt() or (it shl 16)
             }
         }

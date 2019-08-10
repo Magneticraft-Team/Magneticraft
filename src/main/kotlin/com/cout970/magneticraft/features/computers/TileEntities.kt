@@ -27,27 +27,29 @@ class TileComputer : TileBase(), ITickable {
 
     val facing: EnumFacing get() = getBlockState().getOrientation()
 
-    val inventory = Inventory(1)
+    val inventory = Inventory(2)
     val invModule = ModuleInventory(inventory)
     val monitor = DeviceMonitor()
     val keyboard = DeviceKeyboard()
-    val floppyDriveModule = ModuleFloppyDrive(ref, inventory, 0)
+    val floppyDrive1Module = ModuleFloppyDrive(ref, inventory, 0)
+    val floppyDrive2Module = ModuleFloppyDrive(ref, inventory, 1)
     val networkCard = DeviceNetworkCard(ref)
     val redstoneSensor = DeviceRedstoneSensor(ref)
     val computerParts = ModuleComputerDevices(monitor, keyboard, networkCard, redstoneSensor)
 
     val computerModule = ModuleComputer(
-        devices = mapOf(
+        internalDevices = mutableMapOf(
             0x00 to monitor,
-            0x01 to floppyDriveModule.drive,
+            0x01 to floppyDrive1Module.drive,
             0x02 to keyboard,
             0x03 to networkCard,
-            0x04 to redstoneSensor
+            0x04 to redstoneSensor,
+            0x05 to floppyDrive2Module.drive
         )
     )
 
     init {
-        initModules(computerModule, invModule, computerParts, floppyDriveModule)
+        initModules(computerModule, invModule, computerParts, floppyDrive1Module, floppyDrive2Module)
     }
 
     @DoNotRemove
@@ -131,7 +133,7 @@ class TileMiningRobot : TileBase(), ITickable {
     )
 
     val computerModule = ModuleComputer(
-        devices = mapOf(
+        internalDevices = mutableMapOf(
             0x00 to monitor,
             0x01 to floppyDriveModule.drive,
             0x02 to keyboard,

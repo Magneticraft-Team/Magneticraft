@@ -1,14 +1,12 @@
 package com.cout970.magneticraft.systems.computer
 
-import com.cout970.magneticraft.api.computer.IBus
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IRW
-import gnu.trove.map.TIntObjectMap
 
 /**
  * Created by cout970 on 2016/09/30.
  */
-class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
+class Bus(var ram: IRW, val getDevice: (Int) -> IDevice?) : IRW {
 
     private fun Int.isExternal(): Boolean {
         return (this ushr 24) == 0xFF
@@ -17,7 +15,7 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
     override fun readByte(addr: Int): Byte {
         if (addr.isExternal()) {
             val ext = addr shr 16 and 0xFF
-            val dev = devices[ext] ?: return 0
+            val dev = getDevice(ext) ?: return 0
             return dev.readByte(this, addr and 0xFFFF)
         }
         return ram.readByte(addr)
@@ -26,7 +24,7 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
     override fun writeByte(addr: Int, data: Byte) {
         if (addr.isExternal()) {
             val ext = addr shr 16 and 0xFF
-            val dev = devices[ext] ?: return
+            val dev = getDevice(ext) ?: return
             dev.writeByte(this, addr and 0xFFFF, data)
         } else {
             ram.writeByte(addr, data)
@@ -36,7 +34,7 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
     override fun writeWord(addr: Int, data: Int) {
         if (addr.isExternal()) {
             val ext = addr shr 16 and 0xFF
-            val dev = devices[ext] ?: return
+            val dev = getDevice(ext) ?: return
 
             // @formatter:off
             val a = (data shr 24 and 0xFF).toByte()
@@ -57,7 +55,7 @@ class Bus(var ram: IRW, val devices: TIntObjectMap<IDevice>) : IBus {
     override fun readWord(addr: Int): Int {
         if (addr.isExternal()) {
             val ext = addr shr 16 and 0xFF
-            val dev = devices[ext] ?: return 0
+            val dev = getDevice(ext) ?: return 0
 
             // @formatter:off
             val a = dev.readByte(this, addr + 3 and 0xFFFF)

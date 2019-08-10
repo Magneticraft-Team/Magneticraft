@@ -5,7 +5,6 @@ import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.computer.IROM
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.systems.computer.*
-import gnu.trove.map.hash.TIntObjectHashMap
 import org.lwjgl.input.Keyboard
 import java.awt.*
 import java.awt.event.InputEvent.CTRL_MASK
@@ -31,7 +30,7 @@ object Emulator {
     private lateinit var motherboard: Motherboard
 
     fun init(args: Array<String>) {
-        val img = "rust_drivers"
+        val img = "lisp"
         val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
         val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
@@ -47,16 +46,14 @@ object Emulator {
 
         val rom = if (args.isNotEmpty()) CustomRom(args[0]) else ROM("assets/$MOD_ID/cpu/bios.bin")
 
-        val bus = Bus(memory, TIntObjectHashMap())
-        motherboard = Motherboard(cpu, memory, rom, bus)
-
+        motherboard = Motherboard(cpu, memory, rom)
         val mbDevice = DeviceMotherboard(FakeRef, motherboard)
 
-        bus.devices.put(0xFF, mbDevice)
-        bus.devices.put(0x00, monitor)
-        bus.devices.put(0x01, floppyDrive)
-        bus.devices.put(0x02, keyboard)
-        bus.devices.put(0x03, networkCard)
+        motherboard.deviceMap.put(0xFF, mbDevice)
+        motherboard.deviceMap.put(0x00, monitor)
+        motherboard.deviceMap.put(0x01, floppyDrive)
+        motherboard.deviceMap.put(0x02, keyboard)
+        motherboard.deviceMap.put(0x03, networkCard)
 
         val display = createDisplay(monitor, keyboard)
 

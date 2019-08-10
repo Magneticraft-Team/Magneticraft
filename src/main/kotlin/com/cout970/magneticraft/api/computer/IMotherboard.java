@@ -1,7 +1,5 @@
 package com.cout970.magneticraft.api.computer;
 
-import java.util.List;
-
 /**
  * Created by cout970 on 2016/09/30.
  */
@@ -12,7 +10,7 @@ public interface IMotherboard extends IMapSerializable, IResettable {
      *
      * @return the system bus
      */
-    IBus getBus();
+    IRW getBus();
 
     /**
      * The cpu of the computer
@@ -34,13 +32,6 @@ public interface IMotherboard extends IMapSerializable, IResettable {
      * @return the computer ram
      */
     IRAM getRAM();
-
-    /**
-     * All the devices connected to this computer
-     *
-     * @return the device list
-     */
-    List<IDevice> getDevices();
 
     /**
      * The system clock, measure the number of cycles of the cpu since the computer started working, is set to 0 when

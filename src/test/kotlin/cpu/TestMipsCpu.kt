@@ -6,7 +6,6 @@ import com.cout970.magneticraft.systems.computer.CPU_MIPS
 import com.cout970.magneticraft.systems.computer.Motherboard
 import com.cout970.magneticraft.systems.computer.RAM
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
-import gnu.trove.map.hash.TIntObjectHashMap
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -26,9 +25,8 @@ class TestMipsCpu {
     fun setUp() {
         cpu = CPU_MIPS()
         memory = RAM(0x20000, true)
-        bus = Bus(memory, TIntObjectHashMap())
         val rom = IROM { ByteInputStream() }
-        motherboard = Motherboard(cpu, memory, rom, bus)
+        motherboard = Motherboard(cpu, memory, rom)
         motherboard.reset()
         motherboard.start()
     }
