@@ -1,4 +1,4 @@
-**Small Steam Engine**
+# Small Steam Engine
 
 One of the first ways to generate electricity in Magneticraft.
 Uses steam to generate electricity, it produces 2 Watts per milibucket of steam and it has a max energy production of 160 Watts.

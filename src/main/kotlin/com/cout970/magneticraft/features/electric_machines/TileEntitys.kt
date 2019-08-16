@@ -258,7 +258,7 @@ class TileRfTransformer : TileBase(), ITickable {
 
         if (world.isClient || storage.energyStored == 0 || node.voltage >= TIER_1_MAX_VOLTAGE) return
         val rf = Math.min(storage.energyStored, Config.rfConversionSpeed)
-        node.applyPower(rf * ConversionTable.FE_TO_J, false)
+        node.applyPower(rf * Config.wattsToFE, false)
         storage.energyStored -= rf
     }
 }

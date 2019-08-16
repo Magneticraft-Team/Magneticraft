@@ -78,9 +78,6 @@ class CompBookRenderer : IComponent {
     }
 
     fun loadPages() {
-        if (Debug.DEBUG) {
-            book = loadBook()
-        }
         val doc = book.sections[currentSection]?.document ?: errorDocument()
 
         pages = MdRenderer.render(doc, pageSize, gui.fontHelper.FONT_HEIGHT, gui.fontHelper::getStringWidth)
@@ -145,6 +142,10 @@ class CompBookRenderer : IComponent {
             28 -> goForward()
             205 -> if (pageIndex + 1 in pages.indices) pageIndex++ // Right
             203 -> if (pageIndex - 1 in pages.indices) pageIndex-- // Left
+            19 -> {
+                book = loadBook()
+                loadPages()
+            }
             else -> return false
         }
         return true
@@ -163,7 +164,7 @@ class CompBookRenderer : IComponent {
         val uv = if (hover) it.hoverUv to it.uvSize else it.uvPos to it.uvSize
         val (pos, size) = arrowHitbox(it)
 
-        gui.drawTexture(DrawableBox(gui.pos + pos, size, uv.first, uv.second, vec2Of(512)))
+        gui.drawTexture(DrawableBox(pos, size, uv.first, uv.second, vec2Of(512)))
     }
 
     fun renderPage(page: Page, mouse: IVector2, pos: IVector2) {
@@ -178,9 +179,9 @@ class CompBookRenderer : IComponent {
 
     fun renderTextBox(it: TextBox, pos: IVector2, color: Int) {
         gui.drawShadelessString(
-            text = it.txt,
-            pos = pos + it.pos,
-            color = color
+                text = it.txt,
+                pos = pos + it.pos,
+                color = color
         )
     }
 

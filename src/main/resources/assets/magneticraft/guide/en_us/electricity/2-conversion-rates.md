@@ -1,15 +1,17 @@
 # Conversion Rates
-**Watts**
-1 J = 1 RF
-1 J = 0.25 EU
-1 J = 1 FE (forge energy)
-1 Watt = 1 J/t
 
-- Watts are flow rate
-- Joules are energy amount
+*NOTE:*
+- Watts denote rate of energy flow  (energy per tick)
+- Joules denote an amount of energy (energy stored in batteries)
 
-**Steam**
-1 J = Steam 0.5mb 
-Water|1mb = Steam 10mb
+*Watts*
+- 1 J = 1 RF
+- 1 J = 0.25 EU
+- 1 J = 1 FE (forge energy)
+- 1 Watt = 1 J/t
 
-Radius of the sun: 695.700 km
+*Steam*
+- 1 J = 0.5mB of Steam
+- 1mB of Water = 10mB of Steam
+
+Radius of the sun (why not?): 695.700 km

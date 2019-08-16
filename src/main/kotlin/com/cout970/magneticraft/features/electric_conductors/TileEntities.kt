@@ -79,15 +79,14 @@ class TileConnector : TileBase(), ITickable {
             val tile = world.getTileEntity(pos.offset(facing.opposite))
             val handler = tile?.getOrNull(FORGE_ENERGY, facing)
             if (handler != null) {
-                val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-                    ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
+                val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
                 val accepted = Math.min(
                     handler.receiveEnergy(amount, true),
                     node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
                 )
                 if (accepted > 0) {
-                    handler.receiveEnergy(accepted, false)
-                    node.applyPower(-accepted.toDouble() * Config.wattsToFE, false)
+                    val received = handler.receiveEnergy(accepted, false)
+                    node.applyPower(-received.toDouble() * Config.wattsToFE, false)
                 }
             }
         }

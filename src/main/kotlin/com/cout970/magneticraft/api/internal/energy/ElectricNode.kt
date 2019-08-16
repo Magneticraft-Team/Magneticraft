@@ -13,10 +13,10 @@ import net.minecraft.nbt.NBTTagCompound
  */
 @Suppress("unused")
 open class ElectricNode(
-    val ref: ITileRef,
-    private val capacity: Double = 1.0,
-    private val resistance: Double = 0.001,
-    private val name: String = "electric_node_1"
+        val ref: ITileRef,
+        private val capacity: Double = 1.0,
+        private val resistance: Double = 0.001,
+        private val name: String = "electric_node_1"
 ) : IElectricNode {
 
     private var voltage = 0.0
@@ -72,18 +72,11 @@ open class ElectricNode(
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {
-        return if (power > 0) {
-            val squared = voltage * voltage + Math.abs(power) * getCapacity()
-            val diff = Math.sqrt(squared) - Math.abs(voltage)
-            if (!simulated) applyCurrent(diff)
-            power
-        } else {
-            val squared = voltage * voltage - Math.abs(power) * getCapacity()
-            val powerUsed = if (squared > 0) -power else (voltage * voltage) / getCapacity()
-            val diff = Math.sqrt(Math.max(squared, 0.0)) - Math.abs(voltage)
-            if (!simulated) applyCurrent(diff)
-            powerUsed
-        }
+        val energy = Math.abs(voltage * voltage * getCapacity() + power)
+        val finalVoltage = Math.sqrt(Math.max(0.0, energy / getCapacity()))
+        val current = getCapacity() * (finalVoltage - voltage)
+        if (!simulated) applyCurrent(current)
+        return Math.abs(power)
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound?) {
