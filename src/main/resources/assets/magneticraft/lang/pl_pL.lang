@@ -1,10 +1,8 @@
-itemGroup.magneticraft=Magneticraft
 item.magneticraft.guide_book_normal.name=Przewodnik do Magneticrafta
 
 item.magneticraft.iron_hammer_normal.name=Żelazny Młot
 item.magneticraft.stone_hammer_normal.name=Kamienny Młot
 item.magneticraft.steel_hammer_normal.name=Stalowy Młot
-
 
 item.magneticraft.heavy_plates_iron.name=Ciężka Żelazna Płytka
 item.magneticraft.heavy_plates_gold.name=Ciężka Złota Płytka
@@ -103,26 +101,32 @@ item.magneticraft.crafting_magnet.name=Magnes
 item.magneticraft.crafting_mesh.name=Żelazna Siatka
 item.magneticraft.crafting_string_fabric.name=Tkaninowa Siatka
 item.magneticraft.voltmeter_normal.name=Woltomierz
+item.magneticraft.thermometer_normal.name=Termometr
+item.magneticraft.wrench_normal.name=Klucz
 item.magneticraft.battery_item_low_normal.name=Mała Bateria
 item.magneticraft.battery_item_medium_normal.name=Średnia Bateria
 
 item.magneticraft.floppy_disk_user.name=Dyskietka
 item.magneticraft.floppy_disk_lisp.name=Dyskietka (Lisp)
 item.magneticraft.floppy_disk_forth.name=Dyskietka (FORTH)
-item.magneticraft.floppy_disk_js.name=Dyskietka (JS)
-item.magneticraft.floppy_disk_basic.name=Dyskietka (PODSTAWOWA)
-item.magneticraft.floppy_disk_vim.name=Dyskietka (VI?)
-item.magneticraft.floppy_disk_asm.name=Dyskietka (ASM)
+item.magneticraft.floppy_disk_shell.name=Dyskietka (Shell)
+item.magneticraft.floppy_disk_basic.name=Dyskietka (PODSTAWOWA WIP)
+item.magneticraft.floppy_disk_editor.name=Dyskietka (Edytor)
+item.magneticraft.floppy_disk_asm.name=Dyskietka (ASM WIP)
 
 item.magneticraft.iron_gear_normal.name=Żelazna Zębatka
 item.magneticraft.steel_gear_normal.name=Stalowa Zębatka
 item.magneticraft.tungsten_gear_normal.name=Wolframowa Zębatka
+item.magneticraft.broken_gear_normal.name=Zepsuta Zębatka
 
-tile.magneticraft.ores_copper.name=Ruda Chalkopirytu
-tile.magneticraft.ores_lead.name=Ruda Galeny
-tile.magneticraft.ores_cobalt.name=Ruda Kobaltytu
-tile.magneticraft.ores_tungsten.name=Ruda Wolframitu
-tile.magneticraft.ores_pyrite.name=Ruda Pirytu
+item.magneticraft.inserter_upgrade_speed.name=Ulepszenie Podajnika: Prędkość
+item.magneticraft.inserter_upgrade_stack.name=Ulepszenie Podajnika: Ilość
+
+tile.magneticraft.ores_copper.name=Ruda Chalkopirytu (Miedź)
+tile.magneticraft.ores_lead.name=Ruda Galeny (Ołów)
+tile.magneticraft.ores_cobalt.name=Ruda Kobaltytu (Kobalt)
+tile.magneticraft.ores_tungsten.name=Ruda Wolframitu (Wolfram)
+tile.magneticraft.ores_pyrite.name=Ruda Pirytu (Siarka)
 tile.magneticraft.oil_source_full_100.name=Źródło Oleju (Pełne)
 tile.magneticraft.oil_source_full_90.name=Źródło Oleju (90%)
 tile.magneticraft.oil_source_full_80.name=Źródło Oleju (80%)
@@ -137,7 +141,7 @@ tile.magneticraft.oil_source_empty.name=Źródło Oleju (Puste)
 
 tile.magneticraft.box_normal.name=Drewniane Pudło
 tile.magneticraft.crushing_table_normal.name=Stół do Kruszenia
-tile.magneticraft.sluice_box_center_north.name=Skrzynka Śluzowa
+tile.magneticraft.sluice_box_center_north.name=Płucznia
 tile.magneticraft.feeding_trough_center_north.name=Drewniane Koryto
 #tile.magneticraft.kiln_shelf.name=Wstawka do Pieca
 
@@ -152,25 +156,21 @@ tile.magneticraft.tile_limestone_inverted.name=Odwrócone Wapienne Płytki
 tile.magneticraft.tube_light_north.name=Lampa Rurowa
 
 tile.magneticraft.conveyor_belt_north.name=Taśmociąg
-tile.magneticraft.inserter_north.name=Maszyna Wkładająca
+tile.magneticraft.inserter_north.name=Podajnik
 tile.magneticraft.connector_down.name=Złącze Elektryczne
 tile.magneticraft.battery_north.name=Blok Baterii
 tile.magneticraft.electric_pole_north.name=Słup Elektryczny
-tile.magneticraft.electric_pole_transformer_north.name=Transformer do Słupa Elektrycznego
-tile.magneticraft.electric_furnace_north.name=Elektryczny Piec
+tile.magneticraft.electric_pole_transformer_north.name=Transformator do Słupa Elektrycznego
+tile.magneticraft.electric_furnace_off_north.name=Elektryczny Piec
+tile.magneticraft.brick_furnace_off_north.name=Ceglany Piec
 tile.magneticraft.combustion_chamber_north.name=Komora Spalania
 tile.magneticraft.steam_boiler_normal.name=Bojler
-
-#tile.magneticraft.electric_heater_off.name=Elektryczny Podgrzewacz
-#tile.magneticraft.electric_heater_on.name=Elektryczny Podgrzewacz
-#tile.magneticraft.heat_pipe.name=Rura Cieplna
-#tile.magneticraft.redstone_heat_pipe.name=Rura Cieplna z Czerwonym Proszkiem
-#tile.magneticraft.firebox.name=Kominek
-#tile.magneticraft.icebox.name=Lodówka
-#tile.magneticraft.heat_sink.name=Radiator
-#tile.magneticraft.heat_reservoir.name=Zbiornik Ciepła
-#tile.magneticraft.thermometer_block.name=Termoelement
-#tile.magneticraft.brick_furnace.name=Ceglany Piec
+tile.magneticraft.pumpjack_drill_normal.name=Rura Kiwona
+tile.magneticraft.electric_heater_off.name=Elektryczny Podgrzewacz
+tile.magneticraft.electric_heater_on.name=Elektryczny Podgrzewacz
+tile.magneticraft.gasification_unit_normal.name=Gazogenerator
+tile.magneticraft.tesla_tower_bottom.name=Wieża Tesli
+tile.magneticraft.rf_transformer_normal.name=Transformator RF
 
 tile.magneticraft.water_generator_normal.name=Generator Wody
 tile.magneticraft.infinite_energy_normal.name=Nieskończony Prąd
@@ -181,25 +181,49 @@ tile.magneticraft.air_bubble_off.name=Pęcherzyk Powietrza
 tile.magneticraft.computer_north.name=Komputer
 tile.magneticraft.mining_robot_north.name=Robot Kopiący
 tile.magneticraft.moving_robot_normal.name=Robot
-tile.magneticraft.copper_tank_normal.name=Miedziany Zbiornik
+tile.magneticraft.small_tank_normal.name=Mały Zbiornik
 tile.magneticraft.thermopile_normal.name=Termostos
 tile.magneticraft.iron_pipe_normal.name=Żelazna Rura
+tile.magneticraft.wind_turbine_north.name=Turbina Wiatrowa
+tile.magneticraft.wind_turbine_gap.name=Turbina Wiatrowa
+tile.magneticraft.heat_sink_down.name=Radiator
+tile.magneticraft.heat_pipe_normal.name=Rura Cieplna
+tile.magneticraft.insulated_heat_pipe_normal.name=Izolowana Rura Cieplna
+tile.magneticraft.rf_heater_off.name=Podgrzewacz na RF
+tile.magneticraft.electric_cable_normal.name=Kabel Elektryczny
+tile.magneticraft.pneumatic_tube_normal.name=Rura Pneumatyczna
+tile.magneticraft.pneumatic_restriction_tube_normal.name=Ograniczająca Rura Pneumatyczna
+tile.magneticraft.relay_down.name=Przekaźnik
+tile.magneticraft.filter_down.name=Filtr
+tile.magneticraft.transposer_down.name=Ekstraktor Przedmiotów
+tile.magneticraft.fabricator_normal.name=Fabrykator
 
-#multiblocks
-#tile.magneticraft.hydraulic_press.name=Prasa Hydrauliczna
-#tile.magneticraft.kiln.name=Piec Opałowy
-#tile.magneticraft.sifter.name=Elektryczny Przesiewacz
+# Multiblocks
+tile.magneticraft.sieve_inactive_north.name=Przesiewacz Wibracyjny
 tile.magneticraft.solar_panel_inactive_north.name=Panel Słoneczny
-#tile.magneticraft.grinder.name=Młynek
+tile.magneticraft.grinder_inactive_north.name=Kruszarka
 tile.magneticraft.shelving_unit_inactive_north.name=Regał
-tile.magneticraft.steam_engine_inactive_north.name=Silnik Parowy
+tile.magneticraft.steam_engine_inactive_north.name=Mały Silnik Parowy
+tile.magneticraft.solar_tower_inactive_north.name=Wieża Słoneczna
+tile.magneticraft.solar_mirror_inactive_north.name=Lustro Słoneczne
+tile.magneticraft.container_inactive_north.name=Kontener
+tile.magneticraft.pumpjack_inactive_north.name=Kiwon
+tile.magneticraft.hydraulic_press_inactive_north.name=Prasa Hydrauliczna
+tile.magneticraft.oil_heater_inactive_north.name=Podgrzewacz Ropy
+tile.magneticraft.refinery_inactive_north.name=Rafineria
+tile.magneticraft.big_combustion_chamber_inactive_north.name=Duża Komora Spalania
+tile.magneticraft.big_steam_boiler_inactive_north.name=Duży Bojler Parowy
+tile.magneticraft.steam_turbine_inactive_north.name=Turbina Parowa
+tile.magneticraft.big_electric_furnace_inactive_north.name=Duży Piec Elektryczny
 
+# Ingot blocks
+tile.magneticraft.storage_blocks_copper.name=Blok Miedzi
+tile.magneticraft.storage_blocks_cobalt.name=Blok Kobaltu
+tile.magneticraft.storage_blocks_lead.name=Blok Ołowiu
+tile.magneticraft.storage_blocks_tungsten.name=Blok Wolframu
+tile.magneticraft.storage_blocks_pyrite.name=Blok Siarki
 
-#tile.magneticraft.copper_block.name=Blok Miedzi
-#tile.magneticraft.cobalt_block.name=Blok Kobaltu
-#tile.magneticraft.lead_block.name=Blok Ołowiu
-#tile.magneticraft.tungsten_block.name=Blok Wolframu
-
+# Multiblock parts
 tile.magneticraft.multiblock_parts_base.name=Podstawa Maszyny
 tile.magneticraft.multiblock_parts_mesh.name=Filtrująca Podstawa Maszyny
 tile.magneticraft.multiblock_parts_electric.name=Elektryczna Podstawa Maszyny
@@ -207,37 +231,91 @@ tile.magneticraft.multiblock_parts_striped.name=Podstawa Maszyny w Paski
 tile.magneticraft.multiblock_parts_grate.name=Podstawa Maszyny z Żelaznych Krat
 tile.magneticraft.multiblock_parts_copper_coil.name=Podstawa Maszyny z Miedzianą Cewką
 tile.magneticraft.multiblock_parts_corrugated_iron.name=Falista Żelazna Podstawa Maszyny
-tile.magneticraft.multiblock_column_axis_y.name=Kolumna Wspierająca
-tile.magneticraft.multiblock_column_axis_x.name=Kolumna Wspierająca
-tile.magneticraft.multiblock_column_axis_z.name=Kolumna Wspierająca
-tile.magneticraft.multiblock_gap_normal.name=Dziura Multibloku
+tile.magneticraft.multiblock_column_axis_y.name=Kolumna Wspierająca (Oś Y)
+tile.magneticraft.multiblock_column_axis_x.name=Kolumna Wspierająca (Oś X)
+tile.magneticraft.multiblock_column_axis_z.name=Kolumna Wspierająca (Oś Z)
+tile.magneticraft.multiblock_gap_normal.name=Multiblok
+tile.magneticraft.multiblock_gap.name=Multiblok
 
+# Creative tab
 itemGroup.magneticraft=Magneticraft
 
+# Connection messages
 text.magneticraft.wire_connect.success=Kabel Podłączony
 text.magneticraft.wire_connect.fail=Nie można podłaczyć kabla
-text.magneticraft.wire_connect.same_block=Nie można podłaczyć kabla do tego samego bloku
+text.magneticraft.wire_connect.same_connector=Nie można podłaczyć kabla do tego samego bloku
+text.magneticraft.wire_connect.invalid_connector=Nie można podłączyć kabla do tego łącznika
+text.magneticraft.wire_connect.not_a_connector=Nie można podłączyć kabla do tego bloku
+text.magneticraft.wire_connect.too_far=Odległość jest zbyt duża
+text.magneticraft.wire_connect.already_connected=Już podłączono
+
 text.magneticraft.wire_connect.no_other_connector=Nie ustawiono Pozycji
 text.magneticraft.wire_connect.updated_position=Pozycja Zaktualizowana %s
-text.magneticraft.auto_connect.activate=Automatyczne lączenie się kabli aktywowane
-text.magneticraft.auto_connect.deactivate=Automatyczne lączenie się kabli zdezaktywowane
+text.magneticraft.auto_connect.activate=Automatyczne łączenie się kabli aktywowane
+text.magneticraft.auto_connect.deactivate=Automatyczne łączenie się kabli zdezaktywowane
 
+text.magneticraft.wire_connect.position=Pozycja
+text.magneticraft.thermometer.temp=Temperatura: %s
+
+# JEI
 text.magneticraft.jei.crushing_table=Stół do Kruszenia
-text.magneticraft.jei.sluice_box=Skrzynia Śluzowa
-#text.magneticraft.jei.hydraulic_press=Prasa Hydrauliczna
-#text.magneticraft.jei.kiln=Piec Opałowy
-#text.magneticraft.jei.grinder=Młynek
-#text.magneticraft.jei.sifter=Przesiewacz
+text.magneticraft.jei.sluice_box=Płucznia
+text.magneticraft.jei.hydraulic_press=Prasa Hydrauliczna
+text.magneticraft.jei.grinder=Kruszarka
+text.magneticraft.jei.sieve=Przesiewacz Wibracyjny
+text.magneticraft.jei.oil_heater=Podgrzewacz Ropy
+text.magneticraft.jei.refinery=Rafineria
+text.magneticraft.jei.gasification_unit=Gazogenerator
+text.magneticraft.jei.thermopile=Termostos
 
-text.magneticraft.multiblock.invalid_block=Nieprawidłowy blok na: %s, znaleziono: %s, oczekiwano: %s
+#Mining level
+text.magneticraft.jei.mining_level.-1=Poziom Narzędzi: Jakikolwiek
+text.magneticraft.jei.mining_level.0=Poziom Narzędzi: Drewno
+text.magneticraft.jei.mining_level.1=Poziom Narzędzi: Kamień
+text.magneticraft.jei.mining_level.2=Poziom Narzędzi: Żelazo
+text.magneticraft.jei.mining_level.3=Poziom Narzędzi: Diament
+text.magneticraft.jei.mining_level.4=Poziom Narzędzi: Ardite
+text.magneticraft.jei.mining_level.other=Poziom Narzędzi: %s
+
+text.magneticraft.jei.time=%s ticków
+text.magneticraft.jei.require_water=Potrzebuje 1 Wiadra Wody
+text.magneticraft.jei.temperature=Temperatura: %s
+text.magneticraft.jei.head_conductivity=Przewodnictwo: %.1f W/mK
+
+text.magneticraft.jei.hydraulic_hammer.light=Tryb Lekki
+text.magneticraft.jei.hydraulic_hammer.medium=Tryb Umiarkowany
+text.magneticraft.jei.hydraulic_hammer.heavy=Tryb Ciężki
+
+# Multiblock messages
+text.magneticraft.multiblock.invalid_block=Nieprawidłowy blok na: %s\nZnaleziono: %s\nEOczekiwano: %s
+text.magneticraft.multiblock.invalid_column_orientation=Nieprawidłowa orentacja blocku na: %s\nZnaleziony blok: %s\nOczekiwana orientacja: %s
 text.magneticraft.multiblock.activate=Pomyślnie aktywowano
 
-#death.attack.kiln=%1$s wszedł do pieca.
-#death.attack.kiln.player=%1$s wszedł do pieca próbując uciekać przed %2$s.
-#death.attack.kiln=%1$s pożywił sobą mikser.
-#death.attack.kiln.player=%2$s wepchnął %1s$ do miksera.
+text.magneticraft.shelving_unit_add_chests=Dodaj więcej skrzynek by zwiększyć pojemność.
 
+# Item tooltips
 tooltip.magneticraft.item_storage.energy=%f/%fJ
 tooltip.magneticraft.multiblock.blueprint=Postaw ten plan by zobaczyć model multibloku
 
+# Fluids
 fluid.magneticraft.steam=Para Wodna
+fluid.magneticraft.oil=Ropa Naftowa
+fluid.magneticraft.hot_crude=Gorąca Ropa Naftowa
+
+fluid.magneticraft.light_oil=Olej Lekki
+fluid.magneticraft.heavy_oil=Olej Ciężki
+fluid.magneticraft.lpg=LPG
+
+fluid.magneticraft.natural_gas=Gaz Ziemny
+fluid.magneticraft.naphtha=Ropa
+fluid.magneticraft.plastic=Płynny Plastik
+
+fluid.magneticraft.diesel=Olej Napędowy
+fluid.magneticraft.kerosene=Nafta
+fluid.magneticraft.gasoline=Benzyna
+
+fluid.magneticraft.lubricant=Smar
+fluid.magneticraft.fuel=Paliwo
+fluid.magneticraft.oil_residue=Pozostałości Oleju
+
+fluid.magneticraft.wood_gas=Gaz Drzewny
