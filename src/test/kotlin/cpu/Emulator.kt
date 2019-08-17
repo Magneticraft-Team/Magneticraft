@@ -24,13 +24,11 @@ fun main(args: Array<String>) {
 }
 
 object Emulator {
-    private var timer = 0L
-    private var lastTick = 0
     private var useOs = true
     private lateinit var motherboard: Motherboard
 
     fun init(args: Array<String>) {
-        val img = "lisp"
+        val img = "rust_drivers"
         val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
         val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 
@@ -60,34 +58,33 @@ object Emulator {
         //start pc
         restart()
 
-        while (motherboard.isOnline) {
-            networkCard.update()
-            floppyDrive.update()
-            //run CPU
-            motherboard.iterate()
+        while (true) {
+            // "Game loop"
+            while (motherboard.isOnline) {
+                networkCard.update()
+                floppyDrive.update()
+                //run CPU
+                motherboard.iterate()
 
-            //update display
-            display.revalidate()
-            display.repaint()
+                //update display
+                display.revalidate()
+                display.repaint()
 
-            //update world time
-            timer = System.currentTimeMillis()
-            val tick = (timer.and(0xFFFFFF) / 50L).toInt()
-            if (tick != lastTick) {
-                lastTick = tick
+                Thread.sleep(50)
             }
-            Thread.sleep(50)
+            println("End")
+
+            while (!motherboard.isOnline) {
+                Thread.sleep(10)
+            }
         }
-        println("End")
 
         // This is used to avoid: 'Disconnected from the target VM' in the middle of the CPU output
-        System.out.flush()
-        Thread.sleep(10)
+//        System.out.flush()
+//        Thread.sleep(10)
     }
 
     private fun restart() {
-        timer = 0L
-        lastTick = 0
         useOs = true
 
         motherboard.reset()
@@ -95,7 +92,6 @@ object Emulator {
         motherboard.cyclesPerTick = 200000
         motherboard.start()
 
-        timer = System.currentTimeMillis()
         println("Start")
     }
 

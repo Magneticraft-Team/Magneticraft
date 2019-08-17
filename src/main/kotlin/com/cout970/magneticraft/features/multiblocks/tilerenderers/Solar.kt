@@ -38,7 +38,7 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
         val diff = to - from
         val dirToTower = diff.toVec3d().normalize()
 
-        val worldTime = world.worldTime
+        val worldTime = world.totalWorldTime
         val time = (worldTime % 24000L).toInt()
         val sunAngle = (time / 12000f) * 180f - 90f
 

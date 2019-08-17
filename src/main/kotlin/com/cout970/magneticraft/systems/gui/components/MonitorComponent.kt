@@ -22,9 +22,9 @@ import org.lwjgl.input.Keyboard
  */
 
 class MonitorComponent(
-    val tile: ITileRef,
-    val monitor: DeviceMonitor,
-    val keyboard: DeviceKeyboard
+        val tile: ITileRef,
+        val monitor: DeviceMonitor,
+        val keyboard: DeviceKeyboard
 ) : IComponent {
 
     companion object {
@@ -70,7 +70,7 @@ class MonitorComponent(
                 var character = monitor.getChar(line * columns + column) and 0xFF
 
                 if (line == monitor.cursorLine && column == monitor.cursorColumn &&
-                    tile.world.worldTime % 10 >= 4) {
+                        tile.world.totalWorldTime % 10 >= 4) {
 
                     character = character xor 128
                 }
@@ -82,11 +82,11 @@ class MonitorComponent(
                     val y = character shr 4
 
                     Gui.drawScaledCustomSizeModalRect(
-                        posX, posY,
-                        x * 16f, y * 16f,
-                        16, 16,
-                        scale, scale,
-                        256f, 256f
+                            posX, posY,
+                            x * 16f, y * 16f,
+                            16, 16,
+                            scale, scale,
+                            256f, 256f
                     )
                 }
             }
@@ -123,7 +123,9 @@ class MonitorComponent(
         var intChar = typedChar.toInt()
 
         if (isCtrlKeyDown() && keyCode != 29) {
-            intChar += 96
+            if (intChar in 65..90) {
+                intChar += 96
+            }
         }
 
         val key = when (intChar) {

@@ -70,7 +70,7 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>() {
         translate(-1.0, 0.0, 0.0)
         renderModel("default")
 
-        val worldTime = te.world.worldTime
+        val worldTime = te.world.totalWorldTime
         val time = (worldTime % 24000L).toInt()
         val normTime = time / 12000f
         val preAngle = if (normTime > 1) 0f else (normTime * 2 - 1) * 30f
