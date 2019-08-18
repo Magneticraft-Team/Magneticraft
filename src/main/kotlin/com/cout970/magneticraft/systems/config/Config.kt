@@ -46,7 +46,7 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
         "NOTE: all the values in the config about energy are in Watts")
-    var wattsToFE = 1.0
+    var wattsToFE = 3.85
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion speed for the RF transformer in RF/t")
     var rfConversionSpeed = 100
