@@ -1,0 +1,39 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AB ",
+    "BCD",
+    " DE"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:piston",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper",
+      "count": 1
+    },
+    "C": {
+      "item": "magneticraft:crafting",
+      "count": 1,
+      "data": 2
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron",
+      "count": 1
+    },
+    "E": {
+      "item": "magneticraft:battery_item_low",
+      "count": 1,
+      "nbt": "{}"
+    }
+  },
+  "result": {
+    "item": "magneticraft:electric_piston",
+    "count": 1,
+    "nbt": "{}"
+  }
+}

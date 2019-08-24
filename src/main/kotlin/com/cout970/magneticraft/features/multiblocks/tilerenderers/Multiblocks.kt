@@ -3,6 +3,7 @@
 package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileMultiblock
+import com.cout970.magneticraft.misc.vector.length
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.multiblocks.MultiblockManager
 import com.cout970.magneticraft.systems.tilerenderers.BaseTileRenderer
@@ -21,10 +22,16 @@ abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>(
             translate(x, y, z)
 
             if (!te.active) {
+                val player = Minecraft.getMinecraft().player
+
+                // If the player is too far we don't render the template,
+                // because part of the multiblock may be unloaded and the template would be rendered from far away
+                if (vec3Of(x, y, z).length > 32) return@stackMatrix
+
                 Utilities.multiblockPreview(te.multiblockContext())
 
                 if (te.world.totalWorldTime % 20L == 0L) {
-                    val ctx = te.multiblockContext().copy(player = Minecraft.getMinecraft().player)
+                    val ctx = te.multiblockContext().copy(player = player)
                     te.clientErrors = MultiblockManager.checkMultiblockStructure(ctx)
                 }
 

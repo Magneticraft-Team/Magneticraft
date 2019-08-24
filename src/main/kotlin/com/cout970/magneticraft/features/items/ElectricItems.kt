@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.features.items
 
+import com.cout970.magneticraft.features.items.ElectricItems.useEnergy
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.vector.times
 import com.cout970.magneticraft.misc.world.isServer
@@ -8,12 +9,17 @@ import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.items.*
 import net.minecraft.block.material.Material
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.init.SoundEvents
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.SPacketEntityVelocity
+import net.minecraft.util.ActionResult
 import net.minecraft.util.DamageSource
 import net.minecraft.util.EnumActionResult
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.RayTraceResult
 import net.minecraft.util.math.Vec3d
 import kotlin.math.max
 
@@ -49,7 +55,7 @@ object ElectricItems : IItemMaker {
             capabilityProvider = { ElectricItemBase.ItemEnergyCapabilityProvider(it.stack) }
             onHitEntity = damageCallback(5f)
             onBlockDestroyed = {
-                if (!it.worldIn.isServer && it.state.getBlockHardness(it.worldIn, it.pos) != 0.0f) {
+                if (it.worldIn.isServer && it.state.getBlockHardness(it.worldIn, it.pos) != 0.0f) {
                     it.stack.useEnergy(Config.electricToolBreakConsumption)
                 }
                 true
@@ -74,20 +80,36 @@ object ElectricItems : IItemMaker {
             constructor = { ElectricItemBase().apply { capacity = Config.electricToolCapacity } }
             capabilityProvider = { ElectricItemBase.ItemEnergyCapabilityProvider(it.stack) }
             onHitEntity = damageCallback(2f)
-            onItemUse = {
-                val item = it.player.getHeldItem(it.hand)
+            onItemRightClick = callback@{
+                val start = it.playerIn.positionVector
+                val end = it.playerIn.positionVector.add(it.playerIn.lookVec.times(6))
+                val res = it.worldIn.rayTraceBlocks(start, end)
+                if (res == null || res.typeOfHit != RayTraceResult.Type.BLOCK) return@callback it.default
+
+                val item = it.playerIn.getHeldItem(it.handIn)
 
                 if (item.useEnergy(Config.electricToolPistonConsumption)) {
-                    val dir = it.player.lookVec.subtractReverse(Vec3d.ZERO).times(1.75)
-                    it.player.addVelocity(dir.x, dir.y, dir.z)
-                    it.player.fallDistance = max(0f, it.player.fallDistance - 20f)
+                    val power = if (it.playerIn.isSneaking) 0.25 else 1.75
+                    val dir = it.playerIn.lookVec.subtractReverse(Vec3d.ZERO).times(power)
+                    it.playerIn.addVelocity(dir.x, dir.y, dir.z)
+                    it.playerIn.fallDistance = 0f
 
-                    if (it.player is EntityPlayerMP) {
-                        it.player.connection.sendPacket(SPacketEntityVelocity(it.player))
+                    it.worldIn.playSound(
+                            null,
+                            it.playerIn.position,
+                            SoundEvents.BLOCK_PISTON_EXTEND,
+                            SoundCategory.BLOCKS,
+                            0.5f,
+                            it.worldIn.rand.nextFloat() * 0.25f + 0.6f
+                    )
+
+                    if (it.playerIn is EntityPlayerMP) {
+                        it.playerIn.connection.sendPacket(SPacketEntityVelocity(it.playerIn))
                     }
-                    EnumActionResult.SUCCESS
+
+                    ActionResult(EnumActionResult.SUCCESS, item)
                 } else {
-                    EnumActionResult.FAIL
+                    it.default
                 }
             }
             itemInteractionForEntity = {
@@ -96,6 +118,15 @@ object ElectricItems : IItemMaker {
                 if (item.useEnergy(Config.electricToolPistonConsumption)) {
                     val dir = it.target.positionVector.subtract(it.player.positionVector).normalize().times(1.75)
                     it.target.addVelocity(dir.x, dir.y, dir.z)
+
+                    it.player.world.playSound(
+                            null,
+                            it.player.position,
+                            SoundEvents.BLOCK_PISTON_EXTEND,
+                            SoundCategory.BLOCKS,
+                            0.5f,
+                            it.player.world.rand.nextFloat() * 0.25f + 0.6f
+                    )
 
                     if (it.player is EntityPlayerMP) {
                         it.player.connection.sendPacket(SPacketEntityVelocity(it.target))
@@ -114,7 +145,7 @@ object ElectricItems : IItemMaker {
             capabilityProvider = { ElectricItemBase.ItemEnergyCapabilityProvider(it.stack) }
             onHitEntity = damageCallback(14f)
             onBlockDestroyed = {
-                if (!it.worldIn.isServer && it.state.getBlockHardness(it.worldIn, it.pos) != 0.0f) {
+                if (it.worldIn.isServer && it.state.getBlockHardness(it.worldIn, it.pos) != 0.0f) {
                     it.stack.useEnergy(Config.electricToolBreakConsumption)
                 }
                 true
