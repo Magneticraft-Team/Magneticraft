@@ -25,6 +25,7 @@ class ItemBuilder {
     var onHitEntity: ((HitEntityArgs) -> Boolean)? = null
     var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
+    var itemInteractionForEntity: ((ItemInteractionForEntityArgs) -> Boolean)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
     var getDestroySpeed: ((GetDestroySpeedArgs) -> Float)? = null
@@ -34,8 +35,8 @@ class ItemBuilder {
     var getToolClasses: ((ItemStack) -> MutableSet<String>)? = null
     var createStack: ((Item, Int, Int) -> ItemStack)? = null
     var containerItem: Item? = null
+    var canRepair = false
     var customModels: List<Pair<String, ResourceLocation>>? = null
-
 
     fun withName(name: String): ItemBuilder {
         registryName = resource(name)
@@ -58,6 +59,7 @@ class ItemBuilder {
             it.getDestroySpeed = getDestroySpeed
             it.onItemUse = onItemUse
             it.onItemRightClick = onItemRightClick
+            it.itemInteractionForEntity = itemInteractionForEntity
             it.addInformation = addInformation
             it.getHarvestLevel = getHarvestLevel
             it.canHarvestBlock = canHarvestBlock
@@ -65,6 +67,7 @@ class ItemBuilder {
             it.getToolClasses = getToolClasses
             it.createStack = createStack
             it.containerItem = containerItem
+            it.repairAllowed = canRepair
             customModels?.let { c -> it.customModels = c }
         }
 

@@ -41,7 +41,6 @@ object ToolItems : IItemMaker {
 
         stoneHammer = builder.withName("stone_hammer").copy {
             onHitEntity = createHitEntity(2.0f)
-            containerItem
             maxDamage = 130
         }.build()
 

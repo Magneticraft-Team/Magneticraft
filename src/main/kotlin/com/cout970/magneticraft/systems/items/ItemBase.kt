@@ -25,6 +25,7 @@ open class ItemBase : Item() {
     var onHitEntity: ((HitEntityArgs) -> Boolean)? = null
     var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
+    var itemInteractionForEntity: ((ItemInteractionForEntityArgs) -> Boolean)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
     var getDestroySpeed: ((GetDestroySpeedArgs) -> Float)? = null
@@ -36,6 +37,12 @@ open class ItemBase : Item() {
 
     var variants: Map<Int, String> = mapOf(0 to "normal")
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
+
+    var repairAllowed: Boolean
+        get() = this.canRepair
+        set(it) {
+            this.canRepair = it
+        }
 
     override fun getUnlocalizedName(): String = "item.$MOD_ID.${registryName?.resourcePath}"
 
@@ -68,9 +75,15 @@ open class ItemBase : Item() {
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
     }
 
+    override fun itemInteractionForEntity(stack: ItemStack, playerIn: EntityPlayer, target: EntityLivingBase, hand: EnumHand): Boolean {
+        itemInteractionForEntity?.let { return it(ItemInteractionForEntityArgs(stack, playerIn, target, hand))}
+        return super.itemInteractionForEntity(stack, playerIn, target, hand)
+    }
+
     override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: EnumHand): ActionResult<ItemStack> {
         val default = super.onItemRightClick(worldIn, playerIn, handIn)
-        return onItemRightClick?.invoke(OnItemRightClickArgs(worldIn, playerIn, handIn, default)) ?: default
+        onItemRightClick?.let { return it(OnItemRightClickArgs(worldIn, playerIn, handIn, default)) }
+        return default
     }
 
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
@@ -149,3 +162,6 @@ data class GetHarvestLevelArgs(val stack: ItemStack, val toolClass: String,
 
 data class OnBlockDestroyedArgs(val stack: ItemStack, val worldIn: World, val state: IBlockState,
                                 val pos: BlockPos, val entityLiving: EntityLivingBase)
+
+data class ItemInteractionForEntityArgs(val stack: ItemStack, val player: EntityPlayer,
+                                        val target: EntityLivingBase, val hand: EnumHand)

@@ -58,7 +58,7 @@ object ElectricItems : IItemMaker {
                 val applicable = when (it.state.material) {
                     Material.IRON, Material.ANVIL, Material.ROCK -> 44f
                     Material.GRASS, Material.GROUND, Material.SAND, Material.CRAFTED_SNOW,
-                    Material.SNOW, Material.CLAY, Material.CAKE -> 14f
+                    Material.SNOW, Material.CLAY, Material.CAKE -> 15f
                     else -> -1f
                 }
 
@@ -88,6 +88,22 @@ object ElectricItems : IItemMaker {
                     EnumActionResult.SUCCESS
                 } else {
                     EnumActionResult.FAIL
+                }
+            }
+            itemInteractionForEntity = {
+                val item = it.player.getHeldItem(it.hand)
+
+                if (item.useEnergy(Config.electricToolPistonConsumption)) {
+                    val dir = it.target.positionVector.subtract(it.player.positionVector).normalize().times(1.75)
+                    it.target.addVelocity(dir.x, dir.y, dir.z)
+
+                    if (it.player is EntityPlayerMP) {
+                        it.player.connection.sendPacket(SPacketEntityVelocity(it.target))
+                    }
+
+                    true
+                } else {
+                    false
                 }
             }
 

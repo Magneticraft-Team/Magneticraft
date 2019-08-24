@@ -122,6 +122,10 @@ item.magneticraft.broken_gear_normal.name=Broken Gear
 item.magneticraft.inserter_upgrade_speed.name=Inserter Upgrade: Speed
 item.magneticraft.inserter_upgrade_stack.name=Inserter Upgrade: Stack
 
+item.magneticraft.electric_drill_normal.name=Electric Drill
+item.magneticraft.electric_chainsaw_normal.name=Electric Chainsaw
+item.magneticraft.electric_piston_normal.name=Electric Piston
+
 tile.magneticraft.ores_copper.name=Chalcopyrite Ore (Copper)
 tile.magneticraft.ores_lead.name=Galena Ore (Lead)
 tile.magneticraft.ores_cobalt.name=Cobaltite Ore (Cobalt)

@@ -7,7 +7,7 @@
     "variants": {
         "normal": [{
             "textures": {
-                "layer0": "magneticraft:items/tools/electric_piston"
+                "layer0": "magneticraft:items/electric_items/electric_piston"
             }
         }]
     }
