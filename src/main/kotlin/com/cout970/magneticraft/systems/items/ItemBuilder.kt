@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.items
 
 import com.cout970.magneticraft.misc.resource
+import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -26,6 +27,11 @@ class ItemBuilder {
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
+    var getDestroySpeed: ((GetDestroySpeedArgs) -> Float)? = null
+    var getHarvestLevel: ((GetHarvestLevelArgs) -> Int)? = null
+    var canHarvestBlock: ((IBlockState) -> Boolean)? = null
+    var onBlockDestroyed: ((OnBlockDestroyedArgs) -> Boolean)? = null
+    var getToolClasses: ((ItemStack) -> MutableSet<String>)? = null
     var createStack: ((Item, Int, Int) -> ItemStack)? = null
     var containerItem: Item? = null
     var customModels: List<Pair<String, ResourceLocation>>? = null
@@ -40,7 +46,6 @@ class ItemBuilder {
         requireNotNull(registryName) { "registryName was null" }
         val item = constructor()
 
-
         item.let {
             it.registryName = registryName
             creativeTab?.let { t -> it.setCreativeTab(t) }
@@ -50,9 +55,14 @@ class ItemBuilder {
             if (maxDamage > 0) it.maxDamage = maxDamage
             it.onHitEntity = onHitEntity
             it.capabilityProvider = capabilityProvider
+            it.getDestroySpeed = getDestroySpeed
             it.onItemUse = onItemUse
             it.onItemRightClick = onItemRightClick
             it.addInformation = addInformation
+            it.getHarvestLevel = getHarvestLevel
+            it.canHarvestBlock = canHarvestBlock
+            it.onBlockDestroyed = onBlockDestroyed
+            it.getToolClasses = getToolClasses
             it.createStack = createStack
             it.containerItem = containerItem
             customModels?.let { c -> it.customModels = c }
@@ -74,6 +84,9 @@ class ItemBuilder {
         newBuilder.onHitEntity = onHitEntity
         newBuilder.capabilityProvider = capabilityProvider
         newBuilder.addInformation = addInformation
+        newBuilder.getDestroySpeed = getDestroySpeed
+        newBuilder.getHarvestLevel = getHarvestLevel
+        newBuilder.getToolClasses = getToolClasses
         newBuilder.createStack = createStack
         newBuilder.containerItem = containerItem
 

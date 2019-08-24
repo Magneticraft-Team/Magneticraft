@@ -449,7 +449,7 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
     )
 
     val extract = ModuleFluidExporter(output,
-        ports = { listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(0, 4, 1)) to EnumFacing.DOWN) }
+        ports = { listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(0, 4, -1)) to EnumFacing.DOWN) }
     )
 
     val boiler = ModuleSteamBoiler(node, input, output, Config.multiblockBoilerMaxProduction)

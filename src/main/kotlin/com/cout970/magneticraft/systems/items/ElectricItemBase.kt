@@ -20,7 +20,7 @@ import net.minecraftforge.energy.IEnergyStorage
 class ElectricItemBase : ItemBase() {
 
     companion object {
-        val ENERGY_KEY = "energy"
+        const val ENERGY_KEY = "energy"
     }
 
     var capacity = 0

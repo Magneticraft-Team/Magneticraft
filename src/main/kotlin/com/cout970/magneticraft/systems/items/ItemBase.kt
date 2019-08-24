@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.vector.vec3Of
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.EntityLivingBase
@@ -26,6 +27,11 @@ open class ItemBase : Item() {
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
+    var getDestroySpeed: ((GetDestroySpeedArgs) -> Float)? = null
+    var getHarvestLevel: ((GetHarvestLevelArgs) -> Int)? = null
+    var getToolClasses: ((ItemStack) -> MutableSet<String>)? = null
+    var canHarvestBlock: ((IBlockState) -> Boolean)? = null
+    var onBlockDestroyed: ((OnBlockDestroyedArgs) -> Boolean)? = null
     var createStack: ((Item, Int, Int) -> ItemStack)? = null
 
     var variants: Map<Int, String> = mapOf(0 to "normal")
@@ -34,7 +40,7 @@ open class ItemBase : Item() {
     override fun getUnlocalizedName(): String = "item.$MOD_ID.${registryName?.resourcePath}"
 
     override fun getUnlocalizedName(
-        stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata] ?: "normal"}"
+            stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata] ?: "normal"}"
 
     override fun getHasSubtypes() = variants.size > 1
 
@@ -58,8 +64,8 @@ open class ItemBase : Item() {
 
     override fun onItemUse(player: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing,
                            hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
-        return onItemUse?.invoke(OnItemUseArgs(this, player, worldIn, pos, hand, facing,
-            vec3Of(hitX, hitY, hitZ))) ?: super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
+        onItemUse?.let { return it(OnItemUseArgs(this, player, worldIn, pos, hand, facing, vec3Of(hitX, hitY, hitZ))) }
+        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
     }
 
     override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: EnumHand): ActionResult<ItemStack> {
@@ -71,6 +77,11 @@ open class ItemBase : Item() {
 
         addInformation?.invoke(AddInformationArgs(stack, worldIn, tooltip, flagIn))
         super.addInformation(stack, worldIn, tooltip, flagIn)
+    }
+
+    override fun getDestroySpeed(stack: ItemStack, state: IBlockState): Float {
+        getDestroySpeed?.let { return it(GetDestroySpeedArgs(stack, state)) }
+        return super.getDestroySpeed(stack, state)
     }
 
     override fun hasContainerItem(stack: ItemStack): Boolean {
@@ -96,6 +107,26 @@ open class ItemBase : Item() {
         return newStack
     }
 
+    override fun getHarvestLevel(stack: ItemStack, toolClass: String, player: EntityPlayer?, blockState: IBlockState?): Int {
+        getHarvestLevel?.let { return it(GetHarvestLevelArgs(stack, toolClass, player, blockState)) }
+        return super.getHarvestLevel(stack, toolClass, player, blockState)
+    }
+
+    override fun getToolClasses(stack: ItemStack): MutableSet<String> {
+        getToolClasses?.let { return it(stack) }
+        return super.getToolClasses(stack)
+    }
+
+    override fun canHarvestBlock(blockIn: IBlockState): Boolean {
+        canHarvestBlock?.let { return it(blockIn) }
+        return false
+    }
+
+    override fun onBlockDestroyed(stack: ItemStack, worldIn: World, state: IBlockState, pos: BlockPos, entityLiving: EntityLivingBase): Boolean {
+        onBlockDestroyed?.let { return it(OnBlockDestroyedArgs(stack, worldIn, state, pos, entityLiving)) }
+        return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving)
+    }
+
     override fun toString(): String = "ItemBase($registryName)"
 }
 
@@ -110,3 +141,11 @@ data class OnItemRightClickArgs(val worldIn: World, val playerIn: EntityPlayer, 
 
 data class AddInformationArgs(val stack: ItemStack, val worldIn: World?, val tooltip: MutableList<String>,
                               val flagIn: ITooltipFlag)
+
+data class GetDestroySpeedArgs(val stack: ItemStack, val state: IBlockState)
+
+data class GetHarvestLevelArgs(val stack: ItemStack, val toolClass: String,
+                               val player: EntityPlayer?, val blockState: IBlockState?)
+
+data class OnBlockDestroyedArgs(val stack: ItemStack, val worldIn: World, val state: IBlockState,
+                                val pos: BlockPos, val entityLiving: EntityLivingBase)

@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "normal": [{
+            "textures": {
+                "layer0": "magneticraft:items/tools/electric_chainsaw"
+            }
+        }]
+    }
+}

@@ -549,7 +549,7 @@ private fun addHydraulicPressRecipe(input: ItemStack, output: ItemStack, mode: H
 
 private fun addOilHeaterRecipe(input: FluidStack?, output: FluidStack?, ticks: Float, minTemp: Double) {
     if (input == null || output == null) {
-        warn("Error trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks, minTemp=$minTemp")
+        warn("(Ignoring) Trying to register a OilHeaterRecipe with null params: input=$input, output=$output, duration=$ticks, minTemp=$minTemp")
         return
     }
     OilHeaterRecipeManager.registerRecipe(OilHeaterRecipeManager.createRecipe(input, output, ticks, minTemp.toFloat()))
@@ -576,15 +576,13 @@ private fun addFluidFuel(name: String, ticks: Int, value: Double) {
     val fluid = fluidOf(name, 1)
 
     if (fluid == null) {
-        warn("Unable to add a fuel for '$name': fluid not found")
+        warn("(Ignoring) Unable to add a fuel for '$name': fluid not found")
         return
     }
 
     val manager = MagneticraftApi.getFluidFuelManager()
 
-    manager.registerFuel(
-        manager.createFuel(fluid, ticks, value)
-    )
+    manager.registerFuel(manager.createFuel(fluid, ticks, value))
 }
 
 /* OLD RECIPES
