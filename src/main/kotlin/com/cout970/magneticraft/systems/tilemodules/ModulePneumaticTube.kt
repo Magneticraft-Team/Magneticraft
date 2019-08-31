@@ -213,12 +213,6 @@ class ModulePneumaticTube(
     fun sendItemUpdate() {
         if (world.isClient) return
 
-        val closePlayers = world.playerEntities
-            .map { it as EntityPlayerMP }
-            .filter { vec3Of(it.posX, it.posY, it.posZ).distanceSq(pos.toVec3d()) <= (32 * 32) }
-
-        if (closePlayers.isEmpty()) return
-
         val data = IBD()
         val items = flow.getItems()
 
@@ -230,10 +224,7 @@ class ModulePneumaticTube(
             data.setByteArray(index + 2, output.toByteArray())
         }
 
-        // Custom packets are used because they are a bit smaller than regular tile entity update packets
-        val packet = MessageTileUpdate(data, pos, world.provider.dimension)
-
-        closePlayers.forEach { Magneticraft.network.sendTo(packet, it) }
+        container.sendSyncDataToNearPlayers(data)
     }
 
     override fun receiveSyncData(ibd: IBD, otherSide: Side) {

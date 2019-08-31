@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A ",
+    "A A",
+    " B "
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper",
+      "count": 1
+    },
+    "B": {
+      "item": "magneticraft:electric_cable",
+      "count": 1,
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "magneticraft:energy_receiver",
+    "count": 1,
+    "data": 0
+  }
+}

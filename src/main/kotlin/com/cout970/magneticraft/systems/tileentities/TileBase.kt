@@ -1,9 +1,14 @@
 package com.cout970.magneticraft.systems.tileentities
 
+import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.vector.toVec3d
+import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.systems.network.MessageTileUpdate
+import com.cout970.vector.extensions.distanceSq
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.init.Blocks
@@ -132,9 +137,22 @@ abstract class TileBase : TileEntity() {
         if (world.isClient) return
         val packet = updatePacket ?: return
         world.playerEntities
-            .map { it as EntityPlayerMP }
-            .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
-            .forEach { it.connection.sendPacket(packet) }
+                .map { it as EntityPlayerMP }
+                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
+                .forEach { it.connection.sendPacket(packet) }
+    }
+
+    fun sendSyncDataToNearPlayers(ibd: IBD, distance: Double) {
+        if (world.isClient) return
+        val squaredDistance = distance * distance
+        val closePlayers = world.playerEntities
+                .map { it as EntityPlayerMP }
+                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= squaredDistance }
+
+        if (closePlayers.isEmpty()) return
+        val packet = MessageTileUpdate(ibd, pos, world.provider.dimension)
+
+        closePlayers.forEach { Magneticraft.network.sendTo(packet, it) }
     }
 
     open fun saveToPacket() = save()
@@ -183,5 +201,6 @@ abstract class TileBase : TileEntity() {
 
         override fun markDirty() = tile.markDirty()
         override fun sendUpdateToNearPlayers() = tile.sendUpdateToNearPlayers()
+        override fun sendSyncDataToNearPlayers(ibd: IBD, distance: Double) = tile.sendSyncDataToNearPlayers(ibd, distance)
     }
 }

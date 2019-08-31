@@ -43,7 +43,7 @@ object CommonMethods {
 
             val te = args.worldIn.getTile<TileBase>(pos) ?: return false
             val electricModule = te.container.modules.find { it is ModuleElectricity } as? ModuleElectricity
-                ?: return false
+                    ?: return false
 
             electricModule.autoConnectWires = !electricModule.autoConnectWires
             if (!electricModule.autoConnectWires) {
@@ -138,7 +138,7 @@ object CommonMethods {
      * The base value is associated to the NORTH direction
      */
     fun updateBoundingBoxWithFacing(
-        base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
@@ -151,7 +151,7 @@ object CommonMethods {
      * The base value is associated to the NORTH direction
      */
     fun updateBoundingBoxWithOrientation(
-        base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
@@ -161,14 +161,21 @@ object CommonMethods {
     }
 
     // Common properties
-    val PROPERTY_FACING = PropertyEnum.create("facing", Facing::class.java)
-    val PROPERTY_ORIENTATION = PropertyEnum.create("orientation", Orientation::class.java)
-    val PROPERTY_CENTER_ORIENTATION = PropertyEnum.create("center_orientation", CenterOrientation::class.java)
-    val PROPERTY_ORIENTATION_ACTIVE = PropertyEnum.create("orientation_active", OrientationActive::class.java)
+    val PROPERTY_FACING: PropertyEnum<Facing> =
+            PropertyEnum.create("facing", Facing::class.java)
+
+    val PROPERTY_ORIENTATION: PropertyEnum<Orientation> =
+            PropertyEnum.create("orientation", Orientation::class.java)
+
+    val PROPERTY_CENTER_ORIENTATION: PropertyEnum<CenterOrientation> =
+            PropertyEnum.create("center_orientation", CenterOrientation::class.java)
+
+    val PROPERTY_ORIENTATION_ACTIVE: PropertyEnum<OrientationActive> =
+            PropertyEnum.create("orientation_active", OrientationActive::class.java)
 
     enum class Facing(override val stateName: String,
                       val facing: EnumFacing,
-                      override val isVisible: Boolean) : IStatesEnum, IStringSerializable {
+                      override val isVisible: Boolean) : IStatesEnum, IStringSerializable, IRotable<Facing> {
 
         DOWN("down", EnumFacing.DOWN, true),
         UP("up", EnumFacing.UP, false),
@@ -184,6 +191,8 @@ object CommonMethods {
             return block.defaultState.withProperty(PROPERTY_FACING, this)
         }
 
+        override fun next(): IRotable<Facing> = of(EnumFacing.getFront((facing.index + 1) % EnumFacing.VALUES.size))
+
         companion object {
             fun of(facing: EnumFacing): Facing = when (facing) {
                 EnumFacing.DOWN -> DOWN
@@ -198,7 +207,7 @@ object CommonMethods {
 
     enum class Orientation(override val stateName: String,
                            override val isVisible: Boolean,
-                           val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+                           val facing: EnumFacing) : IStatesEnum, IStringSerializable, IRotable<Orientation> {
 
         NORTH("north", true, EnumFacing.NORTH),
         SOUTH("south", false, EnumFacing.SOUTH),
@@ -212,6 +221,8 @@ object CommonMethods {
             return block.defaultState.withProperty(PROPERTY_ORIENTATION, this)
         }
 
+        override fun next(): IRotable<Orientation> = of(facing.rotateY())
+
         companion object {
             fun of(facing: EnumFacing): Orientation = when (facing) {
                 EnumFacing.NORTH -> NORTH
@@ -224,10 +235,10 @@ object CommonMethods {
     }
 
     enum class CenterOrientation(
-        override val stateName: String,
-        override val isVisible: Boolean,
-        val center: Boolean,
-        val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+            override val stateName: String,
+            override val isVisible: Boolean,
+            val center: Boolean,
+            val facing: EnumFacing) : IStatesEnum, IStringSerializable {
 
         CENTER_NORTH("center_north", true, false, EnumFacing.NORTH),
         CENTER_SOUTH("center_south", false, false, EnumFacing.SOUTH),
@@ -261,10 +272,10 @@ object CommonMethods {
     }
 
     enum class OrientationActive(
-        override val stateName: String,
-        override val isVisible: Boolean,
-        val center: Boolean,
-        val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+            override val stateName: String,
+            override val isVisible: Boolean,
+            val active: Boolean,
+            val facing: EnumFacing) : IStatesEnum, IStringSerializable, IRotable<OrientationActive> {
 
         OFF_NORTH("off_north", true, false, EnumFacing.NORTH),
         OFF_SOUTH("off_south", false, false, EnumFacing.SOUTH),
@@ -280,6 +291,17 @@ object CommonMethods {
 
         override fun getBlockState(block: Block): IBlockState {
             return block.defaultState.withProperty(PROPERTY_ORIENTATION_ACTIVE, this)
+        }
+
+        override fun next(): IRotable<OrientationActive> = when (this) {
+            OFF_NORTH -> OFF_SOUTH
+            OFF_SOUTH -> OFF_WEST
+            OFF_WEST -> OFF_EAST
+            OFF_EAST -> OFF_NORTH
+            ON_NORTH -> ON_NORTH
+            ON_SOUTH -> ON_SOUTH
+            ON_WEST -> ON_WEST
+            ON_EAST -> ON_EAST
         }
 
         companion object {

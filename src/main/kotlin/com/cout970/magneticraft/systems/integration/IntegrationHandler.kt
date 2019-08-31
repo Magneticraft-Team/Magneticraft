@@ -30,7 +30,7 @@ object IntegrationHandler {
         buildcraftApi = ModAPIManager.INSTANCE.hasAPI("buildcraftapi_fuels")
         industrialForegoing = Loader.isModLoaded("industrialforegoing")
 
-        if(buildcraftApi){
+        if (buildcraftApi) {
             FluidFuelManager.FLUID_FUEL_MANAGER = BuildcraftFuelManager()
         }
     }

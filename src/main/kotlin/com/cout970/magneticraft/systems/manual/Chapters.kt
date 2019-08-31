@@ -3,6 +3,7 @@ package com.cout970.magneticraft.systems.manual
 import com.cout970.magneticraft.misc.ResourceList
 import com.cout970.magneticraft.misc.logError
 import net.minecraft.client.Minecraft
+import java.util.stream.Collectors
 import kotlin.streams.toList
 
 /**
@@ -38,7 +39,7 @@ fun loadBook(): Book {
 
         val parsed = texts.parallelStream().map { (text, prefix, name) ->
             parseMarkdownDocument(text, prefix) to name
-        }.toList()
+        }.collect(Collectors.toList())
 
         val sections = parsed.map { (md, name) -> Section(name, md) }
 

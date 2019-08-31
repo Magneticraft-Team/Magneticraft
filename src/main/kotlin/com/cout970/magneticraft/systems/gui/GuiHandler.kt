@@ -80,6 +80,7 @@ object GuiHandler : IGuiHandler {
             is TileHydraulicPress       -> autoContainer("hydraulic_press", GuiBuilder::hydraulicPressGui, tile, player, world, pos)
             is TileShelvingUnit         -> autoContainer("shelving_unit", GuiBuilder::shelvingUnitGui, tile, player, world, pos)
             is TileRfTransformer        -> autoContainer("rf_transformer", GuiBuilder::rfTransformerGui, tile, player, world, pos)
+            is TileElectricEngine       -> autoContainer("electric_engine", GuiBuilder::electricEngineGui, tile, player, world, pos)
             is TileAirLock              -> autoContainer("airlock", GuiBuilder::airlockGui, tile, player, world, pos)
             is TileSmallTank            -> autoContainer("small_tank", GuiBuilder::smallTankGui, tile, player, world, pos)
             is TileTeslaTower           -> autoContainer("tesla_tower", GuiBuilder::teslaTowerGui, tile, player, world, pos)

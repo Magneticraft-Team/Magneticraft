@@ -8,9 +8,14 @@ import com.cout970.magneticraft.misc.gui.formatHeat
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.player.sendUnlocalizedMessage
+import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.*
+import com.cout970.magneticraft.systems.blocks.CommonMethods
+import com.cout970.magneticraft.systems.blocks.IRotable
 import com.cout970.magneticraft.systems.items.*
+import net.minecraft.block.BlockHorizontal
+import net.minecraft.block.properties.IProperty
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -68,7 +73,9 @@ object ToolItems : IItemMaker {
             onItemUse = ToolItems::onUseThermometer
         }.build()
 
-        wrench = builder.withName("wrench").build()
+        wrench = builder.withName("wrench").copy {
+            onItemUse = ToolItems::onUseWrench
+        }.build()
 
         return listOf(stoneHammer, ironHammer, steelHammer, copperCoil, voltmeter, thermometer, wrench)
     }
@@ -79,10 +86,10 @@ object ToolItems : IItemMaker {
             val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, args.facing) ?: return EnumActionResult.PASS
 
             val msg = handler.nodes
-                .filterIsInstance<IElectricNode>()
-                .joinToString("\n") {
-                    "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage)
-                }
+                    .filterIsInstance<IElectricNode>()
+                    .joinToString("\n") {
+                        "%.2fV %.2fA %.2fW".format(it.voltage, it.amperage, it.voltage * it.amperage)
+                    }
 
             args.player.sendUnlocalizedMessage(msg)
         }
@@ -95,13 +102,30 @@ object ToolItems : IItemMaker {
             val handler = tile.getOrNull(HEAT_NODE_HANDLER, args.facing) ?: return EnumActionResult.PASS
 
             val msg = handler.nodes
-                .filterIsInstance<IHeatNode>()
-                .joinToString("\n") {
-                    formatHeat(it.temperature)
-                }
+                    .filterIsInstance<IHeatNode>()
+                    .joinToString("\n") {
+                        formatHeat(it.temperature)
+                    }
 
             args.player.sendUnlocalizedMessage(msg)
         }
+        return EnumActionResult.PASS
+    }
+
+    fun onUseWrench(args: OnItemUseArgs): EnumActionResult {
+        if (args.worldIn.isClient) return EnumActionResult.PASS
+
+        val state = args.worldIn.getBlockState(args.pos)
+        val entry = state.properties.entries.find { it.value is IRotable } ?: return EnumActionResult.PASS
+
+        @Suppress("UNCHECKED_CAST") val prop = entry.key as IProperty<IRotable<Any>>
+        val facing = state.getValue(prop)
+        val newState = state.withProperty(prop, facing.next())
+
+        if (state != newState) {
+            args.worldIn.setBlockState(args.pos, newState)
+        }
+
         return EnumActionResult.PASS
     }
 
@@ -151,8 +175,8 @@ object ToolItems : IItemMaker {
                     if (basePos != null) {
                         stack.setBlockPos(POSITION_KEY, basePos)
                         player.sendMessage("text.magneticraft.wire_connect.updated_position",
-                            "[${TextFormatting.AQUA}" +
-                                "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
+                                "[${TextFormatting.AQUA}" +
+                                        "${basePos.x}, ${basePos.y}, ${basePos.z}${TextFormatting.WHITE}]")
                         return EnumActionResult.SUCCESS
                     }
                 } else {

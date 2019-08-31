@@ -44,7 +44,7 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
         val player = Minecraft.getMinecraft().player
 
         if (player.heldItemMainhand.item == ToolItems.voltmeter ||
-            player.heldItemOffhand.item == ToolItems.voltmeter) {
+                player.heldItemOffhand.item == ToolItems.voltmeter) {
 
             if (te.pos.distanceSq(player.position) < 8 * 8) {
                 val text = "%.2fV %.2fA %.2fW".format(te.node.voltage, te.node.amperage, te.node.voltage * te.node.amperage)
@@ -52,7 +52,7 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
             }
 
         } else if (player.heldItemMainhand.item == ToolItems.copperCoil ||
-            player.heldItemOffhand.item == ToolItems.copperCoil) {
+                player.heldItemOffhand.item == ToolItems.copperCoil) {
 
             val stack = if (player.heldItemMainhand.isNotEmpty) {
                 player.heldItemMainhand
@@ -67,17 +67,17 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
                     val oldPos = player.positionVector
 
                     player.setPosition(
-                        player.posX + (player.posX - player.prevPosX) * ticks,
-                        player.posY + (player.posY - player.prevPosY) * ticks,
-                        player.posZ + (player.posZ - player.prevPosZ) * ticks
+                            player.posX + (player.posX - player.prevPosX) * ticks,
+                            player.posY + (player.posY - player.prevPosY) * ticks,
+                            player.posZ + (player.posZ - player.prevPosZ) * ticks
                     )
 
                     val box = player.entityBoundingBox.center - te.pos.toVec3d()
 
                     player.setPosition(
-                        oldPos.x,
-                        oldPos.y,
-                        oldPos.z
+                            oldPos.x,
+                            oldPos.y,
+                            oldPos.z
                     )
 
                     if (basePos.distanceSq(player.position) < 10 * 10) {
@@ -172,16 +172,16 @@ object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
 
     override fun init() {
         createModel(Blocks.electricCable,
-            ModelSelector("up", FilterRegex("up")),
-            ModelSelector("down", FilterRegex("down")),
-            ModelSelector("north", FilterRegex("north")),
-            ModelSelector("south", FilterRegex("south")),
-            ModelSelector("west", FilterRegex("west")),
-            ModelSelector("east", FilterRegex("east"))
+                ModelSelector("up", FilterRegex("up")),
+                ModelSelector("down", FilterRegex("down")),
+                ModelSelector("north", FilterRegex("north")),
+                ModelSelector("south", FilterRegex("south")),
+                ModelSelector("west", FilterRegex("west")),
+                ModelSelector("east", FilterRegex("east"))
         )
 
         createModelWithoutTexture(Blocks.electricCable,
-            ModelSelector("center", FilterRegex("center"))
+                ModelSelector("center", FilterRegex("center"))
         )
     }
 
@@ -209,5 +209,18 @@ object TileRendererElectricCable : BaseTileRenderer<TileElectricCable>() {
 //            Utilities.renderFloatingLabel("I: %.2f".format(te.node.amperage), vec3Of(0, 1.25, 0))
 //            Utilities.renderFloatingLabel("W: %.2f".format(te.node.voltage * te.node.amperage), vec3Of(0, 1.5, 0))
 //        }
+    }
+}
+
+@RegisterRenderer(TileEnergyReceiver::class)
+object TileRendererEnergyReceiver : BaseTileRenderer<TileEnergyReceiver>() {
+
+    override fun init() {
+        createModel(Blocks.energyReceiver)
+    }
+
+    override fun render(te: TileEnergyReceiver) {
+        Utilities.rotateAroundCenter(te.facing)
+        renderModel("default")
     }
 }

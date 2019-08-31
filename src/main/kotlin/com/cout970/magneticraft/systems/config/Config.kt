@@ -51,6 +51,12 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion speed for the RF transformer in RF/t")
     var rfConversionSpeed = 100
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion speed for the electric engine in RF/t")
+    var electricEngineSpeed = 1000
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Max energy transmitted by the tesla tower per player/receiver (in joules), warning: if you put a high value the the machine may get negative voltages")
+    var teslaTowerTransmissionRate = 500.0
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Heater Max Production (in joules)")
     var electricHeaterMaxProduction = 80.0
 
@@ -134,7 +140,7 @@ object Config {
     var electricToolBreakConsumption: Int = 1000
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Energy used per jump")
-    var electricToolPistonConsumption: Int = 8000
+    var electricToolPistonConsumption: Int = 4000
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Item Low Battery Capacity")
     var batteryItemLowCapacity: Int = 250_000

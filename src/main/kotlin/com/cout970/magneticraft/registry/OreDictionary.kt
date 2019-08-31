@@ -60,7 +60,7 @@ fun registerOreDictionaryEntries() {
     OreDictionary.registerOre("oreSulfur", OreBlocks.ores.stack(1, 4))
 
     OreDictionary.registerOre("blockCopper", OreBlocks.storageBlocks.stack(1, 0))
-    OreDictionary.registerOre("blockGalena", OreBlocks.storageBlocks.stack(1, 1))
+    OreDictionary.registerOre("blockLead", OreBlocks.storageBlocks.stack(1, 1))
     OreDictionary.registerOre("blockCobalt", OreBlocks.storageBlocks.stack(1, 2))
     OreDictionary.registerOre("blockTungsten", OreBlocks.storageBlocks.stack(1, 3))
     OreDictionary.registerOre("blockSulfur", OreBlocks.storageBlocks.stack(1, 4))

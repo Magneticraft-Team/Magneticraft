@@ -32,6 +32,7 @@ import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 
 /**
@@ -45,11 +46,11 @@ class TileConnector : TileBase(), ITickable {
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "connector")
 
     val electricModule = ModuleElectricity(
-        electricNodes = listOf(wrapper),
-        onWireChange = { if (world.isClient) wireRender.reset() },
-        maxWireDistance = 10.0,
-        canConnectAtSide = this::canConnectAtSide,
-        connectableDirections = this::getConnectableDirections
+            electricNodes = listOf(wrapper),
+            onWireChange = { if (world.isClient) wireRender.reset() },
+            maxWireDistance = 10.0,
+            canConnectAtSide = this::canConnectAtSide,
+            connectableDirections = this::getConnectableDirections
     )
 
     var ignoreBlockStateUpdate = false
@@ -75,21 +76,7 @@ class TileConnector : TileBase(), ITickable {
         super.update()
         if (world.isClient) return
 
-        if (node.voltage > ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
-            val tile = world.getTileEntity(pos.offset(facing.opposite))
-            val handler = tile?.getOrNull(FORGE_ENERGY, facing)
-            if (handler != null) {
-                val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
-                val accepted = Math.min(
-                    handler.receiveEnergy(amount, true),
-                    node.applyPower(-amount.toDouble() * Config.wattsToFE, true).toInt()
-                )
-                if (accepted > 0) {
-                    val received = handler.receiveEnergy(accepted, false)
-                    node.applyPower(-received.toDouble() * Config.wattsToFE, false)
-                }
-            }
-        }
+        exportConnectorRF(world, pos, facing, node)
 
         if (container.shouldTick(10) && world.isAnyPlayerWithinRangeAt(pos.xd, pos.yd, pos.zd, 8.0)) {
             sendUpdateToNearPlayers()
@@ -109,7 +96,7 @@ class TileConnector : TileBase(), ITickable {
             if (handler is IElectricNodeHandler) {
                 val node = handler.nodes.firstOrNull { it is IElectricNode }
                 if (node != null && handler.canConnect(node as IElectricNode, te.electricModule, te.wrapper,
-                        te.facing)) {
+                                te.facing)) {
                     return false
                 }
             }
@@ -120,8 +107,8 @@ class TileConnector : TileBase(), ITickable {
     fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
         return if (facing.opposite.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
             listOf(
-                facing.opposite.toBlockPos() to facing,
-                facing.opposite.toBlockPos() * 2 to facing)
+                    facing.opposite.toBlockPos() to facing,
+                    facing.opposite.toBlockPos() * 2 to facing)
         } else emptyList()
     }
 
@@ -143,9 +130,9 @@ class TileElectricPole : TileBase(), ITickable {
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
 
     val electricModule = ModuleElectricity(
-        electricNodes = listOf(wrapper),
-        onWireChange = { if (world.isClient) wireRender.reset() },
-        canConnectAtSide = { it == null }
+            electricNodes = listOf(wrapper),
+            onWireChange = { if (world.isClient) wireRender.reset() },
+            canConnectAtSide = { it == null }
     )
 
     // client
@@ -179,9 +166,9 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
     val wrapper2 = WireConnectorWrapper(node, this::getConnectors2, "transformer_connector")
 
     val electricModule = ModuleElectricity(
-        electricNodes = listOf(wrapper, wrapper2),
-        onWireChange = { if (world.isClient) wireRender.reset() },
-        canConnectAtSide = { it == null }
+            electricNodes = listOf(wrapper, wrapper2),
+            onWireChange = { if (world.isClient) wireRender.reset() },
+            canConnectAtSide = { it == null }
     )
 
     // client
@@ -255,8 +242,8 @@ class TileTeslaTower : TileBase(), ITickable {
 
     val node = ElectricNode(ref)
     val electricModule = ModuleElectricity(
-        listOf(node),
-        capabilityFilter = { side -> side == EnumFacing.DOWN || side == EnumFacing.UP }
+            listOf(node),
+            capabilityFilter = { side -> side == EnumFacing.DOWN || side == EnumFacing.UP }
     )
 
     val teslaTowerModule = ModuleTeslaTower(node)
@@ -292,5 +279,42 @@ class TileTeslaTowerPart : TileBase() {
         }
 
         return other?.hasCapability(capability, facing) ?: super.hasCapability(capability, facing)
+    }
+}
+
+@RegisterTileEntity("energy_receiver")
+class TileEnergyReceiver : TileBase(), ITickable {
+    val facing get() = getBlockState().getFacing()
+    val node = ElectricNode(ref)
+
+    val electricModule = ModuleElectricity(
+            listOf(node),
+            capabilityFilter = { side -> side == null || side == facing.opposite }
+    )
+
+    init {
+        initModules(electricModule)
+    }
+
+    @DoNotRemove
+    override fun update() {
+        super.update()
+        if (world.isClient) return
+        exportConnectorRF(world, pos, facing, node)
+    }
+}
+
+private fun exportConnectorRF(world: World, pos: BlockPos, facing: EnumFacing, node: ElectricNode) {
+    if (node.voltage < ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) return
+
+    val tile = world.getTileEntity(pos.offset(facing.opposite))
+    val handler = tile?.getOrNull(FORGE_ENERGY, facing) ?: return
+
+    val amount = (interpolate(node.voltage, ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE, ElectricConstants.TIER_1_MAX_VOLTAGE) * 400).toInt()
+    val accepted = handler.receiveEnergy(amount, true)
+
+    if (accepted > 0) {
+        val received = handler.receiveEnergy(accepted, false)
+        node.applyPower(-received.toDouble() * Config.wattsToFE, false)
     }
 }

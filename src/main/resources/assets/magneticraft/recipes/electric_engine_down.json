@@ -1,0 +1,34 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAA",
+    " B ",
+    "CDC"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper",
+      "count": 1
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlassColorless",
+      "count": 1
+    },
+    "C": {
+      "item": "magneticraft:crafting",
+      "count": 1,
+      "data": 2
+    },
+    "D": {
+      "item": "minecraft:piston",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "magneticraft:electric_engine",
+    "count": 1,
+    "data": 0
+  }
+}

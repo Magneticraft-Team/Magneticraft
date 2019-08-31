@@ -1,0 +1,18 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "magneticraft:empty",
+        "transform": "forge:default-block",
+        "textures": {
+            "particle": "magneticraft:blocks/electric_connectors/energy_receiver"
+        }
+    },
+    "variants": {
+        "down": [{}],
+        "up": [{}],
+        "north": [{}],
+        "south": [{}],
+        "east": [{}],
+        "west": [{}]
+    }
+}

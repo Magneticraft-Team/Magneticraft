@@ -619,6 +619,17 @@ fun GuiBuilder.rfTransformerGui(tile: TileRfTransformer) {
     }
 }
 
+fun GuiBuilder.electricEngineGui(tile: TileElectricEngine) {
+    container {
+        playerInventory()
+    }
+
+    bars {
+        electricBar(tile.node)
+        rfBar(tile.storage)
+    }
+}
+
 fun GuiBuilder.airlockGui(tile: TileAirLock) {
     container {
         playerInventory()

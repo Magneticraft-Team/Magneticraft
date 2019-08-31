@@ -1,6 +1,6 @@
 buildscript {
     ext.project_kotlin_version = '1.2.50'
-    ext.mod_version = '2.7.0'
+    ext.mod_version = '2.8.1'
     
     repositories {
         jcenter()

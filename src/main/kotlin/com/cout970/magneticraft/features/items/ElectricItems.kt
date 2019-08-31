@@ -128,6 +128,9 @@ object ElectricItems : IItemMaker {
                             it.player.world.rand.nextFloat() * 0.25f + 0.6f
                     )
 
+                    if (it.target is EntityPlayerMP) {
+                        it.target.connection.sendPacket(SPacketEntityVelocity(it.target))
+                    }
                     if (it.player is EntityPlayerMP) {
                         it.player.connection.sendPacket(SPacketEntityVelocity(it.target))
                     }

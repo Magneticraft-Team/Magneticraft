@@ -55,6 +55,8 @@ object Blocks : IBlockMaker {
     lateinit var electricPoleTransformer: BlockBase private set
     lateinit var electricCable: BlockBase private set
     lateinit var teslaTower: BlockBase private set
+    lateinit var energyReceiver: BlockBase private set
+
 
     // hacky way to avoid power pole drops and break particles, non thread-safe
     var air = false
@@ -72,8 +74,8 @@ object Blocks : IBlockMaker {
             hasCustomModel = true
             alwaysDropDefault = true
             customModels = listOf(
-                "model" to resource("models/block/mcx/connector.mcx"),
-                "inventory" to resource("models/block/mcx/connector.mcx")
+                    "model" to resource("models/block/mcx/connector.mcx"),
+                    "inventory" to resource("models/block/mcx/connector.mcx")
             )
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithFacing {
@@ -100,8 +102,8 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                "model" to resource("models/block/mcx/electric_pole.mcx"),
-                "inventory" to resource("models/block/mcx/electric_pole_inv.mcx")
+                    "model" to resource("models/block/mcx/electric_pole.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_pole_inv.mcx")
             )
             boundingBox = {
                 val size = 0.0625 * 3
@@ -128,8 +130,8 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                "model" to resource("models/block/mcx/electric_pole_transformer.mcx"),
-                "inventory" to resource("models/block/mcx/electric_pole_transformer_inv.mcx")
+                    "model" to resource("models/block/mcx/electric_pole_transformer.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_pole_transformer_inv.mcx")
             )
             boundingBox = {
                 val size = 0.0625 * 3
@@ -141,7 +143,7 @@ object Blocks : IBlockMaker {
                 else emptyList()
             }
             capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER },
-                ElectricPoleManualConnectionHandler)
+                    ElectricPoleManualConnectionHandler)
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
@@ -150,8 +152,8 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                "model" to resource("models/block/mcx/electric_cable.mcx"),
-                "inventory" to resource("models/block/mcx/electric_cable.mcx")
+                    "model" to resource("models/block/mcx/electric_cable.mcx"),
+                    "inventory" to resource("models/block/mcx/electric_cable.mcx")
             )
             boundingBox = { cableBoundingBox(it.source, it.pos, 6) }
         }.build()
@@ -165,8 +167,8 @@ object Blocks : IBlockMaker {
             forceModelBake = true
             generateDefaultItemBlockModel = false
             customModels = listOf(
-                "bottom" to resource("models/block/gltf/tesla_tower.gltf"),
-                "inventory" to resource("models/block/gltf/tesla_tower_inv.gltf")
+                    "bottom" to resource("models/block/gltf/tesla_tower.gltf"),
+                    "inventory" to resource("models/block/gltf/tesla_tower_inv.gltf")
             )
 
             onActivated = {
@@ -176,7 +178,7 @@ object Blocks : IBlockMaker {
                 } else {
                     val state = it.worldIn.getBlockState(it.pos.down())
                     state.block.onBlockActivated(it.worldIn, it.pos.down(), state, it.playerIn, it.hand, it.side,
-                        it.hit.xf, it.hit.yf, it.hit.zf
+                            it.hit.xf, it.hit.yf, it.hit.zf
                     )
                 }
             }
@@ -205,8 +207,24 @@ object Blocks : IBlockMaker {
             }
         }.build()
 
-        return itemBlockListOf(connector, electricPole, electricCable, teslaTower) +
-            (electricPoleTransformer to ItemBlockElectricPoleTransformer(electricPoleTransformer))
+        energyReceiver = builder.withName("energy_receiver").copy {
+            states = CommonMethods.Facing.values().toList()
+            factory = factoryOf(::TileEnergyReceiver)
+            generateDefaultItemBlockModel = false
+            hasCustomModel = true
+            customModels = listOf(
+                    "model" to resource("models/block/gltf/energy_receiver.gltf"),
+                    "inventory" to resource("models/block/gltf/energy_receiver.gltf")
+            )
+            boundingBox = CommonMethods.updateBoundingBoxWithFacing {
+                listOf(Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 8) createAABBUsing Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0))
+            }
+            onBlockPlaced = CommonMethods::placeWithFacing
+            pickBlock = CommonMethods::pickDefaultBlock
+        }.build()
+
+        return itemBlockListOf(connector, electricPole, electricCable, teslaTower, energyReceiver) +
+                (electricPoleTransformer to ItemBlockElectricPoleTransformer(electricPoleTransformer))
     }
 
     fun cableBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
@@ -269,29 +287,29 @@ object Blocks : IBlockMaker {
         val dir = when {
             yaw < -a * 3 + b && yaw >= -a * 4 + b -> PoleOrientation.NORTH_EAST
             yaw < -a * 2 + b && yaw >= -a * 3 + b -> PoleOrientation.EAST
-            yaw < -a + b     && yaw >= -a * 2 + b -> PoleOrientation.SOUTH_EAST
-            yaw < 0 + b      && yaw >= -a + b     -> PoleOrientation.SOUTH
-            yaw < a + b      && yaw >= 0 + b      -> PoleOrientation.SOUTH_WEST
-            yaw < a * 2 + b  && yaw >= a + b      -> PoleOrientation.WEST
-            yaw < a * 3 + b  && yaw >= a * 2 + b  -> PoleOrientation.NORTH_WEST
-            yaw < a * 4 + b  && yaw >= a * 3 + b  -> PoleOrientation.NORTH
+            yaw < -a + b && yaw >= -a * 2 + b -> PoleOrientation.SOUTH_EAST
+            yaw < 0 + b && yaw >= -a + b -> PoleOrientation.SOUTH
+            yaw < a + b && yaw >= 0 + b -> PoleOrientation.SOUTH_WEST
+            yaw < a * 2 + b && yaw >= a + b -> PoleOrientation.WEST
+            yaw < a * 3 + b && yaw >= a * 2 + b -> PoleOrientation.NORTH_WEST
+            yaw < a * 4 + b && yaw >= a * 3 + b -> PoleOrientation.NORTH
             else -> PoleOrientation.NORTH
         }
         //@formatter:on
 
         val pos = BlockPos.ORIGIN
         listOf(
-            pos to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_4),
-            pos.offset(EnumFacing.UP, 1) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_3),
-            pos.offset(EnumFacing.UP, 2) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_2),
-            pos.offset(EnumFacing.UP, 3) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_1),
-            pos.offset(EnumFacing.UP, 4) to default.withProperty(PROPERTY_POLE_ORIENTATION, dir)
+                pos to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_4),
+                pos.offset(EnumFacing.UP, 1) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_3),
+                pos.offset(EnumFacing.UP, 2) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_2),
+                pos.offset(EnumFacing.UP, 3) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_1),
+                pos.offset(EnumFacing.UP, 4) to default.withProperty(PROPERTY_POLE_ORIENTATION, dir)
         )
     }
 
     enum class TeslaTowerPart(
-        override val stateName: String,
-        override val isVisible: Boolean
+            override val stateName: String,
+            override val isVisible: Boolean
     ) : IStatesEnum, IStringSerializable {
         BOTTOM("bottom", true),
         MIDDLE("middle", false),
@@ -307,11 +325,11 @@ object Blocks : IBlockMaker {
     }
 
     enum class PoleOrientation(
-        override val stateName: String,
-        override val isVisible: Boolean,
-        val offset: Vec3d,
-        val angle: Float = 0f,
-        val offsetY: Int = 0
+            override val stateName: String,
+            override val isVisible: Boolean,
+            val offset: Vec3d,
+            val angle: Float = 0f,
+            val offsetY: Int = 0
     ) : IStatesEnum, IStringSerializable {
 
         NORTH("north", true, Vec3d(1.0, 0.0, 0.0), 180f),
@@ -366,7 +384,7 @@ object Blocks : IBlockMaker {
                 return ERROR
             }
             val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side)
-                ?: return NOT_A_CONNECTOR
+                    ?: return NOT_A_CONNECTOR
             val otherNodes = handler.nodes.filterIsInstance(IWireConnector::class.java)
 
 

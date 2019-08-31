@@ -6,7 +6,7 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockGalena",
+      "ore": "blockLead",
       "count": 1
     }
   },

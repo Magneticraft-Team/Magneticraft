@@ -112,10 +112,10 @@ object Utilities {
                 customRotate(vec3Of(180, 0, 0), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.NORTH -> {
-                customRotate(vec3Of(90, 0, 0), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(0, 90, 90), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.SOUTH -> {
-                customRotate(vec3Of(-90, 0, 0), Vec3d(0.5, 0.5, 0.5))
+                customRotate(vec3Of(0, -90, 90), Vec3d(0.5, 0.5, 0.5))
             }
             EnumFacing.WEST -> {
                 customRotate(vec3Of(0, 0, -90), Vec3d(0.5, 0.5, 0.5))
