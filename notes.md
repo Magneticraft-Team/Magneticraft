@@ -1,19 +1,11 @@
 # Bugs
 
-// shelving unit crash + not blocking keys
-// wires breaking when chunks load without order
-// too much microcrafting
-// shelving unit chest right click
-
 ### TODO list
 - expand container
-- fix guide
 - add conveyor belt up/down blocks
-- add sieve particles and sound
-- add grinder particles and sound
 - add flare stack
-- add gears for steam engine tiers
-- add wire coil durability and remove auto-connect (make lag)
+- add gears for machines
+- add wire coil durability
 - change pumpjack mining mechanic for : amount of oil near = speed of extraction
 - fix recipe progression
 
@@ -29,18 +21,14 @@
 - Farms
 - Original Tanks
 - Auto-extract pipes
-- Steam tubine
 - Rockets/Rocket silo
 - Better ore processing (galvanization tank, Allow furnace)
 - Geothermal power
 - Quarry?
-- Chainsaw, Drill, pneumatic wrench
 - Particles, lots of particles
 - Textil factory
 - Emerald nuggets for tradding?
 - Pump?
-- Shelving unit ordering...
-
 
 ### Steps to add a new multiblock
 - Add Controller Block

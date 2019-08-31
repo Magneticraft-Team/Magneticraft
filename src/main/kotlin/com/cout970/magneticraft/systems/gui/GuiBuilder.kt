@@ -34,6 +34,8 @@ import kotlin.math.max
 
 enum class TankIO { IN, OUT, INOUT, NONE }
 
+val largeAmountNumberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = '_' })
+
 class GuiBuilder(val config: GuiConfig) {
 
     var containerConfig: (AutoContainer) -> Unit = {}
@@ -209,11 +211,10 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun storageBar(node: ModuleInternalStorage) {
-        val numberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = ' ' })
         barOf(
             texture = vec2Of(45, 121),
             value = { node.energy / node.capacity.toDouble() },
-            tooltip = { listOf(numberFormat.format(node.energy) + "J") },
+            tooltip = { listOf(largeAmountNumberFormat.format(node.energy) + "J") },
             icon = 0
         )
     }
@@ -228,11 +229,10 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun rfBar(node: IEnergyStorage) {
-        val numberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = ' ' })
         barOf(
             texture = vec2Of(57, 121),
             value = { node.energyStored / node.maxEnergyStored.toDouble() },
-            tooltip = { listOf(numberFormat.format(node.energyStored) + "RF") },
+            tooltip = { listOf(largeAmountNumberFormat.format(node.energyStored) + "RF") },
             icon = 8
         )
     }
@@ -509,12 +509,11 @@ class DslComponents(val config: GuiConfig) {
 
     fun storageBar(pos: String, node: ModuleInternalStorage) {
         val posVec = config.points[pos] ?: Vec2d.ZERO
-        val numberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = ' ' })
         barOf(
             pos = posVec,
             texture = vec2Of(45, 121),
             value = { node.energy / node.capacity.toDouble() },
-            tooltip = { listOf(numberFormat.format(node.energy) + "J") },
+            tooltip = { listOf(largeAmountNumberFormat.format(node.energy) + "J") },
             icon = 0
         )
     }
