@@ -6,6 +6,7 @@ import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.systems.gui.AutoGui
 import com.cout970.magneticraft.systems.gui.DATA_ID_SHELVING_UNIT_SCROLL
 import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.components.buttons.SelectButton
@@ -46,6 +47,8 @@ class ComponentShelvingUnit : IComponent {
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         val scroll = scrollBar.section
+        val auto = gui as AutoGui
+        auto.slots = auto.createSlots(container.inventorySlots)
 
         if (lastScroll != scroll) {
             lastScroll = scroll
