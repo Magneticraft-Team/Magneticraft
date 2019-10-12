@@ -23,9 +23,7 @@ import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
 import com.cout970.magneticraft.systems.tilemodules.ModuleCrushingTable
-import mezz.jei.api.IModPlugin
-import mezz.jei.api.IModRegistry
-import mezz.jei.api.JEIPlugin
+import mezz.jei.api.*
 import mezz.jei.api.gui.IDrawable
 import mezz.jei.api.gui.IRecipeLayout
 import mezz.jei.api.ingredients.IIngredients
@@ -60,6 +58,7 @@ import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 class MagneticraftPlugin : IModPlugin {
 
     companion object {
+        lateinit var INSTANCE: MagneticraftPlugin
         const val CRUSHING_TABLE_ID = "magneticraft.crushing_table"
         const val SLUICE_BOX_ID = "magneticraft.sluice_box"
         const val GRINDER_ID = "magneticraft.grinder"
@@ -70,6 +69,18 @@ class MagneticraftPlugin : IModPlugin {
         const val GASIFICATION_UNIT_ID = "magneticraft.gasification_unit"
         const val THERMOPILE_ID = "magneticraft.thermopile"
     }
+
+    init {
+        INSTANCE = this
+    }
+
+    private lateinit var runtime: IJeiRuntime
+
+    override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {
+        runtime = jeiRuntime
+    }
+
+    fun getSearchBar(): IIngredientFilter = runtime.ingredientFilter
 
     override fun register(registry: IModRegistry) {
 

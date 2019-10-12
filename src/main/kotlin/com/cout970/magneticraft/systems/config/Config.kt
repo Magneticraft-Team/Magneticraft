@@ -50,6 +50,9 @@ object Config {
     @ConfigValue(category = CATEGORY_GUI, comment = "Scale of the gui with respect of the background image")
     var guideBookScale: Double = 1.5
 
+    @ConfigValue(category = CATEGORY_GUI, comment = "When you search something in the shelving unit the JEI search bar will update with the same search text")
+    var syncShelvingUnitSearchWithJei: Boolean = false
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
             "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0

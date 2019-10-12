@@ -6,7 +6,10 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.*
+import com.cout970.magneticraft.systems.integration.IntegrationHandler
+import com.cout970.magneticraft.systems.integration.jei.MagneticraftPlugin
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -119,10 +122,17 @@ class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> 
     }
 
     fun setFilter(text: String) {
+        if (IntegrationHandler.jei && Config.syncShelvingUnitSearchWithJei) {
+            setJeiFilter(text)
+        }
         filterSlots(text)
         sendUpdate(IBD().apply {
             setIntArray(DATA_ID_SHELVING_UNIT_FILTER, currentSlots.map { it.slotNumber }.toIntArray())
         })
+    }
+
+    fun setJeiFilter(text: String) {
+        MagneticraftPlugin.INSTANCE.getSearchBar().filterText = text
     }
 
     override fun receiveDataFromClient(ibd: IBD) {

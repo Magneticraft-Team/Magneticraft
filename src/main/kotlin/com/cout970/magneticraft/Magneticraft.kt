@@ -24,6 +24,7 @@ import java.io.File
     name = MOD_NAME,
     version = "2.7.0",
     modLanguage = "kotlin",
+    guiFactory = "com.cout970.magneticraft.systems.gui.ModGuiFactory",
     modLanguageAdapter = LANG_ADAPTER,
     acceptedMinecraftVersions = "[1.12]",
     dependencies = "required-client:modelloader@[1.1.6,);required-after:forgelin",
@@ -76,11 +77,7 @@ object Magneticraft {
 
             info("Loading config...")
             logTime("Config loaded in") {
-                ConfigHandler.apply {
-                    load()
-                    read()
-                    save()
-                }
+                ConfigHandler.init()
             }
 
             //Initialization of the Mod stuff

@@ -10,7 +10,6 @@ import com.cout970.magneticraft.misc.vector.cut
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.tileentities.TileBase
-import com.cout970.magneticraft.ug
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockFaceShape
@@ -20,10 +19,12 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.renderer.block.statemap.IStateMapper
 import net.minecraft.client.renderer.block.statemap.StateMapperBase
+import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.*
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -76,6 +77,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     var canConnectRedstone: ((CanConnectRedstoneArgs) -> Boolean)? = null
     var redstonePower: ((RedstonePowerArgs) -> Int)? = null
     var getBlockFaceShape: ((GetBlockFaceShapeArgs) -> BlockFaceShape)? = null
+    var addInformation: ((AddInformationArgs) -> Unit)? = null
 
     // ItemBlock stuff
     val inventoryVariants: Map<Int, String> = run {
@@ -190,6 +192,10 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         if (world.isClient) {
             world.getTile<TileBase>(pos)?.onBreak()
         }
+        // Remove TileEntity that is kept longer to have it at getDrops
+        if (dropWithTileNBT && (player.capabilities.isCreativeMode || world.isClient)) {
+            world.removeTileEntity(pos)
+        }
         return super.removedByPlayer(state, world, pos, player, willHarvest)
     }
 
@@ -257,6 +263,14 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         ) ?: listOf(BlockPos.ORIGIN to default)
     }
 
+    override fun harvestBlock(worldIn: World, player: EntityPlayer, pos: BlockPos, state: IBlockState, te: TileEntity?, stack: ItemStack) {
+        super.harvestBlock(worldIn, player, pos, state, te, stack)
+        if (dropWithTileNBT) {
+            // Make sure that after breaking the block there is no TileEntity remaining
+            worldIn.removeTileEntity(pos)
+        }
+    }
+
     override fun getDrops(drops: NonNullList<ItemStack>, world: IBlockAccess,
                           pos: BlockPos, state: IBlockState, fortune: Int) {
 
@@ -270,7 +284,7 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
         }
 
         super.getDrops(drops, world, pos, state, fortune)
-        // Save TileNBT and remove the Tile because it was not removed in breakBlock (we need to read it here!)
+        // Save TileNBT
         if (dropWithTileNBT) {
             if (drops.isNotEmpty()) {
                 val stack = drops[0]
@@ -281,7 +295,6 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
                     stack.setTagInfo("BlockEntityTag", nbt)
                 }
             }
-            (world as? World)?.removeTileEntity(pos)
         }
     }
 
@@ -336,6 +349,10 @@ open class BlockBase(material: Material) : Block(material), ICapabilityProvider 
     override fun getBlockFaceShape(worldIn: IBlockAccess, state: IBlockState, pos: BlockPos, face: EnumFacing): BlockFaceShape {
         return getBlockFaceShape?.invoke(GetBlockFaceShapeArgs(worldIn, state, pos, face)) ?: BlockFaceShape.SOLID
     }
+
+    override fun addInformation(stack: ItemStack, player: World?, tooltip: MutableList<String>, advanced: ITooltipFlag) {
+        addInformation?.invoke(AddInformationArgs(stack, player, tooltip, advanced))
+    }
 }
 
 data class BoundingBoxArgs(val state: IBlockState, val source: IBlockAccess, val pos: BlockPos)
@@ -385,3 +402,6 @@ data class RedstonePowerArgs(val state: IBlockState, val world: IBlockAccess, va
 
 data class GetBlockFaceShapeArgs(val worldIn: IBlockAccess, val state: IBlockState, val pos: BlockPos,
                                  val face: EnumFacing)
+
+data class AddInformationArgs(val stack: ItemStack, val world: World?, val tooltip: MutableList<String>,
+                              val advanced: ITooltipFlag)

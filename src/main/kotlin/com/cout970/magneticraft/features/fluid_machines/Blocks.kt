@@ -1,9 +1,7 @@
 package com.cout970.magneticraft.features.fluid_machines
 
 import com.cout970.magneticraft.AABB
-import com.cout970.magneticraft.misc.CreativeTabMg
-import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.resource
+import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.createAABBUsing
@@ -50,6 +48,17 @@ object Blocks : IBlockMaker {
             )
 
             dropWithTileNBT = true
+            addInformation = {
+                val tileNBT = it.stack.checkNBT().getCompoundTag("BlockEntityTag")
+                val modulesNBT = tileNBT.getCompoundTag("TileData").getList("_modules")
+                val tank = (modulesNBT[0] as? NBTTagCompound)?.getCompoundTag("tank0")
+
+                if (tank != null) {
+                    val amount = tank.getInteger("Amount")
+                    val fluid = tank.getString("FluidName")
+                    it.tooltip += t("tooltip.magneticraft.small_tank.line_0", amount, fluid)
+                }
+            }
             onActivated = CommonMethods::delegateToModule
         }.build()
 

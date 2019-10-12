@@ -58,6 +58,7 @@ class BlockBuilder {
     var canConnectRedstone: ((CanConnectRedstoneArgs) -> Boolean)? = null
     var redstonePower: ((RedstonePowerArgs) -> Int)? = null
     var blockFaceShape: ((GetBlockFaceShapeArgs) -> BlockFaceShape)? = null
+    var addInformation: ((AddInformationArgs) -> Unit)? = null
 
     var states: List<IStatesEnum>? = null
     var hardness = 1.5f
@@ -133,6 +134,7 @@ class BlockBuilder {
             canConnectRedstone = this@BlockBuilder.canConnectRedstone
             redstonePower = this@BlockBuilder.redstonePower
             getBlockFaceShape = this@BlockBuilder.blockFaceShape
+            addInformation = this@BlockBuilder.addInformation
             // @formatter:on
         }
         return block
@@ -150,6 +152,7 @@ class BlockBuilder {
         newBuilder.registryName = registryName
         newBuilder.material = material
         newBuilder.creativeTab = creativeTab
+        newBuilder.dropWithTileNBT = dropWithTileNBT
         newBuilder.boundingBox = boundingBox
         newBuilder.onActivated = onActivated
         newBuilder.stateMapper = stateMapper
@@ -177,6 +180,7 @@ class BlockBuilder {
         newBuilder.onEntityCollidedWithBlock = onEntityCollidedWithBlock
         newBuilder.canConnectRedstone = canConnectRedstone
         newBuilder.redstonePower = redstonePower
+        newBuilder.addInformation = addInformation
 
         func(newBuilder)
 

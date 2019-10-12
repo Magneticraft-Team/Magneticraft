@@ -144,6 +144,8 @@ gui.magneticraft.shelving_unit.opt0=Top level
 gui.magneticraft.shelving_unit.opt1=Middle level
 gui.magneticraft.shelving_unit.opt2=Bottom level
 
+gui.magneticraft.config_gui.title=Magneticraft Config
+
 item.magneticraft.electric_drill_normal.name=Electric Drill
 item.magneticraft.electric_chainsaw_normal.name=Electric Chainsaw
 item.magneticraft.electric_piston_normal.name=Electric Piston
@@ -324,6 +326,8 @@ text.magneticraft.shelving_unit_add_chests=Add Chests to increase storage
 # Item tooltips
 tooltip.magneticraft.item_storage.energy=%f/%fJ
 tooltip.magneticraft.multiblock.blueprint=Place down this blueprint to see the multiblock pattern
+
+tooltip.magneticraft.small_tank.line_0=Holding %d mB of %s
 
 # Fluids
 fluid.magneticraft.steam=Steam

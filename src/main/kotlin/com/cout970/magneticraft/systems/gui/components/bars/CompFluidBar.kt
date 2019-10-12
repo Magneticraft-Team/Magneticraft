@@ -2,6 +2,7 @@ package com.cout970.magneticraft.systems.gui.components.bars
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.gui.format
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
@@ -145,7 +146,7 @@ class CompFluidBar2(
         if (mouse in (gui.pos + pos to size)) {
             val list = when (tank.clientFluidAmount == 0) {
                 true -> listOf("Fluid: Empty")
-                else -> listOf("Fluid: ${tank.clientFluidName}", "Amount: ${tank.clientFluidAmount}")
+                else -> listOf("Fluid: ${tank.clientFluidName}", "Amount: ${tank.clientFluidAmount.format()} mB")
             }
 
             gui.drawHoveringText(list, mouse)
