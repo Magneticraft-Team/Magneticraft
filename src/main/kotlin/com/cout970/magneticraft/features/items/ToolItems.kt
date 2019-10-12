@@ -11,10 +11,8 @@ import com.cout970.magneticraft.misc.player.sendUnlocalizedMessage
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.*
-import com.cout970.magneticraft.systems.blocks.CommonMethods
 import com.cout970.magneticraft.systems.blocks.IRotable
 import com.cout970.magneticraft.systems.items.*
-import net.minecraft.block.BlockHorizontal
 import net.minecraft.block.properties.IProperty
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
@@ -23,6 +21,7 @@ import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
+
 
 /**
  * Created by cout970 on 2017/06/12.
@@ -81,6 +80,7 @@ object ToolItems : IItemMaker {
     }
 
     fun onUseVoltmeter(args: OnItemUseArgs): EnumActionResult {
+
         if (args.worldIn.isServer) {
             val tile = args.worldIn.getTileEntity(args.pos) ?: return EnumActionResult.PASS
             val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, args.facing) ?: return EnumActionResult.PASS

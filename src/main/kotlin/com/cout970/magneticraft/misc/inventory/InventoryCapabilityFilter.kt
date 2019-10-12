@@ -7,9 +7,9 @@ import net.minecraftforge.items.IItemHandler
  * Created by cout970 on 2017/07/01.
  */
 class InventoryCapabilityFilter(
-    val inventory: IItemHandler,
-    val inputSlots: List<Int>,
-    val outputSlots: List<Int>
+        val inventory: IItemHandler,
+        val inputSlots: List<Int>,
+        val outputSlots: List<Int>
 ) : IItemHandler {
 
     val slotMap = generateSlotMap()
@@ -63,7 +63,6 @@ class InventoryCapabilityFilter(
         if (inventory != other.inventory) return false
         if (inputSlots != other.inputSlots) return false
         if (outputSlots != other.outputSlots) return false
-        if (slotMap != other.slotMap) return false
 
         return true
     }
@@ -72,7 +71,10 @@ class InventoryCapabilityFilter(
         var result = inventory.hashCode()
         result = 31 * result + inputSlots.hashCode()
         result = 31 * result + outputSlots.hashCode()
-        result = 31 * result + slotMap.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "InventoryCapabilityFilter(inventory=$inventory, inputSlots=$inputSlots, outputSlots=$outputSlots, slotMap=$slotMap)"
     }
 }

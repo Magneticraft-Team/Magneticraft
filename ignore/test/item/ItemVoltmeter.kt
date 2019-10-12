@@ -24,6 +24,8 @@ object ItemVoltmeter : ItemMod("voltmeter") {
 
     override fun onItemUse(stack: ItemStack?, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand?, facing: EnumFacing?, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
 
+
+
         //DEBUG
         if (Debug.DEBUG && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
             val tile = worldIn.getTileEntity(pos)

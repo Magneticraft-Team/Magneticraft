@@ -20,4 +20,8 @@ class Inventory(val size: Int, var onContentsChanges: ((Inventory, Int) -> Unit)
         }
         super.deserializeNBT(nbt)
     }
+
+    override fun toString(): String {
+        return "MagneticraftInventory(size=$size)"
+    }
 }

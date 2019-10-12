@@ -13,6 +13,7 @@ import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.IItemHandler
@@ -20,8 +21,8 @@ import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
 class ModuleStackInventory(
-    val maxItems: Int,
-    override val name: String = "module_stack_inventory"
+        val maxItems: Int,
+        override val name: String = "module_stack_inventory"
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -45,58 +46,7 @@ class ModuleStackInventory(
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
 
         if (cap == ITEM_HANDLER) {
-            return object : IItemHandler {
-                override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-                    if (stackType.isEmpty) {
-                        // This doesn't handle the case where maxItems is less than 64 items
-                        if (!simulate) {
-                            stackType = stack.withSize(1)
-                            amount = stack.count
-                            container.sendUpdateToNearPlayers()
-                        }
-                        return ItemStack.EMPTY
-                    }
-
-                    if (ItemHandlerHelper.canItemStacksStack(stackType, stack)) {
-                        val space = maxItems - amount
-                        val toAdd = min(space, stack.count)
-                        val itemsLeft = stack.count - toAdd
-
-                        if (!simulate) {
-                            amount += toAdd
-                        }
-                        return if (itemsLeft == 0) ItemStack.EMPTY else stack.withSize(itemsLeft)
-                    }
-                    return stack
-                }
-
-                override fun getStackInSlot(slot: Int): ItemStack {
-                    if (stackType.isEmpty) return ItemStack.EMPTY
-                    return stackType.withSize(amount)
-                }
-
-                override fun getSlotLimit(slot: Int): Int = maxItems
-
-                override fun getSlots(): Int = 1
-
-                override fun extractItem(slot: Int, count: Int, simulate: Boolean): ItemStack {
-                    if (stackType.isEmpty || amount == 0) return ItemStack.EMPTY
-
-                    val toExtract = min(min(count, amount), 64)
-
-                    if (toExtract <= 0) return ItemStack.EMPTY
-
-                    val result = stackType.withSize(toExtract)
-                    if (!simulate) {
-                        amount -= toExtract
-                        if (amount <= 0) {
-                            stackType = ItemStack.EMPTY
-                            container.sendUpdateToNearPlayers()
-                        }
-                    }
-                    return result
-                }
-            } as T
+            return ContainerCapabilityFilter(this.container.tile) as T
         }
         return null
     }
@@ -159,9 +109,9 @@ class ModuleStackInventory(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return listOf(IntSyncVariable(
-            id = DATA_ID_ITEM_AMOUNT,
-            getter = { amount },
-            setter = { amount = it }
+                id = DATA_ID_ITEM_AMOUNT,
+                getter = { amount },
+                setter = { amount = it }
         ))
     }
 
@@ -175,5 +125,72 @@ class ModuleStackInventory(
     override fun serializeNBT(): NBTTagCompound = newNbt {
         add("amount", amount)
         add("stackType", stackType.serializeNBT())
+    }
+
+    inner class ContainerCapabilityFilter(val parent: TileEntity) : IItemHandler {
+        override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
+            if (stackType.isEmpty) {
+                // This doesn't handle the case where maxItems is less than 64 items
+                if (!simulate) {
+                    stackType = stack.withSize(1)
+                    amount = stack.count
+                    container.sendUpdateToNearPlayers()
+                }
+                return ItemStack.EMPTY
+            }
+
+            if (ItemHandlerHelper.canItemStacksStack(stackType, stack)) {
+                val space = maxItems - amount
+                val toAdd = min(space, stack.count)
+                val itemsLeft = stack.count - toAdd
+
+                if (!simulate) {
+                    amount += toAdd
+                }
+                return if (itemsLeft == 0) ItemStack.EMPTY else stack.withSize(itemsLeft)
+            }
+            return stack
+        }
+
+        override fun getStackInSlot(slot: Int): ItemStack {
+            if (stackType.isEmpty) return ItemStack.EMPTY
+            return stackType.withSize(amount)
+        }
+
+        override fun getSlotLimit(slot: Int): Int = maxItems
+
+        override fun getSlots(): Int = 1
+
+        override fun extractItem(slot: Int, count: Int, simulate: Boolean): ItemStack {
+            if (stackType.isEmpty || amount == 0) return ItemStack.EMPTY
+
+            val toExtract = min(min(count, amount), 64)
+
+            if (toExtract <= 0) return ItemStack.EMPTY
+
+            val result = stackType.withSize(toExtract)
+            if (!simulate) {
+                amount -= toExtract
+                if (amount <= 0) {
+                    stackType = ItemStack.EMPTY
+                    container.sendUpdateToNearPlayers()
+                }
+            }
+            return result
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as ContainerCapabilityFilter
+
+            if (this.parent != other.parent) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode() * 31 + this.parent.hashCode()
+        }
     }
 }

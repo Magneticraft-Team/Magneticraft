@@ -17,4 +17,4 @@ Waila like support, when an item in in hand or like glasses, 'scouter'
 - Conveyor belt check solid on side for leg placement
 - @mod in shelving unit search bar
 - pickable fluid tanks
-JEI sync for shelving unit
+- JEI sync for shelving unit

@@ -17,6 +17,7 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
         private val cache = mutableMapOf<Int, String>()
     }
 
+    @SuppressWarnings("deprecation")
     override fun getStorageFile(): File {
 
         if (stack.itemDamage == 0) {

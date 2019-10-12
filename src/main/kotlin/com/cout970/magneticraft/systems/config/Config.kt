@@ -41,7 +41,7 @@ object Config {
     @ConfigValue(category = CATEGORY_GUI, comment = "Unit of Heat to display, Celsius or Fahrenheit")
     var heatUnitCelsius = true
 
-    @ConfigValue(category = CATEGORY_GUI, comment = "Character used to separate number like , in 1,000,000, only the first character will be used")
+    @ConfigValue(category = CATEGORY_GUI, comment = "Character used to separate number like , in 1,000,000. Only one character will be used")
     var thousandsSeparator: String = ","
 
     @ConfigValue(category = CATEGORY_GUI, comment = "Allow players to use the gui of the combustion generator")
