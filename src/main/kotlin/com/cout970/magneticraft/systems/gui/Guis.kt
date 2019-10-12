@@ -26,6 +26,7 @@ import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.gui.SlotType
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.t
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.misc.world.isServer
@@ -531,12 +532,12 @@ fun GuiBuilder.inserterGui(tile: TileInserter) {
         slotSpacer(1, 2)
 
         group(vec2Of(38, 58)) {
-            switchButton("btn0", "btn0_offset", "btn0_on", "btn0_off", "Whitelist", "Blacklist")
-            switchButton("btn1", "btn1_offset", "btn1_on", "btn1_off", "Ore Dictionary", "Ore Dictionary")
-            switchButton("btn2", "btn2_offset", "btn2_on", "btn2_off", "Metadata", "Metadata")
-            switchButton("btn3", "btn3_offset", "btn3_on", "btn3_off", "NBT", "NBT")
-            switchButton("btn4", "btn4_offset", "btn4_on", "btn4_off", "Drop items", "Drop items")
-            switchButton("btn5", "btn5_offset", "btn5_on", "btn5_off", "Grab items", "Grab items")
+            switchButton("btn0", "btn0_offset", "btn0_on", "btn0_off", t("gui.magneticraft.inserter.btn0"), t("gui.magneticraft.inserter.btn0_off"))
+            switchButton("btn1", "btn1_offset", "btn1_on", "btn1_off", t("gui.magneticraft.inserter.btn1"), t("gui.magneticraft.inserter.btn1_off"))
+            switchButton("btn2", "btn2_offset", "btn2_on", "btn2_off", t("gui.magneticraft.inserter.btn2"), t("gui.magneticraft.inserter.btn2_off"))
+            switchButton("btn3", "btn3_offset", "btn3_on", "btn3_off", t("gui.magneticraft.inserter.btn3"), t("gui.magneticraft.inserter.btn3_off"))
+            switchButton("btn4", "btn4_offset", "btn4_on", "btn4_off", t("gui.magneticraft.inserter.btn4"), t("gui.magneticraft.inserter.btn4_off"))
+            switchButton("btn5", "btn5_offset", "btn5_on", "btn5_off", t("gui.magneticraft.inserter.btn5"), t("gui.magneticraft.inserter.btn5_off"))
         }
     }
 }
@@ -567,14 +568,15 @@ fun GuiBuilder.hydraulicPressGui(tile: TileHydraulicPress) {
     bars {
         electricBar(tile.node)
         storageBar(tile.storageModule)
+        consumptionBar(tile.processModule.consumption, Config.hydraulicPressMaxConsumption)
         progressBar(tile.processModule.timedProcess)
 
         drawable(Vec2d.ZERO, "arrow_offset", "arrow_size", "arrow_uv")
         slotSpacer()
         selectButton(vec2Of(18, 68), "btn0") {
-            option("opt0_offset", "opt0_background", "Light")
-            option("opt1_offset", "opt1_background", "Medium")
-            option("opt2_offset", "opt2_background", "Heavy")
+            option("opt0_offset", "opt0_background", t("gui.magneticraft.hydraulic_press.opt0"))
+            option("opt1_offset", "opt1_background", t("gui.magneticraft.hydraulic_press.opt1"))
+            option("opt2_offset", "opt2_background", t("gui.magneticraft.hydraulic_press.opt2"))
         }
     }
 }
@@ -601,9 +603,9 @@ fun GuiBuilder.shelvingUnitGui(@Suppress("UNUSED_PARAMETER") tile: TileShelvingU
         clickButton("btn1", "button_offset")
         drawable("button_icon_pos", "button_icon_size", "button_icon_uv")
         selectButton("btn0") {
-            option("opt0_offset", "opt0_background", "Top level")
-            option("opt1_offset", "opt1_background", "Middle level")
-            option("opt2_offset", "opt2_background", "Bottom level")
+            option("opt0_offset", "opt0_background", t("gui.magneticraft.shelving_unit.opt0"))
+            option("opt1_offset", "opt1_background", t("gui.magneticraft.shelving_unit.opt1"))
+            option("opt2_offset", "opt2_background", t("gui.magneticraft.shelving_unit.opt2"))
         }
     }
 }

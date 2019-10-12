@@ -53,4 +53,26 @@ class InventoryCapabilityFilter(
         }
         return ItemStack.EMPTY
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as InventoryCapabilityFilter
+
+        if (inventory != other.inventory) return false
+        if (inputSlots != other.inputSlots) return false
+        if (outputSlots != other.outputSlots) return false
+        if (slotMap != other.slotMap) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = inventory.hashCode()
+        result = 31 * result + inputSlots.hashCode()
+        result = 31 * result + outputSlots.hashCode()
+        result = 31 * result + slotMap.hashCode()
+        return result
+    }
 }

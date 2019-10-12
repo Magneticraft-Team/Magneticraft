@@ -1,24 +1,25 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AAA",
-    "BBB"
+    " A ",
+    "ABA",
+    " A "
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron",
+      "ore": "plasticBlack",
       "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron",
+      "ore": "lightPlateCopper",
       "count": 1
     }
   },
   "result": {
-    "item": "magneticraft:heat_sink",
-    "count": 2,
+    "item": "magneticraft:electric_cable",
+    "count": 24,
     "data": 0
   }
 }

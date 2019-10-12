@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft
 /**
  * Created by cout970 on 2017/08/10.
  */
-private val BREAK_LINES_REGEX = """(\\n)|(\n)""".toRegex()
 
 abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>() {
 
@@ -37,10 +36,7 @@ abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>(
 
                 if (te.clientErrors.isNotEmpty()) {
                     val txt = te.clientErrors.first().formattedText
-
-                    txt.split(BREAK_LINES_REGEX).forEachIndexed { index, s ->
-                        Utilities.renderFloatingLabel(s, vec3Of(0.5f, 2f - index * 4 / 16f, 0.5f))
-                    }
+                    Utilities.renderFloatingLabel(txt, vec3Of(0.5f, 2f, 0.5f))
                 }
             } else {
                 ticks = partialTicks

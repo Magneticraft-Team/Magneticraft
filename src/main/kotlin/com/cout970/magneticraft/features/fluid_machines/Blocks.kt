@@ -19,6 +19,7 @@ import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.ItemBlock
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
@@ -44,9 +45,11 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                "model" to resource("models/block/mcx/small_tank.mcx"),
-                "inventory" to resource("models/block/mcx/small_tank.mcx")
+                    "model" to resource("models/block/mcx/small_tank.mcx"),
+                    "inventory" to resource("models/block/mcx/small_tank.mcx")
             )
+
+            dropWithTileNBT = true
             onActivated = CommonMethods::delegateToModule
         }.build()
 
@@ -55,8 +58,8 @@ object Blocks : IBlockMaker {
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                "model" to resource("models/block/mcx/fluid_pipe.mcx"),
-                "inventory" to resource("models/block/mcx/fluid_pipe.mcx")
+                    "model" to resource("models/block/mcx/fluid_pipe.mcx"),
+                    "inventory" to resource("models/block/mcx/fluid_pipe.mcx")
             )
             boundingBox = { fluidPipeBoundingBox(it.source, it.pos) }
             onActivated = CommonMethods::delegateToModule

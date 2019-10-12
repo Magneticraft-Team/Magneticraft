@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "ABA",
+    "DBD",
     "ACA",
-    "ABA"
+    "DBD"
   ],
   "key": {
     "A": {
@@ -17,11 +17,15 @@
     "C": {
       "type": "forge:ore_dict",
       "ore": "stone"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotLead"
     }
   },
   "result": {
     "item": "magneticraft:multiblock_column",
     "data": 0,
-    "count": 2
+    "count": 4
   }
 }

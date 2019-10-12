@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "AAA",
+    "BAB",
     "BCB",
-    "DDD"
+    "EDE"
   ],
   "key": {
     "A": {
@@ -21,6 +21,10 @@
     "D": {
       "type": "forge:ore_dict",
       "ore": "lightPlateLead"
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "ingotLead"
     }
   },
   "result": {

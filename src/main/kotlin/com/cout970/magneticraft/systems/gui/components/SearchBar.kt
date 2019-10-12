@@ -5,6 +5,7 @@ import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
 import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
 import net.minecraft.client.gui.GuiTextField
@@ -27,7 +28,7 @@ class SearchBar(
         val charWidth = gui.fontHelper.getCharWidth('_')
         textField = GuiTextField(0, gui.fontHelper, pos.xi, pos.yi, size.xi - charWidth - 8, size.yi)
         textField.enableBackgroundDrawing = false
-        textField.isFocused = true
+        textField.isFocused = Config.autoSelectSearchBar
         Keyboard.enableRepeatEvents(true)
     }
 

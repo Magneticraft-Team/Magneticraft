@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "ABA",
-    "BCB",
-    "ABA"
+    "CBC",
+    "BAB",
+    "CBC"
   ],
   "key": {
     "A": {

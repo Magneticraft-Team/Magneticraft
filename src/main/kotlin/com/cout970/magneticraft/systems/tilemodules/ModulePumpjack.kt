@@ -96,7 +96,7 @@ class ModulePumpjack(
                     return
                 } else {
 
-                    // analize 32 blocks every tick
+                    // analyze 32 blocks every tick
                     val (pos) = find(firstOilSearch, oilFilter, 9) ?: return
 
                     depositStart = pos
@@ -274,11 +274,12 @@ class ModulePumpjack(
                 val blockstate = world.getBlockState(pos)
 
                 if (!blockstate.block.isAir(blockstate, world, pos)) {
-
                     world.playEvent(2001, pos, Block.getStateId(blockstate))
                     blockstate.block.dropBlockAsItem(world, ref().up(), blockstate, 0)
                 }
-                world.setBlockState(pos, MultiblockParts.pumpjackDrill.defaultState)
+                if(blockstate.getBlockHardness(world, pos) >= 0){
+                    world.setBlockState(pos, MultiblockParts.pumpjackDrill.defaultState)
+                }
                 energy.useEnergy(Config.pumpjackConsumption)
             }
         }

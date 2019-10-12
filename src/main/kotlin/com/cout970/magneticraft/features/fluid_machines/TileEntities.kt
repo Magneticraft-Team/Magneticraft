@@ -10,9 +10,11 @@ import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.*
 import com.cout970.magneticraft.systems.tilemodules.pipe.PipeType
 import com.cout970.magneticraft.systems.tilerenderers.MutableCubeCache
+import net.minecraft.block.state.IBlockState
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2017/08/28.
@@ -50,6 +52,11 @@ class TileSmallTank : TileBase(), ITickable {
 
     override fun shouldRenderInPass(pass: Int): Boolean {
         return pass == 0 || pass == 1
+    }
+
+    // Required to keep the fluid in item form
+    override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
+        return false
     }
 }
 

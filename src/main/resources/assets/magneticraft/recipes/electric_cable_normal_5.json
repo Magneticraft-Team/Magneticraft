@@ -1,29 +1,24 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "BAB",
-    "BCB",
-    "B B"
+    " A ",
+    "ABA",
+    " A "
   ],
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateIron",
+      "ore": "blockWool",
       "count": 1
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron",
+      "ore": "lightPlateCopper",
       "count": 1
-    },
-    "C": {
-      "item": "magneticraft:crafting",
-      "count": 1,
-      "data": 2
     }
   },
   "result": {
-    "item": "magneticraft:conveyor_belt",
+    "item": "magneticraft:electric_cable",
     "count": 12,
     "data": 0
   }

@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    " A ",
+    " C ",
     "ABA",
-    " A "
+    " C "
   ],
   "key": {
     "A": {
@@ -13,6 +13,10 @@
     "B": {
       "type": "forge:ore_dict",
       "ore": "blockGlass"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     }
   },
   "result": {

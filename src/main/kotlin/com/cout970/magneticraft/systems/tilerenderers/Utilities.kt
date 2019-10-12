@@ -43,6 +43,8 @@ import kotlin.math.max
 
 const val PIXEL = 0.0625
 
+private val BREAK_LINES_REGEX = """(\\n)|(\n)""".toRegex()
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun modelOf(block: Block, id: String = "model") = ModelResourceLocation(block.registryName!!, id)
 
@@ -321,7 +323,6 @@ object Utilities {
 
 
     fun renderFloatingLabel(str: String, pos: Vec3d) {
-
         val (x, y, z) = pos
         val renderManager = Minecraft.getMinecraft().renderManager
         val fontrenderer = renderManager.fontRenderer
@@ -341,20 +342,33 @@ object Utilities {
         val tessellator = Tessellator.getInstance()
         val worldrenderer = tessellator.buffer
         val i = 0
+        val lines = str.split(BREAK_LINES_REGEX)
 
-        val j = fontrenderer.getStringWidth(str) / 2
-        disableTexture2D()
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
-        worldrenderer.pos((-j - 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-        worldrenderer.pos((-j - 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-        worldrenderer.pos((j + 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-        worldrenderer.pos((j + 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-        tessellator.draw()
-        enableTexture2D()
-        fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, 553648127)
+        // Print background and text
+        pushMatrix()
+        for (line in lines) {
+            val j = fontrenderer.getStringWidth(line) / 2
+            disableTexture2D()
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
+            worldrenderer.pos((-j - 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            worldrenderer.pos((-j - 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            worldrenderer.pos((j + 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            worldrenderer.pos((j + 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            tessellator.draw()
+            enableTexture2D()
+            fontrenderer.drawString(line, -fontrenderer.getStringWidth(line) / 2, i, 553648127)
+            translate(0f, (1 / f1) * 4f / 16f, 0f)
+        }
+        popMatrix()
+
+        // Mark the text so it looks brighter
         enableDepth()
         depthMask(true)
-        fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, -1)
+        for (line in lines) {
+            fontrenderer.drawString(line, -fontrenderer.getStringWidth(line) / 2, i, -1)
+            translate(0f, (1 / f1) * 4f / 16f, 0f)
+        }
+
         enableLighting()
         disableBlend()
         color(1.0f, 1.0f, 1.0f, 1.0f)
@@ -426,9 +440,9 @@ object Utilities {
         val list = mutableListOf<Vec3d>()
         val distance = start.distanceTo(end)
         val middle = Vec3d(
-            (start.xd + end.xd) / 2,
-            (start.yd + end.yd) / 2 - distance * mass,
-            (start.zd + end.zd) / 2)
+                (start.xd + end.xd) / 2,
+                (start.yd + end.yd) / 2 - distance * mass,
+                (start.zd + end.zd) / 2)
 
         for (i in 0..10) {
             val p = i / 10.0
@@ -471,10 +485,10 @@ object Utilities {
 
     fun setColor(color: Int) {
         GL11.glColor4f(
-            ((color ushr 16) and 0xFF) / 255f,
-            ((color ushr 8) and 0xFF) / 255f,
-            (color and 0xFF) / 255f,
-            ((color ushr 24) and 0xFF) / 255f
+                ((color ushr 16) and 0xFF) / 255f,
+                ((color ushr 8) and 0xFF) / 255f,
+                (color and 0xFF) / 255f,
+                ((color ushr 24) and 0xFF) / 255f
         )
     }
 
@@ -567,17 +581,17 @@ object Utilities {
         val k = i / 65536
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
-            max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
-            max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
+                max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
+                max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
         )
 
         // Set additive color
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD)
         GlStateManager.color(
-            interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
-            interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
-            interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
-            1f
+                interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
+                interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
+                interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
+                1f
         )
         func()
 

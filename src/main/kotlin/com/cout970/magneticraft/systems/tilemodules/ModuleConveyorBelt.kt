@@ -117,8 +117,7 @@ class ModuleConveyorBelt(
     }
 
     val hasBlockDown = TimeCache(tileRefCallback, 10) {
-        val state = world.getBlockState(pos + EnumFacing.DOWN)
-        !state.block.isAir(state, world, pos + EnumFacing.DOWN)
+        world.isSideSolid(pos + EnumFacing.DOWN, EnumFacing.UP)
     }
 
     val isCorner

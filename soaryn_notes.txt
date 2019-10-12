@@ -1,0 +1,20 @@
+# Soaryn's request list
+preview in hand
+list of materials on right click
+JEI multiblock support
+Waila like support, when an item in in hand or like glasses, 'scouter'
+- Fix shelving unit with vaultech
+- Group separator in config 1,000
+- shapeless recipes
+- disable search autoselect in shelving unit
+- Multiblock text single plane rotation
+- Render ingot in hydraulic press
+- Electric furnace inserter same level fix
+- Rename big electric furnace
+- Progress bar when not crafting
+- Hydraulic press consumption bar
+- Inserter button tooltips
+- Conveyor belt check solid on side for leg placement
+- @mod in shelving unit search bar
+- pickable fluid tanks
+JEI cyn for shelving unit

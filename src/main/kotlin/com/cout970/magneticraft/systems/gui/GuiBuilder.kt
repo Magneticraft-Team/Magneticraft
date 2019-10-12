@@ -12,6 +12,7 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.components.*
 import com.cout970.magneticraft.systems.gui.components.bars.*
 import com.cout970.magneticraft.systems.gui.components.buttons.ClickButton
@@ -33,8 +34,6 @@ import java.text.DecimalFormatSymbols
 import kotlin.math.max
 
 enum class TankIO { IN, OUT, INOUT, NONE }
-
-val largeAmountNumberFormat = DecimalFormat("#,###", DecimalFormatSymbols().apply { groupingSeparator = '_' })
 
 class GuiBuilder(val config: GuiConfig) {
 
@@ -118,10 +117,10 @@ class ContainerBuilder(val container: AutoContainer, val config: GuiConfig) {
     }
 
     fun region(
-        first: Int,
-        size: Int,
-        inverseDirection: Boolean = false,
-        filter: (ItemStack, Int) -> Boolean = { _, _ -> true }
+            first: Int,
+            size: Int,
+            inverseDirection: Boolean = false,
+            filter: (ItemStack, Int) -> Boolean = { _, _ -> true }
     ) {
         container.inventoryRegions += InventoryRegion(first until first + size, inverseDirection, filter)
     }
@@ -171,14 +170,14 @@ class DslBars(val config: GuiConfig) {
 
         component(vec2Of(12, 54 + ICON_HEIGHT)) { pos ->
             listOf(
-                GuiValueBar(
-                    pos = pos + ICON_SIZE,
-                    size = vec2Of(12, 54),
-                    colorTextureOffset = texture,
-                    value = value,
-                    tooltip = tooltip
-                ),
-                iconOf(icon, pos + vec2Of(2, 0))
+                    GuiValueBar(
+                            pos = pos + ICON_SIZE,
+                            size = vec2Of(12, 54),
+                            colorTextureOffset = texture,
+                            value = value,
+                            tooltip = tooltip
+                    ),
+                    iconOf(icon, pos + vec2Of(2, 0))
             )
         }
     }
@@ -188,52 +187,52 @@ class DslBars(val config: GuiConfig) {
 
         component(vec2Of(12, 54 + ICON_HEIGHT)) { pos ->
             listOf(
-                GuiValueBar(
-                    pos = pos + ICON_SIZE + vec2Of(1, 0),
-                    size = vec2Of(10, 54),
-                    backgroundTextureOffset = vec2Of(10, 175),
-                    colorTextureOffset = texture,
-                    value = value,
-                    tooltip = tooltip
-                ),
-                iconOf(icon, pos + vec2Of(2, 0))
+                    GuiValueBar(
+                            pos = pos + ICON_SIZE + vec2Of(1, 0),
+                            size = vec2Of(10, 54),
+                            backgroundTextureOffset = vec2Of(10, 175),
+                            colorTextureOffset = texture,
+                            value = value,
+                            tooltip = tooltip
+                    ),
+                    iconOf(icon, pos + vec2Of(2, 0))
             )
         }
     }
 
     fun electricBar(node: IElectricNode) {
         barOf(
-            texture = vec2Of(23, 121),
-            value = { node.voltage / 120.0 },
-            tooltip = { listOf(String.format("%.2fV", node.voltage)) },
-            icon = 1
+                texture = vec2Of(23, 121),
+                value = { node.voltage / 120.0 },
+                tooltip = { listOf(String.format("%.2fV", node.voltage)) },
+                icon = 1
         )
     }
 
     fun storageBar(node: ModuleInternalStorage) {
         barOf(
-            texture = vec2Of(45, 121),
-            value = { node.energy / node.capacity.toDouble() },
-            tooltip = { listOf(largeAmountNumberFormat.format(node.energy) + "J") },
-            icon = 0
+                texture = vec2Of(45, 121),
+                value = { node.energy / node.capacity.toDouble() },
+                tooltip = { listOf(node.energy.format() + "J") },
+                icon = 0
         )
     }
 
     fun heatBar(node: IHeatNode) {
         barOf(
-            texture = vec2Of(34, 121),
-            value = { node.temperature / 4000.0 },
-            tooltip = { listOf(formatHeat(node.temperature)) },
-            icon = 2
+                texture = vec2Of(34, 121),
+                value = { node.temperature / 4000.0 },
+                tooltip = { listOf(formatHeat(node.temperature)) },
+                icon = 2
         )
     }
 
     fun rfBar(node: IEnergyStorage) {
         barOf(
-            texture = vec2Of(57, 121),
-            value = { node.energyStored / node.maxEnergyStored.toDouble() },
-            tooltip = { listOf(largeAmountNumberFormat.format(node.energyStored) + "RF") },
-            icon = 8
+                texture = vec2Of(57, 121),
+                value = { node.energyStored / node.maxEnergyStored.toDouble() },
+                tooltip = { listOf(node.energyStored.format() + "RF") },
+                icon = 8
         )
     }
 
@@ -243,10 +242,10 @@ class DslBars(val config: GuiConfig) {
 
     fun consumptionBar(va: ValueAverage, limit: Number) {
         bar2Of(
-            texture = vec2Of(39, 176),
-            value = { va.storage / limit.toDouble() },
-            tooltip = { listOf(String.format("Consumption: %.2fW", va.storage)) },
-            icon = 5
+                texture = vec2Of(39, 176),
+                value = { va.storage / limit.toDouble() },
+                tooltip = { listOf(String.format("Consumption: %.2fW", va.storage)) },
+                icon = 5
         )
     }
 
@@ -257,14 +256,14 @@ class DslBars(val config: GuiConfig) {
     fun fuelBar(mod: ModuleCombustionChamber) {
         val value = {
             if (mod.maxBurningTime == 0) 0.0 else {
-                (mod.maxBurningTime - mod.burningTime) / mod.maxBurningTime.toDouble()
+                max(0, mod.maxBurningTime - mod.burningTime) / mod.maxBurningTime.toDouble()
             }
         }
         bar2Of(
-            texture = vec2Of(21, 176),
-            value = value,
-            tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
-            icon = 5
+                texture = vec2Of(21, 176),
+                value = value,
+                tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
+                icon = 5
         )
     }
 
@@ -275,53 +274,53 @@ class DslBars(val config: GuiConfig) {
             }
         }
         bar2Of(
-            texture = vec2Of(21, 176),
-            value = value,
-            tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
-            icon = 5
+                texture = vec2Of(21, 176),
+                value = value,
+                tooltip = { listOf(String.format("Fuel: %.1f%%", 100.0 * value())) },
+                icon = 5
         )
     }
 
     fun productionBar(va: ValueAverage, limit: Number) {
         bar2Of(
-            texture = vec2Of(30, 176),
-            value = { va.storage / limit.toDouble() },
-            tooltip = { listOf(String.format("Production: %.2fW", va.storage)) },
-            icon = 4
+                texture = vec2Of(30, 176),
+                value = { va.storage / limit.toDouble() },
+                tooltip = { listOf(String.format("Production: %.2fW", va.storage)) },
+                icon = 4
         )
     }
 
     fun machineFluidBar(va: ValueAverage, limit: Number) {
         bar2Of(
-            texture = vec2Of(30, 176),
-            value = { va.storage / limit.toDouble() },
-            tooltip = { listOf(String.format("%.1f mB/t", va.storage)) },
-            icon = 4
+                texture = vec2Of(30, 176),
+                value = { va.storage / limit.toDouble() },
+                tooltip = { listOf(String.format("%.1f mB/t", va.storage)) },
+                icon = 4
         )
     }
 
     fun electricTransferBar(va: ValueAverage, min: Number, max: Number) {
         component(vec2Of(7, 54 + ICON_HEIGHT)) { pos ->
             listOf(
-                TransferRateBar(
-                    pos = pos + ICON_SIZE + vec2Of(1, 3),
-                    value = { va.storage.toDouble() },
-                    base = { 0.0 },
-                    min = { min.toDouble() },
-                    max = { max.toDouble() }
-                ),
-                iconOf(10, pos)
+                    TransferRateBar(
+                            pos = pos + ICON_SIZE + vec2Of(1, 3),
+                            value = { va.storage.toDouble() },
+                            base = { 0.0 },
+                            min = { min.toDouble() },
+                            max = { max.toDouble() }
+                    ),
+                    iconOf(10, pos)
             )
         }
     }
 
     fun progressBar(timed: TimedCraftingProcess) {
-        val value = { timed.timer / timed.limit().toDouble() }
+        val value = { if (!timed.process.canCraft()) 0.0 else timed.timer / timed.limit().toDouble() }
         bar2Of(
-            texture = vec2Of(66, 176),
-            value = value,
-            tooltip = { listOf(String.format("Progress: %.1f%%", 100 * value())) },
-            icon = 4
+                texture = vec2Of(66, 176),
+                value = value,
+                tooltip = { listOf(String.format("Progress: %.1f%%", 100 * value())) },
+                icon = 4
         )
     }
 
@@ -365,7 +364,7 @@ class DslBars(val config: GuiConfig) {
 
     fun switchButton(id: String, offset: String,
                      enableIcon: String, disableIcon: String,
-                     tooltipOn: String, tooltipOff: String) {
+                     tooltipOn: String, tooltipOff: String = tooltipOn) {
 
         val offsetVec = config.points[offset] ?: Vec2d.ZERO
         val enableIconVec = config.points[enableIcon] ?: Vec2d.ZERO
@@ -373,12 +372,12 @@ class DslBars(val config: GuiConfig) {
 
         component(vec2Of(18, 18)) { pos ->
             listOf(SwitchButton(
-                pos = pos + offsetVec,
-                enableIcon = enableIconVec,
-                disableIcon = disableIconVec,
-                tooltipEnable = tooltipOn,
-                tooltipDisable = tooltipOff,
-                id = id
+                    pos = pos + offsetVec,
+                    enableIcon = enableIconVec,
+                    disableIcon = disableIconVec,
+                    tooltipEnable = tooltipOn,
+                    tooltipDisable = tooltipOff,
+                    id = id
             ))
         }
     }
@@ -487,11 +486,11 @@ class DslComponents(val config: GuiConfig) {
                       value: () -> Double, tooltip: () -> List<String> = { emptyList() }, icon: Int) {
 
         components += GuiValueBar(
-            pos = pos + ICON_SIZE,
-            size = vec2Of(12, 54),
-            colorTextureOffset = texture,
-            value = value,
-            tooltip = tooltip
+                pos = pos + ICON_SIZE,
+                size = vec2Of(12, 54),
+                colorTextureOffset = texture,
+                value = value,
+                tooltip = tooltip
         )
         components += iconOf(icon, pos + vec2Of(2, 0))
     }
@@ -499,22 +498,22 @@ class DslComponents(val config: GuiConfig) {
     fun electricBar(pos: String, node: IElectricNode) {
         val posVec = config.points[pos] ?: Vec2d.ZERO
         barOf(
-            pos = posVec,
-            texture = vec2Of(23, 121),
-            value = { node.voltage / 120.0 },
-            tooltip = { listOf(String.format("%.2fV", node.voltage)) },
-            icon = 1
+                pos = posVec,
+                texture = vec2Of(23, 121),
+                value = { node.voltage / 120.0 },
+                tooltip = { listOf(String.format("%.2fV", node.voltage)) },
+                icon = 1
         )
     }
 
     fun storageBar(pos: String, node: ModuleInternalStorage) {
         val posVec = config.points[pos] ?: Vec2d.ZERO
         barOf(
-            pos = posVec,
-            texture = vec2Of(45, 121),
-            value = { node.energy / node.capacity.toDouble() },
-            tooltip = { listOf(largeAmountNumberFormat.format(node.energy) + "J") },
-            icon = 0
+                pos = posVec,
+                texture = vec2Of(45, 121),
+                value = { node.energy / node.capacity.toDouble() },
+                tooltip = { listOf(node.energy.format() + "J") },
+                icon = 0
         )
     }
 
@@ -587,9 +586,9 @@ class DslComponents(val config: GuiConfig) {
 }
 
 private fun iconOf(index: Int, pos: IVector2): CompImage = CompImage(guiTexture("misc"), DrawableBox(
-    screenPos = pos,
-    screenSize = vec2Of(7, 8),
-    texturePos = vec2Of(37 + (index % 8) * 8, 62 + (index / 8) * 9),
-    textureSize = vec2Of(7, 8),
-    textureScale = vec2Of(256)
+        screenPos = pos,
+        screenSize = vec2Of(7, 8),
+        texturePos = vec2Of(37 + (index % 8) * 8, 62 + (index / 8) * 9),
+        textureSize = vec2Of(7, 8),
+        textureScale = vec2Of(256)
 ))

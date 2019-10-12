@@ -122,6 +122,28 @@ item.magneticraft.broken_gear_normal.name=Broken Gear
 item.magneticraft.inserter_upgrade_speed.name=Inserter Upgrade: Speed
 item.magneticraft.inserter_upgrade_stack.name=Inserter Upgrade: Stack
 
+gui.magneticraft.inserter.btn0=Whitelist
+gui.magneticraft.inserter.btn1=Ore Dictionary
+gui.magneticraft.inserter.btn2=Metadata
+gui.magneticraft.inserter.btn3=NBT
+gui.magneticraft.inserter.btn4=Drop items in world
+gui.magneticraft.inserter.btn5=Grab items in world
+
+gui.magneticraft.inserter.btn0_off=Blacklist
+gui.magneticraft.inserter.btn1_off=Ore Dictionary
+gui.magneticraft.inserter.btn2_off=Metadata
+gui.magneticraft.inserter.btn3_off=NBT
+gui.magneticraft.inserter.btn4_off=Drop items in world
+gui.magneticraft.inserter.btn5_off=Grab items in world
+
+gui.magneticraft.hydraulic_press.opt0=Light
+gui.magneticraft.hydraulic_press.opt1=Medium
+gui.magneticraft.hydraulic_press.opt2=Heavy
+
+gui.magneticraft.shelving_unit.opt0=Top level
+gui.magneticraft.shelving_unit.opt1=Middle level
+gui.magneticraft.shelving_unit.opt2=Bottom level
+
 item.magneticraft.electric_drill_normal.name=Electric Drill
 item.magneticraft.electric_chainsaw_normal.name=Electric Chainsaw
 item.magneticraft.electric_piston_normal.name=Electric Piston
@@ -217,10 +239,10 @@ tile.magneticraft.pumpjack_inactive_north.name=Pumpjack
 tile.magneticraft.hydraulic_press_inactive_north.name=Hydraulic Press
 tile.magneticraft.oil_heater_inactive_north.name=Oil Heater
 tile.magneticraft.refinery_inactive_north.name=Refinery
-tile.magneticraft.big_combustion_chamber_inactive_north.name=Big Combustion Chamber
-tile.magneticraft.big_steam_boiler_inactive_north.name=Big Steam Boiler
+tile.magneticraft.big_combustion_chamber_inactive_north.name=Bigger Combustion Chamber
+tile.magneticraft.big_steam_boiler_inactive_north.name=Bigger Steam Boiler
 tile.magneticraft.steam_turbine_inactive_north.name=Steam Turbine
-tile.magneticraft.big_electric_furnace_inactive_north.name=Big Electric Furnace
+tile.magneticraft.big_electric_furnace_inactive_north.name=Bigger Electric Furnace
 
 # Ingot blocks
 tile.magneticraft.storage_blocks_copper.name=Copper Block

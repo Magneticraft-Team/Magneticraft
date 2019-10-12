@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.vector.Vec2d
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.client.resources.I18n
 import net.minecraft.client.resources.IResource
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent

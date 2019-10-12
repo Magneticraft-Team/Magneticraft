@@ -70,6 +70,7 @@ class BlockBuilder {
     var alwaysDropDefault = false
     var blockLayer: BlockRenderLayer? = null
     var tickRate = 10
+    var dropWithTileNBT: Boolean = false
 
     var hasCustomModel: Boolean = false
         set(value) {
@@ -104,39 +105,40 @@ class BlockBuilder {
             setLightLevel(lightEmission)
 
             // @formatter:off
-            unlocalizedName             = "${registryName?.resourceDomain}.${registryName?.resourcePath}"
-            onActivated                 = this@BlockBuilder.onActivated
-            stateMapper                 = this@BlockBuilder.stateMapper
+            unlocalizedName = "${registryName?.resourceDomain}.${registryName?.resourcePath}"
+            dropWithTileNBT = this@BlockBuilder.dropWithTileNBT
+            onActivated = this@BlockBuilder.onActivated
+            stateMapper = this@BlockBuilder.stateMapper
             enableOcclusionOptimization = this@BlockBuilder.enableOcclusionOptimization
-            translucent_                = this@BlockBuilder.translucent
-            onBlockPlaced               = this@BlockBuilder.onBlockPlaced
-            customModels                = this@BlockBuilder.customModels
-            forceModelBake              = this@BlockBuilder.forceModelBake
-            pickBlock                   = this@BlockBuilder.pickBlock
-            generateDefaultItemModel    = this@BlockBuilder.generateDefaultItemBlockModel
-            canPlaceBlockOnSide         = this@BlockBuilder.canPlaceBlockOnSide
-            capabilityProvider          = this@BlockBuilder.capabilityProvider
-            onNeighborChanged           = this@BlockBuilder.onNeighborChanged
-            alwaysDropDefault           = this@BlockBuilder.alwaysDropDefault
-            blockStatesToPlace          = this@BlockBuilder.blockStatesToPlace
-            onBlockBreak                = this@BlockBuilder.onBlockBreak
-            onDrop                      = this@BlockBuilder.onDrop
-            onBlockPostPlaced           = this@BlockBuilder.onBlockPostPlaced
-            tickRandomly                = this@BlockBuilder.tickRandomly
-            onUpdateTick                = this@BlockBuilder.onUpdateTick
-            collisionBox                = this@BlockBuilder.collisionBox
-            shouldSideBeRendered_       = this@BlockBuilder.shouldSideBeRendered
-            tickRate_                   = this@BlockBuilder.tickRate
-            onEntityCollidedWithBlock   = this@BlockBuilder.onEntityCollidedWithBlock
-            canConnectRedstone          = this@BlockBuilder.canConnectRedstone
-            redstonePower               = this@BlockBuilder.redstonePower
-            getBlockFaceShape           = this@BlockBuilder.blockFaceShape
+            translucent_ = this@BlockBuilder.translucent
+            onBlockPlaced = this@BlockBuilder.onBlockPlaced
+            customModels = this@BlockBuilder.customModels
+            forceModelBake = this@BlockBuilder.forceModelBake
+            pickBlock = this@BlockBuilder.pickBlock
+            generateDefaultItemModel = this@BlockBuilder.generateDefaultItemBlockModel
+            canPlaceBlockOnSide = this@BlockBuilder.canPlaceBlockOnSide
+            capabilityProvider = this@BlockBuilder.capabilityProvider
+            onNeighborChanged = this@BlockBuilder.onNeighborChanged
+            alwaysDropDefault = this@BlockBuilder.alwaysDropDefault
+            blockStatesToPlace = this@BlockBuilder.blockStatesToPlace
+            onBlockBreak = this@BlockBuilder.onBlockBreak
+            onDrop = this@BlockBuilder.onDrop
+            onBlockPostPlaced = this@BlockBuilder.onBlockPostPlaced
+            tickRandomly = this@BlockBuilder.tickRandomly
+            onUpdateTick = this@BlockBuilder.onUpdateTick
+            collisionBox = this@BlockBuilder.collisionBox
+            shouldSideBeRendered_ = this@BlockBuilder.shouldSideBeRendered
+            tickRate_ = this@BlockBuilder.tickRate
+            onEntityCollidedWithBlock = this@BlockBuilder.onEntityCollidedWithBlock
+            canConnectRedstone = this@BlockBuilder.canConnectRedstone
+            redstonePower = this@BlockBuilder.redstonePower
+            getBlockFaceShape = this@BlockBuilder.blockFaceShape
             // @formatter:on
         }
         return block
     }
 
-    inline fun factoryOf(crossinline func:  () -> TileEntity): ((World, IBlockState) -> TileEntity?) = { _, _ -> func() }
+    inline fun factoryOf(crossinline func: () -> TileEntity): ((World, IBlockState) -> TileEntity?) = { _, _ -> func() }
 
     fun copy(func: BlockBuilder.() -> Unit): BlockBuilder {
         val newBuilder = BlockBuilder()

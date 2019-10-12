@@ -9,6 +9,7 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.*
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
@@ -49,7 +50,7 @@ class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> 
         withScroll(0f)
     }
 
-    fun levelButton(id: Int){
+    fun levelButton(id: Int) {
         val ibd = IBD().apply {
             setInteger(DATA_ID_SHELVING_UNIT_LEVEL, id)
             setString(DATA_ID_SHELVING_UNIT_FILTER, "")
@@ -92,9 +93,19 @@ class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> 
             switchLevel(currentLevel)
             return
         }
-        updateCurrentSlots(allSlots.filter {
-            it.stack.isNotEmpty && it.stack.displayName.contains(filter, ignoreCase = true)
-        })
+
+        fun matches(stack: ItemStack, filter: String): Boolean {
+            if (stack.isEmpty) return false
+
+            if (filter.startsWith('@')) {
+                val mod = filter.substring(1)
+                return stack.item.registryName!!.resourceDomain.contains(mod, ignoreCase = true)
+            }
+
+            return stack.displayName.contains(filter, ignoreCase = true)
+        }
+
+        updateCurrentSlots(allSlots.filter { matches(it.stack, filter) })
     }
 
     fun serverFilterSlots(slots: IntArray) {

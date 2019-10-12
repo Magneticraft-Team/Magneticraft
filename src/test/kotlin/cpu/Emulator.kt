@@ -28,7 +28,7 @@ object Emulator {
     private lateinit var motherboard: Motherboard
 
     fun init(args: Array<String>) {
-        val img = "rust_drivers"
+        val img = "rust_lisp"
         val osDisk = FakeFloppyDisk(File("./src/main/resources/assets/magneticraft/cpu/$img.bin"), true)
         val programDisk = FakeFloppyDisk(File("./run/disk.img"), false)
 

@@ -16,9 +16,13 @@ import net.minecraft.block.properties.IProperty
 import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
+import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 
@@ -159,6 +163,18 @@ object CommonMethods {
             boxes.map { facing.rotateBox(center, it) }
         }
     }
+
+//    fun dropWithTileNBT(args: DropsArgs, getNBT: (IBlockAccess, BlockPos) -> NBTTagCompound?): List<ItemStack> {
+//        if (args.default.isNotEmpty()) {
+//            val stack = args.default[0]
+//            val nbt = getNBT(args.world, args.pos)
+//
+//            if (nbt != null) {
+//                stack.setTagInfo("BlockEntityTag", nbt)
+//            }
+//        }
+//        return args.default
+//    }
 
     // Common properties
     val PROPERTY_FACING: PropertyEnum<Facing> =

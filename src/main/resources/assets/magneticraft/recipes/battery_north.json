@@ -2,8 +2,8 @@
   "type": "forge:ore_shaped",
   "pattern": [
     "AAA",
-    "BCB",
-    "BBB"
+    "DCD",
+    "DBD"
   ],
   "key": {
     "A": {
@@ -16,6 +16,10 @@
     "C": {
       "item": "magneticraft:multiblock_parts",
       "data": 2
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     }
   },
   "result": {

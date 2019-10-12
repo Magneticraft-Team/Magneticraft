@@ -153,8 +153,8 @@
     },
     "hydraulic_press": {
         "points": {
-            "input_slot": [91, 17],
-            "output_slot": [91, 49],
+            "input_slot": [98, 17],
+            "output_slot": [98, 49],
             "opt0_offset": [0, 10],
             "opt1_offset": [0, 30],
             "opt2_offset": [0, 50],

@@ -12,15 +12,16 @@
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateLead"
+      "ore": "ingotLead"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "ingotCopper"
+      "ore": "lightPlateCopper"
     }
   },
   "result": {
     "item": "magneticraft:electric_pole_transformer",
-    "data": 0
+    "data": 0,
+    "count": 2
   }
 }

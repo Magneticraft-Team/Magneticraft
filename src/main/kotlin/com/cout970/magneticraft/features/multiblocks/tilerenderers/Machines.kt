@@ -4,6 +4,8 @@ import com.cout970.magneticraft.features.automatic_machines.Blocks
 import com.cout970.magneticraft.features.automatic_machines.TileRendererConveyorBelt
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.RegisterRenderer
+import com.cout970.magneticraft.misc.inventory.get
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.systems.tilerenderers.*
 import com.cout970.modelloader.api.*
@@ -53,6 +55,19 @@ object TileRendererHydraulicPress : TileRendererMultiblock<TileHydraulicPress>()
         Utilities.rotateFromCenter(te.facing, 0f)
         translate(0, 0, -1)
         if (te.processModule.working) renderModel("animation") else renderModel("default")
+
+        val stack = te.inventory[0]
+        if (stack.isNotEmpty) {
+            stackMatrix {
+                translate(0.5f, 2f, 0.5f)
+                if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
+                    scale(2.0)
+                } else {
+                    translate(0f, -PIXEL, 0f)
+                }
+                Utilities.renderItem(stack)
+            }
+        }
     }
 }
 
@@ -61,8 +76,8 @@ object TileRendererBigCombustionChamber : TileRendererMultiblock<TileBigCombusti
 
     override fun init() {
         createModel(Multiblocks.bigCombustionChamber,
-            ModelSelector("fire_off", FilterString("fire_off")),
-            ModelSelector("fire_on", FilterString("fire_on"))
+                ModelSelector("fire_off", FilterString("fire_off")),
+                ModelSelector("fire_on", FilterString("fire_on"))
         )
     }
 
@@ -92,8 +107,8 @@ object TileRendererSteamTurbine : TileRendererMultiblock<TileSteamTurbine>() {
 
     override fun init() {
         createModel(Multiblocks.steamTurbine,
-            ModelSelector("blade", FilterRegex("blade.*")),
-            ModelSelector("not_blade", FilterNotRegex("blade.*"))
+                ModelSelector("blade", FilterRegex("blade.*")),
+                ModelSelector("not_blade", FilterNotRegex("blade.*"))
         )
     }
 
@@ -136,17 +151,17 @@ object TileRendererBigElectricFurnace : TileRendererMultiblock<TileBigElectricFu
 
     override fun init() {
         createModelWithoutTexture(Multiblocks.bigElectricFurnace,
-            ModelSelector("multiblock", FilterAlways),
-            ModelSelector("dark", FilterString("Object 26"))
+                ModelSelector("multiblock", FilterAlways),
+                ModelSelector("dark", FilterString("Object 26"))
         )
 
         createModel(Blocks.conveyorBelt, listOf(
-            ModelSelector("back_legs", FilterRegex("back_leg.*")),
-            ModelSelector("front_legs", FilterRegex("front_leg.*")),
-            ModelSelector("lateral_left", FilterRegex("lateral_left")),
-            ModelSelector("lateral_right", FilterRegex("lateral_right")),
-            ModelSelector("panel_left", FilterRegex("panel_left")),
-            ModelSelector("panel_right", FilterRegex("panel_right"))
+                ModelSelector("back_legs", FilterRegex("back_leg.*")),
+                ModelSelector("front_legs", FilterRegex("front_leg.*")),
+                ModelSelector("lateral_left", FilterRegex("lateral_left")),
+                ModelSelector("lateral_right", FilterRegex("lateral_right")),
+                ModelSelector("panel_left", FilterRegex("panel_left")),
+                ModelSelector("panel_right", FilterRegex("panel_right"))
         ), "base")
 
         val anim = modelOf(Blocks.conveyorBelt, "anim")

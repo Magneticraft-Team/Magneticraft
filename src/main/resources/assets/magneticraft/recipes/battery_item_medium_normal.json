@@ -8,7 +8,7 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "nuggetCopper"
+      "ore": "ingotCopper"
     },
     "B": {
       "item": "magneticraft:battery_item_low",

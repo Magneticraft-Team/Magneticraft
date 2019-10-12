@@ -12,11 +12,11 @@
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "nuggetCopper"
+      "ore": "ingotCopper"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "lightPlateLead"
+      "ore": "ingotLead"
     },
     "D": {
       "type": "forge:ore_dict",

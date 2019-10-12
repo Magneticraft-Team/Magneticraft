@@ -35,8 +35,14 @@ object Config {
             " rods in the crushing table")
     var crushingTableCausesFire = true
 
-    @ConfigValue(category = CATEGORY_GENERAL, comment = "Unit of Heat to display, Celsius or Fahrenheit")
+    @ConfigValue(category = CATEGORY_GENERAL, comment = "Automatically focus the search bar in the shelving unit when you enter the GUI")
+    var autoSelectSearchBar = true
+
+    @ConfigValue(category = CATEGORY_GUI, comment = "Unit of Heat to display, Celsius or Fahrenheit")
     var heatUnitCelsius = true
+
+    @ConfigValue(category = CATEGORY_GUI, comment = "Character used to separate number like , in 1,000,000, only the first character will be used")
+    var thousandsSeparator: String = ","
 
     @ConfigValue(category = CATEGORY_GUI, comment = "Allow players to use the gui of the combustion generator")
     var allowCombustionChamberGui = true
