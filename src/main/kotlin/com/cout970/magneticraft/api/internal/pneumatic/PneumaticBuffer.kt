@@ -4,11 +4,11 @@ import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.misc.forEachTag
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagList
+import net.minecraft.nbt.ListNBT
 import net.minecraftforge.common.util.INBTSerializable
 import java.util.*
 
-class PneumaticBuffer : INBTSerializable<NBTTagList> {
+class PneumaticBuffer : INBTSerializable<ListNBT> {
     private val queue = ArrayDeque<PneumaticBox>()
     var blocked = false
 
@@ -40,14 +40,14 @@ class PneumaticBuffer : INBTSerializable<NBTTagList> {
 
     fun getItems(): Collection<PneumaticBox> = queue
 
-    override fun deserializeNBT(nbt: NBTTagList) {
+    override fun deserializeNBT(nbt: ListNBT) {
         queue.clear()
-        nbt.forEachTag { queue += PneumaticBox(ItemStack(it)) }
+        nbt.forEachTag { queue += PneumaticBox(ItemStack.read(it)) }
     }
 
-    override fun serializeNBT(): NBTTagList {
-        return NBTTagList().also {
-            queue.forEach { item -> it.appendTag(item.serializeNBT()) }
+    override fun serializeNBT(): ListNBT {
+        return ListNBT().also {
+            queue.forEach { item -> it.add(item.serializeNBT()) }
         }
     }
 }

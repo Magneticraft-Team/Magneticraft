@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.core.INode
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
@@ -7,7 +9,6 @@ import com.cout970.magneticraft.api.heat.IHeatConnection
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.heat.HeatNode
-import com.cout970.magneticraft.misc.getTagCompound
 import com.cout970.magneticraft.misc.list
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
@@ -22,8 +23,7 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.gui.DATA_ID_HEAT_LIST
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.Direction
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
@@ -44,7 +44,7 @@ class ModuleHeat(
 
     companion object {
         @JvmStatic
-        val NEGATIVE_DIRECTIONS = EnumFacing.values().filter { it.axisDirection == EnumFacing.AxisDirection.NEGATIVE }
+        val NEGATIVE_DIRECTIONS = EnumFacing.values().filter { it.axisDirection == Direction.AxisDirection.NEGATIVE }
     }
 
     override lateinit var container: IModuleContainer
@@ -147,10 +147,6 @@ class ModuleHeat(
 
     override fun getOutputConnections(): MutableList<IHeatConnection> = outputNormalConnections
 
-    override fun hasCapability(cap: Capability<*>, facing: EnumFacing?): Boolean {
-        return cap == HEAT_NODE_HANDLER && capabilityFilter.invoke(facing)
-    }
-
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
         if (cap != HEAT_NODE_HANDLER) return null
@@ -161,14 +157,14 @@ class ModuleHeat(
     override fun deserializeNBT(nbt: NBTTagCompound) {
         nbt.readList("HeatNodes") { nodeList ->
             nodes.forEachIndexed { index, node ->
-                node.deserializeNBT(nodeList.getTagCompound(index))
+                node.deserializeNBT(nodeList.getCompound(index))
             }
         }
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {
         list("HeatNodes") {
-            nodes.forEach { appendTag(it.serializeNBT()) }
+            nodes.forEach { add(it.serializeNBT()) }
         }
     }
 

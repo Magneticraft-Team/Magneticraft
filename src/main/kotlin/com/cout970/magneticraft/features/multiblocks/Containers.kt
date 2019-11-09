@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.features.multiblocks
 
+import com.cout970.magneticraft.EntityPlayer
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileShelvingUnit
 import com.cout970.magneticraft.misc.gui.SlotShelvingUnit
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
@@ -9,9 +10,7 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.*
 import com.cout970.magneticraft.systems.integration.IntegrationHandler
-import com.cout970.magneticraft.systems.integration.jei.MagneticraftPlugin
 import com.cout970.magneticraft.systems.tilemodules.ModuleShelvingUnitMb
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -21,8 +20,8 @@ import net.minecraft.world.World
  */
 
 
-class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
-    : AutoContainer(builder, configFunc, player, world, pos) {
+class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos, window: Int)
+    : AutoContainer(builder, configFunc, player, world, pos, window) {
 
     val tile: TileShelvingUnit = tileEntity as TileShelvingUnit
 
@@ -39,7 +38,7 @@ class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> 
             SlotShelvingUnit(inv, it, x, y)
         }
 
-        allSlots.forEach { addSlotToContainer(it) }
+        allSlots.forEach { addSlot(it) }
         bindPlayerInventory(player.inventory, vec2Of(0, 41))
     }
 
@@ -102,10 +101,10 @@ class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> 
 
             if (filter.startsWith('@')) {
                 val mod = filter.substring(1)
-                return stack.item.registryName!!.resourceDomain.contains(mod, ignoreCase = true)
+                return stack.item.registryName!!.path.contains(mod, ignoreCase = true)
             }
 
-            return stack.displayName.contains(filter, ignoreCase = true)
+            return stack.displayName.formattedText.contains(filter, ignoreCase = true)
         }
 
         updateCurrentSlots(allSlots.filter { matches(it.stack, filter) })
@@ -132,7 +131,7 @@ class ContainerShelvingUnit(builder: GuiBuilder, configFunc: (AutoContainer) -> 
     }
 
     fun setJeiFilter(text: String) {
-        MagneticraftPlugin.INSTANCE.getSearchBar().filterText = text
+//        MagneticraftPlugin.INSTANCE.getSearchBar().filterText = text
     }
 
     override fun receiveDataFromClient(ibd: IBD) {

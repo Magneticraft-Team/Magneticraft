@@ -38,7 +38,7 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
     fun getDevices(): IntArray {
         val buffer = IntArray(16)
         repeat(16) {
-            if (it in mb.deviceMap.keySet()) {
+            if (it in mb.deviceMap.keys) {
                 buffer[it] = 0xFF000000.toInt() or (it shl 16)
             }
         }
@@ -89,11 +89,11 @@ class DeviceMotherboard(val tile: ITileRef, val mb: Motherboard) : IDevice, ITil
 
     fun getWorldTime(): Long {
         if (tile == FakeRef) return 0L
-        return world.totalWorldTime
+        return world.gameTime
     }
 
     fun getComputerPos(): BlockPos {
-        if (tile == FakeRef) return BlockPos.ORIGIN
+        if (tile == FakeRef) return BlockPos.ZERO
         return pos
     }
 

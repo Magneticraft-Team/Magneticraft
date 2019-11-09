@@ -1,14 +1,14 @@
 package com.cout970.magneticraft.api.pneumatic;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
  * Box traveling through the tube system, contains a item and additional metadata
  */
-public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
+public class PneumaticBox implements INBTSerializable<CompoundNBT> {
 
     public static final int MAX_PROGRESS = 128;
 
@@ -23,7 +23,7 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
     /**
      * The side of the pneumatic tube where this box is located
      */
-    private EnumFacing side;
+    private Direction side;
     /**
      * Stores if the side indicates the input side to the tube, or the output side
      */
@@ -40,7 +40,7 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
     public PneumaticBox() {
         item = ItemStack.EMPTY;
         progress = 0;
-        side = EnumFacing.UP;
+        side = Direction.UP;
         output = false;
         inRoute = true;
         mode = PneumaticMode.TRAVELING;
@@ -51,7 +51,7 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
         this.item = item;
     }
 
-    public PneumaticBox(NBTTagCompound nbt) {
+    public PneumaticBox(CompoundNBT nbt) {
         this();
         deserializeNBT(nbt);
     }
@@ -72,11 +72,11 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
         this.progress = progress;
     }
 
-    public EnumFacing getSide() {
+    public Direction getSide() {
         return side;
     }
 
-    public void setSide(EnumFacing side) {
+    public void setSide(Direction side) {
         this.side = side;
     }
 
@@ -105,22 +105,22 @@ public class PneumaticBox implements INBTSerializable<NBTTagCompound> {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setTag("item", item.serializeNBT());
-        nbt.setInteger("progress", progress);
-        nbt.setInteger("side", side.ordinal());
-        nbt.setBoolean("output", output);
-        nbt.setInteger("mode", mode.ordinal());
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.put("item", item.serializeNBT());
+        nbt.putInt("progress", progress);
+        nbt.putInt("side", side.ordinal());
+        nbt.putBoolean("output", output);
+        nbt.putInt("mode", mode.ordinal());
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
-        item = new ItemStack(nbt.getCompoundTag("item"));
-        progress = nbt.getInteger("progress");
-        side = EnumFacing.getFront(nbt.getInteger("side"));
+    public void deserializeNBT(CompoundNBT nbt) {
+        item = ItemStack.read(nbt.getCompound("item"));
+        progress = nbt.getInt("progress");
+        side = Direction.byIndex(nbt.getInt("side"));
         output = nbt.getBoolean("output");
-        mode = PneumaticMode.values()[nbt.getInteger("mode")];
+        mode = PneumaticMode.values()[nbt.getInt("mode")];
     }
 }

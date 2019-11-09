@@ -1,21 +1,24 @@
 package com.cout970.magneticraft.systems.gui.components.bars
 
 import com.cout970.magneticraft.IVector2
+import com.cout970.magneticraft.TextureMap
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.fluid
 import com.cout970.magneticraft.misc.gui.format
 import com.cout970.magneticraft.misc.guiTexture
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
+import com.mojang.blaze3d.platform.GlStateManager.*
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager.*
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.fluid.Fluid
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fluids.FluidRegistry
+import kotlin.math.min
 
 /**
  * Created by cout970 on 11/07/2016.
@@ -35,10 +38,10 @@ class CompFluidBar(
     fun getFluidTexture(): TextureAtlasSprite? {
         if (tank.clientFluidName.isEmpty()) return null
 
-        val fluid = FluidRegistry.getFluid(tank.clientFluidName) ?: return null
-        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+        val fluid: Fluid = fluid(tank.clientFluidName) ?: return null
+        val textureMap = Minecraft.getInstance().textureMap
 
-        return textureMap.getAtlasSprite(fluid.still.toString())
+        return textureMap.getSprite(fluid.attributes.stillTexture)
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
@@ -51,7 +54,7 @@ class CompFluidBar(
             enableBlend()
             val height = level / 16
             for (h in 0..height) {
-                val heightLevel = Math.min(level - h * 16, 16)
+                val heightLevel = min(level - h * 16, 16)
 
                 gui.drawSprite(gui.pos + vec2Of(pos.x, pos.y + 48 - heightLevel - h * 16), vec2Of(size.x, heightLevel),
                     texture)
@@ -107,17 +110,17 @@ class CompFluidBar2(
     fun getFluidTexture(): TextureAtlasSprite? {
         if (tank.clientFluidName.isEmpty()) return null
 
-        val fluid = FluidRegistry.getFluid(tank.clientFluidName) ?: return null
-        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+        val fluid = fluid(tank.clientFluidName) ?: return null
+        val textureMap = Minecraft.getInstance().textureMap
 
-        return textureMap.getAtlasSprite(fluid.still.toString())
+        return textureMap.getSprite(fluid.attributes.stillTexture)
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
         color(1f, 1f, 1f, 1f)
         gui.bindTexture(guiTexture("misc"))
         gui.drawTexture(back)
-        enableAlpha()
+        enableAlphaTest()
         enableBlend()
 
         if (tank.clientFluidAmount > 0) {

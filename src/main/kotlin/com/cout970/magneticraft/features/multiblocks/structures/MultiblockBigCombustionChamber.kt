@@ -1,19 +1,19 @@
 package com.cout970.magneticraft.features.multiblocks.structures
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotateBox
 import com.cout970.magneticraft.misc.vector.times
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.multiblocks.*
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import net.minecraft.init.Blocks
-import net.minecraft.util.EnumFacing
+import net.minecraft.block.Blocks
+
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.text.ITextComponent
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
-
 
 object MultiblockBigCombustionChamber : Multiblock() {
 
@@ -25,7 +25,7 @@ object MultiblockBigCombustionChamber : Multiblock() {
     init {
         val A = IgnoreBlockComponent
         val C = corrugatedIronBlock()
-        val B = ofBlock(Blocks.BRICK_BLOCK)
+        val B = ofBlock(Blocks.BRICKS)
         val M = mainBlockOf(controllerBlock)
 
         scheme = Multiblock.yLayers(

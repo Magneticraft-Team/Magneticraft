@@ -3,11 +3,11 @@ package com.cout970.magneticraft.api.conveyorbelt;
 import com.cout970.magneticraft.systems.tilemodules.conveyorbelt.BoxedItem;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public interface IConveyorBelt {
 
-    EnumFacing getFacing();
+    Direction getFacing();
 
     List<BoxedItem> getBoxes();
 
@@ -15,5 +15,5 @@ public interface IConveyorBelt {
 
     boolean addItem(ItemStack stack, boolean simulated);
 
-    boolean addItem(ItemStack stack, EnumFacing side, Route oldRoute);
+    boolean addItem(ItemStack stack, Direction side, Route oldRoute);
 }

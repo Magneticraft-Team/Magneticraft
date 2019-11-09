@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.systems.multiblocks
 
-import net.minecraft.block.state.IBlockState
+import com.cout970.magneticraft.IBlockState
 import net.minecraft.util.math.BlockPos
 
 /**

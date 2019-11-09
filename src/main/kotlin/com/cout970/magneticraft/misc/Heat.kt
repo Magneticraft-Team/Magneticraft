@@ -2,10 +2,12 @@
 
 package com.cout970.magneticraft.misc
 
-import net.minecraft.init.Blocks
-import net.minecraft.util.EnumFacing
+
+import com.cout970.magneticraft.EnumFacing
+import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraft.world.biome.Biome
 
 /**
  * Created by cout970 on 07/07/2016.
@@ -21,7 +23,7 @@ val MIN_EMISSION_TEMP = 480.fromCelsiusToKelvin()
 //val MAX_EMISSION_TEMP = 1400.fromCelsiusToKelvin()
 val MAX_EMISSION_TEMP = 800.fromCelsiusToKelvin()
 
-val SNOW_CORRECTION_TEMP = 0.25f //Value to account for the fact that water freezes in some above-freezing biomes if it is snowy
+val SNOW_CORRECTION_TEMP = 0.25f // Value to account for the fact that water freezes in some above-freezing biomes if it is snowy
 
 val QUARTZ_MELTING_POINT = 1750.fromCelsiusToKelvin()
 val GLASS_MAKING_TEMP = 450.fromCelsiusToKelvin()
@@ -93,6 +95,6 @@ fun guessAmbientTemp(worldIn: World, pos: BlockPos, range: Int = 10): Double {
 
 fun testBiomeHeat(worldIn: World, pos: BlockPos): Double {
     val biome = worldIn.getBiome(pos)
-    val correction = if (worldIn.getBiome(pos).isSnowyBiome) SNOW_CORRECTION_TEMP else 0.0f
+    val correction = if (worldIn.getBiome(pos).tempCategory == Biome.TempCategory.COLD) SNOW_CORRECTION_TEMP else 0.0f
     return (biome.getTemperature(pos) - correction).fromMinecraftToKelvin()
 }

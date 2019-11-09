@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.systems.gui.components
 
-import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.logError
+import com.cout970.magneticraft.misc.render.GL
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
@@ -12,7 +12,6 @@ import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
 import com.cout970.magneticraft.systems.manual.*
-import net.minecraft.client.renderer.GlStateManager
 import java.util.*
 
 /**
@@ -84,7 +83,7 @@ class CompBookRenderer : IComponent {
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
-        GlStateManager.color(1f, 1f, 1f)
+        GL.color(1f, 1f, 1f)
         gui.bindTexture(backgroundTexture)
         gui.drawTexture(gui.pos, size, Vec2d.ZERO, backgroundSize, vec2Of(512))
 

@@ -1,37 +1,33 @@
 package com.cout970.magneticraft.systems.tileentities
 
-import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.api.core.ITileRef
-import com.cout970.magneticraft.misc.*
+import com.cout970.magneticraft.misc.add
+import com.cout970.magneticraft.misc.getList
+import com.cout970.magneticraft.misc.list
 import com.cout970.magneticraft.misc.network.IBD
-import com.cout970.magneticraft.misc.vector.toVec3d
-import com.cout970.magneticraft.misc.vector.vec3Of
+import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.systems.network.MagneticraftNetwork
 import com.cout970.magneticraft.systems.network.MessageTileUpdate
-import com.cout970.vector.extensions.distanceSq
-import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.init.Blocks
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.entity.player.ServerPlayerEntity
+import net.minecraft.nbt.CompoundNBT
 import net.minecraft.network.NetworkManager
-import net.minecraft.network.play.server.SPacketUpdateTileEntity
+import net.minecraft.network.play.server.SUpdateTileEntityPacket
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.LogicalSide
 
 /**
  * Created by cout970 on 2017/06/12.
  */
-abstract class TileBase : TileEntity() {
+abstract class TileBase(type: TileType) : TileEntity(type) {
 
     private val modules = mutableListOf<IModule>()
     @Suppress("LeakingThis")
     val container = ModuleContainer(this, modules)
 
-    private var blockState: IBlockState? = null
     private var lastTime: Long = -1
 
     val ref: ITileRef get() = DynamicTileRef(this)
@@ -43,16 +39,7 @@ abstract class TileBase : TileEntity() {
         }
     }
 
-    fun getBlockState(): IBlockState {
-        if (world == null) return Blocks.AIR.defaultState
-
-        if (blockState == null || blockState!!.block != getBlockType() || world.totalWorldTime > lastTime + 40) {
-            lastTime = world.totalWorldTime
-            blockState = world.getBlockState(pos)
-            onBlockStateUpdates()
-        }
-        return blockState!!
-    }
+    val theWorld: World get() = world!!
 
     open fun onBlockStateUpdates() = Unit
 
@@ -64,11 +51,6 @@ abstract class TileBase : TileEntity() {
         container.modules.forEach(IModule::update)
     }
 
-    override fun updateContainingBlockInfo() {
-        super.updateContainingBlockInfo()
-        blockState = null
-    }
-
     open fun onBreak() {
         container.modules.forEach(IModule::onBreak)
     }
@@ -77,34 +59,28 @@ abstract class TileBase : TileEntity() {
         container.modules.forEach(IModule::onLoad)
     }
 
-    override fun invalidate() {
-        super.invalidate()
-        if (world.isClient) {
+    override fun remove() {
+        super.remove()
+        if (world!!.isClient) {
             onBreak()
         }
     }
 
-    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
-        return container.modules.any { it.hasCapability(capability, facing) }
-    }
+//    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+//        val list = container.modules.filter { it.hasCapability(capability, facing) }
+//        return list.firstOrNull()?.getCapability(capability, facing)
+//    }
 
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        val list = container.modules.filter { it.hasCapability(capability, facing) }
-        return list.firstOrNull()?.getCapability(capability, facing)
-    }
-
-    override fun readFromNBT(compound: NBTTagCompound) {
-        super.readFromNBT(compound)
+    override fun read(compound: CompoundNBT) {
+        super.read(compound)
         if (compound.hasKey("TileData")) {
             load(compound.getCompoundTag("TileData"))
         }
     }
 
-    override fun writeToNBT(compound: NBTTagCompound): NBTTagCompound {
-        compound.apply {
-            setTag("TileData", save())
-        }
-        return super.writeToNBT(compound)
+    override fun write(compound: CompoundNBT): CompoundNBT {
+        compound.put("TileData", save())
+        return super.write(compound)
     }
 
     open fun save(): NBTTagCompound {
@@ -112,7 +88,7 @@ abstract class TileBase : TileEntity() {
         if (moduleNbts.isNotEmpty()) {
             return newNbt {
                 list("_modules") {
-                    moduleNbts.forEach { appendTag(it) }
+                    moduleNbts.forEach { add(it) }
                 }
             }
         }
@@ -123,7 +99,7 @@ abstract class TileBase : TileEntity() {
         if (nbt.hasKey("_modules")) {
             val list = nbt.getList("_modules")
             container.modules.forEachIndexed { index, module ->
-                module.deserializeNBT(list.getTagCompound(index))
+                module.deserializeNBT(list.getCompound(index))
             }
         }
     }
@@ -134,59 +110,57 @@ abstract class TileBase : TileEntity() {
     //Sends to the client the nbt of the server TileEntity
     //NOTE: never send a packet every tick, instead use shouldTick(20) to send a packet only every second
     fun sendUpdateToNearPlayers() {
-        if (world.isClient) return
+        if (world!!.isClient) return
         val packet = updatePacket ?: return
-        world.playerEntities
-                .map { it as EntityPlayerMP }
-                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
-                .forEach { it.connection.sendPacket(packet) }
+        world!!.players
+            .map { it as ServerPlayerEntity }
+            .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= (64 * 64) }
+            .forEach { it.connection.sendPacket(packet) }
     }
 
     fun sendSyncDataToNearPlayers(ibd: IBD, distance: Double) {
-        if (world.isClient) return
+        if (world!!.isClient) return
         val squaredDistance = distance * distance
-        val closePlayers = world.playerEntities
-                .map { it as EntityPlayerMP }
-                .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= squaredDistance }
+        val closePlayers = world!!.players
+            .map { it as ServerPlayerEntity }
+            .filter { getDistanceSq(it.posX, it.posY, it.posZ) <= squaredDistance }
 
         if (closePlayers.isEmpty()) return
-        val packet = MessageTileUpdate(ibd, pos, world.provider.dimension)
+        val packet = MessageTileUpdate(ibd, pos, world!!.dimension.type.id)
 
-        closePlayers.forEach { Magneticraft.network.sendTo(packet, it) }
+        closePlayers.forEach { MagneticraftNetwork.sendTo(packet, it) }
     }
 
     open fun saveToPacket() = save()
     open fun loadFromPacket(nbt: NBTTagCompound) = load(nbt)
 
-    override fun getUpdatePacket(): SPacketUpdateTileEntity? {
-        val nbt = super.writeToNBT(newNbt {
+    override fun getUpdatePacket(): SUpdateTileEntityPacket? {
+        val nbt = newNbt {
             add("custom", saveToPacket())
-        })
-        return SPacketUpdateTileEntity(pos, 1, nbt)
+        }
+
+        super.write(nbt)
+        return SUpdateTileEntityPacket(pos, 1, nbt)
     }
 
-    override fun onDataPacket(net: NetworkManager?, pkt: SPacketUpdateTileEntity) {
+    override fun onDataPacket(net: NetworkManager?, pkt: SUpdateTileEntityPacket) {
         if (pkt.nbtCompound.hasKey("custom")) {
             val nbt = pkt.nbtCompound.getCompoundTag("custom")
             loadFromPacket(nbt)
         } else {
-            readFromNBT(pkt.nbtCompound)
+            read(pkt.nbtCompound)
         }
     }
 
-    override fun setWorldCreate(worldIn: World) {
-        this.world = worldIn
-    }
-
     override fun getUpdateTag(): NBTTagCompound {
-        return writeToNBT(NBTTagCompound())
+        return write(NBTTagCompound())
     }
 
     /**
      * Receives data sent using [sendSyncData] in ContainerBase
      * @param otherSide the side that sent the message
      */
-    open fun receiveSyncData(ibd: IBD, otherSide: Side) {
+    open fun receiveSyncData(ibd: IBD, otherSide: LogicalSide) {
         container.modules.forEach { it.receiveSyncData(ibd, otherSide) }
     }
 
@@ -195,7 +169,7 @@ abstract class TileBase : TileEntity() {
     }
 
     class ModuleContainer(override val tile: TileBase, override val modules: List<IModule>) : IModuleContainer {
-        override val world: World get() = tile.world
+        override val world: World get() = tile.world!!
         override val pos: BlockPos get() = tile.pos
         override val blockState: IBlockState get() = tile.getBlockState()
 

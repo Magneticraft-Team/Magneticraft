@@ -4,9 +4,10 @@ import com.cout970.magneticraft.Debug
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.features.items.ComputerItems
+import com.cout970.magneticraft.hasKey
 import com.cout970.magneticraft.misc.*
+import com.cout970.magneticraft.misc.world.worldSaveDirectory
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fml.common.FMLCommonHandler
 import java.io.File
 import java.util.*
 
@@ -20,9 +21,9 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
     @SuppressWarnings("deprecation")
     override fun getStorageFile(): File {
 
-        if (stack.itemDamage == 0) {
+        if (stack.damage == 0) {
             // user created disks
-            val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
+            val parent = File(worldSaveDirectory(), "./disks")
 
             if (!parent.exists()) parent.mkdir()
 
@@ -30,13 +31,18 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
         } else {
             // disks copied from pre-existent ROMs
-            val parent = File(FMLCommonHandler.instance().savesDirectory, "./disks")
+            val parent = File(worldSaveDirectory(), "./disks")
             if (!parent.exists()) parent.mkdir()
 
-
-            val baseName = ComputerItems.defaultDisks.toList()
-                .find { it.second == stack.itemDamage }
-                ?.first ?: "bios"
+            val baseName = when (stack.item) {
+                ComputerItems.floppyDiskLisp -> "lisp"
+                ComputerItems.floppyDiskForth -> "forth"
+                ComputerItems.floppyDiskShell -> "shell"
+                ComputerItems.floppyDiskBasic -> "basic"
+                ComputerItems.floppyDiskEditor -> "editor"
+                ComputerItems.floppyDiskAsm -> "asm"
+                else -> "bios"
+            }
 
             val source = "$baseName.bin"
 
@@ -83,7 +89,7 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
             nbt.add("serialNumber", num)
         }
-        return nbt.getInteger("serialNumber")
+        return nbt.getInt("serialNumber")
     }
 
     override fun getLabel(): String {
@@ -96,7 +102,7 @@ class FloppyDisk(val stack: ItemStack) : IFloppyDisk {
 
     override fun getAccessTime(): Int = stack.getInteger("accessTime")
 
-    override fun canRead(): Boolean = if (stack.itemDamage == 0) stack.getBoolean("canRead") else true
+    override fun canRead(): Boolean = if (stack.damage == 0) stack.getBoolean("canRead") else true
 
-    override fun canWrite(): Boolean = if (stack.itemDamage == 0) stack.getBoolean("canWrite") else false
+    override fun canWrite(): Boolean = if (stack.damage == 0) stack.getBoolean("canWrite") else false
 }

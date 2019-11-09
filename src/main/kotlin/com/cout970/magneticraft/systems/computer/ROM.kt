@@ -10,7 +10,7 @@ import java.io.InputStream
  */
 class ROM(val path: String) : IROM {
 
-    constructor(res: ResourceLocation) : this("/assets/$MOD_ID/cpu/${res.resourcePath}")
+    constructor(res: ResourceLocation) : this("/assets/$MOD_ID/cpu/${res.path}")
 
     override fun getBIOS(): InputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(path)
         ?: error("Resource not found at location: $path")

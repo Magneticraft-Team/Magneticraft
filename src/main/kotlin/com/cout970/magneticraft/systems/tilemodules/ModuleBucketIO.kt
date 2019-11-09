@@ -27,9 +27,10 @@ class ModuleBucketIO(
         val handler = ITEM_FLUID_HANDLER!!.fromItem(playerIn.getHeldItem(hand)) ?: return false
 
         if (worldIn.isServer) {
-            handler.tankProperties.forEach { prop ->
+            repeat(handler.tanks) { index ->
+                val capacity = handler.getTankCapacity(index)
                 if (output) {
-                    val result0 = FluidUtil.tryFillContainer(heldItem, tank, prop.capacity, playerIn, true)
+                    val result0 = FluidUtil.tryFillContainer(heldItem, tank, capacity, playerIn, true)
                     if (result0.isSuccess) {
 
                         heldItem.shrink(1)
@@ -38,20 +39,20 @@ class ModuleBucketIO(
                         }
 
                         container.sendUpdateToNearPlayers()
-                        return@forEach
+                        return@repeat
                     }
                 }
                 if (input) {
-                    val result1 = FluidUtil.tryEmptyContainer(heldItem, tank, prop.capacity, playerIn, true)
+                    val result1 = FluidUtil.tryEmptyContainer(heldItem, tank, capacity, playerIn, true)
                     if (result1.isSuccess) {
-                        if (!playerIn.capabilities.isCreativeMode) {
+                        if (!playerIn.isCreative) {
                             heldItem.shrink(1)
                             if (!playerIn.inventory.addItemStackToInventory(result1.result)) {
                                 worldIn.dropItem(result1.result, playerIn.position, false)
                             }
                         }
                         container.sendUpdateToNearPlayers()
-                        return@forEach
+                        return@repeat
                     }
                 }
             }

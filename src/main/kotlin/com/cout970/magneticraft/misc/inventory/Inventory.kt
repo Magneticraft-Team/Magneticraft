@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.misc.inventory
 
-import net.minecraft.nbt.NBTTagCompound
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.getInteger
 import net.minecraftforge.items.ItemStackHandler
 
 /**
@@ -16,7 +17,7 @@ class Inventory(val size: Int, var onContentsChanges: ((Inventory, Int) -> Unit)
     override fun deserializeNBT(nbt: NBTTagCompound) {
         // Avoid crashes when the size of the inventory changes over time
         if (size != nbt.getInteger("Size")) {
-            nbt.setInteger("Size", size)
+            nbt.putInt("Size", size)
         }
         super.deserializeNBT(nbt)
     }

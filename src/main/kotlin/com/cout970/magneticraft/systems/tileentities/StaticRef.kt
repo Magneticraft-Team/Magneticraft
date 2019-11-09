@@ -26,6 +26,6 @@ data class ModuleContainerRef(
 data class DynamicTileRef(
     val tile: TileEntity
 ) : ITileRef {
-    override fun getWorld(): World = tile.world
+    override fun getWorld(): World = tile.world!!
     override fun getPos(): BlockPos = tile.pos
 }

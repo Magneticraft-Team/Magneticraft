@@ -26,7 +26,7 @@ interface IComponent {
 
     //called when the mouse moves while one button is pressed
     //returns true if this should block the event in others components
-    fun onMouseClickMove(mouse: Vec2d, clickedMouseButton: Int, timeSinceLastClick: Long): Boolean = false
+    fun onMouseClickMove(mouse: Vec2d): Boolean = false
 
     fun onMouseReleased(mouse: Vec2d, state: Int) = Unit
 

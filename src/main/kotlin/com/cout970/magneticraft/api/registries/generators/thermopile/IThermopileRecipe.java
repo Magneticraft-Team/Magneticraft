@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.api.registries.generators.thermopile;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 /**
  * Created by cout970 on 2017/08/28.
@@ -12,7 +12,7 @@ public interface IThermopileRecipe {
      *
      * @return blockstate used to get the recipe
      */
-    IBlockState getBlockState();
+    BlockState getBlockState();
 
 
     /**

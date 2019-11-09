@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.fluid.Tank
@@ -9,8 +11,6 @@ import com.cout970.magneticraft.systems.blocks.IOnActivated
 import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 
 class ModuleToggleFluidExporter(

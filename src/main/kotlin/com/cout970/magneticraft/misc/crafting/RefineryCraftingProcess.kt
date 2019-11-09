@@ -3,7 +3,10 @@ package com.cout970.magneticraft.misc.crafting
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.refinery.IRefineryRecipe
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.orNull
+import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE
 
 class RefineryCraftingProcess(
     val inputTank: Tank,
@@ -26,18 +29,18 @@ class RefineryCraftingProcess(
         return recipe
     }
 
-    override fun craft() {
-        val input = inputTank.fluid ?: return
+    override fun craft(world: World) {
+        val input = inputTank.fluid.orNull() ?: return
         val recipe = getRecipe(input) ?: return
 
-        inputTank.drain(recipe.input.amount, true)
-        recipe.output0?.let { outputTank0.fill(it, true) }
-        recipe.output1?.let { outputTank1.fill(it, true) }
-        recipe.output2?.let { outputTank2.fill(it, true) }
+        inputTank.drain(recipe.input.amount, EXECUTE)
+        recipe.output0?.let { outputTank0.fill(it, EXECUTE) }
+        recipe.output1?.let { outputTank1.fill(it, EXECUTE) }
+        recipe.output2?.let { outputTank2.fill(it, EXECUTE) }
     }
 
-    override fun canCraft(): Boolean {
-        val input = inputTank.fluid ?: return false
+    override fun canCraft(world: World): Boolean {
+        val input = inputTank.fluid.orNull() ?: return false
 
         //check recipe
         val recipe = getRecipe(input) ?: return false
@@ -57,5 +60,5 @@ class RefineryCraftingProcess(
         return true
     }
 
-    override fun duration(): Float = inputTank.fluid?.let { getRecipe(it) }?.duration ?: 10f
+    override fun duration(): Float = inputTank.fluid.orNull()?.let { getRecipe(it) }?.duration ?: 10f
 }

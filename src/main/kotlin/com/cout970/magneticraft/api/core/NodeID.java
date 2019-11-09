@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.api.core;
 
-import net.minecraft.nbt.NBTTagCompound;
+import java.util.Objects;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -8,7 +9,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 /**
  * Created by cout970 on 2017/06/12.
  */
-public final class NodeID implements INBTSerializable<NBTTagCompound> {
+public final class NodeID implements INBTSerializable<CompoundNBT> {
 
     private final String name;
     private final BlockPos pos;
@@ -23,7 +24,7 @@ public final class NodeID implements INBTSerializable<NBTTagCompound> {
     public NodeID(String name, BlockPos pos, World world) {
         this.name = name;
         this.pos = pos;
-        this.dimension = world.provider.getDimension();
+        this.dimension = world.getDimension().getType().getId();
     }
 
     public String getName() {
@@ -39,28 +40,28 @@ public final class NodeID implements INBTSerializable<NBTTagCompound> {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("name", name);
-        nbt.setInteger("posX", pos.getX());
-        nbt.setInteger("posY", pos.getY());
-        nbt.setInteger("posZ", pos.getZ());
-        nbt.setInteger("dimension", dimension);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putString("name", name);
+        nbt.putInt("posX", pos.getX());
+        nbt.putInt("posY", pos.getY());
+        nbt.putInt("posZ", pos.getZ());
+        nbt.putInt("dimension", dimension);
         return nbt;
     }
 
-    public static NodeID deserializeFromNBT(NBTTagCompound nbt) {
+    public static NodeID deserializeFromNBT(CompoundNBT nbt) {
         String name = nbt.getString("name");
-        int dimension = nbt.getInteger("dimension");
-        int posX = nbt.getInteger("posX");
-        int posY = nbt.getInteger("posY");
-        int posZ = nbt.getInteger("posZ");
+        int dimension = nbt.getInt("dimension");
+        int posX = nbt.getInt("posX");
+        int posY = nbt.getInt("posY");
+        int posZ = nbt.getInt("posZ");
 
         return new NodeID(name, new BlockPos(posX, posY, posZ), dimension);
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         throw new IllegalStateException("Immutable class cannot be loaded from NTB, use the static method instead");
     }
 
@@ -87,10 +88,10 @@ public final class NodeID implements INBTSerializable<NBTTagCompound> {
         if (dimension != nodeID.dimension) {
             return false;
         }
-        if (name != null ? !name.equals(nodeID.name) : nodeID.name != null) {
+        if (!Objects.equals(name, nodeID.name)) {
             return false;
         }
-        return pos != null ? pos.equals(nodeID.pos) : nodeID.pos == null;
+        return Objects.equals(pos, nodeID.pos);
     }
 
     @Override

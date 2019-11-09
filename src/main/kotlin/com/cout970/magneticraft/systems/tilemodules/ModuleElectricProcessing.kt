@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.crafting.ICraftingProcess
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
@@ -13,7 +14,6 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_CONSUMPTION
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2017/07/01.
@@ -59,7 +59,7 @@ class ModuleElectricProcessing(
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        timedProcess.deserializeNBT(nbt.getCompoundTag("timedProcess"))
+        timedProcess.deserializeNBT(nbt.getCompound("timedProcess"))
         working = nbt.getBoolean("working")
     }
 

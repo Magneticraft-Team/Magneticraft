@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EntityPlayer
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.features.electric_conductors.TileEnergyReceiver
 import com.cout970.magneticraft.misc.ConversionTable
@@ -15,7 +16,6 @@ import com.cout970.magneticraft.registry.fromItem
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.entity.player.EntityPlayer
 
 class ModuleTeslaTower(
         val node: ElectricNode,
@@ -30,8 +30,8 @@ class ModuleTeslaTower(
         val rate = Config.teslaTowerTransmissionRate
 
         // Charge items in players inventory
-        val start = pos.toVec3d().addVector(-32.0, -32.0, -32.0)
-        val end = pos.toVec3d().addVector(33.0, 33.0, 33.0)
+        val start = pos.toVec3d().add(-32.0, -32.0, -32.0)
+        val end = pos.toVec3d().add(33.0, 33.0, 33.0)
         val aabb = start.createAABBUsing(end)
 
         world.getEntitiesWithinAABB(EntityPlayer::class.java, aabb).forEach { entity ->

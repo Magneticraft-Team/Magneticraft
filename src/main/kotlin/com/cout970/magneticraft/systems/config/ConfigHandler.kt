@@ -1,13 +1,9 @@
 package com.cout970.magneticraft.systems.config
 
 import com.cout970.magneticraft.MOD_ID
-import com.cout970.magneticraft.Magneticraft
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.config.ConfigElement
-import net.minecraftforge.fml.client.config.IConfigElement
+import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
-import net.minecraftforge.fml.common.FMLCommonHandler
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.lang.reflect.Field
 
 /**
@@ -17,10 +13,10 @@ object ConfigHandler {
 
     val instance = Config
     val wrappers = mutableListOf<FieldWrapper>()
-    val config: IConfig
+    val config: IConfig = TODO()
 
     init {
-        config = ForgeConfiguration(Magneticraft.configFile)
+//        config = ForgeConfiguration(Magneticraft.configFile)
         loadFields()
     }
 
@@ -84,17 +80,6 @@ object ConfigHandler {
                 }
             }
         }
-    }
-
-    fun getConfigElements(): List<IConfigElement> {
-        val cnf = config as ForgeConfiguration
-        return listOf(
-                ConfigElement(cnf.getCategory(CATEGORY_ORES)),
-                ConfigElement(cnf.getCategory(CATEGORY_ENERGY)),
-                ConfigElement(cnf.getCategory(CATEGORY_GUI)),
-                ConfigElement(cnf.getCategory(CATEGORY_PC)),
-                ConfigElement(cnf.getCategory(CATEGORY_MACHINES))
-        )
     }
 
     abstract class FieldWrapper(val field: Field, val annotation: ConfigValue, val type: ConfigValueType) {

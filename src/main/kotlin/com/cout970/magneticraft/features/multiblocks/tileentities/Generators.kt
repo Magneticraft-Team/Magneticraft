@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSolarPanel
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSteamEngine
@@ -10,21 +12,20 @@ import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.wrapWithFluidFilter
 import com.cout970.magneticraft.misc.interpolate
 import com.cout970.magneticraft.misc.iterateArea
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotatePoint
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
+import com.cout970.magneticraft.registry.FluidHolder
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
+import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.util.math.BlockPos
 
 @RegisterTileEntity("solar_panel")
-class TileSolarPanel : TileMultiblock(), ITickable {
+class TileSolarPanel(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarPanel
 
@@ -70,15 +71,14 @@ class TileSolarPanel : TileMultiblock(), ITickable {
     }
 
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
-        if (world.isClient) return
-        if (active && world.isDaytime && world.provider.hasSkyLight()) {
+        if (world!!.isClient) return
+        if (active && world!!.isDaytime && world!!.dimension.hasSkyLight()) {
             var count = 0
             iterateArea(0..2, 0..2) { i, j ->
-                val offset = facing.rotatePoint(BlockPos.ORIGIN, BlockPos(i - 1, 0, j))
-                if (world.canBlockSeeSky(pos + offset)) {
+                val offset = facing.rotatePoint(BlockPos.ZERO, BlockPos(i - 1, 0, j))
+                if (theWorld.canBlockSeeSky(pos + offset)) {
                     count++
                 }
             }
@@ -94,14 +94,14 @@ class TileSolarPanel : TileMultiblock(), ITickable {
 }
 
 @RegisterTileEntity("steam_engine")
-class TileSteamEngine : TileMultiblock(), ITickable {
+class TileSteamEngine(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockSteamEngine
 
     val tank = Tank(16_000)
     val node = ElectricNode(ref)
 
-    val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
+    val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid == FluidHolder.STEAM })
 
     val guiModule = ModuleOpenGui()
 
@@ -157,14 +157,13 @@ class TileSteamEngine : TileMultiblock(), ITickable {
             steamEngineMbModule, ioModule, guiModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("steam_turbine")
-class TileSteamTurbine : TileMultiblock(), ITickable {
+class TileSteamTurbine(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockSteamTurbine
 
@@ -175,7 +174,7 @@ class TileSteamTurbine : TileMultiblock(), ITickable {
     var turbineAngle = 0f
     var turbineSpeed = 0f
 
-    val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
+    val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid == FluidHolder.STEAM })
 
     val steamGeneratorModule = ModuleSteamGenerator(
         steamTank = tank,
@@ -222,8 +221,7 @@ class TileSteamTurbine : TileMultiblock(), ITickable {
             ioModule, energyModule, ModuleOpenGui())
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }

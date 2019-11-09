@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.misc.render
 
-import net.minecraft.client.renderer.GlStateManager.*
+import com.mojang.blaze3d.platform.GlStateManager.callList
 import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11.*
 
 /**
  * Created by cout970 on 18/07/2016.

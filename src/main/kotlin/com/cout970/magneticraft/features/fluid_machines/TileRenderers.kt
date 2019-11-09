@@ -1,16 +1,17 @@
 package com.cout970.magneticraft.features.fluid_machines
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.Sprite
+import com.cout970.magneticraft.TextureMap
 import com.cout970.magneticraft.misc.RegisterRenderer
+import com.cout970.magneticraft.misc.fluid.orNull
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.lowercaseName
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.tilemodules.ModulePipe
 import com.cout970.magneticraft.systems.tilerenderers.*
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.BlockRenderLayer
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.fluids.FluidStack
 import org.lwjgl.opengl.GL11
@@ -33,7 +34,7 @@ object TileRendererSmallTank : BaseTileRenderer<TileSmallTank>() {
 
     override fun render(te: TileSmallTank) {
 
-        if (MinecraftForgeClient.getRenderPass() == 0) {
+        if (MinecraftForgeClient.getRenderLayer() == BlockRenderLayer.SOLID) {
             val loc = if (te.toggleExportModule.enable) "out" else "in"
             bindTexture(resource("textures/blocks/fluid_machines/small_tank_$loc.png"))
             renderModel("base")
@@ -41,9 +42,9 @@ object TileRendererSmallTank : BaseTileRenderer<TileSmallTank>() {
             renderModel("shell")
         } else {
             if (te.tank.isNonEmpty()) {
-                val fluidStack = te.tank.fluid ?: return
+                val fluidStack = te.tank.fluid.orNull() ?: return
                 val fillPercent = fluidStack.amount / te.tank.capacity.toDouble()
-                val color = fluidStack.fluid.getColor(fluidStack)
+                val color = fluidStack.fluid.attributes.getColor(fluidStack)
 
                 bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
@@ -58,8 +59,8 @@ object TileRendererSmallTank : BaseTileRenderer<TileSmallTank>() {
     }
 
     fun getFluidSprite(fluidStack: FluidStack): Sprite {
-        val loc = fluidStack.fluid.getStill(fluidStack)
-        return Minecraft.getMinecraft().textureMapBlocks.getAtlasSprite(loc.toString())
+        val loc = fluidStack.fluid.attributes.getStill(fluidStack)
+        return mc.textureMap.getAtlasSprite(loc.toString())
     }
 }
 

@@ -1,7 +1,10 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.sluicebox.ISluiceBoxRecipe
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.fluid.VoidFluidHandler
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -18,12 +21,9 @@ import com.cout970.magneticraft.systems.blocks.IOnActivated
 import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
+import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.SoundCategory
-import net.minecraftforge.fluids.FluidRegistry
-import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.FluidUtil
 
 /**
@@ -60,13 +60,13 @@ class ModuleSluiceBox(
         } else if (canAccept(heldItem)) {
             val stack = inventory[0]
             if (stack.isEmpty) {
-                val extracted = heldItem.splitStack(MAX_ITEMS)
+                val extracted = heldItem.split(MAX_ITEMS)
                 if (extracted.isNotEmpty) {
                     inventory[0] = extracted
                     container.sendUpdateToNearPlayers()
                 }
             } else if (stack.count < MAX_ITEMS && stack.isItemEqual(heldItem)) {
-                val extracted = heldItem.splitStack(MAX_ITEMS - stack.count)
+                val extracted = heldItem.split(MAX_ITEMS - stack.count)
                 if (extracted.isNotEmpty) {
                     stack.count += extracted.count
                     container.sendUpdateToNearPlayers()
@@ -77,8 +77,8 @@ class ModuleSluiceBox(
     }
 
     fun isWaterContainer(stack: ItemStack): Boolean {
-        val fluidStack = FluidUtil.getFluidContained(stack) ?: return false
-        return fluidStack.isFluidEqual(FluidStack(FluidRegistry.WATER, 1000))
+        val fluidStack = FluidUtil.getFluidContained(stack).orElse(null) ?: return false
+        return fluidStack.fluid == Fluids.WATER
     }
 
     fun removeWaterFromContainer(stack: ItemStack): ItemStack {

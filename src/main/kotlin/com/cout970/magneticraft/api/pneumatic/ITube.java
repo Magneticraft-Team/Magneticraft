@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.api.pneumatic;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 /**
  * This interface is provided by tubes and the pathfinder will treat it a bit differently than ITubeConnectable
@@ -14,5 +14,5 @@ public interface ITube extends ITubeConnectable {
      *
      * @return if the item can move towards that side
      */
-    boolean canRouteItemsTo(EnumFacing side);
+    boolean canRouteItemsTo(Direction side);
 }

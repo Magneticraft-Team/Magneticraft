@@ -1,15 +1,15 @@
 package com.cout970.magneticraft.features.manual_machines
 
+import com.cout970.magneticraft.TextureMap
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.systems.tilemodules.ModuleSluiceBox
 import com.cout970.magneticraft.systems.tilerenderers.*
-import com.cout970.modelloader.api.*
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.item.ItemSkull
+import com.cout970.modelloader.api.IRenderCache
+import net.minecraft.client.renderer.model.ItemCameraTransforms
+import net.minecraft.item.SkullItem
+import net.minecraft.util.BlockRenderLayer
 import net.minecraftforge.client.MinecraftForgeClient
 
 /**
@@ -26,14 +26,14 @@ object TileRendererCrushingTable : BaseTileRenderer<TileCrushingTable>() {
 
         if (stack.isNotEmpty) {
             translate(0.5, 0.9375, 0.3125)
-            if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+            if (!mc.itemRenderer.shouldRenderItemIn3D(stack) || stack.item is SkullItem) {
                 translate(0.0, -0.045, 1 * PIXEL)
                 rotate(90f, 1f, 0f, 0f)
             } else {
                 translate(0.0, -0.125, 0.0625 * 3)
             }
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-            Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
+            mc.itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
         }
     }
 }
@@ -53,7 +53,8 @@ object TileRendererSluiceBox : BaseTileRenderer<TileSluiceBox>() {
     override fun render(te: TileSluiceBox) {
         Utilities.rotateFromCenter(te.facing, 180f)
 
-        if (MinecraftForgeClient.getRenderPass() == 1) {
+        // TODO check that works
+        if (MinecraftForgeClient.getRenderLayer() == BlockRenderLayer.TRANSLUCENT) {
             if (te.sluiceBoxModule.progressLeft > 0) {
                 bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
                 waterModel?.render()
@@ -78,16 +79,16 @@ object TileRendererSluiceBox : BaseTileRenderer<TileSluiceBox>() {
         super.onModelRegistryReload()
         waterModel?.close()
         val loc = modelOf(Blocks.sluiceBox, "water")
-        val model = ModelLoaderApi.getModelEntry(loc) ?: return
-
-        val textureMap = Minecraft.getMinecraft().textureMapBlocks
-        val waterFlow = textureMap.getAtlasSprite("minecraft:blocks/water_flow")
-
-        val raw = model.raw as? Model.Mcx ?: return
-        val finalModel = ModelTransform.updateModelUvs(raw.data, waterFlow)
-
-        waterModel = ModelCache {
-            ModelUtilities.renderModel(finalModel)
-        }
+        // TODO
+//        val model = ModelLoaderApi.getModelEntry(loc) ?: return
+//
+//        val waterFlow = mc.textureMap.getAtlasSprite("minecraft:blocks/water_flow")
+//
+//        val raw = model.raw as? Model.Mcx ?: return
+//        val finalModel = ModelTransform.updateModelUvs(raw.data, waterFlow)
+//
+//        waterModel = ModelCache {
+//            ModelUtilities.renderModel(finalModel)
+//        }
     }
 }

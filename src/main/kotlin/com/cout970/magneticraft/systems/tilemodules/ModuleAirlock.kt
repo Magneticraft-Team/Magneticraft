@@ -2,14 +2,13 @@ package com.cout970.magneticraft.systems.tilemodules
 
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.ElectricConstants
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import net.minecraft.block.Block
-import net.minecraft.init.Blocks
+import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import com.cout970.magneticraft.features.electric_machines.Blocks as ElectricBlocks
@@ -54,7 +53,7 @@ class ModuleAirlock(
                     val pos = pos.add(i, j, k)
                     var block = world.getBlockState(pos).block
                     if (i * i + j * j + k * k <= length) {
-                        if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+                        if (block == Blocks.WATER) {
                             block = bubble
                         }
                     }
@@ -73,12 +72,12 @@ class ModuleAirlock(
                         val y = j + range
                         val z = k + range
                         if (array[x][y][z] == bubble) {
-                            if (array[x - 1][y][z] != Blocks.WATER && array[x - 1][y][z] != Blocks.FLOWING_WATER &&
-                                array[x + 1][y][z] != Blocks.WATER && array[x + 1][y][z] != Blocks.FLOWING_WATER &&
-                                array[x][y - 1][z] != Blocks.WATER && array[x][y - 1][z] != Blocks.FLOWING_WATER &&
-                                array[x][y + 1][z] != Blocks.WATER && array[x][y + 1][z] != Blocks.FLOWING_WATER &&
-                                array[x][y][z - 1] != Blocks.WATER && array[x][y][z - 1] != Blocks.FLOWING_WATER &&
-                                array[x][y][z + 1] != Blocks.WATER && array[x][y][z + 1] != Blocks.FLOWING_WATER) {
+                            if (array[x - 1][y][z] != Blocks.WATER &&
+                                array[x + 1][y][z] != Blocks.WATER &&
+                                array[x][y - 1][z] != Blocks.WATER &&
+                                array[x][y + 1][z] != Blocks.WATER &&
+                                array[x][y][z - 1] != Blocks.WATER &&
+                                array[x][y][z + 1] != Blocks.WATER) {
                                 array[x][y][z] = Blocks.AIR
                             }
                         }
@@ -115,7 +114,7 @@ class ModuleAirlock(
                             val z = k + range
                             if (array[x][y][z] == Blocks.AIR) {
                                 if (node.voltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) {
-                                    world.setBlockToAir(pos.add(i, j, k))
+                                    world.setBlockState(pos.add(i, j, k), Blocks.AIR.defaultState)
                                     node.applyPower(-Config.airlockAirCost, false)
                                 }
                             }
@@ -137,8 +136,11 @@ class ModuleAirlock(
                         val state = world.getBlockState(pos.add(i, j, k))
                         if (state.block == ElectricBlocks.airBubble) {
                             if (state[ElectricBlocks.PROPERTY_DECAY_MODE] == ElectricBlocks.DecayMode.OFF) {
-                                world.setBlockState(pos.add(i, j, k), stateOn)
-                                world.scheduleUpdate(pos.add(i, j, k), bubble, 0)
+                                val alt = pos.add(i, j, k)
+                                val old = world.getBlockState(alt)
+                                world.setBlockState(alt, stateOn)
+                                world.notifyBlockUpdate(alt, old, stateOn, 0)
+                                world.notifyNeighbors(alt, bubble)
                             }
                         }
                     }

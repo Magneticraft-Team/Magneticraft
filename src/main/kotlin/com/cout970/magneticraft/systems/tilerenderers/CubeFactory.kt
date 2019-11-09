@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilerenderers
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.Sprite
 import com.cout970.magneticraft.misc.vector.xf
@@ -10,10 +11,8 @@ import com.cout970.modelloader.api.ModelCache
 import net.minecraft.client.renderer.BufferBuilder
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.util.EnumFacing
+
 import net.minecraft.util.math.Vec3d
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.opengl.GL11
 
 /**
@@ -58,7 +57,7 @@ class MutableCubeCache : IRenderCache {
     fun compare(a: List<Sprite>, b: List<Sprite>): Boolean {
         if (a.size != b.size) return false
         a.zip(b).forEach {
-            if (it.first.iconName != it.second.iconName) return false
+            if (it.first.name != it.second.name) return false
         }
         return true
     }
@@ -105,7 +104,6 @@ class CubeFactory(val pos: IVector3, val size: IVector3, sprites: List<Sprite>, 
         }
     }
 
-    @SideOnly(Side.CLIENT)
     private fun drawBottom(t: BufferBuilder, x: Float, z: Float, x1: Float, z1: Float, y: Float) {
         t.pos(x1.toDouble(), y.toDouble(), z.toDouble())
             .tex(icons[0].maxU.toDouble(), icons[0].minV.toDouble())
@@ -125,7 +123,6 @@ class CubeFactory(val pos: IVector3, val size: IVector3, sprites: List<Sprite>, 
             .endVertex()
     }
 
-    @SideOnly(Side.CLIENT)
     private fun drawTop(t: BufferBuilder, x: Float, z: Float, x1: Float, z1: Float, y: Float) {
         t.pos(x.toDouble(), y.toDouble(), z.toDouble())
             .tex(icons[1].maxU.toDouble(), icons[1].maxV.toDouble())
@@ -145,7 +142,6 @@ class CubeFactory(val pos: IVector3, val size: IVector3, sprites: List<Sprite>, 
             .endVertex()
     }
 
-    @SideOnly(Side.CLIENT)
     private fun drawNorth(t: BufferBuilder, x: Float, y: Float, x1: Float, y1: Float, z: Float) {
         t.pos(x.toDouble(), y.toDouble(), z.toDouble())
             .tex(icons[2].maxU.toDouble(), icons[2].maxV.toDouble())
@@ -165,7 +161,6 @@ class CubeFactory(val pos: IVector3, val size: IVector3, sprites: List<Sprite>, 
             .endVertex()
     }
 
-    @SideOnly(Side.CLIENT)
     private fun drawSouth(t: BufferBuilder, x: Float, y: Float, x1: Float, y1: Float, z: Float) {
         t.pos(x1.toDouble(), y.toDouble(), z.toDouble())
             .tex(icons[3].maxU.toDouble(), icons[3].maxV.toDouble())
@@ -185,7 +180,6 @@ class CubeFactory(val pos: IVector3, val size: IVector3, sprites: List<Sprite>, 
             .endVertex()
     }
 
-    @SideOnly(Side.CLIENT)
     private fun drawWest(t: BufferBuilder, z: Float, y: Float, z1: Float, y1: Float, x: Float) {
         t.pos(x.toDouble(), y.toDouble(), z.toDouble())
             .tex(icons[5].maxU.toDouble(), icons[5].maxV.toDouble())
@@ -205,7 +199,6 @@ class CubeFactory(val pos: IVector3, val size: IVector3, sprites: List<Sprite>, 
             .endVertex()
     }
 
-    @SideOnly(Side.CLIENT)
     private fun drawEast(t: BufferBuilder, z: Float, y: Float, z1: Float, y1: Float, x: Float) {
         t.pos(x.toDouble(), y.toDouble(), z1.toDouble())
             .tex(icons[4].maxU.toDouble(), icons[4].maxV.toDouble())

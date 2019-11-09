@@ -2,8 +2,8 @@ package com.cout970.magneticraft.api.internal.registries.machines.heatrecipes
 
 import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipe
 import com.cout970.magneticraft.api.registries.machines.heatrecipes.IIceboxRecipeManager
+import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.Fluid
 import net.minecraftforge.fluids.FluidStack
 import java.util.*
 

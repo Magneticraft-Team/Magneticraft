@@ -4,7 +4,6 @@ import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
-import net.minecraftforge.oredict.OreDictionary
 
 /**
  * Created by cout970 on 22/08/2016.
@@ -47,8 +46,7 @@ data class SieveRecipe(
         if (input.isEmpty) return false
         if (ApiUtils.equalsIgnoreSize(input, this.input)) return true
         if (oreDict) {
-            val ids = OreDictionary.getOreIDs(this.input)
-            return OreDictionary.getOreIDs(input).any { it in ids }
+            return ApiUtils.areEquivalent(this.input, input)
         }
         return false
     }

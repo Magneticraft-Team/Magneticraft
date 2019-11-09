@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.hasKey
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.network.IntSyncVariable
@@ -12,9 +15,7 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_ITEM_AMOUNT
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.ItemHandlerHelper
@@ -52,6 +53,8 @@ class ModuleStackInventory(
     }
 
     fun getGuiInventory() = object : IItemHandler {
+
+        override fun isItemValid(slot: Int, stack: ItemStack): Boolean = true
 
         override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
             if (slot != 0 || stack.isEmpty) return stack
@@ -117,8 +120,8 @@ class ModuleStackInventory(
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
         if (nbt.hasKey("amount")) {
-            amount = nbt.getInteger("amount")
-            stackType = ItemStack(nbt.getCompoundTag("stackType"))
+            amount = nbt.getInt("amount")
+            stackType = ItemStack.read(nbt.getCompound("stackType"))
         }
     }
 
@@ -128,6 +131,10 @@ class ModuleStackInventory(
     }
 
     inner class ContainerCapabilityFilter(val parent: TileEntity) : IItemHandler {
+        override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
+            return stackType.isEmpty || ItemHandlerHelper.canItemStacksStack(stackType, stack)
+        }
+
         override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
             if (stackType.isEmpty) {
                 // This doesn't handle the case where maxItems is less than 64 items

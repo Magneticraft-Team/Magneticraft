@@ -3,29 +3,33 @@
 package com.cout970.magneticraft.systems.gui.render
 
 import net.minecraft.client.Minecraft
-import org.lwjgl.input.Keyboard
-import org.lwjgl.input.Mouse
+import net.minecraft.client.util.InputMappings
 
 /**
  * Created by cout970 on 08/07/2016.
  */
 
-fun isMouseButtonDown(button: Int) = Mouse.isButtonDown(button)
+fun isMouseButtonDown(button: Int) = when (button) {
+    0 -> Minecraft.getInstance().mouseHelper.isLeftDown
+    1 -> Minecraft.getInstance().mouseHelper.isRightDown
+    2 -> Minecraft.getInstance().mouseHelper.isMiddleDown
+    else -> false
+}
 
 fun isCtrlKeyDown(): Boolean {
-    return if (Minecraft.IS_RUNNING_ON_MAC) Keyboard.isKeyDown(219) || Keyboard.isKeyDown(220)
-    else Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)
+    return if (Minecraft.IS_RUNNING_ON_MAC) isKeyPressed(219) || isKeyPressed(220)
+    else isKeyPressed(29) || isKeyPressed(157)
 }
 
 /**
  * Returns true if either shift key is down
  */
-fun isShiftKeyDown(): Boolean = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54)
+fun isShiftKeyDown(): Boolean = isKeyPressed(42) || isKeyPressed(54)
 
 /**
  * Returns true if either alt key is down
  */
-fun isAltKeyDown(): Boolean = Keyboard.isKeyDown(56) || Keyboard.isKeyDown(184)
+fun isAltKeyDown(): Boolean = isKeyPressed(56) || isKeyPressed(184)
 
 fun isKeyComboCtrlX(keyID: Int): Boolean = keyID == 45 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
 
@@ -35,4 +39,6 @@ fun isKeyComboCtrlC(keyID: Int): Boolean = keyID == 46 && isCtrlKeyDown() && !is
 
 fun isKeyComboCtrlA(keyID: Int): Boolean = keyID == 30 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
 
-fun isKeyPressed(key: Int) = Keyboard.isKeyDown(key)
+fun isKeyPressed(key: Int) = InputMappings.isKeyDown(Minecraft.getInstance().mainWindow.handle, key)
+
+fun keyboardEnableRepeatedEvents(value: Boolean) = Minecraft.getInstance().keyboardListener.enableRepeatEvents(value)

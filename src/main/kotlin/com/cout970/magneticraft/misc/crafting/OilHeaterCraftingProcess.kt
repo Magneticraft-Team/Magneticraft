@@ -4,7 +4,10 @@ import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.registries.machines.oilheater.IOilHeaterRecipe
 import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.orNull
+import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.capability.IFluidHandler
 
 class OilHeaterCraftingProcess(
     val inputTank: Tank,
@@ -25,16 +28,16 @@ class OilHeaterCraftingProcess(
         return recipe
     }
 
-    override fun craft() {
-        val input = inputTank.fluid ?: return
+    override fun craft(world: World) {
+        val input = inputTank.fluid.orNull() ?: return
         val recipe = getRecipe(input) ?: return
 
-        inputTank.drain(recipe.input.amount, true)
-        outputTank.fill(recipe.output, true)
+        inputTank.drain(recipe.input.amount, IFluidHandler.FluidAction.EXECUTE)
+        outputTank.fill(recipe.output, IFluidHandler.FluidAction.EXECUTE)
     }
 
-    override fun canCraft(): Boolean {
-        val input = inputTank.fluid ?: return false
+    override fun canCraft(world: World): Boolean {
+        val input = inputTank.fluid.orNull() ?: return false
 
         //check recipe
         val recipe = getRecipe(input) ?: return false
@@ -47,8 +50,8 @@ class OilHeaterCraftingProcess(
     }
 
     override fun minTemperature(): Float {
-        return inputTank.fluid?.let { getRecipe(it) }?.minTemperature() ?: STANDARD_AMBIENT_TEMPERATURE.toFloat()
+        return inputTank.fluid.orNull()?.let { getRecipe(it) }?.minTemperature() ?: STANDARD_AMBIENT_TEMPERATURE.toFloat()
     }
 
-    override fun duration(): Float = inputTank.fluid?.let { getRecipe(it) }?.duration ?: 10f
+    override fun duration(): Float = inputTank.fluid.orNull()?.let { getRecipe(it) }?.duration ?: 10f
 }

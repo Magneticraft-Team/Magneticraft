@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.features.electric_machines.Blocks
 import com.cout970.magneticraft.features.electric_machines.TileWindTurbineGap
@@ -9,6 +12,7 @@ import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.setBlockToAir
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
@@ -16,11 +20,9 @@ import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.block.state.IBlockState
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import com.cout970.magneticraft.totalWorldTime
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.gen.NoiseGeneratorPerlin
+import net.minecraft.world.gen.PerlinNoiseGenerator
 import java.util.*
 
 class ModuleWindTurbine(
@@ -32,7 +34,7 @@ class ModuleWindTurbine(
     override lateinit var container: IModuleContainer
 
     companion object {
-        val windNoise = NoiseGeneratorPerlin(Random(1234L), 1)
+        val windNoise = PerlinNoiseGenerator(Random(1234L), 1)
     }
 
     var openSpace = 0f
@@ -114,7 +116,9 @@ class ModuleWindTurbine(
         iterateHitbox { base ->
             val blockPos = pos + base
             val state = world.getBlockState(blockPos)
-            val replaceable = state.block.isReplaceable(world, blockPos)
+            // TODO
+//            val replaceable = state.block.isReplaceable(world, blockPos)
+            val replaceable = state.block == net.minecraft.block.Blocks.AIR
 
             if (!replaceable && !isBlockValid(blockPos))
                 canPlace = false

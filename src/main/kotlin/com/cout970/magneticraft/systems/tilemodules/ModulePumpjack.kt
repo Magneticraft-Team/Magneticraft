@@ -1,10 +1,15 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.features.ores.Blocks
+import com.cout970.magneticraft.getCompoundTag
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.add
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.energy.IMachineEnergyInterface
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.fillExecute
+import com.cout970.magneticraft.misc.fluid.fillSimulate
 import com.cout970.magneticraft.misc.getBlockPos
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.AverageSyncVariable
@@ -15,6 +20,7 @@ import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.yi
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.registry.FluidHolder
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.*
 import com.cout970.magneticraft.systems.tileentities.IModule
@@ -22,10 +28,7 @@ import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilemodules.pumpjack.WorldIterator
 import com.cout970.magneticraft.systems.tilemodules.pumpjack.serializeNBT
 import net.minecraft.block.Block
-import net.minecraft.block.state.IBlockState
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
-import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 import com.cout970.magneticraft.features.multiblock_parts.Blocks as MultiblockParts
 
@@ -44,7 +47,7 @@ class ModulePumpjack(
         val pipeFilter: (IBlockState) -> Boolean = { it.block != MultiblockParts.pumpjackDrill }
 
         val nonEmptyOilFilter: (IBlockState) -> Boolean = {
-            it.block == Blocks.oilSource && it.getValue(Blocks.PROPERTY_OIL_AMOUNT) != Blocks.OilAmount.EMPTY
+            it.block == Blocks.oilSource && it.get(Blocks.PROPERTY_OIL_AMOUNT) != Blocks.OilAmount.EMPTY
         }
     }
 
@@ -55,10 +58,10 @@ class ModulePumpjack(
     var status = Status.SEARCHING_OIL
     var firstOilSearch: WorldIterator? = null
     var depositSearch: WorldIterator? = null
-    var depositStart: BlockPos = BlockPos.ORIGIN
+    var depositStart: BlockPos = BlockPos.ZERO
     var placeBlocks: WorldIterator? = null
     var nextSource: WorldIterator? = null
-    var nextSourcePos: BlockPos = BlockPos.ORIGIN
+    var nextSourcePos: BlockPos = BlockPos.ZERO
     var processPercent = 0f
 
     override fun update() {
@@ -218,10 +221,10 @@ class ModulePumpjack(
             return
         }
 
-        val oil = FluidRegistry.getFluid("oil") ?: error("Oil not found, please report to mod author")
+        val oil = FluidHolder.OIL ?: error("Oil not found, please report to mod author")
         val fluid = FluidStack(oil, Config.oilPerStage)
 
-        if (tank.fill(fluid, false) == Config.oilPerStage) {
+        if (tank.fillSimulate(fluid) == Config.oilPerStage) {
 
             val newAmount = state[Blocks.PROPERTY_OIL_AMOUNT]!!.amount - 1
             val newState = Blocks.OilAmount.fromAmount(newAmount)!!.getBlockState(Blocks.oilSource)
@@ -232,7 +235,7 @@ class ModulePumpjack(
             }
 
             world.setBlockState(nextSourcePos, newState)
-            tank.fill(fluid, true)
+            tank.fillExecute(fluid)
         }
     }
 
@@ -275,7 +278,8 @@ class ModulePumpjack(
 
                 if (!blockstate.block.isAir(blockstate, world, pos)) {
                     world.playEvent(2001, pos, Block.getStateId(blockstate))
-                    blockstate.block.dropBlockAsItem(world, ref().up(), blockstate, 0)
+                    // TODO
+//                    blockstate.block.dropBlockAsItem(world, ref().up(), blockstate, 0)
                 }
                 if(blockstate.getBlockHardness(world, pos) >= 0){
                     world.setBlockState(pos, MultiblockParts.pumpjackDrill.defaultState)

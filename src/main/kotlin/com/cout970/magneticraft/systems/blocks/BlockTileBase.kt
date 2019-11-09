@@ -1,29 +1,25 @@
 package com.cout970.magneticraft.systems.blocks
 
-import net.minecraft.block.ITileEntityProvider
-import net.minecraft.block.material.Material
-import net.minecraft.block.state.IBlockState
+import com.cout970.magneticraft.IBlockState
+import net.minecraft.block.Block
+import net.minecraft.block.BlockState
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.world.World
+import net.minecraft.world.IBlockReader
 
 open class BlockTileBase(
-    val factory: (World, IBlockState) -> TileEntity?,
+    val factory: (IBlockReader, IBlockState) -> TileEntity?,
     val filter: ((IBlockState) -> Boolean)?,
-    material: Material
-) : BlockBase(material), ITileEntityProvider {
+    props: Block.Properties
+) : BlockBase(props) {
 
-    @Suppress("DEPRECATION")
-    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
-        val state = getStateFromMeta(meta)
-        filter?.let {
-            if (!it.invoke(state)) {
-                return null
-            }
+    override fun createTileEntity(state: BlockState, world: IBlockReader): TileEntity? {
+        filter?.let { valid ->
+            if (!valid(state)) return null
         }
-        return factory(worldIn, state)
+        return factory(world, state)
     }
 
     override fun hasTileEntity(state: IBlockState): Boolean {
-        return filter?.invoke(state) ?: super.hasTileEntity(state)
+        return filter?.invoke(state) ?: true
     }
 }

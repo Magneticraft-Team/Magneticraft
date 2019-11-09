@@ -8,7 +8,7 @@ import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.multiblocks.MultiblockManager
 import com.cout970.magneticraft.systems.tilerenderers.BaseTileRenderer
 import com.cout970.magneticraft.systems.tilerenderers.Utilities
-import net.minecraft.client.Minecraft
+import com.cout970.magneticraft.totalWorldTime
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -21,7 +21,7 @@ abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>(
             translate(x, y, z)
 
             if (!te.active) {
-                val player = Minecraft.getMinecraft().player
+                val player = mc.player
 
                 // If the player is too far we don't render the template,
                 // because part of the multiblock may be unloaded and the template would be rendered from far away
@@ -29,7 +29,7 @@ abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>(
 
                 Utilities.multiblockPreview(te.multiblockContext())
 
-                if (te.world.totalWorldTime % 20L == 0L) {
+                if (world.totalWorldTime % 20L == 0L) {
                     val ctx = te.multiblockContext().copy(player = player)
                     te.clientErrors = MultiblockManager.checkMultiblockStructure(ctx)
                 }
@@ -40,7 +40,7 @@ abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>(
                 }
             } else {
                 ticks = partialTicks
-                time = (te.world.totalWorldTime and 0xFF_FFFF).toDouble() + partialTicks
+                time = (world.totalWorldTime and 0xFF_FFFF).toDouble() + partialTicks
                 render(te)
             }
         }

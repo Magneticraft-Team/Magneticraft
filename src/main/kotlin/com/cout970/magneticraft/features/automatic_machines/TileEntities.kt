@@ -1,14 +1,19 @@
 package com.cout970.magneticraft.features.automatic_machines
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBoxStorage
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBuffer
 import com.cout970.magneticraft.misc.RegisterTileEntity
+import com.cout970.magneticraft.misc.block.FULL_BLOCK_AABB
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.block.getOrientation
 import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.fillExecute
+import com.cout970.magneticraft.misc.fluid.fillSimulate
+import com.cout970.magneticraft.misc.fluid.stack
 import com.cout970.magneticraft.misc.inventory.Inventory
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.TimeCache
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.*
@@ -17,12 +22,9 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.*
-import net.minecraft.block.Block
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
+import net.minecraft.fluid.Fluids
+import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.util.math.AxisAlignedBB
-import net.minecraftforge.fluids.FluidRegistry
-import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.IFluidHandler
 
 /**
@@ -30,9 +32,9 @@ import net.minecraftforge.fluids.capability.IFluidHandler
  */
 
 @RegisterTileEntity("feeding_trough")
-class TileFeedingTrough : TileBase(), ITickable {
+class TileFeedingTrough(type: TileType) : TileBase(type), ITickableTileEntity {
 
-    val facing: EnumFacing get() = getBlockState().getOrientationCentered()
+    val facing: EnumFacing get() = blockState.getOrientationCentered()
 
     val inventory = Inventory(1)
     val invModule = ModuleInventory(inventory, capabilityFilter = { null })
@@ -42,8 +44,7 @@ class TileFeedingTrough : TileBase(), ITickable {
         initModules(moduleFeedingTrough, invModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 
@@ -55,17 +56,16 @@ class TileFeedingTrough : TileBase(), ITickable {
 
 
 @RegisterTileEntity("conveyor_belt")
-class TileConveyorBelt : TileBase(), ITickable {
+class TileConveyorBelt(type: TileType) : TileBase(type), ITickableTileEntity {
 
-    val facing: EnumFacing get() = getBlockState().getOrientation()
+    val facing: EnumFacing get() = blockState.getOrientation()
     val conveyorModule = ModuleConveyorBelt({ facing })
 
     init {
         initModules(conveyorModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 
@@ -75,9 +75,9 @@ class TileConveyorBelt : TileBase(), ITickable {
 }
 
 @RegisterTileEntity("inserter")
-class TileInserter : TileBase(), ITickable {
+class TileInserter(type: TileType) : TileBase(type), ITickableTileEntity {
 
-    val facing: EnumFacing get() = getBlockState().getOrientation()
+    val facing: EnumFacing get() = blockState.getOrientation()
     val filters = Inventory(9)
     val inventory: Inventory = Inventory(3) { _, _ -> inserterModule.updateUpgrades() }
     val invModule = ModuleInventory(inventory, capabilityFilter = { null })
@@ -88,14 +88,13 @@ class TileInserter : TileBase(), ITickable {
         initModules(inserterModule, invModule, openGui)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("water_generator")
-class TileWaterGenerator : TileBase(), ITickable {
+class TileWaterGenerator(type: TileType) : TileBase(type), ITickableTileEntity {
 
     val cache: MutableList<IFluidHandler> = mutableListOf()
     val tank = object : Tank(32_000) {
@@ -104,7 +103,7 @@ class TileWaterGenerator : TileBase(), ITickable {
         }
 
         override fun onContentsChanged() {
-            fluid = FluidRegistry.getFluidStack("water", 32_000)
+            fluid = Fluids.WATER.stack(32_000)
         }
     }
 
@@ -115,28 +114,27 @@ class TileWaterGenerator : TileBase(), ITickable {
         initModules(bucketIoModule, fluidModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
         if (container.shouldTick(20)) {
             cache.clear()
             enumValues<EnumFacing>().forEach { dir ->
-                val tile = world.getTileEntity(pos.offset(dir))
+                val tile = theWorld.getTileEntity(pos.offset(dir))
                 val handler = tile?.getOrNull(FLUID_HANDLER, dir.opposite) ?: return@forEach
                 cache.add(handler)
             }
         }
         cache.forEach { handler ->
-            val water = FluidStack(FluidRegistry.WATER, Config.waterGeneratorPerTickWater)
-            val amount = handler.fill(water, false)
+            val water = Fluids.WATER.stack(Config.waterGeneratorPerTickWater)
+            val amount = handler.fillSimulate(water)
             if (amount > 0) {
-                handler.fill(FluidStack(water, amount), true)
+                handler.fillExecute(water.stack(amount))
             }
         }
     }
 }
 
-abstract class AbstractTileTube : TileBase() {
+abstract class AbstractTileTube(type: TileType) : TileBase(type) {
 
     val flow = PneumaticBoxStorage()
 
@@ -159,37 +157,35 @@ abstract class AbstractTileTube : TileBase() {
 
 
     override fun getRenderBoundingBox(): AxisAlignedBB {
-        return Block.FULL_BLOCK_AABB.offset(pos)
+        return FULL_BLOCK_AABB.offset(pos)
     }
 }
 
 @RegisterTileEntity("pneumatic_tube")
-class TilePneumaticTube : AbstractTileTube(), ITickable {
+class TilePneumaticTube(type: TileType) : AbstractTileTube(type), ITickableTileEntity {
 
     override fun getWeight(): Int = 0
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 
 }
 
 @RegisterTileEntity("pneumatic_restriction_tube")
-class TilePneumaticRestrictionTube : AbstractTileTube(), ITickable {
+class TilePneumaticRestrictionTube(type: TileType) : AbstractTileTube(type), ITickableTileEntity {
 
     override fun getWeight(): Int = 100
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("relay")
-class TileRelay : TileBase(), ITickable {
+class TileRelay(type: TileType) : TileBase(type), ITickableTileEntity {
 
-    val facing: EnumFacing get() = getBlockState().getFacing()
+    val facing: EnumFacing get() = blockState.getFacing()
     val inventory = Inventory(9)
     val buffer = PneumaticBuffer()
 
@@ -201,16 +197,15 @@ class TileRelay : TileBase(), ITickable {
         initModules(endpointModule, invModule, relayModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("filter")
-class TileFilter : TileBase(), ITickable {
+class TileFilter(type: TileType) : TileBase(type), ITickableTileEntity {
 
-    val facing: EnumFacing get() = getBlockState().getFacing()
+    val facing: EnumFacing get() = blockState.getFacing()
     val inventory = Inventory(9)
     val inputBuffer = PneumaticBuffer()
     val outputBuffer = PneumaticBuffer()
@@ -233,8 +228,7 @@ class TileFilter : TileBase(), ITickable {
         initModules(endpointModule, filterModule, itemFilter)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }
@@ -242,9 +236,9 @@ class TileFilter : TileBase(), ITickable {
 
 // Nice to have: filter to only extract certain items
 @RegisterTileEntity("transposer")
-class TileTransposer : TileBase(), ITickable {
+class TileTransposer(type: TileType) : TileBase(type), ITickableTileEntity {
 
-    val facing: EnumFacing get() = getBlockState().getFacing()
+    val facing: EnumFacing get() = blockState.getFacing()
     val buffer = PneumaticBuffer()
     val inventory = Inventory(9)
 
@@ -256,8 +250,7 @@ class TileTransposer : TileBase(), ITickable {
         initModules(endpointModule, transposerModule, itemFilter)
     }
 
-    @DoNotRemove
-    override fun update() {
+    override fun tick() {
         super.update()
     }
 }

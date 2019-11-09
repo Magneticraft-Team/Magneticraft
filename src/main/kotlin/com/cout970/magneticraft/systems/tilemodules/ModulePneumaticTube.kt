@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
-import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBoxStorage
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticUtils
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry
@@ -17,8 +18,6 @@ import com.cout970.magneticraft.misc.set
 import com.cout970.magneticraft.misc.tileentity.getCap
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.containsPoint
-import com.cout970.magneticraft.misc.vector.toVec3d
-import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
@@ -26,16 +25,11 @@ import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.TUBE_CONNECTABLE
 import com.cout970.magneticraft.systems.blocks.IOnActivated
 import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
-import com.cout970.magneticraft.systems.network.MessageTileUpdate
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import com.cout970.vector.extensions.distanceSq
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.CompressedStreamTools
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.LogicalSide
 import java.io.ByteArrayOutputStream
 
 class ModulePneumaticTube(
@@ -73,7 +67,7 @@ class ModulePneumaticTube(
                 val side = validConnections.mapIndexed { index, open -> index to open }
                     .find { (index, open) -> open && index != box.side.ordinal }!!
                     .first
-                    .let { EnumFacing.getFront(it) }
+                    .let { EnumFacing.byIndex(it) }
 
                 val tube = world.getCap(TUBE_CONNECTABLE, pos.offset(side), side.opposite)
                 if (tube != null && tube is ITube) {
@@ -144,7 +138,7 @@ class ModulePneumaticTube(
     fun nextSide(validConnections: List<Boolean>, fromSide: EnumFacing): EnumFacing? {
 
         val sidesToCheck = roundRobbingMap
-            .mapIndexed { index, _ -> EnumFacing.getFront(index) to (validConnections[index] && index != fromSide.ordinal) }
+            .mapIndexed { index, _ -> EnumFacing.byIndex(index) to (validConnections[index] && index != fromSide.ordinal) }
             .filter { it.second }
             .map { it.first }
 
@@ -227,8 +221,8 @@ class ModulePneumaticTube(
         container.sendSyncDataToNearPlayers(data)
     }
 
-    override fun receiveSyncData(ibd: IBD, otherSide: Side) {
-        if (otherSide != Side.SERVER) return
+    override fun receiveSyncData(ibd: IBD, otherSide: LogicalSide) {
+        if (otherSide != LogicalSide.SERVER) return
         // id 0 is the packet type, for now there is only one type
         val size = ibd.getInteger(1)
         flow.clear()

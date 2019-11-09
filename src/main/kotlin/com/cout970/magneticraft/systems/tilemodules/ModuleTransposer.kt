@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBuffer
 import com.cout970.magneticraft.misc.tileentity.getCap
 import com.cout970.magneticraft.misc.tileentity.shouldTick
@@ -9,8 +10,8 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.util.EnumFacing
+import net.minecraft.entity.item.ItemEntity
+
 
 class ModuleTransposer(
     val buffer: PneumaticBuffer,
@@ -39,11 +40,11 @@ class ModuleTransposer(
         }
 
         val start = frontPos.toVec3d()
-        val end = start.addVector(1.0, 1.0, 1.0)
+        val end = start.add(1.0, 1.0, 1.0)
         val aabb = start.createAABBUsing(end)
 
-        val items = world.getEntitiesWithinAABB(EntityItem::class.java, aabb)
-            .filter { !it.isDead }
+        val items = world.getEntitiesWithinAABB(ItemEntity::class.java, aabb)
+            .filter { it.isAlive }
             .toMutableSet()
 
         while (items.isNotEmpty()) {
@@ -51,7 +52,7 @@ class ModuleTransposer(
 
             if (itemFilter.filterAllowStack(target.item)) {
                 buffer.add(target.item)
-                target.setDead()
+                target.remove()
                 break
             }
 

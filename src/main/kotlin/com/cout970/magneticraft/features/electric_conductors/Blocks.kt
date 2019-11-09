@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.features.electric_conductors
 
-import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.energy.IManualConnectionHandler
@@ -8,11 +8,11 @@ import com.cout970.magneticraft.api.energy.IManualConnectionHandler.Result.*
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
-import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.isSideSolid
+import com.cout970.magneticraft.misc.tileentity.setBlockToAir
 import com.cout970.magneticraft.misc.tileentity.tryConnect
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
@@ -26,20 +26,16 @@ import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
+import net.minecraft.state.IProperty
 import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.BlockRayTraceResult
 import net.minecraft.util.math.Vec3d
-import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import kotlin.math.min
+import kotlin.math.sqrt
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -69,13 +65,13 @@ object Blocks : IBlockMaker {
 
         connector = builder.withName("connector").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileConnector)
+            factory = factoryOf(TileConnector::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             alwaysDropDefault = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/connector.mcx"),
-                    "inventory" to resource("models/block/mcx/connector.mcx")
+                "model" to resource("models/block/mcx/connector.mcx"),
+                "inventory" to resource("models/block/mcx/connector.mcx")
             )
             //methods
             boundingBox = CommonMethods.updateBoundingBoxWithFacing {
@@ -84,26 +80,28 @@ object Blocks : IBlockMaker {
             onBlockPlaced = CommonMethods::placeWithFacing
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::enableAutoConnectWires
-            canPlaceBlockOnSide = { it.default && canStayInSide(it.worldIn, it.pos, it.side) }
+            // TODO
+//            canPlaceBlockOnSide = { it.default && canStayInSide(it.worldIn, it.pos, it.side) }
             capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER }, ConnectorManualConnectionHandler)
-            onNeighborChanged = {
-                if (!canStayInSide(it.worldIn, it.pos, it.state.getFacing())) {
-                    it.worldIn.destroyBlock(it.pos, true)
-                }
-            }
+            // TODO
+//            onNeighborChanged = {
+//                if (!canStayInSide(it.worldIn, it.pos, it.state.getFacing())) {
+//                    it.worldIn.destroyBlock(it.pos, true)
+//                }
+//            }
         }.build()
 
         electricPole = builder.withName("electric_pole").copy {
             material = Material.WOOD
             states = PoleOrientation.values().toList()
             factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
-            factory = factoryOf(::TileElectricPole)
+            factory = factoryOf(TileElectricPole::class)
             alwaysDropDefault = true
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/electric_pole.mcx"),
-                    "inventory" to resource("models/block/mcx/electric_pole_inv.mcx")
+                "model" to resource("models/block/mcx/electric_pole.mcx"),
+                "inventory" to resource("models/block/mcx/electric_pole_inv.mcx")
             )
             boundingBox = {
                 val size = 0.0625 * 3
@@ -125,13 +123,13 @@ object Blocks : IBlockMaker {
             material = Material.WOOD
             states = PoleOrientation.values().toList()
             factoryFilter = { state -> state[PROPERTY_POLE_ORIENTATION]?.isMainBlock() ?: false }
-            factory = factoryOf(::TileElectricPoleTransformer)
+            factory = factoryOf(TileElectricPoleTransformer::class)
             alwaysDropDefault = true
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/electric_pole_transformer.mcx"),
-                    "inventory" to resource("models/block/mcx/electric_pole_transformer_inv.mcx")
+                "model" to resource("models/block/mcx/electric_pole_transformer.mcx"),
+                "inventory" to resource("models/block/mcx/electric_pole_transformer_inv.mcx")
             )
             boundingBox = {
                 val size = 0.0625 * 3
@@ -143,17 +141,17 @@ object Blocks : IBlockMaker {
                 else emptyList()
             }
             capabilityProvider = CommonMethods.providerFor({ MANUAL_CONNECTION_HANDLER },
-                    ElectricPoleManualConnectionHandler)
+                ElectricPoleManualConnectionHandler)
             onActivated = CommonMethods::enableAutoConnectWires
         }.build()
 
         electricCable = builder.withName("electric_cable").copy {
-            factory = factoryOf(::TileElectricCable)
+            factory = factoryOf(TileElectricCable::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/mcx/electric_cable.mcx"),
-                    "inventory" to resource("models/block/mcx/electric_cable.mcx")
+                "model" to resource("models/block/mcx/electric_cable.mcx"),
+                "inventory" to resource("models/block/mcx/electric_cable.mcx")
             )
             boundingBox = { cableBoundingBox(it.source, it.pos, 6) }
         }.build()
@@ -161,24 +159,28 @@ object Blocks : IBlockMaker {
         teslaTower = builder.withName("tesla_tower").copy {
             states = TeslaTowerPart.values().toList()
             factory = { _, state ->
-                if (state[PROPERTY_TESLA_TOWER_PART] == TeslaTowerPart.BOTTOM) TileTeslaTower() else TileTeslaTowerPart()
+                if (state[PROPERTY_TESLA_TOWER_PART] == TeslaTowerPart.BOTTOM) {
+                    BlockBuilder.createTile(TileTeslaTower::class)
+                } else {
+                    BlockBuilder.createTile(TileTeslaTowerPart::class)
+                }
             }
             hasCustomModel = true
             forceModelBake = true
             generateDefaultItemBlockModel = false
             customModels = listOf(
-                    "bottom" to resource("models/block/gltf/tesla_tower.gltf"),
-                    "inventory" to resource("models/block/gltf/tesla_tower_inv.gltf")
+                "bottom" to resource("models/block/gltf/tesla_tower.gltf"),
+                "inventory" to resource("models/block/gltf/tesla_tower_inv.gltf")
             )
 
-            onActivated = {
-                val part = it.state[PROPERTY_TESLA_TOWER_PART]
+            onActivated = { args ->
+                val part = args.state[PROPERTY_TESLA_TOWER_PART]
                 if (part == Blocks.TeslaTowerPart.BOTTOM) {
-                    CommonMethods.openGui(it)
+                    CommonMethods.openGui(args)
                 } else {
-                    val state = it.worldIn.getBlockState(it.pos.down())
-                    state.block.onBlockActivated(it.worldIn, it.pos.down(), state, it.playerIn, it.hand, it.side,
-                            it.hit.xf, it.hit.yf, it.hit.zf
+                    val state = args.worldIn.getBlockState(args.pos.down())
+                    state.block.onBlockActivated(state, args.worldIn, args.pos.down(), args.playerIn, args.hand,
+                        BlockRayTraceResult(args.hit, args.side, args.pos.down(), true)
                     )
                 }
             }
@@ -188,7 +190,7 @@ object Blocks : IBlockMaker {
                 val middle = TeslaTowerPart.MIDDLE.getBlockState(it.default.block)
                 val top = TeslaTowerPart.TOP.getBlockState(it.default.block)
 
-                listOf(BlockPos.ORIGIN to bottom, BlockPos(0, 1, 0) to middle, BlockPos(0, 2, 0) to top)
+                listOf(BlockPos.ZERO to bottom, BlockPos(0, 1, 0) to middle, BlockPos(0, 2, 0) to top)
             }
             onBlockBreak = {
                 val part = it.state[PROPERTY_TESLA_TOWER_PART]
@@ -209,12 +211,12 @@ object Blocks : IBlockMaker {
 
         energyReceiver = builder.withName("energy_receiver").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileEnergyReceiver)
+            factory = factoryOf(TileEnergyReceiver::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
-                    "model" to resource("models/block/gltf/energy_receiver.gltf"),
-                    "inventory" to resource("models/block/gltf/energy_receiver.gltf")
+                "model" to resource("models/block/gltf/energy_receiver.gltf"),
+                "inventory" to resource("models/block/gltf/energy_receiver.gltf")
             )
             boundingBox = CommonMethods.updateBoundingBoxWithFacing {
                 listOf(Vec3d(PIXEL * 5, PIXEL * 5, 1.0 - PIXEL * 8) createAABBUsing Vec3d(1.0 - PIXEL * 5, 1.0 - PIXEL * 5, 1.0))
@@ -224,7 +226,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         return itemBlockListOf(connector, electricPole, electricCable, teslaTower, energyReceiver) +
-                (electricPoleTransformer to ItemBlockElectricPoleTransformer(electricPoleTransformer))
+            (electricPoleTransformer to ItemBlockElectricPoleTransformer(electricPoleTransformer))
     }
 
     fun cableBoundingBox(world: IBlockAccess, pos: BlockPos, size: Int): List<AABB> {
@@ -297,19 +299,19 @@ object Blocks : IBlockMaker {
         }
         //@formatter:on
 
-        val pos = BlockPos.ORIGIN
+        val pos = BlockPos.ZERO
         listOf(
-                pos to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_4),
-                pos.offset(EnumFacing.UP, 1) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_3),
-                pos.offset(EnumFacing.UP, 2) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_2),
-                pos.offset(EnumFacing.UP, 3) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_1),
-                pos.offset(EnumFacing.UP, 4) to default.withProperty(PROPERTY_POLE_ORIENTATION, dir)
+            pos to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_4),
+            pos.offset(EnumFacing.UP, 1) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_3),
+            pos.offset(EnumFacing.UP, 2) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_2),
+            pos.offset(EnumFacing.UP, 3) to default.withProperty(PROPERTY_POLE_ORIENTATION, PoleOrientation.DOWN_1),
+            pos.offset(EnumFacing.UP, 4) to default.withProperty(PROPERTY_POLE_ORIENTATION, dir)
         )
     }
 
     enum class TeslaTowerPart(
-            override val stateName: String,
-            override val isVisible: Boolean
+        override val stateName: String,
+        override val isVisible: Boolean
     ) : IStatesEnum, IStringSerializable {
         BOTTOM("bottom", true),
         MIDDLE("middle", false),
@@ -325,11 +327,11 @@ object Blocks : IBlockMaker {
     }
 
     enum class PoleOrientation(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val offset: Vec3d,
-            val angle: Float = 0f,
-            val offsetY: Int = 0
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val offset: Vec3d,
+        val angle: Float = 0f,
+        val offsetY: Int = 0
     ) : IStatesEnum, IStringSerializable {
 
         NORTH("north", true, Vec3d(1.0, 0.0, 0.0), 180f),
@@ -384,7 +386,7 @@ object Blocks : IBlockMaker {
                 return ERROR
             }
             val handler = other.getOrNull(ELECTRIC_NODE_HANDLER, side)
-                    ?: return NOT_A_CONNECTOR
+                ?: return NOT_A_CONNECTOR
             val otherNodes = handler.nodes.filterIsInstance(IWireConnector::class.java)
 
 
@@ -431,7 +433,7 @@ object Blocks : IBlockMaker {
         val size = module.outputWiredConnections.size
         thisNodes.forEach { thisNode ->
             otherNodes.forEach { otherNode ->
-                val dist = Math.sqrt(otherNode.pos.distanceSq(thisNode.pos))
+                val dist = sqrt(otherNode.pos.distanceSq(thisNode.pos))
                 if (thisNode === otherNode || module === handler) same = true
                 if (handler is ModuleElectricity) {
                     if (module.inputWiredConnections.any { it.firstNode == otherNode } || handler.inputWiredConnections.any { it.firstNode == thisNode }) {
@@ -474,7 +476,8 @@ object Blocks : IBlockMaker {
         val state = worldIn.getBlockState(blockPos)
         val list = mutableListOf<AxisAlignedBB>()
 
-        state.addCollisionBoxToList(worldIn, blockPos, box, list, null, false)
+        // TODO
+//        state.addCollisionBoxToList(worldIn, blockPos, box, list, null, false)
         return list.isNotEmpty()
     }
 }

@@ -7,9 +7,9 @@ import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegist
 import com.cout970.magneticraft.features.items.ToolItems
 import com.cout970.magneticraft.misc.info
 import com.cout970.magneticraft.misc.inventory.stack
-import net.minecraft.init.Items
+import net.minecraft.item.Items
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fml.common.registry.ForgeRegistries
+import net.minecraftforge.registries.ForgeRegistries
 
 fun registerMisc() {
     HammerRegistry.registerHammer(ToolItems.stoneHammer.stack(), Hammer(1, 8, 1))
@@ -32,9 +32,9 @@ fun registerMisc() {
     registerWrench("teslacorelib:wrench")
 }
 
-private fun registerWrench(resource: String, meta: Int = 0) {
+private fun registerWrench(resource: String) {
     ForgeRegistries.ITEMS.getValue(ResourceLocation(resource))?.let {
         info("Adding item: $it as valid wrench")
-        WrenchRegistry.registerWrench(it.stack(meta = meta))
+        WrenchRegistry.registerWrench(it.stack())
     }
 }

@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.systems.blocks
 
+import com.cout970.magneticraft.IBlockState
 import net.minecraft.block.Block
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.IBlockState
+import net.minecraft.state.IProperty
 
 /**
  * Created by cout970 on 2017/01/28.

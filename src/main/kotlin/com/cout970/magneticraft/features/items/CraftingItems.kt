@@ -1,47 +1,43 @@
 package com.cout970.magneticraft.features.items
 
-import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.misc.RegisterItems
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.items.IItemMaker
 import com.cout970.magneticraft.systems.items.ItemBase
 import com.cout970.magneticraft.systems.items.ItemBuilder
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
-import net.minecraft.util.EnumActionResult
+import net.minecraft.util.ActionResultType
 
 /**
  * Created by cout970 on 2017/07/22.
  */
+@RegisterItems
 object CraftingItems : IItemMaker {
 
     lateinit var guideBook: ItemBase private set
-    lateinit var crafting: ItemBase private set
+    lateinit var sulfur: ItemBase private set
+    lateinit var alternator: ItemBase private set
+    lateinit var motor: ItemBase private set
+    lateinit var coil: ItemBase private set
+    lateinit var magnet: ItemBase private set
+    lateinit var mesh: ItemBase private set
+    lateinit var string_fabric: ItemBase private set
 
-    enum class Type(val meta: Int) {
-        SULFUR(0),
-        ALTERNATOR(1),
-        MOTOR(2),
-        COIL(3),
-        MAGNET(4),
-        MESH(5),
-        STRING_FABRIC(6);
-
-        fun stack(amount: Int = 1): ItemStack = ItemStack(crafting, amount, meta)
-    }
-
-    val meta = Type.values().map { it.name.toLowerCase() to it.meta }.toMap()
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
             creativeTab = CreativeTabMg
         }
 
-        crafting = builder.withName("crafting").copy {
-            constructor = { CraftingItem() }
-            variants = meta.map { it.value to it.key }.toMap()
-        }.build()
+        sulfur = builder.withName("sulfur").copy { burnTime = 800 }.build()
+        alternator = builder.withName("alternator").build()
+        motor = builder.withName("motor").build()
+        coil = builder.withName("coil").build()
+        magnet = builder.withName("magnet").build()
+        mesh = builder.withName("mesh").build()
+        string_fabric = builder.withName("string_fabric").build()
 
         guideBook = builder.withName("guide_book").copy {
             onItemRightClick = {
@@ -49,20 +45,14 @@ object CraftingItems : IItemMaker {
                     it.default
                 } else {
                     val pos = it.playerIn.position
-                    it.playerIn.openGui(Magneticraft, -2, it.worldIn, pos.x, pos.y, pos.z)
-                    ActionResult(EnumActionResult.SUCCESS, it.playerIn.getHeldItem(it.handIn))
+                    // TODO
+//                    it.playerIn.openGui(Magneticraft, -2, it.worldIn, pos.x, pos.y, pos.z)
+                    ActionResult(ActionResultType.SUCCESS, it.playerIn.getHeldItem(it.handIn))
                 }
             }
         }.build()
 
-        return listOf(crafting, guideBook)
+        return listOf(magnet, alternator, motor, coil, magnet, mesh, string_fabric, guideBook)
     }
 
-    class CraftingItem : ItemBase() {
-
-        override fun getItemBurnTime(itemStack: ItemStack): Int {
-            if (itemStack.metadata == Type.SULFUR.meta) return 800
-            return -1
-        }
-    }
 }

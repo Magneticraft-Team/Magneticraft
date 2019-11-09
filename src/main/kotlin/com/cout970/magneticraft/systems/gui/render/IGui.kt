@@ -10,7 +10,7 @@ import net.minecraft.client.gui.FontRenderer
 
 interface IGui : IGuiRenderer {
 
-    val container: ContainerBase
+    val containerBase: ContainerBase
     val components: MutableList<IComponent>
 
     val pos: IVector2

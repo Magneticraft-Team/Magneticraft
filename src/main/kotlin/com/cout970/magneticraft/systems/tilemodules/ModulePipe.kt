@@ -1,11 +1,16 @@
 package com.cout970.magneticraft.systems.tilemodules
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.internal.registries.tool.wrench.WrenchRegistry
 import com.cout970.magneticraft.features.fluid_machines.Blocks
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.add
+import com.cout970.magneticraft.misc.fluid.FluidHandlerConcatenate
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.isNotEmpty
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.vector.containsPoint
@@ -23,11 +28,8 @@ import com.cout970.magneticraft.systems.tilemodules.pipe.INetworkNode
 import com.cout970.magneticraft.systems.tilemodules.pipe.Network
 import com.cout970.magneticraft.systems.tilemodules.pipe.PipeNetwork
 import com.cout970.magneticraft.systems.tilemodules.pipe.PipeType
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fluids.FluidUtil
-import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate
 
 /**
  * Created by cout970 on 2017/08/28.
@@ -102,11 +104,11 @@ class ModulePipe(
             val handler = FLUID_HANDLER!!.fromTile(tile, side.opposite) ?: return@forEach
 
             if (state == ConnectionState.PASSIVE) {
-                if (FluidUtil.tryFluidTransfer(handler, getNetworkTank(), type.maxRate, false) != null) {
+                if (FluidUtil.tryFluidTransfer(handler, getNetworkTank(), type.maxRate, false).isNotEmpty) {
                     FluidUtil.tryFluidTransfer(handler, getNetworkTank(), type.maxRate, true)
                 }
             } else if (state == ConnectionState.ACTIVE) {
-                if (FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, false) != null) {
+                if (FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, false).isNotEmpty) {
                     // This line doesn't work after using hotswap, for some reason
                     FluidUtil.tryFluidTransfer(getNetworkTank(), handler, type.maxRate, true)
                 }
@@ -155,7 +157,7 @@ class ModulePipe(
 
     override fun onBreak() {
         if (world.isServer) {
-            container.tile.invalidate()
+            container.tile.remove()
         }
         pipeNetwork?.split(this)
     }

@@ -2,13 +2,13 @@ package com.cout970.magneticraft.systems.gui.components.buttons
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.guiTexture
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
-import net.minecraft.client.renderer.GlStateManager.color
-import net.minecraft.client.renderer.GlStateManager.enableBlend
+import com.mojang.blaze3d.platform.GlStateManager.enableBlend
 
 class SelectButton(
     override val pos: IVector2,

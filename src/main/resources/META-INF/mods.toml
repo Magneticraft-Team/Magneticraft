@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/Magneticraft-Team/Magneticraft/issues"
+[[mods]]
+modId="magneticraft"
+version="${file.jarVersion}"
+displayName="Magneticraft"
+updateJSONURL="https://raw.githubusercontent.com/Magneticraft-Team/Magneticraft/1.14/src/main/resources/update.json"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/magneticraft"
+logoFile="assets/magneticraft/textures/logo.png"
+credits="By Magneticraft Team: Cout970 (Developer) and MechWarrior99 (Artist), old members: Cypher121, Minecreatr, MattDahEpic"
+authors="Cout970, MechWarrior99"
+description="Magneticraft: Energy, Industries and Multiblocks!"
+
+[[dependencies.magneticraft]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.magneticraft]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.magneticraft]]
+    modId="modelloader"
+    mandatory=true
+    versionRange="[2,)"
+    ordering="NONE"
+    side="CLIENT"

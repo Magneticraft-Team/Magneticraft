@@ -2,14 +2,14 @@ package com.cout970.magneticraft.systems.gui.components
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.guiTexture
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
 import com.cout970.magneticraft.systems.gui.render.MouseButton
-import net.minecraft.client.renderer.GlStateManager.color
-import org.lwjgl.input.Mouse
+import com.cout970.magneticraft.systems.gui.render.isMouseButtonDown
 import kotlin.math.max
 import kotlin.math.min
 
@@ -50,7 +50,7 @@ class ScrollBar(
             if (!tracking) slider else vec2Of(228, 240)
         )
 
-        if (Mouse.isButtonDown(MouseButton.LEFT.id)) {
+        if (isMouseButtonDown(MouseButton.LEFT.id)) {
             onMouseClick(mouse, 0)
         } else {
             tracking = false

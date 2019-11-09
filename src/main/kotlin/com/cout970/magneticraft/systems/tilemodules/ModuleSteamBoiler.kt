@@ -4,14 +4,16 @@ import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.heat.tempToEnergy
 import com.cout970.magneticraft.misc.ConversionTable
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.drainExecute
+import com.cout970.magneticraft.misc.fluid.fillExecute
 import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.registry.FluidHolder
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fluids.FluidStack
 
 /**
@@ -49,12 +51,12 @@ class ModuleSteamBoiler(
         val water = minOf(minOf(waterLimit, spaceLimit), minOf(maxWaterPerTick, heatLimit))
         if (water <= 0) return
 
-        val fluid = FluidRegistry.getFluid("steam") ?: return
+        val fluid = FluidHolder.STEAM ?: return
         val steam = (water * ConversionTable.WATER_TO_STEAM).toInt()
 
         // boil water
-        inputTank.drainInternal(water, true)
-        outputTank.fillInternal(FluidStack(fluid, steam), true)
+        inputTank.drainExecute(water)
+        outputTank.fillExecute(FluidStack(fluid, steam))
         production += steam
         node.applyHeat(-steam * ConversionTable.STEAM_TO_J)
     }

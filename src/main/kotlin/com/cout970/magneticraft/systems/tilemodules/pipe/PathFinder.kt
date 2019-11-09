@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.systems.tilemodules.pipe
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.vector.plus
-import net.minecraft.util.EnumFacing
+
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*

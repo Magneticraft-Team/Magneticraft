@@ -1,25 +1,23 @@
 package com.cout970.magneticraft.features.computers
 
-import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getTile
-import com.cout970.magneticraft.misc.vector.*
+import com.cout970.magneticraft.misc.vector.createAABBUsing
+import com.cout970.magneticraft.misc.vector.rotateBox
+import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.blocks.*
 import com.cout970.magneticraft.systems.itemblocks.blockListOf
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
 import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
+import net.minecraft.state.IProperty
 import net.minecraft.util.IStringSerializable
+import net.minecraft.util.math.BlockRayTraceResult
 
 /**
  * Created by cout970 on 2017/07/07.
@@ -41,7 +39,7 @@ object Blocks : IBlockMaker {
         }
 
         computer = builder.withName("computer").copy {
-            factory = factoryOf(::TileComputer)
+            factory = factoryOf(TileComputer::class)
             states = CommonMethods.Orientation.values().toList()
             hasCustomModel = true
             generateDefaultItemBlockModel = false
@@ -60,7 +58,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         miningRobot = builder.withName("mining_robot").copy {
-            factory = factoryOf(::TileMiningRobot)
+            factory = factoryOf(TileMiningRobot::class)
             states = RobotOrientation.values().toList()
             hasCustomModel = true
             generateDefaultItemBlockModel = false
@@ -84,12 +82,12 @@ object Blocks : IBlockMaker {
             onDrop = { emptyList() }
             boundingBox = { listOf(vec3Of(4.px, 4.px, 4.px) createAABBUsing vec3Of(1 - 4.px, 1 - 4.px, 1 - 4.px)) }
             onActivated = func@{
-                for (side in EnumFacing.VALUES) {
+                for (side in EnumFacing.values()) {
                     val state = it.worldIn.getBlockState(it.pos.offset(side))
                     if (state.block == miningRobot) {
                         return@func state.block.onBlockActivated(
-                            it.worldIn, it.pos.offset(side), it.state, it.playerIn, it.hand, it.side,
-                            it.hit.xf, it.hit.yf, it.hit.zf
+                            it.state, it.worldIn, it.pos.offset(side), it.playerIn, it.hand,
+                            BlockRayTraceResult(it.hit, it.side, it.pos.offset(side), true)
                         )
                     }
                 }

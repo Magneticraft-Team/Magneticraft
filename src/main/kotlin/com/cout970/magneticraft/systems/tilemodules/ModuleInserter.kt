@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.features.items.Upgrades
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.decodeFlags
@@ -17,14 +18,11 @@ import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.systems.gui.DATA_ID_FLAGS
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.item.EntityMinecartContainer
+import net.minecraft.entity.item.ItemEntity
+import net.minecraft.entity.item.minecart.ChestMinecartEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.items.IItemHandler
-import net.minecraftforge.oredict.OreDictionary
 
 
 /**
@@ -186,11 +184,11 @@ class ModuleInserter(
 
         for (i in 1..2) {
             val stack = inventory[i]
-            if (stack.isEmpty || stack.item != Upgrades.inserterUpgrade) continue
+            if (stack.isEmpty) continue
 
-            when (stack.metadata) {
-                0 -> hasSpeedUpgrade = true
-                1 -> hasStackUpgrade = true
+            when (stack.item) {
+                Upgrades.inserterUpgradeSpeed -> hasSpeedUpgrade = true
+                Upgrades.inserterUpgradeStack -> hasStackUpgrade = true
             }
         }
     }
@@ -212,7 +210,7 @@ class ModuleInserter(
         inventoryAccessors.forEach { (offset, side) ->
             val base = pos + offset
             val area = base createAABBUsing base.add(1, 1, 1)
-            val carts = world.getEntitiesWithinAABB(EntityMinecartContainer::class.java, area)
+            val carts = world.getEntitiesWithinAABB(ChestMinecartEntity::class.java, area)
 
             carts.forEach { entity ->
                 val handler = ITEM_HANDLER!!.fromEntity(entity, side)
@@ -254,8 +252,8 @@ class ModuleInserter(
     fun canGrabFromGround(level: Level): Boolean {
         val height = if (level == Level.HIGH) pos else pos.down()
         val base = height.toVec3d() + facing.toVector3()
-        val area = base createAABBUsing base.addVector(1.0, 1.0, 1.0)
-        val items = world.getEntitiesWithinAABB(EntityItem::class.java, area)
+        val area = base createAABBUsing base.add(1.0, 1.0, 1.0)
+        val items = world.getEntitiesWithinAABB(ItemEntity::class.java, area)
         return items.any { canExtract(it.item) && acceptInDestine(it.item) != null }
     }
 
@@ -282,13 +280,13 @@ class ModuleInserter(
         if (world.isClient) return false
         val height = if (level == Level.HIGH) pos else pos.down()
         val base = height.toVec3d() + facing.toVector3()
-        val area = base createAABBUsing base.addVector(1.0, 1.0, 1.0)
-        val items = world.getEntitiesWithinAABB(EntityItem::class.java, area)
+        val area = base createAABBUsing base.add(1.0, 1.0, 1.0)
+        val items = world.getEntitiesWithinAABB(ItemEntity::class.java, area)
         val stack = items.firstOrNull { canExtract(it.item) && acceptInDestine(it.item) != null } ?: return false
 
         currentItem = stack.item
         stack.item = ItemStack.EMPTY
-        world.removeEntity(stack)
+        stack.remove()
         return true
     }
 
@@ -310,10 +308,10 @@ class ModuleInserter(
         val base = height + facing.opposite
 
         val blockstate = world.getBlockState(base)
-        if (blockstate.isFullBlock) return false
+        if (blockstate.isSolid) return false
 
         val area = base createAABBUsing base.add(1.0, 1.0, 1.0)
-        val itemList = world.getEntitiesWithinAABB(EntityItem::class.java, area)
+        val itemList = world.getEntitiesWithinAABB(ItemEntity::class.java, area)
         return itemList.isEmpty()
     }
 
@@ -373,20 +371,21 @@ class ModuleInserter(
     fun checkFilter(filter: ItemStack, stack: ItemStack): Boolean {
         if (filter.isEmpty) return false
 
-        if (useOreDictionary && filter.item != stack.item) {
-            val filterIds = OreDictionary.getOreIDs(filter)
-            val stackIds = OreDictionary.getOreIDs(stack)
-            if (stackIds.isNotEmpty() && filterIds.isNotEmpty()) {
-                for (stackId in stackIds) {
-                    for (filterId in filterIds) {
-                        if (stackId == filterId) return true
-                    }
-                }
-            }
-        }
+        // TODO
+//        if (useOreDictionary && filter.item != stack.item) {
+//            val filterIds = OreDictionary.getOreIDs(filter)
+//            val stackIds = OreDictionary.getOreIDs(stack)
+//            if (stackIds.isNotEmpty() && filterIds.isNotEmpty()) {
+//                for (stackId in stackIds) {
+//                    for (filterId in filterIds) {
+//                        if (stackId == filterId) return true
+//                    }
+//                }
+//            }
+//        }
 
         if (filter.item !== stack.item) return false
-        if (useMetadata && filter.itemDamage != stack.itemDamage) return false
+        if (useMetadata && filter.damage != stack.damage) return false
         if (useNbt && filter.tagCompound != stack.tagCompound) return false
         return true
     }

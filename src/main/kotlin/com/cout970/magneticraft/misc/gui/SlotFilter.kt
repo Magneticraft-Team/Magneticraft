@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.misc.gui
 
-import net.minecraft.entity.player.EntityPlayer
+import com.cout970.magneticraft.EntityPlayer
 import net.minecraft.inventory.IInventory
-import net.minecraft.inventory.Slot
+import net.minecraft.inventory.container.Slot
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.SlotItemHandler

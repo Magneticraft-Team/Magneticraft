@@ -4,12 +4,12 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.features.manual_machines.TileFabricator
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.iterateArea
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
-import net.minecraft.client.renderer.GlStateManager.color
-import net.minecraft.client.renderer.GlStateManager.enableBlend
+import com.mojang.blaze3d.platform.GlStateManager.enableBlend
 
 class CompFabricatorMatches(val tile: TileFabricator) : IComponent {
     override val pos: IVector2 = vec2Of(24, 5)

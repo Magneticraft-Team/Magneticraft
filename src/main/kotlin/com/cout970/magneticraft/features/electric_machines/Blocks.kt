@@ -1,25 +1,25 @@
 package com.cout970.magneticraft.features.electric_machines
 
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.ItemBlock
+import com.cout970.magneticraft.PropertyEnum
 import com.cout970.magneticraft.features.heat_machines.TileElectricHeater
 import com.cout970.magneticraft.features.heat_machines.TileRfHeater
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.setBlockToAir
 import com.cout970.magneticraft.systems.blocks.*
 import com.cout970.magneticraft.systems.blocks.CommonMethods.propertyOf
 import com.cout970.magneticraft.systems.itemblocks.blockListOf
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
 import com.cout970.magneticraft.systems.tilemodules.ModuleWindTurbine
+import com.cout970.magneticraft.withProperty
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.BlockFaceShape
-import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemBlock
+import net.minecraft.state.IProperty
 import net.minecraft.util.BlockRenderLayer
 import net.minecraft.util.IStringSerializable
 
@@ -53,7 +53,7 @@ object Blocks : IBlockMaker {
 
         battery = builder.withName("battery").copy {
             states = CommonMethods.Orientation.values().toList()
-            factory = factoryOf(::TileBattery)
+            factory = factoryOf(TileBattery::class)
             alwaysDropDefault = true
             generateDefaultItemBlockModel = false
             hasCustomModel = true
@@ -70,7 +70,7 @@ object Blocks : IBlockMaker {
         electricFurnace = builder.withName("electric_furnace").copy {
             material = Material.ROCK
             states = CommonMethods.OrientationActive.values().toList()
-            factory = factoryOf(::TileElectricFurnace)
+            factory = factoryOf(TileElectricFurnace::class)
             alwaysDropDefault = true
             //methods
             onBlockPlaced = CommonMethods::placeInactiveWithOppositeOrientation
@@ -79,7 +79,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         infiniteEnergy = builder.withName("infinite_energy").copy {
-            factory = factoryOf(::TileInfiniteEnergy)
+            factory = factoryOf(TileInfiniteEnergy::class)
         }.build()
 
         airBubble = builder.withName("air_bubble").copy {
@@ -89,11 +89,12 @@ object Blocks : IBlockMaker {
             blockLayer = BlockRenderLayer.CUTOUT
             hasCustomModel = true
             tickRate = 1
-            onNeighborChanged = {
-                if (it.state[PROPERTY_DECAY_MODE]?.enable == true && it.worldIn.rand.nextBoolean()) {
-                    it.worldIn.setBlockToAir(it.pos)
-                }
-            }
+            // TODO
+//            onNeighborChanged = {
+//                if (it.state[PROPERTY_DECAY_MODE]?.enable == true && it.worldIn.rand.nextBoolean()) {
+//                    it.worldIn.setBlockToAir(it.pos)
+//                }
+//            }
             onUpdateTick = {
                 if (it.state[PROPERTY_DECAY_MODE]?.enable == true) {
                     it.world.setBlockToAir(it.pos)
@@ -101,27 +102,28 @@ object Blocks : IBlockMaker {
             }
             onDrop = { emptyList() }
             collisionBox = { null }
-            shouldSideBeRendered = func@{
-                val state = it.blockAccess.getBlockState(it.pos.offset(it.side))
-                if (state.block === it.state.block) false
-                else !state.doesSideBlockRendering(it.blockAccess, it.pos.offset(it.side), it.side.opposite)
-            }
+            // TODO
+//            shouldSideBeRendered = func@{
+//                val state = it.blockAccess.getBlockState(it.pos.offset(it.side))
+//                if (state.block === it.state.block) false
+//                else !state.doesSideBlockRendering(it.blockAccess, it.pos.offset(it.side), it.side.opposite)
+//            }
         }.build()
 
         airLock = builder.withName("airlock").copy {
-            factory = factoryOf(::TileAirLock)
+            factory = factoryOf(TileAirLock::class)
             onActivated = CommonMethods::openGui
         }.build()
 
         thermopile = builder.withName("thermopile").copy {
-            factory = factoryOf(::TileThermopile)
+            factory = factoryOf(TileThermopile::class)
             //methods
             onActivated = CommonMethods::openGui
         }.build()
 
         windTurbine = builder.withName("wind_turbine").copy {
             states = CommonMethods.Orientation.values().toList()
-            factory = factoryOf(::TileWindTurbine)
+            factory = factoryOf(TileWindTurbine::class)
             alwaysDropDefault = true
             generateDefaultItemBlockModel = false
             hasCustomModel = true
@@ -135,7 +137,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         windTurbineGap = builder.withName("wind_turbine_gap").copy {
-            factory = factoryOf(::TileWindTurbineGap)
+            factory = factoryOf(TileWindTurbineGap::class)
             hasCustomModel = true
             onDrop = { emptyList() }
             onBlockBreak = func@{
@@ -147,12 +149,11 @@ object Blocks : IBlockMaker {
                 }
                 it.worldIn.removeTileEntity(it.pos)
             }
-            blockFaceShape = { BlockFaceShape.UNDEFINED }
         }.build()
 
         electricHeater = builder.withName("electric_heater").copy {
             states = WorkingMode.values().toList()
-            factory = factoryOf(::TileElectricHeater)
+            factory = factoryOf(TileElectricHeater::class)
             alwaysDropDefault = true
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
@@ -160,20 +161,20 @@ object Blocks : IBlockMaker {
 
         rfHeater = builder.withName("rf_heater").copy {
             states = WorkingMode.values().toList()
-            factory = factoryOf(::TileRfHeater)
+            factory = factoryOf(TileRfHeater::class)
             alwaysDropDefault = true
             pickBlock = CommonMethods::pickDefaultBlock
             onActivated = CommonMethods::openGui
         }.build()
 
         rfTransformer = builder.withName("rf_transformer").copy {
-            factory = factoryOf(::TileRfTransformer)
+            factory = factoryOf(TileRfTransformer::class)
             onActivated = CommonMethods::openGui
         }.build()
 
         electricEngine = builder.withName("electric_engine").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileElectricEngine)
+            factory = factoryOf(TileElectricEngine::class)
             alwaysDropDefault = true
             generateDefaultItemBlockModel = false
             hasCustomModel = true

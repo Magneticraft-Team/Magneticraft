@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.systems.computer
 
 import com.cout970.magneticraft.api.computer.*
-import gnu.trove.map.hash.TIntObjectHashMap
 
 /**
  * Created by cout970 on 2016/09/30.
@@ -19,7 +18,7 @@ class Motherboard(
     var cyclesPerTick = 1_000_000 / 20 // 1MHz
 
 
-    val deviceMap = TIntObjectHashMap<IDevice>()
+    val deviceMap = HashMap<Int, IDevice>()
 
     private val bus = Bus(ram) { deviceMap[it] }
     private var cpuCycles = -1
@@ -71,7 +70,7 @@ class Motherboard(
     override fun reset() {
         clock = 0
         cpu.reset()
-        deviceMap.values().filterIsInstance<IResettable>().forEach { it.reset() }
+        deviceMap.values.filterIsInstance<IResettable>().forEach { it.reset() }
         rom.bios.use {
             var index = CPU_START_POINT
             while (true) {

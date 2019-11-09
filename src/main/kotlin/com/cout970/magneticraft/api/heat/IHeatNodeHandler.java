@@ -2,7 +2,7 @@ package com.cout970.magneticraft.api.heat;
 
 import com.cout970.magneticraft.api.core.INodeHandler;
 import java.util.List;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -37,7 +37,7 @@ public interface IHeatNodeHandler extends INodeHandler {
      *
      * @return true if the connections is allowed or false if is not allowed
      */
-    boolean canConnect(IHeatNode thisNode, IHeatNodeHandler other, IHeatNode otherNode, @NotNull EnumFacing side);
+    boolean canConnect(IHeatNode thisNode, IHeatNodeHandler other, IHeatNode otherNode, @NotNull Direction side);
 
     /**
      * Adds a connections to the handler All the connections must be in two handlers, in one handler the connection must
@@ -54,7 +54,7 @@ public interface IHeatNodeHandler extends INodeHandler {
      * @param output true if this connection starts in this handler and go to other handler, false if this connection
      * starts in other handler and go to this handler
      */
-    void addConnection(IHeatConnection connection, @NotNull EnumFacing side, boolean output);
+    void addConnection(IHeatConnection connection, @NotNull Direction side, boolean output);
 
     /**
      * Notifies this handler that a connection needs to be removed, usually because the other block has been mined

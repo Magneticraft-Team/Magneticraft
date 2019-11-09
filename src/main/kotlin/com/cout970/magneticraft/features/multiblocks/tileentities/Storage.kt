@@ -1,17 +1,17 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockContainer
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockShelvingUnit
 import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.inventory.Inventory
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
-import net.minecraft.util.ITickable
+import net.minecraft.tileentity.ITickableTileEntity
 
 @RegisterTileEntity("shelving_unit")
-class TileShelvingUnit : TileMultiblock(), ITickable {
+class TileShelvingUnit(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockShelvingUnit
 
@@ -30,14 +30,13 @@ class TileShelvingUnit : TileMultiblock(), ITickable {
         initModules(multiblockModule, shelvingUnitModule, invModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("container")
-class TileContainer : TileMultiblock(), ITickable {
+class TileContainer(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockContainer
 
@@ -46,16 +45,15 @@ class TileContainer : TileMultiblock(), ITickable {
 
     override val multiblockModule = ModuleMultiblockCenter(
         multiblockStructure = getMultiblock(),
-        facingGetter = { facing },
-        capabilityGetter = { cap, side, _ -> stackInventoryModule.getCapability(cap, side) }
+        facingGetter = { facing } //,
+//        capabilityGetter = { cap, side, _ -> stackInventoryModule.getCapability(cap, side) }
     )
 
     init {
         initModules(multiblockModule, stackInventoryModule, openGui)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }

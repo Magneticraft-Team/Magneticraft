@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.api.registries.machines.kiln;
 
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -59,6 +59,6 @@ public interface IKilnRecipeManager {
      *
      * @return the new recipe
      */
-    IKilnRecipe createRecipe(ItemStack input, IBlockState output, int duration, double minTemp, double maxTemp,
+    IKilnRecipe createRecipe(ItemStack input, BlockState output, int duration, double minTemp, double maxTemp,
                              boolean oreDict);
 }

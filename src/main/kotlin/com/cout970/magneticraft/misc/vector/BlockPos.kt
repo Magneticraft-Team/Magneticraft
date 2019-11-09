@@ -2,7 +2,7 @@
 
 package com.cout970.magneticraft.misc.vector
 
-import net.minecraft.util.EnumFacing
+import com.cout970.magneticraft.EnumFacing
 import net.minecraft.util.math.BlockPos
 
 /**

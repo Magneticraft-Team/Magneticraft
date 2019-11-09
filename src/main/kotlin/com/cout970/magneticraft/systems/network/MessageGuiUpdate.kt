@@ -5,12 +5,12 @@ import com.cout970.magneticraft.misc.network.readUUID
 import com.cout970.magneticraft.misc.network.writeUUID
 import com.cout970.magneticraft.systems.gui.ContainerBase
 import io.netty.buffer.ByteBuf
-import net.minecraftforge.fml.common.FMLCommonHandler
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
-import net.minecraftforge.fml.relauncher.Side
+import net.minecraft.server.MinecraftServer
+import net.minecraftforge.fml.LogicalSide
+import net.minecraftforge.fml.LogicalSidedProvider
+import net.minecraftforge.fml.network.NetworkEvent
 import java.util.*
+import java.util.function.Supplier
 
 /**
  * Created by cout970 on 2016/10/01.
@@ -20,44 +20,35 @@ import java.util.*
  * Client -> Server
  * This message is used to send data from a GUI in the client to the Container in the server
  */
-class MessageGuiUpdate() : IMessage {
+class MessageGuiUpdate(
+    val ibd: IBD,
+    val uuid: UUID
+) {
 
-    //Data buffer
-    var ibd: IBD? = null
-    //player uuid
-    var uuid: UUID? = null
+    constructor(buf: ByteBuf) : this(
+        IBD().fromBuffer(buf),
+        buf.readUUID()
+    )
 
-    constructor(ibd: IBD, uuid: UUID) : this() {
-        this.ibd = ibd
-        this.uuid = uuid
+    fun toBytes(buf: ByteBuf) {
+        buf.writeUUID(uuid)
+        ibd.toBuffer(buf)
     }
 
-    override fun fromBytes(buf: ByteBuf) {
-        val ibd = IBD()
-        uuid = buf.readUUID()
-        ibd.fromBuffer(buf)
-        this.ibd = ibd
-    }
+    fun handle(supplier: Supplier<NetworkEvent.Context>) {
+        val ctx = supplier.get()
+        if (ctx.direction.receptionSide != LogicalSide.SERVER) return
 
-    override fun toBytes(buf: ByteBuf) {
-        buf.writeUUID(uuid!!)
-        ibd!!.toBuffer(buf)
-    }
+        ctx.enqueueWork {
+            val server = LogicalSidedProvider.INSTANCE
+                .get<Supplier<MinecraftServer>>(LogicalSide.SERVER)
+                .get()
 
-    companion object : IMessageHandler<MessageGuiUpdate, IMessage> {
-
-        override fun onMessage(message: MessageGuiUpdate?, ctx: MessageContext?): IMessage? {
-            if (ctx!!.side == Side.SERVER) {
-                val server = FMLCommonHandler.instance().minecraftServerInstance ?: return null
-                val player = server.playerList.getPlayerByUUID(message!!.uuid!!) ?: return null
-                val container = player.openContainer
-                if (container is ContainerBase) {
-                    container.receiveDataFromClient(message.ibd!!)
-                }
-            } else {
-                throw IllegalStateException()
+            val player = server.playerList.getPlayerByUUID(uuid) ?: return@enqueueWork
+            val container = player.openContainer ?: return@enqueueWork
+            if (container is ContainerBase) {
+                container.receiveDataFromClient(ibd)
             }
-            return null
         }
     }
 }

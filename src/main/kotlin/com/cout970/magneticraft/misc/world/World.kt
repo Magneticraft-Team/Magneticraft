@@ -2,9 +2,10 @@
 
 package com.cout970.magneticraft.misc.world
 
-import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.item.ItemEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 /**
@@ -14,7 +15,7 @@ import net.minecraft.world.World
 inline val World.isServer: Boolean get() = !isRemote
 inline val World.isClient: Boolean get() = isRemote
 
-fun World.dropItem(item: ItemStack, pos: BlockPos, jump: Boolean = true, config: ((EntityItem) -> Unit)? = null) {
+fun World.dropItem(item: ItemStack, pos: BlockPos, jump: Boolean = true, config: ((ItemEntity) -> Unit)? = null) {
     if (!isServer) return
 
     val d0: Double
@@ -30,14 +31,14 @@ fun World.dropItem(item: ItemStack, pos: BlockPos, jump: Boolean = true, config:
         d1 = 0.5
         d2 = 0.5
     }
-    val entityItem = EntityItem(this, pos.x.toDouble() + d0, pos.y.toDouble() + d1, pos.z.toDouble() + d2, item)
+    val entityItem = ItemEntity(this, pos.x.toDouble() + d0, pos.y.toDouble() + d1, pos.z.toDouble() + d2, item)
     entityItem.setDefaultPickupDelay()
     if (!jump) {
-        entityItem.motionX = 0.0
-        entityItem.motionY = 0.0
-        entityItem.motionZ = 0.0
+        entityItem.motion = Vec3d.ZERO
     }
 
     config?.invoke(entityItem)
-    spawnEntity(entityItem)
+    addEntity(entityItem)
 }
+
+fun worldSaveDirectory(): String = TODO()

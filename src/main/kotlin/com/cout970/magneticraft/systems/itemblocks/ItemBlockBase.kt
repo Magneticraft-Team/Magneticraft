@@ -1,84 +1,89 @@
 package com.cout970.magneticraft.systems.itemblocks
 
-import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.blocks.BlockBase
 import com.cout970.magneticraft.systems.blocks.OnBlockPostPlacedArgs
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemBlock
-import net.minecraft.item.ItemStack
-import net.minecraft.util.*
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.entity.player.ServerPlayerEntity
+import net.minecraft.item.BlockItem
+import net.minecraft.item.BlockItemUseContext
+import net.minecraft.item.ItemUseContext
+import net.minecraft.util.ActionResultType
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.BlockRayTraceResult
+
+
 
 /**
  * Created by cout970 on 2017/07/03.
  */
-open class ItemBlockBase(val blockBase: BlockBase) : ItemBlock(blockBase) {
+open class ItemBlockBase(val blockBase: BlockBase) : BlockItem(blockBase, Properties().group(blockBase.creativeTab)) {
 
     init {
         registryName = blockBase.registryName
-        hasSubtypes = true
     }
-
-    override fun getUnlocalizedName(stack: ItemStack): String {
-        return blockBase.getItemName(stack)
-    }
-
-    override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
-        if (isInCreativeTab(itemIn)) {
-            blockBase.inventoryVariants.forEach { meta, _ -> tab.add(ItemStack(this, 1, meta)) }
-        }
-    }
-
-    override fun getMetadata(damage: Int): Int = damage
 
     /**
-     * Called when a Block is right-clicked with this Item
+     * Called when a Block is right-clicked with this Item to place the block/blocks
      */
-    override fun onItemUse(player: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing,
-                           hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
-        val itemstack = player.getHeldItem(hand)
-        if (itemstack.isEmpty) return EnumActionResult.FAIL
+    override fun tryPlace(ctx: BlockItemUseContext): ActionResultType {
+        val player = ctx.player ?: return ActionResultType.PASS
+        val handStack = player.getHeldItem(ctx.hand)
+        if (handStack.isEmpty) return ActionResultType.FAIL
 
-        val otherBlock = worldIn.getBlockState(pos).block
-        val basePos = if (!otherBlock.isReplaceable(worldIn, pos)) pos.offset(facing) else pos
-        val meta = getMetadata(itemstack.metadata)
+        val basePos = ctx.pos
 
-        val posStatePair = blockBase.getBlockStatesToPlace(worldIn, basePos, facing,
-            hitX, hitY, hitZ, meta, player, hand)
+        val posStatePair = blockBase.getBlockStatesToPlace(
+            ctx.world, ctx.pos, ctx.face,
+            ctx.hitVec.x.toFloat(), ctx.hitVec.y.toFloat(), ctx.hitVec.z.toFloat(),
+            player, ctx.hand
+        )
         val posList = posStatePair.map { it.first.add(basePos) }
 
-        val canEdit = posList.all { player.canPlayerEdit(it, facing, itemstack) }
-        val mayPlace = posList.all { worldIn.mayPlace(block, it, false, facing, null) }
+        val canEdit = posList.all { player.canPlayerEdit(it, ctx.face, handStack) }
+        val mayPlace = posList.all {
+            val ray = BlockRayTraceResult(ctx.hitVec, ctx.face, it, ctx.func_221533_k())
+            val newCtx = BlockItemUseContext(ItemUseContext(player, ctx.hand, ray))
+            newCtx.canPlace()
+        }
 
-        if (canEdit && mayPlace) {
-
+        if (mayPlace && canEdit) {
             var success = false
-            posStatePair.forEach { (pos0, blockstate) ->
-                val toPlace = basePos.add(pos0)
-                if (placeBlockAt(itemstack, player, worldIn, toPlace, facing, hitX, hitY, hitZ, blockstate)) {
-                    val statePlaced = worldIn.getBlockState(toPlace)
+            posStatePair.forEach { (pos0, toPlaceState) ->
+                val toPlacePos = basePos.add(pos0)
 
-                    val soundType = statePlaced.block.getSoundType(statePlaced, worldIn, toPlace, player)
-                    worldIn.playSound(player, toPlace, soundType.placeSound,
+                if (ctx.world.setBlockState(toPlacePos, toPlaceState, 11)) {
+                    val statePlaced = ctx.world.getBlockState(toPlacePos)
+
+                    if (statePlaced.block === toPlaceState.block) {
+//                        statePlaced = this.func_219985_a(blockpos, world, itemstack, blockstate1)
+                        onBlockPlaced(toPlacePos, ctx.world, player, handStack, statePlaced)
+                        statePlaced.block.onBlockPlacedBy(ctx.world, toPlacePos, statePlaced, player, handStack)
+                        if (player is ServerPlayerEntity) {
+                            CriteriaTriggers.PLACED_BLOCK.trigger(player as ServerPlayerEntity, toPlacePos, handStack)
+                        }
+                    }
+
+                    val soundType = statePlaced.getSoundType(ctx.world, toPlacePos, player)
+                    val placeSound = getPlaceSound(statePlaced, ctx.world, toPlacePos, player)
+
+                    ctx.world.playSound(player, toPlacePos, placeSound,
                         SoundCategory.BLOCKS,
                         (soundType.getVolume() + 1.0f) / 2.0f,
                         soundType.getPitch() * 0.8f
                     )
+
                     blockBase.onBlockPostPlaced?.invoke(OnBlockPostPlacedArgs(
-                        worldIn, pos, facing, vec3Of(hitX, hitY, hitZ), player, hand, pos0
+                        ctx.world, ctx.pos, ctx.face, ctx.hitVec, player, ctx.hand, pos0
                     ))
                     success = true
                 }
             }
             if (success) {
-                itemstack.shrink(1)
+                handStack.shrink(1)
             }
-            return EnumActionResult.SUCCESS
-        } else {
-            return EnumActionResult.FAIL
+            return ActionResultType.SUCCESS
         }
+        return ActionResultType.FAIL
     }
 }
 

@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.fromCelsiusToKelvin
@@ -14,8 +15,8 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.init.Blocks
-import net.minecraft.util.EnumFacing
+import net.minecraft.block.Blocks
+
 import net.minecraft.util.math.BlockPos
 
 class ModuleSolarTower(
@@ -53,7 +54,7 @@ class ModuleSolarTower(
 
         iterateVolume(-1..1, 0..2, 0..2) { i, j, k ->
             if (i == 0 && j == 0 && k == 0) return@iterateVolume
-            val relPos = dir.rotatePoint(BlockPos.ORIGIN, BlockPos(i, j, k))
+            val relPos = dir.rotatePoint(BlockPos.ZERO, BlockPos(i, j, k))
             world.setBlockState(pos + relPos, Blocks.LAVA.defaultState)
         }
 

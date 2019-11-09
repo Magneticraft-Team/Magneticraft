@@ -1,12 +1,14 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.MutableCubeCache
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.Direction
+
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
@@ -76,7 +78,7 @@ class ModuleMultiblockIO(
         fun connectionCross(capability: Capability<*>, start: BlockPos, dist: Int = 1, getter: () -> Any?): List<ConnectionSpot> {
             val result = mutableListOf<ConnectionSpot>()
 
-            EnumFacing.HORIZONTALS.forEach {
+            Direction.Plane.HORIZONTAL.forEach {
                 result += ConnectionSpot(capability, start + it.toBlockPos() * dist, it, getter)
             }
             return result
@@ -98,7 +100,7 @@ class ModuleMultiblockIO(
             }
         }
 
-        val validPos = validSide.filter { direction.rotatePoint(BlockPos.ORIGIN, it.pos) == relPos }
+        val validPos = validSide.filter { direction.rotatePoint(BlockPos.ZERO, it.pos) == relPos }
 
         val valid = validPos.firstOrNull() ?: return null
 
@@ -126,10 +128,10 @@ class ModuleMultiblockIO(
     private fun getConnectPoints(connections: List<ConnectionSpot>, direction: EnumFacing): List<Pair<BlockPos, EnumFacing>> {
         return connections
             .filter { it.side != null }
-            .filter { direction.getRelative(it.side!!).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
+            .filter { direction.getRelative(it.side!!).axisDirection == Direction.AxisDirection.NEGATIVE }
             .map {
                 val dir = direction.getRelative(it.side!!)
-                direction.rotatePoint(BlockPos.ORIGIN, it.pos) + dir.toBlockPos() to dir.opposite
+                direction.rotatePoint(BlockPos.ZERO, it.pos) + dir.toBlockPos() to dir.opposite
             }
     }
 
@@ -151,6 +153,6 @@ class ModuleMultiblockIO(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
-        return getCapability(cap, facing, BlockPos.ORIGIN) as? T?
+        return getCapability(cap, facing, BlockPos.ZERO) as? T?
     }
 }

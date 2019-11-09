@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.core.INode
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.core.NodeID
@@ -25,9 +27,8 @@ import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.gui.DATA_ID_VOLTAGE_LIST
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.Direction
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3i
 import net.minecraftforge.common.capabilities.Capability
@@ -48,7 +49,7 @@ class ModuleElectricity(
 
     companion object {
         @JvmStatic
-        val NEGATIVE_DIRECTIONS = EnumFacing.values().filter { it.axisDirection == EnumFacing.AxisDirection.NEGATIVE }
+        val NEGATIVE_DIRECTIONS = EnumFacing.values().filter { it.axisDirection == Direction.AxisDirection.NEGATIVE }
     }
 
     override lateinit var container: IModuleContainer
@@ -267,13 +268,9 @@ class ModuleElectricity(
 
     override fun getOutputConnections(): MutableList<IElectricConnection> = outputNormalConnections with outputWiredConnections
 
-    override fun hasCapability(cap: Capability<*>, facing: EnumFacing?): Boolean {
-        return cap == ELECTRIC_NODE_HANDLER && capabilityFilter.invoke(facing)
-    }
-
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
-        if (!capabilityFilter.invoke(facing)) return null
+        if (cap != ELECTRIC_NODE_HANDLER || !capabilityFilter.invoke(facing)) return null
         return this as T
     }
 
@@ -281,13 +278,13 @@ class ModuleElectricity(
         autoConnectWires = nbt.getBoolean("auto_connect")
         nbt.readList("ElectricNodes") { nodeList ->
             nodes.forEachIndexed { index, node ->
-                node.deserializeNBT(nodeList.getTagCompound(index))
+                node.deserializeNBT(nodeList.getCompound(index))
             }
         }
         nbt.readList("ElectricConnections") { connectionList ->
             val unloaded = mutableListOf<Pair<String, NodeID>>()
             connectionList.forEachTag { tag ->
-                unloaded += tag.getString("first") to NodeID.deserializeFromNBT(tag.getCompoundTag("second"))
+                unloaded += tag.getString("first") to NodeID.deserializeFromNBT(tag.getCompound("second"))
             }
             unloadedWireConnections.addAll(unloaded)
         }
@@ -296,7 +293,7 @@ class ModuleElectricity(
     override fun serializeNBT(): NBTTagCompound = newNbt {
         add("auto_connect", autoConnectWires)
         list("ElectricNodes") {
-            nodes.forEach { appendTag(it.serializeNBT()) }
+            nodes.forEach { add(it.serializeNBT()) }
         }
         list("ElectricConnections") {
             outputWiredConnections.forEach {

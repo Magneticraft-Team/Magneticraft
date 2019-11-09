@@ -2,14 +2,15 @@ package com.cout970.magneticraft.systems.tilemodules.conveyorbelt
 
 import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.IVector3
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.conveyorbelt.Route
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import com.cout970.magneticraft.systems.tilerenderers.Utilities
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 
 data class BoxedItem(
     val item: ItemStack,
@@ -20,7 +21,7 @@ data class BoxedItem(
 ) {
 
     constructor(nbt: NBTTagCompound) : this(
-        ItemStack(nbt.getCompoundTag("item")),
+        ItemStack.read(nbt.getCompound("item")),
         nbt.getFloat("position"),
         Route.values()[nbt.getInteger("route")],
         -1L

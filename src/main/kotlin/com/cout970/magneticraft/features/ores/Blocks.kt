@@ -1,16 +1,17 @@
 package com.cout970.magneticraft.features.ores
 
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.ItemBlock
+import com.cout970.magneticraft.PropertyEnum
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.systems.blocks.*
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
+import com.cout970.magneticraft.withProperty
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
+import net.minecraft.state.IProperty
 import net.minecraft.util.IStringSerializable
 
 /**
@@ -49,11 +50,12 @@ object Blocks : IBlockMaker {
             states = OreType.values().toList()
         }.build()
 
-        ores.setHarvestLevel("pickaxe", 1, OreType.COPPER.getBlockState(ores))
-        ores.setHarvestLevel("pickaxe", 1, OreType.LEAD.getBlockState(ores))
-        ores.setHarvestLevel("pickaxe", 2, OreType.COBALT.getBlockState(ores))
-        ores.setHarvestLevel("pickaxe", 2, OreType.TUNGSTEN.getBlockState(ores))
-        ores.setHarvestLevel("pickaxe", 1, OreType.PYRITE.getBlockState(ores))
+        // TODO
+//        ores.setHarvestLevel("pickaxe", 1, OreType.COPPER.getBlockState(ores))
+//        ores.setHarvestLevel("pickaxe", 1, OreType.LEAD.getBlockState(ores))
+//        ores.setHarvestLevel("pickaxe", 2, OreType.COBALT.getBlockState(ores))
+//        ores.setHarvestLevel("pickaxe", 2, OreType.TUNGSTEN.getBlockState(ores))
+//        ores.setHarvestLevel("pickaxe", 1, OreType.PYRITE.getBlockState(ores))
 
         return itemBlockListOf(ores, oilSource, storageBlocks)
     }
@@ -95,7 +97,8 @@ object Blocks : IBlockMaker {
         TUNGSTEN("tungsten", true),
         PYRITE("pyrite", true);
 
-        fun stack(amount: Int = 1) = ItemStack(ores, amount, ordinal)
+        // TODO ordinal
+        fun stack(amount: Int = 1) = ItemStack(ores, amount)
 
         override fun getName() = name.toLowerCase()
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_ORE_TYPE)

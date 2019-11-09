@@ -24,6 +24,7 @@ import com.cout970.magneticraft.features.manual_machines.TileFabricator
 import com.cout970.magneticraft.features.multiblocks.ContainerShelvingUnit
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.gui.SlotType
+import com.cout970.magneticraft.misc.inventory.isFurnaceInput
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.t
@@ -38,9 +39,8 @@ import com.cout970.magneticraft.systems.gui.components.ComponentShelvingUnit
 import com.cout970.magneticraft.systems.gui.components.MonitorComponent
 import com.cout970.magneticraft.systems.gui.components.bars.*
 import com.cout970.magneticraft.systems.tilemodules.ModulePumpjack.Status.*
-import net.minecraft.init.Items
-import net.minecraft.item.crafting.FurnaceRecipes
-import net.minecraft.tileentity.TileEntityFurnace
+import net.minecraft.item.Items
+import net.minecraft.tileentity.FurnaceTileEntity
 import net.minecraftforge.items.wrapper.InvWrapper
 
 fun GuiBuilder.boxGui(tile: TileBox) {
@@ -121,7 +121,7 @@ fun GuiBuilder.electricFurnaceGui(tile: TileElectricFurnace) {
     container {
         slot(tile.invModule.inventory, 0, "input_slot", SlotType.INPUT)
         slot(tile.invModule.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
-        region(0, 1, filter = { it, _ -> FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })
+        region(0, 1, filter = { it, _ -> it.isFurnaceInput(tile.world!!)})
         region(1, 1, filter = { _, _ -> false })
         playerInventory()
     }
@@ -138,7 +138,7 @@ fun GuiBuilder.bigElectricFurnaceGui(tile: TileBigElectricFurnace) {
     container {
         slot(tile.invModule.inventory, 0, "input_slot", SlotType.INPUT)
         slot(tile.invModule.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
-        region(0, 1, filter = { it, _ -> FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })
+        region(0, 1, filter = { it, _ -> it.isFurnaceInput(tile.theWorld) })
         region(1, 1, filter = { _, _ -> false })
         playerInventory()
     }
@@ -155,7 +155,7 @@ fun GuiBuilder.brickFurnaceGui(tile: TileBrickFurnace) {
     container {
         slot(tile.invModule.inventory, 0, "input_slot", SlotType.INPUT)
         slot(tile.invModule.inventory, 1, "output_slot", SlotType.OUTPUT, blockInput = true)
-        region(0, 1, filter = { it, _ -> FurnaceRecipes.instance().getSmeltingResult(it).isNotEmpty })
+        region(0, 1, filter = { it, _ -> it.isFurnaceInput(tile.theWorld) })
         region(1, 1, filter = { _, _ -> false })
         playerInventory()
     }
@@ -363,7 +363,7 @@ fun GuiBuilder.steamEngineGui(tile: TileSteamEngine) {
 fun GuiBuilder.bigCombustionChamberGui(tile: TileBigCombustionChamber) {
     container {
         slot(tile.inventory, 0, "fuel_slot")
-        region(0, 1) { it, _ -> TileEntityFurnace.isItemFuel(it) }
+        region(0, 1) { it, _ -> FurnaceTileEntity.isFuel(it) }
         playerInventory()
     }
 
@@ -493,8 +493,8 @@ fun GuiBuilder.inserterGui(tile: TileInserter) {
         slot(tile.inventory, 1, "upgrade1")
         slot(tile.inventory, 2, "upgrade2")
         slotGroup(3, 3, tile.filters, 0, "filters", SlotType.FILTER)
-        region(0, 1) { stack, _ -> stack.item != Upgrades.inserterUpgrade }
-        region(1, 2) { stack, _ -> stack.item == Upgrades.inserterUpgrade }
+        region(0, 1) { stack, _ -> stack.item != Upgrades.inserterUpgradeSpeed }
+        region(1, 2) { stack, _ -> stack.item == Upgrades.inserterUpgradeStack }
         region(3, 9) { _, _ -> false }
         playerInventory()
 

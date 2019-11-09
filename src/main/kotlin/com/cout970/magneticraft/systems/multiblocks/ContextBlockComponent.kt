@@ -1,13 +1,10 @@
 package com.cout970.magneticraft.systems.multiblocks
 
-import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.misc.vector.plus
-import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
-import net.minecraftforge.fml.common.FMLCommonHandler
-import net.minecraftforge.fml.relauncher.Side
 
 /**
  * Created by cout970 on 28/08/2016.
@@ -23,9 +20,10 @@ class ContextBlockComponent(
         val pos = context.center + relativePos
         val state = context.world.getBlockState(pos)
         if (state != getter(context)) {
-            if (Debug.DEBUG && context.player != null && FMLCommonHandler.instance().effectiveSide == Side.SERVER) {
-                context.world.setBlockState(pos, getter(context))
-            }
+            // TODO
+//            if (Debug.DEBUG && context.player != null && FMLCommonHandler.instance().effectiveSide == Dist.DEDICATED_SERVER) {
+//                context.world.setBlockState(pos, getter(context))
+//            }
             return listOf(errorMsg(context, state, pos))
         }
         return emptyList()

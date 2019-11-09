@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.EntityPlayer
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.conveyorbelt.IConveyorBelt
 import com.cout970.magneticraft.api.conveyorbelt.Route
@@ -23,12 +26,9 @@ import com.cout970.magneticraft.systems.computer.FloppyDisk
 import com.cout970.magneticraft.systems.tilemodules.conveyorbelt.BoxedItem
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTBase
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.INBT
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
@@ -93,7 +93,7 @@ fun registerCapabilities() {
         register(IConveyorBelt::class.java, EmptyStorage()) { DefaultConveyorBelt() }
         register(IFloppyDisk::class.java, EmptyStorage()) {
             FloppyDisk(
-                ItemStack(ComputerItems.floppyDisk, 1, 0,
+                ItemStack(ComputerItems.floppyDisk, 1,
                     ComputerItems.createNBT(128, read = true, write = true)
                 )
             )
@@ -105,39 +105,27 @@ fun registerCapabilities() {
  * Extension functions to get capabilities from TileEntities, Blocks and Items
  */
 fun <T> Capability<T>.fromTile(tile: TileEntity, side: EnumFacing? = null): T? {
-    if (tile.hasCapability(this, side)) {
-        return tile.getCapability(this, side)
-    }
-    return null
+    return tile.getCapability(this, side).orElse(null) // TODO
 }
 
 fun <T> Capability<T>.fromEntity(tile: Entity, side: EnumFacing? = null): T? {
-    if (tile.hasCapability(this, side)) {
-        return tile.getCapability(this, side)
-    }
-    return null
+    return tile.getCapability(this, side).orElse(null) // TODO
 }
 
 fun <T> Capability<T>.fromBlock(block: Block, side: EnumFacing? = null): T? {
-    if (block is ICapabilityProvider && block.hasCapability(this, side)) {
-        return block.getCapability(this, side)
+    if (block is ICapabilityProvider) {
+        return block.getCapability(this, side).orElse(null) // TODO
     }
     return null
 }
 
 fun <T> Capability<T>.fromItem(tile: ItemStack): T? {
-    if (tile.hasCapability(this, null)) {
-        return tile.getCapability(this, null)
-    }
-    return null
+    return tile.getCapability(this, null).orElse(null) // TODO
 }
 
 fun <T> TileEntity.getOrNull(cap: Capability<T>?, side: EnumFacing?): T? {
     cap ?: return null
-    if (this.hasCapability(cap, side)) {
-        return this.getCapability(cap, side)
-    }
-    return null
+    return this.getCapability(cap, side).orElse(null) // TODO
 }
 
 
@@ -147,9 +135,9 @@ fun <T> TileEntity.getOrNull(cap: Capability<T>?, side: EnumFacing?): T? {
  */
 class EmptyStorage<T> : Capability.IStorage<T> {
 
-    override fun writeNBT(capability: Capability<T>?, instance: T, side: EnumFacing?): NBTBase? = NBTTagCompound()
+    override fun writeNBT(capability: Capability<T>?, instance: T, side: EnumFacing?): INBT? = NBTTagCompound()
 
-    override fun readNBT(capability: Capability<T>?, instance: T, side: EnumFacing?, nbt: NBTBase?) = Unit
+    override fun readNBT(capability: Capability<T>?, instance: T, side: EnumFacing?, nbt: INBT?) = Unit
 }
 
 /**

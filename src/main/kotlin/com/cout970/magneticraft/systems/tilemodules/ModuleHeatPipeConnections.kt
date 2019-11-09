@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.misc.tileentity.canConnect
 import com.cout970.magneticraft.misc.vector.plus
@@ -7,7 +8,7 @@ import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.util.EnumFacing
+
 
 class ModuleHeatPipeConnections(
     val heatModule: ModuleHeat,

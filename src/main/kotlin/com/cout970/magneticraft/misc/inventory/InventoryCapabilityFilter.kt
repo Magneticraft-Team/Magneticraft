@@ -7,9 +7,9 @@ import net.minecraftforge.items.IItemHandler
  * Created by cout970 on 2017/07/01.
  */
 class InventoryCapabilityFilter(
-        val inventory: IItemHandler,
-        val inputSlots: List<Int>,
-        val outputSlots: List<Int>
+    val inventory: IItemHandler,
+    val inputSlots: List<Int>,
+    val outputSlots: List<Int>
 ) : IItemHandler {
 
     val slotMap = generateSlotMap()
@@ -41,6 +41,14 @@ class InventoryCapabilityFilter(
     override fun getStackInSlot(slot: Int): ItemStack = inventory.getStackInSlot(toRealSlot(slot))
 
     override fun getSlotLimit(slot: Int): Int = inventory.getSlotLimit(toRealSlot(slot))
+
+    override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
+        val realSlot = toRealSlot(slot)
+        if (realSlot in inputSlots) {
+            return inventory.isItemValid(realSlot, stack)
+        }
+        return false
+    }
 
     override fun getSlots(): Int = slotMap.size
 

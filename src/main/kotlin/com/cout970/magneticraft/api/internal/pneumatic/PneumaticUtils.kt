@@ -1,9 +1,11 @@
 package com.cout970.magneticraft.api.internal.pneumatic
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.pneumatic.ITube
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.api.pneumatic.PneumaticMode
+import com.cout970.magneticraft.isSideSolid
 import com.cout970.magneticraft.misc.inventory.insertItem
 import com.cout970.magneticraft.misc.tileentity.getCap
 import com.cout970.magneticraft.misc.vector.toVec3d
@@ -15,15 +17,17 @@ import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.TUBE_CONNECTABLE
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.systems.tilerenderers.px
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.Direction
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
+import net.minecraft.util.math.Vec3d
+import net.minecraft.world.IBlockReader
+import net.minecraft.world.IWorld
 import net.minecraft.world.World
 import java.util.*
 
 object PneumaticUtils {
 
-    fun canConnectToTube(world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean {
+    fun canConnectToTube(world: IBlockReader, pos: BlockPos, side: EnumFacing): Boolean {
         val here = pos.offset(side)
 
         return world.getCap(TUBE_CONNECTABLE, here, side.opposite) != null
@@ -66,9 +70,7 @@ object PneumaticUtils {
                 0.0f, 0.0f
             )
 
-            entity.motionX = dir.x * 0.2
-            entity.motionY = dir.y * 0.2
-            entity.motionZ = dir.z * 0.2
+            entity.motion =  Vec3d(dir.x * 0.2, dir.y * 0.2, dir.z * 0.2)
         }
     }
 
@@ -122,7 +124,7 @@ object PneumaticUtils {
 
         val thisTube = world.getCap(TUBE_CONNECTABLE, start, originSide) as? ITube
 
-        for (dir in EnumFacing.VALUES) {
+        for (dir in Direction.values()) {
             if(thisTube != null && !thisTube.canRouteItemsTo(dir)) continue
             if (dir != originSide || mode == PneumaticMode.GOING_BACK) {
                 addPoint(start.offset(dir), dir, dir, if (dir == priorityDir) 0 else 1)
@@ -139,7 +141,7 @@ object PneumaticUtils {
             val handler = world.getCap(TUBE_CONNECTABLE, route.pos, route.fromSide.opposite) as? ITube
                 ?: continue
 
-            for (dir in EnumFacing.VALUES) {
+            for (dir in Direction.values()) {
                 if (handler.canRouteItemsTo(dir) && dir != route.fromSide.opposite) {
                     addPoint(route.pos.offset(dir), route.initialSide, dir, route.weight + 2)
                 }

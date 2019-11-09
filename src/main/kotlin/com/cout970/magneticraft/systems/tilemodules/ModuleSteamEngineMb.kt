@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.newNbt
@@ -15,9 +16,10 @@ import com.cout970.magneticraft.systems.multiblocks.IMultiblockModule
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumParticleTypes
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.getInteger
+import net.minecraft.particles.ParticleTypes
+
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 
@@ -71,7 +73,7 @@ class ModuleSteamEngineMb(
                 val randVec = vec3Of(world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat()) * 2 - 1
                 val randDir = randVec * vec3Of(0.00625) + vec3Of(0, 0.0625, 0)
 
-                world.spawnParticle(EnumParticleTypes.CLOUD,
+                world.addParticle(ParticleTypes.CLOUD,
                     particlePos.x, particlePos.y, particlePos.z,
                     randDir.x, randDir.y, randDir.z)
             }

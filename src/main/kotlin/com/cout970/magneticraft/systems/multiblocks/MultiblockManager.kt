@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.multiblocks
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.MOD_ID
 import com.cout970.magneticraft.api.multiblock.IMultiblock
 import com.cout970.magneticraft.api.multiblock.IMultiblockManager
@@ -7,7 +8,7 @@ import com.cout970.magneticraft.api.multiblock.MultiBlockEvent
 import com.cout970.magneticraft.features.multiblocks.structures.*
 import com.cout970.magneticraft.misc.get
 import com.cout970.magneticraft.misc.vector.rotatePoint
-import net.minecraft.util.EnumFacing
+
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.MinecraftForge
@@ -145,8 +146,8 @@ object MultiblockManager : IMultiblockManager {
     fun applyFacing(context: MultiblockContext, pos: BlockPos): BlockPos {
         val center = context.multiblock.center
         val origin = pos.subtract(center)
-        val normalized = EnumFacing.SOUTH.rotatePoint(BlockPos.ORIGIN, origin)
+        val normalized = EnumFacing.SOUTH.rotatePoint(BlockPos.ZERO, origin)
 
-        return context.facing.rotatePoint(BlockPos.ORIGIN, normalized)
+        return context.facing.rotatePoint(BlockPos.ZERO, normalized)
     }
 }

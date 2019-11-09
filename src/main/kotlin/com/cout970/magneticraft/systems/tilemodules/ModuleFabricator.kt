@@ -1,6 +1,10 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EntityPlayer
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.internal.ApiUtils
+import com.cout970.magneticraft.getCompoundTag
 import com.cout970.magneticraft.misc.inventory.*
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.set
@@ -12,15 +16,13 @@ import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.Container
+import net.minecraft.inventory.CraftingInventory
 import net.minecraft.inventory.IInventory
-import net.minecraft.inventory.InventoryCrafting
+import net.minecraft.inventory.container.Container
+import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.ItemStack
-import net.minecraft.item.crafting.CraftingManager
 import net.minecraft.item.crafting.IRecipe
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.item.crafting.IRecipeType
 import net.minecraftforge.items.IItemHandler
 
 class ModuleFabricator(
@@ -29,7 +31,7 @@ class ModuleFabricator(
 ) : IModule {
 
     override lateinit var container: IModuleContainer
-    val recipeGrid = InventoryCrafting(object : Container() {
+    val recipeGrid = CraftingInventory(object : Container(ContainerType.CRAFTING, 0) {
         override fun canInteractWith(playerIn: EntityPlayer): Boolean = true
 
         override fun onCraftMatrixChanged(inventoryIn: IInventory) {
@@ -42,7 +44,7 @@ class ModuleFabricator(
     val craftingResult = Inventory(1)
 
     var ignoreGridUpdate = false
-    var craftRecipe: IRecipe? = null
+    var craftRecipe: IRecipe<CraftingInventory>? = null
     var itemMatches: BooleanArray? = null
     var toCraft = false
     val craftingResources = mutableListOf<InventorySlotLocation>()
@@ -134,7 +136,7 @@ class ModuleFabricator(
                 continue
             }
 
-            for (side in EnumFacing.VALUES) {
+            for (side in EnumFacing.values()) {
                 val inv = world.getCap(ITEM_HANDLER, pos.offset(side), side.opposite) ?: continue
 
                 if (searchItemInInventory(i, inv, craftingResources)) {
@@ -192,7 +194,7 @@ class ModuleFabricator(
     }
 
     fun refreshRecipe() {
-        craftRecipe = CraftingManager.findMatchingRecipe(recipeGrid, world)
+        craftRecipe = world.recipeManager.getRecipe(IRecipeType.CRAFTING, recipeGrid, world).orElse(null)
         craftRecipe?.let {
             craftingResult[0] = it.getCraftingResult(recipeGrid)
             if (craftingResult[0].isEmpty) {
@@ -222,7 +224,7 @@ class ModuleFabricator(
             val itemNBT = nbt.getCompoundTag("grid")
                 .getCompoundTag(it.toString())
 
-            recipeGrid.setInventorySlotContents(it, ItemStack(itemNBT))
+            recipeGrid.setInventorySlotContents(it, ItemStack.read(itemNBT))
         }
 
         craftingResult.deserializeNBT(nbt.getCompoundTag("result"))

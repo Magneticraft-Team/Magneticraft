@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.features.multiblocks.structures.*
@@ -15,7 +17,6 @@ import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.createAABBUsing
 import com.cout970.magneticraft.misc.vector.rotateBox
@@ -28,15 +29,15 @@ import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
 import com.cout970.magneticraft.systems.tilerenderers.px
-import com.cout970.vector.extensions.Vector3
-import net.minecraft.init.Blocks
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumParticleTypes
-import net.minecraft.util.ITickable
+import net.minecraft.block.Blocks
+import net.minecraft.fluid.Fluids
+import net.minecraft.particles.ParticleTypes
+import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Vec3d
 
 @RegisterTileEntity("grinder")
-class TileGrinder : TileMultiblock(), ITickable {
+class TileGrinder(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockGrinder
 
@@ -103,8 +104,9 @@ class TileGrinder : TileMultiblock(), ITickable {
         capabilityGetter = ioModule::getCapability
     )
 
-    val spawner = ParticleSpawner(30.0, EnumParticleTypes.BLOCK_DUST, Blocks.STONE.defaultState,
-        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0.1, 0)) }
+    // TODO better particle type?
+    val spawner = ParticleSpawner(30.0, ParticleTypes.FALLING_WATER, Blocks.STONE.defaultState,
+        speed = { facing.rotatePoint(Vec3d.ZERO, vec3Of(0, 0.1, 0)) }
     ) {
         facing.rotateBox(vec3Of(0.5), vec3Of((-5).px, 14.px, 5.px).createAABBUsing(vec3Of(21.px, 58.px, (-21).px))).offset(pos)
     }
@@ -114,19 +116,18 @@ class TileGrinder : TileMultiblock(), ITickable {
             itemExporterModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
 
-        if (world.isServer || !processModule.working) return
+        if (theWorld.isServer || !processModule.working) return
         if (Config.enableMachineParticles == 1) {
-            spawner.spawn(world)
+            spawner.spawn(theWorld)
         }
     }
 }
 
 @RegisterTileEntity("sieve")
-class TileSieve : TileMultiblock(), ITickable {
+class TileSieve(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockSieve
 
@@ -217,18 +218,18 @@ class TileSieve : TileMultiblock(), ITickable {
         capabilityGetter = ioModule::getCapability
     )
 
-    val spawner1 = ParticleSpawner(20.0, EnumParticleTypes.BLOCK_DUST, Blocks.SAND.defaultState,
-        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0, -0.1)) }
+    val spawner1 = ParticleSpawner(20.0, ParticleTypes.FALLING_WATER, Blocks.SAND.defaultState,
+        speed = { facing.rotatePoint(Vec3d.ZERO, vec3Of(0, 0, -0.1)) }
     ) {
         facing.rotateBox(vec3Of(0.5), vec3Of((-4).px, 1.5, (-4).px).createAABBUsing(vec3Of(20.px, 1.5, (-20).px))).offset(pos)
     }
-    val spawner2 = ParticleSpawner(20.0, EnumParticleTypes.BLOCK_DUST, Blocks.SAND.defaultState,
-        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0, -0.1)) }
+    val spawner2 = ParticleSpawner(20.0, ParticleTypes.FALLING_WATER, Blocks.SAND.defaultState,
+        speed = { facing.rotatePoint(Vec3d.ZERO, vec3Of(0, 0, -0.1)) }
     ) {
         facing.rotateBox(vec3Of(0.5), vec3Of((-4).px, 1.25, (-20).px).createAABBUsing(vec3Of(20.px, 1.25, (-36).px))).offset(pos)
     }
-    val spawner3 = ParticleSpawner(20.0, EnumParticleTypes.BLOCK_DUST, Blocks.SAND.defaultState,
-        speed = { facing.rotatePoint(Vector3.ORIGIN, vec3Of(0, 0, -0.1)) }
+    val spawner3 = ParticleSpawner(20.0, ParticleTypes.FALLING_WATER, Blocks.SAND.defaultState,
+        speed = { facing.rotatePoint(Vec3d.ZERO, vec3Of(0, 0, -0.1)) }
     ) {
         facing.rotateBox(vec3Of(0.5), vec3Of((-4).px, 1, (-36).px).createAABBUsing(vec3Of(20.px, 1, (-52).px))).offset(pos)
     }
@@ -238,21 +239,20 @@ class TileSieve : TileMultiblock(), ITickable {
             itemExporterModule0, itemExporterModule1, itemExporterModule2)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
 
-        if (world.isServer || !processModule.working) return
+        if (theWorld.isServer || !processModule.working) return
         if (Config.enableMachineParticles == 1) {
-            spawner1.spawn(world)
-            spawner2.spawn(world)
-            spawner3.spawn(world)
+            spawner1.spawn(theWorld)
+            spawner2.spawn(theWorld)
+            spawner3.spawn(theWorld)
         }
     }
 }
 
 @RegisterTileEntity("hydraulic_press")
-class TileHydraulicPress : TileMultiblock(), ITickable {
+class TileHydraulicPress(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockHydraulicPress
 
@@ -332,14 +332,13 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
             openGuiModule, processModule, hydraulicPressModule, itemExporterModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("big_combustion_chamber")
-class TileBigCombustionChamber : TileMultiblock(), ITickable {
+class TileBigCombustionChamber(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockBigCombustionChamber
 
@@ -391,14 +390,13 @@ class TileBigCombustionChamber : TileMultiblock(), ITickable {
         initModules(multiblockModule, invModule, fluidModule, bigCombustionChamberModule, heatModule, openGuiModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("big_steam_boiler")
-class TileBigSteamBoiler : TileMultiblock(), ITickable {
+class TileBigSteamBoiler(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockBigSteamBoiler
 
@@ -406,14 +404,14 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
         capacity = 16_000,
         allowInput = true,
         allowOutput = false,
-        fluidFilter = { it.fluid.name == "water" }
+        fluidFilter = { it.fluid == Fluids.WATER }
     ).apply { clientFluidName = "water" }
 
     val output = Tank(
         capacity = 128_000,
         allowInput = false,
         allowOutput = true,
-        fluidFilter = { it.fluid.name == "steam" }
+        fluidFilter = { it.fluid == FluidHolder.STEAM }
     ).apply { clientFluidName = "steam" }
 
     val node = HeatNode(ref)
@@ -449,7 +447,7 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
     )
 
     val extract = ModuleFluidExporter(output,
-        ports = { listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(0, 4, -1)) to EnumFacing.DOWN) }
+        ports = { listOf(facing.rotatePoint(BlockPos.ZERO, BlockPos(0, 4, -1)) to EnumFacing.DOWN) }
     )
 
     val boiler = ModuleSteamBoiler(node, input, output, Config.multiblockBoilerMaxProduction)
@@ -458,15 +456,14 @@ class TileBigSteamBoiler : TileMultiblock(), ITickable {
         initModules(multiblockModule, ioModule, heatMod, fluidMod, boiler, extract, ModuleOpenGui())
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 
 @RegisterTileEntity("big_electric_furnace")
-class TileBigElectricFurnace : TileMultiblock(), ITickable {
+class TileBigElectricFurnace(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockBigElectricFurnace
 
@@ -537,11 +534,11 @@ class TileBigElectricFurnace : TileMultiblock(), ITickable {
         capabilityGetter = ioModule::getCapability
     )
 
-    val spawner1 = ParticleSpawner(10.0, EnumParticleTypes.FLAME, Blocks.FIRE.defaultState) {
+    val spawner1 = ParticleSpawner(10.0, ParticleTypes.FLAME, Blocks.FIRE.defaultState) {
         facing.rotateBox(vec3Of(0.5), vec3Of(0.px, 13.px, 7.px).createAABBUsing(vec3Of(16.px, 18.px, 8.px))).offset(pos)
     }
 
-    val spawner2 = ParticleSpawner(10.0, EnumParticleTypes.FLAME, Blocks.FIRE.defaultState) {
+    val spawner2 = ParticleSpawner(10.0, ParticleTypes.FLAME, Blocks.FIRE.defaultState) {
         facing.rotateBox(vec3Of(0.5), vec3Of(0.px, 13.px, (-23).px).createAABBUsing(vec3Of(16.px, 18.px, (-24).px))).offset(pos)
     }
 
@@ -552,11 +549,10 @@ class TileBigElectricFurnace : TileMultiblock(), ITickable {
         )
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
 
-        if (world.isServer && container.shouldTick(20)) {
+        if (theWorld.isServer && container.shouldTick(20)) {
             val stack = inventory.extractItem(1, 64, true)
             if (stack.isNotEmpty) {
                 if (outConveyor.addItem(stack, true)) {
@@ -566,10 +562,10 @@ class TileBigElectricFurnace : TileMultiblock(), ITickable {
             }
         }
 
-        if (world.isServer || !processModule.working) return
+        if (theWorld.isServer || !processModule.working) return
         if (Config.enableMachineParticles == 1) {
-            spawner1.spawn(world)
-            spawner2.spawn(world)
+            spawner1.spawn(theWorld)
+            spawner2.spawn(theWorld)
         }
     }
 }

@@ -2,7 +2,7 @@ package com.cout970.magneticraft.systems.gui.render
 
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.vector.vec2Of
-import net.minecraft.client.gui.Gui
+import com.cout970.magneticraft.systems.gui.GuiBase
 
 /**
  * Created by cout970 on 2017/08/01.
@@ -17,12 +17,12 @@ data class DrawableBox(
     fun offset(pos: IVector2): DrawableBox = copy(screenPos = screenPos + pos)
 
     fun draw() {
-        Gui.drawScaledCustomSizeModalRect(
+        GuiBase.drawTexture(
             screenPos.xi, screenPos.yi,
-            texturePos.xf, texturePos.yf,
-            textureSize.xi, textureSize.yi,
+            texturePos.xi, texturePos.yi,
+            textureSize.xf, textureSize.yf,
             screenSize.xi, screenSize.yi,
-            textureScale.xf, textureScale.yf
+            textureScale.xi, textureScale.yi
         )
     }
 }

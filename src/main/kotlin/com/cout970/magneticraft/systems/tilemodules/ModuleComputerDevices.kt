@@ -7,7 +7,7 @@ import com.cout970.magneticraft.misc.toMap
 import com.cout970.magneticraft.misc.toNBT
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
+import com.cout970.magneticraft.NBTTagCompound
 
 /**
  * Created by cout970 on 2017/07/07.

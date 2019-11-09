@@ -42,6 +42,12 @@ interface IGuiRenderer {
                     texturePos: IVector2, textureSize: IVector2 = screenSize,
                     textureScale: IVector2 = vec2Of(256))
 
+    fun drawTexture(screenPosX: Int, screenPosY: Int,
+                    screenSizeX: Int, screenSizeY: Int,
+                    texturePosX: Float, texturePosY: Float,
+                    textureSizeX: Int, textureSizeY: Int,
+                    textureScaleX: Int = 256, textureScaleY: Int = 256)
+
     //itemstack render
     fun drawStack(stack: ItemStack, pos: IVector2, text: String? = null)
 }

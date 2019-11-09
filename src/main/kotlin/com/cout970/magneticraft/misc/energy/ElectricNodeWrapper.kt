@@ -1,9 +1,10 @@
 package com.cout970.magneticraft.misc.energy
 
 import com.cout970.magneticraft.api.energy.IElectricNode
-import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE
 import com.cout970.magneticraft.misc.ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 class ElectricNodeWrapper(val node: IElectricNode) : IMachineEnergyInterface {
 
@@ -13,8 +14,8 @@ class ElectricNodeWrapper(val node: IElectricNode) : IMachineEnergyInterface {
     }
 
     override fun hasEnergy(amount: Double): Boolean {
-        val newVoltage = Math.sqrt(node.voltage * node.voltage - Math.abs(amount) * 2)
-        return newVoltage >= ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        val newVoltage = sqrt(node.voltage * node.voltage - abs(amount) * 2)
+        return newVoltage >= TIER_1_MACHINES_MIN_VOLTAGE
     }
 
     override fun useEnergy(amount: Double) {

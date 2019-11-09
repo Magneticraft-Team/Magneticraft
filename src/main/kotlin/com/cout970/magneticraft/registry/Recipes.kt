@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.registry
 
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.api.MagneticraftApi
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
@@ -15,30 +16,20 @@ import com.cout970.magneticraft.api.registries.machines.hydraulicpress.Hydraulic
 import com.cout970.magneticraft.features.items.CraftingItems
 import com.cout970.magneticraft.features.items.EnumMetal
 import com.cout970.magneticraft.features.items.EnumMetal.*
-import com.cout970.magneticraft.features.items.MetallicItems
 import com.cout970.magneticraft.misc.*
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.inventory.toBlockState
 import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.systems.integration.ItemHolder
-import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
 import net.minecraft.block.Block
-import net.minecraft.block.BlockSnow
-import net.minecraft.block.state.IBlockState
-import net.minecraft.init.Blocks
-import net.minecraft.init.Blocks.COBBLESTONE
-import net.minecraft.init.Items
-import net.minecraft.init.Items.GOLD_INGOT
-import net.minecraft.init.Items.IRON_INGOT
+import net.minecraft.block.Blocks
+import net.minecraft.block.Blocks.COBBLESTONE
+import net.minecraft.block.SnowBlock
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.FluidRegistry
+import net.minecraft.item.Items
+import net.minecraft.item.Items.GOLD_INGOT
+import net.minecraft.item.Items.IRON_INGOT
 import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fml.common.registry.GameRegistry
-import com.cout970.magneticraft.features.decoration.Blocks as Decoration
-import com.cout970.magneticraft.features.decoration.Blocks as DecorationBlocks
-import com.cout970.magneticraft.features.ores.Blocks as OreBlocks
-import com.cout970.magneticraft.features.ores.Blocks as Ores
 import com.cout970.magneticraft.features.ores.Blocks.OreType as BlockOreType
 
 
@@ -63,63 +54,63 @@ fun registerRecipes() {
             addGrinderRecipe(metal.getIngot(), metal.getDust(), ItemStack.EMPTY, 0.0f, 50f)
         }
     }
-    ItemHolder.tinOre?.ifNonEmpty {
+    ItemHolder.tinOre?.let {
         addGrinderRecipe(it, TIN.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
     }
-    ItemHolder.osmiumOre?.ifNonEmpty {
+    ItemHolder.osmiumOre?.let {
         addGrinderRecipe(it, OSMIUM.getRockyChunk(), Blocks.GRAVEL.stack(), 0.15f, 50f)
     }
-    ItemHolder.dimensionalShard?.ifNonEmpty { shard ->
-        ItemHolder.dimensionalShardOre0?.ifNonEmpty { ore ->
+    ItemHolder.dimensionalShard?.let { shard ->
+        ItemHolder.dimensionalShardOre0?.let { ore ->
             addGrinderRecipe(ore, shard.withSize(4), shard.withSize(1), 0.5f, 50f)
         }
-        ItemHolder.dimensionalShardOre1?.ifNonEmpty { ore ->
+        ItemHolder.dimensionalShardOre1?.let { ore ->
             addGrinderRecipe(ore, shard.withSize(4), shard.withSize(1), 0.5f, 50f)
         }
-        ItemHolder.dimensionalShardOre2?.ifNonEmpty { ore ->
+        ItemHolder.dimensionalShardOre2?.let { ore ->
             addGrinderRecipe(ore, shard.withSize(4), shard.withSize(1), 0.5f, 50f)
         }
     }
 
     addGrinderRecipe(Blocks.REDSTONE_ORE.stack(), Items.REDSTONE.stack(4), Blocks.GRAVEL.stack(), 0.15f, 50f)
-    addGrinderRecipe(Blocks.LAPIS_ORE.stack(), Items.DYE.stack(6, 4), Blocks.GRAVEL.stack(), 0.15f, 50f)
-    addGrinderRecipe(Blocks.QUARTZ_ORE.stack(), Items.QUARTZ.stack(3), Items.QUARTZ.stack(1), 0.5f, 60f)
+//    addGrinderRecipe(Blocks.LAPIS_ORE.stack(), Items.DYE.stack(6, 4), Blocks.GRAVEL.stack(), 0.15f, 50f)
+    addGrinderRecipe(Blocks.NETHER_QUARTZ_ORE.stack(), Items.QUARTZ.stack(3), Items.QUARTZ.stack(1), 0.5f, 60f)
     addGrinderRecipe(Blocks.EMERALD_ORE.stack(), Items.EMERALD.stack(2), Blocks.GRAVEL.stack(), 0.15f, 50f)
     addGrinderRecipe(Blocks.DIAMOND_ORE.stack(), Items.DIAMOND.stack(1), Items.DIAMOND.stack(1), 0.75f, 50f)
     addGrinderRecipe(Blocks.COAL_ORE.stack(), Items.COAL.stack(1), Items.COAL.stack(1), 0.5f, 50f)
 
     addGrinderRecipe(Blocks.GLOWSTONE.stack(), Items.GLOWSTONE_DUST.stack(4), ItemStack.EMPTY, 0.0f, 40f)
     addGrinderRecipe(Blocks.SANDSTONE.stack(), Blocks.SAND.stack(4), ItemStack.EMPTY, 0.0f, 40f)
-    addGrinderRecipe(Blocks.RED_SANDSTONE.stack(), Blocks.SAND.stack(4, 1), ItemStack.EMPTY, 0.0f, 40f)
-    addGrinderRecipe(Items.BLAZE_ROD.stack(), Items.BLAZE_POWDER.stack(4), CraftingItems.Type.SULFUR.stack(1), 0.5f, 50f)
-    addGrinderRecipe(Blocks.WOOL.stack(), Items.STRING.stack(4), ItemStack.EMPTY, 0.0f, 40f)
-    addGrinderRecipe(Items.BONE.stack(), Items.DYE.stack(5, 15), Items.DYE.stack(3, 15), 0.5f, 40f)
-    addGrinderRecipe(Items.REEDS.stack(), Items.SUGAR.stack(1), Items.SUGAR.stack(2), 0.5f, 40f)
-    addGrinderRecipe(Blocks.COBBLESTONE.stack(), Blocks.GRAVEL.stack(1), Blocks.SAND.stack(1), 0.5f, 60f)
+    addGrinderRecipe(Blocks.RED_SANDSTONE.stack(), Blocks.RED_SAND.stack(4), ItemStack.EMPTY, 0.0f, 40f)
+    addGrinderRecipe(Items.BLAZE_ROD.stack(), Items.BLAZE_POWDER.stack(4), CraftingItems.sulfur.stack(), 0.5f, 50f)
+//    addGrinderRecipe(Blocks.WOOL.stack(), Items.STRING.stack(4), ItemStack.EMPTY, 0.0f, 40f)
+//    addGrinderRecipe(Items.BONE.stack(), Items.DYE.stack(5, 15), Items.DYE.stack(3, 15), 0.5f, 40f)
+//    addGrinderRecipe(Items.REEDS.stack(), Items.SUGAR.stack(1), Items.SUGAR.stack(2), 0.5f, 40f)
+    addGrinderRecipe(COBBLESTONE.stack(), Blocks.GRAVEL.stack(1), Blocks.SAND.stack(1), 0.5f, 60f)
     addGrinderRecipe(Blocks.QUARTZ_BLOCK.stack(), Items.QUARTZ.stack(4), ItemStack.EMPTY, 0.0f, 50f)
 
-    addGrinderRecipe(DecorationBlocks.limestone.stack(meta = 0), DecorationBlocks.limestone.stack(meta = 2), ItemStack.EMPTY, 0.0f, 20f)
-    addGrinderRecipe(DecorationBlocks.burnLimestone.stack(meta = 0), DecorationBlocks.burnLimestone.stack(meta = 2), ItemStack.EMPTY, 0.0f, 20f)
+//    addGrinderRecipe(DecorationBlocks.limestone.stack(), DecorationBlocks.limestone.stack(meta = 2), ItemStack.EMPTY, 0.0f, 20f)
+//    addGrinderRecipe(DecorationBlocks.burnLimestone.stack(), DecorationBlocks.burnLimestone.stack(meta = 2), ItemStack.EMPTY, 0.0f, 20f)
 
-    addGrinderRecipe(BlockOreType.PYRITE.stack(1), CraftingItems.Type.SULFUR.stack(4), EnumMetal.IRON.getDust(), 0.01f, 40f)
+    addGrinderRecipe(BlockOreType.PYRITE.stack(1), CraftingItems.sulfur.stack(4), IRON.getDust(), 0.01f, 40f)
 
-    ItemHolder.sawdust?.ifNonEmpty { sawdust ->
-        addGrinderRecipe(Blocks.LOG.stack(), sawdust.withSize(8), sawdust.withSize(4), 0.5f, 100f)
-        addGrinderRecipe(Blocks.PLANKS.stack(), sawdust.withSize(2), sawdust.withSize(1), 0.5f, 80f)
-    }
+//    ItemHolder.sawdust?.let { sawdust ->
+//        addGrinderRecipe(Blocks.LOG.stack(), sawdust.withSize(8), sawdust.withSize(4), 0.5f, 100f)
+//        addGrinderRecipe(Blocks.PLANKS.stack(), sawdust.withSize(2), sawdust.withSize(1), 0.5f, 80f)
+//    }
 
-    ItemHolder.pulverizedCoal?.ifNonEmpty { pulverizedCoal ->
+    ItemHolder.pulverizedCoal?.let { pulverizedCoal ->
         addGrinderRecipe(Blocks.COAL_ORE.stack(), pulverizedCoal.withSize(1), pulverizedCoal.withSize(1), 0.25f, 50f)
         addGrinderRecipe(Blocks.COAL_BLOCK.stack(), pulverizedCoal.withSize(9), pulverizedCoal.withSize(1), 0.15f, 120f)
         addGrinderRecipe(Items.COAL.stack(), pulverizedCoal.withSize(1), pulverizedCoal.withSize(1), 0.05f, 40f)
     }
 
-    ItemHolder.pulverizedObsidian?.ifNonEmpty { pulverizedObsidian ->
+    ItemHolder.pulverizedObsidian?.let { pulverizedObsidian ->
         addGrinderRecipe(Blocks.OBSIDIAN.stack(), pulverizedObsidian.withSize(4), pulverizedObsidian.withSize(1), 0.25f, 80f)
     }
 
-    ItemHolder.pulverizedCharcoal?.ifNonEmpty { pulverizedCharcoal ->
-        addGrinderRecipe(Items.COAL.stack(meta = 1), pulverizedCharcoal.withSize(1), pulverizedCharcoal.withSize(1), 0.15f, 40f)
+    ItemHolder.pulverizedCharcoal?.let { pulverizedCharcoal ->
+        addGrinderRecipe(Items.CHARCOAL.stack(), pulverizedCharcoal.withSize(1), pulverizedCharcoal.withSize(1), 0.15f, 40f)
     }
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -150,9 +141,9 @@ fun registerRecipes() {
     //                                              CRUSHING TABLE RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // skulls
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 4), Items.GUNPOWDER.stack(8), true)    // creeper
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 0), Items.DYE.stack(8, 15), true) // skeleton
-    addCrushingTableRecipe(Items.SKULL.stack(meta = 2), Items.ROTTEN_FLESH.stack(4), true) // zombie
+    addCrushingTableRecipe(Items.CREEPER_HEAD.stack(), Items.GUNPOWDER.stack(8), true)   // creeper
+    addCrushingTableRecipe(Items.SKELETON_SKULL.stack(), Items.BONE_MEAL.stack(8), true) // skeleton
+    addCrushingTableRecipe(Items.ZOMBIE_HEAD.stack(), Items.ROTTEN_FLESH.stack(4), true) // zombie
 
     // ores
     EnumMetal.values().forEach { metal ->
@@ -160,49 +151,49 @@ fun registerRecipes() {
             addCrushingTableRecipe(it, metal.getRockyChunk())
         }
     }
-    ItemHolder.tinOre?.ifNonEmpty {
+    ItemHolder.tinOre?.let {
         addCrushingTableRecipe(it, TIN.getRockyChunk())
     }
-    ItemHolder.osmiumOre?.ifNonEmpty {
+    ItemHolder.osmiumOre?.let {
         addCrushingTableRecipe(it, OSMIUM.getRockyChunk())
     }
 
-    addCrushingTableRecipe(BlockOreType.PYRITE.stack(), CraftingItems.Type.SULFUR.stack(2))
+    addCrushingTableRecipe(BlockOreType.PYRITE.stack(), CraftingItems.sulfur.stack(2))
     // limestone
-    addCrushingTableRecipe(Decoration.limestone.stack(), Decoration.limestone.stack(1, 2))
-    addCrushingTableRecipe(Decoration.burnLimestone.stack(), Decoration.burnLimestone.stack(1, 2))
+//    addCrushingTableRecipe(Decoration.limestone.stack(), Decoration.limestone.stack(1, 2))
+//    addCrushingTableRecipe(Decoration.burnLimestone.stack(), Decoration.burnLimestone.stack(1, 2))
     // double plates
-    addCrushingTableRecipe(Blocks.IRON_BLOCK.stack(), EnumMetal.IRON.getLightPlate().withSize(5), true)
-    addCrushingTableRecipe(Blocks.GOLD_BLOCK.stack(), EnumMetal.GOLD.getLightPlate().withSize(5), true)
-    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.COPPER.ordinal), EnumMetal.COPPER.getLightPlate().withSize(5))
-    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.LEAD.ordinal), EnumMetal.LEAD.getLightPlate().withSize(5))
-    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.TUNGSTEN.ordinal), EnumMetal.TUNGSTEN.getLightPlate().withSize(5))
-    addCrushingTableRecipe(EnumMetal.STEEL.getIngot(), EnumMetal.STEEL.getLightPlate())
+    addCrushingTableRecipe(Blocks.IRON_BLOCK.stack(), IRON.getLightPlate().withSize(5), true)
+    addCrushingTableRecipe(Blocks.GOLD_BLOCK.stack(), GOLD.getLightPlate().withSize(5), true)
+//    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.COPPER.ordinal), EnumMetal.COPPER.getLightPlate().withSize(5))
+//    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.LEAD.ordinal), EnumMetal.LEAD.getLightPlate().withSize(5))
+//    addCrushingTableRecipe(OreBlocks.storageBlocks.stack(1, BlockOreType.TUNGSTEN.ordinal), EnumMetal.TUNGSTEN.getLightPlate().withSize(5))
+    addCrushingTableRecipe(STEEL.getIngot(), STEEL.getLightPlate())
 
     // rods
     addCrushingTableRecipe(Items.BLAZE_ROD.stack(), Items.BLAZE_POWDER.stack(5))
-    addCrushingTableRecipe(Items.BONE.stack(), Items.DYE.stack(4, 15))
+    addCrushingTableRecipe(Items.BONE.stack(), Items.BONE_MEAL.stack(4))
     // blocks
-    addCrushingTableRecipe(Blocks.STONE.stack(), Blocks.COBBLESTONE.stack())
-    addCrushingTableRecipe(Blocks.STONE.stack(1, 6), Blocks.STONE.stack(1, 5))
-    addCrushingTableRecipe(Blocks.STONE.stack(1, 4), Blocks.STONE.stack(1, 3))
-    addCrushingTableRecipe(Blocks.STONE.stack(1, 2), Blocks.STONE.stack(1, 1))
-    addCrushingTableRecipe(Blocks.STONEBRICK.stack(), Blocks.STONEBRICK.stack(1, 2))
-    addCrushingTableRecipe(Blocks.STONEBRICK.stack(1, 1), Blocks.MOSSY_COBBLESTONE.stack())
-    addCrushingTableRecipe(Blocks.PRISMARINE.stack(1, 1), Blocks.PRISMARINE.stack())
-    addCrushingTableRecipe(Blocks.END_BRICKS.stack(1), Blocks.END_STONE.stack(1))
+    addCrushingTableRecipe(Blocks.STONE.stack(), COBBLESTONE.stack())
+    addCrushingTableRecipe(Blocks.POLISHED_GRANITE.stack(1), Blocks.GRANITE.stack(1))
+    addCrushingTableRecipe(Blocks.POLISHED_ANDESITE.stack(1), Blocks.ANDESITE.stack(1))
+    addCrushingTableRecipe(Blocks.POLISHED_DIORITE.stack(1), Blocks.DIORITE.stack(1))
+    addCrushingTableRecipe(Blocks.STONE_BRICKS.stack(), Blocks.CRACKED_STONE_BRICKS.stack(1))
+    addCrushingTableRecipe(Blocks.MOSSY_STONE_BRICKS.stack(1), Blocks.CRACKED_STONE_BRICKS.stack())
+    addCrushingTableRecipe(Blocks.PRISMARINE.stack(1), Blocks.PRISMARINE.stack())
+    addCrushingTableRecipe(Blocks.END_STONE_BRICKS.stack(1), Blocks.END_STONE.stack(1))
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  SMELTING RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    addSmeltingRecipe(Decoration.burnLimestone.stack(1, 0), Decoration.limestone.stack(1, 0))
-    addSmeltingRecipe(Decoration.burnLimestone.stack(1, 2), Decoration.limestone.stack(1, 2))
+//    addSmeltingRecipe(Decoration.burnLimestone.stack(1, 0), Decoration.limestone.stack(1, 0))
+//    addSmeltingRecipe(Decoration.burnLimestone.stack(1, 2), Decoration.limestone.stack(1, 2))
 
     //ores
-    addSmeltingRecipe(MetallicItems.ingots.stack(1, 2), Ores.ores.stack(1, 0))
-    addSmeltingRecipe(MetallicItems.ingots.stack(1, 3), Ores.ores.stack(1, 1))
-    addSmeltingRecipe(MetallicItems.ingots.stack(1, 4), Ores.ores.stack(1, 2))
-    addSmeltingRecipe(MetallicItems.ingots.stack(1, 5), Ores.ores.stack(1, 3))
+//    addSmeltingRecipe(MetallicItems.ingots.stack(1, 2), Ores.ores.stack(1, 0))
+//    addSmeltingRecipe(MetallicItems.ingots.stack(1, 3), Ores.ores.stack(1, 1))
+//    addSmeltingRecipe(MetallicItems.ingots.stack(1, 4), Ores.ores.stack(1, 2))
+//    addSmeltingRecipe(MetallicItems.ingots.stack(1, 5), Ores.ores.stack(1, 3))
 
     EnumMetal.values().forEach {
         if (it.isComposite) {
@@ -256,24 +247,25 @@ fun registerRecipes() {
     addThermopileRecipe(Blocks.ICE, WATER_FREEZING_POINT, 60.0)
     addThermopileRecipe(Blocks.PACKED_ICE, WATER_FREEZING_POINT, 80.0)
     addThermopileRecipe(Blocks.TORCH, FIRE_TEMP, 4.0)
-    addThermopileRecipe(Blocks.LIT_PUMPKIN, FIRE_TEMP, 3.5)
+    addThermopileRecipe(Blocks.JACK_O_LANTERN, FIRE_TEMP, 3.5)
     addThermopileRecipe(Blocks.FIRE, FIRE_TEMP, 4.5)
-    addThermopileRecipe(Blocks.MAGMA, MAGMA_TEMP, 1.4)
+    addThermopileRecipe(Blocks.MAGMA_BLOCK, MAGMA_TEMP, 1.4)
 
-    Blocks.SNOW_LAYER.blockState.validStates.forEach { state ->
-        addThermopileRecipe(state, WATER_FREEZING_POINT, state[BlockSnow.LAYERS]!!.toDouble() / 15.0 * 40.0)
+    Blocks.SNOW.stateContainer.validStates.forEach { state ->
+        addThermopileRecipe(state, WATER_FREEZING_POINT, state[SnowBlock.LAYERS].toDouble() / 15.0 * 40.0)
     }
 
-    ItemHolder.uraniumBlock?.ifNonEmpty {
+    ItemHolder.uraniumBlock?.let {
         it.toBlockState()?.let { state -> addThermopileRecipe(state, FIRE_TEMP, 1.5) }
     }
 
-    FluidRegistry.getRegisteredFluids().values
-            .filter { it.canBePlacedInWorld() }
-            .forEach { fluid ->
-                val temp = fluid.temperature.toDouble()
-                addThermopileRecipe(fluid.block, temp, balancedConductivity(temp))
-            }
+    // TODO FluidRegistry
+//    FluidRegistry.getRegisteredFluids().values
+//            .filter { it.canBePlacedInWorld() }
+//            .forEach { fluid ->
+//                val temp = fluid.temperature.toDouble()
+//                addThermopileRecipe(fluid.block, temp, balancedConductivity(temp))
+//            }
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  HYDRAULIC PRESS RECIPES
@@ -283,33 +275,33 @@ fun registerRecipes() {
     // Heavy recipes
     addHydraulicPressRecipe(IRON_INGOT.stack(4), IRON.getHeavyPlate(), HEAVY, 120f)
     addHydraulicPressRecipe(GOLD_INGOT.stack(4), GOLD.getHeavyPlate(), HEAVY, 50f)
-    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(4), EnumMetal.COPPER.getHeavyPlate(), HEAVY, 100f)
-    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(4), EnumMetal.LEAD.getHeavyPlate(), HEAVY, 50f)
-    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(4), EnumMetal.TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
-    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(4), EnumMetal.STEEL.getHeavyPlate(), HEAVY, 140f)
+    addHydraulicPressRecipe(COPPER.getIngot().withSize(4), COPPER.getHeavyPlate(), HEAVY, 100f)
+    addHydraulicPressRecipe(LEAD.getIngot().withSize(4), LEAD.getHeavyPlate(), HEAVY, 50f)
+    addHydraulicPressRecipe(TUNGSTEN.getIngot().withSize(4), TUNGSTEN.getHeavyPlate(), HEAVY, 250f)
+    addHydraulicPressRecipe(STEEL.getIngot().withSize(4), STEEL.getHeavyPlate(), HEAVY, 140f)
 
     // Medium recipes
     addHydraulicPressRecipe(IRON_INGOT.stack(1), IRON.getLightPlate(), MEDIUM, 120f)
     addHydraulicPressRecipe(GOLD_INGOT.stack(1), GOLD.getLightPlate(), MEDIUM, 50f)
-    addHydraulicPressRecipe(EnumMetal.COPPER.getIngot().withSize(1), EnumMetal.COPPER.getLightPlate(), MEDIUM, 100f)
-    addHydraulicPressRecipe(EnumMetal.LEAD.getIngot().withSize(1), EnumMetal.LEAD.getLightPlate(), MEDIUM, 50f)
-    addHydraulicPressRecipe(EnumMetal.TUNGSTEN.getIngot().withSize(1), EnumMetal.TUNGSTEN.getLightPlate(), MEDIUM, 250f)
-    addHydraulicPressRecipe(EnumMetal.STEEL.getIngot().withSize(1), EnumMetal.STEEL.getLightPlate(), MEDIUM, 140f)
+    addHydraulicPressRecipe(COPPER.getIngot().withSize(1), COPPER.getLightPlate(), MEDIUM, 100f)
+    addHydraulicPressRecipe(LEAD.getIngot().withSize(1), LEAD.getLightPlate(), MEDIUM, 50f)
+    addHydraulicPressRecipe(TUNGSTEN.getIngot().withSize(1), TUNGSTEN.getLightPlate(), MEDIUM, 250f)
+    addHydraulicPressRecipe(STEEL.getIngot().withSize(1), STEEL.getLightPlate(), MEDIUM, 140f)
 
     // Light recipes
     listOf(
             IRON_INGOT.stack() to ItemHolder.ironPlate,
             GOLD_INGOT.stack() to ItemHolder.goldPlate,
-            EnumMetal.COPPER.getIngot() to ItemHolder.copperPlate,
-            EnumMetal.TIN.getIngot() to ItemHolder.tinPlate,
-            EnumMetal.SILVER.getIngot() to ItemHolder.silverPlate,
-            EnumMetal.LEAD.getIngot() to ItemHolder.leadPlate,
-            EnumMetal.ALUMINIUM.getIngot() to ItemHolder.aluminiumPlate,
-            EnumMetal.NICKEL.getIngot() to ItemHolder.nickelPlate,
+            COPPER.getIngot() to ItemHolder.copperPlate,
+            TIN.getIngot() to ItemHolder.tinPlate,
+            SILVER.getIngot() to ItemHolder.silverPlate,
+            LEAD.getIngot() to ItemHolder.leadPlate,
+            ALUMINIUM.getIngot() to ItemHolder.aluminiumPlate,
+            NICKEL.getIngot() to ItemHolder.nickelPlate,
             ItemHolder.platinumIngot to ItemHolder.platinumPlate,
             ItemHolder.iridiumIngot to ItemHolder.iridiumPlate,
-            EnumMetal.MITHRIL.getIngot() to ItemHolder.mithilPlate,
-            EnumMetal.STEEL.getIngot() to ItemHolder.steelPlate,
+            MITHRIL.getIngot() to ItemHolder.mithilPlate,
+            STEEL.getIngot() to ItemHolder.steelPlate,
             ItemHolder.electrumIngot to ItemHolder.electrumPlate,
             ItemHolder.invarIngot to ItemHolder.invarPlate,
             ItemHolder.constantanIngot to ItemHolder.constantanPlate,
@@ -317,71 +309,71 @@ fun registerRecipes() {
             ItemHolder.lumiumIngot to ItemHolder.lumiumPlate,
             ItemHolder.enderiumIngot to ItemHolder.enderiumPlate
     ).forEach { (a, b) ->
-        a?.ifNonEmpty {
-            b?.ifNonEmpty {
+        a?.let {
+            b?.let {
                 addHydraulicPressRecipe(a, b, LIGHT, 80f)
             }
         }
     }
 
     // utility
-    addHydraulicPressRecipe(Blocks.STONE.stack(), Blocks.COBBLESTONE.stack(), LIGHT, 55f)
-    addHydraulicPressRecipe(Blocks.STONE.stack(meta = 6), Blocks.STONE.stack(meta = 5), LIGHT, 55f)
-    addHydraulicPressRecipe(Blocks.STONE.stack(meta = 4), Blocks.STONE.stack(meta = 3), LIGHT, 55f)
-    addHydraulicPressRecipe(Blocks.STONE.stack(meta = 2), Blocks.STONE.stack(meta = 1), LIGHT, 55f)
-    addHydraulicPressRecipe(Blocks.STONEBRICK.stack(meta = 1), Blocks.MOSSY_COBBLESTONE.stack(), LIGHT, 55f)
-    addHydraulicPressRecipe(Blocks.STONEBRICK.stack(), Blocks.STONEBRICK.stack(meta = 2), LIGHT, 55f)
-    addHydraulicPressRecipe(Blocks.END_BRICKS.stack(), Blocks.END_STONE.stack(), LIGHT, 100f)
-    addHydraulicPressRecipe(Blocks.RED_SANDSTONE.stack(meta = 2), Blocks.RED_SANDSTONE.stack(), LIGHT, 40f)
-    addHydraulicPressRecipe(Blocks.SANDSTONE.stack(meta = 2), Blocks.SANDSTONE.stack(), LIGHT, 40f)
-    addHydraulicPressRecipe(Blocks.PRISMARINE.stack(meta = 1), Blocks.PRISMARINE.stack(), LIGHT, 50f)
+    addHydraulicPressRecipe(Blocks.STONE.stack(), COBBLESTONE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.POLISHED_GRANITE.stack(), Blocks.GRANITE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.POLISHED_ANDESITE.stack(), Blocks.ANDESITE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.POLISHED_DIORITE.stack(), Blocks.DIORITE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.MOSSY_STONE_BRICKS.stack(), Blocks.MOSSY_COBBLESTONE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.STONE_BRICKS.stack(), COBBLESTONE.stack(), LIGHT, 55f)
+    addHydraulicPressRecipe(Blocks.END_STONE_BRICKS.stack(), Blocks.END_STONE.stack(), LIGHT, 100f)
+    addHydraulicPressRecipe(Blocks.CHISELED_RED_SANDSTONE.stack(), Blocks.RED_SANDSTONE.stack(), LIGHT, 40f)
+    addHydraulicPressRecipe(Blocks.CHISELED_SANDSTONE.stack(), Blocks.SANDSTONE.stack(), LIGHT, 40f)
+    addHydraulicPressRecipe(Blocks.PRISMARINE_BRICKS.stack(), Blocks.PRISMARINE.stack(), LIGHT, 50f)
     addHydraulicPressRecipe(Blocks.ICE.stack(), Blocks.PACKED_ICE.stack(), LIGHT, 200f)
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                  OIL HEATER RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f, WATER_BOILING_POINT)
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 2f, 350.fromCelsiusToKelvin())
-    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 2f, 350.fromCelsiusToKelvin())
+//    addOilHeaterRecipe(FluidRegistry.getFluidStack("water", 1), FluidRegistry.getFluidStack("steam", 10), 1f, WATER_BOILING_POINT)
+//    addOilHeaterRecipe(FluidRegistry.getFluidStack("oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 2f, 350.fromCelsiusToKelvin())
+//    addOilHeaterRecipe(FluidRegistry.getFluidStack("crude_oil", 10), FluidRegistry.getFluidStack("hot_crude", 100), 2f, 350.fromCelsiusToKelvin())
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   REFINERY RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    addRefineryRecipe(FluidRegistry.getFluidStack("steam", 10), FluidRegistry.getFluidStack("water", 1), null, null, 2f)
-
-    addRefineryRecipe(FluidRegistry.getFluidStack("hot_crude", 100),
-            FluidRegistry.getFluidStack("heavy_oil", 4),
-            FluidRegistry.getFluidStack("light_oil", 3),
-            FluidRegistry.getFluidStack("lpg", 3),
-            1f)
-
-    addRefineryRecipe(FluidRegistry.getFluidStack("heavy_oil", 10),
-            FluidRegistry.getFluidStack("oil_residue", 4),
-            FluidRegistry.getFluidStack("fuel", 5),
-            FluidRegistry.getFluidStack("lubricant", 1),
-            1f)
-
-    addRefineryRecipe(FluidRegistry.getFluidStack("light_oil", 10),
-            FluidRegistry.getFluidStack("diesel", 5),
-            FluidRegistry.getFluidStack("kerosene", 2),
-            FluidRegistry.getFluidStack("gasoline", 3),
-            1f)
-
-    addRefineryRecipe(FluidRegistry.getFluidStack("lpg", 10),
-            FluidRegistry.getFluidStack("plastic", 5),
-            FluidRegistry.getFluidStack("naphtha", 2),
-            FluidRegistry.getFluidStack("natural_gas", 3),
-            1f)
+//    addRefineryRecipe(FluidRegistry.getFluidStack("steam", 10), FluidRegistry.getFluidStack("water", 1), null, null, 2f)
+//
+//    addRefineryRecipe(FluidRegistry.getFluidStack("hot_crude", 100),
+//            FluidRegistry.getFluidStack("heavy_oil", 4),
+//            FluidRegistry.getFluidStack("light_oil", 3),
+//            FluidRegistry.getFluidStack("lpg", 3),
+//            1f)
+//
+//    addRefineryRecipe(FluidRegistry.getFluidStack("heavy_oil", 10),
+//            FluidRegistry.getFluidStack("oil_residue", 4),
+//            FluidRegistry.getFluidStack("fuel", 5),
+//            FluidRegistry.getFluidStack("lubricant", 1),
+//            1f)
+//
+//    addRefineryRecipe(FluidRegistry.getFluidStack("light_oil", 10),
+//            FluidRegistry.getFluidStack("diesel", 5),
+//            FluidRegistry.getFluidStack("kerosene", 2),
+//            FluidRegistry.getFluidStack("gasoline", 3),
+//            1f)
+//
+//    addRefineryRecipe(FluidRegistry.getFluidStack("lpg", 10),
+//            FluidRegistry.getFluidStack("plastic", 5),
+//            FluidRegistry.getFluidStack("naphtha", 2),
+//            FluidRegistry.getFluidStack("natural_gas", 3),
+//            1f)
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //                                                   GASIFIER RECIPES
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    addGasifierRecipe(Blocks.PLANKS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
-    addGasifierRecipe(Blocks.LOG.stack(), Items.COAL.stack(meta = 1), fluidOf("wood_gas", 150), 30f, 300f)
-    addGasifierRecipe(Blocks.LOG2.stack(), Items.COAL.stack(meta = 1), fluidOf("wood_gas", 150), 30f, 300f)
+//    addGasifierRecipe(Blocks.PLANKS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
+//    addGasifierRecipe(Blocks.LOG.stack(), Items.COAL.stack(meta = 1), fluidOf("wood_gas", 150), 30f, 300f)
+//    addGasifierRecipe(Blocks.LOG2.stack(), Items.COAL.stack(meta = 1), fluidOf("wood_gas", 150), 30f, 300f)
     addGasifierRecipe(Blocks.OAK_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
     addGasifierRecipe(Blocks.ACACIA_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
     addGasifierRecipe(Blocks.BIRCH_STAIRS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
@@ -400,40 +392,40 @@ fun registerRecipes() {
     addGasifierRecipe(Blocks.JUNGLE_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
     addGasifierRecipe(Blocks.SPRUCE_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
     addGasifierRecipe(Blocks.DARK_OAK_FENCE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 250f)
-    addGasifierRecipe(Blocks.WOODEN_SLAB.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 15f, 200f)
-    addGasifierRecipe(Blocks.WOODEN_PRESSURE_PLATE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 15f, 200f)
-    addGasifierRecipe(Blocks.TRAPDOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 15f, 200f)
+//    addGasifierRecipe(Blocks.WOODEN_SLAB.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 15f, 200f)
+//    addGasifierRecipe(Blocks.WOODEN_PRESSURE_PLATE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 15f, 200f)
+//    addGasifierRecipe(Blocks.TRAPDOOR.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 15f, 200f)
     addGasifierRecipe(Blocks.HAY_BLOCK.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 100), 15f, 250f)
-    addGasifierRecipe(Blocks.SAPLING.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
-    addGasifierRecipe(Blocks.LEAVES.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
-    addGasifierRecipe(Blocks.LEAVES2.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
+//    addGasifierRecipe(Blocks.SAPLING.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
+//    addGasifierRecipe(Blocks.LEAVES.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
+//    addGasifierRecipe(Blocks.LEAVES2.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
     addGasifierRecipe(Blocks.VINE.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
-    addGasifierRecipe(Blocks.WATERLILY.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
-    addGasifierRecipe(Blocks.RED_FLOWER.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
-    addGasifierRecipe(Blocks.YELLOW_FLOWER.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
+//    addGasifierRecipe(Blocks.WATERLILY.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 180f)
+//    addGasifierRecipe(Blocks.RED_FLOWER.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
+//    addGasifierRecipe(Blocks.YELLOW_FLOWER.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
     addGasifierRecipe(Blocks.BROWN_MUSHROOM.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
     addGasifierRecipe(Blocks.RED_MUSHROOM.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
     addGasifierRecipe(Blocks.CACTUS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 180f)
-    addGasifierRecipe(Blocks.DOUBLE_PLANT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
+//    addGasifierRecipe(Blocks.DOUBLE_PLANT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
     addGasifierRecipe(Blocks.CHEST.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 30f, 200f)
     addGasifierRecipe(Items.BOWL.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 15f, 150f)
-    addGasifierRecipe(Items.SIGN.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
+//    addGasifierRecipe(Items.SIGN.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
     addGasifierRecipe(Items.STICK.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 10), 10f, 150f)
     addGasifierRecipe(Items.WHEAT_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 150f)
     addGasifierRecipe(Items.BEETROOT_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 150f)
     addGasifierRecipe(Items.MELON_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 150f)
     addGasifierRecipe(Items.PUMPKIN_SEEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 150f)
     addGasifierRecipe(Items.WHEAT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 20f, 200f)
-    addGasifierRecipe(Items.REEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 200f)
+//    addGasifierRecipe(Items.REEDS.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 30), 10f, 200f)
     addGasifierRecipe(Items.NETHER_WART.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 10f, 200f)
     addGasifierRecipe(Items.CARROT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 10f, 200f)
     addGasifierRecipe(Items.POTATO.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 10f, 200f)
     addGasifierRecipe(Items.BEETROOT.stack(), ItemStack.EMPTY, fluidOf("wood_gas", 50), 10f, 200f)
 
-    ItemHolder.coalCoke?.ifNonEmpty {
+    ItemHolder.coalCoke?.let {
         addGasifierRecipe(Items.COAL.stack(), it, fluidOf("wood_gas", 15), 30f, 300f)
     }
-    ItemHolder.sawdust?.ifNonEmpty {
+    ItemHolder.sawdust?.let {
         addGasifierRecipe(it, ItemStack.EMPTY, fluidOf("wood_gas", 10), 30f, 10f)
     }
 
@@ -480,7 +472,8 @@ fun registerRecipes() {
     addFluidFuel("bioethanol", 10_000, 50.0)    // 500_000 J/B   = 31.25 coal items
 }
 
-private fun fluidOf(name: String, amount: Int) = FluidRegistry.getFluidStack(name, amount)
+// TODO
+private fun fluidOf(name: String, amount: Int): FluidStack? = null // FluidRegistry.getFluidStack(name, amount)
 
 private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
     if (input.isEmpty)
@@ -488,7 +481,8 @@ private fun addSmeltingRecipe(result: ItemStack, input: ItemStack) {
     if (result.isEmpty)
         throw IllegalStateException("Trying to register furnace recipe with empty result empty stack: $result")
 
-    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
+    // TODO
+//    GameRegistry.addSmelting(input, result, 0.1f) // i don't care about xp
 }
 
 private fun addCrushingTableRecipe(input: ItemStack, output: ItemStack, strict: Boolean = false) {
@@ -507,7 +501,7 @@ private fun addThermopileRecipe(input: IBlockState, temperature: Double, conduct
 }
 
 private fun addThermopileRecipe(input: Block, temperature: Double, conductivity: Double) {
-    input.blockState.validStates.forEach { state ->
+    input.stateContainer.validStates.forEach { state ->
         ThermopileRecipeManager.registerRecipe(
                 ThermopileRecipeManager.createRecipe(state, temperature.toFloat(), conductivity.toFloat())
         )

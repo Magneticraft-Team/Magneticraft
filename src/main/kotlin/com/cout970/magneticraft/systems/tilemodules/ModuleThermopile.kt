@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.internal.registries.generators.thermopile.ThermopileRecipeManager
@@ -21,9 +23,7 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_THERMOPILE_HEAT_FLUX
 import com.cout970.magneticraft.systems.gui.DATA_ID_THERMOPILE_PRODUCTION
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumFacing.*
+import net.minecraft.util.Direction.*
 import net.minecraft.util.math.BlockPos
 import kotlin.math.absoluteValue
 
@@ -55,7 +55,7 @@ class ModuleThermopile(
     }
 
     fun updateFlux() {
-        val sources = EnumFacing.VALUES.map { it to getSource(pos + it, it) }.toMap()
+        val sources = EnumFacing.values().map { it to getSource(pos + it, it) }.toMap()
 
         totalFlux = listOf(
             getFlux(sources[DOWN]!!, sources[UP]!!),

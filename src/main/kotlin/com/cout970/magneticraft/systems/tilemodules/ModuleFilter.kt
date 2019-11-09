@@ -1,12 +1,13 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBuffer
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.api.pneumatic.PneumaticMode
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.util.EnumFacing
+
 
 class ModuleFilter(
     val input: PneumaticBuffer,

@@ -1,13 +1,14 @@
 package com.cout970.magneticraft.features.heat_machines
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.toCelsius
 import com.cout970.magneticraft.misc.vector.lowercaseName
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.tilerenderers.*
-import net.minecraft.util.EnumFacing
+
 
 /**
  * Created by cout970 on 2017/08/10.

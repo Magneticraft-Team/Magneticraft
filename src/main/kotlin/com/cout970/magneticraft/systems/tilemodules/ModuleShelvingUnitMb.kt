@@ -1,7 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
-import com.cout970.magneticraft.IVector3
-import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockShelvingUnit
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileMultiblockGap
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileShelvingUnit
@@ -9,7 +8,9 @@ import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.inventory.*
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.getTile
-import com.cout970.magneticraft.misc.vector.*
+import com.cout970.magneticraft.misc.vector.plus
+import com.cout970.magneticraft.misc.vector.toVec3d
+import com.cout970.magneticraft.misc.vector.yi
 import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ITEM_HANDLER
@@ -18,17 +19,13 @@ import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import net.minecraft.block.BlockChest
+import net.minecraft.block.ChestBlock
 import net.minecraft.item.Item
-import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 import java.util.*
 import kotlin.Comparator
-import kotlin.collections.HashSet
 
 /**
  * Created by cout970 on 2017/07/05.
@@ -53,7 +50,7 @@ class ModuleShelvingUnitMb(
         val stack = args.playerIn.getHeldItem(args.hand)
         if (stack.isNotEmpty) {
             val item = stack.item
-            if (item is ItemBlock && item.block is BlockChest) {
+            if (item is ItemBlock && item.block is ChestBlock) {
                 if (world.isServer) {
                     placeChest(args.pos, args.hit, stack)
                 }
@@ -76,7 +73,8 @@ class ModuleShelvingUnitMb(
 
                 guiLevel = level
                 container.sendUpdateToNearPlayers()
-                args.playerIn.openGui(Magneticraft, 0, args.worldIn, pos.xi, pos.yi, pos.zi)
+                // TODO
+//                args.playerIn.openGui(Magneticraft, 0, args.worldIn, pos.xi, pos.yi, pos.zi)
             }
             return true
         } else {
@@ -131,7 +129,7 @@ class ModuleShelvingUnitMb(
             val bId = Item.getIdFromItem(b.item)
             val order = when {
                 aId != bId -> aId - bId
-                a.itemDamage != b.itemDamage -> a.itemDamage - b.itemDamage
+                a.damage != b.damage -> a.damage - b.damage
                 else -> 0
             }
 
@@ -227,7 +225,7 @@ class ModuleShelvingUnitMb(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
-        return getCapability(cap, facing, BlockPos.ORIGIN) as? T
+        return getCapability(cap, facing, BlockPos.ZERO) as? T
     }
 
     enum class Level(val levelIndex: Int) {

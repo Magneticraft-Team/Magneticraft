@@ -2,7 +2,7 @@ package com.cout970.magneticraft.api.energy;
 
 import com.cout970.magneticraft.api.core.INodeHandler;
 import java.util.List;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -38,7 +38,7 @@ public interface IElectricNodeHandler extends INodeHandler {
      * @return true if the connections is allowed or false if is not allowed
      */
     boolean canConnect(IElectricNode thisNode, IElectricNodeHandler other, IElectricNode otherNode,
-                       @Nullable EnumFacing side);
+                       @Nullable Direction side);
 
     /**
      * Adds a connections to the handler All the connections must be in two handlers, in one handler the connection must
@@ -55,7 +55,7 @@ public interface IElectricNodeHandler extends INodeHandler {
      * @param output true if this connection starts in this handler and go to other handler, false if this connection
      * starts in other handler and go to this handler
      */
-    void addConnection(IElectricConnection connection, @Nullable EnumFacing side, boolean output);
+    void addConnection(IElectricConnection connection, @Nullable Direction side, boolean output);
 
     /**
      * Notifies this handler that a connection needs to be removed, usually because the other block has been mined

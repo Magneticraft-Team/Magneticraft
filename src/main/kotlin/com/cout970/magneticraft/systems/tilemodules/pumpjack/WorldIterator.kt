@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.systems.tilemodules.pumpjack
 
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.hasKey
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.getBlockPos
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.vector.*
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import kotlin.math.max
 import kotlin.math.min

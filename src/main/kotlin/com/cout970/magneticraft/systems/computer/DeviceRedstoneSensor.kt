@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.systems.computer
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.vector.plus
-import net.minecraft.util.EnumFacing
+
 import net.minecraftforge.event.ForgeEventFactory
 import java.util.*
 
@@ -45,7 +46,7 @@ class DeviceRedstoneSensor(val tile: ITileRef) : IDevice, ITileRef by tile {
     )
 
     fun getInput(side: Int): Int {
-        val facing = EnumFacing.getFront(side)
+        val facing = EnumFacing.byIndex(side)
 
         return if (tile.world.getRedstonePower(pos, facing) > 0) -1 else 0
     }
@@ -57,7 +58,7 @@ class DeviceRedstoneSensor(val tile: ITileRef) : IDevice, ITileRef by tile {
     fun setOutput(side: Int, value: Int) {
         outputs[side] = value
 
-        val facing = EnumFacing.getFront(side)
+        val facing = EnumFacing.byIndex(side)
         val blockState = world.getBlockState(pos)
 
         if (ForgeEventFactory.onNeighborNotify(world, pos, blockState, EnumSet.of(facing.opposite), false).isCanceled)

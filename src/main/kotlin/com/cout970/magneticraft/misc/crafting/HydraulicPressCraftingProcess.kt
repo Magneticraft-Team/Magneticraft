@@ -7,6 +7,7 @@ import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydrauli
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2017/07/01.
@@ -32,7 +33,7 @@ class HydraulicPressCraftingProcess(
         return recipe
     }
 
-    override fun craft() {
+    override fun craft(world: World) {
         val input = inventory.extractItem(inputSlot, 1, true)
         val recipe = MagneticraftApi.getHydraulicPressRecipeManager().findRecipe(input, mode()) ?: return
 
@@ -43,7 +44,7 @@ class HydraulicPressCraftingProcess(
         }
     }
 
-    override fun canCraft(): Boolean {
+    override fun canCraft(world: World): Boolean {
         val input = inventory.extractItem(inputSlot, 1, true)
         // check non empty and size >= 1
         if (input.isEmpty) return false

@@ -1,22 +1,21 @@
 package com.cout970.magneticraft.misc.world
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.misc.vector.xd
 import com.cout970.magneticraft.misc.vector.yd
 import com.cout970.magneticraft.misc.vector.zd
-import com.cout970.vector.extensions.Vector3
-import net.minecraft.block.Block
-import net.minecraft.block.state.IBlockState
-import net.minecraft.util.EnumParticleTypes
+import net.minecraft.particles.IParticleData
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 class ParticleSpawner(
     val particlesPerSecond: Double,
-    val particle: EnumParticleTypes,
+    val particle: IParticleData,
     val block: IBlockState,
-    val speed: () -> IVector3 = { Vector3.ORIGIN },
+    val speed: () -> IVector3 = { Vec3d.ZERO },
     val area: () -> AABB
 ) {
 
@@ -43,10 +42,9 @@ class ParticleSpawner(
             aabb.minZ.interp(aabb.maxZ, world.rand.nextDouble())
         )
         val dir = speed()
-        world.spawnParticle(particle, false,
+        world.addParticle(particle,
             point.xd, point.yd, point.zd,
-            dir.xd, dir.yd, dir.zd,
-            Block.getStateId(block)
+            dir.xd, dir.yd, dir.zd
         )
     }
 

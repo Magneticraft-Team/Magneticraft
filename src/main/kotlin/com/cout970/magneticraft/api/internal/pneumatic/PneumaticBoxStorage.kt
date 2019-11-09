@@ -2,10 +2,10 @@ package com.cout970.magneticraft.api.internal.pneumatic
 
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
 import com.cout970.magneticraft.misc.forEachTag
-import net.minecraft.nbt.NBTTagList
+import net.minecraft.nbt.ListNBT
 import net.minecraftforge.common.util.INBTSerializable
 
-class PneumaticBoxStorage : INBTSerializable<NBTTagList> {
+class PneumaticBoxStorage : INBTSerializable<ListNBT> {
     private val items = mutableListOf<PneumaticBox>()
 
     fun insert(box: PneumaticBox) {
@@ -22,16 +22,16 @@ class PneumaticBoxStorage : INBTSerializable<NBTTagList> {
 
     fun getItems(): List<PneumaticBox> = items
 
-    override fun deserializeNBT(nbt: NBTTagList) {
+    override fun deserializeNBT(nbt: ListNBT) {
         items.clear()
         nbt.forEachTag { tag ->
             items += PneumaticBox(tag)
         }
     }
 
-    override fun serializeNBT(): NBTTagList {
-        return NBTTagList().also {
-            items.forEach { item -> it.appendTag(item.serializeNBT()) }
+    override fun serializeNBT(): ListNBT {
+        return ListNBT().also {
+            items.forEach { item -> it.add(item.serializeNBT()) }
         }
     }
 }

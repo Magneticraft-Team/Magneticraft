@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.misc.inventory
 
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.player.InventoryPlayer
-import net.minecraft.inventory.Container
-import net.minecraft.inventory.Slot
+import com.cout970.magneticraft.EntityPlayer
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.container.Container
+import net.minecraft.inventory.container.Slot
 
 /**
  * Created by cout970 on 2017/02/20.
@@ -13,14 +13,14 @@ import net.minecraft.inventory.Slot
  * Gets all slots range is a part of player inventory.
  */
 fun Container.getPlayerSlotRanges(player: EntityPlayer): List<IntRange> {
-    return this.getSlotRanges { it.inventory is InventoryPlayer && it.inventory == player.inventory }
+    return this.getSlotRanges { it.inventory is PlayerInventory && it.inventory == player.inventory }
 }
 
 /**
  * Get all slots range that is not a part of player inventory.
  */
 fun Container.getNonPlayerSlotRanges(): List<IntRange> {
-    return this.getSlotRanges { it.inventory !is InventoryPlayer }
+    return this.getSlotRanges { it.inventory !is PlayerInventory }
 }
 
 /**
@@ -43,7 +43,7 @@ fun Container.getSlotRanges(predicate: (Slot) -> Boolean): List<IntRange> {
     }
 
     if (start != null)
-        ranges += start!!..size - 1
+        ranges += start!! until size
 
     return ranges
 }

@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
@@ -12,19 +13,17 @@ import com.cout970.magneticraft.systems.computer.DeviceMonitor
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_MONITOR_CLIPBOARD
 import com.cout970.magneticraft.systems.gui.render.*
-import net.minecraft.client.gui.Gui
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.renderer.GlStateManager.color
-import org.lwjgl.input.Keyboard
+import com.cout970.magneticraft.totalWorldTime
+import net.minecraft.client.Minecraft
 
 /**
  * Created by cout970 on 20/05/2016.
  */
 
 class MonitorComponent(
-        val tile: ITileRef,
-        val monitor: DeviceMonitor,
-        val keyboard: DeviceKeyboard
+    val tile: ITileRef,
+    val monitor: DeviceMonitor,
+    val keyboard: DeviceKeyboard
 ) : IComponent {
 
     companion object {
@@ -37,7 +36,7 @@ class MonitorComponent(
     override lateinit var gui: IGui
 
     override fun init() {
-        Keyboard.enableRepeatEvents(true)
+        keyboardEnableRepeatedEvents(true)
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) {
@@ -70,7 +69,7 @@ class MonitorComponent(
                 var character = monitor.getChar(line * columns + column) and 0xFF
 
                 if (line == monitor.cursorLine && column == monitor.cursorColumn &&
-                        tile.world.totalWorldTime % 10 >= 4) {
+                    tile.world.totalWorldTime % 10 >= 4) {
 
                     character = character xor 128
                 }
@@ -81,12 +80,11 @@ class MonitorComponent(
                     val x = character and 15
                     val y = character shr 4
 
-                    Gui.drawScaledCustomSizeModalRect(
-                            posX, posY,
-                            x * 16f, y * 16f,
-                            16, 16,
-                            scale, scale,
-                            256f, 256f
+                    gui.drawTexture(
+                        posX, posY,
+                        x * 16, y * 16,
+                        16f, 16f,
+                        scale, scale
                     )
                 }
             }
@@ -103,10 +101,10 @@ class MonitorComponent(
         // SHIFT + CTRL + ALT + V
         if (isShiftKeyDown() && isCtrlKeyDown() && isAltKeyDown() && keyCode == 47) {
 
-            val str = GuiScreen.getClipboardString()
+            val str = Minecraft.getInstance().keyboardListener.clipboardString
 
             if (str.isNotBlank()) {
-                gui.container.sendUpdate(IBD().apply { setString(DATA_ID_MONITOR_CLIPBOARD, str) })
+                gui.containerBase.sendUpdate(IBD().apply { setString(DATA_ID_MONITOR_CLIPBOARD, str) })
             }
         }
 
@@ -194,11 +192,11 @@ class MonitorComponent(
         } else {
             keyboard.onKeyRelease(key, code)
         }
-        gui.container.detectAndSendChanges()
+        gui.containerBase.detectAndSendChanges()
     }
 
     override fun onGuiClosed() {
         keyboard.reset()
-        Keyboard.enableRepeatEvents(false)
+        keyboardEnableRepeatedEvents(false)
     }
 }

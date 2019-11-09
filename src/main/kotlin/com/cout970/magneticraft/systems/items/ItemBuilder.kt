@@ -1,13 +1,14 @@
 package com.cout970.magneticraft.systems.items
 
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.misc.resource
-import net.minecraft.block.state.IBlockState
-import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
-import net.minecraft.util.EnumActionResult
+import net.minecraft.util.ActionResultType
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.common.ToolType
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 
 /**
@@ -15,15 +16,14 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider
  */
 class ItemBuilder {
 
-    var constructor: () -> ItemBase = { ItemBase() }
+    var constructor: (Item.Properties) -> ItemBase = { ItemBase(it) }
     var registryName: ResourceLocation? = null
-    var creativeTab: CreativeTabs? = null
-    var variants: Map<Int, String>? = null
+    var creativeTab: ItemGroup? = null
     var isFull3d: Boolean = false
     var maxStackSize = 64
     var maxDamage = 0
     var onHitEntity: ((HitEntityArgs) -> Boolean)? = null
-    var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
+    var onItemUse: ((OnItemUseArgs) -> ActionResultType)? = null
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
     var itemInteractionForEntity: ((ItemInteractionForEntityArgs) -> Boolean)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
@@ -32,10 +32,11 @@ class ItemBuilder {
     var getHarvestLevel: ((GetHarvestLevelArgs) -> Int)? = null
     var canHarvestBlock: ((IBlockState) -> Boolean)? = null
     var onBlockDestroyed: ((OnBlockDestroyedArgs) -> Boolean)? = null
-    var getToolClasses: ((ItemStack) -> MutableSet<String>)? = null
-    var createStack: ((Item, Int, Int) -> ItemStack)? = null
+    var getToolClasses: ((ItemStack) -> MutableSet<ToolType>)? = null
+    var postCreate: ((ItemStack) -> Unit)? = null
     var containerItem: Item? = null
     var canRepair = false
+    var burnTime = -1
     var customModels: List<Pair<String, ResourceLocation>>? = null
 
     fun withName(name: String): ItemBuilder {
@@ -45,16 +46,20 @@ class ItemBuilder {
 
     fun build(): ItemBase {
         requireNotNull(registryName) { "registryName was null" }
-        val item = constructor()
+        val props = Item.Properties()
+
+        if (!canRepair) props.setNoRepair()
+        props.maxStackSize(maxStackSize)
+        props.maxDamage(maxDamage)
+        creativeTab?.let { props.group(it) }
+        containerItem?.let { props.containerItem(it) }
+
+        val item = constructor(props)
 
         item.let {
             it.registryName = registryName
-            creativeTab?.let { t -> it.setCreativeTab(t) }
-            variants?.let { v -> it.variants = v }
-            if (isFull3d) it.setFull3D()
-            it.setMaxStackSize(maxStackSize)
-            if (maxDamage > 0) it.maxDamage = maxDamage
             it.onHitEntity = onHitEntity
+            it.postCreate = postCreate
             it.capabilityProvider = capabilityProvider
             it.getDestroySpeed = getDestroySpeed
             it.onItemUse = onItemUse
@@ -65,9 +70,7 @@ class ItemBuilder {
             it.canHarvestBlock = canHarvestBlock
             it.onBlockDestroyed = onBlockDestroyed
             it.getToolClasses = getToolClasses
-            it.createStack = createStack
-            it.containerItem = containerItem
-            it.repairAllowed = canRepair
+            it.burnTime = burnTime
             customModels?.let { c -> it.customModels = c }
         }
 
@@ -80,17 +83,16 @@ class ItemBuilder {
         newBuilder.constructor = constructor
         newBuilder.registryName = registryName
         newBuilder.creativeTab = creativeTab
-        newBuilder.variants = variants
         newBuilder.isFull3d = isFull3d
         newBuilder.maxStackSize = maxStackSize
         newBuilder.maxDamage = maxDamage
         newBuilder.onHitEntity = onHitEntity
+        newBuilder.postCreate = postCreate
         newBuilder.capabilityProvider = capabilityProvider
         newBuilder.addInformation = addInformation
         newBuilder.getDestroySpeed = getDestroySpeed
         newBuilder.getHarvestLevel = getHarvestLevel
         newBuilder.getToolClasses = getToolClasses
-        newBuilder.createStack = createStack
         newBuilder.containerItem = containerItem
 
         func(newBuilder)

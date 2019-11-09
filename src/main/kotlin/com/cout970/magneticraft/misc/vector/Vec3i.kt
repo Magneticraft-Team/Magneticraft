@@ -2,7 +2,7 @@
 
 package com.cout970.magneticraft.misc.vector
 
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.Direction
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3i
@@ -26,8 +26,8 @@ val Vec3i.zd: Double get() = z.toDouble()
 val Vec3i.lengthSqr: Double get() = xd * xd + yd * yd + zd * zd
 val Vec3i.length: Double get() = Math.sqrt(lengthSqr)
 
-operator fun Vec3i.plus(dir: EnumFacing) = toBlockPos().offset(dir)
-operator fun Vec3i.minus(dir: EnumFacing) = toBlockPos().offset(dir.opposite)
+operator fun Vec3i.plus(dir: Direction) = toBlockPos().offset(dir)
+operator fun Vec3i.minus(dir: Direction) = toBlockPos().offset(dir.opposite)
 
 fun Vec3i.toBlockPos() = if (this is BlockPos) this else BlockPos(x, y, z)
 fun Vec3d.toBlockPos() = BlockPos(Math.round(xd).toInt(), Math.round(yd).toInt(), Math.round(zd).toInt())
@@ -58,9 +58,9 @@ private fun norm(n: Int) = when {
 
 fun Vec3i.norm(): BlockPos = BlockPos(norm(x), norm(y), norm(z))
 
-fun Vec3i.toEnumFacing(): EnumFacing? {
+fun Vec3i.toEnumFacing(): Direction? {
     val norm = this.norm()
-    EnumFacing.values().forEach {
+    Direction.values().forEach {
         if (it.directionVec == norm) return it
     }
     return null

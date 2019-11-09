@@ -1,10 +1,14 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.features.computers.Blocks
+import com.cout970.magneticraft.getCompoundTag
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.inventory.canAcceptAll
+import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.computer.DeviceRobotControl
@@ -14,8 +18,12 @@ import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilemodules.mining_robot.*
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.item.Items
 import net.minecraft.util.NonNullList
+import net.minecraft.world.World
+import net.minecraft.world.server.ServerWorld
+import net.minecraft.world.storage.loot.LootContext
+import net.minecraft.world.storage.loot.LootParameters
 import net.minecraftforge.items.IItemHandler
 
 /**
@@ -96,24 +104,25 @@ class ModuleRobotControl(
         val newPos = pos + orientation.facing.let { if (front) it else it.opposite }
         val state = world.getBlockState(newPos)
 
-        if (world.isOutsideBuildHeight(newPos)) {
+        if (World.isOutsideBuildHeight(newPos)) {
             status = RequestStatus.FAILED
             failReason = FailReason.BLOCKED
             return
         }
 
-        if (state.block.canPlaceBlockAt(world, newPos)) {
-            if (front) {
-                requestedAction = RobotAction.MOVE_FRONT
-                updateTask()
-            } else {
-                requestedAction = RobotAction.MOVE_BACK
-                updateTask()
-            }
+        // TODO
+//        if (state.block.canPlaceBlockAt(world, newPos)) {
+        if (front) {
+            requestedAction = RobotAction.MOVE_FRONT
+            updateTask()
         } else {
-            status = RequestStatus.FAILED
-            failReason = FailReason.BLOCKED
+            requestedAction = RobotAction.MOVE_BACK
+            updateTask()
         }
+//        } else {
+//            status = RequestStatus.FAILED
+//            failReason = FailReason.BLOCKED
+//        }
     }
 
     override fun rotateLeft() {
@@ -166,9 +175,14 @@ class ModuleRobotControl(
             failReason = FailReason.UNBREAKABLE
             return
         }
-        val items = NonNullList.create<ItemStack>().also {
-            frontBlock.block.getDrops(it, world, frontPos, frontBlock, 0)
-        }
+        val items = NonNullList.create<ItemStack>()
+        val ctx = LootContext.Builder(world as ServerWorld)
+            .withParameter(LootParameters.POSITION, frontPos)
+            .withParameter(LootParameters.TOOL, Items.DIAMOND_PICKAXE.stack())
+            .withRandom(world.random)
+            .withLuck(0f)
+
+        items.addAll(frontBlock.block.getDrops(frontBlock, ctx))
 
         if (inventory.canAcceptAll(items)) {
             requestedAction = RobotAction.MINE

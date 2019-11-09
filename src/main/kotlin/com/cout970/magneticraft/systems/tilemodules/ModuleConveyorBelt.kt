@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.conveyorbelt.IConveyorBelt
 import com.cout970.magneticraft.api.conveyorbelt.Route
 import com.cout970.magneticraft.api.core.ITileRef
@@ -12,6 +14,7 @@ import com.cout970.magneticraft.misc.list
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.tileentity.TimeCache
 import com.cout970.magneticraft.misc.tileentity.getCap
+import com.cout970.magneticraft.misc.tileentity.isSideSolid
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.times
 import com.cout970.magneticraft.misc.vector.toBlockPos
@@ -26,10 +29,9 @@ import com.cout970.magneticraft.systems.itemblocks.ItemBlockBase
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilemodules.conveyorbelt.*
+import com.cout970.magneticraft.totalWorldTime
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
@@ -421,7 +423,7 @@ class ModuleConveyorBelt(
     override fun serializeNBT(): NBTTagCompound {
         return newNbt {
             list("items") {
-                boxes.map { it.serializeNBT() }.forEach { appendTag(it) }
+                boxes.map { it.serializeNBT() }.forEach { add(it) }
             }
         }
     }
@@ -462,6 +464,7 @@ class ModuleConveyorBelt(
         if (cap == CONVEYOR_BELT) return this as T
         if (cap == ITEM_HANDLER && facing == EnumFacing.UP) {
             return object : IItemHandler {
+                override fun isItemValid(slot: Int, stack: ItemStack): Boolean = slot != 0
 
                 override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
                     if (slot != 0) return stack

@@ -1,6 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.heat.IHeatNode
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
@@ -17,13 +19,11 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_MAX_BURNING_TIME
 import com.cout970.magneticraft.systems.integration.ItemHolder
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.init.Blocks
-import net.minecraft.init.Items
-import net.minecraft.item.Item
+import net.minecraft.block.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntityFurnace
-import net.minecraft.util.EnumParticleTypes
+import net.minecraft.item.Items
+import net.minecraft.particles.ParticleTypes
+import net.minecraftforge.common.ForgeHooks
 
 /**
  * Created by cout970 on 2017/07/13.
@@ -85,7 +85,7 @@ class ModuleCombustionChamber(
                 val randDir = vec3Of(rand.nextFloat(), rand.nextFloat(), rand.nextFloat())
                 val randDirAllDirections = randDir * vec3Of(2, 1, 2) - vec3Of(1, 0, 1)
                 val dir = randDirAllDirections * 0.001 + (-offset + vec3Of(0, 1, 0)) * 0.025
-                world.spawnParticle(EnumParticleTypes.FLAME, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z)
+                world.addParticle(ParticleTypes.FLAME, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z)
             }
         }
     }
@@ -120,7 +120,7 @@ class ModuleCombustionChamber(
         maxBurningTime = 0
         val stack = inventory[0]
         if (stack.isEmpty || !isValidFuel(stack)) return false
-        val time = TileEntityFurnace.getItemBurnTime(stack)
+        val time = ForgeHooks.getBurnTime(stack)
         if (time > 0) {
             stack.shrink(1)
             maxBurningTime = time
@@ -132,7 +132,7 @@ class ModuleCombustionChamber(
         if (stack.isEmpty) return false
         // vanilla
         if (stack.item == Items.COAL) return true
-        if (stack.item == Item.getItemFromBlock(Blocks.COAL_BLOCK)) return true
+        if (stack.item == Blocks.COAL_BLOCK.asItem()) return true
         // other mods
         ItemHolder.coalCoke?.let { if (it.isItemEqual(stack)) return true }
         ItemHolder.coalCokeBlock?.let { if (it.isItemEqual(stack)) return true }

@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.registries.machines.sifter.ISieveRecipe
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.systems.tilemodules.ModuleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.world.World
 
 /**
  * Created by cout970 on 2017/07/01.
@@ -32,7 +33,7 @@ class SieveCraftingProcess(
         return recipe
     }
 
-    override fun craft() {
+    override fun craft(world: World) {
         val input = invModule.inventory.extractItem(inputSlot, 1, false)
         val recipe = MagneticraftApi.getSieveRecipeManager().findRecipe(input) ?: return
 
@@ -53,7 +54,7 @@ class SieveCraftingProcess(
         }
     }
 
-    override fun canCraft(): Boolean {
+    override fun canCraft(world: World): Boolean {
         val input = getInput()
         // check non empty and size >= 1
         if (input.isEmpty) return false

@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EntityPlayer
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.ItemBlock
 import com.cout970.magneticraft.api.internal.registries.machines.crushingtable.CrushingTableRecipeManager
 import com.cout970.magneticraft.api.internal.registries.tool.hammer.HammerRegistry
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -13,18 +16,10 @@ import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.block.Block
-import net.minecraft.client.Minecraft
-import net.minecraft.client.particle.ParticleBreaking
-import net.minecraft.client.particle.ParticleDigging
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
-import net.minecraft.item.Item
-import net.minecraft.item.ItemBlock
+import net.minecraft.client.particle.DiggingParticle
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumHand
-import net.minecraft.util.EnumParticleTypes
+import net.minecraft.item.Items
+import net.minecraft.util.Hand
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -47,7 +42,7 @@ class ModuleCrushingTable(
         fun getCrushingLevel(storedItem: ItemStack): Int {
             val item = storedItem.item
             if (item is ItemBlock) {
-                val blockState = item.block.getStateFromMeta(storedItem.metadata)
+                val blockState = item.block.defaultState
                 return item.block.getHarvestLevel(blockState)
             }
             return -1
@@ -63,7 +58,7 @@ class ModuleCrushingTable(
         set(value) = inventory.setStackInSlot(0, value)
 
     override fun onActivated(args: OnActivatedArgs): Boolean = args.run {
-        if (side != EnumFacing.UP || hand == EnumHand.OFF_HAND) return false
+        if (side != EnumFacing.UP || hand == Hand.OFF_HAND) return false
 
         return if (storedItem.isNotEmpty) {
             useHammer(worldIn, pos, playerIn, heldItem)
@@ -73,7 +68,7 @@ class ModuleCrushingTable(
         }
     }
 
-    fun placeItemFromPlayer(playerIn: EntityPlayer, heldItem: ItemStack, hand: EnumHand): Boolean {
+    fun placeItemFromPlayer(playerIn: EntityPlayer, heldItem: ItemStack, hand: Hand): Boolean {
         if (heldItem.isNotEmpty) {
             val hammer = HammerRegistry.findHammer(heldItem)
             if (hammer != null) {
@@ -129,7 +124,7 @@ class ModuleCrushingTable(
                 playerIn.setFire(5)
             }
 
-            heldItem.damageItem(hammer.durabilityCost, playerIn)
+            heldItem.damageItem(hammer.durabilityCost, playerIn){}
         } else {
             if (playerIn.inventory.addItemStackToInventory(storedItem)) {
                 storedItem = ItemStack.EMPTY
@@ -166,30 +161,31 @@ class ModuleCrushingTable(
         val item = storedItem.item
 
         if (item is ItemBlock) {
-            val state = item.block.getStateFromMeta(storedItem.metadata)
-            val factory = ParticleDigging.Factory()
+            val state = item.block.defaultState
+            val factory = DiggingParticle.Factory()
             val rand = Random()
 
             for (i in 0..5) {
-                val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
-                    center.xd, center.yd, center.zd,
-                    (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
-                    Block.getStateId(state))!!
-
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle)
+                // TODO
+//                val particle = factory.makeParticle(ParticleTypes.FALLING_DUST, world,
+//                    center.xd, center.yd, center.zd,
+//                    (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
+//                    Block.getStateId(state))!!
+//
+//                Minecraft.getMinecraft().effectRenderer.addEffect(particle)
             }
         } else {
-            val factory = ParticleBreaking.Factory()
-            val rand = Random()
-
-            for (i in 0..5) {
-                val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
-                    center.xd, center.yd, center.zd,
-                    (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
-                    Item.getIdFromItem(item), storedItem.itemDamage)!!
-
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle)
-            }
+//            val factory = ParticleBreaking.Factory()
+//            val rand = Random()
+//
+//            for (i in 0..5) {
+//                val particle = factory.createParticle(EnumParticleTypes.BLOCK_DUST.particleID, world,
+//                    center.xd, center.yd, center.zd,
+//                    (rand.nextDouble() - 0.5) * 0.15, rand.nextDouble() * 0.2, (rand.nextDouble() - 0.5) * 0.15,
+//                    Item.getIdFromItem(item), storedItem.itemDamage)!!
+//
+//                Minecraft.getMinecraft().effectRenderer.addEffect(particle)
+//            }
         }
     }
 }

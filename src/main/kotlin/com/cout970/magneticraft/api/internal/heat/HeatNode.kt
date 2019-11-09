@@ -5,7 +5,7 @@ import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.newNbt
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.math.max
@@ -27,7 +27,7 @@ class HeatNode(
 
     override fun getPos(): BlockPos = ref.pos
 
-    override fun getId(): NodeID = NodeID(name, pos, world.provider.dimension)
+    override fun getId(): NodeID = NodeID(name, pos, world)
 
     override fun getTemperature(): Double {
         val moles = mass * 1000 / molarMass
@@ -55,12 +55,12 @@ class HeatNode(
         internalEnergy = max(0.0, internalEnergy + heat)
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound) {
+    override fun deserializeNBT(nbt: CompoundNBT) {
         internalEnergy = nbt.getDouble("U")
     }
 
     override fun serializeNBT() = newNbt {
-        setDouble("U", internalEnergy)
+        putDouble("U", internalEnergy)
     }
 
     override fun equals(other: Any?): Boolean {

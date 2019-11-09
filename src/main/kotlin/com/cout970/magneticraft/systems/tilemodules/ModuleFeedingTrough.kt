@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.systems.tilemodules
 
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -15,12 +14,12 @@ import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.mojang.authlib.GameProfile
-import net.minecraft.entity.passive.EntityAnimal
-import net.minecraft.init.Items
+import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
-import net.minecraft.world.WorldServer
+import net.minecraft.item.Items
+import net.minecraft.util.Direction
+import net.minecraft.world.server.ServerWorld
 import net.minecraftforge.common.util.FakePlayerFactory
 import java.util.*
 
@@ -50,18 +49,18 @@ class ModuleFeedingTrough(
             }
             if (container.shouldTick(WAIT_TIME) && inventory[0].isNotEmpty) {
                 //getting the bounding box to search animals
-                var start = pos.toVec3d().addVector(-3.5, -1.0, -3.5)
-                var end = pos.toVec3d().addVector(4.5, 2.0, 4.5)
+                var start = pos.toVec3d().add(-3.5, -1.0, -3.5)
+                var end = pos.toVec3d().add(4.5, 2.0, 4.5)
                 val dir = world.getBlockState(pos)[CommonMethods.PROPERTY_CENTER_ORIENTATION] ?: return
-                if (dir.facing.axisDirection == EnumFacing.AxisDirection.POSITIVE) {
+                if (dir.facing.axisDirection == Direction.AxisDirection.POSITIVE) {
                     end += dir.facing.directionVec.toVec3d()
                 } else {
                     start += dir.facing.directionVec.toVec3d()
                 }
                 val box = start createAABBUsing end
                 //getting the animals
-                val totalAnimals = world.getEntitiesInAABBexcluding(null, box, { it is EntityAnimal })
-                val validAnimals = totalAnimals.map { it as EntityAnimal }
+                val totalAnimals = world.getEntitiesInAABBexcluding(null, box, { it is AnimalEntity })
+                val validAnimals = totalAnimals.map { it as AnimalEntity }
                     .filter {
                         !it.isInLove && it.growingAge == 0 && it.isBreedingItem(inventory[0])
                     }.toMutableList()
@@ -75,7 +74,7 @@ class ModuleFeedingTrough(
                         container.sendUpdateToNearPlayers()
 
                         //applying love =)
-                        animal.setInLove(FakePlayerFactory.get(world as WorldServer, FAKE_PROFILE))
+                        animal.setInLove(FakePlayerFactory.get(world as ServerWorld, FAKE_PROFILE))
                     }
                 }
             }

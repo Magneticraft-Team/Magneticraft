@@ -8,8 +8,12 @@ import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.tilerenderers.FilterRegex
 import com.cout970.magneticraft.systems.tilerenderers.ModelSelector
 import com.cout970.magneticraft.systems.tilerenderers.Utilities
-import com.cout970.vector.extensions.rotateZ
+import com.cout970.magneticraft.totalWorldTime
 import net.minecraft.util.math.BlockPos
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 
 @RegisterRenderer(TileSolarTower::class)
@@ -46,14 +50,14 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
             return Pair(0f, 0f)
         }
 
-        val dirToSun = vec3Of(0, 1, 0).rotateZ(sunAngle.toRads()).normalize()
+        val dirToSun = vec3Of(0, 1, 0).rotate(vec3Of(0, 0, sunAngle.toRads())).normalize()
         val normal = (dirToSun + dirToTower).normalize()
 
         val plane = vec3Of(normal.x, 0, normal.z)
         val normPlane = plane.normalize()
 
-        val angleY = Math.atan2(normPlane.x, normPlane.z) + 90.0.toRads()
-        val realAngle = Math.atan2(plane.length, normal.y)
+        val angleY = atan2(normPlane.x, normPlane.z) + 90.0.toRads()
+        val realAngle = atan2(plane.length, normal.y)
 
         val angleX = when {
             realAngle > 90.toRads() -> 0.0
@@ -81,7 +85,7 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
     }
 
     fun diff(src: Float, dst: Float): Float {
-        return Math.toDegrees(Math.atan2(Math.sin(src.toRads() - dst.toRads()), Math.cos(src.toRads() - dst.toRads()))).toFloat()
+        return Math.toDegrees(atan2(sin(src.toRads() - dst.toRads()), cos(src.toRads() - dst.toRads()))).toFloat()
     }
 
     override fun render(te: TileSolarMirror) {
@@ -102,7 +106,7 @@ object TileRendererSolarMirror : TileRendererMultiblock<TileSolarMirror>() {
             val oldTime = mod.deltaTime
             mod.deltaTime = System.currentTimeMillis()
 
-            val delta = (Math.min(mod.deltaTime - oldTime, 1000)) / 1000f
+            val delta = (min(mod.deltaTime - oldTime, 1000)) / 1000f
             val src = te.solarMirrorModule.mirrorPos
             val (y, x) = getAngles(src, dst)
 

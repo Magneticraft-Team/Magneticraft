@@ -5,6 +5,7 @@ import com.cout970.magneticraft.misc.clamp
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.guiTexture
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
@@ -12,7 +13,7 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
-import net.minecraft.client.renderer.GlStateManager.*
+import com.mojang.blaze3d.platform.GlStateManager.*
 import kotlin.math.roundToInt
 
 /**
@@ -37,7 +38,7 @@ open class CompVerticalBar(
         val level = (provider.getLevel() * 48).toInt()
 
         enableBlend()
-        enableAlpha()
+        enableAlphaTest()
         color(1f, 1f, 1f, 0.2f)
         gui.drawTexture(DrawableBox(
             gui.pos + pos, vec2Of(5, 48),
@@ -162,7 +163,7 @@ open class GuiValueBar(
             texturePos = backgroundTextureOffset
         )
 
-        enableAlpha()
+        enableAlphaTest()
         enableBlend()
         color(1f, 1f, 1f, 0.2f)
         gui.drawTexture(

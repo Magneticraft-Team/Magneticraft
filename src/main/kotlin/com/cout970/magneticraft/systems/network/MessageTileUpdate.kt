@@ -2,17 +2,17 @@ package com.cout970.magneticraft.systems.network
 
 
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.network.readBlockPos
+import com.cout970.magneticraft.misc.network.writeBlockPos
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos
-import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.server.FMLServerHandler
+import net.minecraft.world.dimension.DimensionType
+import net.minecraftforge.fml.LogicalSide
+import net.minecraftforge.fml.network.NetworkEvent
+import java.util.function.Supplier
 
 /**
  * Created by cout970 on 16/07/2016.
@@ -24,64 +24,49 @@ import net.minecraftforge.fml.server.FMLServerHandler
  * Server -> Client
  * Client -> Server
  */
-class MessageTileUpdate() : IMessage {
-
+class MessageTileUpdate(
     //Data buffer
-    var ibd: IBD? = null
+    val ibd: IBD,
     //Position of the block
-    var pos: BlockPos? = null
+    val pos: BlockPos,
     //Dimension of the block, only for server side
-    var dimension = 0
+    val dimension: Int
+) {
 
-    constructor(ibd: IBD, pos: BlockPos, dimension: Int) : this() {
-        this.ibd = ibd
-        this.pos = pos
-        this.dimension = dimension
-    }
+    constructor(buf: ByteBuf) : this(
+        IBD().fromBuffer(buf),
+        buf.readBlockPos(),
+        buf.readInt()
+    )
 
-    override fun fromBytes(buf: ByteBuf) {
-        val ibd = IBD()
-        dimension = buf.readInt()
-        pos = BlockPos(buf.readInt(), buf.readInt(), buf.readInt())
-        ibd.fromBuffer(buf)
-        this.ibd = ibd
-    }
-
-    override fun toBytes(buf: ByteBuf) {
+    fun toBytes(buf: ByteBuf) {
+        ibd.toBuffer(buf)
+        buf.writeBlockPos(pos)
         buf.writeInt(dimension)
-        buf.writeInt(pos!!.x)
-        buf.writeInt(pos!!.y)
-        buf.writeInt(pos!!.z)
-        ibd!!.toBuffer(buf)
     }
 
-    companion object : IMessageHandler<MessageTileUpdate, IMessage> {
-
-        override fun onMessage(message: MessageTileUpdate, ctx: MessageContext): IMessage? {
-            if (ctx.side == Side.CLIENT) {
-                handleClient(message)
-            } else {
-                handleServer(message)
-            }
-            return null
+    fun handle(supplier: Supplier<NetworkEvent.Context>) {
+        val ctx = supplier.get()
+        when (ctx.direction.receptionSide!!) {
+            LogicalSide.CLIENT -> handleClient(ctx)
+            LogicalSide.SERVER -> handleServer(ctx)
         }
+    }
 
-        fun handleClient(message: MessageTileUpdate) {
-            Minecraft.getMinecraft().addScheduledTask {
-                val world = Minecraft.getMinecraft().world
-                if (world.provider.dimension == message.dimension) {
-                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.SERVER)
-                }
+    fun handleClient(ctx: NetworkEvent.Context) {
+        ctx.enqueueWork {
+            val world = Minecraft.getInstance().world
+            if (world.dimension.type.id == dimension) {
+                world.getTile<TileBase>(pos)?.receiveSyncData(ibd, LogicalSide.SERVER)
             }
         }
+    }
 
-        fun handleServer(message: MessageTileUpdate) {
-            FMLServerHandler.instance().server.addScheduledTask {
-                val world = DimensionManager.getWorld(message.dimension)
-                if (world != null) {
-                    world.getTile<TileBase>(message.pos!!)?.receiveSyncData(message.ibd!!, Side.CLIENT)
-                }
-            }
+    fun handleServer(ctx: NetworkEvent.Context) {
+        ctx.enqueueWork {
+            val type = DimensionType.getById(dimension) ?: return@enqueueWork
+            val world = ctx.sender?.server?.getWorld(type) ?: return@enqueueWork
+            world.getTile<TileBase>(pos)?.receiveSyncData(ibd, LogicalSide.CLIENT)
         }
     }
 }

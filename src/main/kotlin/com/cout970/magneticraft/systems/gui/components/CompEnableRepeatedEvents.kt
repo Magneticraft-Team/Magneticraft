@@ -4,7 +4,7 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
-import org.lwjgl.input.Keyboard
+import com.cout970.magneticraft.systems.gui.render.keyboardEnableRepeatedEvents
 
 class CompEnableRepeatedEvents : IComponent {
 
@@ -13,12 +13,12 @@ class CompEnableRepeatedEvents : IComponent {
     override lateinit var gui: IGui
 
     init {
-        Keyboard.enableRepeatEvents(true)
+        keyboardEnableRepeatedEvents(true)
     }
 
     override fun drawFirstLayer(mouse: Vec2d, partialTicks: Float) = Unit
 
     override fun onGuiClosed() {
-        Keyboard.enableRepeatEvents(false)
+        keyboardEnableRepeatedEvents(false)
     }
 }

@@ -10,13 +10,18 @@ object ApiUtils {
     fun equalsIgnoreSize(a: ItemStack, b: ItemStack): Boolean {
         return a == b || !(a.isEmpty || b.isEmpty)
             && a.item == b.item
-            && (!a.item.hasSubtypes || a.metadata == b.metadata)
-            && a.tagCompound == b.tagCompound
+            && (!a.item.isDamageable || a.damage == b.damage)
+            && a.tag == b.tag
     }
 
     fun equalsIgnoreSizeAndNBT(a: ItemStack, b: ItemStack): Boolean {
         return a == b || !(a.isEmpty || b.isEmpty)
             && a.item == b.item
-            && (!a.item.hasSubtypes || a.metadata == b.metadata)
+            && (!a.item.isDamageable || a.damage == b.damage)
+    }
+
+    fun areEquivalent(a: ItemStack, b: ItemStack): Boolean {
+        // TODO add OreDictionary functionality back
+        return false
     }
 }

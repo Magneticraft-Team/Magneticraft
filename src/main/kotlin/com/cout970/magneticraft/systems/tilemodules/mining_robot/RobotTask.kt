@@ -3,6 +3,7 @@ package com.cout970.magneticraft.systems.tilemodules.mining_robot
 import com.cout970.magneticraft.features.computers.Blocks
 import com.cout970.magneticraft.misc.inventory.canAcceptAll
 import com.cout970.magneticraft.misc.inventory.insertAll
+import com.cout970.magneticraft.misc.tileentity.setBlockToAir
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.systems.tilemodules.ModuleRobotControl
 import net.minecraft.item.ItemStack
@@ -108,7 +109,8 @@ class MineBlockTask : EndTickRobotTask(RobotAction.MINE) {
         if (!world.isAirBlock(frontPos) && frontBlock.getBlockHardness(world, frontPos) >= 0) {
 
             val items = NonNullList.create<ItemStack>().also {
-                frontBlock.block.getDrops(it, world, frontPos, frontBlock, 0)
+                // TODO
+//                frontBlock.block.getDrops(it, world, frontPos, frontBlock, 0)
             }
 
             if (inventory.canAcceptAll(items)) {

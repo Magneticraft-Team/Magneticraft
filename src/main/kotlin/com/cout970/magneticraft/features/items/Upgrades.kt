@@ -2,6 +2,7 @@ package com.cout970.magneticraft.features.items
 
 import com.cout970.magneticraft.api.tool.IGear
 import com.cout970.magneticraft.misc.CreativeTabMg
+import com.cout970.magneticraft.misc.RegisterItems
 import com.cout970.magneticraft.misc.item.IItemCapability
 import com.cout970.magneticraft.misc.item.ItemCapabilityProvider
 import com.cout970.magneticraft.misc.resource
@@ -16,14 +17,15 @@ import java.util.*
 /**
  * Created by cout970 on 2017/08/19.
  */
-
+@RegisterItems
 object Upgrades : IItemMaker {
 
     lateinit var brokenGear: ItemBase private set
     lateinit var ironGear: ItemBase private set
     lateinit var steelGear: ItemBase private set
     lateinit var tungstenGear: ItemBase private set
-    lateinit var inserterUpgrade: ItemBase private set
+    lateinit var inserterUpgradeSpeed: ItemBase private set
+    lateinit var inserterUpgradeStack: ItemBase private set
 
     override fun initItems(): List<Item> {
         val builder = ItemBuilder().apply {
@@ -58,14 +60,10 @@ object Upgrades : IItemMaker {
             customModels = listOf("normal" to resource("models/item/mcx/tungsten_gear.mcx"))
         }.build()
 
-        inserterUpgrade = builder.withName("inserter_upgrade").copy {
-            variants = mapOf(
-                0 to "speed",
-                1 to "stack"
-            )
-        }.build()
+        inserterUpgradeSpeed = builder.withName("inserter_upgrade_speed").build()
+        inserterUpgradeStack = builder.withName("inserter_upgrade_stack").build()
 
-        return listOf(ironGear, brokenGear, steelGear, tungstenGear, inserterUpgrade)
+        return listOf(ironGear, brokenGear, steelGear, tungstenGear, inserterUpgradeSpeed, inserterUpgradeStack)
     }
 
     class Gear(override val stack: ItemStack, val speed: Float) : IGear, IItemCapability {
@@ -74,7 +72,7 @@ object Upgrades : IItemMaker {
 
         override fun getMaxDurability(): Int = stack.maxDamage
 
-        override fun getDurability(): Int = stack.itemDamage
+        override fun getDurability(): Int = stack.damage
 
         override fun applyDamage(stack: ItemStack): ItemStack {
             stack.attemptDamageItem(1, Random(), null)

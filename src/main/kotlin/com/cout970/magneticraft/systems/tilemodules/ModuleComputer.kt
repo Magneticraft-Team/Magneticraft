@@ -1,14 +1,16 @@
 package com.cout970.magneticraft.systems.tilemodules
 
 import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.computer.IDevice
+import com.cout970.magneticraft.getCompoundTag
+import com.cout970.magneticraft.misc.set
 import com.cout970.magneticraft.misc.toMap
 import com.cout970.magneticraft.misc.toNBT
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.systems.computer.*
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
 
 
 class ModuleComputer(
@@ -45,7 +47,7 @@ class ModuleComputer(
 
     override fun serializeNBT(): NBTTagCompound {
         return motherboard.serialize().toNBT().also {
-            it.setTag("motherboardDevice", motherboardDevice.serialize().toNBT())
+            it["motherboardDevice"] = motherboardDevice.serialize().toNBT()
         }
     }
 

@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.features.automatic_machines
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TextureMap
 import com.cout970.magneticraft.api.conveyorbelt.IConveyorBelt
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBoxStorage
 import com.cout970.magneticraft.api.pneumatic.PneumaticBox
@@ -8,20 +10,13 @@ import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.tilerenderers.*
-import com.cout970.modelloader.api.*
-import com.cout970.modelloader.api.animation.AnimatedModel
-import com.cout970.modelloader.api.formats.gltf.GltfAnimationBuilder
-import com.cout970.modelloader.api.util.TRSTransformation
+import com.cout970.modelloader.api.IRenderCache
+import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.item.ItemSkull
+import net.minecraft.client.renderer.model.ItemCameraTransforms
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ResourceLocation
+import net.minecraft.item.SkullItem
 import net.minecraft.util.math.Vec3d
-import net.minecraftforge.client.ForgeHooksClient
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -162,7 +157,7 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         translate(-rotPos.xd * PIXEL, -rotPos.yd * PIXEL, -rotPos.zd * PIXEL)
 
         translate(PIXEL * 4, 0.0, 0.0)
-        GlStateManager.scale(scale.xd, scale.yd, scale.zd)
+        scale(scale.xd, scale.yd, scale.zd)
     }
 
     private fun rotate(x: Number, y: Number, z: Number) {
@@ -172,7 +167,7 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
     }
 
     private fun renderItem(stack: ItemStack) {
-        Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
+        Minecraft.getInstance().itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
     }
 }
 
@@ -209,19 +204,21 @@ object TileRendererInserter : BaseTileRenderer<TileInserter>() {
 
         // animation0 is used to get the articulated node because Transition.ROTATING discards the
         // info about translation/rotation of the inner nodes
-        val cache0 = getModel("animation0") as? AnimationRenderCache ?: return
-        val cache1 = getModel(transition.animation) as? AnimationRenderCache ?: return
-        val node = cache0.model.rootNodes.firstOrNull() ?: return
-        val anim = cache1.model
 
-        val localTime = ((time / 20.0) % cache1.model.length.toDouble()).toFloat()
-        val trs = getGlobalTransform(item, anim, node, localTime)
+        // TODO
+//        val cache0 = getModel("animation0") as? AnimationRenderCache ?: return
+//        val cache1 = getModel(transition.animation) as? AnimationRenderCache ?: return
+//        val node = cache0.model.rootNodes.firstOrNull() ?: return
+//        val anim = cache1.model
+
+//        val localTime = ((time / 20.0) % cache1.model.length.toDouble()).toFloat()
+//        val trs = getGlobalTransform(item, anim, node, localTime)
 
         pushMatrix()
-        ForgeHooksClient.multiplyCurrentGlMatrix(trs.matrix.apply { transpose() })
+//        ForgeHooksClient.multiplyCurrentGlMatrix(trs.getMatrix4f().apply { transpose() })
         translate(0.0, (-7.5).px, 0.0)
 
-        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(item) || item.item is ItemSkull) {
+        if (!mc.itemRenderer.shouldRenderItemIn3D(item) || item.item is SkullItem) {
             // 2D item
             scale(0.75)
         } else {
@@ -231,15 +228,15 @@ object TileRendererInserter : BaseTileRenderer<TileInserter>() {
             scale(0.9)
         }
 
-        Minecraft.getMinecraft().renderItem.renderItem(item, ItemCameraTransforms.TransformType.GROUND)
+        mc.itemRenderer.renderItem(item, ItemCameraTransforms.TransformType.GROUND)
         popMatrix()
     }
 
-    fun getGlobalTransform(item: ItemStack, anim: AnimatedModel, node: AnimatedModel.Node, localTime: Float): TRSTransformation {
-        val trs = anim.getTransform(node, localTime)
-        if (node.children.isEmpty()) return trs
-        return trs * getGlobalTransform(item, anim, node.children[0], localTime)
-    }
+//    fun getGlobalTransform(item: ItemStack, anim: AnimatedModel, node: AnimatedModel.Node, localTime: Float): TRSTransformation {
+//        val trs = anim.getTransform(node, localTime)
+//        if (node.children.isEmpty()) return trs
+//        return trs * getGlobalTransform(item, anim, node.children[0], localTime)
+//    }
 }
 
 @RegisterRenderer(TileConveyorBelt::class)
@@ -286,17 +283,17 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
         beltUp?.close()
         beltDown?.close()
 
-        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
-        val cornerBeltModel = ModelLoaderApi.getModelEntry(cornerAnim) ?: return
-        val beltUpModel = ModelLoaderApi.getModelEntry(upAnim) ?: return
-        val beltDownModel = ModelLoaderApi.getModelEntry(downAnim) ?: return
+//        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
+//        val cornerBeltModel = ModelLoaderApi.getModelEntry(cornerAnim) ?: return
+//        val beltUpModel = ModelLoaderApi.getModelEntry(upAnim) ?: return
+//        val beltDownModel = ModelLoaderApi.getModelEntry(downAnim) ?: return
 
         val texture = resource("blocks/machines/conveyor_belt_anim")
 
-        belt = updateTexture(beltModel, texture)
-        cornerBelt = updateTexture(cornerBeltModel, texture)
-        beltUp = updateTexture(beltUpModel, texture)
-        beltDown = updateTexture(beltDownModel, texture)
+//        belt = updateTexture(beltModel, texture)
+//        cornerBelt = updateTexture(cornerBeltModel, texture)
+//        beltUp = updateTexture(beltUpModel, texture)
+//        beltDown = updateTexture(beltDownModel, texture)
     }
 
     override fun render(te: TileConveyorBelt) {
@@ -448,24 +445,25 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
         }
     }
 
-    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): IRenderCache {
-        val raw = model.raw
-        val textureMap = Minecraft.getMinecraft().textureMapBlocks
-        val animTexture = textureMap.getAtlasSprite(texture.toString())
-
-        return when (raw) {
-            is Model.Mcx -> {
-                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
-                TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, ModelCache { ModelUtilities.renderModel(finalModel) })
-            }
-            is Model.Gltf -> {
-                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
-                val anim = GltfAnimationBuilder().buildPlain(finalModel)
-                AnimationRenderCache(anim) { 0.0 }
-            }
-            else -> error("Invalid type: $raw, ${raw::class.java}")
-        }
-    }
+    // TODO
+//    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): IRenderCache {
+//        val raw = model.raw
+//        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+//        val animTexture = textureMap.getAtlasSprite(texture.toString())
+//
+//        return when (raw) {
+//            is Model.Mcx -> {
+//                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+//                TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, ModelCache { ModelUtilities.renderModel(finalModel) })
+//            }
+//            is Model.Gltf -> {
+//                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+//                val anim = GltfAnimationBuilder().buildPlain(finalModel)
+//                AnimationRenderCache(anim) { 0.0 }
+//            }
+//            else -> error("Invalid type: $raw, ${raw::class.java}")
+//        }
+//    }
 }
 
 

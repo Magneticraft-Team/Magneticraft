@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.misc.energy
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.tileentity.getCap
 import com.cout970.magneticraft.registry.FORGE_ENERGY
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.energy.EnergyStorage

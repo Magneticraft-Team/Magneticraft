@@ -2,23 +2,29 @@
 
 package com.cout970.magneticraft.misc.block
 
+import com.cout970.magneticraft.AABB
 import com.cout970.magneticraft.systems.blocks.CommonMethods
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.IBlockState
-import net.minecraft.util.EnumFacing
+import net.minecraft.block.BlockState
+import net.minecraft.state.IProperty
+import net.minecraft.util.Direction
 
 /**
  * Created by cout970 on 2017/02/20.
  */
 
-operator fun <T : Comparable<T>> IBlockState.get(property: IProperty<T>): T? = if (property.isIn(this)) getValue(property) else null
+val FULL_BLOCK_AABB = AABB(
+    0.0, 0.0, 0.0,
+    1.0, 1.0, 1.0
+)
 
-fun <T : Comparable<T>> IProperty<T>.isIn(state: IBlockState): Boolean = this in state.properties
+operator fun <T : Comparable<T>> BlockState.get(property: IProperty<T>): T? = if (property.isIn(this)) get(property) else null
 
-fun IBlockState.getFacing() = this[CommonMethods.PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
+fun <T : Comparable<T>> IProperty<T>.isIn(state: BlockState): Boolean = this in state.properties
 
-fun IBlockState.getOrientation() = this[CommonMethods.PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
+fun BlockState.getFacing() = this[CommonMethods.PROPERTY_FACING]?.facing ?: Direction.DOWN
 
-fun IBlockState.getOrientationActive() = this[CommonMethods.PROPERTY_ORIENTATION_ACTIVE]?.facing ?: EnumFacing.NORTH
+fun BlockState.getOrientation() = this[CommonMethods.PROPERTY_ORIENTATION]?.facing ?: Direction.NORTH
 
-fun IBlockState.getOrientationCentered() = this[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: EnumFacing.NORTH
+fun BlockState.getOrientationActive() = this[CommonMethods.PROPERTY_ORIENTATION_ACTIVE]?.facing ?: Direction.NORTH
+
+fun BlockState.getOrientationCentered() = this[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: Direction.NORTH

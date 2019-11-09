@@ -1,38 +1,34 @@
 package com.cout970.magneticraft
 
+import com.cout970.magneticraft.misc.Asm
+import com.cout970.magneticraft.misc.fluid.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.logError
 import com.cout970.magneticraft.misc.toTextComponent
-import com.cout970.magneticraft.proxy.ClientProxy
-import com.cout970.magneticraft.registry.blocks
-import com.cout970.magneticraft.registry.items
-import com.cout970.magneticraft.systems.items.ItemBase
+import com.cout970.magneticraft.misc.vector.toBlockPos
+import com.cout970.magneticraft.systems.gui.render.isKeyPressed
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.mojang.brigadier.Command
+import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.builder.LiteralArgumentBuilder.literal
 import net.minecraft.client.Minecraft
-import net.minecraft.command.CommandBase
-import net.minecraft.command.ICommandSender
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.InventoryCrafting
-import net.minecraft.item.ItemBlock
+import net.minecraft.command.CommandSource
+import net.minecraft.command.Commands
+import net.minecraft.inventory.CraftingInventory
+import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
-import net.minecraft.item.crafting.CraftingManager
-import net.minecraft.item.crafting.IRecipe
-import net.minecraft.launchwrapper.Launch
-import net.minecraft.server.MinecraftServer
-import net.minecraft.util.EnumHand
+import net.minecraft.item.crafting.IRecipeType
+import net.minecraft.util.Hand
 import net.minecraft.util.Timer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraft.world.gen.ChunkProviderServer
+import net.minecraft.world.server.ServerChunkProvider
+import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.FluidUtil
-import net.minecraftforge.fml.client.FMLClientHandler
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import net.minecraftforge.oredict.OreDictionary
-import net.minecraftforge.oredict.OreIngredient
-import org.lwjgl.input.Keyboard
-import org.lwjgl.input.Mouse
+import net.minecraftforge.fml.client.ClientHooks
+import org.lwjgl.glfw.GLFW
 import java.io.File
 
 @Suppress("unused")
@@ -43,14 +39,13 @@ import java.io.File
  */
 object Debug {
 
-    val DEBUG = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
+    var DEBUG = false
     var srcDir: File? = null
 
-    fun preInit(event: FMLPreInitializationEvent) {
-        srcDir = searchSourceDir(event.modConfigurationDirectory)
-        if (srcDir == null) {
-            logError("Error trying to find the source directory")
-        }
+    fun init() {
+        val configDir = TODO()
+        srcDir = searchSourceDir(configDir)
+        DEBUG = srcDir != null
     }
 
     fun searchSourceDir(configDir: File): File? {
@@ -101,31 +96,33 @@ object Debug {
 //        }
 //    }
 
-    fun printBlockWithoutRecipe() {
+    fun printBlocksWithoutRecipe() {
 
-        val allBlocks = blocks.map { it.first }.toMutableSet()
-        val allItems = items.flatMap { item -> (item as ItemBase).variants.map { item to it.key } }.toMutableSet()
+        val allBlocks = RegistryEvents.blocks.toMutableSet()
+        val allItems = RegistryEvents.items.toMutableSet()
 
-        CraftingManager.REGISTRY.filterIsInstance<IRecipe>().forEach { it ->
-            val stack = it.recipeOutput
+        val server = Minecraft.getInstance().integratedServer ?: return
+        val craftingRecipes = server.recipeManager.recipes.filter { it.type == IRecipeType.CRAFTING }
+        craftingRecipes.forEach { value ->
+            val stack = value.recipeOutput
             if (stack.isEmpty) return@forEach
 
             val item = stack.item
-            val pair = item to stack.itemDamage
 
             // check that the recipe doesn't use ore dictionary entries that are empty
-
-            val valid = it.ingredients.all { ing ->
-                (ing as? OreIngredient)?.matchingStacks?.isNotEmpty() ?: true
-            }
+            // TODO
+//            val valid = it.ingredients.all { ing ->
+//                (ing as? OreIngredient)?.matchingStacks?.isNotEmpty() ?: true
+//            }
+            val valid = true
 
             if (valid) {
-                allItems.remove(pair)
-            } else if (pair in allItems) {
+                allItems.remove(item)
+            } else if (item in allItems) {
                 println("Invalid recipe for: ${item.registryName}")
             }
 
-            if (item is ItemBlock) {
+            if (item is BlockItem) {
                 if (valid) {
                     allBlocks.remove(item.block)
                 } else if (item.block in allBlocks) {
@@ -153,7 +150,7 @@ object Debug {
     // net.minecraft.inventory.ContainerWorkbench#onCraftMatrixChanged
     // and set the breakpoint condition to:
     // "Debug.INSTANCE.createRecipe(craftMatrix, player)"
-    fun createRecipe(inv: InventoryCrafting, player: EntityPlayer): Boolean {
+    fun createRecipe(inv: CraftingInventory, player: EntityPlayer): Boolean {
 
         try {
             val chars = listOf(
@@ -168,7 +165,7 @@ object Debug {
             for (y in 0 until inv.height) {
                 for (x in 0 until inv.width) {
 
-                    val stack = inv.getStackInRowAndColumn(x, y)
+                    val stack = inv.getStackInSlot(x + y * 3)
 
                     if (stack.isNotEmpty) {
                         val itemJson = deserializeToJson(stack)
@@ -213,7 +210,7 @@ object Debug {
                 }
             }
 
-            val handItem = player.getHeldItem(EnumHand.MAIN_HAND)
+            val handItem = player.getHeldItem(Hand.MAIN_HAND)
 
             val obj = JsonObject()
             obj.addProperty("type", "forge:ore_shaped")
@@ -224,9 +221,9 @@ object Debug {
             val gson = GsonBuilder().setPrettyPrinting().create()
             val jsonStr = gson.toJson(obj)
 
-            if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+            if (isKeyPressed(GLFW.GLFW_KEY_C)) {
                 val folder = File(srcDir, "src/main/resources/assets/magneticraft/recipes")
-                val fileName = handItem.unlocalizedName.replace(".name", "").replaceBeforeLast(".", "").substring(1)
+                val fileName = handItem.translationKey.replace(".name", "").replaceBeforeLast(".", "").substring(1)
                 val file = File(folder, "$fileName.json")
 
                 file.writeText(jsonStr)
@@ -244,9 +241,9 @@ object Debug {
         addProperty("item", stack.item.registryName.toString())
         addProperty("count", stack.count)
 
-        if (stack.hasSubtypes) {
-            addProperty("data", stack.itemDamage)
-        }
+//        if (stack.hasSubtypes) {
+//            addProperty("data", stack.itemDamage)
+//        }
         if (stack.tagCompound != null) {
             addProperty("nbt", stack.tagCompound.toString())
         }
@@ -254,118 +251,104 @@ object Debug {
 
     fun deserializeToJson(stack: ItemStack) = JsonObject().run {
         if (stack.isEmpty) return this
-        val ids = OreDictionary.getOreIDs(stack)
-
-        if (ids.isNotEmpty()) {
-            val name = OreDictionary.getOreName(ids.first())
-            addProperty("type", "forge:ore_dict")
-            addProperty("ore", name)
-            addProperty("count", stack.count)
-            this
-        } else {
-            deserializeToJson2(stack)
-        }
+//        val ids = OreDictionary.getOreIDs(stack)
+//
+//        if (ids.isNotEmpty()) {
+//            val name = OreDictionary.getOreName(ids.first())
+//            addProperty("type", "forge:ore_dict")
+//            addProperty("ore", name)
+//            addProperty("count", stack.count)
+//            this
+//        } else {
+        deserializeToJson2(stack)
+//        }
     }
 
     //useful function to change the amount of tick per second used in minecraft
     fun setTicksPerSecond(tps: Int) {
-        val timerField = Minecraft::class.java.getDeclaredField("timer")
-        timerField.isAccessible = true
-        val timer = timerField.get(Minecraft.getMinecraft()) as Timer
-        val tickField = Timer::class.java.getDeclaredField("tickLength")
-        tickField.isAccessible = true
-        tickField.set(timer, 1000.0f / tps.toFloat())
+        val timer = Asm.getPrivateField(Minecraft.getInstance(), "timer") as Timer
+        Asm.setPrivateField(timer, "tickLength", 1000.0f / tps.toFloat())
     }
 
-    object MgCommand : CommandBase() {
-        override fun getName(): String = "mg"
+    object MgCommand {
 
-        override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
-            if (args.isNotEmpty()) {
-                when (args[0]) {
-                    "gen" -> regenTerrain(sender, sender.entityWorld, sender.position)
-                    "ticks" -> setTicksPerSecond(args.getOrNull(1)?.toIntOrNull() ?: 20)
-                    "info" -> {
-                        val stack = (sender as EntityPlayer).inventory.getCurrentItem()
-                        val fluid = FluidUtil.getFluidContained(stack)
+        fun register(dispatcher: CommandDispatcher<CommandSource>) {
+            dispatcher.register(
+                literal<CommandSource>("mg")
+                    .executes {
+                        it.source.sendFeedback("Magneticraft debug command, is you see this please report to the mod author".toTextComponent(), true)
+                        Command.SINGLE_SUCCESS
+                    }
+                    .then(literal("gen")).executes {
+                        regenTerrain(it.source, it.source.world, it.source.pos.toBlockPos())
+                        Command.SINGLE_SUCCESS
+                    }
+                    .then(
+                        literal<CommandSource>("ticks")
+                            .then(Commands.argument("ticks", IntegerArgumentType.integer(20)))
+                            .executes {
+                                setTicksPerSecond(IntegerArgumentType.getInteger(it, "ticks"))
+                                Command.SINGLE_SUCCESS
+                            }
+                    )
+                    .then(literal("info")).executes {
+                        setTicksPerSecond(IntegerArgumentType.getInteger(it, "ticks"))
+                        Command.SINGLE_SUCCESS
+                    }
+                    .then(literal("reload")).executes {
+                        reload()
+                        Command.SINGLE_SUCCESS
+                    }
+            )
+        }
 
-                        sender.sendMessage("Item: $stack <${stack.item.registryName}:${stack.itemDamage}>".toTextComponent())
-                        sender.sendMessage("NBT: ${stack.tagCompound}".toTextComponent())
-                        sender.sendMessage("OreDict: ${OreDictionary.getOreIDs(stack).map { OreDictionary.getOreName(it) }}".toTextComponent())
-                        if (fluid != null) {
-                            sender.sendMessage("FluidStack: ${fluid.fluid.name}, ${fluid.amount}, ${fluid.tag}".toTextComponent())
-                        }
-                    }
-                    "reload" -> {
-                        Minecraft.getMinecraft().addScheduledTask {
-                            ug()
-                            try {
-                                @Suppress("DEPRECATION")
-                                Minecraft.getMinecraft().refreshResources()
-                                val list = Minecraft.getMinecraft().saveLoader.saveList
-                                list.sort()
-                                FMLClientHandler.instance().tryLoadExistingWorld(null, list[0])
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }
-                    "r" -> {
-                        val client = Magneticraft.proxy as? ClientProxy ?: return
-                        Minecraft.getMinecraft().addScheduledTask {
-                            ug()
-                            client.tileRenderers.forEach {
-                                try {
-                                    it.onModelRegistryReload()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
-                            }
-                        }
-                    }
-                    else -> {
-                        sender.sendMessage("Unknown arg: '${args[0]}'".toTextComponent())
-                    }
+        private fun reload() {
+            Minecraft.getInstance().deferTask {
+                ug()
+                try {
+                    @Suppress("DEPRECATION")
+                    Minecraft.getInstance().reloadResources()
+                    val list = Minecraft.getInstance().saveLoader.saveList
+                    list.sort()
+                    ClientHooks.tryLoadExistingWorld(null, list[0])
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } else {
-                sender.sendMessage("No args".toTextComponent())
             }
         }
 
-        private fun regenTerrain(sender: ICommandSender, world: World, pos: BlockPos) {
-            val prov = world.chunkProvider as ChunkProviderServer
+        private fun info(sender: CommandSource) {
+            val stack = sender.asPlayer().inventory.getCurrentItem()
+            val fluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY)
+
+            sender.sendFeedback("Item: $stack <${stack.item.registryName}:${stack.damage}>".toTextComponent(), true)
+            sender.sendFeedback("NBT: ${stack.tag}".toTextComponent(), true)
+            if (fluid.isNotEmpty) {
+                sender.sendFeedback("FluidStack: ${fluid.fluid.registryName}, ${fluid.amount}, ${fluid.tag}".toTextComponent(), true)
+            }
+        }
+
+        private fun regenTerrain(sender: CommandSource, world: World, pos: BlockPos) {
+            val prov = world.chunkProvider as ServerChunkProvider
 
             for (i in -5..5) {
                 for (j in -5..5) {
                     val chunkX = i + (pos.x shr 4)
                     val chunkZ = j + (pos.z shr 4)
 
-                    prov.getLoadedChunk(chunkX, chunkZ)?.let { chunk ->
-                        sender.sendMessage("Regenerating chunk: ($chunkX, $chunkZ)".toTextComponent())
-                        val newTerrain = prov.chunkGenerator.generateChunk(chunkX, chunkZ)
-
-                        repeat(16) {
-                            chunk.blockStorageArray[it] = newTerrain.blockStorageArray[it]
-                        }
-
-                        chunk.setStorageArrays(newTerrain.blockStorageArray)
-
-                        chunk.isTerrainPopulated = false
-                        chunk.populate(prov, prov.chunkGenerator)
-                        chunk.markDirty()
-
+                    prov.getChunk(chunkX, chunkZ, false)?.let { chunk ->
+                        sender.sendFeedback("Regenerating chunk: ($chunkX, $chunkZ)".toTextComponent(), true)
+                        // TODO deal with new chunk generation
                     }
                 }
             }
         }
-
-        override fun getUsage(sender: ICommandSender?): String = "Magneticraft debug command, is you see this please report to the mod author"
     }
 }
 
-val ug get() = Mouse.setGrabbed(false)
+val ug get() = ug()
 
 fun ug(): Boolean {
-    Mouse.setGrabbed(false)
+    Minecraft.getInstance().mouseHelper.ungrabMouse()
     return true
 }

@@ -1,12 +1,13 @@
 package com.cout970.magneticraft.features.multiblocks.structures
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotateBox
 import com.cout970.magneticraft.misc.vector.times
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.multiblocks.*
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import net.minecraft.util.EnumFacing
+
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d

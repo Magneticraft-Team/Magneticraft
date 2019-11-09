@@ -1,8 +1,9 @@
 package com.cout970.magneticraft.misc.crafting
 
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.newNbt
-import net.minecraft.nbt.NBTTagCompound
+import com.cout970.magneticraft.totalWorldTime
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
 
@@ -18,15 +19,15 @@ class TimedCraftingProcess(
     var lastTick = 0L
 
     fun tick(world: World, speed: Float) {
-        if (process.canCraft()) {
+        if (process.canCraft(world)) {
             lastTick = world.totalWorldTime
             if (timer <= limit()) {
                 timer += speed
                 onWorkingTick(speed)
             }
-            while (timer >= limit() && process.canCraft()) {
+            while (timer >= limit() && process.canCraft(world)) {
                 timer -= limit()
-                process.craft()
+                process.craft(world)
             }
         }
     }

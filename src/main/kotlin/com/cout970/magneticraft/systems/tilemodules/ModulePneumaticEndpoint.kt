@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.NBTTagList
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticBuffer
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticUtils
 import com.cout970.magneticraft.api.pneumatic.ITubeConnectable
@@ -14,9 +17,6 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.TUBE_CONNECTABLE
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagList
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 
 class BufferInfo(
@@ -80,7 +80,7 @@ class ModulePneumaticEndpoint(
     override fun serializeNBT(): NBTTagCompound {
         return newNbt {
             list("buffers") {
-                buffers.forEach { appendTag(it.serializeNBT()) }
+                buffers.forEach { add(it.serializeNBT()) }
             }
         }
     }

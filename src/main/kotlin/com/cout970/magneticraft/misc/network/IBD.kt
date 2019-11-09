@@ -159,7 +159,7 @@ class IBD {
         }
     }
 
-    fun fromBuffer(buf: ByteBuf) {
+    fun fromBuffer(buf: ByteBuf): IBD {
         clear()
         val size = buf.readInt()
         for (i in 0 until size) {
@@ -176,6 +176,7 @@ class IBD {
                 8 -> setIntArray(id, buf.readIntArray())
             }
         }
+        return this
     }
 
     fun toBuffer(buf: ByteBuf) {

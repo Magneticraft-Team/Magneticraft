@@ -3,7 +3,9 @@ package com.cout970.magneticraft.features.electric_machines
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.systems.tilerenderers.*
-import net.minecraft.util.EnumFacing
+import com.cout970.magneticraft.totalWorldTime
+import net.minecraft.util.Direction
+
 import kotlin.math.min
 
 /**
@@ -38,7 +40,7 @@ object TileRendererWindTurbine : BaseTileRenderer<TileWindTurbine>() {
         var angle = te.windTurbineModule.rotation
         angle += te.windTurbineModule.rotationSpeed * ticks
 
-        if (te.facing.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
+        if (te.facing.axisDirection == Direction.AxisDirection.NEGATIVE) {
             angle = -angle
         }
 
@@ -67,7 +69,7 @@ object TileRendererElectricEngine : BaseTileRenderer<TileElectricEngine>() {
         val speedMultiplier = 3.0
 
         // Detect if the engine is working
-        val isWorking = (te.world.totalWorldTime - te.lastWorkingTick) < 20
+        val isWorking = (te.theWorld.totalWorldTime - te.lastWorkingTick) < 20
 
         if (isWorking) {
             // Speed up
@@ -80,7 +82,9 @@ object TileRendererElectricEngine : BaseTileRenderer<TileElectricEngine>() {
         } else {
             // Slowly go back to the starting position
             te.animationSpeed = 0.0
-            val length = (getModel("animation") as AnimationRenderCache).model.length * 20
+            // TODO
+//            val length = (getModel("animation") as AnimationRenderCache).model.length * 20
+            val length = 20
             val remaining = length - (te.animationStep % length)
 
             if (remaining > 0 && remaining < length) {

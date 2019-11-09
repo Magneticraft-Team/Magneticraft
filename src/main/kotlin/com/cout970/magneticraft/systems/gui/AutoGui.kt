@@ -7,22 +7,22 @@ import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.inventory.Slot
+import net.minecraft.client.gui.IHasContainer
+import net.minecraft.inventory.container.Slot
 
-class AutoGui(override val container: AutoContainer) : GuiBase(container) {
+class AutoGui(val autoContainer: AutoContainer) : GuiBase<AutoContainer>(autoContainer), IHasContainer<AutoContainer> {
 
     lateinit var background: List<DrawableBox>
     lateinit var slots: List<DrawableBox>
     var oldGuiScale = 0
 
-    override fun initGui() {
-        val config = container.builder.config
+    override fun init() {
+        val config = autoContainer.builder.config
         this.xSize = config.background.xi
         this.ySize = config.background.yi
-        super.initGui()
+        super.init()
 
-        this.slots = createSlots(container.inventorySlots)
+        this.slots = createSlots(this.autoContainer.inventorySlots)
         this.background = if (config.top) {
             createRectWithBorders(pos, size)
         } else {
@@ -30,27 +30,29 @@ class AutoGui(override val container: AutoContainer) : GuiBase(container) {
         }
     }
 
-    override fun setWorldAndResolution(mc: Minecraft, width: Int, height: Int) {
-        val size = container.builder.config.background
+    override fun resize(mc: Minecraft, width: Int, height: Int) {
+        val size = autoContainer.builder.config.background
         oldGuiScale = mc.gameSettings.guiScale
 
         if (width < size.xi || height < size.yi) {
             mc.gameSettings.guiScale = 3
-            val sr = ScaledResolution(mc)
-            super.setWorldAndResolution(mc, sr.scaledWidth, sr.scaledHeight)
+            val i = mc.mainWindow.calcGuiScale(mc.gameSettings.guiScale, mc.forceUnicodeFont)
+            mc.mainWindow.setGuiScale(i.toDouble())
+            super.resize(mc, mc.mainWindow.scaledWidth, mc.mainWindow.scaledHeight)
             return
         }
 
-        super.setWorldAndResolution(mc, width, height)
+        super.resize(mc, width, height)
     }
 
-    override fun onGuiClosed() {
-        super.onGuiClosed()
-        mc.gameSettings.guiScale = oldGuiScale
+
+    override fun onClose() {
+        super.onClose()
+        getMinecraft().gameSettings.guiScale = oldGuiScale
     }
 
     override fun initComponents() {
-        container.builder.build(this, container)
+        autoContainer.builder.build(this, autoContainer)
     }
 
     override fun drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) {

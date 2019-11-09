@@ -1,18 +1,18 @@
 package com.cout970.magneticraft.features.electric_conductors
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.IVector3
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.energy.WireConnectorWrapper
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.RegisterTileEntity
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.block.getFacing
 import com.cout970.magneticraft.misc.interpolate
 import com.cout970.magneticraft.misc.render.RenderCache
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.tileentity.canConnect
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.*
@@ -26,28 +26,26 @@ import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleElectricity
 import com.cout970.magneticraft.systems.tilemodules.ModuleTeslaTower
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
+import net.minecraft.tileentity.ITickableTileEntity
+import net.minecraft.util.Direction
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import net.minecraftforge.common.capabilities.Capability
 
 /**
  * Created by cout970 on 2017/08/10.
  */
 
 @RegisterTileEntity("connector")
-class TileConnector : TileBase(), ITickable {
+class TileConnector(type: TileType) : TileBase(type), ITickableTileEntity {
 
     val node = ElectricNode(ref, capacity = 0.25)
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "connector")
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(wrapper),
-            onWireChange = { if (world.isClient) wireRender.reset() },
+            onWireChange = { if (theWorld.isClient) wireRender.reset() },
             maxWireDistance = 10.0,
             canConnectAtSide = this::canConnectAtSide,
             connectableDirections = this::getConnectableDirections
@@ -71,26 +69,25 @@ class TileConnector : TileBase(), ITickable {
         initModules(electricModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
-        if (world.isClient) return
+        if (theWorld.isClient) return
 
-        exportConnectorRF(world, pos, facing, node)
+        exportConnectorRF(theWorld, pos, facing, node)
 
-        if (container.shouldTick(10) && world.isAnyPlayerWithinRangeAt(pos.xd, pos.yd, pos.zd, 8.0)) {
+        if (container.shouldTick(10) && theWorld.getClosestPlayer(pos.xd, pos.yd, pos.zd, 8.0, false) != null) {
             sendUpdateToNearPlayers()
         }
     }
 
     override fun onBlockStateUpdates() {
-        if (world.isClient && !ignoreBlockStateUpdate) {
+        if (theWorld.isClient && !ignoreBlockStateUpdate) {
             hasBase = shouldHaveBase(this)
         }
     }
 
     fun shouldHaveBase(te: TileConnector): Boolean {
-        val tile = te.world.getTileEntity(te.pos.offset(te.facing.opposite))
+        val tile = te.theWorld.getTileEntity(te.pos.offset(te.facing.opposite))
         if (tile != null) {
             val handler = ELECTRIC_NODE_HANDLER!!.fromTile(tile, te.facing)
             if (handler is IElectricNodeHandler) {
@@ -105,7 +102,7 @@ class TileConnector : TileBase(), ITickable {
     }
 
     fun getConnectableDirections(): List<Pair<BlockPos, EnumFacing>> {
-        return if (facing.opposite.axisDirection == EnumFacing.AxisDirection.NEGATIVE) {
+        return if (facing.opposite.axisDirection == Direction.AxisDirection.NEGATIVE) {
             listOf(
                     facing.opposite.toBlockPos() to facing,
                     facing.opposite.toBlockPos() * 2 to facing)
@@ -125,13 +122,13 @@ class TileConnector : TileBase(), ITickable {
 }
 
 @RegisterTileEntity("electric_pole")
-class TileElectricPole : TileBase(), ITickable {
+class TileElectricPole(type: TileType) : TileBase(type), ITickableTileEntity {
     val node = ElectricNode(ref, capacity = 0.25)
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(wrapper),
-            onWireChange = { if (world.isClient) wireRender.reset() },
+            onWireChange = { if (theWorld.isClient) wireRender.reset() },
             canConnectAtSide = { it == null }
     )
 
@@ -143,8 +140,7 @@ class TileElectricPole : TileBase(), ITickable {
         initModules(electricModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 
@@ -160,14 +156,14 @@ class TileElectricPole : TileBase(), ITickable {
 }
 
 @RegisterTileEntity("electric_pole_transformer")
-class TileElectricPoleTransformer : TileBase(), ITickable {
+class TileElectricPoleTransformer(type: TileType) : TileBase(type), ITickableTileEntity {
     val node = ElectricNode(ref, capacity = 0.5)
     val wrapper = WireConnectorWrapper(node, this::getConnectors, "inter_pole_connector")
     val wrapper2 = WireConnectorWrapper(node, this::getConnectors2, "transformer_connector")
 
     val electricModule = ModuleElectricity(
             electricNodes = listOf(wrapper, wrapper2),
-            onWireChange = { if (world.isClient) wireRender.reset() },
+            onWireChange = { if (theWorld.isClient) wireRender.reset() },
             canConnectAtSide = { it == null }
     )
 
@@ -179,8 +175,7 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
         initModules(electricModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 
@@ -203,7 +198,7 @@ class TileElectricPoleTransformer : TileBase(), ITickable {
 }
 
 @RegisterTileEntity("electric_cable")
-class TileElectricCable : TileBase(), ITickable {
+class TileElectricCable(type: TileType) : TileBase(type), ITickableTileEntity {
 
     val node = ElectricNode(ref, capacity = 0.25)
     val electricModule = ModuleElectricity(listOf(node))
@@ -212,8 +207,7 @@ class TileElectricCable : TileBase(), ITickable {
         initModules(electricModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
         if (Debug.DEBUG) {
             sendUpdateToNearPlayers()
@@ -221,7 +215,7 @@ class TileElectricCable : TileBase(), ITickable {
     }
 
     fun canConnect(side: EnumFacing): Boolean {
-        val tile = world.getTileEntity(pos + side) ?: return false
+        val tile = theWorld.getTileEntity(pos + side) ?: return false
         val handler = tile.getOrNull(ELECTRIC_NODE_HANDLER, side.opposite)
         if (handler === null || handler === electricModule) return false
 
@@ -238,7 +232,7 @@ class TileElectricCable : TileBase(), ITickable {
 
 
 @RegisterTileEntity("tesla_tower")
-class TileTeslaTower : TileBase(), ITickable {
+class TileTeslaTower(type: TileType) : TileBase(type), ITickableTileEntity {
 
     val node = ElectricNode(ref)
     val electricModule = ModuleElectricity(
@@ -252,38 +246,28 @@ class TileTeslaTower : TileBase(), ITickable {
         initModules(electricModule, teslaTowerModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("tesla_tower_part")
-class TileTeslaTowerPart : TileBase() {
+class TileTeslaTowerPart(type: TileType) : TileBase(type) {
 
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        val other: TileEntity? = when (facing) {
-            EnumFacing.UP -> world.getTileEntity(pos.down())
-            EnumFacing.DOWN -> world.getTileEntity(pos.up())
-            else -> null
-        }
-
-        return other?.getCapability(capability, facing) ?: super.getCapability(capability, facing)
-    }
-
-    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
-        val other: TileEntity? = when (facing) {
-            EnumFacing.UP -> world.getTileEntity(pos.down())
-            EnumFacing.DOWN -> world.getTileEntity(pos.up())
-            else -> null
-        }
-
-        return other?.hasCapability(capability, facing) ?: super.hasCapability(capability, facing)
-    }
+    // TODO
+//    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
+//        val other: TileEntity? = when (facing) {
+//            EnumFacing.UP -> theWorld.getTileEntity(pos.down())
+//            EnumFacing.DOWN -> theWorld.getTileEntity(pos.up())
+//            else -> null
+//        }
+//
+//        return other?.getCapability(capability, facing) ?: super.getCapability(capability, facing)
+//    }
 }
 
 @RegisterTileEntity("energy_receiver")
-class TileEnergyReceiver : TileBase(), ITickable {
+class TileEnergyReceiver(type: TileType) : TileBase(type), ITickableTileEntity {
     val facing get() = getBlockState().getFacing()
     val node = ElectricNode(ref)
 
@@ -296,11 +280,10 @@ class TileEnergyReceiver : TileBase(), ITickable {
         initModules(electricModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
-        if (world.isClient) return
-        exportConnectorRF(world, pos, facing, node)
+        if (theWorld.isClient) return
+        exportConnectorRF(theWorld, pos, facing, node)
     }
 }
 

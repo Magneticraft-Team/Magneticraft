@@ -4,7 +4,6 @@ import com.cout970.magneticraft.misc.ResourceList
 import com.cout970.magneticraft.misc.logError
 import net.minecraft.client.Minecraft
 import java.util.stream.Collectors
-import kotlin.streams.toList
 
 /**
  * Created by cout970 on 2017/08/02.
@@ -18,19 +17,19 @@ fun loadBook(): Book {
 
     try {
         val langOptions = ResourceList.getGuideBookLanguages()
-        val currentLang = Minecraft.getMinecraft().languageManager.currentLanguage.languageCode
+        val currentLang = Minecraft.getInstance().languageManager.currentLanguage.code
 
         val lang = if (currentLang in langOptions) currentLang else "en_us"
 
         val locations = ResourceList.getGuideBookPages(lang)
-        val resources = locations.map { it to Minecraft.getMinecraft().resourceManager.getResource(it) }
+        val resources = locations.map { it to Minecraft.getInstance().resourceManager.getResource(it) }
 
         val texts = resources.mapNotNull { (loc, res) ->
 
             val text = res.inputStream.reader().readText()
 
             if (text.isEmpty()) return@mapNotNull null
-            val name = loc.resourcePath.removePrefix("guide/$lang/").removeSuffix(".md")
+            val name = loc.path.removePrefix("guide/$lang/").removeSuffix(".md")
 
             val prefix = name.substringBeforeLast('/', "")
 

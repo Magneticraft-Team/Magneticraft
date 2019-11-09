@@ -1,14 +1,16 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.getInteger
 import com.cout970.magneticraft.misc.energy.RfStorage
 import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
+import com.cout970.magneticraft.misc.set
 import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.systems.gui.DATA_ID_RF
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 
 class ModuleRf(
@@ -32,7 +34,7 @@ class ModuleRf(
 
     override fun serializeNBT(): NBTTagCompound {
         return super.serializeNBT().apply {
-            setInteger("${name}_energy", storage.energyStored)
+            set("${name}_energy", storage.energyStored)
         }
     }
 

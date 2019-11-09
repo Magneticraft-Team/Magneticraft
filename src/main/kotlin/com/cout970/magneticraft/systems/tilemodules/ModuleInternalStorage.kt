@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.add
@@ -15,7 +16,6 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_CHARGE_RATE
 import com.cout970.magneticraft.systems.gui.DATA_ID_STORAGE
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2017/06/30.
@@ -75,7 +75,7 @@ class ModuleInternalStorage(
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {
-        energy = nbt.getInteger("energy")
+        energy = nbt.getInt("energy")
     }
 
     override fun serializeNBT(): NBTTagCompound = newNbt {

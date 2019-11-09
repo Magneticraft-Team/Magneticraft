@@ -1,10 +1,12 @@
 package com.cout970.magneticraft.systems.gui.components.bars
 
 import com.cout970.magneticraft.misc.guiTexture
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.contains
 import com.cout970.magneticraft.misc.vector.vec2Of
-import net.minecraft.client.renderer.GlStateManager.*
+import com.mojang.blaze3d.platform.GlStateManager.enableAlphaTest
+import com.mojang.blaze3d.platform.GlStateManager.enableBlend
 import net.minecraft.util.text.TextFormatting
 
 /**
@@ -27,7 +29,7 @@ class TransferRateBar(
             vec2Of(10, 10)
         )
 
-        enableAlpha()
+        enableAlphaTest()
         enableBlend()
         color(1f,1f,1f, 0.2f)
         gui.drawTexture(

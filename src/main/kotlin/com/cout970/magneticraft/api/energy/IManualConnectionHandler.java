@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.energy;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,7 +27,7 @@ public interface IManualConnectionHandler {
      *
      * @return the position to store in the item
      */
-    BlockPos getBasePos(BlockPos thisBlock, World world, EntityPlayer player, EnumFacing side, ItemStack stack);
+    BlockPos getBasePos(BlockPos thisBlock, World world, PlayerEntity player, Direction side, ItemStack stack);
 
     /**
      * @param otherBlock The position other the other block obtained from <code>IManualConnectionHandler.getBasePos()</code>
@@ -40,7 +40,7 @@ public interface IManualConnectionHandler {
      *
      * @return true if the connection has been set, false otherwise
      */
-    Result connectWire(BlockPos otherBlock, BlockPos thisBlock, World world, EntityPlayer player, EnumFacing side,
+    Result connectWire(BlockPos otherBlock, BlockPos thisBlock, World world, PlayerEntity player, Direction side,
                        ItemStack stack);
 
     enum Result {

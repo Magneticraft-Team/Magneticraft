@@ -2,8 +2,8 @@ package com.cout970.magneticraft.systems.worldgen
 
 import com.cout970.magneticraft.systems.config.Config
 import net.minecraft.world.World
-import net.minecraft.world.chunk.IChunkProvider
-import net.minecraft.world.gen.IChunkGenerator
+import net.minecraft.world.chunk.AbstractChunkProvider
+import net.minecraft.world.gen.ChunkGenerator
 import net.minecraftforge.fml.common.IWorldGenerator
 import java.util.*
 import com.cout970.magneticraft.features.decoration.Blocks as DecorationBlocks
@@ -26,7 +26,7 @@ object WorldGenerator : IWorldGenerator {
         generators.add(OilSourceGenerator(OreBlocks.OilAmount.FULL_100.getBlockState(OreBlocks.oilSource), Config.oil))
     }
 
-    override fun generate(random: Random, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator, chunkProvider: IChunkProvider) {
+    override fun generate(random: Random, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: ChunkGenerator<*>, chunkProvider: AbstractChunkProvider) {
         generators.forEach {
             it.generate(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider)
         }

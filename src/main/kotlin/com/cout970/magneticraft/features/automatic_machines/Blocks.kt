@@ -1,10 +1,11 @@
 package com.cout970.magneticraft.features.automatic_machines
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.ItemBlock
 import com.cout970.magneticraft.api.internal.pneumatic.PneumaticUtils
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getTile
 import com.cout970.magneticraft.misc.vector.*
@@ -18,10 +19,8 @@ import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.ItemBlock
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
+import net.minecraft.world.IBlockReader
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -47,7 +46,7 @@ object Blocks : IBlockMaker {
 
         conveyorBelt = builder.withName("conveyor_belt").copy {
             states = CommonMethods.Orientation.values().toList()
-            factory = factoryOf(::TileConveyorBelt)
+            factory = factoryOf(TileConveyorBelt::class)
             customModels = listOf(
                 "base" to resource("models/block/mcx/conveyor_belt_base.mcx"),
                 "anim" to resource("models/block/mcx/conveyor_belt_anim.mcx"),
@@ -71,7 +70,7 @@ object Blocks : IBlockMaker {
 
         inserter = builder.withName("inserter").copy {
             states = CommonMethods.Orientation.values().toList()
-            factory = factoryOf(::TileInserter)
+            factory = factoryOf(TileInserter::class)
             customModels = listOf(
                 "model" to resource("models/block/gltf/inserter.gltf"),
                 "inventory" to resource("models/block/gltf/inserter.gltf")
@@ -87,14 +86,14 @@ object Blocks : IBlockMaker {
         }.build()
 
         waterGenerator = builder.withName("water_generator").copy {
-            factory = factoryOf(::TileWaterGenerator)
+            factory = factoryOf(TileWaterGenerator::class)
             onActivated = CommonMethods::delegateToModule
         }.build()
 
         feedingTrough = builder.withName("feeding_trough").copy {
             material = Material.WOOD
             states = CommonMethods.CenterOrientation.values().toList()
-            factory = factoryOf(::TileFeedingTrough)
+            factory = factoryOf(TileFeedingTrough::class)
             factoryFilter = { it[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false }
             customModels = listOf(
                 "model" to resource("models/block/mcx/feeding_trough.mcx"),
@@ -111,10 +110,10 @@ object Blocks : IBlockMaker {
                 val center = CommonMethods.CenterOrientation.of(facing, true)
                 val noCenter = CommonMethods.CenterOrientation.of(facing.opposite, false)
 
-                val thisState = it.default.withProperty(CommonMethods.PROPERTY_CENTER_ORIENTATION, center)
-                val otherState = it.default.withProperty(CommonMethods.PROPERTY_CENTER_ORIENTATION, noCenter)
+                val thisState = it.default.with(CommonMethods.PROPERTY_CENTER_ORIENTATION, center)
+                val otherState = it.default.with(CommonMethods.PROPERTY_CENTER_ORIENTATION, noCenter)
 
-                listOf(BlockPos.ORIGIN to thisState, facing.toBlockPos() to otherState)
+                listOf(BlockPos.ZERO to thisState, facing.toBlockPos() to otherState)
             }
             onBlockBreak = func@{
                 val facing = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: return@func
@@ -128,7 +127,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         pneumaticTube = builder.withName("pneumatic_tube").copy {
-            factory = factoryOf(::TilePneumaticTube)
+            factory = factoryOf(TilePneumaticTube::class)
             customModels = listOf(
                 "model" to resource("models/block/gltf/pneumatic_tube.gltf"),
                 "inventory" to resource("models/block/gltf/pneumatic_tube_inv.gltf")
@@ -147,7 +146,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         pneumaticRestrictionTube = builder.withName("pneumatic_restriction_tube").copy {
-            factory = factoryOf(::TilePneumaticRestrictionTube)
+            factory = factoryOf(TilePneumaticRestrictionTube::class)
             customModels = listOf(
                 "model" to resource("models/block/gltf/pneumatic_restriction_tube.gltf"),
                 "inventory" to resource("models/block/gltf/pneumatic_restriction_tube_inv.gltf")
@@ -167,7 +166,7 @@ object Blocks : IBlockMaker {
 
         relay = builder.withName("relay").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileRelay)
+            factory = factoryOf(TileRelay::class)
             alwaysDropDefault = true
             onBlockPlaced = CommonMethods::placeWithOppositeFacing
             pickBlock = CommonMethods::pickDefaultBlock
@@ -176,7 +175,7 @@ object Blocks : IBlockMaker {
 
         filter = builder.withName("filter").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileFilter)
+            factory = factoryOf(TileFilter::class)
             alwaysDropDefault = true
             onBlockPlaced = CommonMethods::placeWithOppositeFacing
             pickBlock = CommonMethods::pickDefaultBlock
@@ -185,7 +184,7 @@ object Blocks : IBlockMaker {
 
         transposer = builder.withName("transposer").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileTransposer)
+            factory = factoryOf(TileTransposer::class)
             alwaysDropDefault = true
             onBlockPlaced = CommonMethods::placeWithOppositeFacing
             pickBlock = CommonMethods::pickDefaultBlock
@@ -195,7 +194,7 @@ object Blocks : IBlockMaker {
         return itemBlockListOf(conveyorBelt, inserter, waterGenerator, feedingTrough, pneumaticTube, pneumaticRestrictionTube, relay, filter, transposer)
     }
 
-    fun pneumaticTubeBoundingBox(world: IBlockAccess, pos: BlockPos): List<AABB> {
+    fun pneumaticTubeBoundingBox(world: IBlockReader, pos: BlockPos): List<AABB> {
         val list = mutableListOf<AABB>()
 
         list += vec3Of(4.px) createAABBUsing vec3Of(1 - 4.px)
@@ -207,7 +206,7 @@ object Blocks : IBlockMaker {
         return list
     }
 
-    fun pneumaticTubeSides(world: IBlockAccess, pos: BlockPos): List<Pair<EnumFacing, AABB>> {
+    fun pneumaticTubeSides(world: IBlockReader, pos: BlockPos): List<Pair<EnumFacing, AABB>> {
         val list = mutableListOf<Pair<EnumFacing, AABB>>()
 
         if (PneumaticUtils.canConnectToTube(world, pos, EnumFacing.DOWN))

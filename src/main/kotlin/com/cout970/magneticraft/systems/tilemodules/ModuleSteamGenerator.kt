@@ -1,16 +1,19 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.ConversionTable
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.drainExecute
 import com.cout970.magneticraft.misc.gui.ValueAverage
+import com.cout970.magneticraft.misc.set
 import com.cout970.magneticraft.misc.tileentity.WorkingIndicator
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
+import kotlin.math.min
 
 /**
  * Created by cout970 on 2017/07/18.
@@ -41,7 +44,7 @@ class ModuleSteamGenerator(
             return 0
         }
 
-        return Math.min(fluidLimit, maxProduction / ENERGY_PER_OPERATION)
+        return min(fluidLimit, maxProduction / ENERGY_PER_OPERATION)
     }
 
     override fun update() {
@@ -49,7 +52,7 @@ class ModuleSteamGenerator(
         val operations = getAvailableOperations()
         if (operations > 0) {
             working.onWork()
-            steamTank.drain(STEAM_PER_OPERATION * operations, true)
+            steamTank.drainExecute(STEAM_PER_OPERATION * operations)
             node.applyPower(ENERGY_PER_OPERATION * operations.toDouble(), false)
             production += ENERGY_PER_OPERATION * operations
         }
@@ -67,8 +70,8 @@ class ModuleSteamGenerator(
     }
 
     override fun serializeNBT(): NBTTagCompound {
-        return working.serializeNBT().also {
-            it.setFloat("production", production.average)
+        return working.serializeNBT().apply {
+            set("production", production.average)
         }
     }
 }

@@ -20,7 +20,7 @@ enum class Sounds(
  */
 fun registerSounds(registry: IForgeRegistry<SoundEvent>) {
     Sounds.values().forEach {
-        it.soundEvent.registryName = it.soundEvent.soundName
+        it.soundEvent.registryName = it.resourceLocation
         registry.register(it.soundEvent)
     }
 }

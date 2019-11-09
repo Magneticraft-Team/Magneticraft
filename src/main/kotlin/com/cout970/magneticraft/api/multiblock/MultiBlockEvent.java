@@ -1,12 +1,12 @@
 package com.cout970.magneticraft.api.multiblock;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 public class MultiBlockEvent extends Event {
 
@@ -17,9 +17,9 @@ public class MultiBlockEvent extends Event {
     // Position of the controller block
     private final BlockPos center;
     // Orientation of the multiblock
-    private final EnumFacing facing;
+    private final Direction facing;
 
-    public MultiBlockEvent(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing) {
+    public MultiBlockEvent(IMultiblock multiblock, World world, BlockPos center, Direction facing) {
         this.multiblock = multiblock;
         this.world = world;
         this.center = center;
@@ -32,18 +32,18 @@ public class MultiBlockEvent extends Event {
     public static class CheckIntegrity extends MultiBlockEvent {
 
         // Player forming the multiblock
-        private final EntityPlayer player;
+        private final PlayerEntity player;
         // Errors found scanning the multiblock, if empty the multiblock will form, otherwise it will show the errors
         private final List<ITextComponent> integrityErrors;
 
-        public CheckIntegrity(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing,
-                              EntityPlayer player, List<ITextComponent> integrityErrors) {
+        public CheckIntegrity(IMultiblock multiblock, World world, BlockPos center, Direction facing,
+                              PlayerEntity player, List<ITextComponent> integrityErrors) {
             super(multiblock, world, center, facing);
             this.player = player;
             this.integrityErrors = integrityErrors;
         }
 
-        public EntityPlayer getPlayer() {
+        public PlayerEntity getPlayer() {
             return player;
         }
 
@@ -58,7 +58,7 @@ public class MultiBlockEvent extends Event {
      */
     public static class Activate extends MultiBlockEvent {
 
-        public Activate(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing) {
+        public Activate(IMultiblock multiblock, World world, BlockPos center, Direction facing) {
             super(multiblock, world, center, facing);
         }
     }
@@ -68,7 +68,7 @@ public class MultiBlockEvent extends Event {
      */
     public static class Deactivate extends MultiBlockEvent {
 
-        public Deactivate(IMultiblock multiblock, World world, BlockPos center, EnumFacing facing) {
+        public Deactivate(IMultiblock multiblock, World world, BlockPos center, Direction facing) {
             super(multiblock, world, center, facing);
         }
     }
@@ -85,7 +85,7 @@ public class MultiBlockEvent extends Event {
         return center;
     }
 
-    public EnumFacing getFacing() {
+    public Direction getFacing() {
         return facing;
     }
 }

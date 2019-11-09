@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.multiblocks
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.features.multiblock_parts.Blocks.ColumnOrientation.*
 import com.cout970.magneticraft.features.multiblock_parts.toColumnAxis
 import com.cout970.magneticraft.misc.i18n
@@ -7,8 +8,8 @@ import com.cout970.magneticraft.misc.inventory.stack
 import com.cout970.magneticraft.misc.prettyFormat
 import com.cout970.magneticraft.misc.vector.getRelative
 import net.minecraft.block.Block
-import net.minecraft.init.Blocks
-import net.minecraft.util.EnumFacing
+import net.minecraft.block.Blocks
+
 import com.cout970.magneticraft.features.multiblock_parts.Blocks as MultiblockParts
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 

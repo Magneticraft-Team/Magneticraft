@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.systems.gui
 
+import com.cout970.magneticraft.EntityPlayer
 import com.cout970.magneticraft.IVector2
-import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.RegistryEvents
 import com.cout970.magneticraft.misc.gui.SlotButton
 import com.cout970.magneticraft.misc.gui.SlotFilter
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
@@ -9,21 +10,26 @@ import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import com.cout970.magneticraft.misc.inventory.withSize
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
+import com.cout970.magneticraft.systems.network.MagneticraftNetwork
 import com.cout970.magneticraft.systems.network.MessageContainerUpdate
 import com.cout970.magneticraft.systems.network.MessageGuiUpdate
 import com.cout970.magneticraft.systems.tileentities.TileBase
-import net.minecraft.client.entity.EntityPlayerSP
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.entity.player.InventoryPlayer
-import net.minecraft.inventory.ClickType
-import net.minecraft.inventory.Container
-import net.minecraft.inventory.Slot
+import net.minecraft.client.entity.player.ClientPlayerEntity
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.entity.player.ServerPlayerEntity
+import net.minecraft.inventory.container.ClickType
+import net.minecraft.inventory.container.Container
+import net.minecraft.inventory.container.Slot
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos: BlockPos) : Container() {
+abstract class ContainerBase(
+    val player: EntityPlayer,
+    val world: World,
+    val pos: BlockPos,
+    id: Int
+) : Container(RegistryEvents.container, id) {
 
     //the TileEntity that has the gui, can be null
     val tileEntity = world.getTileEntity(pos)
@@ -31,12 +37,12 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     override fun canInteractWith(playerIn: EntityPlayer?): Boolean = true
 
-    fun bindPlayerInventory(playerInventory: InventoryPlayer, offset: IVector2 = Vec2d.ZERO) {
+    fun bindPlayerInventory(playerInventory: PlayerInventory, offset: IVector2 = Vec2d.ZERO) {
 
         val startIndex = inventorySlots.size
         for (i in 0..2) {
             for (j in 0..8) {
-                this.addSlotToContainer(Slot(playerInventory, j + i * 9 + 9,
+                this.addSlot(Slot(playerInventory, j + i * 9 + 9,
                     8 + j * 18 + offset.xi,
                     84 + i * 18 + offset.yi))
             }
@@ -44,7 +50,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
         val hotBarIndex = inventorySlots.size
         for (i in 0..8) {
-            this.addSlotToContainer(Slot(playerInventory, i,
+            this.addSlot(Slot(playerInventory, i,
                 8 + i * 18 + offset.xi,
                 142 + offset.yi))
         }
@@ -54,15 +60,15 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
     override fun detectAndSendChanges() {
         super.detectAndSendChanges()
-        if (player is EntityPlayerMP) {
+        if (player is ServerPlayerEntity) {
             val ibd = sendDataToClient()
             if (ibd != null) {
-                Magneticraft.network.sendTo(MessageContainerUpdate(ibd), player)
+                MagneticraftNetwork.sendTo(MessageContainerUpdate(ibd), player)
             }
-        } else if (player is EntityPlayerSP) {
+        } else if (player is ClientPlayerEntity) {
             val ibd = sendDataToServer()
             if (ibd != null) {
-                Magneticraft.network.sendToServer(MessageGuiUpdate(ibd, player.persistentID))
+                MagneticraftNetwork.sendToServer(MessageGuiUpdate(ibd, player.uniqueID))
             }
         }
     }
@@ -95,8 +101,13 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
      */
     protected fun tryMergeItemStack(stack: ItemStack, index: Int, regions: List<InventoryRegion>): Boolean {
         regions.forEach {
-            if (it.advFilter(stack, index) && mergeItemStack(stack, it.region.start,
-                    it.region.endInclusive + 1, it.inverseDirection)) {
+            if (it.advFilter(stack, index) &&
+                mergeItemStack(stack,
+                    it.region.first,
+                    it.region.last + 1,
+                    it.inverseDirection
+                )
+            ) {
                 return true
             }
         }
@@ -134,7 +145,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
 
 
     fun sendUpdate(ibd: IBD) {
-        Magneticraft.network.sendToServer(MessageGuiUpdate(ibd, player.persistentID))
+        MagneticraftNetwork.sendToServer(MessageGuiUpdate(ibd, player.uniqueID))
     }
 
     @Suppress("FoldInitializerAndIfToElvis")
@@ -172,7 +183,7 @@ abstract class ContainerBase(val player: EntityPlayer, val world: World, val pos
                 }
 
                 if (dragType == 1) {
-                    player.dropItem(playerInv.itemStack.splitStack(1), true)
+                    player.dropItem(playerInv.itemStack.split(1), true)
                 }
             }
             return result

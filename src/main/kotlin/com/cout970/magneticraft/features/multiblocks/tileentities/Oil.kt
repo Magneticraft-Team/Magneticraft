@@ -1,5 +1,7 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockOilHeater
@@ -11,7 +13,6 @@ import com.cout970.magneticraft.misc.crafting.OilHeaterCraftingProcess
 import com.cout970.magneticraft.misc.crafting.RefineryCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.TankCapabilityFilter
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.vector.rotatePoint
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
 import com.cout970.magneticraft.registry.FLUID_HANDLER
@@ -19,12 +20,11 @@ import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
+import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.util.math.BlockPos
 
 @RegisterTileEntity("pumpjack")
-class TilePumpjack : TileMultiblock(), ITickable {
+class TilePumpjack(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockPumpjack
 
@@ -44,7 +44,7 @@ class TilePumpjack : TileMultiblock(), ITickable {
     val openGuiModule = ModuleOpenGui()
 
     val fluidExportModule = ModuleFluidExporter(tank, {
-        listOf(facing.rotatePoint(BlockPos.ORIGIN, BlockPos(0, 0, 1)) to facing.opposite)
+        listOf(facing.rotatePoint(BlockPos.ZERO, BlockPos(0, 0, 1)) to facing.opposite)
     })
 
     val ioModule: ModuleMultiblockIO = ModuleMultiblockIO(
@@ -81,15 +81,14 @@ class TilePumpjack : TileMultiblock(), ITickable {
             openGuiModule, fluidExportModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 
 @RegisterTileEntity("oil_heater")
-class TileOilHeater : TileMultiblock(), ITickable {
+class TileOilHeater(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockOilHeater
 
@@ -149,14 +148,13 @@ class TileOilHeater : TileMultiblock(), ITickable {
         initModules(multiblockModule, ioModule, heatModule, openGuiModule, fluidModule, processModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("refinery")
-class TileRefinery : TileMultiblock(), ITickable {
+class TileRefinery(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockRefinery
 
@@ -230,8 +228,7 @@ class TileRefinery : TileMultiblock(), ITickable {
         initModules(multiblockModule, ioModule, openGuiModule, fluidModule, processModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }

@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.getCompoundTag
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.forEach
@@ -8,8 +11,6 @@ import com.cout970.magneticraft.misc.world.dropItem
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.IItemHandler
 

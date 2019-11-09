@@ -1,33 +1,40 @@
 package com.cout970.magneticraft.systems.tilerenderers
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.IVector3
 import com.cout970.magneticraft.api.energy.IElectricConnection
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.render.GL.color
+import com.cout970.magneticraft.misc.render.GL.popMatrix
+import com.cout970.magneticraft.misc.render.GL.pushMatrix
+import com.cout970.magneticraft.misc.render.GL.rotate
+import com.cout970.magneticraft.misc.render.GL.scale
+import com.cout970.magneticraft.misc.render.GL.translate
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.split
 import com.cout970.magneticraft.misc.vector.*
-import com.cout970.magneticraft.systems.blocks.BlockMultiblock
 import com.cout970.magneticraft.systems.multiblocks.IMultiblockModule
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.multiblocks.MultiblockContext
 import com.cout970.magneticraft.systems.multiblocks.MultiblockManager
 import com.cout970.magneticraft.systems.tilemodules.ModuleMultiblockIO
-import com.cout970.vector.extensions.Vector3
+import com.mojang.blaze3d.platform.GLX
+import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.*
-import net.minecraft.client.renderer.GlStateManager.*
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.client.renderer.BufferBuilder
+import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.client.renderer.Tessellator
+import net.minecraft.client.renderer.model.ItemCameraTransforms
+import net.minecraft.client.renderer.model.ModelResourceLocation
+import net.minecraft.client.renderer.texture.AtlasTexture
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.item.ItemSkull
 import net.minecraft.item.ItemStack
+import net.minecraft.item.SkullItem
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -50,13 +57,15 @@ inline fun modelOf(block: Block, id: String = "model") = ModelResourceLocation(b
 
 object Utilities {
 
+    private val mc: Minecraft get() = Minecraft.getInstance()
+
     val WIRE_TEXTURE = resource("textures/models/wire_texture.png")
 
     fun renderMultiblockBlueprint(ctx: MultiblockContext) {
 
-        GlStateManager.disableDepth()
+        GlStateManager.disableDepthTest()
         val mb: Multiblock = ctx.multiblock
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+        mc.textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE)
 
         for (j in 0 until mb.size.y) {
             for (i in 0 until mb.size.x) {
@@ -77,7 +86,7 @@ object Utilities {
                     val pos = vec3Of(i, j, k) - mb.center.toVec3d()
                     translate(pos.xd, pos.yd, pos.zd)
 
-                    if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
+                    if (!mc.itemRenderer.shouldRenderItemIn3D(stack)) {
                         translate(0.0, -0.045, 0.125)
                         rotate(90f, 1f, 0f, 0f)
                     } else {
@@ -90,7 +99,7 @@ object Utilities {
                 }
             }
         }
-        GlStateManager.enableDepth()
+        GlStateManager.enableDepthTest()
     }
 
     fun renderMultiblockHitboxes(facing: EnumFacing, multiblock: Multiblock) {
@@ -130,7 +139,7 @@ object Utilities {
     }
 
     fun renderItem(stack: ItemStack, facing: EnumFacing = EnumFacing.NORTH) {
-        if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+        if (!mc.itemRenderer.shouldRenderItemIn3D(stack) || stack.item is SkullItem) {
             translate(0.0, -0.9 * PIXEL, 0.0)
             rotate(90f, 1f, 0f, 0f)
             rotate(-facing.horizontalAngle, 0f, 0f, 1f)
@@ -144,13 +153,13 @@ object Utilities {
             scale(s, s, s)
         }
 
-        Minecraft.getMinecraft().renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
+        mc.itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.GROUND)
     }
 
     fun renderTubeItem(stack: ItemStack) {
-        val renderItem = Minecraft.getMinecraft().renderItem
+        val renderItem = mc.itemRenderer
 
-        if (!renderItem.shouldRenderItemIn3D(stack) || stack.item is ItemSkull) {
+        if (!renderItem.shouldRenderItemIn3D(stack) || stack.item is SkullItem) {
 //            translate(0.0, -0.9 * PIXEL, 0.0)
 //            rotate(90f, 1f, 0f, 0f)
 //            translate(0.0, -1 * PIXEL, 0.0)
@@ -165,30 +174,30 @@ object Utilities {
     }
 
     fun renderItemWithTransparency(stack: ItemStack, transform: ItemCameraTransforms.TransformType, alpha: Float) {
-        var bakedModel = Minecraft.getMinecraft().renderItem.getItemModelWithOverrides(stack, null, null)
+        var bakedModel = mc.itemRenderer.getItemModelWithOverrides(stack, null, null)
         if (stack.isNotEmpty) {
-            val textureManager = Minecraft.getMinecraft().textureManager
-            textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-            textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false)
+            val textureManager = mc.textureManager
+            textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE)
+            textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false)
 
-            enableRescaleNormal()
-            alphaFunc(516, 0.1f)
+            GlStateManager.enableRescaleNormal()
+            GlStateManager.alphaFunc(516, 0.1f)
             color(1.0f, 1.0f, 1.0f, 1.0f)
-            enableBlend()
+            GlStateManager.enableBlend()
             GL14.glBlendColor(1f, 1f, 1f, alpha)
-            glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA)
+            GlStateManager.blendFunc(GL14.GL_CONSTANT_ALPHA, GL14.GL_ONE_MINUS_CONSTANT_ALPHA)
             pushMatrix()
 
             bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedModel, transform, false)
 
-            Minecraft.getMinecraft().renderItem.renderItem(stack, bakedModel)
-            cullFace(CullFace.BACK)
+            mc.itemRenderer.renderItem(stack, bakedModel)
+            GlStateManager.cullFace(GlStateManager.CullFace.BACK)
             popMatrix()
-            disableRescaleNormal()
-            disableBlend()
+            GlStateManager.disableRescaleNormal()
+            GlStateManager.disableBlend()
 
-            textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-            textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap()
+            textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE)
+            textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap()
         }
     }
 
@@ -209,8 +218,8 @@ object Utilities {
         val a = 1f
 
 //        glDisable(GL_TEXTURE_2D)
-        bindTexture(0)
-        GlStateManager.glLineWidth(2f)
+        GlStateManager.bindTexture(0)
+        GlStateManager.lineWidth(2f)
         t.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR)
         t.pos(box.minX, box.minY, box.minZ).color(r, g, b, a).endVertex()
         t.pos(box.maxX, box.minY, box.minZ).color(r, g, b, a).endVertex()
@@ -261,7 +270,7 @@ object Utilities {
         val a = 1.0f
 
         glDisable(GL_TEXTURE_2D)
-        GlStateManager.glLineWidth(2f)
+        GlStateManager.lineWidth(2f)
         t.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR)
         t.pos(pos.xd, pos.yd, pos.zd).color(r, g, b, a).endVertex()
         t.pos(end.xd, end.yd, end.zd).color(r, g, b, a).endVertex()
@@ -316,29 +325,30 @@ object Utilities {
     // this works
     fun renderMultiblockCollisionBoxes(world: World, blockPos: BlockPos, te: IMultiblockModule) {
 
-        val global = BlockMultiblock.getBoxes(world, blockPos, te)
-
-        global.forEach { renderBox(it) }
+        // TODO
+//        val global = BlockMultiblock.getBoxes(world, blockPos, te)
+//
+//        global.forEach { renderBox(it) }
     }
 
 
     fun renderFloatingLabel(str: String, pos: Vec3d) {
         val (x, y, z) = pos
-        val renderManager = Minecraft.getMinecraft().renderManager
+        val renderManager = mc.renderManager
         val fontrenderer = renderManager.fontRenderer
         val f = 1.6f
         val f1 = 0.016666668f * f
         pushMatrix()
         translate(x.toFloat() + 0.0f, y.toFloat() + 0.5f, z.toFloat())
-        GlStateManager.glNormal3f(0.0f, 1.0f, 0.0f)
+        GlStateManager.normal3f(0.0f, 1.0f, 0.0f)
         rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         rotate(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
         scale(-f1, -f1, f1)
-        disableLighting()
-        depthMask(false)
-        disableDepth()
-        enableBlend()
-        tryBlendFuncSeparate(770, 771, 1, 0)
+        GlStateManager.disableLighting()
+        GlStateManager.depthMask(false)
+        GlStateManager.disableDepthTest()
+        GlStateManager.enableBlend()
+        GlStateManager.blendFuncSeparate(770, 771, 1, 0)
         val tessellator = Tessellator.getInstance()
         val worldrenderer = tessellator.buffer
         val i = 0
@@ -348,29 +358,29 @@ object Utilities {
         pushMatrix()
         for (line in lines) {
             val j = fontrenderer.getStringWidth(line) / 2
-            disableTexture2D()
+            GlStateManager.disableTexture()
             worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
             worldrenderer.pos((-j - 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             worldrenderer.pos((-j - 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             worldrenderer.pos((j + 1).toDouble(), (8 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             worldrenderer.pos((j + 1).toDouble(), (-1 + i).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             tessellator.draw()
-            enableTexture2D()
-            fontrenderer.drawString(line, -fontrenderer.getStringWidth(line) / 2, i, 553648127)
+            GlStateManager.enableTexture()
+            fontrenderer.drawString(line, -fontrenderer.getStringWidth(line) / 2f, i.toFloat(), 553648127)
             translate(0f, (1 / f1) * 4f / 16f, 0f)
         }
         popMatrix()
 
         // Mark the text so it looks brighter
-        enableDepth()
-        depthMask(true)
+        GlStateManager.enableDepthTest()
+        GlStateManager.depthMask(true)
         for (line in lines) {
-            fontrenderer.drawString(line, -fontrenderer.getStringWidth(line) / 2, i, -1)
+            fontrenderer.drawString(line, -fontrenderer.getStringWidth(line) / 2f, i.toFloat(), -1)
             translate(0f, (1 / f1) * 4f / 16f, 0f)
         }
 
-        enableLighting()
-        disableBlend()
+        GlStateManager.enableLighting()
+        GlStateManager.disableBlend()
         color(1.0f, 1.0f, 1.0f, 1.0f)
         popMatrix()
     }
@@ -440,9 +450,9 @@ object Utilities {
         val list = mutableListOf<Vec3d>()
         val distance = start.distanceTo(end)
         val middle = Vec3d(
-                (start.xd + end.xd) / 2,
-                (start.yd + end.yd) / 2 - distance * mass,
-                (start.zd + end.zd) / 2)
+            (start.xd + end.xd) / 2,
+            (start.yd + end.yd) / 2 - distance * mass,
+            (start.zd + end.zd) / 2)
 
         for (i in 0..10) {
             val p = i / 10.0
@@ -484,11 +494,11 @@ object Utilities {
     }
 
     fun setColor(color: Int) {
-        GL11.glColor4f(
-                ((color ushr 16) and 0xFF) / 255f,
-                ((color ushr 8) and 0xFF) / 255f,
-                (color and 0xFF) / 255f,
-                ((color ushr 24) and 0xFF) / 255f
+        color(
+            ((color ushr 16) and 0xFF) / 255f,
+            ((color ushr 8) and 0xFF) / 255f,
+            (color and 0xFF) / 255f,
+            ((color ushr 24) and 0xFF) / 255f
         )
     }
 
@@ -576,38 +586,38 @@ object Utilities {
         val (r, g, b) = tempToRGB(temp.toFloat())
         val heatVisibility = ((temp - 150.fromCelsiusToKelvin()) / 300).coerceIn(0.0, 1.0)
 
-        val i = te.world.getCombinedLight(te.pos, 0)
+        val i = te.world!!.getCombinedLight(te.pos, 0)
         val j = i % 65536
         val k = i / 65536
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
-                max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
-                max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
+        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1,
+            max((15 shl 4) * heatVisibility, j.toDouble()).toFloat(),
+            max((15 shl 4) * heatVisibility, k.toDouble()).toFloat()
         )
 
         // Set additive color
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD)
-        GlStateManager.color(
-                interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
-                interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
-                interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
-                1f
+        color(
+            interpolate(0.0, r / 255.0, heatVisibility).toFloat(),
+            interpolate(0.0, g / 255.0, heatVisibility).toFloat(),
+            interpolate(0.0, b / 255.0, heatVisibility).toFloat(),
+            1f
         )
         func()
 
         // Reset color
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE)
-        GlStateManager.color(1f, 1f, 1f, 1f)
+        color(1f, 1f, 1f, 1f)
         setDefaultLight(te)
     }
 
     fun setDefaultLight(te: TileEntity) {
         RenderHelper.enableStandardItemLighting()
-        val i = te.world.getCombinedLight(te.pos, 0)
+        val i = te.world!!.getCombinedLight(te.pos, 0)
         val j = i % 65536
         val k = i / 65536
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j.toFloat(), k.toFloat())
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
+        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, j.toFloat(), k.toFloat())
+        color(1.0f, 1.0f, 1.0f, 1.0f)
     }
 
     fun colorFromRGB(r: Float, g: Float, b: Float): Int {
@@ -630,17 +640,16 @@ object Utilities {
 
         ioModule.connectionSpots.forEachIndexed { index, spot ->
             val box = cache[index]
-            val sprite = Minecraft.getMinecraft().textureMapBlocks.getAtlasSprite("minecraft:blocks/water_still")
+            val sprite = mc.textureMap.getAtlasSprite("minecraft:blocks/water_still")
             val finalPos = spot.pos
 
             box.sprites = listOf(sprite)
             box.pos = finalPos.toVec3d()
-            box.size = Vector3.ONE
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            box.size = Vec3d.ZERO
+            mc.textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE)
             setColor(spot.capability.hashCode() or 0xFF000000.toInt())
             box.render()
-            GL11.glColor4f(1f, 1f, 1f, 1f)
-            GlStateManager.color(1f, 1f, 1f)
+            color(1f, 1f, 1f, 1f)
         }
         popMatrix()
     }

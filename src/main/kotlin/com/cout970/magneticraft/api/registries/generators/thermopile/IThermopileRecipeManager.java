@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.api.registries.generators.thermopile;
 
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,7 +17,7 @@ public interface IThermopileRecipeManager {
      * @return the recipes that matches the input or null if none matches the input
      */
     @Nullable
-    IThermopileRecipe findRecipe(@Nullable IBlockState input);
+    IThermopileRecipe findRecipe(@Nullable BlockState input);
 
     /**
      * The list with all registered recipes
@@ -51,5 +51,5 @@ public interface IThermopileRecipeManager {
      *
      * @return the new recipe
      */
-    IThermopileRecipe createRecipe(IBlockState state, float temperature, float conductivity);
+    IThermopileRecipe createRecipe(BlockState state, float temperature, float conductivity);
 }

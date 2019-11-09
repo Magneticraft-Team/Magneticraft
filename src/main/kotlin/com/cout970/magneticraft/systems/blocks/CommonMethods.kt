@@ -1,42 +1,40 @@
 package com.cout970.magneticraft.systems.blocks
 
-import com.cout970.magneticraft.Magneticraft
-import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.PropertyEnum
 import com.cout970.magneticraft.misc.block.isIn
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.tileentity.getTile
-import com.cout970.magneticraft.misc.vector.*
+import com.cout970.magneticraft.misc.vector.rotateBox
+import com.cout970.magneticraft.misc.vector.vec3Of
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.MANUAL_CONNECTION_HANDLER
 import com.cout970.magneticraft.registry.fromBlock
+import com.cout970.magneticraft.systems.gui.GuiHandler
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleElectricity
 import net.minecraft.block.Block
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.state.EnumProperty
+import net.minecraft.state.IProperty
 import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.AxisAlignedBB
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
-import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
+import net.minecraftforge.common.util.LazyOptional
 
 /**
  * Created by cout970 on 2017/06/30.
  */
 object CommonMethods {
 
-    inline fun <reified T> propertyOf(name: String): PropertyEnum<T> where T : IStringSerializable, T : Enum<T> {
-        return PropertyEnum.create(name, T::class.java)
+    inline fun <reified T> propertyOf(name: String): EnumProperty<T> where T : IStringSerializable, T : Enum<T> {
+        return EnumProperty.create(name, T::class.java)
     }
 
     fun pickDefaultBlock(args: PickBlockArgs): ItemStack {
-        return ItemStack(args.default.item, 1, 0)
+        return ItemStack(args.default.item, 1)
     }
 
     fun enableAutoConnectWires(args: OnActivatedArgs): Boolean {
@@ -47,7 +45,7 @@ object CommonMethods {
 
             val te = args.worldIn.getTile<TileBase>(pos) ?: return false
             val electricModule = te.container.modules.find { it is ModuleElectricity } as? ModuleElectricity
-                    ?: return false
+                ?: return false
 
             electricModule.autoConnectWires = !electricModule.autoConnectWires
             if (!electricModule.autoConnectWires) {
@@ -66,51 +64,51 @@ object CommonMethods {
     }
 
     fun placeWithFacing(it: OnBlockPlacedArgs): IBlockState {
-        return it.defaultValue.withProperty(PROPERTY_FACING, Facing.of(it.facing))
+        return it.defaultValue.with(PROPERTY_FACING, Facing.of(it.facing))
     }
 
     fun placeWithOppositeFacing(it: OnBlockPlacedArgs): IBlockState {
-        return it.defaultValue.withProperty(PROPERTY_FACING, Facing.of(it.facing.opposite))
+        return it.defaultValue.with(PROPERTY_FACING, Facing.of(it.facing.opposite))
     }
 
     fun placeWithOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
-        return it.defaultValue.withProperty(PROPERTY_ORIENTATION, Orientation.of(placer.horizontalFacing))
+        return it.defaultValue.with(PROPERTY_ORIENTATION, Orientation.of(placer.horizontalFacing))
     }
 
     fun placeWithOppositeOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
         val orientation = Orientation.of(placer.horizontalFacing.opposite)
-        return it.defaultValue.withProperty(PROPERTY_ORIENTATION, orientation)
+        return it.defaultValue.with(PROPERTY_ORIENTATION, orientation)
     }
 
     fun placeCenterWithOppositeOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
         val orientation = CenterOrientation.of(placer.horizontalFacing.opposite, true)
-        return it.defaultValue.withProperty(PROPERTY_CENTER_ORIENTATION, orientation)
+        return it.defaultValue.with(PROPERTY_CENTER_ORIENTATION, orientation)
     }
 
     fun placeCenterWithOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
         val orientation = CenterOrientation.of(placer.horizontalFacing, true)
-        return it.defaultValue.withProperty(PROPERTY_CENTER_ORIENTATION, orientation)
+        return it.defaultValue.with(PROPERTY_CENTER_ORIENTATION, orientation)
     }
 
     fun placeInactiveWithOppositeOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
         val orientation = OrientationActive.of(placer.horizontalFacing.opposite, false)
-        return it.defaultValue.withProperty(PROPERTY_ORIENTATION_ACTIVE, orientation)
+        return it.defaultValue.with(PROPERTY_ORIENTATION_ACTIVE, orientation)
     }
 
     fun placeInactiveWithOrientation(it: OnBlockPlacedArgs): IBlockState {
         val placer = it.placer ?: return it.defaultValue
         val orientation = OrientationActive.of(placer.horizontalFacing, false)
-        return it.defaultValue.withProperty(PROPERTY_ORIENTATION_ACTIVE, orientation)
+        return it.defaultValue.with(PROPERTY_ORIENTATION_ACTIVE, orientation)
     }
 
     fun delegateToModule(args: OnActivatedArgs): Boolean {
         val pos = if (PROPERTY_CENTER_ORIENTATION.isIn(args.state)) {
-            val prop = args.state.getValue(PROPERTY_CENTER_ORIENTATION)
+            val prop = args.state.get(PROPERTY_CENTER_ORIENTATION)
             if (prop.center) args.pos else args.pos.offset(prop.facing)
         } else args.pos
 
@@ -122,7 +120,7 @@ object CommonMethods {
     fun openGui(args: OnActivatedArgs): Boolean {
         return if (!args.playerIn.isSneaking) {
             if (args.worldIn.isServer) {
-                args.playerIn.openGui(Magneticraft, -1, args.worldIn, args.pos.xi, args.pos.yi, args.pos.zi)
+                args.playerIn.openContainer(GuiHandler.getProvider(args.playerIn, args.worldIn, args.pos))
             }
             true
         } else false
@@ -132,9 +130,10 @@ object CommonMethods {
         return object : ICapabilityProvider {
 
             @Suppress("UNCHECKED_CAST")
-            override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): T? = handler as? T
-
-            override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean = capability == cap()
+            override fun <T : Any?> getCapability(capability: Capability<T>, facing: EnumFacing?): LazyOptional<T> {
+                if (capability == cap()) return LazyOptional.of { handler }.cast()
+                return LazyOptional.empty()
+            }
         }
     }
 
@@ -142,7 +141,7 @@ object CommonMethods {
      * The base value is associated to the NORTH direction
      */
     fun updateBoundingBoxWithFacing(
-            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+        base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_FACING]?.facing ?: EnumFacing.DOWN
@@ -155,7 +154,7 @@ object CommonMethods {
      * The base value is associated to the NORTH direction
      */
     fun updateBoundingBoxWithOrientation(
-            base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
+        base: (BoundingBoxArgs) -> List<AxisAlignedBB>): (BoundingBoxArgs) -> List<AxisAlignedBB> {
         return { args ->
             val boxes = base(args)
             val facing = args.state[PROPERTY_ORIENTATION]?.facing ?: EnumFacing.NORTH
@@ -178,16 +177,16 @@ object CommonMethods {
 
     // Common properties
     val PROPERTY_FACING: PropertyEnum<Facing> =
-            PropertyEnum.create("facing", Facing::class.java)
+        PropertyEnum.create("facing", Facing::class.java)
 
     val PROPERTY_ORIENTATION: PropertyEnum<Orientation> =
-            PropertyEnum.create("orientation", Orientation::class.java)
+        PropertyEnum.create("orientation", Orientation::class.java)
 
     val PROPERTY_CENTER_ORIENTATION: PropertyEnum<CenterOrientation> =
-            PropertyEnum.create("center_orientation", CenterOrientation::class.java)
+        PropertyEnum.create("center_orientation", CenterOrientation::class.java)
 
     val PROPERTY_ORIENTATION_ACTIVE: PropertyEnum<OrientationActive> =
-            PropertyEnum.create("orientation_active", OrientationActive::class.java)
+        PropertyEnum.create("orientation_active", OrientationActive::class.java)
 
     enum class Facing(override val stateName: String,
                       val facing: EnumFacing,
@@ -204,10 +203,10 @@ object CommonMethods {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_FACING)
 
         override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_FACING, this)
+            return block.defaultState.with(PROPERTY_FACING, this)
         }
 
-        override fun next(): IRotable<Facing> = of(EnumFacing.getFront((facing.index + 1) % EnumFacing.VALUES.size))
+        override fun next(): IRotable<Facing> = of(EnumFacing.byIndex((facing.index + 1) % EnumFacing.values().size))
 
         companion object {
             fun of(facing: EnumFacing): Facing = when (facing) {
@@ -234,7 +233,7 @@ object CommonMethods {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_ORIENTATION)
 
         override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_ORIENTATION, this)
+            return block.defaultState.with(PROPERTY_ORIENTATION, this)
         }
 
         override fun next(): IRotable<Orientation> = of(facing.rotateY())
@@ -251,10 +250,10 @@ object CommonMethods {
     }
 
     enum class CenterOrientation(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val center: Boolean,
-            val facing: EnumFacing) : IStatesEnum, IStringSerializable {
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val center: Boolean,
+        val facing: EnumFacing) : IStatesEnum, IStringSerializable {
 
         CENTER_NORTH("center_north", true, false, EnumFacing.NORTH),
         CENTER_SOUTH("center_south", false, false, EnumFacing.SOUTH),
@@ -269,7 +268,7 @@ object CommonMethods {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_CENTER_ORIENTATION)
 
         override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_CENTER_ORIENTATION, this)
+            return block.defaultState.with(PROPERTY_CENTER_ORIENTATION, this)
         }
 
         companion object {
@@ -288,10 +287,10 @@ object CommonMethods {
     }
 
     enum class OrientationActive(
-            override val stateName: String,
-            override val isVisible: Boolean,
-            val active: Boolean,
-            val facing: EnumFacing) : IStatesEnum, IStringSerializable, IRotable<OrientationActive> {
+        override val stateName: String,
+        override val isVisible: Boolean,
+        val active: Boolean,
+        val facing: EnumFacing) : IStatesEnum, IStringSerializable, IRotable<OrientationActive> {
 
         OFF_NORTH("off_north", true, false, EnumFacing.NORTH),
         OFF_SOUTH("off_south", false, false, EnumFacing.SOUTH),
@@ -306,7 +305,7 @@ object CommonMethods {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_ORIENTATION_ACTIVE)
 
         override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_ORIENTATION_ACTIVE, this)
+            return block.defaultState.with(PROPERTY_ORIENTATION_ACTIVE, this)
         }
 
         override fun next(): IRotable<OrientationActive> = when (this) {

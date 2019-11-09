@@ -1,9 +1,10 @@
 package com.cout970.magneticraft.features.manual_machines
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.ItemBlock
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
+import com.cout970.magneticraft.misc.block.FULL_BLOCK_AABB
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.createAABBUsing
 import com.cout970.magneticraft.misc.vector.plus
@@ -14,9 +15,9 @@ import com.cout970.magneticraft.systems.blocks.BlockBuilder
 import com.cout970.magneticraft.systems.blocks.CommonMethods
 import com.cout970.magneticraft.systems.blocks.IBlockMaker
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
+import com.cout970.magneticraft.withProperty
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.ItemBlock
 import net.minecraft.util.math.BlockPos
 
 /**
@@ -38,12 +39,12 @@ object Blocks : IBlockMaker {
 
         box = builder.withName("box").copy {
             material = Material.WOOD
-            factory = factoryOf(::TileBox)
+            factory = factoryOf(TileBox::class)
             onActivated = CommonMethods::openGui
         }.build()
 
         crushingTable = builder.withName("crushing_table").copy {
-            factory = factoryOf(::TileCrushingTable)
+            factory = factoryOf(TileCrushingTable::class)
             material = Material.ROCK
             forceModelBake = true
             customModels = listOf("normal" to resource("models/block/mcx/crushing_table.mcx"))
@@ -55,7 +56,7 @@ object Blocks : IBlockMaker {
 
         sluiceBox = builder.withName("sluice_box").copy {
             states = CommonMethods.CenterOrientation.values().toList()
-            factory = factoryOf(::TileSluiceBox)
+            factory = factoryOf(TileSluiceBox::class)
             factoryFilter = { it[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false }
             customModels = listOf(
                 "model" to resource("models/block/mcx/sluice_box.mcx"),
@@ -76,7 +77,7 @@ object Blocks : IBlockMaker {
                 val thisState = it.default.withProperty(CommonMethods.PROPERTY_CENTER_ORIENTATION, center)
                 val otherState = it.default.withProperty(CommonMethods.PROPERTY_CENTER_ORIENTATION, noCenter)
 
-                listOf(BlockPos.ORIGIN to thisState, facing.toBlockPos() to otherState)
+                listOf(BlockPos.ZERO to thisState, facing.toBlockPos() to otherState)
             }
             onBlockBreak = func@{
                 val facing = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.facing ?: return@func
@@ -88,12 +89,12 @@ object Blocks : IBlockMaker {
             }
             boundingBox = {
                 val center = it.state[CommonMethods.PROPERTY_CENTER_ORIENTATION]?.center ?: false
-                if (center) listOf(Block.FULL_BLOCK_AABB) else listOf(AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0))
+                if (center) listOf(FULL_BLOCK_AABB) else listOf(AABB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0))
             }
         }.build()
 
         fabricator = builder.withName("fabricator").copy {
-            factory = factoryOf(::TileFabricator)
+            factory = factoryOf(TileFabricator::class)
             onActivated = CommonMethods::openGui
         }.build()
 

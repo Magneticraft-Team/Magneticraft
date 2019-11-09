@@ -23,8 +23,8 @@ object TileRendererTubeLight : BaseTileRenderer<TileTubeLight>() {
 
     override fun render(te: TileTubeLight) {
         Utilities.rotateFromCenter(te.facing, 90f)
-        val front = te.world.getTile<TileTubeLight>(te.pos.offset(te.facing, 1))
-        val back = te.world.getTile<TileTubeLight>(te.pos.offset(te.facing, -1))
+        val front = te.theWorld.getTile<TileTubeLight>(te.pos.offset(te.facing, 1))
+        val back = te.theWorld.getTile<TileTubeLight>(te.pos.offset(te.facing, -1))
 
         renderModel("default")
         if (front == null || front.facing.axis != te.facing.axis) {

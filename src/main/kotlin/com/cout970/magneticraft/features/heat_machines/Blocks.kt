@@ -1,9 +1,11 @@
 package com.cout970.magneticraft.features.heat_machines
 
 import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.IBlockAccess
+import com.cout970.magneticraft.ItemBlock
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
@@ -23,12 +25,9 @@ import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.item.ItemBlock
+import net.minecraft.entity.LivingEntity
 import net.minecraft.util.DamageSource
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -52,7 +51,7 @@ object Blocks : IBlockMaker {
 
         combustionChamber = builder.withName("combustion_chamber").copy {
             states = CommonMethods.Orientation.values().toList()
-            factory = factoryOf(::TileCombustionChamber)
+            factory = factoryOf(TileCombustionChamber::class)
             customModels = listOf(
                 "model" to resource("models/block/mcx/combustion_chamber.mcx"),
                 "inventory" to resource("models/block/mcx/combustion_chamber.mcx")
@@ -74,7 +73,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         steamBoiler = builder.withName("steam_boiler").copy {
-            factory = factoryOf(::TileSteamBoiler)
+            factory = factoryOf(TileSteamBoiler::class)
             customModels = listOf(
                 "model" to resource("models/block/mcx/steam_boiler.mcx"),
                 "inventory" to resource("models/block/mcx/steam_boiler.mcx")
@@ -87,7 +86,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         heatPipe = builder.withName("heat_pipe").copy {
-            factory = factoryOf(::TileHeatPipe)
+            factory = factoryOf(TileHeatPipe::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
@@ -97,7 +96,7 @@ object Blocks : IBlockMaker {
             boundingBox = { heatPipeBoundingBox(it.source, it.pos, 4) }
             onActivated = CommonMethods::delegateToModule
             onEntityCollidedWithBlock = func@{
-                val entity = it.entityIn as? EntityLivingBase ?: return@func
+                val entity = it.entityIn as? LivingEntity ?: return@func
                 val tile = it.worldIn.getTile<TileHeatPipe>(it.pos) ?: return@func
                 val temp = tile.heatNode.temperature.toCelsius()
 
@@ -120,7 +119,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         insulatedHeatPipe = builder.withName("insulated_heat_pipe").copy {
-            factory = factoryOf(::TileInsulatedHeatPipe)
+            factory = factoryOf(TileInsulatedHeatPipe::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
@@ -133,7 +132,7 @@ object Blocks : IBlockMaker {
 
         heatSink = builder.withName("heat_sink").copy {
             states = CommonMethods.Facing.values().toList()
-            factory = factoryOf(::TileHeatSink)
+            factory = factoryOf(TileHeatSink::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
@@ -150,7 +149,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         gasificationUnit = builder.withName("gasification_unit").copy {
-            factory = factoryOf(::TileGasificationUnit)
+            factory = factoryOf(TileGasificationUnit::class)
             customModels = listOf(
                 "model" to resource("models/block/mcx/gasification_unit.mcx"),
                 "inventory" to resource("models/block/mcx/gasification_unit.mcx")
@@ -165,7 +164,7 @@ object Blocks : IBlockMaker {
         brickFurnace = builder.withName("brick_furnace").copy {
             material = Material.ROCK
             states = CommonMethods.OrientationActive.values().toList()
-            factory = factoryOf(::TileBrickFurnace)
+            factory = factoryOf(TileBrickFurnace::class)
             alwaysDropDefault = true
             hasCustomModel = true
             //methods

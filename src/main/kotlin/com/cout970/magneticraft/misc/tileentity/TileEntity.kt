@@ -1,18 +1,22 @@
 package com.cout970.magneticraft.misc.tileentity
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.api.heat.IHeatNode
 import com.cout970.magneticraft.api.heat.IHeatNodeHandler
 import com.cout970.magneticraft.api.internal.energy.ElectricConnection
 import com.cout970.magneticraft.api.internal.heat.HeatConnection
+import com.cout970.magneticraft.isSideSolid
 import com.cout970.magneticraft.registry.fromTile
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tileentities.TileBase
+import net.minecraft.block.Blocks
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.Direction
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
+import net.minecraft.world.IBlockReader
+import net.minecraft.world.IWorld
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 
@@ -21,31 +25,45 @@ import net.minecraftforge.common.capabilities.Capability
  */
 
 fun World.shouldTick(pos: BlockPos, time: Int): Boolean {
-    return (totalWorldTime + pos.hashCode()) % time == 0L
+    return (gameTime + pos.hashCode()) % time == 0L
 }
 
 fun IModuleContainer.shouldTick(ticks: Int): Boolean {
-    return (world.totalWorldTime + pos.hashCode()) % ticks == 0L
+    return (world.gameTime + pos.hashCode()) % ticks == 0L
 }
 
-inline fun <reified T : TileEntity> World.getTile(pos: BlockPos): T? {
+inline fun <reified T : TileEntity> IBlockReader.getTile(pos: BlockPos): T? {
     val tile = getTileEntity(pos)
     return tile as? T
 }
 
-fun <T> IBlockAccess.getCap(cap: Capability<T>?, pos: BlockPos, side: EnumFacing?): T? {
+fun <T> IWorld.getCap(cap: Capability<T>?, pos: BlockPos, side: EnumFacing?): T? {
     val tile = getTileEntity(pos) ?: return null
     return cap?.fromTile(tile, side)
 }
 
+fun <T> IBlockReader.getCap(cap: Capability<T>?, pos: BlockPos, side: EnumFacing?): T? {
+    val tile = getTileEntity(pos) ?: return null
+    return cap?.fromTile(tile, side)
+}
+
+fun World.setBlockToAir(pos: BlockPos) {
+    setBlockState(pos, Blocks.AIR.defaultState)
+}
+
+
+fun IBlockReader.isSideSolid(pos: BlockPos, side: Direction, water: Boolean = false): Boolean {
+    return getBlockState(pos).isSideSolid(this, pos, side)
+}
+
 inline fun <reified T> TileBase.getModule(): T? = container.modules.find { it is T } as? T
 
-inline fun <reified T> IBlockAccess.getModule(pos: BlockPos): T? {
+inline fun <reified T> IWorld.getModule(pos: BlockPos): T? {
     val tile = getTile<TileBase>(pos)
     return tile?.getModule<T>()
 }
 
-inline fun <reified T : TileEntity> IBlockAccess.getTile(pos: BlockPos): T? {
+inline fun <reified T : TileEntity> IWorld.getTile(pos: BlockPos): T? {
     val tile = getTileEntity(pos)
     return tile as? T
 }
@@ -64,10 +82,10 @@ fun World.getTileEntitiesIn(start: BlockPos, end: BlockPos,
     for (x in start.x..end.x step 16) {
         for (z in start.z..end.z step 16) {
 
-            val chunk = getChunkFromChunkCoords(x shr 4, z shr 4)
+            val chunk = getChunk(x shr 4, z shr 4)
 
             for ((pos, tile) in chunk.tileEntityMap) {
-                if (!tile.isInvalid && pos in (start to end) && filter.invoke(tile)) {
+                if (!tile.isRemoved && pos in (start to end) && filter.invoke(tile)) {
                     list.add(tile)
                 }
             }

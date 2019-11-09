@@ -1,9 +1,10 @@
 package com.cout970.magneticraft.features.manual_machines
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.block.getOrientationCentered
 import com.cout970.magneticraft.misc.inventory.Inventory
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.misc.vector.toBlockPos
 import com.cout970.magneticraft.misc.vector.xd
 import com.cout970.magneticraft.misc.vector.yd
@@ -13,8 +14,7 @@ import com.cout970.magneticraft.systems.tilemodules.ModuleCrushingTable
 import com.cout970.magneticraft.systems.tilemodules.ModuleFabricator
 import com.cout970.magneticraft.systems.tilemodules.ModuleInventory
 import com.cout970.magneticraft.systems.tilemodules.ModuleSluiceBox
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
+import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.util.math.AxisAlignedBB
 
 /**
@@ -22,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB
  */
 
 @RegisterTileEntity("box")
-class TileBox : TileBase() {
+class TileBox(type: TileType) : TileBase(type) {
 
     val inventory = Inventory(27)
     val invModule = ModuleInventory(inventory)
@@ -33,7 +33,7 @@ class TileBox : TileBase() {
 }
 
 @RegisterTileEntity("crushing_table")
-class TileCrushingTable : TileBase() {
+class TileCrushingTable(type: TileType) : TileBase(type) {
 
     val inventory = Inventory(1)
     val invModule = ModuleInventory(inventory, capabilityFilter = { null })
@@ -45,7 +45,7 @@ class TileCrushingTable : TileBase() {
 }
 
 @RegisterTileEntity("sluice_box")
-class TileSluiceBox : TileBase(), ITickable {
+class TileSluiceBox(type: TileType) : TileBase(type), ITickableTileEntity {
 
     val facing: EnumFacing get() = getBlockState().getOrientationCentered()
 
@@ -57,14 +57,14 @@ class TileSluiceBox : TileBase(), ITickable {
         initModules(sluiceBoxModule, invModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 
-    override fun shouldRenderInPass(pass: Int): Boolean {
-        return pass == 0 || pass == 1
-    }
+    // TODO
+//    override fun shouldRenderInPass(pass: Int): Boolean {
+//        return pass == 0 || pass == 1
+//    }
 
     override fun getRenderBoundingBox(): AxisAlignedBB {
         val dir = facing.toBlockPos()
@@ -73,7 +73,7 @@ class TileSluiceBox : TileBase(), ITickable {
 }
 
 @RegisterTileEntity("fabricator")
-class TileFabricator : TileBase(), ITickable {
+class TileFabricator(type: TileType) : TileBase(type), ITickableTileEntity {
     val inventory = Inventory(9)
 
     val invModule = ModuleInventory(inventory)
@@ -83,8 +83,7 @@ class TileFabricator : TileBase(), ITickable {
         initModules(invModule, fabricatorModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }

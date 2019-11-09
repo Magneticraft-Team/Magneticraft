@@ -4,9 +4,11 @@ import kotlin.reflect.KClass
 
 annotation class RegisterBlocks
 
+annotation class RegisterItems
+
 annotation class RegisterRenderer(val tileEntity: KClass<*>)
 
-annotation class RegisterTileEntity(val name: String)
+annotation class RegisterTileEntity(val name: String, vararg val blocks: String)
 
 annotation class RegisterContainer(val tile: KClass<*>)
 

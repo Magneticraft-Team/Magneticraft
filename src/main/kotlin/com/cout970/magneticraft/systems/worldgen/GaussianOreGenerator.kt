@@ -1,11 +1,12 @@
 package com.cout970.magneticraft.systems.worldgen
 
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.systems.config.GaussOreConfig
-import net.minecraft.block.state.IBlockState
 import net.minecraft.world.World
-import net.minecraft.world.chunk.IChunkProvider
-import net.minecraft.world.gen.IChunkGenerator
+import net.minecraft.world.chunk.AbstractChunkProvider
+import net.minecraft.world.dimension.DimensionType
+import net.minecraft.world.gen.ChunkGenerator
 import java.util.*
 
 /**
@@ -16,11 +17,11 @@ class GaussianOreGenerator(
     val conf: GaussOreConfig
 ) : OreGenerator(blockstate, conf) {
 
-    override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?, chunkGenerator: IChunkGenerator?,
-                          chunkProvider: IChunkProvider?) {
+    override fun generate(random: Random?, chunkX: Int, chunkZ: Int, world: World?,
+                          chunkGenerator: ChunkGenerator<*>, chunkProvider: AbstractChunkProvider) {
 
         if (world == null || random == null) return
-        if (world.provider.dimension in listOf(1, -1)) return
+        if (world.dimension.type == DimensionType.THE_NETHER || world.dimension.type == DimensionType.THE_END) return
 
         if (conf.active) {
             val randGaussian = random.nextGaussian() * conf.deviation + conf.chunkAmount

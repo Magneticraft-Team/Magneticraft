@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.systems.tilemodules.pipe
 
+import com.cout970.magneticraft.EnumFacing
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
+
 
 /**
  * Created by cout970 on 2017/08/28.

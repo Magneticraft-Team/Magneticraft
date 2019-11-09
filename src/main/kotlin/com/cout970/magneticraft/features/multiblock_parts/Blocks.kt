@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.features.multiblock_parts
 
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.ItemBlock
+import com.cout970.magneticraft.PropertyEnum
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.systems.blocks.BlockBase
@@ -7,13 +10,11 @@ import com.cout970.magneticraft.systems.blocks.BlockBuilder
 import com.cout970.magneticraft.systems.blocks.IBlockMaker
 import com.cout970.magneticraft.systems.blocks.IStatesEnum
 import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
+import com.cout970.magneticraft.withProperty
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemBlock
-import net.minecraft.util.EnumFacing
+import net.minecraft.state.IProperty
+import net.minecraft.util.Direction
 import net.minecraft.util.IStringSerializable
 
 /**
@@ -89,8 +90,8 @@ object Blocks : IBlockMaker {
     }
 }
 
-fun EnumFacing.Axis.toColumnAxis(): Blocks.ColumnOrientation = when (this) {
-    EnumFacing.Axis.X -> Blocks.ColumnOrientation.AXIS_X
-    EnumFacing.Axis.Y -> Blocks.ColumnOrientation.AXIS_Y
-    EnumFacing.Axis.Z -> Blocks.ColumnOrientation.AXIS_Z
+fun Direction.Axis.toColumnAxis(): Blocks.ColumnOrientation = when (this) {
+    Direction.Axis.X -> Blocks.ColumnOrientation.AXIS_X
+    Direction.Axis.Y -> Blocks.ColumnOrientation.AXIS_Y
+    Direction.Axis.Z -> Blocks.ColumnOrientation.AXIS_Z
 }

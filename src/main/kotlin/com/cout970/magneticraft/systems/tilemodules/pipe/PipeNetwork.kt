@@ -21,7 +21,7 @@ class PipeNetwork(module: ModulePipe) : Network<ModulePipe>(
         fun getInspectFunc(type: PipeType): InspectFunc {
             return func@{ tile, _ ->
                 val tileBase = tile as? TileBase ?: return@func emptyList()
-                if (tile.isInvalid) return@func emptyList()
+                if (tile.isRemoved) return@func emptyList()
 
                 val module = tileBase.getModule<ModulePipe>() ?: return@func emptyList()
                 if (module.type == type) listOf(module) else emptyList()

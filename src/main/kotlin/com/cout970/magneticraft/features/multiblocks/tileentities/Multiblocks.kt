@@ -1,14 +1,14 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.misc.RegisterTileEntity
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.multiblocks.MultiblockContext
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleMultiblockCenter
 import com.cout970.magneticraft.systems.tilemodules.ModuleMultiblockGap
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.text.ITextComponent
@@ -19,7 +19,7 @@ import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
  */
 
 @RegisterTileEntity("multiblock_gap")
-class TileMultiblockGap : TileBase() {
+class TileMultiblockGap(type: TileType) : TileBase(type) {
 
     val multiblockModule = ModuleMultiblockGap()
 
@@ -28,12 +28,12 @@ class TileMultiblockGap : TileBase() {
     }
 }
 
-abstract class TileMultiblock : TileBase() {
+abstract class TileMultiblock(type: TileType) : TileBase(type) {
 
     val facing: EnumFacing
-        get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: EnumFacing.NORTH
+        get() = blockState[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.facing ?: EnumFacing.NORTH
     val active: Boolean
-        get() = getBlockState()[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.active ?: false
+        get() = blockState[Multiblocks.PROPERTY_MULTIBLOCK_ORIENTATION]?.active ?: false
 
     var clientErrors: List<ITextComponent> = emptyList()
 
@@ -42,9 +42,10 @@ abstract class TileMultiblock : TileBase() {
     @Suppress("LeakingThis")
     abstract val multiblockModule: ModuleMultiblockCenter
 
-    override fun shouldRenderInPass(pass: Int): Boolean {
-        return if (active) super.shouldRenderInPass(pass) else pass == 1
-    }
+    // TODO
+//    override fun shouldRenderInPass(pass: Int): Boolean {
+//        return if (active) super.shouldRenderInPass(pass) else pass == 1
+//    }
 
     override fun getRenderBoundingBox(): AxisAlignedBB {
         val size = getMultiblock().size.toVec3d()
@@ -57,6 +58,6 @@ abstract class TileMultiblock : TileBase() {
     }
 
     fun multiblockContext(): MultiblockContext {
-        return MultiblockContext(getMultiblock(), world, pos, facing, null)
+        return MultiblockContext(getMultiblock(), theWorld, pos, facing, null)
     }
 }

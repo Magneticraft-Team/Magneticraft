@@ -1,48 +1,41 @@
 package com.cout970.magneticraft.misc.inventory
 
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.api.internal.ApiUtils
-import com.cout970.magneticraft.systems.blocks.BlockBase
 import net.minecraft.block.Block
-import net.minecraft.block.state.IBlockState
-import net.minecraft.init.Items
+import net.minecraft.fluid.Fluid
+import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.Fluid
+import net.minecraft.item.Items
+import net.minecraft.item.crafting.IRecipeType
+import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.FluidUtil
 import net.minecraftforge.fluids.IFluidBlock
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.IItemHandlerModifiable
-import java.util.*
 
 /**
  * Created by cout970 on 07/07/2016.
  */
 
-fun Item.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
+fun Item.stack(size: Int = 1) = ItemStack(this, size)
 
-fun Block.stack(size: Int = 1, meta: Int = 0) = ItemStack(this, size, meta)
+fun Block.stack(size: Int = 1) = ItemStack(this, size)
 
 fun IBlockState.stack(size: Int = 1): ItemStack {
     val block = block
 
     return when {
         block is IFluidBlock -> {
-            if (block.getMetaFromState(this) != 0) {
-                ItemStack.EMPTY
-            } else {
-                FluidUtil.getFilledBucket(block.fluid.stack())
-            }
+            FluidUtil.getFilledBucket(block.fluid.stack())
         }
-        Item.getItemFromBlock(block) == Items.AIR -> {
+        block.asItem() == Items.AIR -> {
             ItemStack(block, size)
         }
-        (block as? BlockBase)?.alwaysDropDefault == true -> {
-            ItemStack(block.getItemDropped(this, Random(), 0), size, block.getMetaFromState(this))
-        }
         else -> {
-            ItemStack(block.getItemDropped(this, Random(), 0), size, block.damageDropped(this))
+            ItemStack(block, size)
         }
     }
 }
@@ -51,8 +44,8 @@ fun Fluid.stack() = FluidStack(this, 1000)
 
 @Suppress("DEPRECATION")
 fun ItemStack.toBlockState(): IBlockState? {
-    val itemBlock = item as? ItemBlock ?: return null
-    return itemBlock.block.getStateFromMeta(metadata)
+    val itemBlock = item as? BlockItem ?: return null
+    return itemBlock.block.defaultState
 }
 
 operator fun IItemHandlerModifiable.set(slot: Int, stack: ItemStack) {
@@ -83,6 +76,11 @@ inline fun IItemHandler.forEachIndexed(func: (Int, ItemStack) -> Unit) {
 }
 
 val ItemStack.isNotEmpty get() = !isEmpty
+
+fun ItemStack.isFurnaceInput(world: World): Boolean {
+    val inv = net.minecraft.inventory.Inventory().apply { setInventorySlotContents(0, this@isFurnaceInput) }
+    return world.recipeManager.getRecipe(IRecipeType.SMELTING, inv, world).isPresent
+}
 
 fun ItemStack.withSize(size: Int): ItemStack = this.copy().also { it.count = size }
 

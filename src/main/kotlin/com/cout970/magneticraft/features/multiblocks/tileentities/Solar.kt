@@ -1,19 +1,19 @@
 package com.cout970.magneticraft.features.multiblocks.tileentities
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.TileType
 import com.cout970.magneticraft.api.internal.heat.HeatNode
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSolarMirror
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSolarTower
 import com.cout970.magneticraft.misc.RegisterTileEntity
-import com.cout970.magneticraft.misc.tileentity.DoNotRemove
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
 import com.cout970.magneticraft.systems.multiblocks.Multiblock
 import com.cout970.magneticraft.systems.tilemodules.*
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
+import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.util.math.BlockPos
 
 @RegisterTileEntity("solar_tower")
-class TileSolarTower : TileMultiblock(), ITickable {
+class TileSolarTower(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarTower
 
@@ -51,14 +51,13 @@ class TileSolarTower : TileMultiblock(), ITickable {
         initModules(multiblockModule, ioModule, solarTowerModule, openGuiModule, heatModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }
 
 @RegisterTileEntity("solar_mirror")
-class TileSolarMirror : TileMultiblock(), ITickable {
+class TileSolarMirror(type: TileType) : TileMultiblock(type), ITickableTileEntity {
 
     override fun getMultiblock(): Multiblock = MultiblockSolarMirror
 
@@ -77,8 +76,7 @@ class TileSolarMirror : TileMultiblock(), ITickable {
         initModules(multiblockModule, solarMirrorModule)
     }
 
-    @DoNotRemove
-    override fun update() {
+        override fun tick() {
         super.update()
     }
 }

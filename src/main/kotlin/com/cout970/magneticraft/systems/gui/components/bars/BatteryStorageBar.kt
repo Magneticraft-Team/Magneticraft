@@ -16,7 +16,7 @@ import java.text.DecimalFormat
  * Created by cout970 on 2017/07/01.
  */
 
-class BatteryStorageBar(val parent: GuiBase, val texture: ResourceLocation,
+class BatteryStorageBar(val parent: GuiBase<*>, val texture: ResourceLocation,
                         val storageModule: ModuleInternalStorage) : IComponent {
 
     override val pos: IVector2 = vec2Of(69, 16) + parent.pos

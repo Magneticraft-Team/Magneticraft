@@ -9,3 +9,6 @@ inline val Number.px get() = toDouble() * PIXEL
 
 inline val Double.f get() = toFloat()
 inline val Float.d get() = toDouble()
+
+inline val Float.i get() = toInt()
+inline val Double.i get() = toInt()

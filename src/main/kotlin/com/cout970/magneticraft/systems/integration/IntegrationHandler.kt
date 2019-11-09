@@ -1,13 +1,8 @@
 package com.cout970.magneticraft.systems.integration
 
-import com.blamejared.mtlib.helpers.InputHelper
-import com.cout970.magneticraft.api.internal.registries.fuel.FluidFuelManager
 import com.cout970.magneticraft.misc.info
-import com.cout970.magneticraft.systems.integration.buildcraft.BuildcraftFuelManager
 import com.cout970.magneticraft.systems.integration.crafttweaker.CraftTweakerPlugin
 import com.cout970.magneticraft.systems.integration.tinkersconstruct.TinkersConstruct
-import net.minecraftforge.fml.common.Loader
-import net.minecraftforge.fml.common.ModAPIManager
 
 /**
  * Created by cout970 on 22/07/2016.
@@ -21,21 +16,25 @@ object IntegrationHandler {
     var buildcraftApi = false
     var industrialForegoing = false
 
-    fun preInit() {
+    fun init() {
         // jei automatically loads MagneticraftPlugin because has @JEIPlugin
-        jei = Loader.isModLoaded("jei")
+        jei = isModLoaded("jei")
         // also auto-loads classes with @ZenRegister
-        craftTweaker = Loader.isModLoaded("crafttweaker")
-        tconstruct = Loader.isModLoaded("tconstruct")
-        buildcraftApi = ModAPIManager.INSTANCE.hasAPI("buildcraftapi_fuels")
-        industrialForegoing = Loader.isModLoaded("industrialforegoing")
+        craftTweaker = isModLoaded("crafttweaker")
+        tconstruct = isModLoaded("tconstruct")
+        buildcraftApi = isModLoaded("buildcraftapi_fuels") // TODO search a better way to check apis
+        industrialForegoing = isModLoaded("industrialforegoing")
 
-        if (buildcraftApi) {
-            FluidFuelManager.FLUID_FUEL_MANAGER = BuildcraftFuelManager()
-        }
+        // TODO
+//        if (buildcraftApi) {
+//            FluidFuelManager.FLUID_FUEL_MANAGER = BuildcraftFuelManager()
+//        }
     }
 
-    fun init() {
+    // TODO
+    fun isModLoaded(modid: String) = false
+
+    fun postInit() {
         if (craftTweaker) craftTweaker()
         if (tconstruct) {
             info("Starting tinkers construct integration")
@@ -51,7 +50,7 @@ object IntegrationHandler {
     private fun craftTweaker() {
         info("Starting CraftTweaker integration")
         try {
-            InputHelper::class.java
+            Class.forName("com.blamejared.mtlib.helpers.InputHelper")
         } catch (e: NoClassDefFoundError) {
             info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             info("++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!++")

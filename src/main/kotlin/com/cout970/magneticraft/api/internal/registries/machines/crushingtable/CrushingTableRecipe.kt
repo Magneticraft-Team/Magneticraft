@@ -4,7 +4,6 @@ import com.cout970.magneticraft.api.internal.ApiUtils
 import com.cout970.magneticraft.api.registries.machines.crushingtable.ICrushingTableRecipe
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
-import net.minecraftforge.oredict.OreDictionary
 
 /**
  * Created by cout970 on 24/08/2016.
@@ -28,8 +27,7 @@ data class CrushingTableRecipe(
     override fun matches(input: ItemStack): Boolean {
         if (ApiUtils.equalsIgnoreSize(input, this.input)) return true
         if (oreDict) {
-            val ids = OreDictionary.getOreIDs(this.input)
-            return OreDictionary.getOreIDs(input).any { it in ids }
+            return ApiUtils.areEquivalent(this.input, input)
         }
         return false
     }

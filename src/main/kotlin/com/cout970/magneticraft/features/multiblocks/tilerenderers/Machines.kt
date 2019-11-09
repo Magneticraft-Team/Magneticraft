@@ -6,14 +6,11 @@ import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.systems.tilerenderers.*
-import com.cout970.modelloader.api.*
-import com.cout970.modelloader.api.formats.gltf.GltfAnimationBuilder
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager.*
-import net.minecraft.client.renderer.texture.TextureMap
-import net.minecraft.util.ResourceLocation
+import com.cout970.modelloader.api.IRenderCache
+import com.mojang.blaze3d.platform.GlStateManager
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 
 @RegisterRenderer(TileGrinder::class)
@@ -60,7 +57,7 @@ object TileRendererHydraulicPress : TileRendererMultiblock<TileHydraulicPress>()
         if (stack.isNotEmpty) {
             stackMatrix {
                 translate(0.5f, 2f, 0.5f)
-                if (!Minecraft.getMinecraft().renderItem.shouldRenderItemIn3D(stack)) {
+                if (!mc.itemRenderer.shouldRenderItemIn3D(stack)) {
                     scale(2.0)
                 } else {
                     translate(0f, -PIXEL, 0f)
@@ -169,10 +166,10 @@ object TileRendererBigElectricFurnace : TileRendererMultiblock<TileBigElectricFu
         //cleaning
         belt?.close()
 
-        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
-        val texture = resource("blocks/machines/conveyor_belt_anim")
-
-        belt = updateTexture(beltModel, texture)
+//        val beltModel = ModelLoaderApi.getModelEntry(anim) ?: return
+//        val texture = resource("blocks/machines/conveyor_belt_anim")
+//
+//        belt = updateTexture(beltModel, texture)
     }
 
     override fun render(te: TileBigElectricFurnace) {
@@ -191,14 +188,14 @@ object TileRendererBigElectricFurnace : TileRendererMultiblock<TileBigElectricFu
         renderModel("multiblock")
 
         // Dark interior
-        disableTexture2D()
+        GlStateManager.disableTexture()
         if (te.processModule.working) {
             color(0.2f, 0.1f, 0.05f, 1f)
         } else {
             color(0f, 0f, 0f, 1f)
         }
         renderModel("dark")
-        enableTexture2D()
+        GlStateManager.enableTexture()
         color(1f, 1f, 1f, 1f)
 
         // Exit belt
@@ -217,22 +214,22 @@ object TileRendererBigElectricFurnace : TileRendererMultiblock<TileBigElectricFu
         renderModel("front_legs")
     }
 
-    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): IRenderCache {
-        val raw = model.raw
-        val textureMap = Minecraft.getMinecraft().textureMapBlocks
-        val animTexture = textureMap.getAtlasSprite(texture.toString())
-
-        return when (raw) {
-            is Model.Mcx -> {
-                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
-                TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, ModelCache { ModelUtilities.renderModel(finalModel) })
-            }
-            is Model.Gltf -> {
-                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
-                val anim = GltfAnimationBuilder().buildPlain(finalModel)
-                AnimationRenderCache(anim) { 0.0 }
-            }
-            else -> error("Invalid type: $raw, ${raw::class.java}")
-        }
-    }
+//    private fun updateTexture(model: ModelEntry, texture: ResourceLocation): IRenderCache {
+//        val raw = model.raw
+//        val textureMap = Minecraft.getMinecraft().textureMapBlocks
+//        val animTexture = textureMap.getAtlasSprite(texture.toString())
+//
+//        return when (raw) {
+//            is Model.Mcx -> {
+//                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+//                TextureModelCache(TextureMap.LOCATION_BLOCKS_TEXTURE, ModelCache { ModelUtilities.renderModel(finalModel) })
+//            }
+//            is Model.Gltf -> {
+//                val finalModel = ModelTransform.updateModelUvs(raw.data, animTexture)
+//                val anim = GltfAnimationBuilder().buildPlain(finalModel)
+//                AnimationRenderCache(anim) { 0.0 }
+//            }
+//            else -> error("Invalid type: $raw, ${raw::class.java}")
+//        }
+//    }
 }

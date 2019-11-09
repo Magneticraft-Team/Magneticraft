@@ -1,14 +1,16 @@
 package com.cout970.magneticraft.misc.network
 
 import io.netty.buffer.ByteBuf
+import net.minecraft.util.math.BlockPos
 import java.util.*
+import kotlin.math.abs
 
 /**
  * Created by cout970 on 2017/02/20.
  */
 
 fun ByteBuf.readString(): String {
-    val size = Math.abs(this.readShort().toInt())
+    val size = abs(this.readShort().toInt())
     val buffer = ByteArray(size)
     for (i in 0 until size) {
         buffer[i] = this.readByte()
@@ -19,13 +21,13 @@ fun ByteBuf.readString(): String {
 fun ByteBuf.writeString(str: String) {
     val array = str.toByteArray(Charsets.UTF_8)
     this.writeShort(array.size)
-    for (i in 0 until array.size) {
-        this.writeByte(array[i].toInt())
+    for (element in array) {
+        this.writeByte(element.toInt())
     }
 }
 
 fun ByteBuf.readByteArray(): ByteArray {
-    val size = Math.abs(this.readShort().toInt())
+    val size = abs(this.readShort().toInt())
     val buffer = ByteArray(size)
     for (i in 0 until size) {
         buffer[i] = this.readByte()
@@ -35,13 +37,13 @@ fun ByteBuf.readByteArray(): ByteArray {
 
 fun ByteBuf.writeByteArray(array: ByteArray) {
     this.writeShort(array.size)
-    for (i in 0 until array.size) {
-        this.writeByte(array[i].toInt())
+    for (element in array) {
+        this.writeByte(element.toInt())
     }
 }
 
 fun ByteBuf.readIntArray(): IntArray {
-    val size = Math.abs(this.readShort().toInt())
+    val size = abs(this.readShort().toInt())
     val buffer = IntArray(size)
     for (i in 0 until size) {
         buffer[i] = this.readInt()
@@ -51,9 +53,19 @@ fun ByteBuf.readIntArray(): IntArray {
 
 fun ByteBuf.writeIntArray(array: IntArray) {
     this.writeShort(array.size)
-    for (i in 0 until array.size) {
-        this.writeInt(array[i])
+    for (element in array) {
+        this.writeInt(element)
     }
+}
+
+fun ByteBuf.readBlockPos(): BlockPos {
+    return BlockPos(readInt(), readInt(), readInt())
+}
+
+fun ByteBuf.writeBlockPos(pos: BlockPos) {
+    writeInt(pos.x)
+    writeInt(pos.y)
+    writeInt(pos.z)
 }
 
 fun ByteBuf.writeUUID(uuid: UUID) {

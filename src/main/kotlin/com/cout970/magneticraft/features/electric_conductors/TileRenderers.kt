@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.features.electric_conductors
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.api.energy.IWireConnector
 import com.cout970.magneticraft.features.items.ToolItems
 import com.cout970.magneticraft.misc.RegisterRenderer
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.getBlockPos
 import com.cout970.magneticraft.misc.hasKey
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
@@ -16,8 +16,7 @@ import com.cout970.magneticraft.systems.tilerenderers.BaseTileRenderer
 import com.cout970.magneticraft.systems.tilerenderers.FilterRegex
 import com.cout970.magneticraft.systems.tilerenderers.ModelSelector
 import com.cout970.magneticraft.systems.tilerenderers.Utilities
-import net.minecraft.client.Minecraft
-import net.minecraft.util.EnumFacing
+
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -41,7 +40,7 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
         bindTexture(Utilities.WIRE_TEXTURE)
         te.wireRender.render()
 
-        val player = Minecraft.getMinecraft().player
+        val player = mc.player
 
         if (player.heldItemMainhand.item == ToolItems.voltmeter ||
                 player.heldItemOffhand.item == ToolItems.voltmeter) {
@@ -72,7 +71,7 @@ object TileRendererConnector : BaseTileRenderer<TileConnector>() {
                             player.posZ + (player.posZ - player.prevPosZ) * ticks
                     )
 
-                    val box = player.entityBoundingBox.center - te.pos.toVec3d()
+                    val box = player.renderBoundingBox.center - te.pos.toVec3d()
 
                     player.setPosition(
                             oldPos.x,

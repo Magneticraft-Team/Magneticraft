@@ -1,5 +1,8 @@
 package com.cout970.magneticraft.features.decoration
 
+import com.cout970.magneticraft.IBlockState
+import com.cout970.magneticraft.ItemBlock
+import com.cout970.magneticraft.PropertyEnum
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
 import com.cout970.magneticraft.misc.resource
@@ -9,10 +12,7 @@ import com.cout970.magneticraft.systems.itemblocks.itemBlockListOf
 import com.cout970.magneticraft.systems.tilerenderers.PIXEL
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemBlock
+import net.minecraft.state.IProperty
 import net.minecraft.util.IStringSerializable
 import net.minecraft.util.math.Vec3d
 
@@ -46,7 +46,7 @@ object Blocks : IBlockMaker {
 
         tubeLight = builder.withName("tube_light").copy {
             states = CommonMethods.Orientation.values().toList()
-            factory = factoryOf(::TileTubeLight)
+            factory = factoryOf(TileTubeLight::class)
             lightEmission = 1f
             hasCustomModel = true
             generateDefaultItemBlockModel = false
@@ -77,7 +77,7 @@ object Blocks : IBlockMaker {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_LIMESTONE_KIND)
 
         override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_LIMESTONE_KIND, this)
+            return block.defaultState.with(PROPERTY_LIMESTONE_KIND, this)
         }
     }
 
@@ -91,7 +91,7 @@ object Blocks : IBlockMaker {
         override val properties: List<IProperty<*>> get() = listOf(PROPERTY_INVERTED)
 
         override fun getBlockState(block: Block): IBlockState {
-            return block.defaultState.withProperty(PROPERTY_INVERTED, this)
+            return block.defaultState.with(PROPERTY_INVERTED, this)
         }
     }
 }

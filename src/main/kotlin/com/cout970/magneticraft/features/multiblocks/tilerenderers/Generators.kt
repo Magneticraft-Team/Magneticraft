@@ -1,10 +1,15 @@
 package com.cout970.magneticraft.features.multiblocks.tilerenderers
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileSolarPanel
 import com.cout970.magneticraft.features.multiblocks.tileentities.TileSteamEngine
 import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.systems.tilerenderers.*
-import net.minecraft.util.EnumFacing
+import com.cout970.magneticraft.totalWorldTime
+import net.minecraft.util.Direction
+import kotlin.math.max
+import kotlin.math.min
+
 import com.cout970.magneticraft.features.multiblocks.Blocks as Multiblocks
 
 @RegisterRenderer(TileSteamEngine::class)
@@ -43,7 +48,7 @@ object TileRendererSteamEngine : TileRendererMultiblock<TileSteamEngine>() {
             renderModel("base")
         }
 
-        val step = Math.max(0.0, (te.steamEngineMbModule.auxTime - ticks) / 20.0)
+        val step = max(0.0, (te.steamEngineMbModule.auxTime - ticks) / 20.0)
         val clock = if (te.steamEngineMbModule.lidOpen) 1 - step else step
 
         translate(-0.5 * PIXEL * clock, -2.5 * PIXEL * clock, 0)
@@ -70,7 +75,7 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>() {
         translate(-1.0, 0.0, 0.0)
         renderModel("default")
 
-        val worldTime = te.world.totalWorldTime
+        val worldTime = te.theWorld.totalWorldTime
         val time = (worldTime % 24000L).toInt()
         val normTime = time / 12000f
         val preAngle = if (normTime > 1) 0f else (normTime * 2 - 1) * 30f
@@ -85,13 +90,13 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>() {
 
         val oldTime = te.deltaTime
         te.deltaTime = System.currentTimeMillis()
-        val delta = (Math.min(te.deltaTime - oldTime, 1000)) / 1000f
+        val delta = (min(te.deltaTime - oldTime, 1000)) / 1000f
 
         val angle = te.currentAngle
         te.currentAngle += (targetAngle - te.currentAngle) * delta * 0.5f
 
         when (te.facing.axis) {
-            EnumFacing.Axis.X -> {
+            Direction.Axis.X -> {
                 stackMatrix {
                     translate(1.5f, 11f / 16f, 0.5f)
                     rotate(angle, 0f, 0f, 1f)
@@ -130,7 +135,7 @@ object TileRendererSolarPanel : TileRendererMultiblock<TileSolarPanel>() {
                     renderModel("panel6-3")
                 }
             }
-            EnumFacing.Axis.Z -> {
+            Direction.Axis.Z -> {
                 stackMatrix {
                     translate(0f, 0.75f, 1.25f)
                     rotate(angle, 1f, 0f, 0f)

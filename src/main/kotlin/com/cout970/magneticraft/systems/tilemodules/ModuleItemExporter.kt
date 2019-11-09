@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.EnumFacing
 import com.cout970.magneticraft.misc.inventory.forEachIndexed
 import com.cout970.magneticraft.misc.inventory.insertItem
 import com.cout970.magneticraft.misc.inventory.isEmpty
@@ -11,7 +12,7 @@ import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.getOrNull
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.util.EnumFacing
+
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.items.IItemHandler
 
@@ -31,7 +32,7 @@ class ModuleItemExporter(
 
         val facing = facing()
         for ((off, dir) in ports()) {
-            val tile = world.getTileEntity(pos.add(facing.rotatePoint(BlockPos.ORIGIN, off))) ?: continue
+            val tile = world.getTileEntity(pos.add(facing.rotatePoint(BlockPos.ZERO, off))) ?: continue
             val handler = tile.getOrNull(ITEM_HANDLER, facing.getRelative(dir)) ?: continue
 
             inventory.forEachIndexed { i, stack ->

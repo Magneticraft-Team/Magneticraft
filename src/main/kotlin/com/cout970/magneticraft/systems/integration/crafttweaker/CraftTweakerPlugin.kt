@@ -12,7 +12,7 @@ object CraftTweakerPlugin {
             try {
                 it.invoke()
             } catch (e: Exception) {
-                ctLogError(e.message ?: "Unknown Exception, please read the game log")
+//                ctLogError(e.message ?: "Unknown Exception, please read the game log")
                 e.printStackTrace()
             }
         }

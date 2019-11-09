@@ -5,7 +5,6 @@ import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasifi
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.oredict.OreDictionary
 
 class GasificationUnitRecipe(
     private val input: ItemStack,
@@ -36,8 +35,7 @@ class GasificationUnitRecipe(
         if (input.isEmpty) return false
         if (ApiUtils.equalsIgnoreSize(input, this.input)) return true
         if (oreDict) {
-            val ids = OreDictionary.getOreIDs(this.input)
-            return OreDictionary.getOreIDs(input).any { it in ids }
+            return ApiUtils.areEquivalent(this.input, input)
         }
         return false
     }

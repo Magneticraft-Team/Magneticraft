@@ -7,9 +7,11 @@ import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.render.DrawableBox
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
+import com.cout970.magneticraft.systems.gui.render.isMouseButtonDown
 import net.minecraft.util.ResourceLocation
-import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
+import kotlin.math.max
+import kotlin.math.min
 
 
 /**
@@ -49,7 +51,7 @@ class CompScrollBar(
 
         gui.drawTexture(DrawableBox(gui.pos + pos + vec2Of(0, currentScroll), sliderSize, vec2Of(232, 0)))
 
-        if (Mouse.isButtonDown(0)) {
+        if (isMouseButtonDown(0)) {
             onMouseClick(mouse, 0)
         } else {
             tracking = false
@@ -78,6 +80,6 @@ class CompScrollBar(
     }
 
     fun clampScroll() {
-        currentScroll = Math.min(Math.max(0, currentScroll), size.yi - sliderSize.yi)
+        currentScroll = min(max(0, currentScroll), size.yi - sliderSize.yi)
     }
 }

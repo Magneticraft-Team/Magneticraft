@@ -1,7 +1,8 @@
 package com.cout970.magneticraft.systems.multiblocks
 
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.EnumFacing
+import com.cout970.magneticraft.EntityPlayer
+import com.cout970.magneticraft.EnumFacing
+
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 

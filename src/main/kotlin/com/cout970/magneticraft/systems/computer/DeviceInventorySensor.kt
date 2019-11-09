@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.computer.IDevice
 import com.cout970.magneticraft.api.computer.IRW
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.inventory.Inventory
+import com.cout970.magneticraft.tagCompound
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
@@ -21,7 +22,7 @@ class DeviceInventorySensor(val tile: ITileRef, val inv: Inventory) : IDevice, I
         ReadOnlyInt("slotCount") { inv.slots },
         ReadWriteStruct("stack",
             ReadOnlyInt("itemId") { Item.getIdFromItem(getStack().item) },
-            ReadOnlyInt("itemMeta") { getStack().metadata },
+            ReadOnlyInt("itemMeta") { 0 },
             ReadOnlyInt("itemNbtHash") { getStack().tagCompound?.hashCode() ?: 0 },
             ReadOnlyInt("stackSize") { getStack().count }
         )

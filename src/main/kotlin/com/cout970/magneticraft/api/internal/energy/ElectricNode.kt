@@ -5,18 +5,18 @@ import com.cout970.magneticraft.api.core.NodeID
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.world.isClient
-import net.minecraft.nbt.NBTTagCompound
-
+import com.cout970.magneticraft.totalWorldTime
+import net.minecraft.nbt.CompoundNBT
 
 /**
  * Created by cout970 on 11/06/2016.
  */
 @Suppress("unused")
 open class ElectricNode(
-        val ref: ITileRef,
-        private val capacity: Double = 1.0,
-        private val resistance: Double = 0.001,
-        private val name: String = "electric_node_1"
+    val ref: ITileRef,
+    private val capacity: Double = 1.0,
+    private val resistance: Double = 0.001,
+    private val name: String = "electric_node_1"
 ) : IElectricNode {
 
     private var voltage = 0.0
@@ -24,7 +24,7 @@ open class ElectricNode(
     var amperageCount = 0.0
     var lastTick = 0L
 
-    override fun getId(): NodeID = NodeID(name, pos, world.provider.dimension)
+    override fun getId(): NodeID = NodeID(name, pos, world)
 
     override fun getAmperage(): Double {
         updateAmperage()
@@ -48,8 +48,7 @@ open class ElectricNode(
     override fun getPos() = ref.pos!!
 
     fun updateAmperage() {
-        val tick = world.totalWorldTime
-        when (tick) {
+        when (val tick = world.totalWorldTime) {
             lastTick -> return
             lastTick + 1 -> {
                 lastTick = tick
@@ -79,15 +78,15 @@ open class ElectricNode(
         return Math.abs(power)
     }
 
-    override fun deserializeNBT(nbt: NBTTagCompound?) {
+    override fun deserializeNBT(nbt: CompoundNBT?) {
         if (nbt == null) return
         voltage = nbt.getDouble("V")
         amperage = nbt.getDouble("A")
     }
 
     override fun serializeNBT() = newNbt {
-        setDouble("V", voltage)
-        setDouble("A", amperage)
+        putDouble("V", voltage)
+        putDouble("A", amperage)
     }
 
     override fun toString(): String {

@@ -1,15 +1,15 @@
 package com.cout970.magneticraft.systems.tileentities
 
+import com.cout970.magneticraft.EnumFacing
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.newNbt
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.INBTSerializable
-import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.LogicalSide
 
 interface IModule : INBTSerializable<NBTTagCompound> {
 
@@ -26,12 +26,11 @@ interface IModule : INBTSerializable<NBTTagCompound> {
     fun onBreak() = Unit
 
     fun <T : Any?> getCapability(cap: Capability<T>, facing: EnumFacing?): T? = null
-    fun hasCapability(cap: Capability<*>, facing: EnumFacing?): Boolean = getCapability(cap, facing) != null
 
     override fun deserializeNBT(nbt: NBTTagCompound) = Unit
     override fun serializeNBT(): NBTTagCompound = newNbt {}
 
-    fun receiveSyncData(ibd: IBD, otherSide: Side) = Unit
+    fun receiveSyncData(ibd: IBD, otherSide: LogicalSide) = Unit
 
     fun getGuiSyncVariables(): List<SyncVariable> = emptyList()
 }

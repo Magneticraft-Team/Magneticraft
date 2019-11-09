@@ -1,14 +1,15 @@
 package com.cout970.magneticraft.features.multiblocks
 
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.features.multiblocks.structures.*
 import com.cout970.magneticraft.features.multiblocks.tileentities.*
 import com.cout970.magneticraft.misc.CreativeTabMg
 import com.cout970.magneticraft.misc.RegisterBlocks
-import com.cout970.magneticraft.misc.block.get
 import com.cout970.magneticraft.misc.player.sendMessage
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
+import com.cout970.magneticraft.misc.tileentity.setBlockToAir
 import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.systems.blocks.*
@@ -21,12 +22,8 @@ import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModuleMultiblockGap
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.properties.PropertyEnum
-import net.minecraft.block.state.IBlockState
-import net.minecraft.item.ItemBlock
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.EnumHand
+import net.minecraft.state.IProperty
+import net.minecraft.util.Hand
 import net.minecraft.util.IStringSerializable
 import net.minecraft.util.text.TextFormatting
 
@@ -72,7 +69,7 @@ object Blocks : IBlockMaker {
 
         gap = builder.withName("multiblock_gap").copy {
             states = null
-            factory = factoryOf(::TileMultiblockGap)
+            factory = factoryOf(TileMultiblockGap::class)
             onDrop = { emptyList() }
             onActivated = func@{
                 val tile = it.worldIn.getTile<TileMultiblockGap>(it.pos) ?: return@func false
@@ -93,7 +90,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         solarPanel = builder.withName("solar_panel").copy {
-            factory = factoryOf(::TileSolarPanel)
+            factory = factoryOf(TileSolarPanel::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_panel.mcx")
@@ -104,7 +101,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         shelvingUnit = builder.withName("shelving_unit").copy {
-            factory = factoryOf(::TileShelvingUnit)
+            factory = factoryOf(TileShelvingUnit::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/shelving_unit.mcx")
@@ -115,7 +112,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         steamEngine = builder.withName("steam_engine").copy {
-            factory = factoryOf(::TileSteamEngine)
+            factory = factoryOf(TileSteamEngine::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/steam_engine.gltf")
@@ -126,7 +123,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         grinder = builder.withName("grinder").copy {
-            factory = factoryOf(::TileGrinder)
+            factory = factoryOf(TileGrinder::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/grinder.gltf")
@@ -137,7 +134,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         sieve = builder.withName("sieve").copy {
-            factory = factoryOf(::TileSieve)
+            factory = factoryOf(TileSieve::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/sieve.gltf")
@@ -148,7 +145,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         solarTower = builder.withName("solar_tower").copy {
-            factory = factoryOf(::TileSolarTower)
+            factory = factoryOf(TileSolarTower::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_tower.mcx")
@@ -159,7 +156,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         solarMirror = builder.withName("solar_mirror").copy {
-            factory = factoryOf(::TileSolarMirror)
+            factory = factoryOf(TileSolarMirror::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/solar_mirror.mcx")
@@ -170,7 +167,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         container = builder.withName("container").copy {
-            factory = factoryOf(::TileContainer)
+            factory = factoryOf(TileContainer::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/container.mcx")
@@ -181,7 +178,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         pumpjack = builder.withName("pumpjack").copy {
-            factory = factoryOf(::TilePumpjack)
+            factory = factoryOf(TilePumpjack::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/pumpjack.mcx")
@@ -192,7 +189,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         hydraulicPress = builder.withName("hydraulic_press").copy {
-            factory = factoryOf(::TileHydraulicPress)
+            factory = factoryOf(TileHydraulicPress::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/hydraulic_press.gltf")
@@ -203,7 +200,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         oilHeater = builder.withName("oil_heater").copy {
-            factory = factoryOf(::TileOilHeater)
+            factory = factoryOf(TileOilHeater::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/oil_heater.mcx")
@@ -214,7 +211,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         refinery = builder.withName("refinery").copy {
-            factory = factoryOf(::TileRefinery)
+            factory = factoryOf(TileRefinery::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/mcx/refinery.mcx")
@@ -225,7 +222,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         bigCombustionChamber = builder.withName("big_combustion_chamber").copy {
-            factory = factoryOf(::TileBigCombustionChamber)
+            factory = factoryOf(TileBigCombustionChamber::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/big_combustion_chamber.gltf")
@@ -236,7 +233,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         bigSteamBoiler = builder.withName("big_steam_boiler").copy {
-            factory = factoryOf(::TileBigSteamBoiler)
+            factory = factoryOf(TileBigSteamBoiler::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/big_steam_boiler.gltf")
@@ -247,7 +244,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         steamTurbine = builder.withName("steam_turbine").copy {
-            factory = factoryOf(::TileSteamTurbine)
+            factory = factoryOf(TileSteamTurbine::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/steam_turbine.gltf")
@@ -258,7 +255,7 @@ object Blocks : IBlockMaker {
         }.build()
 
         bigElectricFurnace = builder.withName("big_electric_furnace").copy {
-            factory = factoryOf(::TileBigElectricFurnace)
+            factory = factoryOf(TileBigElectricFurnace::class)
             generateDefaultItemBlockModel = false
             customModels = listOf(
                 "model" to resource("models/block/gltf/big_electric_furnace.gltf")
@@ -289,7 +286,7 @@ object Blocks : IBlockMaker {
                 val actionables = tile.container.modules.filterIsInstance<IOnActivated>()
                 return@func actionables.any { it.onActivated(args) }
             } else {
-                if (args.hand != EnumHand.MAIN_HAND) return@func false
+                if (args.hand != Hand.MAIN_HAND) return@func false
                 if (args.worldIn.isServer) {
                     val context = MultiblockContext(
                         multiblock = multiblock(),

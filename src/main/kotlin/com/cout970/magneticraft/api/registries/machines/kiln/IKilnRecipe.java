@@ -1,7 +1,7 @@
 package com.cout970.magneticraft.api.registries.machines.kiln;
 
 import javax.annotation.Nullable;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -45,7 +45,7 @@ public interface IKilnRecipe {
      * @return The output of the recipe
      */
     @Nullable
-    IBlockState getBlockOutput();
+    BlockState getBlockOutput();
 
     /**
      * The minimum temperature required for this recipe to occur

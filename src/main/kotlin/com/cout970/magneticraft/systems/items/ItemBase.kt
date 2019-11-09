@@ -1,93 +1,74 @@
 package com.cout970.magneticraft.systems.items
 
-import com.cout970.magneticraft.IVector3
-import com.cout970.magneticraft.MOD_ID
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
-import com.cout970.magneticraft.misc.vector.vec3Of
-import net.minecraft.block.state.IBlockState
+import net.minecraft.block.BlockState
 import net.minecraft.client.util.ITooltipFlag
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.item.ItemUseContext
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.text.ITextComponent
 import net.minecraft.world.World
+import net.minecraftforge.common.ToolType
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 
 /**
  * Created by cout970 on 2017/06/11.
  */
-open class ItemBase : Item() {
+open class ItemBase(properties: Properties) : Item(properties) {
 
     var onHitEntity: ((HitEntityArgs) -> Boolean)? = null
-    var onItemUse: ((OnItemUseArgs) -> EnumActionResult)? = null
+    var onItemUse: ((OnItemUseArgs) -> ActionResultType)? = null
     var onItemRightClick: ((OnItemRightClickArgs) -> ActionResult<ItemStack>)? = null
     var itemInteractionForEntity: ((ItemInteractionForEntityArgs) -> Boolean)? = null
     var capabilityProvider: ((InitCapabilitiesArgs) -> ICapabilityProvider?)? = null
     var addInformation: ((AddInformationArgs) -> Unit)? = null
     var getDestroySpeed: ((GetDestroySpeedArgs) -> Float)? = null
     var getHarvestLevel: ((GetHarvestLevelArgs) -> Int)? = null
-    var getToolClasses: ((ItemStack) -> MutableSet<String>)? = null
+    var getToolClasses: ((ItemStack) -> MutableSet<ToolType>)? = null
     var canHarvestBlock: ((IBlockState) -> Boolean)? = null
     var onBlockDestroyed: ((OnBlockDestroyedArgs) -> Boolean)? = null
-    var createStack: ((Item, Int, Int) -> ItemStack)? = null
+    var postCreate: ((ItemStack) -> Unit)? = null
+    var burnTime = -1
 
-    var variants: Map<Int, String> = mapOf(0 to "normal")
     var customModels: List<Pair<String, ResourceLocation>> = emptyList()
-
-    var repairAllowed: Boolean
-        get() = this.canRepair
-        set(it) {
-            this.canRepair = it
-        }
-
-    override fun getUnlocalizedName(): String = "item.$MOD_ID.${registryName?.resourcePath}"
-
-    override fun getUnlocalizedName(
-            stack: ItemStack): String = "${unlocalizedName}_${variants[stack.metadata] ?: "normal"}"
-
-    override fun getHasSubtypes() = variants.size > 1
-
-    override fun getSubItems(itemIn: CreativeTabs, tab: NonNullList<ItemStack>) {
-        if (isInCreativeTab(itemIn)) {
-            variants.keys.forEach {
-                tab.add(createStack?.invoke(this, 1, it) ?: ItemStack(this, 1, it))
-            }
-        }
-    }
 
     override fun initCapabilities(stack: ItemStack, nbt: NBTTagCompound?): ICapabilityProvider? {
         capabilityProvider?.let { return it(InitCapabilitiesArgs(stack, nbt)) }
         return super.initCapabilities(stack, nbt)
     }
 
-    override fun hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase): Boolean {
+    override fun hitEntity(stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean {
         onHitEntity?.let { return it(HitEntityArgs(stack, target, attacker)) }
         return super.hitEntity(stack, target, attacker)
     }
 
-    override fun onItemUse(player: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing,
-                           hitX: Float, hitY: Float, hitZ: Float): EnumActionResult {
-        onItemUse?.let { return it(OnItemUseArgs(this, player, worldIn, pos, hand, facing, vec3Of(hitX, hitY, hitZ))) }
-        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ)
+    override fun onItemUse(context: ItemUseContext): ActionResultType {
+        onItemUse?.let {
+            return it(OnItemUseArgs(this,
+                context.player, context.world, context.pos,
+                context.hand, context.face, context.hitVec))
+        }
+        return super.onItemUse(context)
     }
 
-    override fun itemInteractionForEntity(stack: ItemStack, playerIn: EntityPlayer, target: EntityLivingBase, hand: EnumHand): Boolean {
-        itemInteractionForEntity?.let { return it(ItemInteractionForEntityArgs(stack, playerIn, target, hand))}
+    override fun itemInteractionForEntity(stack: ItemStack, playerIn: EntityPlayer, target: LivingEntity, hand: Hand): Boolean {
+        itemInteractionForEntity?.let { return it(ItemInteractionForEntityArgs(stack, playerIn, target, hand)) }
         return super.itemInteractionForEntity(stack, playerIn, target, hand)
     }
 
-    override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: EnumHand): ActionResult<ItemStack> {
+    override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: Hand): ActionResult<ItemStack> {
         val default = super.onItemRightClick(worldIn, playerIn, handIn)
         onItemRightClick?.let { return it(OnItemRightClickArgs(worldIn, playerIn, handIn, default)) }
         return default
     }
 
-    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
-
+    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
         addInformation?.invoke(AddInformationArgs(stack, worldIn, tooltip, flagIn))
         super.addInformation(stack, worldIn, tooltip, flagIn)
     }
@@ -111,23 +92,23 @@ open class ItemBase : Item() {
 
         if (newStack.isEmpty && maxDamage > 0) {
             newStack = itemStack.copy()
-            newStack.itemDamage++
+            newStack.damage++
 
-            if (newStack.itemDamage > maxDamage) {
+            if (newStack.damage > maxDamage) {
                 newStack.shrink(1)
             }
         }
         return newStack
     }
 
-    override fun getHarvestLevel(stack: ItemStack, toolClass: String, player: EntityPlayer?, blockState: IBlockState?): Int {
-        getHarvestLevel?.let { return it(GetHarvestLevelArgs(stack, toolClass, player, blockState)) }
-        return super.getHarvestLevel(stack, toolClass, player, blockState)
+    override fun getHarvestLevel(stack: ItemStack, tool: ToolType, player: PlayerEntity?, blockState: BlockState?): Int {
+        getHarvestLevel?.let { return it(GetHarvestLevelArgs(stack, tool, player, blockState)) }
+        return super.getHarvestLevel(stack, tool, player, blockState)
     }
 
-    override fun getToolClasses(stack: ItemStack): MutableSet<String> {
+    override fun getToolTypes(stack: ItemStack): MutableSet<ToolType> {
         getToolClasses?.let { return it(stack) }
-        return super.getToolClasses(stack)
+        return super.getToolTypes(stack)
     }
 
     override fun canHarvestBlock(blockIn: IBlockState): Boolean {
@@ -135,33 +116,45 @@ open class ItemBase : Item() {
         return false
     }
 
-    override fun onBlockDestroyed(stack: ItemStack, worldIn: World, state: IBlockState, pos: BlockPos, entityLiving: EntityLivingBase): Boolean {
+    override fun onBlockDestroyed(stack: ItemStack, worldIn: World, state: IBlockState, pos: BlockPos, entityLiving: LivingEntity): Boolean {
         onBlockDestroyed?.let { return it(OnBlockDestroyedArgs(stack, worldIn, state, pos, entityLiving)) }
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving)
+    }
+
+    override fun fillItemGroup(group: ItemGroup, items: NonNullList<ItemStack>) {
+        if (this.isInGroup(group)) {
+            val stack = ItemStack(this)
+            postCreate?.let{ it(stack) }
+            items.add(stack)
+        }
+    }
+
+    override fun getBurnTime(itemStack: ItemStack?): Int {
+        return burnTime
     }
 
     override fun toString(): String = "ItemBase($registryName)"
 }
 
-data class HitEntityArgs(val stack: ItemStack, val target: EntityLivingBase, val attacker: EntityLivingBase)
+data class HitEntityArgs(val stack: ItemStack, val target: LivingEntity, val attacker: LivingEntity)
 data class InitCapabilitiesArgs(val stack: ItemStack, val nbt: NBTTagCompound?)
-data class OnItemUseArgs(val item: ItemBase, val player: EntityPlayer, val worldIn: World, val pos: BlockPos,
-                         val hand: EnumHand,
+data class OnItemUseArgs(val item: ItemBase, val player: EntityPlayer?, val worldIn: World, val pos: BlockPos,
+                         val hand: Hand,
                          val facing: EnumFacing, val hit: IVector3)
 
-data class OnItemRightClickArgs(val worldIn: World, val playerIn: EntityPlayer, val handIn: EnumHand,
+data class OnItemRightClickArgs(val worldIn: World, val playerIn: EntityPlayer, val handIn: Hand,
                                 val default: ActionResult<ItemStack>)
 
-data class AddInformationArgs(val stack: ItemStack, val worldIn: World?, val tooltip: MutableList<String>,
+data class AddInformationArgs(val stack: ItemStack, val worldIn: World?, val tooltip: MutableList<ITextComponent>,
                               val flagIn: ITooltipFlag)
 
 data class GetDestroySpeedArgs(val stack: ItemStack, val state: IBlockState)
 
-data class GetHarvestLevelArgs(val stack: ItemStack, val toolClass: String,
+data class GetHarvestLevelArgs(val stack: ItemStack, val toolClass: ToolType,
                                val player: EntityPlayer?, val blockState: IBlockState?)
 
 data class OnBlockDestroyedArgs(val stack: ItemStack, val worldIn: World, val state: IBlockState,
-                                val pos: BlockPos, val entityLiving: EntityLivingBase)
+                                val pos: BlockPos, val entityLiving: LivingEntity)
 
 data class ItemInteractionForEntityArgs(val stack: ItemStack, val player: EntityPlayer,
-                                        val target: EntityLivingBase, val hand: EnumHand)
+                                        val target: LivingEntity, val hand: Hand)

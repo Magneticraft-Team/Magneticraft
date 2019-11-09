@@ -1,8 +1,8 @@
 package com.cout970.magneticraft.api.registries.machines.heatrecipes;
 
 import java.util.List;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 /**

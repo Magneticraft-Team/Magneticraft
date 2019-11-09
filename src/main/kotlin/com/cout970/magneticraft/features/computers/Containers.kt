@@ -1,5 +1,6 @@
 package com.cout970.magneticraft.features.computers
 
+import com.cout970.magneticraft.EntityPlayer
 import com.cout970.magneticraft.misc.gui.SlotType
 import com.cout970.magneticraft.misc.gui.TypedSlot
 import com.cout970.magneticraft.misc.inventory.InventoryRegion
@@ -12,8 +13,7 @@ import com.cout970.magneticraft.systems.gui.AutoContainer
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_BUTTON
 import com.cout970.magneticraft.systems.gui.DATA_ID_COMPUTER_LIGHT
 import com.cout970.magneticraft.systems.gui.GuiBuilder
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.Slot
+import net.minecraft.inventory.container.Slot
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.SlotItemHandler
@@ -22,8 +22,8 @@ import net.minecraftforge.items.SlotItemHandler
  * Created by cout970 on 2017/08/10.
  */
 
-class ContainerComputer(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
-    : AutoContainer(builder, configFunc, player, world, pos) {
+class ContainerComputer(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos, window: Int)
+    : AutoContainer(builder, configFunc, player, world, pos, window) {
 
     val tile: TileComputer = tileEntity as TileComputer
     val motherboard = tile.computerModule.motherboard
@@ -31,12 +31,12 @@ class ContainerComputer(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit
     val keyboard = tile.keyboard
 
     init {
-        addSlotToContainer(TypedSlot(tile.invModule.inventory, 0, 35, 225, SlotType.FLOPPY))
+        addSlot(TypedSlot(tile.invModule.inventory, 0, 35, 225, SlotType.FLOPPY))
         inventoryRegions += InventoryRegion(0..0)
 
         val hotBarIndex = inventorySlots.size
         repeat(9) { i ->
-            addSlotToContainer(Slot(player.inventory, i, i * 18 + 95, 226))
+            addSlot(Slot(player.inventory, i, i * 18 + 95, 226))
         }
         inventoryRegions += InventoryRegion(hotBarIndex..hotBarIndex + 8)
     }
@@ -44,7 +44,7 @@ class ContainerComputer(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit
     override fun sendDataToClient(): IBD {
         val ibd = super.sendDataToClient() ?: IBD()
         monitor.saveToClient(ibd)
-        ibd.setBoolean(DATA_ID_COMPUTER_LIGHT, motherboard.isOnline())
+        ibd.setBoolean(DATA_ID_COMPUTER_LIGHT, motherboard.isOnline)
         return ibd
     }
 
@@ -77,8 +77,8 @@ class ContainerComputer(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit
     }
 }
 
-class ContainerMiningRobot(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos)
-    : AutoContainer(builder, configFunc, player, world, pos) {
+class ContainerMiningRobot(builder: GuiBuilder, configFunc: (AutoContainer) -> Unit, player: EntityPlayer, world: World, pos: BlockPos, window: Int)
+    : AutoContainer(builder, configFunc, player, world, pos, window) {
 
     val tile: TileMiningRobot = tileEntity as TileMiningRobot
     val motherboard = tile.computerModule.motherboard
@@ -93,18 +93,18 @@ class ContainerMiningRobot(builder: GuiBuilder, configFunc: (AutoContainer) -> U
                 (0..3).forEach { i ->
                     val x = i * 18 + 268
                     val y = j * 18 + 226
-                    addSlotToContainer(SlotItemHandler(inv, index, x, y))
+                    addSlot(SlotItemHandler(inv, index, x, y))
                     index++
                 }
             }
             inventoryRegions += InventoryRegion(0..15)
 
             // floppy disk
-            addSlotToContainer(TypedSlot(inv, 16, 69, 263, SlotType.FLOPPY))
+            addSlot(TypedSlot(inv, 16, 69, 263, SlotType.FLOPPY))
             inventoryRegions += InventoryRegion(16..16, filter = { ITEM_FLOPPY_DISK!!.fromItem(it) != null })
 
             // battery slot
-            addSlotToContainer(TypedSlot(inv, 17, 69, 284, SlotType.BATTERY))
+            addSlot(TypedSlot(inv, 17, 69, 284, SlotType.BATTERY))
             inventoryRegions += InventoryRegion(17..17, filter = { FORGE_ENERGY!!.fromItem(it) != null })
         }
 

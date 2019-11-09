@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.systems.tilemodules
 
-import com.cout970.magneticraft.Magneticraft
+import com.cout970.magneticraft.NBTTagCompound
 import com.cout970.magneticraft.api.computer.IFloppyDisk
 import com.cout970.magneticraft.api.core.ITileRef
 import com.cout970.magneticraft.misc.inventory.Inventory
@@ -17,8 +17,7 @@ import com.cout970.magneticraft.systems.blocks.OnActivatedArgs
 import com.cout970.magneticraft.systems.computer.DeviceFloppyDrive
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumHand
+import net.minecraft.util.Hand
 
 /**
  * Created by cout970 on 2017/08/10.
@@ -74,12 +73,13 @@ class ModuleFloppyDrive(
                 }
 
                 if (!block) {
-                    playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
+                    // TODO
+//                    playerIn.openGui(Magneticraft, -1, worldIn, pos.x, pos.y, pos.z)
                 }
             }
             return true
         } else {
-            if (worldIn.isServer && hand == EnumHand.MAIN_HAND && heldItem.isEmpty) {
+            if (worldIn.isServer && hand == Hand.MAIN_HAND && heldItem.isEmpty) {
                 if (inventory[slot].isNotEmpty) {
                     playerIn.inventory.addItemStackToInventory(
                         inventory.extractItem(slot, 64, false)

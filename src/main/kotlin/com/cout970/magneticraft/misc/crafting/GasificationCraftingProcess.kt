@@ -6,8 +6,10 @@ import com.cout970.magneticraft.api.registries.machines.gasificationunit.IGasifi
 import com.cout970.magneticraft.misc.STANDARD_AMBIENT_TEMPERATURE
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.inventory.Inventory
-import com.cout970.magneticraft.systems.integration.crafttweaker.ifNonEmpty
+import com.cout970.magneticraft.misc.inventory.isNotEmpty
 import net.minecraft.item.ItemStack
+import net.minecraft.world.World
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE
 
 class GasificationCraftingProcess(
     val tank: Tank,
@@ -28,24 +30,26 @@ class GasificationCraftingProcess(
         return recipe
     }
 
-    override fun craft() {
+    override fun craft(world: World) {
         val recipe = getRecipe(inv.getStackInSlot(input))!!
 
         inv.extractItem(input, 1, false)
-        recipe.itemOutput.ifNonEmpty { inv.insertItem(output, it, false) }
-        recipe.fluidOutput?.let { tank.fill(it, true) }
+        if(recipe.itemOutput.isNotEmpty){
+            inv.insertItem(output, recipe.itemOutput, false)
+        }
+        recipe.fluidOutput?.let { tank.fill(it, SIMULATE) }
     }
 
-    override fun canCraft(): Boolean {
+    override fun canCraft(world: World): Boolean {
         val item = inv.extractItem(input, 1, true)
         if (item.isEmpty) return false
 
         val recipe = getRecipe(item) ?: return false
-        recipe.itemOutput.ifNonEmpty {
-            if (inv.insertItem(output, it, true) != ItemStack.EMPTY) return false
+        if(recipe.itemOutput.isNotEmpty){
+            if(inv.insertItem(output, recipe.itemOutput, true)!= ItemStack.EMPTY) return false
         }
         recipe.fluidOutput?.let {
-            if (tank.fill(it, false) != it.amount) return false
+            if (tank.fill(it, SIMULATE) != it.amount) return false
         }
         return true
     }

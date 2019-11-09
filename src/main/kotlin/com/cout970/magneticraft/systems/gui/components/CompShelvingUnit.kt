@@ -4,6 +4,7 @@ import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.features.multiblocks.ContainerShelvingUnit
 import com.cout970.magneticraft.misc.guiTexture
 import com.cout970.magneticraft.misc.network.IBD
+import com.cout970.magneticraft.misc.render.GL.color
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
 import com.cout970.magneticraft.systems.gui.AutoGui
@@ -12,8 +13,7 @@ import com.cout970.magneticraft.systems.gui.GuiBase
 import com.cout970.magneticraft.systems.gui.components.buttons.SelectButton
 import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.gui.render.IGui
-import net.minecraft.client.renderer.GlStateManager.color
-import net.minecraft.client.renderer.GlStateManager.enableBlend
+import com.mojang.blaze3d.platform.GlStateManager.enableBlend
 import net.minecraft.client.resources.I18n
 
 
@@ -31,7 +31,7 @@ class ComponentShelvingUnit : IComponent {
     var lastScroll = 0
 
     override fun init() {
-        container = (gui as GuiBase).container as ContainerShelvingUnit
+        container = (gui as GuiBase<*>).containerBase as ContainerShelvingUnit
         scrollBar = gui.components.filterIsInstance<ScrollBar>().first()
         searchBar = gui.components.filterIsInstance<SearchBar>().first()
         searchBar.onChange = container::setFilter

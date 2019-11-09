@@ -1,9 +1,9 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.block.state.IBlockState
 
 class ModuleUpdateBlockstate(
     val checkInterval: Int = 20,

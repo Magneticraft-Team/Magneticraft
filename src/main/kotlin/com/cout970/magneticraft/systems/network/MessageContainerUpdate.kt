@@ -4,10 +4,9 @@ import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.systems.gui.ContainerBase
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
-import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.LogicalSide
+import net.minecraftforge.fml.network.NetworkEvent
+import java.util.function.Supplier
 
 /**
  * Created by cout970 on 10/07/2016.
@@ -17,37 +16,23 @@ import net.minecraftforge.fml.relauncher.Side
  * Server -> Client
  * This message is used to send data from a container in the server to the GUI in the client
  */
-class MessageContainerUpdate() : IMessage {
+class MessageContainerUpdate(val ibd: IBD = IBD()) {
 
-    //Data buffer
-    var ibd: IBD? = null
-
-    constructor(ibd: IBD) : this() {
-        this.ibd = ibd
+    constructor(buf: ByteBuf) : this() {
+        ibd.fromBuffer(buf)
     }
 
-    override fun fromBytes(buf: ByteBuf?) {
-        val ibd = IBD()
-        ibd.fromBuffer(buf!!)
-        this.ibd = ibd
+    fun toBytes(buf: ByteBuf) {
+        ibd.toBuffer(buf)
     }
 
-    override fun toBytes(buf: ByteBuf?) {
-        ibd!!.toBuffer(buf!!)
-    }
+    fun handle(supplier: Supplier<NetworkEvent.Context>) {
+        val ctx = supplier.get()
+        if (ctx.direction.receptionSide != LogicalSide.CLIENT) return
 
-    companion object : IMessageHandler<MessageContainerUpdate, IMessage> {
-
-        override fun onMessage(message: MessageContainerUpdate?, ctx: MessageContext?): IMessage? {
-            if (ctx!!.side == Side.CLIENT) {
-                val container = Minecraft.getMinecraft().player.openContainer
-                if (container is ContainerBase) {
-                    container.receiveDataFromServer(message!!.ibd!!)
-                }
-            } else {
-                throw IllegalStateException()
-            }
-            return null
+        val container = Minecraft.getInstance().player.openContainer
+        if (container is ContainerBase) {
+            container.receiveDataFromServer(ibd)
         }
     }
 }

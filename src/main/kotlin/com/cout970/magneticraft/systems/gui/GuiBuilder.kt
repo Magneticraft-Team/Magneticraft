@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.gui
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.EntityPlayer
 import com.cout970.magneticraft.IVector2
 import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.api.heat.IHeatNode
@@ -12,7 +13,6 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
-import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.components.*
 import com.cout970.magneticraft.systems.gui.components.bars.*
 import com.cout970.magneticraft.systems.gui.components.buttons.ClickButton
@@ -23,14 +23,12 @@ import com.cout970.magneticraft.systems.gui.render.IComponent
 import com.cout970.magneticraft.systems.tilemodules.ModuleBigCombustionChamber
 import com.cout970.magneticraft.systems.tilemodules.ModuleCombustionChamber
 import com.cout970.magneticraft.systems.tilemodules.ModuleInternalStorage
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.items.IItemHandler
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import kotlin.math.max
 
 enum class TankIO { IN, OUT, INOUT, NONE }
@@ -40,7 +38,7 @@ class GuiBuilder(val config: GuiConfig) {
     var containerConfig: (AutoContainer) -> Unit = {}
     var bars: DslBars? = null
     var comps: DslComponents? = null
-    var containerClass: (GuiBuilder, (AutoContainer) -> Unit, EntityPlayer, World, BlockPos) -> AutoContainer = ::AutoContainer
+    var containerClass: (GuiBuilder, (AutoContainer) -> Unit, EntityPlayer, World, BlockPos, Int) -> AutoContainer = ::AutoContainer
 
     fun container(func: ContainerBuilder.() -> Unit) {
         containerConfig = { container ->
@@ -88,7 +86,7 @@ class ContainerBuilder(val container: AutoContainer, val config: GuiConfig) {
         } else {
             TypedSlot(inventory, index, pos.xi, pos.yi, type)
         }
-        container.addSlotToContainer(slot)
+        container.addSlot(slot)
     }
 
     fun slotGroup(rows: Int, columns: Int, inventory: IItemHandler, startIndex: Int, point: String, type: SlotType = SlotType.NORMAL) {
@@ -104,7 +102,7 @@ class ContainerBuilder(val container: AutoContainer, val config: GuiConfig) {
                     TypedSlot(inventory, index, pos.xi + column * 18, pos.yi + row * 18, type)
                 }
 
-                container.addSlotToContainer(slot)
+                container.addSlot(slot)
             }
         }
     }
@@ -113,7 +111,7 @@ class ContainerBuilder(val container: AutoContainer, val config: GuiConfig) {
         val pos = config.points[point] ?: Vec2d.ZERO
         val slot = SlotButton(inventory, index, pos.xi, pos.yi, func)
 
-        container.addSlotToContainer(slot)
+        container.addSlot(slot)
     }
 
     fun region(
@@ -315,7 +313,7 @@ class DslBars(val config: GuiConfig) {
     }
 
     fun progressBar(timed: TimedCraftingProcess) {
-        val value = { if (!timed.process.canCraft()) 0.0 else timed.timer / timed.limit().toDouble() }
+        val value = { if (!timed.isWorking(Minecraft.getInstance().world)) 0.0 else timed.timer / timed.limit().toDouble() }
         bar2Of(
                 texture = vec2Of(66, 176),
                 value = value,

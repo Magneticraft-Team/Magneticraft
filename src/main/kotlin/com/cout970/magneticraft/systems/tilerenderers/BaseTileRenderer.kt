@@ -3,7 +3,6 @@ package com.cout970.magneticraft.systems.tilerenderers
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.modelloader.api.IRenderCache
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.block.model.ModelResourceLocation
 
 abstract class BaseTileRenderer<T : TileBase> : TileRenderer<T>() {
 
@@ -19,7 +18,7 @@ abstract class BaseTileRenderer<T : TileBase> : TileRenderer<T>() {
         stackMatrix {
             translate(x, y, z)
             ticks = partialTicks
-            time = (te.world.totalWorldTime and 0xFF_FFFF).toDouble() + partialTicks
+            time = (te.world!!.gameTime and 0xFF_FFFF).toDouble() + partialTicks
             render(te)
         }
     }
@@ -36,22 +35,24 @@ abstract class BaseTileRenderer<T : TileBase> : TileRenderer<T>() {
     }
 
     fun createModel(block: Block, filters: List<ModelSelector>, variant: String = "model", createDefault: Boolean = true) {
-        models += ModelCacheFactory.createModel(
-            loc = ModelResourceLocation(block.registryName!!, variant),
-            filters = filters,
-            useTextures = true,
-            time = { time },
-            createDefault = createDefault
-        )
+        // TODO
+//        models += ModelCacheFactory.createModel(
+//            loc = ModelResourceLocation(block.registryName!!, variant),
+//            filters = filters,
+//            useTextures = true,
+//            time = { time },
+//            createDefault = createDefault
+//        )
     }
 
     fun createModelWithoutTexture(block: Block, vararg filters: ModelSelector) {
-        models += ModelCacheFactory.createModel(
-            loc = ModelResourceLocation(block.registryName!!, "model"),
-            filters = filters.toList(),
-            useTextures = false,
-            time = { time }
-        )
+        // TODO
+//        models += ModelCacheFactory.createModel(
+//            loc = ModelResourceLocation(block.registryName!!, "model"),
+//            filters = filters.toList(),
+//            useTextures = false,
+//            time = { time }
+//        )
     }
 
     fun renderModel(key: String) {

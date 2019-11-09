@@ -1,9 +1,12 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.NBTTagCompound
+import com.cout970.magneticraft.getCompoundTag
 import com.cout970.magneticraft.misc.add
 import com.cout970.magneticraft.misc.crafting.ICraftingProcess
 import com.cout970.magneticraft.misc.crafting.TimedCraftingProcess
 import com.cout970.magneticraft.misc.fluid.Tank
+import com.cout970.magneticraft.misc.fluid.drainExecute
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.FloatSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
@@ -13,7 +16,6 @@ import com.cout970.magneticraft.systems.gui.DATA_ID_BURNING_TIME
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_CONSUMPTION
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
-import net.minecraft.nbt.NBTTagCompound
 
 /**
  * Created by cout970 on 2017/07/01.
@@ -53,7 +55,7 @@ class ModuleSteamProcessing(
 
     fun onWorkingTick(speed: Float) {
         consumption += speed * costPerTick
-        storage.drain((speed * costPerTick).toInt(), true)
+        storage.drainExecute((speed * costPerTick).toInt())
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound) {

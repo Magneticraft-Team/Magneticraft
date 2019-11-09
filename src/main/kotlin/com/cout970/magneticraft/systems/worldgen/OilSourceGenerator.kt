@@ -1,15 +1,15 @@
 package com.cout970.magneticraft.systems.worldgen
 
+import com.cout970.magneticraft.IBlockState
 import com.cout970.magneticraft.misc.iterateArea
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.systems.config.OilGenConfig
 import com.google.common.base.Predicate
-import net.minecraft.block.state.IBlockState
-import net.minecraft.init.Blocks
+import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraft.world.chunk.IChunkProvider
-import net.minecraft.world.gen.IChunkGenerator
+import net.minecraft.world.chunk.AbstractChunkProvider
+import net.minecraft.world.gen.ChunkGenerator
 import net.minecraftforge.fml.common.IWorldGenerator
 import java.util.*
 
@@ -27,8 +27,8 @@ class OilSourceGenerator(
     }
 
     override fun generate(random: Random, chunkX: Int, chunkZ: Int, world: World,
-                          chunkGenerator: IChunkGenerator,
-                          chunkProvider: IChunkProvider) {
+                          chunkGenerator: ChunkGenerator<*>,
+                          chunkProvider: AbstractChunkProvider) {
 
         if (!config.active) return
 

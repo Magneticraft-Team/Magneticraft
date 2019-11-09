@@ -1,6 +1,6 @@
 package com.cout970.magneticraft.features.fluid_machines
 
-import com.cout970.magneticraft.AABB
+import com.cout970.magneticraft.*
 import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.tileentity.getModule
 import com.cout970.magneticraft.misc.tileentity.getTile
@@ -16,11 +16,8 @@ import com.cout970.magneticraft.systems.tilemodules.ModulePipe
 import com.cout970.magneticraft.systems.tilerenderers.px
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.ItemBlock
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.IBlockAccess
 
 
 /**
@@ -39,7 +36,7 @@ object Blocks : IBlockMaker {
         }
 
         smallTank = builder.withName("small_tank").copy {
-            factory = factoryOf(::TileSmallTank)
+            factory = factoryOf(TileSmallTank::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
@@ -56,14 +53,14 @@ object Blocks : IBlockMaker {
                 if (tank != null) {
                     val amount = tank.getInteger("Amount")
                     val fluid = tank.getString("FluidName")
-                    it.tooltip += t("tooltip.magneticraft.small_tank.line_0", amount, fluid)
+                    it.tooltip.add(tc("tooltip.magneticraft.small_tank.line_0", amount, fluid))
                 }
             }
             onActivated = CommonMethods::delegateToModule
         }.build()
 
         ironPipe = builder.withName("iron_pipe").copy {
-            factory = factoryOf(::TileIronPipe)
+            factory = factoryOf(TileIronPipe::class)
             generateDefaultItemBlockModel = false
             hasCustomModel = true
             customModels = listOf(
