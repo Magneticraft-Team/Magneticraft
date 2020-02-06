@@ -85,7 +85,9 @@ object Utilities {
                     }
 
                     scale(2.0, 2.0, 2.0)
-                    renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.5f)
+                    if (Minecraft.getMinecraft().world.isAirBlock(ctx.center.plus(blockPos))) enableDepth()
+                    renderItemWithTransparency(stack, ItemCameraTransforms.TransformType.GROUND, 0.6f)
+                    disableDepth()
                     popMatrix()
                 }
             }
