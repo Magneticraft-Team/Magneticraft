@@ -3,6 +3,7 @@ package com.cout970.magneticraft.systems.integration.crafttweaker
 import com.cout970.magneticraft.api.internal.registries.machines.grinder.GrinderRecipeManager
 import crafttweaker.annotations.ZenRegister
 import crafttweaker.api.item.IItemStack
+import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
@@ -12,12 +13,12 @@ object Grinder {
 
     @ZenMethod
     @JvmStatic
-    fun addRecipe(input: IItemStack, out1: IItemStack, out2: IItemStack, probOut2: Float, ticks: Float, useOreDict: Boolean) {
+    fun addRecipe(input: IItemStack, out1: IItemStack, out2: IItemStack?, probOut2: Float, ticks: Float, useOreDict: Boolean) {
 
         CraftTweakerPlugin.delayExecution {
             val inStack = input.toStack()
             val outStack1 = out1.toStack()
-            val outStack2 = out2.toStack()
+            val outStack2 = out2?.toStack() ?: ItemStack.EMPTY
 
             inStack.ifEmpty {
                 ctLogError("[Grinder] Invalid input stack: EMPTY")
