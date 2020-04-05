@@ -4,6 +4,7 @@ import com.cout970.magneticraft.api.internal.registries.machines.gasificationuni
 import crafttweaker.annotations.ZenRegister
 import crafttweaker.api.item.IItemStack
 import crafttweaker.api.liquid.ILiquidStack
+import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
@@ -13,12 +14,12 @@ object GasificationUnit {
 
     @ZenMethod
     @JvmStatic
-    fun addRecipe(input: IItemStack, out1: IItemStack, out2: ILiquidStack, ticks: Float, minTemp: Float, useOreDict: Boolean) {
+    fun addRecipe(input: IItemStack, out1: IItemStack?, out2: ILiquidStack?, ticks: Float, minTemp: Float, useOreDict: Boolean) {
 
         CraftTweakerPlugin.delayExecution {
             val inStack = input.toStack()
-            val outStack1 = out1.toStack()
-            val outStack2 = out2.toStack()
+            val outStack1 = out1?.toStack() ?: ItemStack.EMPTY
+            val outStack2 = out2?.toStack()
 
             inStack.ifEmpty {
                 ctLogError("[GasificationUnit] Invalid input stack: EMPTY")
