@@ -36,7 +36,7 @@ abstract class TileRendererMultiblock<T : TileMultiblock> : BaseTileRenderer<T>(
 
                 if (te.clientErrors.isNotEmpty()) {
                     val txt = te.clientErrors.first().formattedText
-                    Utilities.renderFloatingLabel(txt, vec3Of(0.5f, 2f, 0.5f))
+                    if (vec3Of(x, y, z).length < 7) Utilities.renderFloatingLabel(txt, vec3Of(0.5f, 2f, 0.5f))
                 }
             } else {
                 ticks = partialTicks
