@@ -53,6 +53,9 @@ object Config {
     @ConfigValue(category = CATEGORY_GUI, comment = "When you search something in the shelving unit the JEI search bar will update with the same search text")
     var syncShelvingUnitSearchWithJei: Boolean = false
 
+    @ConfigValue(category = CATEGORY_GUI, comment = "Max distance the player can be from the conveyor belt to render its items, setting this value lower increases FPS")
+    var conveyorBeltItemRenderLimit: Float = 128f
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion ratio between Watts and Forge Energy, " +
             "NOTE: all the values in the config about energy are in Watts")
     var wattsToFE = 1.0

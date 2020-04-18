@@ -7,6 +7,7 @@ import com.cout970.magneticraft.misc.RegisterRenderer
 import com.cout970.magneticraft.misc.inventory.get
 import com.cout970.magneticraft.misc.resource
 import com.cout970.magneticraft.misc.vector.*
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tilerenderers.*
 import com.cout970.modelloader.api.*
 import com.cout970.modelloader.api.animation.AnimatedModel
@@ -63,18 +64,18 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 1) {
             pushMatrix()
             transform(Vec3d(2.0, 1.1, 6.0),
-                Vec3d(90.0, 0.0, 0.0),
-                Vec3d(0.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(90.0, 0.0, 0.0),
+                    Vec3d(0.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
 
             pushMatrix()
             transform(Vec3d(7.5, 1.5, 7.0),
-                Vec3d(90.0, 30.0, 0.0),
-                Vec3d(0.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(90.0, 30.0, 0.0),
+                    Vec3d(0.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -82,17 +83,17 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 2) {
             pushMatrix()
             transform(Vec3d(0.0, 2.0, 12.0),
-                Vec3d(90.0, -30.0, 0.0),
-                Vec3d(16.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(90.0, -30.0, 0.0),
+                    Vec3d(16.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(16.5, 2.5, 12.5),
-                Vec3d(90.0, -30.0, 0.0),
-                Vec3d(16.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(90.0, -30.0, 0.0),
+                    Vec3d(16.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -100,25 +101,25 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 3) {
             pushMatrix()
             transform(Vec3d(1.0, 1.0, 7.0),
-                Vec3d(-10.0, 22.0, 4.0),
-                Vec3d(0.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(-10.0, 22.0, 4.0),
+                    Vec3d(0.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(0.0, 1.0, 15.0),
-                Vec3d(10.0, -22.0, -4.0),
-                Vec3d(16.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(10.0, -22.0, -4.0),
+                    Vec3d(16.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(-2.5, -2.0, -4.0),
-                Vec3d(20.0, -90.0, 5.0),
-                Vec3d(0.0, 0.0, 8.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(20.0, -90.0, 5.0),
+                    Vec3d(0.0, 0.0, 8.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -126,25 +127,25 @@ object TileRendererFeedingTrough : BaseTileRenderer<TileFeedingTrough>() {
         if (level >= 4) {
             pushMatrix()
             transform(Vec3d(5.0, 0.0, 4.5),
-                Vec3d(-10.0, 0.0, 0.0),
-                Vec3d(0.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(-10.0, 0.0, 0.0),
+                    Vec3d(0.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(7.0, 0.0, 11.0),
-                Vec3d(14.0, 0.0, 0.0),
-                Vec3d(0.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(14.0, 0.0, 0.0),
+                    Vec3d(0.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
 
             pushMatrix()
             transform(Vec3d(12.0, 0.0, 10.0),
-                Vec3d(14.0, 0.0, 0.0),
-                Vec3d(0.0, 0.0, 0.0),
-                Vec3d(1.0, 1.0, 1.0))
+                    Vec3d(14.0, 0.0, 0.0),
+                    Vec3d(0.0, 0.0, 0.0),
+                    Vec3d(1.0, 1.0, 1.0))
             renderItem(item)
             popMatrix()
         }
@@ -182,16 +183,16 @@ object TileRendererInserter : BaseTileRenderer<TileInserter>() {
     override fun init() {
         val item = FilterNotString("item")
         createModel(Blocks.inserter,
-            ModelSelector("animation0", item, FilterRegex("animation0", FilterTarget.ANIMATION)),
-            ModelSelector("animation1", item, FilterRegex("animation1", FilterTarget.ANIMATION)),
-            ModelSelector("animation2", item, FilterRegex("animation2", FilterTarget.ANIMATION)),
-            ModelSelector("animation3", item, FilterRegex("animation3", FilterTarget.ANIMATION)),
-            ModelSelector("animation4", item, FilterRegex("animation4", FilterTarget.ANIMATION)),
-            ModelSelector("animation5", item, FilterRegex("animation5", FilterTarget.ANIMATION)),
-            ModelSelector("animation6", item, FilterRegex("animation6", FilterTarget.ANIMATION)),
-            ModelSelector("animation7", item, FilterRegex("animation7", FilterTarget.ANIMATION)),
-            ModelSelector("animation8", item, FilterRegex("animation8", FilterTarget.ANIMATION)),
-            ModelSelector("animation9", item, FilterRegex("animation9", FilterTarget.ANIMATION))
+                ModelSelector("animation0", item, FilterRegex("animation0", FilterTarget.ANIMATION)),
+                ModelSelector("animation1", item, FilterRegex("animation1", FilterTarget.ANIMATION)),
+                ModelSelector("animation2", item, FilterRegex("animation2", FilterTarget.ANIMATION)),
+                ModelSelector("animation3", item, FilterRegex("animation3", FilterTarget.ANIMATION)),
+                ModelSelector("animation4", item, FilterRegex("animation4", FilterTarget.ANIMATION)),
+                ModelSelector("animation5", item, FilterRegex("animation5", FilterTarget.ANIMATION)),
+                ModelSelector("animation6", item, FilterRegex("animation6", FilterTarget.ANIMATION)),
+                ModelSelector("animation7", item, FilterRegex("animation7", FilterTarget.ANIMATION)),
+                ModelSelector("animation8", item, FilterRegex("animation8", FilterTarget.ANIMATION)),
+                ModelSelector("animation9", item, FilterRegex("animation9", FilterTarget.ANIMATION))
         )
     }
 
@@ -252,27 +253,27 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
 
     override fun init() {
         createModel(Blocks.conveyorBelt, listOf(
-            ModelSelector("back_legs", FilterRegex("back_leg.*")),
-            ModelSelector("front_legs", FilterRegex("front_leg.*")),
-            ModelSelector("lateral_left", FilterRegex("lateral_left")),
-            ModelSelector("lateral_right", FilterRegex("lateral_right")),
-            ModelSelector("panel_left", FilterRegex("panel_left")),
-            ModelSelector("panel_right", FilterRegex("panel_right"))
+                ModelSelector("back_legs", FilterRegex("back_leg.*")),
+                ModelSelector("front_legs", FilterRegex("front_leg.*")),
+                ModelSelector("lateral_left", FilterRegex("lateral_left")),
+                ModelSelector("lateral_right", FilterRegex("lateral_right")),
+                ModelSelector("panel_left", FilterRegex("panel_left")),
+                ModelSelector("panel_right", FilterRegex("panel_right"))
         ), "base")
 
         createModel(Blocks.conveyorBelt, listOf(
-            ModelSelector("corner", FilterNotRegex("support.*")),
-            ModelSelector("corner_supports", FilterRegex("support.*"))
+                ModelSelector("corner", FilterNotRegex("support.*")),
+                ModelSelector("corner_supports", FilterRegex("support.*"))
         ), "corner_base")
 
         createModel(Blocks.conveyorBelt, listOf(
-            ModelSelector("up", FilterNotRegex("support.*")),
-            ModelSelector("up_supports", FilterRegex("support.*"))
+                ModelSelector("up", FilterNotRegex("support.*")),
+                ModelSelector("up_supports", FilterRegex("support.*"))
         ), "up_base", false)
 
         createModel(Blocks.conveyorBelt, listOf(
-            ModelSelector("down", FilterNotRegex("support.*")),
-            ModelSelector("down_supports", FilterRegex("support.*"))
+                ModelSelector("down", FilterNotRegex("support.*")),
+                ModelSelector("down_supports", FilterRegex("support.*"))
         ), "down_base", false)
 
         val anim = modelOf(Blocks.conveyorBelt, "anim")
@@ -302,8 +303,11 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
     override fun render(te: TileConveyorBelt) {
         Utilities.rotateFromCenter(te.facing)
         renderStaticParts(te)
-        renderDynamicParts(te.conveyorModule, ticks)
-        translate(0f, 12.5 * PIXEL, 0f)
+        val limit = Config.conveyorBeltItemRenderLimit
+        if (Minecraft.getMinecraft().player.getDistanceSq(te.pos) <= limit * limit) {
+            renderDynamicParts(te.conveyorModule, ticks)
+        }
+//        translate(0f, 12.5 * PIXEL, 0f)
 
         //debug hitboxes
 //        renderHitboxes(te)
@@ -323,9 +327,9 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             Utilities.rotateFromCenter(te.facing)
 
             Utilities.renderBox((vec3Of(1, 0, 0) * PIXEL).createAABBUsing(vec3Of(2, 1, 1) * PIXEL),
-                vec3Of(0, 1, 0))
+                    vec3Of(0, 1, 0))
             Utilities.renderBox((vec3Of(0, 0, 1) * PIXEL).createAABBUsing(vec3Of(1, 1, 2) * PIXEL),
-                vec3Of(0, 0, 1))
+                    vec3Of(0, 0, 1))
 
             val bitmap2 = te.conveyorModule.generateGlobalBitMap()
 
@@ -336,7 +340,7 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
                     val h = if (bitmap2[i, j]) 1 else 0
 
                     Utilities.renderBox(
-                        vec3Of(i, h, j) * PIXEL createAABBUsing vec3Of(i + 1, h, j + 1) * PIXEL, color)
+                            vec3Of(i, h, j) * PIXEL createAABBUsing vec3Of(i + 1, h, j + 1) * PIXEL, color)
                 }
             }
         }
@@ -350,7 +354,7 @@ object TileRendererConveyorBelt : BaseTileRenderer<TileConveyorBelt>() {
             stackMatrix {
                 val boxPos = box.position + if (box.locked) 0f else partialTicks
                 val pos = box.getPos(partialTicks)
-                val y = when(mod.level) {
+                val y = when (mod.level) {
                     1 -> boxPos / 16.0
                     -1 -> 1.0 - boxPos / 16.0
                     else -> 0.0
@@ -474,25 +478,25 @@ object TileRendererPneumaticTube : BaseTileRenderer<TilePneumaticTube>() {
 
     override fun init() {
         createModel(Blocks.pneumaticTube, listOf(
-            ModelSelector("center_full", FilterString("center_full")),
-            ModelSelector("north", FilterString("north")),
-            ModelSelector("south", FilterString("south")),
-            ModelSelector("east", FilterString("east")),
-            ModelSelector("west", FilterString("west")),
-            ModelSelector("up", FilterString("up")),
-            ModelSelector("down", FilterString("down")),
-            ModelSelector("center_north_h", FilterString("center_north_h")),
-            ModelSelector("center_south_h", FilterString("center_south_h")),
-            ModelSelector("center_east_h", FilterString("center_east_h")),
-            ModelSelector("center_west_h", FilterString("center_west_h")),
-            ModelSelector("center_up_h", FilterString("center_up_h")),
-            ModelSelector("center_down_h", FilterString("center_down_h")),
-            ModelSelector("center_north_v", FilterString("center_north_v")),
-            ModelSelector("center_south_v", FilterString("center_south_v")),
-            ModelSelector("center_east_v", FilterString("center_east_v")),
-            ModelSelector("center_west_v", FilterString("center_west_v")),
-            ModelSelector("center_up_v", FilterString("center_up_v")),
-            ModelSelector("center_down_v", FilterString("center_down_v"))
+                ModelSelector("center_full", FilterString("center_full")),
+                ModelSelector("north", FilterString("north")),
+                ModelSelector("south", FilterString("south")),
+                ModelSelector("east", FilterString("east")),
+                ModelSelector("west", FilterString("west")),
+                ModelSelector("up", FilterString("up")),
+                ModelSelector("down", FilterString("down")),
+                ModelSelector("center_north_h", FilterString("center_north_h")),
+                ModelSelector("center_south_h", FilterString("center_south_h")),
+                ModelSelector("center_east_h", FilterString("center_east_h")),
+                ModelSelector("center_west_h", FilterString("center_west_h")),
+                ModelSelector("center_up_h", FilterString("center_up_h")),
+                ModelSelector("center_down_h", FilterString("center_down_h")),
+                ModelSelector("center_north_v", FilterString("center_north_v")),
+                ModelSelector("center_south_v", FilterString("center_south_v")),
+                ModelSelector("center_east_v", FilterString("center_east_v")),
+                ModelSelector("center_west_v", FilterString("center_west_v")),
+                ModelSelector("center_up_v", FilterString("center_up_v")),
+                ModelSelector("center_down_v", FilterString("center_down_v"))
         ))
     }
 
@@ -564,25 +568,25 @@ object TileRendererPneumaticRestrictionTube : BaseTileRenderer<TilePneumaticRest
 
     override fun init() {
         createModel(Blocks.pneumaticRestrictionTube, listOf(
-            ModelSelector("center_full", FilterString("center_full")),
-            ModelSelector("north", FilterString("north")),
-            ModelSelector("south", FilterString("south")),
-            ModelSelector("east", FilterString("east")),
-            ModelSelector("west", FilterString("west")),
-            ModelSelector("up", FilterString("up")),
-            ModelSelector("down", FilterString("down")),
-            ModelSelector("center_north_h", FilterString("center_north_h")),
-            ModelSelector("center_south_h", FilterString("center_south_h")),
-            ModelSelector("center_east_h", FilterString("center_east_h")),
-            ModelSelector("center_west_h", FilterString("center_west_h")),
-            ModelSelector("center_up_h", FilterString("center_up_h")),
-            ModelSelector("center_down_h", FilterString("center_down_h")),
-            ModelSelector("center_north_v", FilterString("center_north_v")),
-            ModelSelector("center_south_v", FilterString("center_south_v")),
-            ModelSelector("center_east_v", FilterString("center_east_v")),
-            ModelSelector("center_west_v", FilterString("center_west_v")),
-            ModelSelector("center_up_v", FilterString("center_up_v")),
-            ModelSelector("center_down_v", FilterString("center_down_v"))
+                ModelSelector("center_full", FilterString("center_full")),
+                ModelSelector("north", FilterString("north")),
+                ModelSelector("south", FilterString("south")),
+                ModelSelector("east", FilterString("east")),
+                ModelSelector("west", FilterString("west")),
+                ModelSelector("up", FilterString("up")),
+                ModelSelector("down", FilterString("down")),
+                ModelSelector("center_north_h", FilterString("center_north_h")),
+                ModelSelector("center_south_h", FilterString("center_south_h")),
+                ModelSelector("center_east_h", FilterString("center_east_h")),
+                ModelSelector("center_west_h", FilterString("center_west_h")),
+                ModelSelector("center_up_h", FilterString("center_up_h")),
+                ModelSelector("center_down_h", FilterString("center_down_h")),
+                ModelSelector("center_north_v", FilterString("center_north_v")),
+                ModelSelector("center_south_v", FilterString("center_south_v")),
+                ModelSelector("center_east_v", FilterString("center_east_v")),
+                ModelSelector("center_west_v", FilterString("center_west_v")),
+                ModelSelector("center_up_v", FilterString("center_up_v")),
+                ModelSelector("center_down_v", FilterString("center_down_v"))
         ))
     }
 
