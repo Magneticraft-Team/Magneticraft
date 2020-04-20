@@ -30,6 +30,9 @@ fun registerMisc() {
     registerWrench("mekanism:configurator")
     registerWrench("buildcraftcore:wrench")
     registerWrench("teslacorelib:wrench")
+    registerWrench("actuallyadditions:item_laser_wrench")
+    registerWrench("enderio:item_yeta_wrench")
+    registerWrench("extrautils2:wrench")
 }
 
 private fun registerWrench(resource: String, meta: Int = 0) {

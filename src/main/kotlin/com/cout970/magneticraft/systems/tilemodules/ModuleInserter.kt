@@ -14,6 +14,7 @@ import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.registry.ITEM_HANDLER
 import com.cout970.magneticraft.registry.fromEntity
 import com.cout970.magneticraft.registry.fromTile
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_FLAGS
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
@@ -57,10 +58,10 @@ enum class Transition(val animation: String) {
 }
 
 class ModuleInserter(
-    val facingGetter: () -> EnumFacing,
-    val inventory: Inventory,
-    val filters: Inventory,
-    override val name: String = "module_conveyor_belt" // TODO fix for 1.14
+        val facingGetter: () -> EnumFacing,
+        val inventory: Inventory,
+        val filters: Inventory,
+        override val name: String = "module_conveyor_belt" // TODO fix for 1.14
 ) : IModule {
 
     override lateinit var container: IModuleContainer
@@ -76,8 +77,8 @@ class ModuleInserter(
     var useMetadata = true
     var useNbt = true
 
-    val delay: Float get() = if (hasSpeedUpgrade) 5f else 10f
-    val maxStackSize: Int get() = if (hasStackUpgrade) 64 else 8
+    val delay: Float get() = if (hasSpeedUpgrade) Config.inserterUpgradedDelay else Config.inserterDefaultDelay
+    val maxStackSize: Int get() = if (hasStackUpgrade) Config.inserterUpgradedStackSize else Config.inserterDefaultStackSize
     val moving: Boolean get() = state == State.TRANSITION
 
     var state = State.CONTRACTED
@@ -89,7 +90,9 @@ class ModuleInserter(
     //@formatter:off
     var currentItem: ItemStack
         get() = inventory[0]
-        set(i) { inventory[0] = i }
+        set(i) {
+            inventory[0] = i
+        }
     //@formatter:on
 
     override fun init() {
@@ -192,6 +195,13 @@ class ModuleInserter(
                 0 -> hasSpeedUpgrade = true
                 1 -> hasStackUpgrade = true
             }
+        }
+
+        if (Config.infiniteInserterStackUpgrades) {
+            hasStackUpgrade = true
+        }
+        if (Config.infiniteInserterSpeedUpgrades) {
+            hasSpeedUpgrade = true
         }
     }
 
@@ -422,16 +432,16 @@ class ModuleInserter(
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> = listOf(
-        IntSyncVariable(DATA_ID_FLAGS,
-            { encodeFlags(whiteList, useOreDictionary, useMetadata, useNbt, canDropItems, canGrabItems) },
-            {
-                val flags = decodeFlags(it, 6)
-                whiteList = flags[0]
-                useOreDictionary = flags[1]
-                useMetadata = flags[2]
-                useNbt = flags[3]
-                canDropItems = flags[4]
-                canGrabItems = flags[5]
-            })
+            IntSyncVariable(DATA_ID_FLAGS,
+                    { encodeFlags(whiteList, useOreDictionary, useMetadata, useNbt, canDropItems, canGrabItems) },
+                    {
+                        val flags = decodeFlags(it, 6)
+                        whiteList = flags[0]
+                        useOreDictionary = flags[1]
+                        useMetadata = flags[2]
+                        useNbt = flags[3]
+                        canDropItems = flags[4]
+                        canGrabItems = flags[5]
+                    })
     )
 }

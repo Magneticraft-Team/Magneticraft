@@ -6,6 +6,8 @@ import com.cout970.magneticraft.api.energy.IElectricNode
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.world.isClient
 import net.minecraft.nbt.NBTTagCompound
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 
 /**
@@ -67,16 +69,16 @@ open class ElectricNode(
 
     override fun applyCurrent(current: Double) {
         updateAmperage()
-        amperageCount += Math.abs(current)
+        amperageCount += abs(current)
         voltage += current / getCapacity()
     }
 
     override fun applyPower(power: Double, simulated: Boolean): Double {
-        val energy = Math.abs(voltage * voltage * getCapacity() + power)
-        val finalVoltage = Math.sqrt(Math.max(0.0, energy / getCapacity()))
+        val energy = abs(voltage * voltage * getCapacity() + power)
+        val finalVoltage = sqrt(0.0.coerceAtLeast(energy / getCapacity()))
         val current = getCapacity() * (finalVoltage - voltage)
         if (!simulated) applyCurrent(current)
-        return Math.abs(power)
+        return abs(power)
     }
 
     override fun deserializeNBT(nbt: NBTTagCompound?) {

@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler
 object GuiHandler : IGuiHandler {
 
     override fun getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): Any? {
-        val container = getServerGuiElement(ID, player, world, x, y, z) as ContainerBase
+        val container = getServerGuiElement(ID, player, world, x, y, z) as? ContainerBase ?: return null
         if (ID == -2) {
             return GuiGuideBook(container as ContainerGuideBook)
         }

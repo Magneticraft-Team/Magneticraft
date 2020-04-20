@@ -6,6 +6,7 @@ import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSteamE
 import com.cout970.magneticraft.features.multiblocks.structures.MultiblockSteamTurbine
 import com.cout970.magneticraft.misc.ElectricConstants
 import com.cout970.magneticraft.misc.RegisterTileEntity
+import com.cout970.magneticraft.misc.fluid.FilteredFluidHandler
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.fluid.wrapWithFluidFilter
 import com.cout970.magneticraft.misc.interpolate
@@ -176,6 +177,7 @@ class TileSteamTurbine : TileMultiblock(), ITickable {
     var turbineSpeed = 0f
 
     val fluidModule = ModuleFluidHandler(tank, capabilityFilter = wrapWithFluidFilter { it.fluid.name == "steam" })
+    val filteredFluidModule = FilteredFluidHandler(fluidModule){ it.fluid.name == "steam" }
 
     val steamGeneratorModule = ModuleSteamGenerator(
         steamTank = tank,
@@ -194,14 +196,14 @@ class TileSteamTurbine : TileMultiblock(), ITickable {
         facing = { facing },
         connectionSpots = listOf(
             ConnectionSpot(ELECTRIC_NODE_HANDLER!!, BlockPos(0, 2, -1), EnumFacing.UP) { energyModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -1), EnumFacing.WEST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 1, -1), EnumFacing.WEST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -2), EnumFacing.WEST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 1, -2), EnumFacing.WEST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -1), EnumFacing.EAST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 1, -1), EnumFacing.EAST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -2), EnumFacing.EAST) { fluidModule },
-            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 1, -2), EnumFacing.EAST) { fluidModule }
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -1), EnumFacing.WEST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 1, -1), EnumFacing.WEST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 0, -2), EnumFacing.WEST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(-1, 1, -2), EnumFacing.WEST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -1), EnumFacing.EAST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 1, -1), EnumFacing.EAST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 0, -2), EnumFacing.EAST) { filteredFluidModule },
+            ConnectionSpot(FLUID_HANDLER!!, BlockPos(1, 1, -2), EnumFacing.EAST) { filteredFluidModule }
         )
     )
 

@@ -1,8 +1,11 @@
 package com.cout970.magneticraft.systems.tilemodules
 
+import com.cout970.magneticraft.api.energy.IElectricNodeHandler
 import com.cout970.magneticraft.misc.vector.*
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.HEAT_NODE_HANDLER
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import com.cout970.magneticraft.systems.tilerenderers.MutableCubeCache
@@ -11,16 +14,16 @@ import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.capabilities.Capability
 
 data class ConnectionSpot(
-    val capability: Capability<*>,
-    val pos: BlockPos,
-    val side: EnumFacing?,
-    val getter: () -> Any?
+        val capability: Capability<*>,
+        val pos: BlockPos,
+        val side: EnumFacing?,
+        val getter: () -> Any?
 )
 
 class ModuleMultiblockIO(
-    val facing: () -> EnumFacing,
-    val connectionSpots: List<ConnectionSpot>,
-    override val name: String = "module_multiblock_io"
+        val facing: () -> EnumFacing,
+        val connectionSpots: List<ConnectionSpot>,
+        override val name: String = "module_multiblock_io"
 ) : IModule {
 
     // Client side only, for debug purposes
@@ -88,7 +91,7 @@ class ModuleMultiblockIO(
 
         val direction = facing()
 
-        val validCapability = connectionSpots.filter { it.capability == cap }
+        val validCapability = connectionSpots.filter { it.capability == cap || (Config.enableDirectRFUsage && cap == FORGE_ENERGY && it.capability == ELECTRIC_NODE_HANDLER) }
 
         val validSide = validCapability.filter {
             if (it.side == null) {
@@ -102,7 +105,11 @@ class ModuleMultiblockIO(
 
         val valid = validPos.firstOrNull() ?: return null
 
-        return valid.getter()
+        val capInstance = valid.getter()
+        if (Config.enableDirectRFUsage && cap == FORGE_ENERGY && valid.capability == ELECTRIC_NODE_HANDLER && capInstance is IElectricNodeHandler) {
+            return RFWrapper(capInstance)
+        }
+        return capInstance
     }
 
     fun getElectricConnectPoints(): List<Pair<BlockPos, EnumFacing>> {
@@ -125,12 +132,12 @@ class ModuleMultiblockIO(
 
     private fun getConnectPoints(connections: List<ConnectionSpot>, direction: EnumFacing): List<Pair<BlockPos, EnumFacing>> {
         return connections
-            .filter { it.side != null }
-            .filter { direction.getRelative(it.side!!).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
-            .map {
-                val dir = direction.getRelative(it.side!!)
-                direction.rotatePoint(BlockPos.ORIGIN, it.pos) + dir.toBlockPos() to dir.opposite
-            }
+                .filter { it.side != null }
+                .filter { direction.getRelative(it.side!!).axisDirection == EnumFacing.AxisDirection.NEGATIVE }
+                .map {
+                    val dir = direction.getRelative(it.side!!)
+                    direction.rotatePoint(BlockPos.ORIGIN, it.pos) + dir.toBlockPos() to dir.opposite
+                }
     }
 
     fun canConnectAtSide(facing: EnumFacing?): Boolean {

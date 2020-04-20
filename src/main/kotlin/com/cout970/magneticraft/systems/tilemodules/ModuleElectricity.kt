@@ -21,7 +21,9 @@ import com.cout970.magneticraft.misc.vector.toBlockPos
 import com.cout970.magneticraft.misc.world.isClient
 import com.cout970.magneticraft.misc.world.isServer
 import com.cout970.magneticraft.registry.ELECTRIC_NODE_HANDLER
+import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.registry.getOrNull
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_VOLTAGE_LIST
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
@@ -36,14 +38,14 @@ import net.minecraftforge.common.capabilities.Capability
  * Created by cout970 on 2017/06/29.
  */
 class ModuleElectricity(
-    val electricNodes: List<IElectricNode>,
-    val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
-    val onWireChange: (EnumFacing?) -> Unit = {},
-    val onUpdateConnections: (ModuleElectricity) -> Unit = {},
-    val maxWireDistance: Double = 16.0,
-    val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
-    val capabilityFilter: (EnumFacing?) -> Boolean = { true },
-    override val name: String = "module_electricity"
+        val electricNodes: List<IElectricNode>,
+        val canConnectAtSide: (EnumFacing?) -> Boolean = { true },
+        val onWireChange: (EnumFacing?) -> Unit = {},
+        val onUpdateConnections: (ModuleElectricity) -> Unit = {},
+        val maxWireDistance: Double = 16.0,
+        val connectableDirections: () -> List<Pair<BlockPos, EnumFacing>> = { NEGATIVE_DIRECTIONS.map { it.toBlockPos() to it.opposite } },
+        val capabilityFilter: (EnumFacing?) -> Boolean = { true },
+        override val name: String = "module_electricity"
 ) : IModule, IElectricNodeHandler {
 
     companion object {
@@ -121,8 +123,7 @@ class ModuleElectricity(
 
             for ((handler, side) in handlers) {
                 val electricNodes = handler.nodes
-                    .filter { it is IElectricNode }
-                    .map { it as IElectricNode }
+                        .filterIsInstance<IElectricNode>()
 
                 electricNodes.forEach { otherNode ->
                     tryConnect(this, thisNode, handler, otherNode, side.opposite)
@@ -159,13 +160,13 @@ class ModuleElectricity(
 
         handlers.forEach { handler ->
             handler.nodes
-                .filterIsInstance<IWireConnector>()
-                .filter { it.connectorsSize == thisNode.connectorsSize }
-                .forEach { otherNode ->
-                    if (outputWiredConnections.size < 16) {
-                        tryConnect(this, thisNode, handler, otherNode, null)
+                    .filterIsInstance<IWireConnector>()
+                    .filter { it.connectorsSize == thisNode.connectorsSize }
+                    .forEach { otherNode ->
+                        if (outputWiredConnections.size < 16) {
+                            tryConnect(this, thisNode, handler, otherNode, null)
+                        }
                     }
-                }
         }
     }
 
@@ -268,12 +269,18 @@ class ModuleElectricity(
     override fun getOutputConnections(): MutableList<IElectricConnection> = outputNormalConnections with outputWiredConnections
 
     override fun hasCapability(cap: Capability<*>, facing: EnumFacing?): Boolean {
+        if (Config.enableDirectRFUsage && cap == FORGE_ENERGY) {
+            return true
+        }
         return cap == ELECTRIC_NODE_HANDLER && capabilityFilter.invoke(facing)
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(cap: Capability<T>, facing: EnumFacing?): T? {
         if (!capabilityFilter.invoke(facing)) return null
+        if (Config.enableDirectRFUsage && cap == FORGE_ENERGY) {
+            return RFWrapper(this) as T
+        }
         return this as T
     }
 
@@ -316,13 +323,13 @@ class ModuleElectricity(
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
         return electricNodes
-            .filterIsInstance<ElectricNode>()
-            .mapIndexed { index, node ->
-                FloatSyncVariable(
-                    id = DATA_ID_VOLTAGE_LIST[index],
-                    getter = { node.voltage.toFloat() },
-                    setter = { node.voltage = it.toDouble() }
-                )
-            }
+                .filterIsInstance<ElectricNode>()
+                .mapIndexed { index, node ->
+                    FloatSyncVariable(
+                            id = DATA_ID_VOLTAGE_LIST[index],
+                            getter = { node.voltage.toFloat() },
+                            setter = { node.voltage = it.toDouble() }
+                    )
+                }
     }
 }

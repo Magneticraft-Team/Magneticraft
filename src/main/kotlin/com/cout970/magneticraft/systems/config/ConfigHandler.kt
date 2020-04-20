@@ -89,8 +89,10 @@ object ConfigHandler {
     fun getConfigElements(): List<IConfigElement> {
         val cnf = config as ForgeConfiguration
         return listOf(
+                ConfigElement(cnf.getCategory(CATEGORY_GENERAL)),
                 ConfigElement(cnf.getCategory(CATEGORY_ORES)),
                 ConfigElement(cnf.getCategory(CATEGORY_ENERGY)),
+                ConfigElement(cnf.getCategory(CATEGORY_INSERTERS)),
                 ConfigElement(cnf.getCategory(CATEGORY_GUI)),
                 ConfigElement(cnf.getCategory(CATEGORY_PC)),
                 ConfigElement(cnf.getCategory(CATEGORY_MACHINES))

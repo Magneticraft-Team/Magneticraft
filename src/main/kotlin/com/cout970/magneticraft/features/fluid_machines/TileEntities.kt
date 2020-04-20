@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.features.fluid_machines
 
 import com.cout970.magneticraft.Debug
+import com.cout970.magneticraft.features.multiblocks.Blocks
 import com.cout970.magneticraft.misc.RegisterTileEntity
 import com.cout970.magneticraft.misc.fluid.Tank
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
@@ -56,7 +57,7 @@ class TileSmallTank : TileBase(), ITickable {
 
     // Required to keep the fluid in item form
     override fun shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState): Boolean {
-        return false
+        return newSate == Blocks.gap.defaultState || newSate.block.isAir(newSate, world, pos)
     }
 }
 

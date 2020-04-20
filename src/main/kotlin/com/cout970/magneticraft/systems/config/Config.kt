@@ -6,6 +6,7 @@ package com.cout970.magneticraft.systems.config
 
 const val CATEGORY_GENERAL = "general"
 const val CATEGORY_ORES = "$CATEGORY_GENERAL.ores"
+const val CATEGORY_INSERTERS = "$CATEGORY_GENERAL.inserters"
 const val CATEGORY_ENERGY = "$CATEGORY_GENERAL.energy"
 const val CATEGORY_GUI = "$CATEGORY_GENERAL.gui"
 const val CATEGORY_PC = "$CATEGORY_GENERAL.pc"
@@ -30,6 +31,27 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ORES, comment = "Oil source")
     var oil = OilGenConfig(1 / 50f, 10, true)
+
+    @ConfigValue(category = CATEGORY_GENERAL, comment = "Allow to power machines directly with RF")
+    var enableDirectRFUsage = false
+
+    @ConfigValue(category = CATEGORY_INSERTERS, comment = "Ignore stack upgrades in inserters, they will be always applied")
+    var infiniteInserterStackUpgrades = false
+
+    @ConfigValue(category = CATEGORY_INSERTERS, comment = "Ignore speed upgrades in inserters, they will be always applied")
+    var infiniteInserterSpeedUpgrades = false
+
+    @ConfigValue(category = CATEGORY_INSERTERS, comment = "Default: delay between inserter animations in ticks")
+    var inserterDefaultDelay = 10f
+
+    @ConfigValue(category = CATEGORY_INSERTERS, comment = "Upgraded: delay between inserter animations in ticks")
+    var inserterUpgradedDelay = 5f
+
+    @ConfigValue(category = CATEGORY_INSERTERS, comment = "Default: amount of items to take with an inserter on each operation")
+    var inserterDefaultStackSize = 8
+
+    @ConfigValue(category = CATEGORY_INSERTERS, comment = "Upgraded: amount of items to take with an inserter on each operation")
+    var inserterUpgradedStackSize = 64
 
     @ConfigValue(category = CATEGORY_GENERAL, comment = "Set players on fire when processing blaze" +
             " rods in the crushing table")
