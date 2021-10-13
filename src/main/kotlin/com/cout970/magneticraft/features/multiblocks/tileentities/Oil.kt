@@ -36,9 +36,9 @@ class TilePumpjack : TileMultiblock(), ITickable {
 
     val storageModule = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
-        lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        initialCapacity = 10_000,
+        initialLowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+        initialUpperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
     )
 
     val openGuiModule = ModuleOpenGui()

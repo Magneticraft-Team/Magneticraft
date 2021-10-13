@@ -12,7 +12,6 @@ import com.cout970.magneticraft.misc.inventory.InventoryRegion
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.vector.Vec2d
 import com.cout970.magneticraft.misc.vector.vec2Of
-import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.components.*
 import com.cout970.magneticraft.systems.gui.components.bars.*
 import com.cout970.magneticraft.systems.gui.components.buttons.ClickButton
@@ -29,8 +28,6 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.energy.IEnergyStorage
 import net.minecraftforge.items.IItemHandler
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import kotlin.math.max
 
 enum class TankIO { IN, OUT, INOUT, NONE }

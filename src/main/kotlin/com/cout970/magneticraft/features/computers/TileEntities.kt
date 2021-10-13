@@ -102,9 +102,9 @@ class TileMiningRobot : TileBase(), ITickable {
 
     val energyStorage = ModuleInternalStorage(
         mainNode = node,
-        capacity = 50000,
-        maxChargeSpeed = 50.0,
-        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
+        initialCapacity = 50_000,
+        initialMaxChargeSpeed = 50.0,
+        initialUpperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE + 5
     )
 
     val itemChargeModule = ModuleChargeItems(

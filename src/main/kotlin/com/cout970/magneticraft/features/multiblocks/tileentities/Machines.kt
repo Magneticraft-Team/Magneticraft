@@ -80,9 +80,7 @@ class TileGrinder : TileMultiblock(), ITickable {
 
     val storageModule = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
-        lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        initialCapacity = 10_000
     )
 
     val invModule = ModuleInventory(
@@ -194,9 +192,9 @@ class TileSieve : TileMultiblock(), ITickable {
 
     val storageModule = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
-        lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        initialCapacity = 10_000,
+        initialLowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+        initialUpperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
     )
 
     val invModule = ModuleInventory(
@@ -263,9 +261,9 @@ class TileHydraulicPress : TileMultiblock(), ITickable {
 
     val storageModule = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
-        lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        initialCapacity = 10_000,
+        initialLowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+        initialUpperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
     )
 
     val openGuiModule = ModuleOpenGui()
@@ -513,10 +511,10 @@ class TileBigElectricFurnace : TileMultiblock(), ITickable {
 
     val storageModule = ModuleInternalStorage(
         mainNode = node,
-        capacity = 10_000,
-        maxChargeSpeed = 2000.0,
-        lowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE - 10.0,
-        upperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
+        initialCapacity = 10_000,
+        initialMaxChargeSpeed = 2000.0,
+        initialLowerVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE - 10.0,
+        initialUpperVoltageLimit = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
     )
 
     val invModule = ModuleInventory(

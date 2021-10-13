@@ -1,6 +1,5 @@
 package com.cout970.magneticraft.features.electric_machines
 
-import com.cout970.magneticraft.Magneticraft
 import com.cout970.magneticraft.api.internal.energy.ElectricNode
 import com.cout970.magneticraft.misc.*
 import com.cout970.magneticraft.misc.ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE
@@ -14,11 +13,9 @@ import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.InventoryCapabilityFilter
 import com.cout970.magneticraft.misc.network.IBD
 import com.cout970.magneticraft.misc.tileentity.DoNotRemove
-import com.cout970.magneticraft.misc.tileentity.getCap
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.vector.createAABBUsing
 import com.cout970.magneticraft.misc.world.isClient
-import com.cout970.magneticraft.registry.FORGE_ENERGY
 import com.cout970.magneticraft.systems.blocks.CommonMethods
 import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
@@ -48,11 +45,11 @@ class TileBattery : TileBase(), ITickable {
             canConnectAtSide = this::canConnectAtSide
     )
     val storageModule = ModuleInternalStorage(
-            capacity = Config.blockBatteryCapacity,
+            initialCapacity = Config.blockBatteryCapacity,
             mainNode = node,
-            maxChargeSpeed = 640.0,
-            upperVoltageLimit = ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE,
-            lowerVoltageLimit = ElectricConstants.TIER_1_BATTERY_DISCHARGE_VOLTAGE
+            initialMaxChargeSpeed = 640.0,
+            initialUpperVoltageLimit = ElectricConstants.TIER_1_BATTERY_CHARGE_VOLTAGE,
+            initialLowerVoltageLimit = ElectricConstants.TIER_1_BATTERY_DISCHARGE_VOLTAGE
     )
 
     val inventory = Inventory(2)
@@ -90,7 +87,7 @@ class TileElectricFurnace : TileBase(), ITickable {
             electricNodes = listOf(node)
     )
     val storageModule = ModuleInternalStorage(
-            capacity = 10000,
+            initialCapacity = 10_000,
             mainNode = node
     )
     val invModule = ModuleInventory(Inventory(2), capabilityFilter = {
@@ -178,9 +175,9 @@ class TileThermopile : TileBase(), ITickable {
 
     val storage = ModuleInternalStorage(
             mainNode = node,
-            capacity = 80_000,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
+            initialCapacity = 80_000,
+            initialLowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0,
+            initialUpperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5.0
     )
 
     val thermopileModule = ModuleThermopile(node)
@@ -205,10 +202,10 @@ class TileWindTurbine : TileBase(), ITickable {
             electricNodes = listOf(node)
     )
     val storageModule = ModuleInternalStorage(
-            capacity = 80_000,
+            initialCapacity = 80_000,
             mainNode = node,
-            upperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5,
-            lowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 10
+            initialUpperVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 5,
+            initialLowerVoltageLimit = ElectricConstants.TIER_1_GENERATORS_MAX_VOLTAGE - 10
     )
 
     val windTurbineModule = ModuleWindTurbine(

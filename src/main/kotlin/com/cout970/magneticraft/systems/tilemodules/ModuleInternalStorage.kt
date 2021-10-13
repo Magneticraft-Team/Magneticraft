@@ -23,13 +23,18 @@ import net.minecraft.nbt.NBTTagCompound
  */
 class ModuleInternalStorage(
     val mainNode: IElectricNode,
-    val capacity: Int,
-    val maxChargeSpeed: Double = 200.0,
-    val upperVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
-    val lowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+    val initialCapacity: Int,
+    val initialMaxChargeSpeed: Double = 200.0,
+    val initialUpperVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
+    val initialLowerVoltageLimit: Double = ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE,
     override val name: String = "module_electric_storage"
 ) : IModule, IMachineEnergyInterface {
     override lateinit var container: IModuleContainer
+
+    val capacity: Int get() = (initialCapacity * Config.machineEnergyStorageMultiplier).toInt()
+    val maxChargeSpeed: Double get() = initialMaxChargeSpeed * Config.maxChargeSpeedMultiplier
+    val upperVoltageLimit: Double get() = initialUpperVoltageLimit + Config.upperVoltageLimitOffset
+    val lowerVoltageLimit: Double get() = initialLowerVoltageLimit + Config.lowerVoltageLimitOffset
 
     companion object {
         const val INTERVAL = 10
@@ -66,7 +71,7 @@ class ModuleInternalStorage(
     }
 
     override fun getSpeed(): Double {
-        return if(Config.machineConstantSpeed) energy.toDouble() / capacity else 1.0
+        return energy.toDouble() / capacity
     }
 
     override fun hasEnergy(amount: Double): Boolean = energy >= amount
