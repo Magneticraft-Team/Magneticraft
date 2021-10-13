@@ -3,6 +3,11 @@
 # Magneticraft
 Magneticraft mod, more info in curseforge https://minecraft.curseforge.com/projects/magneticraft
 
+***The mod is no longer in development***
+
+Check out this cool [fork](https://github.com/Silfryi/Magneticraft) called [Magnetic Engineering](https://www.curseforge.com/minecraft/mc-mods/magnetic-engineering):
+It turns Magneticraft into an Immersive Engineering + Addons companion/addon by removing most overlapping content.
+
 ### Compiling the mod
 This is a small tutorial for non-modders to get the last version of the mod from github, so you can play with alpha versions of the mod.
 

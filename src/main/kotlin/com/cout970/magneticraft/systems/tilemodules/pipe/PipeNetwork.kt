@@ -1,6 +1,7 @@
 package com.cout970.magneticraft.systems.tilemodules.pipe
 
 import com.cout970.magneticraft.misc.tileentity.getModule
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.TileBase
 import com.cout970.magneticraft.systems.tilemodules.ModulePipe
 
@@ -32,8 +33,10 @@ class PipeNetwork(module: ModulePipe) : Network<ModulePipe>(
     }
 }
 
-enum class PipeType(val maxRate: Int) {
-    IRON(160),
-    STEEL(320),
-    TUNGSTEN(640)
+enum class PipeType(val rateMultiplier: Int) {
+    IRON(1),
+    STEEL(2),
+    TUNGSTEN(4);
+
+    val maxRate: Int get() = Config.ironPipeMaxRate * rateMultiplier
 }

@@ -11,6 +11,7 @@ import com.cout970.magneticraft.misc.vector.plus
 import com.cout970.magneticraft.misc.vector.rotatePoint
 import com.cout970.magneticraft.misc.vector.toBlockPos
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_HEAT
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
@@ -43,7 +44,7 @@ class ModuleSolarTower(
             val diff = node.temperature - STANDARD_AMBIENT_TEMPERATURE
             node.applyHeat(-diff * 0.25)
         }
-        if (node.temperature > 4000f.fromCelsiusToKelvin()) {
+        if (Config.allowSolarTowerMeltdown && node.temperature > 4000f.fromCelsiusToKelvin()) {
             meltDown()
         }
     }

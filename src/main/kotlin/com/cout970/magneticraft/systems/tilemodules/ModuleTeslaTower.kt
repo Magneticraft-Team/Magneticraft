@@ -42,7 +42,7 @@ class ModuleTeslaTower(
                 val storage = FORGE_ENERGY!!.fromItem(item) ?: continue
 
                 val rf = storage.receiveEnergy(rate.toInt(), false)
-                node.applyPower(-rf * ConversionTable.FE_TO_J, false)
+                node.applyPower(-rf * Config.forgeEnergyToJoules, false)
                 if (node.voltage < ElectricConstants.TIER_1_MACHINES_MIN_VOLTAGE) return
             }
         }

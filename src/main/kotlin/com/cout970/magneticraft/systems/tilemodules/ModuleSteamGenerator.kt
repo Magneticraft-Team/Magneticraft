@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.tileentity.WorkingIndicator
 import com.cout970.magneticraft.misc.tileentity.shouldTick
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
 import net.minecraft.nbt.NBTTagCompound
@@ -26,7 +27,7 @@ class ModuleSteamGenerator(
 
     companion object {
         const val STEAM_PER_OPERATION = 10
-        const val ENERGY_PER_OPERATION = (STEAM_PER_OPERATION * ConversionTable.STEAM_TO_J).toInt()
+        val ENERGY_PER_OPERATION = (STEAM_PER_OPERATION * Config.steamToJoules).toInt()
     }
 
     val production = ValueAverage()

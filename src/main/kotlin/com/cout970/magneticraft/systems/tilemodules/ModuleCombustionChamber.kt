@@ -104,7 +104,7 @@ class ModuleCombustionChamber(
                 if (node.temperature < MAX_HEAT) {
                     val speed = ((if (doorOpen) 0.5f else 1f) * Config.combustionChamberMaxSpeed.toFloat()).toInt()
                     burningTime += speed
-                    node.applyHeat(ConversionTable.FUEL_TO_J * speed)
+                    node.applyHeat(Config.fuelToJoules * speed)
                 }
             }
         }

@@ -41,7 +41,7 @@ class ModuleBigCombustionChamber(
     override lateinit var container: IModuleContainer
     var working = WorkingIndicator(this)
     var burningTime = 0
-    var burningPower = ConversionTable.FUEL_TO_J
+    var burningPower = Config.fuelToJoules
     var maxBurningTime = 0
 
     override fun update() {
@@ -114,7 +114,7 @@ class ModuleBigCombustionChamber(
         val time = TileEntityFurnace.getItemBurnTime(stack)
         if (time > 0) {
             stack.shrink(1)
-            burningPower = ConversionTable.FUEL_TO_J
+            burningPower = Config.fuelToJoules
             maxBurningTime = time
             return true
         }

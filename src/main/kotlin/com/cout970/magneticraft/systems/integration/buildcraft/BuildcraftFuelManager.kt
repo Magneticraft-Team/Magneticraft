@@ -8,6 +8,7 @@ import com.cout970.magneticraft.api.internal.registries.fuel.FluidFuel
 import com.cout970.magneticraft.api.registries.fuel.IFluidFuel
 import com.cout970.magneticraft.api.registries.fuel.IFluidFuelManager
 import com.cout970.magneticraft.misc.ConversionTable
+import com.cout970.magneticraft.systems.config.Config
 import net.minecraftforge.fluids.FluidStack
 
 class BuildcraftFuelManager : IFluidFuelManager {
@@ -37,6 +38,6 @@ class BuildcraftFuelManager : IFluidFuelManager {
 
     private fun IFuel.wrap(): IFluidFuel = FluidFuel(fluid, totalBurningTime, powerPerCycle.convertPower())
 
-    private fun Long.convertPower(): Double = ConversionTable.MJ_TO_FE * (this.toDouble() / MjAPI.MJ.toDouble())
-    private fun Double.convertPower(): Long = (this * MjAPI.MJ / ConversionTable.MJ_TO_FE).toLong()
+    private fun Long.convertPower(): Double = Config.minecraftJoulesToForgeEnergy * (this.toDouble() / MjAPI.MJ.toDouble())
+    private fun Double.convertPower(): Long = (this * MjAPI.MJ / Config.minecraftJoulesToForgeEnergy).toLong()
 }

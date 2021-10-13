@@ -8,6 +8,7 @@ import com.cout970.magneticraft.misc.fromCelsiusToKelvin
 import com.cout970.magneticraft.misc.gui.ValueAverage
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.world.isClient
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_MACHINE_PRODUCTION
 import com.cout970.magneticraft.systems.tileentities.IModule
 import com.cout970.magneticraft.systems.tileentities.IModuleContainer
@@ -27,7 +28,7 @@ class ModuleSteamBoiler(
 ) : IModule {
 
     override lateinit var container: IModuleContainer
-    val maxWaterPerTick = (maxProduction / ConversionTable.WATER_TO_STEAM).toInt()
+    val maxWaterPerTick = (maxProduction / Config.waterToSteam).toInt()
     val production = ValueAverage()
 
     override fun update() {
@@ -38,25 +39,25 @@ class ModuleSteamBoiler(
         val waterLimit = inputTank.fluidAmount
         if (waterLimit <= 0) return
 
-        val spaceLimit = (outputTank.capacity - outputTank.fluidAmount) / ConversionTable.WATER_TO_STEAM.toInt()
+        val spaceLimit = (outputTank.capacity - outputTank.fluidAmount) / Config.waterToSteam.toInt()
         if (spaceLimit <= 0) return
 
         if (node.temperature < 100.fromCelsiusToKelvin()) return
 
         val heatEnergy = tempToEnergy(node, node.temperature - 100.fromCelsiusToKelvin())
-        val heatLimit = (heatEnergy / ConversionTable.STEAM_TO_J / ConversionTable.WATER_TO_STEAM).toInt()
+        val heatLimit = (heatEnergy / Config.steamToJoules / Config.waterToSteam).toInt()
 
         val water = minOf(minOf(waterLimit, spaceLimit), minOf(maxWaterPerTick, heatLimit))
         if (water <= 0) return
 
         val fluid = FluidRegistry.getFluid("steam") ?: return
-        val steam = (water * ConversionTable.WATER_TO_STEAM).toInt()
+        val steam = (water * Config.waterToSteam).toInt()
 
         // boil water
         inputTank.drainInternal(water, true)
         outputTank.fillInternal(FluidStack(fluid, steam), true)
         production += steam
-        node.applyHeat(-steam * ConversionTable.STEAM_TO_J)
+        node.applyHeat(-steam * Config.steamToJoules)
     }
 
     override fun getGuiSyncVariables(): List<SyncVariable> {
