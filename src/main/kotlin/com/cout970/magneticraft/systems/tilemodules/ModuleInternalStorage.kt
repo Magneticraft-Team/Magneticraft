@@ -11,6 +11,7 @@ import com.cout970.magneticraft.misc.network.IntSyncVariable
 import com.cout970.magneticraft.misc.network.SyncVariable
 import com.cout970.magneticraft.misc.newNbt
 import com.cout970.magneticraft.misc.world.isServer
+import com.cout970.magneticraft.systems.config.Config
 import com.cout970.magneticraft.systems.gui.DATA_ID_CHARGE_RATE
 import com.cout970.magneticraft.systems.gui.DATA_ID_STORAGE
 import com.cout970.magneticraft.systems.tileentities.IModule
@@ -65,7 +66,7 @@ class ModuleInternalStorage(
     }
 
     override fun getSpeed(): Double {
-        return energy.toDouble() / capacity
+        return if(Config.machineConstantSpeed) energy.toDouble() / capacity else 1.0
     }
 
     override fun hasEnergy(amount: Double): Boolean = energy >= amount
