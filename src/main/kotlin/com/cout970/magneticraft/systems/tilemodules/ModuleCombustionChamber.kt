@@ -111,7 +111,7 @@ class ModuleCombustionChamber(
         if (maxBurningTime <= 0) {
             val consumed = consumeFuel()
             if (!consumed && node.temperature > STANDARD_AMBIENT_TEMPERATURE) {
-                node.applyHeat(-10.0)
+                node.applyHeat(Config.heatDissipationSpeed)
             }
         }
     }
@@ -123,13 +123,18 @@ class ModuleCombustionChamber(
         val time = TileEntityFurnace.getItemBurnTime(stack)
         if (time > 0) {
             stack.shrink(1)
-            maxBurningTime = time
+            maxBurningTime = (time * Config.combustionChamberFuelMultiplier).toInt()
         }
         return true
     }
 
     fun isValidFuel(stack: ItemStack): Boolean {
         if (stack.isEmpty) return false
+
+        if (!Config.combustionChamberOnlyCoal) {
+            return TileEntityFurnace.getItemBurnTime(stack) > 0
+        }
+
         // vanilla
         if (stack.item == Items.COAL) return true
         if (stack.item == Item.getItemFromBlock(Blocks.COAL_BLOCK)) return true

@@ -35,7 +35,7 @@ class ModuleElectricHeater(
 
         if (!this.energy.hasEnergy(energy)) {
             if (node.temperature > STANDARD_AMBIENT_TEMPERATURE) {
-                node.applyHeat(-10.0)
+                node.applyHeat(Config.heatDissipationSpeed)
             }
 
         } else {

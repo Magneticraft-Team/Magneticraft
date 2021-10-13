@@ -97,8 +97,20 @@ object Config {
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber max speed in Fuel per tick")
     var combustionChamberMaxSpeed = 4.0
 
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber fuel multiplier, bigger value makes fuel last longer")
+    var combustionChamberFuelMultiplier = 1.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Combustion chamber use only coal or coal-like fuels")
+    var combustionChamberOnlyCoal = true
+
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Big combustion chamber max speed in Fuel per tick")
     var bigCombustionChamberMaxSpeed = 40.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Big combustion chamber liquid fuel energy multiplier")
+    var bigCombustionChamberLiquidFuelMultiplier = 1.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Hydraulic Press crafting time multiplier, doesn't affect energy usage per tick")
+    var hydraulicPressCraftingTimeMultiplier = 1.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Electric Furnace Max Consumption")
     var electricFurnaceMaxConsumption = 20.0
@@ -197,6 +209,9 @@ object Config {
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Conversion rate fuel to joules, by default 1fuel = 10J")
     var fuelToJoules: Double = 10.0
+
+    @ConfigValue(category = CATEGORY_ENERGY, comment = "Energy dissipated per tick for generators that are not working")
+    var heatDissipationSpeed: Double = -10.0
 
     @ConfigValue(category = CATEGORY_ENERGY, comment = "Iron pipe max rate in mb")
     var ironPipeMaxRate: Int = 160

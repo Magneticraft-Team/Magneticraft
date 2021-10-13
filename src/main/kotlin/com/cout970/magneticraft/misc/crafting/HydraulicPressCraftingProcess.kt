@@ -6,6 +6,7 @@ import com.cout970.magneticraft.api.registries.machines.hydraulicpress.Hydraulic
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.IHydraulicPressRecipe
 import com.cout970.magneticraft.misc.inventory.Inventory
 import com.cout970.magneticraft.misc.inventory.isNotEmpty
+import com.cout970.magneticraft.systems.config.Config
 import net.minecraft.item.ItemStack
 
 /**
@@ -64,5 +65,5 @@ class HydraulicPressCraftingProcess(
         return true
     }
 
-    override fun duration(): Float = getRecipe(inventory.extractItem(inputSlot, 1, true))?.duration ?: 100f
+    override fun duration(): Float = (getRecipe(inventory.extractItem(inputSlot, 1, true))?.duration ?: 100f) * Config.hydraulicPressCraftingTimeMultiplier.toFloat()
 }

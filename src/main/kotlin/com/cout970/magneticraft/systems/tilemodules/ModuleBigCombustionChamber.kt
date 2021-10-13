@@ -67,7 +67,7 @@ class ModuleBigCombustionChamber(
         }
 
         if (maxBurningTime <= 0 && heatNode.temperature > STANDARD_AMBIENT_TEMPERATURE) {
-            heatNode.applyHeat(-10.0)
+            heatNode.applyHeat(Config.heatDissipationSpeed)
         }
 
         working.tick()
@@ -131,7 +131,7 @@ class ModuleBigCombustionChamber(
         val fraction = (fluidAmount * fuel.totalBurningTime / 1000f).roundToInt()
         if (fraction <= 0) return false
         tank.drain(fluidAmount, true)
-        burningPower = fuel.powerPerCycle
+        burningPower = fuel.powerPerCycle * Config.bigCombustionChamberLiquidFuelMultiplier
         maxBurningTime = fraction
         return true
     }
