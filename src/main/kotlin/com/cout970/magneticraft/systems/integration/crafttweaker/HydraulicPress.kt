@@ -3,25 +3,29 @@ package com.cout970.magneticraft.systems.integration.crafttweaker
 import com.cout970.magneticraft.api.internal.registries.machines.hydraulicpress.HydraulicPressRecipeManager
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 import crafttweaker.annotations.ZenRegister
+import crafttweaker.api.item.IIngredient
 import crafttweaker.api.item.IItemStack
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
+@Suppress("UNUSED")
 @ZenClass("mods.magneticraft.HydraulicPress")
 @ZenRegister
 object HydraulicPress {
 
     @ZenMethod
     @JvmStatic
-    fun addRecipe(input: IItemStack, output: IItemStack, ticks: Float, mode: Int, useOreDict: Boolean) {
+    fun addRecipe(input: IIngredient, output: IItemStack, ticks: Float, mode: Int) {
 
         CraftTweakerPlugin.delayExecution {
-            val inStack = input.toStack()
+            val inStack = input.items
             val outStack = output.toStack()
 
-            inStack.ifEmpty {
-                ctLogError("[HydraulicPress] Invalid input stack: EMPTY")
-                return@delayExecution
+            if (inStack != null) {
+                if (inStack.isEmpty()) {
+                    ctLogError("[HydraulicPress] Invalid input stack: EMPTY")
+                    return@delayExecution
+                }
             }
 
             if (mode > 2 || mode < 0) {
@@ -35,11 +39,15 @@ object HydraulicPress {
             }
 
             val pressMode = HydraulicPressMode.values()[mode]
-            val recipe = HydraulicPressRecipeManager.createRecipe(inStack, outStack, ticks, pressMode, useOreDict)
 
-            applyAction("Adding $recipe") {
-                HydraulicPressRecipeManager.registerRecipe(recipe)
+            for (inputItem in inStack) {
+                val recipe = HydraulicPressRecipeManager.createRecipe(inputItem.toStack(), outStack, ticks, pressMode, false)
+
+                applyAction("Adding $recipe") {
+                    HydraulicPressRecipeManager.registerRecipe(recipe)
+                }
             }
+
         }
     }
 

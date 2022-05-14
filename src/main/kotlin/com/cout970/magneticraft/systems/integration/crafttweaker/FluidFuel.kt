@@ -6,11 +6,11 @@ import crafttweaker.api.liquid.ILiquidStack
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
+@Suppress("DEPRECATION", "UNUSED")
 @ZenClass("mods.magneticraft.FluidFuel")
 @ZenRegister
 object FluidFuel {
 
-    @Suppress("DEPRECATION")
     @ZenMethod
     @JvmStatic
     fun addFuel(liquid: ILiquidStack, burningTime: Int, powerPerCycle: Double) {
@@ -38,7 +38,6 @@ object FluidFuel {
         }
     }
 
-    @Suppress("DEPRECATION")
     @ZenMethod
     @JvmStatic
     fun removeFuel(liquid: ILiquidStack) {
