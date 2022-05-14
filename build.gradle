@@ -3,12 +3,19 @@ buildscript {
     ext.mod_version = '2.8.4.3'
     
     repositories {
-        jcenter()
-        maven { name = 'forge'; url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
+        maven { name = 'forge';  url = 'https://maven.minecraftforge.net/' }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$project_kotlin_version"
+    }
+}
+
+// change FG2's default maven url to the new one.
+repositories.each {
+    if (it instanceof MavenArtifactRepository && it.url.toString() == 'https://files.minecraftforge.net/maven') {
+        it.url = 'https://maven.minecraftforge.net/'
     }
 }
 
@@ -24,93 +31,90 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
-    version = "1.12.2-14.23.5.2847"
-	mappings = "snapshot_20171003"
+    version = '1.12.2-14.23.5.2847'
+	mappings = 'snapshot_20171003'
     makeObfSourceJar = false
-    runDir = "run"
+    runDir = 'run'
 
 //    replaceIn 'Magneticraft.kt'
 //    replace '@VERSION@', mod_version
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 
     maven {
         name = 'Mobius Repo'
-        url = 'http://mobiusstrip.eu/maven'
+        url = 'https://mobiusstrip.eu/maven'
     }
     maven {
         name = 'CB Repo'
-        url = 'http://chickenbones.net/maven/'
-    }
-    maven {
-        name = 'tehnut'
-        url = 'http://tehnut.info/maven/'
+        url = 'https://chickenbones.net/maven/'
     }
     maven {
         name = 'amadornes'
-        url = 'http://maven.amadornes.com/'
+        url = 'https://maven.amadornes.com/'
     }
     maven {
         name = 'Progwml6 maven'
-        url 'http://dvs1.progwml6.com/files/maven'
+        url = 'https://dvs1.progwml6.com/files/maven'
     }
     maven {
         name = 'TCL'
-        url 'http://maven.mcmoddev.com'
+        url = 'https://maven.mcmoddev.com'
     }
     maven {
-        name = "Team Acronym Coders"
-        url "http://maven.blamejared.com"
+        name = 'BlameJared'
+        url 'https://maven.blamejared.com'
     }
     maven {
-        name "BuildCraft"
-        url = "https://mod-buildcraft.com/maven"
+        name = 'BuildCraft'
+        url = 'https://mod-buildcraft.com/maven'
     }
     maven {
-        name "Industrial foregoing"
-        url = "http://dyonovan.com/maven2"
+        name = 'covers1624'
+        url = 'https://maven.covers1624.net/'
     }
     maven {
-        url 'http://maven.covers1624.net/'
+        name = 'cursemaven'
+        url = 'https://cfa2.cursemaven.com'
     }
-    maven { name = 'forgelin'; url = 'http://maven.shadowfacts.net' }
-    mavenCentral()
+    maven {
+        name = 'forgelin'
+        url = 'https://maven.shadowfacts.net'
+    }
 }
 
 dependencies {
     // Kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$project_kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$project_kotlin_version"
-    compile "net.shadowfacts:Forgelin:1.8.3"
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:$project_kotlin_version'
+    compile 'org.jetbrains.kotlin:kotlin-reflect:$project_kotlin_version'
+    compile 'net.shadowfacts:Forgelin:1.8.4'
 
     // JEI
-    compile "mezz.jei:jei_1.12.2:4.14.1.234" // commented causes gradle to include jei twice
+    compile 'mezz.jei:jei_1.12.2:4.16.1.302' // commented causes gradle to include jei twice
 
     // Craft Tweaker
-    compile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.+"
-    compile "CraftTweaker2:CraftTweaker2-API:4.1.20.+"
-    compile "CraftTweaker2:ZenScript:4.1.20.+"
-    compile "com.blamejared:MTLib:3.0.5.9"
+    compile 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.675'
+    compile 'com.blamejared:MTLib:3.0.5.9'
     // Tinkers
-    compile "slimeknights.mantle:Mantle:1.12-1.3.3.55"
-    compile "slimeknights:TConstruct:1.12.2-2.13.0.+"
+    compile 'slimeknights.mantle:Mantle:1.12-1.3.3.55'
+    compile 'slimeknights:TConstruct:1.12.2-2.13.0.183'
     // Buildcraft
-    compile "com.mod-buildcraft:buildcraft:7.99.19"
+    compile 'com.mod-buildcraft:buildcraft:7.99.19'
     
-//    compileOnly "com.buuz135.industrial.IndustrialForegoing:industrialforegoing:1.12.2-1.11.2-258"
+//    compileOnly 'com.buuz135.industrial.IndustrialForegoing:industrialforegoing:1.12.2-1.11.2-258'
 
     // Forgelin and ModelLoader
-	compile files("lib/modelloader-1.1.7.jar")
+    deobfCompile 'curse.maven:modelloader-277663:2744735'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'junit', name: 'junit', version: '4.13.1'
 }
 
 
 processResources {
-    inputs.property "version", mod_version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property 'version', mod_version
+    inputs.property 'mcversion', project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
@@ -129,7 +133,7 @@ sourceSets {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file://" + (System.getenv("local_maven") != null ? System.getenv("local_maven") : System.getenv("bamboo_local_maven")))
+            repository(url: 'file://' + (System.getenv('local_maven') != null ? System.getenv('local_maven') : System.getenv('bamboo_local_maven')))
         }
     }
 }
@@ -146,12 +150,12 @@ task updateModVersion {
 compileKotlin.dependsOn updateModVersion
 
 static String getBuildNumber() {
-    String buildNumber = System.getenv("BUILD_NUMBER") != null ? System.getenv("BUILD_NUMBER") : ""
-    if(buildNumber == "") {
-        buildNumber = System.getenv("bamboo_buildNumber") != null ? "." + System.getenv("bamboo_buildNumber") : ""
+    String buildNumber = System.getenv('BUILD_NUMBER') != null ? System.getenv('BUILD_NUMBER') : ''
+    if(buildNumber == '') {
+        buildNumber = System.getenv('bamboo_buildNumber') != null ? '.' + System.getenv('bamboo_buildNumber') : ''
     }
-    if(buildNumber == null || buildNumber == ""){
-        buildNumber = "dev"
+    if(buildNumber == null || buildNumber == ''){
+        buildNumber = 'dev'
     }
     return buildNumber
 }
