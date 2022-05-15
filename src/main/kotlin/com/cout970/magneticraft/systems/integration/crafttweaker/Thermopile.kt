@@ -8,11 +8,11 @@ import net.minecraft.item.ItemBlock
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
+@Suppress("DEPRECATION", "UNUSED")
 @ZenClass("mods.magneticraft.Thermopile")
 @ZenRegister
 object Thermopile {
 
-    @Suppress("DEPRECATION")
     @ZenMethod
     @JvmStatic
     fun addRecipe(block: IItemStack, temperature: Float, conductivity: Float) {
@@ -49,7 +49,6 @@ object Thermopile {
         }
     }
 
-    @Suppress("DEPRECATION")
     @ZenMethod
     @JvmStatic
     fun removeRecipe(block: IItemStack) {

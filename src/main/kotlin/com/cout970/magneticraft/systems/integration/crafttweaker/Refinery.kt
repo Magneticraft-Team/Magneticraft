@@ -7,6 +7,7 @@ import crafttweaker.api.liquid.ILiquidStack
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
+@Suppress("UNUSED")
 @ZenClass("mods.magneticraft.Refinery")
 @ZenRegister
 object Refinery {

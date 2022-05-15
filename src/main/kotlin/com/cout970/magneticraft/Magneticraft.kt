@@ -22,7 +22,7 @@ import java.io.File
 @net.minecraftforge.fml.common.Mod(
     modid = MOD_ID,
     name = MOD_NAME,
-    version = "2.7.0",
+    version = "2.8.5",
     modLanguage = "kotlin",
     guiFactory = "com.cout970.magneticraft.systems.gui.ModGuiFactory",
     modLanguageAdapter = LANG_ADAPTER,

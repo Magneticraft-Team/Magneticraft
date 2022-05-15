@@ -2,25 +2,27 @@ package com.cout970.magneticraft.systems.integration.crafttweaker
 
 import com.cout970.magneticraft.api.internal.registries.machines.sieve.SieveRecipeManager
 import crafttweaker.annotations.ZenRegister
+import crafttweaker.api.item.IIngredient
 import crafttweaker.api.item.IItemStack
 import net.minecraft.item.ItemStack
 import stanhebben.zenscript.annotations.ZenClass
 import stanhebben.zenscript.annotations.ZenMethod
 
+@Suppress("UNUSED")
 @ZenClass("mods.magneticraft.Sieve")
 @ZenRegister
 object Sieve {
 
     @ZenMethod
     @JvmStatic
-    fun addRecipe(input: IItemStack,
+    fun addRecipe(input: IIngredient,
                   out1: IItemStack, probOut1: Float,
                   out2: IItemStack?, probOut2: Float,
                   out3: IItemStack?, probOut3: Float,
-                  ticks: Float, useOreDict: Boolean) {
+                  ticks: Float) {
 
         CraftTweakerPlugin.delayExecution {
-            val inStack = input.toStack()
+            val inStack = input.items
             val outStack1 = out1.toStack()
             val outStack2 = out2?.toStack() ?: ItemStack.EMPTY
             val outStack3 = out3?.toStack() ?: ItemStack.EMPTY
@@ -47,15 +49,18 @@ object Sieve {
                 return@delayExecution
             }
 
-            val recipe = SieveRecipeManager.createRecipe(inStack,
-                outStack1, probOut1,
-                outStack2, probOut2,
-                outStack3, probOut3,
-                ticks, useOreDict)
+            for (inputItem in inStack) {
+                val recipe = SieveRecipeManager.createRecipe(inputItem.toStack(),
+                    outStack1, probOut1,
+                    outStack2, probOut2,
+                    outStack3, probOut3,
+                    ticks, false)
 
-            applyAction("Adding $recipe") {
-                SieveRecipeManager.registerRecipe(recipe)
+                applyAction("Adding $recipe") {
+                    SieveRecipeManager.registerRecipe(recipe)
+                }
             }
+
         }
     }
 
