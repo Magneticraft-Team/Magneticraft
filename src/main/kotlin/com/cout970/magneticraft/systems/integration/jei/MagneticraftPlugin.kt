@@ -121,6 +121,12 @@ class MagneticraftPlugin : IModPlugin {
         registry.handleRecipes(IThermopileRecipe::class.java, ::ThermopileRecipeWrapper, THERMOPILE_ID)
         registry.addRecipeCatalyst(ElectricBlocks.thermopile.stack(), THERMOPILE_ID)
         registry.addRecipes(MagneticraftApi.getThermopileRecipeManager().recipes.filter(::validThermopileRecipe), THERMOPILE_ID)
+		
+		registry.addRecipeCatalyst(HeatBlocks.brickFurnace.stack(), VanillaRecipeCategoryUid.SMELTING)
+		registry.addRecipeCatalyst(ElectricBlocks.electricFurnace.stack(), VanillaRecipeCategoryUid.SMELTING)
+		registry.addRecipeCatalyst(Multiblocks.bigElectricFurnace.stack(), VanillaRecipeCategoryUid.SMELTING)
+		
+		registry.addRecipeCatalyst(ManualBlocks.fabricator.stack(), VanillaRecipeCategoryUid.CRAFTING)
 
 //        registry.addRecipeClickArea(...) fuck
     }
